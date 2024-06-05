@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package sourcenetwork.acp_core;
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+
+message EventPolicyCreated {
+  string creator = 1;
+  string policy_id = 2;
+  string policy_name = 3;
+}
+
+message EventAccessDecisionCreated {
+  string creator = 1;
+  string policy_id = 2;
+  string decision_id = 3;
+  string actor = 4;
+  string actor_did = 5;
+}
+
+message EventObjectRegistered {
+  string actor = 1;
+  string policy_id = 2;
+  string object_resource = 3;
+  string object_id = 4;
+}
+
+message EventObjectUnarchived {
+  string actor = 1;
+  string policy_id = 2;
+  string object_resource = 3;
+  string object_id = 4;
+}

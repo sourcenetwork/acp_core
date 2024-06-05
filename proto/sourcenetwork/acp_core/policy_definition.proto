@@ -1,0 +1,16 @@
+syntax = "proto3";
+package sourcenetwork.acp_core;
+
+import "sourcenetwork/acp_core/policy.proto";
+import "sourcenetwork/acp_core/policy_short.proto";
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+
+// PolicyDefinition represents a Policy defined either as a raw
+// Policy type or a shortened and marshaled version
+message PolicyDefinition {
+  oneof definition {
+    MarshaledPolicy marshaled_policy = 1;
+    Policy policy = 2;
+  }
+}

@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package sourcenetwork.acp_core;
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+
+
+// Params models the dynamic system parameters that callers can set
+message Params {
+}

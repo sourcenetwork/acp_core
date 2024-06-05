@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package sourcenetwork.acp_core;
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+
+enum Severity {
+    WARNING = 0;
+    ERROR = 1;
+}
+
+// ParserMessage models a message returned by a parser, which points
+// to a position in the given text input
+message ParserMessage {
+    string message = 1;
+    string sevirity = 2;
+    uint64 line_start = 3;
+    uint64 column_start = 4;
+    uint64 line_end = 5;
+    uint64 column_end = 6;
+}
+
+// ParserReport contains a set of messages returned while parsing some input
+message ParserReport {
+    string parser_input = 1;
+    repeated ParserMessage messages = 2;
+}
