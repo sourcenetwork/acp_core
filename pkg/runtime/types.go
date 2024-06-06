@@ -28,7 +28,7 @@ func WithKVStore(kv KVStore) Opt {
 // and uses it as the default KV Store
 func WithPersistentKV(kvPath string) Opt {
 	return func(m *runtimeManager) error {
-		kv, closeFn, err := rcdb.NewLevelDB(kvPath, defualtDbFile)
+		kv, closeFn, err := rcdb.NewPersistentKV(kvPath, defualtDbFile)
 		if err != nil {
 			return fmt.Errorf("could not create kv: %v", err)
 		}
