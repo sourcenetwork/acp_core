@@ -310,8 +310,12 @@ github.com/sirupsen/logrus v1.9.3 h1:dueUQJ1C2q9oE3F7wvmSGAaVtTmUizReu6fjN8uqzbQ
 github.com/sirupsen/logrus v1.9.3/go.mod h1:naHLuLoDiP4jHNo9R0sCBMtWGeIprob74mVsIT4qYEQ=
 github.com/sourcenetwork/raccoondb v0.2.1-0.20240416213510-8585f9d94337 h1:NZNWT9varFLNGK0u6Ffrte3zuwK7Q9zKc8erB7iXsiQ=
 github.com/sourcenetwork/raccoondb v0.2.1-0.20240416213510-8585f9d94337/go.mod h1:JvZ+G3QTmv7zto3tUBxnV0+fPoev0DkObSwczTm9VJE=
+github.com/sourcenetwork/zanzi v0.3.0 h1:Y9uyrpsT569QjzAxNOwWDxeWOkcntm+26qDLR7nGuo4=
+github.com/sourcenetwork/zanzi v0.3.0/go.mod h1:eLQ94tdz96vfwHIZXL5ZoHbV9YHQeMyFeTc5hFSGDRU=
 github.com/sourcenetwork/zanzi v0.3.1-0.20240416215232-544fc379ca8c h1:UeUljt1iJk9XPnQc1hZpbiMN6U8/C4TaBzpCG54e1fE=
 github.com/sourcenetwork/zanzi v0.3.1-0.20240416215232-544fc379ca8c/go.mod h1:YAXfSnQWfxGEG/JTLMk76KTnHGom0vSXQYoc29n6/2M=
+github.com/sourcenetwork/zanzi v0.3.1-0.20240605141250-28387f9dc82d h1:7Ogcoi/mApXgnumHPp4GL1prvooJ44BfZE9v7zYn6yk=
+github.com/sourcenetwork/zanzi v0.3.1-0.20240605141250-28387f9dc82d/go.mod h1:YAXfSnQWfxGEG/JTLMk76KTnHGom0vSXQYoc29n6/2M=
 github.com/spf13/cast v1.6.0 h1:GEiTHELF+vaR5dhz3VqZfFSzZjYbgeKDpBxQVS4GYJ0=
 github.com/spf13/cast v1.6.0/go.mod h1:ancEpBxwJDODSW/UG4rDrAqiKolqNNh2DX3mk86cAdo=
 github.com/spf13/cobra v1.8.0 h1:7aJaZx1B85qltLMc546zn58BxxfZdR/W22ej9CFoEf0=

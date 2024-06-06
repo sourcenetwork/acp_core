@@ -70,13 +70,6 @@ func (s *acpEngine) UnregisterObject(ctx context.Context, msg *types.UnregisterO
 	return applyMiddleware(ctx, h, s.hooks, msg)
 }
 
-func (s *acpEngine) CheckAccess(ctx context.Context, msg *types.VerifyAccessRequestRequest) (*types.VerifyAccessRequestResponse, error) {
-	h := func(ctx context.Context, msg *types.VerifyAccessRequestRequest) (*types.VerifyAccessRequestResponse, error) {
-		return authz_db.VerifyAccessRequest(ctx, s.runtime, msg)
-	}
-	return applyMiddleware(ctx, h, s.hooks, msg)
-}
-
 func (s *acpEngine) GetObjectRegistration(ctx context.Context, req *types.GetObjectRegistrationRequest) (*types.GetObjectRegistrationResponse, error) {
 	h := func(ctx context.Context, msg *types.GetObjectRegistrationRequest) (*types.GetObjectRegistrationResponse, error) {
 		return relationship.GetObjectRegistrationHandler(ctx, s.runtime, msg)
@@ -107,7 +100,7 @@ func (s *acpEngine) ValidatePolicy(ctx context.Context, req *types.ValidatePolic
 
 func (s *acpEngine) VerifyAccessRequest(ctx context.Context, req *types.VerifyAccessRequestRequest) (*types.VerifyAccessRequestResponse, error) {
 	h := func(ctx context.Context, msg *types.VerifyAccessRequestRequest) (*types.VerifyAccessRequestResponse, error) {
-		return policy.VerifyAccessRequest(ctx, s.runtime, msg)
+		return authz_db.VerifyAccessRequest(ctx, s.runtime, msg)
 	}
 	return applyMiddleware(ctx, h, s.hooks, req)
 }

@@ -94,7 +94,3 @@ func ValidatePolicy(ctx context.Context, runtime runtime.RuntimeManager, req *ty
 
 	return resp, nil
 }
-
-func VerifyAccessRequest(ctx context.Context, runtime runtime.RuntimeManager, req *types.VerifyAccessRequestRequest) (*types.VerifyAccessRequestResponse, error) {
-	return nil, nil
-}

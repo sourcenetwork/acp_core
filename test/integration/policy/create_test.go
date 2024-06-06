@@ -214,3 +214,51 @@ resources:
 	require.Nil(t, resp)
 	require.ErrorIs(t, err, auth.ErrUnauthenticatd)
 }
+
+func TestCreatePolicy_CreatingMultipleEqualPoliciesProduceDifferentIDs(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("creator")
+
+	pol := `
+name: test
+description: A Valid Defra Policy Interface (DPI)
+
+actor:
+  name: actor
+
+resources:
+  users:
+    permissions:
+      read:
+        expr: owner + reader
+      write:
+        expr: owner
+
+    relations:
+      owner:
+        types:
+          - actor
+      reader:
+        types:
+          - actor
+      admin:
+        manages:
+          - reader
+        types:
+          - actor
+`
+
+	req := types.CreatePolicyRequest{
+		Policy:      pol,
+		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+	}
+	resp1, err1 := ctx.Engine.CreatePolicy(ctx, &req)
+	resp2, err2 := ctx.Engine.CreatePolicy(ctx, &req)
+
+	want1 := "94eb195c0e459aa79e02a1986c7e731c5015721c18a373f2b2a0ed140a04b454"
+	want2 := "7bcb558ef8dac6b744a11ea144a61a756ea38475554097ac04612037c36ffe52"
+	require.NoError(t, err1)
+	require.NoError(t, err2)
+	require.Equal(t, want1, resp1.Policy.Id)
+	require.Equal(t, want2, resp2.Policy.Id)
+}

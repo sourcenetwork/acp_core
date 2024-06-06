@@ -22,3 +22,16 @@ func ProduceDID() (string, stdcrypto.Signer, error) {
 
 	return did.String(), skey, nil
 }
+
+func ProduceDIDFromSeed(seed []byte) (string, stdcrypto.Signer, error) {
+	skey := ed25519.NewKeyFromSeed(seed)
+	pkey := skey.Public().(ed25519.PublicKey)
+
+	keyType := crypto.Ed25519
+	did, err := key.CreateDIDKey(keyType, []byte(pkey))
+	if err != nil {
+		return "", nil, err
+	}
+
+	return did.String(), skey, nil
+}

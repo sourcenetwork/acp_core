@@ -10,7 +10,7 @@ require (
 	github.com/cyware/ssi-sdk v0.0.0-20231229164914-f93f3006379f
 	github.com/google/go-cmp v0.6.0
 	github.com/sourcenetwork/raccoondb v0.2.1-0.20240416213510-8585f9d94337
-	github.com/sourcenetwork/zanzi v0.3.1-0.20240416215232-544fc379ca8c
+	github.com/sourcenetwork/zanzi v0.3.1-0.20240605141250-28387f9dc82d
 	github.com/stretchr/testify v1.9.0
 	google.golang.org/grpc v1.63.2
 	google.golang.org/protobuf v1.33.0

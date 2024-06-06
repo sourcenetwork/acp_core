@@ -31,7 +31,7 @@ func parseDID(did string) (scheme string, method string, id string, err error) {
 
 	parts := strings.SplitN(did, ":", 3)
 	if len(parts) != 3 {
-		err = fmt.Errorf("invalid did")
+		err = fmt.Errorf("%v is not a valid did", did)
 		return
 	}
 
