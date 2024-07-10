@@ -2,48 +2,48 @@ package types
 
 // FIXME refactor this, find a better error system
 
-// DONTCOVER
-
 import (
-	sdkerrors "cosmossdk.io/errors"
+	"errors"
+	"fmt"
 )
 
 var ModuleName = "acp_core"
 
 // x/acp module sentinel errors
 var (
-	ErrInvalidSigner = sdkerrors.Register(ModuleName, 1100, "expected gov account as only signer for proposal message")
-	ErrSample        = sdkerrors.Register(ModuleName, 1101, "sample error")
-
 	// ErrAcpInternal is a general base error for IO or unexpected system errors
-	ErrAcpInternal = sdkerrors.Register(ModuleName, 1000, "internal error")
+	ErrAcpInternal = errors.New("internal error")
 
 	// ErrAcpInput is a general base error for input errors
-	ErrAcpInput = sdkerrors.Register(ModuleName, 1001, "input error")
+	ErrAcpInput = errors.New("input error")
 
 	// ErrAcpProtocolViolation is a general base error for operations forbidden by the protocol
-	ErrAcpProtocolViolation = sdkerrors.Register(ModuleName, 1002, "acp protocol violation")
+	ErrAcpProtocolViolation = wrap("acp protocol violation", ErrAcpInput)
 
 	// ErrAcpInvariantViolation indicates that an important condition of the protocol
 	// has been violated, either by a bug or a successful exploit.
 	// These are bad.
-	ErrAcpInvariantViolation = sdkerrors.Register(ModuleName, 1003, "invariant violation")
+	ErrAcpInvariantViolation = errors.New("invariant violation")
 
-	ErrPolicyNil        = ErrAcpInput.Wrapf("policy must not be nil")
-	ErrRelationshipNil  = ErrAcpInput.Wrapf("relationship must not be nil")
-	ErrActorNil         = ErrAcpInput.Wrapf("actor must not be nil")
-	ErrRegistrationNil  = ErrAcpInput.Wrapf("registration must not be nil")
-	ErrAccessRequestNil = ErrAcpInput.Wrapf("AccessRequest must not be nil")
-	ErrInvalidVariant   = ErrAcpInput.Wrapf("invalid type variant")
-	ErrObjectNil        = ErrAcpInput.Wrapf("object must not be nil")
-	ErrTimestampNil     = ErrAcpInput.Wrapf("timestamp must not be nil")
-	ErrAccNotFound      = ErrAcpInput.Wrapf("account not found")
-	ErrPolicyNotFound   = ErrAcpInput.Wrapf("policy not found")
-	ErrObjectNotFound   = ErrAcpInput.Wrapf("object not found")
-	ErrInvalidHeight    = ErrAcpInput.Wrapf("invalid block height")
-	ErrInvalidAccAddr   = ErrAcpInput.Wrapf("invalid account address")
-	ErrInvalidDID       = ErrAcpInput.Wrapf("invalid DID")
-	ErrAuthentication   = ErrAcpInput.Wrapf("failed authentication check")
+	ErrPolicyNil        = wrap("policy must not be nil", ErrAcpInput)
+	ErrRelationshipNil  = wrap("relationship must not be nil", ErrAcpInput)
+	ErrActorNil         = wrap("actor must not be nil", ErrAcpInput)
+	ErrRegistrationNil  = wrap("registration must not be nil", ErrAcpInput)
+	ErrAccessRequestNil = wrap("AccessRequest must not be nil", ErrAcpInput)
+	ErrInvalidVariant   = wrap("invalid type variant", ErrAcpInput)
+	ErrObjectNil        = wrap("object must not be nil", ErrAcpInput)
+	ErrTimestampNil     = wrap("timestamp must not be nil", ErrAcpInput)
+	ErrAccNotFound      = wrap("account not found", ErrAcpInput)
+	ErrPolicyNotFound   = wrap("policy not found", ErrAcpInput)
+	ErrObjectNotFound   = wrap("object not found", ErrAcpInput)
+	ErrInvalidHeight    = wrap("invalid block height", ErrAcpInput)
+	ErrInvalidAccAddr   = wrap("invalid account address", ErrAcpInput)
+	ErrInvalidDID       = wrap("invalid DID", ErrAcpInput)
+	ErrAuthentication   = wrap("failed authentication check", ErrAcpInput)
 
-	ErrNotAuthorized = ErrAcpProtocolViolation.Wrapf("actor not authorized")
+	ErrNotAuthorized = wrap("actor not authorized", ErrAcpProtocolViolation)
 )
+
+func wrap(err string, base error) error {
+	return fmt.Errorf("%v: %w", err, base)
+}

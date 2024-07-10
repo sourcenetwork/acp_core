@@ -3,7 +3,7 @@ package types
 import (
 	"fmt"
 
-	"github.com/sourcenetwork/acp_core/internal/utils"
+	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
 
 // BuildManagementGraph builds a Management Graph from a Policy.

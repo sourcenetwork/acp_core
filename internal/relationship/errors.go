@@ -1,11 +1,13 @@
 package relationship
 
 import (
+	"fmt"
+
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
 var (
-	ErrDeleteOwnerRel      = types.ErrAcpProtocolViolation.Wrapf("cannot delete an owner relationship")
-	ErrSetOwnerRel         = types.ErrAcpProtocolViolation.Wrapf("cannot set an owner relationship")
-	ErrInvalidRelationship = types.ErrAcpInput.Wrapf("invalid relationship")
+	ErrDeleteOwnerRel      = fmt.Errorf("cannot delete an owner relationship: %w", types.ErrAcpProtocolViolation)
+	ErrSetOwnerRel         = fmt.Errorf("cannot set an owner relationship: %w", types.ErrAcpProtocolViolation)
+	ErrInvalidRelationship = fmt.Errorf("invalid relationship: %w", types.ErrAcpInput)
 )

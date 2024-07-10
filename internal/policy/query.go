@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/sourcenetwork/acp_core/internal/utils"
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/types"
+	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
 
 func HandleGetPolicy(ctx context.Context, runtime runtime.RuntimeManager, req *types.GetPolicyRequest) (*types.GetPolicyResponse, error) {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/sourcenetwork/acp_core/internal/utils"
+	utils "github.com/sourcenetwork/acp_core/internal/infra"
 )
 
 var _ Decorator = (*MsgSpanDecorator)(nil)

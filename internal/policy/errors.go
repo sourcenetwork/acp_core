@@ -7,10 +7,10 @@ import (
 )
 
 var (
-	ErrInvalidPolicy = types.ErrAcpInput.Wrap("invalid policy")
+	ErrInvalidPolicy = fmt.Errorf("invalid policy: %w", types.ErrAcpInput)
 
-	ErrUnknownMarshalingType = types.ErrAcpInput.Wrap("unknown marshaling type")
-	ErrUnmarshaling          = types.ErrAcpInput.Wrap("unmarshaling error")
+	ErrUnknownMarshalingType = fmt.Errorf("unknown marshaling type: %w", types.ErrAcpInput)
+	ErrUnmarshaling          = fmt.Errorf("unmarshaling error: %w", types.ErrAcpInput)
 
 	ErrInvalidShortPolicy           = fmt.Errorf("invalid short policy: %w", ErrInvalidPolicy)
 	ErrInvalidCreator               = fmt.Errorf("invalid creator: %w", ErrInvalidPolicy)

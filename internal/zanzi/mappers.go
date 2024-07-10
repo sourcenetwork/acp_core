@@ -3,7 +3,7 @@ package zanzi
 import (
 	"fmt"
 
-	"github.com/sourcenetwork/acp_core/internal/utils"
+	"github.com/sourcenetwork/acp_core/pkg/utils"
 	"github.com/sourcenetwork/zanzi/pkg/domain"
 
 	"github.com/sourcenetwork/acp_core/pkg/types"

@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"cosmossdk.io/log"
+	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
 const spanEventType = "msg_span"
@@ -83,7 +83,7 @@ func (s *MsgSpan) ToEvent() sdk.Event {
 }
 */
 
-func (s *MsgSpan) Log(logger log.Logger) {
+func (s *MsgSpan) Log(logger types.Logger) {
 	var kvs []any
 	kvs = append(kvs, AttrStart)
 	kvs = append(kvs, s.start.String())

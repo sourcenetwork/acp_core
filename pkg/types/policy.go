@@ -1,7 +1,7 @@
 package types
 
 import (
-	"github.com/sourcenetwork/acp_core/internal/utils"
+	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
 
 const ManagementPermissionPrefix string = "_can_manage_"
