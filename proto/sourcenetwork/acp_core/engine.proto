@@ -5,7 +5,6 @@ package sourcenetwork.acp_core;
 import "google/protobuf/timestamp.proto";
 
 import "sourcenetwork/acp_core/access_decision.proto";
-import "sourcenetwork/acp_core/params.proto";
 import "sourcenetwork/acp_core/policy.proto";
 import "sourcenetwork/acp_core/policy_short.proto";
 import "sourcenetwork/acp_core/relationship.proto";

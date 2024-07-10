@@ -50,8 +50,8 @@ message Relationship {
 
 // RelationshipRecord represents a document contained a Relationship and additional data.
 message RelationshipRecord {
-  // id of the transaction that added the policy
-  string tx_id = 1;
+  // hash of the transaction that added the policy
+  string tx_hash = 1;
 
   string policy_id = 2;
 
