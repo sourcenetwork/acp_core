@@ -2,9 +2,9 @@ module github.com/sourcenetwork/acp_core
 
 go 1.21.3
 
-replace github.com/sourcenetwork/raccoondb => ../raccoondb
+replace github.com/sourcenetwork/raccoondb => ../../../../raccoondb
 
-replace github.com/sourcenetwork/zanzi => ../zanzi
+replace github.com/sourcenetwork/zanzi => ../../../../zanzi
 
 require (
 	github.com/TBD54566975/ssi-sdk v0.0.4-alpha

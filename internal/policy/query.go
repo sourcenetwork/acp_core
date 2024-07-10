@@ -71,7 +71,7 @@ func ValidatePolicy(ctx context.Context, runtime runtime.RuntimeManager, req *ty
 	}
 
 	factory := factory{}
-	record, _ := factory.Create(ir, "", i, nil)
+	record, _ := factory.Create(ir, nil, i, nil)
 
 	spec := validPolicySpec{}
 	err = spec.Satisfies(record.Policy)

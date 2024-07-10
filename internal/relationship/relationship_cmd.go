@@ -81,8 +81,9 @@ func (c *SetRelationshipHandler) Execute(ctx context.Context, runtime runtime.Ru
 		PolicyId:     policy.Id,
 		Relationship: cmd.Relationship,
 		CreationTime: cmd.CreationTime,
-		Actor:        did,
+		OwnerDid:     did,
 		Archived:     false,
+		Metadata:     cmd.Metadata,
 	}
 	_, err = engine.SetRelationship(ctx, policy, record)
 	if err != nil {

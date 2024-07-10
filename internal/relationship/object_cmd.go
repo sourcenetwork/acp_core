@@ -64,7 +64,7 @@ func (c *RegisterObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 
 	switch c.resolveObjectStatus(record) {
 	case statusUnregistered:
-		result, err = c.unregisteredStrategy(ctx, engine, policy, registration, did, cmd.CreationTime)
+		result, err = c.unregisteredStrategy(ctx, engine, policy, registration, did, cmd.CreationTime, cmd.Metadata)
 	case statusArchived:
 		result, err = c.archivedObjectStrategy(ctx, engine, policy, record, registration)
 	case statusActive:
@@ -126,16 +126,8 @@ func (c *RegisterObjectHandler) resolveObjectStatus(record *types.RelationshipRe
 	return statusActive
 }
 
-func (c *RegisterObjectHandler) unregisteredStrategy(ctx context.Context, zanzi *zanzi.Adapter, pol *types.Policy, registration *types.Registration, creator string, creationTs *prototypes.Timestamp) (types.RegistrationResult, error) {
-	err := c.createOwnerRelationship(ctx, zanzi, pol, registration, creator, creationTs)
-	if err != nil {
-		return types.RegistrationResult_NoOp, err
-	}
-
-	return types.RegistrationResult_Registered, nil
-}
-
-func (c *RegisterObjectHandler) createOwnerRelationship(ctx context.Context, zanzi *zanzi.Adapter, pol *types.Policy, registration *types.Registration, creator string, creationTs *prototypes.Timestamp) error {
+// unregisteredStrategy creates a relationship with the relation `owner` for the object in Registration
+func (c *RegisterObjectHandler) unregisteredStrategy(ctx context.Context, zanzi *zanzi.Adapter, pol *types.Policy, registration *types.Registration, creator string, creationTs *prototypes.Timestamp, metadata map[string]string) (types.RegistrationResult, error) {
 	record := types.RelationshipRecord{
 		Relationship: &types.Relationship{
 			Object:   registration.Object,
@@ -146,40 +138,42 @@ func (c *RegisterObjectHandler) createOwnerRelationship(ctx context.Context, zan
 				},
 			},
 		},
-		Actor:        registration.Actor.Id,
+		OwnerDid:     registration.Actor.Id,
 		PolicyId:     pol.Id,
 		Archived:     false,
 		CreationTime: creationTs,
+		Metadata:     metadata,
 	}
 	_, err := zanzi.SetRelationship(ctx, pol, &record)
-	return err
+	if err != nil {
+		return types.RegistrationResult_NoOp, err
+	}
+
+	return types.RegistrationResult_Registered, nil
 }
 
+// activateObjectStategy is a NoOp
 func (c *RegisterObjectHandler) activeObjectStrategy(record *types.RelationshipRecord, registration *types.Registration) (types.RegistrationResult, error) {
-	if record.Actor != registration.Actor.Id {
+	if record.OwnerDid != registration.Actor.Id {
 		return types.RegistrationResult_NoOp, types.ErrNotAuthorized
 	}
 
 	return types.RegistrationResult_NoOp, nil
 }
 
+// archivedObjectStrategy modifies the relationship record to be unarchived
 func (c *RegisterObjectHandler) archivedObjectStrategy(ctx context.Context, engine *zanzi.Adapter, policy *types.Policy, record *types.RelationshipRecord, registration *types.Registration) (types.RegistrationResult, error) {
-	if record.Actor != registration.Actor.Id {
+	if record.OwnerDid != registration.Actor.Id {
 		return types.RegistrationResult_NoOp, types.ErrNotAuthorized
 	}
 
-	err := c.unarchiveRelationship(ctx, engine, policy, record)
+	record.Archived = false
+	_, err := engine.SetRelationship(ctx, policy, record)
 	if err != nil {
 		return types.RegistrationResult_NoOp, err
 	}
 
 	return types.RegistrationResult_Unarchived, nil
-}
-
-func (c *RegisterObjectHandler) unarchiveRelationship(ctx context.Context, engine *zanzi.Adapter, policy *types.Policy, record *types.RelationshipRecord) error {
-	record.Archived = false
-	_, err := engine.SetRelationship(ctx, policy, record)
-	return err
 }
 
 type UnregisterObjectHandler struct{}

@@ -53,17 +53,19 @@ func TestSetRelationship_OwnerCanShareObjectTheyOwn(t *testing.T) {
 		PolicyId:     ctx.State.PolicyId,
 		CreationTime: timestamp,
 		Relationship: types.NewActorRelationship("file", "foo", "reader", bob),
+		Metadata:     metadata,
 	}
 	resp, err := ctx.Engine.SetRelationship(ctx, req)
 
 	want := &types.SetRelationshipResponse{
 		RecordExisted: false,
 		Record: &types.RelationshipRecord{
-			Actor:        alice,
+			OwnerDid:     alice,
 			CreationTime: timestamp,
 			PolicyId:     ctx.State.PolicyId,
 			Relationship: types.NewActorRelationship("file", "foo", "reader", bob),
 			Archived:     false,
+			Metadata:     metadata,
 		},
 	}
 	require.Equal(t, want, resp)
@@ -128,7 +130,7 @@ func TestSetRelationship_ManagerActorCanDelegateAccessToAnotherActor(t *testing.
 	want := &types.SetRelationshipResponse{
 		RecordExisted: false,
 		Record: &types.RelationshipRecord{
-			Actor:        bob,
+			OwnerDid:     bob,
 			CreationTime: timestamp,
 			PolicyId:     ctx.State.PolicyId,
 			Relationship: types.NewActorRelationship("file", "foo", "reader", charlie),
