@@ -95,16 +95,23 @@ message CreatePolicyRequest {
   string                    policy        = 1;
   PolicyMarshalingType      marshal_type  = 2;
   google.protobuf.Timestamp creation_time = 3;
+  // metadata is a map of attributes which can be used to store
+  // caller supplied satellite data 
+  map<string, string> metadata = 4;
 }
 
 message CreatePolicyResponse {
   Policy policy = 1;
+  map<string, string> metadata = 2;
 }
 
 message SetRelationshipRequest {
   string                    policy_id     = 1;
   google.protobuf.Timestamp creation_time = 2;
   Relationship              relationship  = 3;
+  // metadata is a map of attributes which can be used to store
+  // caller supplied satellite data 
+  map<string, string> metadata = 4;
 }
 
 message SetRelationshipResponse {
@@ -127,6 +134,9 @@ message RegisterObjectRequest {
   string                    policy_id     = 1;
   Object                    object        = 2;
   google.protobuf.Timestamp creation_time = 3;
+  // metadata is a map of attributes which can be used to store
+  // caller supplied satellite data 
+  map<string, string> metadata = 4;
 }
 
 message RegisterObjectResponse {
