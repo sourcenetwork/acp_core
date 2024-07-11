@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/test"
 )
@@ -19,7 +20,7 @@ func TestQueryPolicy_UnknownPolicyReturnsPolicyNotFoundErr(t *testing.T) {
 	resp, err := ctx.Engine.GetPolicy(ctx, &req)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, types.ErrPolicyNotFound)
+	require.ErrorIs(t, err, errors.ErrNotFound)
 }
 
 func TestGetPolicy_ReturnsAnExistingPolicy(t *testing.T) {

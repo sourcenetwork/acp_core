@@ -3,6 +3,7 @@ package policy
 import (
 	"fmt"
 
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
@@ -10,7 +11,7 @@ import (
 // Returns nil if the initial validation is accepted
 func basicPolicyIRSpec(pol *PolicyIR) error {
 	if pol.Name == "" {
-		return fmt.Errorf("name is required: %w", ErrInvalidPolicy)
+		return errors.Wrap("name is required", errors.ErrInvalidPolicy)
 	}
 	for _, resource := range pol.Resources {
 		found := false

@@ -1,13 +1,34 @@
 package relationship
 
 import (
-	"fmt"
-
-	"github.com/sourcenetwork/acp_core/pkg/types"
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 )
 
 var (
-	ErrDeleteOwnerRel      = fmt.Errorf("cannot delete an owner relationship: %w", types.ErrAcpProtocolViolation)
-	ErrSetOwnerRel         = fmt.Errorf("cannot set an owner relationship: %w", types.ErrAcpProtocolViolation)
-	ErrInvalidRelationship = fmt.Errorf("invalid relationship: %w", types.ErrAcpInput)
+	ErrDeleteOwnerRel = errors.Wrap("deleting an owner relationship is not allowed, consider archiving the object", errors.ErrOperationForbidden)
+	ErrSetOwnerRel    = errors.Wrap("creating an owner relationship is not allowed, consider registering the object", errors.ErrOperationForbidden)
 )
+
+func newFilterRelationshpErr(err error) error {
+	return errors.Wrap("filter relationships error", err)
+}
+
+func newSetRelationshipErr(err error) error {
+	return errors.Wrap("set relationship error", err)
+}
+
+func newDeleteRelationshipErr(err error) error {
+	return errors.Wrap("delete relationship erro", err)
+}
+
+func newGetObjectRegistrationErr(err error) error {
+	return errors.Wrap("get object error", err)
+}
+
+func newRegisterObjectErr(err error) error {
+	return errors.Wrap("register object error", err)
+}
+
+func newUnregisterObjectErr(err error) error {
+	return errors.Wrap("unregister object error", err)
+}

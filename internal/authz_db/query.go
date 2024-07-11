@@ -2,9 +2,9 @@ package authz_db
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
@@ -20,13 +20,13 @@ func VerifyAccessRequest(ctx context.Context, runtime runtime.RuntimeManager, re
 		return nil, err
 	}
 	if rec == nil {
-		return nil, fmt.Errorf("verify access request: policy %v: %w", req.PolicyId, types.ErrPolicyNotFound)
+		return nil, errors.Wrap("verifying access request", errors.NewPolicyNotFound(req.PolicyId))
 	}
 
 	for _, op := range req.AccessRequest.Operations {
 		ok, err := zanzi.Check(ctx, rec.Policy, op, req.AccessRequest.Actor)
 		if err != nil {
-			return nil, fmt.Errorf("verify access request: %v", err)
+			return nil, errors.Wrap("verify access request", err)
 		}
 		if !ok {
 			return &types.VerifyAccessRequestResponse{

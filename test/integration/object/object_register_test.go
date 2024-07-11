@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/test"
 )
@@ -92,7 +93,7 @@ func TestRegisterObject_RegisteringObjectRegisteredToAnotherUserErrors(t *testin
 	resp, err := ctx.Engine.RegisterObject(ctx, &req)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, types.ErrNotAuthorized)
+	require.ErrorIs(t, err, errors.ErrUnauthorized)
 }
 
 func TestRegisterObject_ReregisteringObjectOwnedByUserIsNoop(t *testing.T) {
@@ -166,7 +167,7 @@ func TestRegisterObject_RegisteringAnotherUsersArchivedObjectErrors(t *testing.T
 	)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, types.ErrNotAuthorized)
+	require.ErrorIs(t, err, errors.ErrUnauthorized)
 }
 
 func TestRegisterObject_RegisteringArchivedUserObjectUnarchivesObject(t *testing.T) {
@@ -259,7 +260,7 @@ func TestRegisterObject_RegisteringToUnknownPolicyReturnsError(t *testing.T) {
 	)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, types.ErrPolicyNotFound)
+	require.ErrorIs(t, err, errors.ErrNotFound)
 }
 
 func TestRegisterObject_BlankResourceErrors(t *testing.T) {

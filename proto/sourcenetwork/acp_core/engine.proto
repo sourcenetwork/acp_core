@@ -151,6 +151,7 @@ message UnregisterObjectRequest {
 
 message UnregisterObjectResponse {
   bool found = 1;
+  uint64 relationships_removed = 2;
 }
 
 

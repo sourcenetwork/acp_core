@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
@@ -21,7 +22,7 @@ func HandleGetPolicy(ctx context.Context, runtime runtime.RuntimeManager, req *t
 		return nil, err
 	}
 	if rec == nil {
-		return nil, fmt.Errorf("id %v: %w", req.Id, types.ErrPolicyNotFound)
+		return nil, errors.NewPolicyNotFound(req.Id)
 	}
 
 	return &types.GetPolicyResponse{
