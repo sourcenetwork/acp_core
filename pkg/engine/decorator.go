@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	utils "github.com/sourcenetwork/acp_core/internal/infra"
+	"github.com/sourcenetwork/acp_core/pkg/tracing"
 )
 
 var _ Decorator = (*MsgSpanDecorator)(nil)
@@ -40,12 +40,12 @@ func (h *MsgSpanDecorator) Name() string {
 }
 
 func (h *MsgSpanDecorator) Pre(ctx context.Context, msg any) (context.Context, error) {
-	ctx, _ = utils.WithMsgSpan(ctx)
+	ctx, _ = tracing.WithMsgSpan(ctx)
 	return ctx, nil
 }
 
 func (h *MsgSpanDecorator) Post(ctx context.Context, resp any, err error) (context.Context, error) {
-	span := utils.GetMsgSpan(ctx)
+	span := tracing.GetMsgSpan(ctx)
 	span.End()
 
 	if h.log {

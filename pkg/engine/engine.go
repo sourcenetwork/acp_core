@@ -5,9 +5,9 @@ import (
 	"fmt"
 
 	"github.com/sourcenetwork/acp_core/internal/authz_db"
+	"github.com/sourcenetwork/acp_core/internal/params"
 	"github.com/sourcenetwork/acp_core/internal/policy"
 	"github.com/sourcenetwork/acp_core/internal/relationship"
-	"github.com/sourcenetwork/acp_core/internal/system"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
@@ -19,11 +19,11 @@ var _ types.ACPEngineServer = (*acpEngine)(nil)
 // decorating functions which can wrap the execution of a Msg.
 type acpEngine struct {
 	hooks   []Decorator
-	runtime runtime.RuntimeManager
+	runtime *runtime.RuntimeManager
 }
 
 // NewCmdSrever creates a message server for Embedded ACP
-func NewACPEngine(runtime runtime.RuntimeManager, hooks ...Decorator) types.ACPEngineServer {
+func NewACPEngine(runtime *runtime.RuntimeManager, hooks ...Decorator) types.ACPEngineServer {
 	return &acpEngine{
 		hooks:   hooks,
 		runtime: runtime,
@@ -125,14 +125,14 @@ func (s *acpEngine) TransferObject(ctx context.Context, req *types.TransferObjec
 
 func (s *acpEngine) SetParams(ctx context.Context, req *types.SetParamsRequest) (*types.SetParamsResponse, error) {
 	h := func(ctx context.Context, msg *types.SetParamsRequest) (*types.SetParamsResponse, error) {
-		return system.HandleSetParams(ctx, s.runtime, msg)
+		return params.HandleSetParams(ctx, s.runtime, msg)
 	}
 	return applyMiddleware(ctx, h, s.hooks, req)
 }
 
 func (s *acpEngine) GetParams(ctx context.Context, req *types.GetParamsRequest) (*types.GetParamsResponse, error) {
 	h := func(ctx context.Context, msg *types.GetParamsRequest) (*types.GetParamsResponse, error) {
-		return system.HandleGetParams(ctx, s.runtime, msg)
+		return params.HandleGetParams(ctx, s.runtime, msg)
 	}
 	return applyMiddleware(ctx, h, s.hooks, req)
 }

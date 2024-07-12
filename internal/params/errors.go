@@ -1,4 +1,4 @@
-package system
+package params
 
 import (
 	"github.com/sourcenetwork/acp_core/pkg/errors"
