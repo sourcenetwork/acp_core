@@ -85,7 +85,7 @@ func TestSetRelationship_ActorCannotSetRelationshipForUnregisteredObject(t *test
 	resp, err := ctx.Engine.SetRelationship(ctx, req)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, errors.ErrNotFound)
+	require.ErrorIs(t, err, errors.ErrorType_NOT_FOUND)
 }
 
 func TestSetRelationship_ActorCannotSetRelationshipForObjectTheyDoNotOwn(t *testing.T) {
@@ -101,7 +101,7 @@ func TestSetRelationship_ActorCannotSetRelationshipForObjectTheyDoNotOwn(t *test
 	resp, err := ctx.Engine.SetRelationship(ctx, req)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, errors.ErrUnauthorized)
+	require.ErrorIs(t, err, errors.ErrorType_UNAUTHORIZED)
 }
 
 func TestSetRelationship_ManagerActorCanDelegateAccessToAnotherActor(t *testing.T) {
@@ -167,5 +167,5 @@ func TestSetRelationship_ManagerActorCannotSetRelationshipToRelationshipsTheyDoN
 	resp, err := ctx.Engine.SetRelationship(ctx, req)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, errors.ErrUnauthorized)
+	require.ErrorIs(t, err, errors.ErrorType_UNAUTHORIZED)
 }

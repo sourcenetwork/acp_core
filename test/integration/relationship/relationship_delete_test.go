@@ -104,5 +104,5 @@ func TestDeleteRelationship_ObjectManagerCannotRemoveRelationshipForRelationThey
 	resp, err := ctx.Engine.DeleteRelationship(ctx, req)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, errors.ErrUnauthorized)
+	require.ErrorIs(t, err, errors.ErrorType_UNAUTHORIZED)
 }

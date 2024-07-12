@@ -16,37 +16,6 @@ func Pair(key string, val any) ContextPair {
 	}
 }
 
-type ErrorType string
-
-const (
-	// ErrUnspecified is a catch all bucket for unspecified errors
-	ErrUnspecified ErrorType = ErrorType("uknown internal error")
-	// ErrInternal is a general base error for IO or unexpected system errors
-	ErrInternal = ErrorType("internal error")
-	// ErrUnauthenticated signals caller was not authenticated while it was required
-	ErrUnauthenticated = ErrorType("not authenticated")
-	// ErrUnauthorized is a general error for operations that were
-	// rejected due to insufficient permission unauthorized
-	ErrUnauthorized = ErrorType("unauthorized")
-	// Errinput is a general base error for input errors
-	ErrInput = ErrorType("input error")
-	// ErrOperationForbidden signals that the operation was not executed
-	// as that would violate part of the Access Control system
-	ErrOperationForbidden = ErrorType("forbidden")
-)
-
-func (t ErrorType) String() string {
-	return string(t)
-}
-
-func (t ErrorType) Error() string {
-	return t.String()
-}
-
-func (t ErrorType) Is(err error) bool {
-	return err.Error() == t.Error()
-}
-
 type Error struct {
 	errType ErrorType
 	base    error
@@ -73,7 +42,7 @@ func (e *Error) getMsgChain() string {
 }
 
 func (e *Error) Error() string {
-	return fmt.Sprintf("%v: ctx={%v}", e.getMsgChain(), e.pairs)
+	return fmt.Sprintf("%v: code %v: type %v: ctx={%v}", e.getMsgChain(), e.errType.Code(), e.errType.String(), e.pairs)
 }
 
 // AppendPairs returns a new Error with the extra information contained in pairs
@@ -124,7 +93,7 @@ func NewFromBaseError(base error, errType ErrorType, msg string, pairs ...Contex
 func New(message string, errType ErrorType, pairs ...ContextPair) *Error {
 	return &Error{
 		errType: errType,
-		base:    errType,
+		base:    nil,
 		message: message,
 		pairs:   pairs,
 	}
@@ -137,8 +106,8 @@ func Wrap(message string, err error, pairs ...ContextPair) error {
 	case *Error:
 		return e.Refine(message, pairs...)
 	case ErrorType:
-		return New(message, e)
+		return New(message, e, pairs...)
 	default:
-		return NewFromBaseError(err, ErrUnspecified, message, pairs...)
+		return NewFromBaseError(err, ErrorType_UNKNOWN, message, pairs...)
 	}
 }

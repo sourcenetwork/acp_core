@@ -33,23 +33,23 @@ func relationshipSpec(policy *types.Policy, relationship *types.Relationship) er
 
 func registrationSpec(registration *types.Registration) error {
 	if registration == nil {
-		return errors.Wrap("registration is required", errors.ErrInput)
+		return errors.Wrap("registration is required", errors.ErrorType_BAD_INPUT)
 	}
 
 	if registration.Actor == nil {
-		return errors.Wrap("registration actor is required", errors.ErrInput)
+		return errors.Wrap("registration actor is required", errors.ErrorType_BAD_INPUT)
 	}
 
 	if registration.Object == nil {
-		return errors.Wrap("registration object is required", errors.ErrInput)
+		return errors.Wrap("registration object is required", errors.ErrorType_BAD_INPUT)
 	}
 
 	if registration.Object.Id == "" {
-		return errors.Wrap("registration object id is required", errors.ErrInput)
+		return errors.Wrap("registration object id is required", errors.ErrorType_BAD_INPUT)
 	}
 
 	if err := did.IsValidDID(registration.Actor.Id); err != nil {
-		return errors.Wrap("invalid registration: invalid actor did", errors.ErrInput)
+		return errors.Wrap("invalid registration: invalid actor did", errors.ErrorType_BAD_INPUT)
 	}
 
 	return nil
@@ -57,7 +57,7 @@ func registrationSpec(registration *types.Registration) error {
 
 func ObjectSpec(obj *types.Object) error {
 	if obj.Id == "" {
-		return errors.Wrap("object ID must not be empty", errors.ErrInput)
+		return errors.Wrap("object ID must not be empty", errors.ErrorType_BAD_INPUT)
 	}
 	return nil
 }

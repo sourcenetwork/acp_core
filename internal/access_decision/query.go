@@ -38,11 +38,11 @@ func (c *VerifyAccessRequestQuery) Execute(ctx context.Context, engine zanzi.Ada
 
 func (c *VerifyAccessRequestQuery) validate() error {
 	if c.Policy == nil {
-		return errors.New("policy nil", errors.ErrInput)
+		return errors.New("policy nil", errors.ErrorType_BAD_INPUT)
 	}
 
 	if c.AccessRequest == nil {
-		return errors.New("access request nil", errors.ErrInput)
+		return errors.New("access request nil", errors.ErrorType_BAD_INPUT)
 	}
 
 	return nil

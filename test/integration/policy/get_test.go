@@ -20,7 +20,7 @@ func TestQueryPolicy_UnknownPolicyReturnsPolicyNotFoundErr(t *testing.T) {
 	resp, err := ctx.Engine.GetPolicy(ctx, &req)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, errors.ErrNotFound)
+	require.ErrorIs(t, err, errors.ErrorType_NOT_FOUND)
 }
 
 func TestGetPolicy_ReturnsAnExistingPolicy(t *testing.T) {

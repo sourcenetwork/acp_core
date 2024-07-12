@@ -5,8 +5,8 @@ import (
 )
 
 var (
-	ErrDeleteOwnerRel = errors.Wrap("deleting an owner relationship is not allowed, consider archiving the object", errors.ErrOperationForbidden)
-	ErrSetOwnerRel    = errors.Wrap("creating an owner relationship is not allowed, consider registering the object", errors.ErrOperationForbidden)
+	ErrDeleteOwnerRel = errors.Wrap("deleting an owner relationship is not allowed, consider archiving the object", errors.ErrorType_OPERATION_FORBIDDEN)
+	ErrSetOwnerRel    = errors.Wrap("creating an owner relationship is not allowed, consider registering the object", errors.ErrorType_OPERATION_FORBIDDEN)
 )
 
 func newFilterRelationshpErr(err error) error {

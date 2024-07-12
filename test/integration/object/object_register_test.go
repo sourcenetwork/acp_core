@@ -93,7 +93,7 @@ func TestRegisterObject_RegisteringObjectRegisteredToAnotherUserErrors(t *testin
 	resp, err := ctx.Engine.RegisterObject(ctx, &req)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, errors.ErrUnauthorized)
+	require.ErrorIs(t, err, errors.ErrorType_UNAUTHORIZED)
 }
 
 func TestRegisterObject_ReregisteringObjectOwnedByUserIsNoop(t *testing.T) {
@@ -167,7 +167,7 @@ func TestRegisterObject_RegisteringAnotherUsersArchivedObjectErrors(t *testing.T
 	)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, errors.ErrUnauthorized)
+	require.ErrorIs(t, err, errors.ErrorType_UNAUTHORIZED)
 }
 
 func TestRegisterObject_RegisteringArchivedUserObjectUnarchivesObject(t *testing.T) {
@@ -260,7 +260,7 @@ func TestRegisterObject_RegisteringToUnknownPolicyReturnsError(t *testing.T) {
 	)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, errors.ErrNotFound)
+	require.ErrorIs(t, err, errors.ErrorType_NOT_FOUND)
 }
 
 func TestRegisterObject_BlankResourceErrors(t *testing.T) {

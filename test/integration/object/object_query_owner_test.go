@@ -92,7 +92,7 @@ func TestGetObjectOwner_QueryingPolicyThatDoesNotExistReturnError(t *testing.T) 
 	})
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, errors.ErrNotFound)
+	require.ErrorIs(t, err, errors.ErrorType_NOT_FOUND)
 }
 
 func TestGetObjectOwner_QueryingForUnregisteredObjectReturnsEmptyOwner(t *testing.T) {

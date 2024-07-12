@@ -52,7 +52,7 @@ func (c *SetRelationshipHandler) Execute(ctx context.Context, runtime runtime.Ru
 		return nil, newSetRelationshipErr(err)
 	}
 	if ownerRecord == nil {
-		return nil, newSetRelationshipErr(errors.Wrap("cannot set relationship for unregistered object", errors.ErrNotFound,
+		return nil, newSetRelationshipErr(errors.New("cannot set relationship for unregistered object", errors.ErrorType_NOT_FOUND,
 			errors.Pair("policy", cmd.PolicyId),
 			errors.Pair("resource", cmd.Relationship.Object.Resource),
 			errors.Pair("object", cmd.Relationship.Object.Id),
@@ -65,7 +65,7 @@ func (c *SetRelationshipHandler) Execute(ctx context.Context, runtime runtime.Ru
 	}
 	if !authorized {
 		return nil, newSetRelationshipErr(
-			errors.Wrap("cannot create relationship: actor is not a manager of relation", errors.ErrUnauthorized,
+			errors.New("cannot create relationship: actor is not a manager of relation", errors.ErrorType_UNAUTHORIZED,
 				errors.Pair("policy", cmd.PolicyId),
 				errors.Pair("relation", cmd.Relationship.Relation),
 				errors.Pair("actor", did),
@@ -149,7 +149,7 @@ func (c *DeleteRelationshipHandler) Execute(ctx context.Context, runtime runtime
 	}
 
 	if !isAuthorized {
-		return nil, newDeleteRelationshipErr(errors.Wrap("cannot delete relationship: actor is not a manager of relation", errors.ErrUnauthorized,
+		return nil, newDeleteRelationshipErr(errors.Wrap("cannot delete relationship: actor is not a manager of relation", errors.ErrorType_UNAUTHORIZED,
 			errors.Pair("policy", cmd.PolicyId),
 			errors.Pair("relation", cmd.Relationship.Relation),
 			errors.Pair("actor", did),

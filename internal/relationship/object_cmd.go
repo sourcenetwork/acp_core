@@ -149,7 +149,7 @@ func (c *RegisterObjectHandler) unregisteredStrategy(ctx context.Context, zanzi 
 
 func (c *RegisterObjectHandler) activeObjectStrategy(record *types.RelationshipRecord, registration *types.Registration) (types.RegistrationResult, error) {
 	if record.OwnerDid != registration.Actor.Id {
-		return types.RegistrationResult_NoOp, errors.Wrap("object is already registered to a different actor", errors.ErrUnauthorized,
+		return types.RegistrationResult_NoOp, errors.Wrap("object is already registered to a different actor", errors.ErrorType_UNAUTHORIZED,
 			errors.Pair("policy", record.PolicyId),
 			errors.Pair("resource", record.Relationship.Object.Resource),
 			errors.Pair("object", record.Relationship.Object.Id),
@@ -162,7 +162,7 @@ func (c *RegisterObjectHandler) activeObjectStrategy(record *types.RelationshipR
 // archivedObjectStrategy modifies the relationship record to be unarchived
 func (c *RegisterObjectHandler) archivedObjectStrategy(ctx context.Context, engine *zanzi.Adapter, policy *types.Policy, record *types.RelationshipRecord, registration *types.Registration) (types.RegistrationResult, error) {
 	if record.OwnerDid != registration.Actor.Id {
-		return types.RegistrationResult_NoOp, errors.Wrap("object was archived by a different actor", errors.ErrUnauthorized,
+		return types.RegistrationResult_NoOp, errors.Wrap("object was archived by a different actor", errors.ErrorType_UNAUTHORIZED,
 			errors.Pair("policy", record.PolicyId),
 			errors.Pair("resource", record.Relationship.Object.Resource),
 			errors.Pair("object", record.Relationship.Object.Id),
@@ -233,7 +233,7 @@ func (c *UnregisterObjectHandler) Execute(ctx context.Context, runtime runtime.R
 		return nil, newUnregisterObjectErr(err)
 	}
 	if !authorized {
-		return nil, newUnregisterObjectErr(errors.Wrap("cannot unregister object: actor is not the owner", errors.ErrUnauthorized,
+		return nil, newUnregisterObjectErr(errors.Wrap("cannot unregister object: actor is not the owner", errors.ErrorType_UNAUTHORIZED,
 			errors.Pair("policy", cmd.PolicyId),
 			errors.Pair("resource", cmd.Object.Resource),
 			errors.Pair("object", cmd.Object.Id)))

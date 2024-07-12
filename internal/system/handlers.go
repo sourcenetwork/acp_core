@@ -12,7 +12,7 @@ import (
 func HandleSetParams(ctx context.Context, runtime runtime.RuntimeManager, req *types.SetParamsRequest) (*types.SetParamsResponse, error) {
 	_, err := auth.ExtractPrincipalWithType(ctx, auth.Root)
 	if err != nil {
-		return nil, newSetParamsErr(errors.Wrap("requires root principal", errors.ErrUnauthorized))
+		return nil, newSetParamsErr(errors.Wrap("requires root principal", errors.ErrorType_UNAUTHORIZED))
 	}
 
 	repo := NewParamsRepository(runtime)

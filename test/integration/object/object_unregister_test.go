@@ -81,7 +81,7 @@ func TestUnregisterObject_ActorCannotUnregisterObjectTheyDoNotOwn(t *testing.T) 
 	resp, err := ctx.Engine.UnregisterObject(ctx, req)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, errors.ErrUnauthorized)
+	require.ErrorIs(t, err, errors.ErrorType_UNAUTHORIZED)
 }
 
 func TestUnregisterObject_UnregisteringAnObjectThatDoesNotExistReturnsFoundFalse(t *testing.T) {
@@ -97,7 +97,7 @@ func TestUnregisterObject_UnregisteringAnObjectThatDoesNotExistReturnsFoundFalse
 	require.Equal(t, &types.UnregisterObjectResponse{
 		Found: false,
 	}, resp)
-	require.NoError(t, err, errors.ErrUnauthorized)
+	require.NoError(t, err, errors.ErrorType_UNAUTHORIZED)
 }
 
 func TestUnregisterObject_UnregisteringAnAlreadyArchivedObjectIsANoop(t *testing.T) {
@@ -136,7 +136,7 @@ func TestUnregisterObject_SendingInvalidPolicyIdErrors(t *testing.T) {
 	})
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, errors.ErrNotFound)
+	require.ErrorIs(t, err, errors.ErrorType_NOT_FOUND)
 }
 
 /*

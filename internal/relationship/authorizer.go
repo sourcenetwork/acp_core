@@ -34,14 +34,14 @@ type RelationshipAuthorizer struct {
 func (a *RelationshipAuthorizer) IsAuthorized(ctx context.Context, policy *types.Policy, relationship *types.Relationship, actor *types.Actor) (bool, error) {
 	resource := policy.GetResourceByName(relationship.Object.Resource)
 	if resource == nil {
-		return false, errors.Wrap("resource not found in policy", errors.ErrNotFound,
+		return false, errors.New("resource not found in policy", errors.ErrorType_NOT_FOUND,
 			errors.Pair("policy", policy.Id),
 			errors.Pair("resource", relationship.Object.Resource),
 		)
 	}
 	relation := resource.GetRelationByName(relationship.Relation)
 	if relation == nil {
-		return false, errors.Wrap("relation not found in resource", errors.ErrNotFound,
+		return false, errors.New("relation not found in resource", errors.ErrorType_NOT_FOUND,
 			errors.Pair("policy", policy.Id),
 			errors.Pair("resource", relationship.Object.Resource),
 			errors.Pair("relation", relationship.Relation),
