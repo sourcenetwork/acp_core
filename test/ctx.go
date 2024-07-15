@@ -17,7 +17,7 @@ var _ context.Context = (*TestCtx)(nil)
 type TestCtx struct {
 	Ctx     context.Context
 	T       *testing.T
-	Runtime *runtime.RuntimeManager
+	Runtime runtime.RuntimeManager
 	Engine  types.ACPEngineServer
 	Actors  ActorRegistrar
 	State   ActionState

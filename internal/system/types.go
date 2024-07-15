@@ -1,4 +1,4 @@
-package params
+package system
 
 import (
 	"context"
@@ -18,14 +18,14 @@ type ParamsRepository interface {
 	GetOrDefault(context.Context) (*types.Params, error)
 }
 
-func NewParamsRepository(runtime *runtime.RuntimeManager) *KVParamsRepository {
+func NewParamsRepository(runtime runtime.RuntimeManager) *KVParamsRepository {
 	return &KVParamsRepository{
 		runtime: runtime,
 	}
 }
 
 type KVParamsRepository struct {
-	runtime *runtime.RuntimeManager
+	runtime runtime.RuntimeManager
 }
 
 func (r *KVParamsRepository) Set(ctx context.Context, params *types.Params) error {

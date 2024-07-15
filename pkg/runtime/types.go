@@ -1,16 +1,24 @@
 package runtime
 
 import (
+	"context"
 	"fmt"
 
+	"github.com/sourcenetwork/acp_core/pkg/types"
 	rcdb "github.com/sourcenetwork/raccoondb"
 )
 
-type Opt func(m *RuntimeManager) error
+var _ RuntimeManager = (*runtimeManager)(nil)
+
+type AccountDIDIssuer interface {
+	IssueDID(ctx context.Context, id string) (string, error)
+}
+
+type Opt func(m *runtimeManager) error
 
 // WithKVStore specifies the kKVStore which must be used
 func WithKVStore(kv KVStore) Opt {
-	return func(m *RuntimeManager) error {
+	return func(m *runtimeManager) error {
 		m.kvStore = kv
 		return nil
 	}
@@ -19,7 +27,7 @@ func WithKVStore(kv KVStore) Opt {
 // WithPersistentKV initiates a LevelDB store at the given path
 // and uses it as the default KV Store
 func WithPersistentKV(kvPath string) Opt {
-	return func(m *RuntimeManager) error {
+	return func(m *runtimeManager) error {
 		kv, closeFn, err := rcdb.NewPersistentKV(kvPath, defualtDbFile)
 		if err != nil {
 			return fmt.Errorf("could not create kv: %v", err)
@@ -32,8 +40,8 @@ func WithPersistentKV(kvPath string) Opt {
 }
 
 // WithLogger sets the logger for the Runtime
-func WithLogger(logger Logger) Opt {
-	return func(m *RuntimeManager) error {
+func WithLogger(logger types.Logger) Opt {
+	return func(m *runtimeManager) error {
 		m.logger = logger
 		return nil
 	}
@@ -41,23 +49,31 @@ func WithLogger(logger Logger) Opt {
 
 // WithEventManager sets the EventManager for the Runtime
 func WithEventManager(manager EventManager) Opt {
-	return func(m *RuntimeManager) error {
+	return func(m *runtimeManager) error {
 		m.eventMan = manager
+		return nil
+	}
+}
+
+// WithLogicalClock sets the LogicalClock implementation for the Runtime
+func WithLogicalClock(clock LogicalClockService) Opt {
+	return func(m *runtimeManager) error {
+		m.clock = clock
 		return nil
 	}
 }
 
 // WithMemKV initiates an memory kv store and sets it as the Runtime's KV
 func WithMemKV() Opt {
-	return func(m *RuntimeManager) error {
+	return func(m *runtimeManager) error {
 		m.kvStore = rcdb.NewMemKV()
 		return nil
 	}
 }
 
 // NewRuntimeManager creates a RuntimeManager with the given options
-func NewRuntimeManager(opts ...Opt) (*RuntimeManager, error) {
-	rt := &RuntimeManager{
+func NewRuntimeManager(opts ...Opt) (RuntimeManager, error) {
+	rt := &runtimeManager{
 		eventMan: &DefaultEventManager{},
 		logger:   nil,
 	}
@@ -73,36 +89,41 @@ func NewRuntimeManager(opts ...Opt) (*RuntimeManager, error) {
 	return rt, nil
 }
 
-type RuntimeManager struct {
+type runtimeManager struct {
 	kvStore    KVStore
 	eventMan   EventManager
 	logger     Logger
 	metrics    MetricService
+	clock      LogicalClockService
 	cleanupFns []func() error
 	terminated bool
 }
 
-func (m *RuntimeManager) GetKVStore() KVStore {
+func (m *runtimeManager) GetKVStore() KVStore {
 	return m.kvStore
 }
 
-func (m *RuntimeManager) GetEventManager() EventManager {
+func (m *runtimeManager) GetEventManager() EventManager {
 	return m.eventMan
 }
 
-func (m *RuntimeManager) GetRequestLogger() Logger {
+func (m *runtimeManager) GetLogger() Logger {
 	return m.logger
 }
 
-func (m *RuntimeManager) GetLogger() Logger {
-	return m.logger
-}
-
-func (m *RuntimeManager) GetMetricService() MetricService {
+func (m *runtimeManager) GetMetricService() MetricService {
 	return m.metrics
 }
 
-func (m *RuntimeManager) Terminate() error {
+func (m *runtimeManager) GetAccountDIDIssuer() AccountDIDIssuer {
+	return nil
+}
+
+func (m *runtimeManager) GetLogicalClock() LogicalClockService {
+	return m.clock
+}
+
+func (m *runtimeManager) Terminate() error {
 	m.terminated = true
 	for _, f := range m.cleanupFns {
 		err := f()
@@ -113,11 +134,28 @@ func (m *RuntimeManager) Terminate() error {
 	return nil
 }
 
+type RuntimeManager interface {
+	GetKVStore() KVStore
+	GetEventManager() EventManager
+	GetLogger() Logger
+	GetMetricService() MetricService
+	GetLogicalClock() LogicalClockService
+
+	// Terminate frees up all used up resources, leaving the runtime unusable
+	Terminate() error
+}
+
 type KVStore = rcdb.KVStore
+
+type Logger = types.Logger
 
 type MetricService interface {
 }
 
 type EventManager interface {
 	EmitEvent(any) error
+}
+
+type LogicalClockService interface {
+	GetCurrentTime(ctx context.Context) uint64 // maybe make this generic over seomthing that can be compared
 }

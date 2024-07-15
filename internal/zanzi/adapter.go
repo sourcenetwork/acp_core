@@ -9,13 +9,12 @@ import (
 	"github.com/sourcenetwork/zanzi/pkg/api"
 	"github.com/sourcenetwork/zanzi/pkg/domain"
 
-	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
 
 // NewZanzi builds an AuthEngine with zanzi as backend
-func NewZanzi(kv rcdb.KVStore, logger runtime.Logger) (*Adapter, error) {
+func NewZanzi(kv rcdb.KVStore, logger types.Logger) (*Adapter, error) {
 	wrappedLogger := &loggerWrapper{}
 
 	z, err := zanzi.New(

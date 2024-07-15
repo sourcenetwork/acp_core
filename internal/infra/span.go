@@ -1,10 +1,10 @@
-package tracing
+package utils
 
 import (
 	"context"
 	"time"
 
-	"github.com/sourcenetwork/acp_core/pkg/runtime"
+	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
 const spanEventType = "msg_span"
@@ -83,7 +83,7 @@ func (s *MsgSpan) ToEvent() sdk.Event {
 }
 */
 
-func (s *MsgSpan) Log(logger runtime.Logger) {
+func (s *MsgSpan) Log(logger types.Logger) {
 	var kvs []any
 	kvs = append(kvs, AttrStart)
 	kvs = append(kvs, s.start.String())
