@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
@@ -37,11 +38,11 @@ func (c *VerifyAccessRequestQuery) Execute(ctx context.Context, engine zanzi.Ada
 
 func (c *VerifyAccessRequestQuery) validate() error {
 	if c.Policy == nil {
-		return types.ErrPolicyNil
+		return errors.New("policy nil", errors.ErrorType_BAD_INPUT)
 	}
 
 	if c.AccessRequest == nil {
-		return types.ErrAccessRequestNil
+		return errors.New("access request nil", errors.ErrorType_BAD_INPUT)
 	}
 
 	return nil

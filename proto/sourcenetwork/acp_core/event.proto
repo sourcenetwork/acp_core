@@ -5,7 +5,6 @@ package sourcenetwork.acp_core;
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
 
 message EventPolicyCreated {
-  string creator = 1;
   string policy_id = 2;
   string policy_name = 3;
 }

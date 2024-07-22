@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/test"
 )
@@ -53,17 +54,19 @@ func TestSetRelationship_OwnerCanShareObjectTheyOwn(t *testing.T) {
 		PolicyId:     ctx.State.PolicyId,
 		CreationTime: timestamp,
 		Relationship: types.NewActorRelationship("file", "foo", "reader", bob),
+		Metadata:     metadata,
 	}
 	resp, err := ctx.Engine.SetRelationship(ctx, req)
 
 	want := &types.SetRelationshipResponse{
 		RecordExisted: false,
 		Record: &types.RelationshipRecord{
-			Actor:        alice,
+			OwnerDid:     alice,
 			CreationTime: timestamp,
 			PolicyId:     ctx.State.PolicyId,
 			Relationship: types.NewActorRelationship("file", "foo", "reader", bob),
 			Archived:     false,
+			Metadata:     metadata,
 		},
 	}
 	require.Equal(t, want, resp)
@@ -82,7 +85,7 @@ func TestSetRelationship_ActorCannotSetRelationshipForUnregisteredObject(t *test
 	resp, err := ctx.Engine.SetRelationship(ctx, req)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, types.ErrObjectNotFound)
+	require.ErrorIs(t, err, errors.ErrorType_NOT_FOUND)
 }
 
 func TestSetRelationship_ActorCannotSetRelationshipForObjectTheyDoNotOwn(t *testing.T) {
@@ -98,7 +101,7 @@ func TestSetRelationship_ActorCannotSetRelationshipForObjectTheyDoNotOwn(t *test
 	resp, err := ctx.Engine.SetRelationship(ctx, req)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, types.ErrNotAuthorized)
+	require.ErrorIs(t, err, errors.ErrorType_UNAUTHORIZED)
 }
 
 func TestSetRelationship_ManagerActorCanDelegateAccessToAnotherActor(t *testing.T) {
@@ -128,7 +131,7 @@ func TestSetRelationship_ManagerActorCanDelegateAccessToAnotherActor(t *testing.
 	want := &types.SetRelationshipResponse{
 		RecordExisted: false,
 		Record: &types.RelationshipRecord{
-			Actor:        bob,
+			OwnerDid:     bob,
 			CreationTime: timestamp,
 			PolicyId:     ctx.State.PolicyId,
 			Relationship: types.NewActorRelationship("file", "foo", "reader", charlie),
@@ -164,5 +167,5 @@ func TestSetRelationship_ManagerActorCannotSetRelationshipToRelationshipsTheyDoN
 	resp, err := ctx.Engine.SetRelationship(ctx, req)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, types.ErrNotAuthorized)
+	require.ErrorIs(t, err, errors.ErrorType_UNAUTHORIZED)
 }

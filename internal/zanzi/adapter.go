@@ -4,19 +4,18 @@ import (
 	"context"
 	"fmt"
 
-	"cosmossdk.io/log"
 	rcdb "github.com/sourcenetwork/raccoondb"
 	"github.com/sourcenetwork/zanzi"
 	"github.com/sourcenetwork/zanzi/pkg/api"
 	"github.com/sourcenetwork/zanzi/pkg/domain"
 
-	"github.com/sourcenetwork/acp_core/internal/utils"
 	"github.com/sourcenetwork/acp_core/pkg/types"
+	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
 
 // NewZanzi builds an AuthEngine with zanzi as backend
-func NewZanzi(kv rcdb.KVStore, logger log.Logger) (*Adapter, error) {
-	wrappedLogger := &loggerWrapper{logger}
+func NewZanzi(kv rcdb.KVStore, logger types.Logger) (*Adapter, error) {
+	wrappedLogger := &loggerWrapper{}
 
 	z, err := zanzi.New(
 		zanzi.WithKVStore(kv),

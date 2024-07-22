@@ -2,9 +2,9 @@ package relationship
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
@@ -34,11 +34,18 @@ type RelationshipAuthorizer struct {
 func (a *RelationshipAuthorizer) IsAuthorized(ctx context.Context, policy *types.Policy, relationship *types.Relationship, actor *types.Actor) (bool, error) {
 	resource := policy.GetResourceByName(relationship.Object.Resource)
 	if resource == nil {
-		return false, fmt.Errorf("policy %v: resource %v: not found: %w", policy.Name, relationship.Object.Resource, types.ErrAcpInput)
+		return false, errors.New("resource not found in policy", errors.ErrorType_NOT_FOUND,
+			errors.Pair("policy", policy.Id),
+			errors.Pair("resource", relationship.Object.Resource),
+		)
 	}
 	relation := resource.GetRelationByName(relationship.Relation)
 	if relation == nil {
-		return false, fmt.Errorf("policy %v: resource %v: relation %v: not found: %w", policy.Name, resource.Name, relationship.Relation, types.ErrAcpInput)
+		return false, errors.New("relation not found in resource", errors.ErrorType_NOT_FOUND,
+			errors.Pair("policy", policy.Id),
+			errors.Pair("resource", relationship.Object.Resource),
+			errors.Pair("relation", relationship.Relation),
+		)
 	}
 
 	authRequest := &types.Operation{

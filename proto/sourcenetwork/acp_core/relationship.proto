@@ -50,20 +50,20 @@ message Relationship {
 
 // RelationshipRecord represents a document contained a Relationship and additional data.
 message RelationshipRecord {
-  // id of the transaction that added the policy
-  string tx_id = 1;
+  string policy_id = 1;
 
-  string policy_id = 2;
+  // owner_did is the DID of the Actor which created the relationship
+  string owner_did = 2;
 
-  // actor is the DID of the Actor which created the relationship
-  string actor = 3;
-
-  Relationship relationship = 4;
+  Relationship relationship = 3;
 
   // archived indicates whether an object has been unregistered
-  bool archived = 5;
+  bool archived = 4;
 
-  google.protobuf.Timestamp creation_time = 6;
+  google.protobuf.Timestamp creation_time = 5;
+
+  // metadata contains arbitrary caller specified metadata
+  map<string, string> metadata = 6;
 }
 
 // Registration represents a record assigning an Object as being owned by an Actor

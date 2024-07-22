@@ -5,7 +5,6 @@ package sourcenetwork.acp_core;
 import "google/protobuf/timestamp.proto";
 
 import "sourcenetwork/acp_core/access_decision.proto";
-import "sourcenetwork/acp_core/params.proto";
 import "sourcenetwork/acp_core/policy.proto";
 import "sourcenetwork/acp_core/policy_short.proto";
 import "sourcenetwork/acp_core/relationship.proto";
@@ -96,16 +95,23 @@ message CreatePolicyRequest {
   string                    policy        = 1;
   PolicyMarshalingType      marshal_type  = 2;
   google.protobuf.Timestamp creation_time = 3;
+  // metadata is a map of attributes which can be used to store
+  // caller supplied satellite data 
+  map<string, string> metadata = 4;
 }
 
 message CreatePolicyResponse {
   Policy policy = 1;
+  map<string, string> metadata = 2;
 }
 
 message SetRelationshipRequest {
   string                    policy_id     = 1;
   google.protobuf.Timestamp creation_time = 2;
   Relationship              relationship  = 3;
+  // metadata is a map of attributes which can be used to store
+  // caller supplied satellite data 
+  map<string, string> metadata = 4;
 }
 
 message SetRelationshipResponse {
@@ -128,6 +134,9 @@ message RegisterObjectRequest {
   string                    policy_id     = 1;
   Object                    object        = 2;
   google.protobuf.Timestamp creation_time = 3;
+  // metadata is a map of attributes which can be used to store
+  // caller supplied satellite data 
+  map<string, string> metadata = 4;
 }
 
 message RegisterObjectResponse {
@@ -142,6 +151,7 @@ message UnregisterObjectRequest {
 
 message UnregisterObjectResponse {
   bool found = 1;
+  uint64 relationships_removed = 2;
 }
 
 

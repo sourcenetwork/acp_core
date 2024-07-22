@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"cosmossdk.io/log"
+	"github.com/sourcenetwork/acp_core/pkg/types"
 	rcdb "github.com/sourcenetwork/raccoondb"
 )
 
@@ -40,7 +40,7 @@ func WithPersistentKV(kvPath string) Opt {
 }
 
 // WithLogger sets the logger for the Runtime
-func WithLogger(logger Logger) Opt {
+func WithLogger(logger types.Logger) Opt {
 	return func(m *runtimeManager) error {
 		m.logger = logger
 		return nil
@@ -75,7 +75,7 @@ func WithMemKV() Opt {
 func NewRuntimeManager(opts ...Opt) (RuntimeManager, error) {
 	rt := &runtimeManager{
 		eventMan: &DefaultEventManager{},
-		logger:   log.NewNopLogger(),
+		logger:   nil,
 	}
 	WithMemKV()(rt)
 
@@ -147,7 +147,7 @@ type RuntimeManager interface {
 
 type KVStore = rcdb.KVStore
 
-type Logger = log.Logger
+type Logger = types.Logger
 
 type MetricService interface {
 }

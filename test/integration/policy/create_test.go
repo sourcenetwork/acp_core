@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/sourcenetwork/acp_core/internal/policy"
-	"github.com/sourcenetwork/acp_core/pkg/auth"
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/test"
 	testutil "github.com/sourcenetwork/acp_core/test/util"
@@ -14,10 +14,12 @@ import (
 
 var timestamp = testutil.MustDateTimeToProto("2024-01-01 00:00:00")
 
+var metadata map[string]string = map[string]string{
+	"test": "abc",
+}
+
 func TestCreatePolicy_ValidPolicyIsCreated(t *testing.T) {
 	ctx := test.NewTestCtx(t)
-	bob := ctx.Actors.DID("bob")
-	ctx.SetPrincipal("bob")
 
 	policyStr := `
 name: policy
@@ -47,16 +49,17 @@ actor:
 		Policy:       policyStr,
 		MarshalType:  types.PolicyMarshalingType_SHORT_YAML,
 		CreationTime: timestamp,
+		Metadata:     metadata,
 	}
 	resp, err := ctx.Engine.CreatePolicy(ctx, &msg)
 
 	require.Nil(t, err)
+	require.Equal(t, metadata, resp.Metadata)
 	require.Equal(t, resp.Policy, &types.Policy{
 		Id:           "d12fa4d041911f2c77f6f49dd73942fb03389ab983714315af67b0f8e7cbcfef",
 		Name:         "policy",
 		Description:  "ok",
 		CreationTime: timestamp,
-		Creator:      bob,
 		Resources: []*types.Resource{
 			&types.Resource{
 				Name: "file",
@@ -117,7 +120,6 @@ actor:
 	})
 
 	event := &types.EventPolicyCreated{
-		Creator:    bob,
 		PolicyId:   "4419a8abb886c641bc794b9b3289bc2118ab177542129627b6b05d540de03e46",
 		PolicyName: "policy",
 	}
@@ -195,24 +197,7 @@ resources:
 	resp, err := ctx.Engine.CreatePolicy(ctx, &req)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, policy.ErrInvalidPolicy)
-}
-
-func TestCreatePolicy_CreatePolicyWithAnonymousPrincipalErrors(t *testing.T) {
-	pol := `
-name: test
-resources:
-`
-	ctx := test.NewTestCtx(t)
-
-	req := types.CreatePolicyRequest{
-		Policy:      pol,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
-	}
-	resp, err := ctx.Engine.CreatePolicy(ctx, &req)
-
-	require.Nil(t, resp)
-	require.ErrorIs(t, err, auth.ErrUnauthenticatd)
+	require.ErrorIs(t, err, errors.ErrInvalidPolicy)
 }
 
 func TestCreatePolicy_CreatingMultipleEqualPoliciesProduceDifferentIDs(t *testing.T) {

@@ -1,9 +1,8 @@
 package relationship
 
 import (
-	"fmt"
-
 	"github.com/sourcenetwork/acp_core/pkg/did"
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
@@ -14,17 +13,19 @@ func relationshipSpec(policy *types.Policy, relationship *types.Relationship) er
 	switch subj := relationship.Subject.Subject.(type) {
 	case *types.Subject_Actor:
 		if err := did.IsValidDID(subj.Actor.Id); err != nil {
-			return fmt.Errorf("%w: actor must be a valid did: %v", ErrInvalidRelationship, err)
+			return errors.Wrap("actor must be a valid did: "+err.Error(),
+				errors.ErrInvalidRelationship, errors.Pair("did", subj.Actor.Id))
 		}
 	case *types.Subject_Object:
 		err := did.IsValidDID(subj.Object.Id)
 		if subj.Object.Resource == policy.ActorResource.Name && err != nil {
-			return fmt.Errorf("%w: actor must be a valid did: %v", ErrInvalidRelationship, err)
+			return errors.Wrap("actor must be a valid did: "+err.Error(),
+				errors.ErrInvalidRelationship, errors.Pair("did", subj.Object.Id))
 		}
 	}
 
 	if relationship.Object.Id == "" {
-		return fmt.Errorf("object id must not be empty: %w", ErrInvalidRelationship)
+		return errors.Wrap("object id must not be empty", errors.ErrInvalidRelationship)
 	}
 
 	return nil
@@ -32,24 +33,31 @@ func relationshipSpec(policy *types.Policy, relationship *types.Relationship) er
 
 func registrationSpec(registration *types.Registration) error {
 	if registration == nil {
-		return types.ErrRegistrationNil
+		return errors.Wrap("registration is required", errors.ErrorType_BAD_INPUT)
 	}
 
 	if registration.Actor == nil {
-		return fmt.Errorf("invalid registration: %w", types.ErrActorNil)
+		return errors.Wrap("registration actor is required", errors.ErrorType_BAD_INPUT)
 	}
 
 	if registration.Object == nil {
-		return fmt.Errorf("invalid registration: %w", types.ErrObjectNil)
+		return errors.Wrap("registration object is required", errors.ErrorType_BAD_INPUT)
 	}
 
 	if registration.Object.Id == "" {
-		return fmt.Errorf("invalid registration: object id required")
+		return errors.Wrap("registration object id is required", errors.ErrorType_BAD_INPUT)
 	}
 
 	if err := did.IsValidDID(registration.Actor.Id); err != nil {
-		return fmt.Errorf("invalid registration: %v", err)
+		return errors.Wrap("invalid registration: invalid actor did", errors.ErrorType_BAD_INPUT)
 	}
 
+	return nil
+}
+
+func ObjectSpec(obj *types.Object) error {
+	if obj.Id == "" {
+		return errors.Wrap("object ID must not be empty", errors.ErrorType_BAD_INPUT)
+	}
 	return nil
 }

@@ -2,12 +2,11 @@ package relationship
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/sourcenetwork/acp_core/internal/policy"
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
 	"github.com/sourcenetwork/acp_core/pkg/auth"
-	"github.com/sourcenetwork/acp_core/pkg/did"
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
@@ -16,15 +15,14 @@ type SetRelationshipHandler struct{}
 
 func (c *SetRelationshipHandler) Execute(ctx context.Context, runtime runtime.RuntimeManager, cmd *types.SetRelationshipRequest) (*types.SetRelationshipResponse, error) {
 	//eventManager := runtime.GetEventManager()
-
 	engine, err := zanzi.NewZanzi(runtime.GetKVStore(), runtime.GetLogger())
 	if err != nil {
-		return nil, err
+		return nil, newSetRelationshipErr(err)
 	}
 
 	principal, err := auth.ExtractPrincipalWithType(ctx, auth.DID)
 	if err != nil {
-		return nil, fmt.Errorf("MsgRegisterObject: %w", err)
+		return nil, newSetRelationshipErr(err)
 	}
 	did := principal.Identifier()
 
@@ -32,16 +30,16 @@ func (c *SetRelationshipHandler) Execute(ctx context.Context, runtime runtime.Ru
 
 	rec, err := engine.GetPolicy(ctx, cmd.PolicyId)
 	if err != nil {
-		return nil, err
+		return nil, newSetRelationshipErr(err)
 	}
 	if rec == nil {
-		return nil, fmt.Errorf("MsgSetRelationship: policy %v: %w", cmd.PolicyId, types.ErrPolicyNotFound)
+		return nil, newSetRelationshipErr(errors.NewPolicyNotFound(cmd.PolicyId))
 	}
 	policy := rec.Policy
 
-	err = c.validate(ctx, policy, cmd)
+	err = c.validate(policy, cmd)
 	if err != nil {
-		return nil, fmt.Errorf("failed to set relationship: %w", err)
+		return nil, newSetRelationshipErr(err)
 	}
 
 	creatorActor := types.Actor{
@@ -49,26 +47,33 @@ func (c *SetRelationshipHandler) Execute(ctx context.Context, runtime runtime.Ru
 	}
 
 	obj := cmd.Relationship.Object
-	ownerRecord, err := QueryOwnerRelationship(ctx, engine, policy, obj)
+	ownerRecord, err := queryOwnerRelationship(ctx, engine, policy, obj)
 	if err != nil {
-		return nil, fmt.Errorf("failed to set relationship: %w", err)
+		return nil, newSetRelationshipErr(err)
 	}
 	if ownerRecord == nil {
-		return nil, fmt.Errorf("failed to set relationship: object %v: %w", obj, types.ErrObjectNotFound)
+		return nil, newSetRelationshipErr(errors.New("cannot set relationship for unregistered object", errors.ErrorType_NOT_FOUND,
+			errors.Pair("policy", cmd.PolicyId),
+			errors.Pair("resource", cmd.Relationship.Object.Resource),
+			errors.Pair("object", cmd.Relationship.Object.Id),
+		))
 	}
 
 	authorized, err := authorizer.IsAuthorized(ctx, policy, cmd.Relationship, &creatorActor)
 	if err != nil {
-		return nil, fmt.Errorf("failed to set relationship: %w", err)
+		return nil, newSetRelationshipErr(err)
 	}
 	if !authorized {
-		return nil, fmt.Errorf("failed to set relationship: actor %v is not a manager of relation %v for object %v: %w",
-			did, cmd.Relationship.Relation, obj, types.ErrNotAuthorized)
+		return nil, newSetRelationshipErr(
+			errors.New("cannot create relationship: actor is not a manager of relation", errors.ErrorType_UNAUTHORIZED,
+				errors.Pair("policy", cmd.PolicyId),
+				errors.Pair("relation", cmd.Relationship.Relation),
+				errors.Pair("actor", did),
+			))
 	}
-
 	record, err := engine.GetRelationship(ctx, policy, cmd.Relationship)
 	if err != nil {
-		return nil, fmt.Errorf("failed to set relationship: %w", err)
+		return nil, newSetRelationshipErr(err)
 	}
 	if record != nil {
 		return &types.SetRelationshipResponse{
@@ -81,12 +86,13 @@ func (c *SetRelationshipHandler) Execute(ctx context.Context, runtime runtime.Ru
 		PolicyId:     policy.Id,
 		Relationship: cmd.Relationship,
 		CreationTime: cmd.CreationTime,
-		Actor:        did,
+		OwnerDid:     did,
 		Archived:     false,
+		Metadata:     cmd.Metadata,
 	}
 	_, err = engine.SetRelationship(ctx, policy, record)
 	if err != nil {
-		return nil, fmt.Errorf("failed to set relationship: %w", err)
+		return nil, newSetRelationshipErr(err)
 	}
 
 	return &types.SetRelationshipResponse{
@@ -95,22 +101,14 @@ func (c *SetRelationshipHandler) Execute(ctx context.Context, runtime runtime.Ru
 	}, nil
 }
 
-func (c *SetRelationshipHandler) validate(ctx context.Context, pol *types.Policy, cmd *types.SetRelationshipRequest) error {
+func (c *SetRelationshipHandler) validate(pol *types.Policy, cmd *types.SetRelationshipRequest) error {
 	err := relationshipSpec(pol, cmd.Relationship)
 	if err != nil {
 		return err
 	}
-
 	if cmd.Relationship.Relation == policy.OwnerRelation {
 		return ErrSetOwnerRel
 	}
-
-	if actor := cmd.Relationship.Subject.GetActor(); actor != nil {
-		if err := did.IsValidDID(actor.Id); err != nil {
-			return err
-		}
-	}
-
 	return nil
 }
 
@@ -118,63 +116,60 @@ type DeleteRelationshipHandler struct{}
 
 func (c *DeleteRelationshipHandler) Execute(ctx context.Context, runtime runtime.RuntimeManager, cmd *types.DeleteRelationshipRequest) (*types.DeleteRelationshipResponse, error) {
 	//eventManager := runtime.GetEventManager()
-
 	engine, err := zanzi.NewZanzi(runtime.GetKVStore(), runtime.GetLogger())
 	if err != nil {
-		return nil, err
+		return nil, newDeleteRelationshipErr(err)
 	}
 
 	principal, err := auth.ExtractPrincipalWithType(ctx, auth.DID)
 	if err != nil {
-		return nil, fmt.Errorf("MsgRegisterObject: %w", err)
+		return nil, newDeleteRelationshipErr(err)
 	}
 	did := principal.Identifier()
 
 	authorizer := NewRelationshipAuthorizer(engine)
 
-	err = c.validate(ctx, cmd)
+	err = c.validate(cmd)
 	if err != nil {
-		return nil, fmt.Errorf("failed to delete relationship: %w", err)
+		return nil, newDeleteRelationshipErr(err)
 	}
 
 	rec, err := engine.GetPolicy(ctx, cmd.PolicyId)
 	if err != nil {
-		return nil, err
+		return nil, newDeleteRelationshipErr(err)
 	}
 	if rec == nil {
-		return nil, fmt.Errorf("MsgDeleteRelationship: policy %v: %w", cmd.PolicyId, types.ErrPolicyNotFound)
+		return nil, newDeleteRelationshipErr(errors.NewPolicyNotFound(cmd.PolicyId))
 	}
 	policy := rec.Policy
 
 	isAuthorized, err := c.isActorAuthorized(ctx, authorizer, policy, cmd, did)
 	if err != nil {
-		return nil, fmt.Errorf("failed to delete relationship: %w", err)
+		return nil, newDeleteRelationshipErr(err)
 	}
 
 	if !isAuthorized {
-		return nil, fmt.Errorf("failed to delete relationship: %w", types.ErrNotAuthorized)
+		return nil, newDeleteRelationshipErr(errors.Wrap("cannot delete relationship: actor is not a manager of relation", errors.ErrorType_UNAUTHORIZED,
+			errors.Pair("policy", cmd.PolicyId),
+			errors.Pair("relation", cmd.Relationship.Relation),
+			errors.Pair("actor", did),
+		))
 	}
 
 	found, err := engine.DeleteRelationship(ctx, policy, cmd.Relationship)
 	if err != nil {
-		return nil, fmt.Errorf("failed to delete relationship: %w", err)
+		return nil, newDeleteRelationshipErr(err)
 	}
 
 	return &types.DeleteRelationshipResponse{
 		RecordFound: bool(found),
 	}, nil
-
 }
 
-func (c *DeleteRelationshipHandler) validate(ctx context.Context, cmd *types.DeleteRelationshipRequest) error {
-	if cmd.Relationship == nil {
-		return types.ErrRelationshipNil
-	}
-
+func (c *DeleteRelationshipHandler) validate(cmd *types.DeleteRelationshipRequest) error {
 	if cmd.Relationship.Relation == policy.OwnerRelation {
 		return ErrDeleteOwnerRel
 	}
-
 	return nil
 }
 

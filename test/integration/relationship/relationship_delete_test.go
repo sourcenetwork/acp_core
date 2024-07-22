@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/test"
 )
@@ -103,5 +104,5 @@ func TestDeleteRelationship_ObjectManagerCannotRemoveRelationshipForRelationThey
 	resp, err := ctx.Engine.DeleteRelationship(ctx, req)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, types.ErrNotAuthorized)
+	require.ErrorIs(t, err, errors.ErrorType_UNAUTHORIZED)
 }

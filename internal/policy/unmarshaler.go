@@ -7,8 +7,8 @@ import (
 
 	"sigs.k8s.io/yaml"
 
-	"github.com/sourcenetwork/acp_core/internal/utils"
 	"github.com/sourcenetwork/acp_core/pkg/types"
+	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
 
 const (

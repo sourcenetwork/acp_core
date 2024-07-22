@@ -4,8 +4,8 @@ package did
 import (
 	"context"
 
-	"github.com/cyware/ssi-sdk/did"
-	"github.com/cyware/ssi-sdk/did/key"
+	"github.com/TBD54566975/ssi-sdk/did"
+	"github.com/TBD54566975/ssi-sdk/did/key"
 )
 
 type DIDDocument struct {

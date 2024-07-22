@@ -17,8 +17,6 @@ message Policy {
   map<string, string> attributes = 5;
   repeated Resource resources = 6;
   ActorResource actor_resource = 7;
-  string creator = 10;
-  string tx_id = 11;
 }
 
 // Resource models a namespace for objects in a Policy.

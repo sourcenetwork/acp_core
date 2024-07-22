@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/test"
 )
@@ -19,14 +20,11 @@ func TestQueryPolicy_UnknownPolicyReturnsPolicyNotFoundErr(t *testing.T) {
 	resp, err := ctx.Engine.GetPolicy(ctx, &req)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, types.ErrPolicyNotFound)
+	require.ErrorIs(t, err, errors.ErrorType_NOT_FOUND)
 }
 
 func TestGetPolicy_ReturnsAnExistingPolicy(t *testing.T) {
 	ctx := test.NewTestCtx(t)
-
-	bob := ctx.Actors.DID("bob")
-	ctx.SetPrincipal("bob")
 
 	pol := `
 name: policy
@@ -44,7 +42,6 @@ name: policy
 	want := &types.Policy{
 		Id:           "a969e15fbc568e85a4fadf4758b0fc69ae59248e7ffc983b6caa63bcff19c3cc",
 		Name:         "policy",
-		Creator:      bob,
 		CreationTime: test.DefaultTs,
 		ActorResource: &types.ActorResource{
 			Name: "actor",

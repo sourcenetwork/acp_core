@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/test"
 )
@@ -40,18 +41,19 @@ func TestRegisterObject_RegisteringNewObjectIsSucessful(t *testing.T) {
 		PolicyId:     ctx.State.PolicyId,
 		Object:       types.NewObject("resource", "foo"),
 		CreationTime: timestamp,
+		Metadata:     metadata,
 	}
 	resp, err := ctx.Engine.RegisterObject(ctx, &req)
 
 	want := &types.RegisterObjectResponse{
 		Result: types.RegistrationResult_Registered,
 		Record: &types.RelationshipRecord{
-			TxId:         "",
 			PolicyId:     ctx.State.PolicyId,
-			Actor:        bob,
+			OwnerDid:     bob,
 			Relationship: types.NewActorRelationship("resource", "foo", "owner", bob),
 			Archived:     false,
 			CreationTime: timestamp,
+			Metadata:     metadata,
 		},
 	}
 	require.NoError(t, err)
@@ -91,7 +93,7 @@ func TestRegisterObject_RegisteringObjectRegisteredToAnotherUserErrors(t *testin
 	resp, err := ctx.Engine.RegisterObject(ctx, &req)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, types.ErrNotAuthorized)
+	require.ErrorIs(t, err, errors.ErrorType_UNAUTHORIZED)
 }
 
 func TestRegisterObject_ReregisteringObjectOwnedByUserIsNoop(t *testing.T) {
@@ -124,7 +126,7 @@ func TestRegisterObject_ReregisteringObjectOwnedByUserIsNoop(t *testing.T) {
 			PolicyId:     ctx.State.PolicyId,
 			Relationship: types.NewActorRelationship("resource", "foo", "owner", alice),
 			Archived:     false,
-			Actor:        alice,
+			OwnerDid:     alice,
 		},
 	}
 	require.Equal(t, want, resp)
@@ -165,7 +167,7 @@ func TestRegisterObject_RegisteringAnotherUsersArchivedObjectErrors(t *testing.T
 	)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, types.ErrNotAuthorized)
+	require.ErrorIs(t, err, errors.ErrorType_UNAUTHORIZED)
 }
 
 func TestRegisterObject_RegisteringArchivedUserObjectUnarchivesObject(t *testing.T) {
@@ -210,7 +212,7 @@ func TestRegisterObject_RegisteringArchivedUserObjectUnarchivesObject(t *testing
 			PolicyId:     ctx.State.PolicyId,
 			Relationship: types.NewActorRelationship("resource", "foo", "owner", alice),
 			Archived:     false,
-			Actor:        alice,
+			OwnerDid:     alice,
 		},
 	}
 	require.Equal(t, want, got)
@@ -258,7 +260,7 @@ func TestRegisterObject_RegisteringToUnknownPolicyReturnsError(t *testing.T) {
 	)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, types.ErrPolicyNotFound)
+	require.ErrorIs(t, err, errors.ErrorType_NOT_FOUND)
 }
 
 func TestRegisterObject_BlankResourceErrors(t *testing.T) {

@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/test"
 )
@@ -91,7 +92,7 @@ func TestGetObjectOwner_QueryingPolicyThatDoesNotExistReturnError(t *testing.T) 
 	})
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, types.ErrPolicyNotFound)
+	require.ErrorIs(t, err, errors.ErrorType_NOT_FOUND)
 }
 
 func TestGetObjectOwner_QueryingForUnregisteredObjectReturnsEmptyOwner(t *testing.T) {

@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
-	"github.com/sourcenetwork/acp_core/pkg/auth"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
@@ -18,15 +17,6 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 	if err != nil {
 		return nil, err
 	}
-
-	principal, err := auth.ExtractPrincipal(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("CreatePolicy: %w", err)
-	}
-	if principal.IsAnonymous() {
-		return nil, fmt.Errorf("CreatePolicy: requires authenticated principal: %w", auth.ErrUnauthenticatd)
-	}
-	identifier := principal.Identifier()
 
 	ir, err := Unmarshal(cmd.Policy, cmd.MarshalType)
 	if err != nil {
@@ -45,7 +35,7 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 	}
 
 	factory := factory{}
-	record, err := factory.Create(ir, identifier, i, cmd.CreationTime)
+	record, err := factory.Create(ir, cmd.Metadata, i, cmd.CreationTime)
 	if err != nil {
 		return nil, fmt.Errorf("CreatePolicy: %w", err)
 	}
@@ -63,7 +53,6 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 
 	eventManager := runtime.GetEventManager()
 	event := types.EventPolicyCreated{
-		Creator:    identifier,
 		PolicyId:   record.Policy.Id,
 		PolicyName: record.Policy.Name,
 	}
@@ -73,7 +62,8 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 	}
 
 	return &types.CreatePolicyResponse{
-		Policy: record.Policy,
+		Policy:   record.Policy,
+		Metadata: record.Metadata,
 	}, nil
 }
 

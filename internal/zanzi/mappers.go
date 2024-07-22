@@ -3,9 +3,10 @@ package zanzi
 import (
 	"fmt"
 
-	"github.com/sourcenetwork/acp_core/internal/utils"
+	"github.com/sourcenetwork/acp_core/pkg/utils"
 	"github.com/sourcenetwork/zanzi/pkg/domain"
 
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
@@ -295,7 +296,7 @@ func (m *selectorMapper) MapObjectSelector(selector *types.ObjectSelector) (*dom
 			ResourceSpec: selectorType.ResourcePredicate,
 		}
 	default:
-		return nil, fmt.Errorf("ObjectSelector %v: %w", selectorType, types.ErrInvalidVariant)
+		return nil, errors.Wrap("relation selector", errors.ErrUnknownVariant, errors.Pair("variant", selectorType))
 	}
 
 	return zanziSelector, nil
@@ -314,7 +315,7 @@ func (m *selectorMapper) mapRelationSelector(selector *types.RelationSelector) (
 			Wildcard: &domain.WildcardSelector{},
 		}
 	default:
-		return nil, fmt.Errorf("RelationSelector %v: %w", selectorType, types.ErrInvalidVariant)
+		return nil, errors.Wrap("relation selector", errors.ErrUnknownVariant, errors.Pair("variant", selectorType))
 	}
 	return zanziSelector, nil
 }
@@ -332,7 +333,7 @@ func (m *selectorMapper) mapSubjectSelector(selector *types.SubjectSelector) (*d
 			Wildcard: &domain.WildcardSelector{},
 		}
 	default:
-		return nil, fmt.Errorf("SubjectSelector %v: %w", selectorType, types.ErrInvalidVariant)
+		return nil, errors.Wrap("subject selector", errors.ErrUnknownVariant, errors.Pair("variant", selectorType))
 	}
 
 	return zanziSelector, nil

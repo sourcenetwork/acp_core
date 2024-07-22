@@ -5,6 +5,7 @@ import (
 
 	rcdb "github.com/sourcenetwork/raccoondb"
 
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
@@ -33,7 +34,7 @@ func (r *KVParamsRepository) Set(ctx context.Context, params *types.Params) erro
 
 	bytes, err := params.Marshal()
 	if err != nil {
-		return err
+		return errors.NewFromCause("could not marshal params:", err, errors.ErrorType_BAD_INPUT)
 	}
 
 	err = kv.Set([]byte(key), bytes)
@@ -58,7 +59,8 @@ func (r *KVParamsRepository) GetOrDefault(ctx context.Context) (*types.Params, e
 	params := &types.Params{}
 	err = params.Unmarshal(bytes)
 	if err != nil {
-		return nil, err
+		// TODO this might mean data corruption or a bug, should be logged
+		return nil, errors.NewFromCause("could not unmarshal stored params, considering setting it", err, errors.ErrorType_INTERNAL)
 	}
 
 	return params, nil

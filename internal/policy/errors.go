@@ -1,19 +1,14 @@
 package policy
 
 import (
-	"fmt"
-
-	"github.com/sourcenetwork/acp_core/pkg/types"
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 )
 
 var (
-	ErrInvalidPolicy = types.ErrAcpInput.Wrap("invalid policy")
+	ErrUnknownMarshalingType = errors.Wrap("unknown marshaling type", errors.ErrorType_BAD_INPUT)
+	ErrUnmarshaling          = errors.Wrap("unmarshaling error", errors.ErrorType_BAD_INPUT)
 
-	ErrUnknownMarshalingType = types.ErrAcpInput.Wrap("unknown marshaling type")
-	ErrUnmarshaling          = types.ErrAcpInput.Wrap("unmarshaling error")
-
-	ErrInvalidShortPolicy           = fmt.Errorf("invalid short policy: %w", ErrInvalidPolicy)
-	ErrInvalidCreator               = fmt.Errorf("invalid creator: %w", ErrInvalidPolicy)
-	ErrResourceMissingOwnerRelation = fmt.Errorf("resource missing owner relation: %w", ErrInvalidPolicy)
-	ErrInvalidManagementRule        = fmt.Errorf("invalid relation managamente definition: %w", ErrInvalidPolicy)
+	ErrInvalidShortPolicy           = errors.Wrap("invalid short policy", errors.ErrorType_BAD_INPUT)
+	ErrResourceMissingOwnerRelation = errors.Wrap("resource missing owner relation: %w", errors.ErrInvalidPolicy)
+	ErrInvalidManagementRule        = errors.Wrap("invalid relation managamente definition: %w", errors.ErrInvalidPolicy)
 )
