@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package sourcenetwork.acp_core;
+
+import "google/protobuf/timestamp.proto";
+
+import "sourcenetwork/acp_core/access_decision.proto";
+import "sourcenetwork/acp_core/policy.proto";
+import "sourcenetwork/acp_core/policy_short.proto";
+import "sourcenetwork/acp_core/relationship.proto";
+import "sourcenetwork/acp_core/relationship_selector.proto";
+import "sourcenetwork/acp_core/system.proto";
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+
+// AuthorizationTheorem states that the given AccessRequest request is valid (or not) in the context of a certain Policy
+message AuthorizationTheorem {
+  Operation operation = 1;
+  Actor actor = 2;
+  bool assert_true = 3;
+}
+
+message ReachabilityTheorem {
+  Actor actor = 1;
+  string operation = 2;
+  Object object = 3;
+  bool assert_true = 4;
+}
+
+// DelegationTheorem models a statement declaring that actor can create and delete relationships
+// with `relation` for the given `object`
+message DelegationTheorem {
+  Actor actor = 1;
+  Operation operation = 2;
+  bool assert_true = 3;
+}
+
+message PolicyTheorem {
+  repeated AuthorizationTheorem authorization_thereoms = 1;
+  repeated DelegationTheorem delegation_theorems = 2;
+  repeated ReachabilityTheorem reachability_theorems = 3;
+}
+
+// Result models the result of evaluating a theorem
+message Result {
+    // Valid indicates whether the Theorem is valid
+    bool valid = 1;
+    
+    // Message explains the result
+    string message = 2;
+}
+
+message PolicyTheoremResult {
+  repeated Result authorization_theorems_result = 1;
+  repeated Result delegation_theorems_result = 2;
+  repeated Result reachability_theorems_result = 3;
+}

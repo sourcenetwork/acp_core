@@ -7,6 +7,13 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func TestParseRelationship_EmptyString(t *testing.T) {
+	relationship, err := ParseRelationship("")
+
+	require.Nil(t, err)
+	require.Nil(t, relationship)
+}
+
 func TestParseRelationship_DIDActorRelationship(t *testing.T) {
 	relationship, err := ParseRelationship("test:abc#rel@did:example:bob")
 
@@ -42,12 +49,29 @@ func TestParseRelationship_InvalidRelationshipError(t *testing.T) {
 	require.Nil(t, relationship)
 }
 
-func TestParseRelationships_(t *testing.T) {}
+func TestParseRelationships(t *testing.T) {
+	relationships := `
+	resource:abc#relation@did:example:bob
+	resource:abc#relation@resource:thing
+	resource:abc#relation@resource:userset#member
+	`
 
-func TestParseTestSuite_SuiteGetsParsed(t *testing.T) {
+	rels, err := ParseRelationships(relationships)
 
+	require.Nil(t, err)
+	want := []*types.Relationship{
+		types.NewActorRelationship("resource", "abc", "relation", "did:example:bob"),
+		types.NewRelationship("resource", "abc", "relation", "resource", "thing"),
+		types.NewActorSetRelationship("resource", "abc", "relation", "resource", "userset", "member"),
+	}
+	require.Equal(t, want, rels)
 }
-
 func TestParseTestSuite_EmptySuiteGetsParsed(t *testing.T) {
+	relationships := ""
 
+	rels, err := ParseRelationships(relationships)
+
+	require.Nil(t, err)
+	want := make([]*types.Relationship, 0)
+	require.Equal(t, want, rels)
 }

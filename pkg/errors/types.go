@@ -23,6 +23,10 @@ type Error struct {
 	pairs   []ContextPair
 }
 
+func (e *Error) Type() ErrorType {
+	return e.errType
+}
+
 func (e *Error) Unwrap() []error {
 	return []error{e.base, e.errType}
 }

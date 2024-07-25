@@ -226,9 +226,12 @@ func (c *UnregisterObjectHandler) Execute(ctx context.Context, runtime runtime.R
 
 	authorizer := NewRelationshipAuthorizer(engine)
 
-	authRelationship := types.NewActorRelationship(cmd.Object.Resource, cmd.Object.Id, policy.OwnerRelation, did)
+	mutateOwnerOperation := types.Operation{
+		Object:     cmd.Object,
+		Permission: policy.OwnerRelation,
+	}
 	actor := types.Actor{Id: did}
-	authorized, err := authorizer.IsAuthorized(ctx, pol, authRelationship, &actor)
+	authorized, err := authorizer.IsAuthorized(ctx, pol, &mutateOwnerOperation, &actor)
 	if err != nil {
 		return nil, newUnregisterObjectErr(err)
 	}

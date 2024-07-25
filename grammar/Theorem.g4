@@ -1,28 +1,32 @@
-grammar TestSuite;
+grammar Theorem;
 
-relationship_set: relationship+;
+relationship_set: relationship*;
 
-policy_tests: checks implied_relations delegation_assertions;
+policy_thorems: authorization_theorems delegation_theorems;
 
-checks: 'Checks' '{' check* '}';
-check: relationship | NEGATION relationship;
+term: authorization_theorems | implied_relations | delegation_theorems;
+
+authorization_theorems: 'Authorizations' '{' authorization_theorem* '}';
+authorization_theorem: relationship | NEGATION relationship;
 
 implied_relations: 'ImpliedRelations' '{' implied_relation* '}';
 implied_relation: object_rel '=>' object_rel;
 object_rel: object '#' relation;
 
-delegation_assertions: 'DelegationAssertions' '{' delegation_assertion* '}';
-delegation_assertion: actorid OPERATION relationship | NEGATION actorid OPERATION relationship;
+delegation_theorems: 'Delegations' '{' delegation_theorem* '}';
+delegation_theorem: actorid '>' operation  | NEGATION actorid '>' operation;
 
 relationship: object '#' relation '@' subject;
+
+operation: object '#' relation;
 
 subject: object '#' relation #subj_uset
        | object #subj_obj
        | actorid #subj_actor
        ;
 object: resource ':' object_id;
-object_id: ID #ascii_id
-         | STRING #utf_id
+object_id: ID  #ascii_id
+         | STRING  #utf_id
          ;
 relation: ID;
 resource: ID;

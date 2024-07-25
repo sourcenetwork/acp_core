@@ -59,7 +59,11 @@ func (c *SetRelationshipHandler) Execute(ctx context.Context, runtime runtime.Ru
 		))
 	}
 
-	authorized, err := authorizer.IsAuthorized(ctx, policy, cmd.Relationship, &creatorActor)
+	operation := types.Operation{
+		Object:     cmd.Relationship.Object,
+		Permission: cmd.Relationship.Relation,
+	}
+	authorized, err := authorizer.IsAuthorized(ctx, policy, &operation, &creatorActor)
 	if err != nil {
 		return nil, newSetRelationshipErr(err)
 	}
@@ -178,5 +182,9 @@ func (c *DeleteRelationshipHandler) isActorAuthorized(ctx context.Context, autho
 	creatorActor := types.Actor{
 		Id: initiator,
 	}
-	return authorizer.IsAuthorized(ctx, policy, cmd.Relationship, &creatorActor)
+	operation := types.Operation{
+		Object:     cmd.Relationship.Object,
+		Permission: cmd.Relationship.Relation,
+	}
+	return authorizer.IsAuthorized(ctx, policy, &operation, &creatorActor)
 }

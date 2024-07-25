@@ -31,26 +31,26 @@ type RelationshipAuthorizer struct {
 //
 // A given Relationship is only valid if for the Relationship's Object and Relation
 // the Actor has an associated permission to manage the Object, Relation pair.
-func (a *RelationshipAuthorizer) IsAuthorized(ctx context.Context, policy *types.Policy, relationship *types.Relationship, actor *types.Actor) (bool, error) {
-	resource := policy.GetResourceByName(relationship.Object.Resource)
+func (a *RelationshipAuthorizer) IsAuthorized(ctx context.Context, policy *types.Policy, operation *types.Operation, actor *types.Actor) (bool, error) {
+	resource := policy.GetResourceByName(operation.Object.Resource)
 	if resource == nil {
 		return false, errors.New("resource not found in policy", errors.ErrorType_NOT_FOUND,
 			errors.Pair("policy", policy.Id),
-			errors.Pair("resource", relationship.Object.Resource),
+			errors.Pair("resource", operation.Object.Resource),
 		)
 	}
-	relation := resource.GetRelationByName(relationship.Relation)
+	relation := resource.GetRelationByName(operation.Permission)
 	if relation == nil {
 		return false, errors.New("relation not found in resource", errors.ErrorType_NOT_FOUND,
 			errors.Pair("policy", policy.Id),
-			errors.Pair("resource", relationship.Object.Resource),
-			errors.Pair("relation", relationship.Relation),
+			errors.Pair("resource", operation.Object.Resource),
+			errors.Pair("relation", operation.Permission),
 		)
 	}
 
 	authRequest := &types.Operation{
-		Object:     relationship.Object,
-		Permission: policy.GetManagementPermissionName(relationship.Relation),
+		Object:     operation.Object,
+		Permission: policy.GetManagementPermissionName(operation.Permission),
 	}
 
 	return a.engine.Check(ctx, policy, authRequest, actor)
