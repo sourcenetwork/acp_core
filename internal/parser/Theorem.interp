@@ -46,7 +46,7 @@ NL
 
 rule names:
 relationship_set
-policy_thorems
+policy_thorem
 term
 authorization_theorems
 authorization_theorem

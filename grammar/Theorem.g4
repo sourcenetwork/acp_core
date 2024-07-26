@@ -2,7 +2,7 @@ grammar Theorem;
 
 relationship_set: relationship*;
 
-policy_thorems: authorization_theorems delegation_theorems;
+policy_thorem: authorization_theorems delegation_theorems;
 
 term: authorization_theorems | implied_relations | delegation_theorems;
 

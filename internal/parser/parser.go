@@ -41,6 +41,27 @@ func ParseRelationships(relationshipSet string) ([]*types.Relationship, *ParseEr
 	return result.([]*types.Relationship), nil
 }
 
-func ParseTestSuite(relationshipSet string) ([]*types.Relationship, error) {
-	return nil, nil
+func ParsePolicyTheorem(policyTheorem string) (*types.PolicyTheorem, *ParseErrors) {
+	input := antlr.NewInputStream(policyTheorem)
+	lexer := NewTheoremLexer(input)
+	stream := antlr.NewCommonTokenStream(lexer, 0)
+
+	errListener := errListener{}
+
+	parser := NewTheoremParser(stream)
+	parser.RemoveErrorListeners()
+	parser.AddErrorListener(&errListener)
+	tree := parser.Policy_thorem()
+
+	err := errListener.GetError()
+	if err != nil {
+		return nil, err
+	}
+
+	visitor := newTheoremVisitor()
+	result := visitor.Visit(tree)
+	if result == nil {
+		return nil, nil
+	}
+	return result.(*types.PolicyTheorem), nil
 }

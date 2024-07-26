@@ -75,3 +75,48 @@ func TestParseTestSuite_EmptySuiteGetsParsed(t *testing.T) {
 	want := make([]*types.Relationship, 0)
 	require.Equal(t, want, rels)
 }
+
+func TestPolicyTheorem_ParsesCorrectly(t *testing.T) {
+	theorem := `
+	Authorizations {
+      note:abc#owner@did:example:bob
+      !note:abc#owner@did:example:alice
+	}
+
+	Delegations {
+	  did:ex:bob > note:abc#read
+	  ! did:ex:bob > note:abc#read
+	}
+	`
+
+	thm, err := ParsePolicyTheorem(theorem)
+
+	require.Nil(t, err)
+	want := &types.PolicyTheorem{
+		AuthorizationThereoms: []*types.AuthorizationTheorem{
+			{
+				Operation:  types.NewOperation(types.NewObject("note", "abc"), "owner"),
+				Actor:      types.NewActor("did:example:bob"),
+				AssertTrue: true,
+			},
+			{
+				Operation:  types.NewOperation(types.NewObject("note", "abc"), "owner"),
+				Actor:      types.NewActor("did:example:alice"),
+				AssertTrue: false,
+			},
+		},
+		DelegationTheorems: []*types.DelegationTheorem{
+			{
+				Actor:      types.NewActor("did:ex:bob"),
+				Operation:  types.NewOperation(types.NewObject("note", "abc"), "read"),
+				AssertTrue: true,
+			},
+			{
+				Actor:      types.NewActor("did:ex:bob"),
+				Operation:  types.NewOperation(types.NewObject("note", "abc"), "read"),
+				AssertTrue: false,
+			},
+		},
+	}
+	require.Equal(t, want, thm)
+}

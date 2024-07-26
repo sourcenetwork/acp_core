@@ -40,7 +40,7 @@ func theoremParserInit() {
 		"ID", "STRING", "DID", "HEX", "HEXDIG", "COMMENT", "WS", "NL",
 	}
 	staticData.RuleNames = []string{
-		"relationship_set", "policy_thorems", "term", "authorization_theorems",
+		"relationship_set", "policy_thorem", "term", "authorization_theorems",
 		"authorization_theorem", "implied_relations", "implied_relation", "object_rel",
 		"delegation_theorems", "delegation_theorem", "relationship", "operation",
 		"subject", "object", "object_id", "relation", "resource", "actorid",
@@ -163,7 +163,7 @@ const (
 // TheoremParser rules.
 const (
 	TheoremParserRULE_relationship_set       = 0
-	TheoremParserRULE_policy_thorems         = 1
+	TheoremParserRULE_policy_thorem          = 1
 	TheoremParserRULE_term                   = 2
 	TheoremParserRULE_authorization_theorems = 3
 	TheoremParserRULE_authorization_theorem  = 4
@@ -328,8 +328,8 @@ errorExit:
 	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
-// IPolicy_thoremsContext is an interface to support dynamic dispatch.
-type IPolicy_thoremsContext interface {
+// IPolicy_thoremContext is an interface to support dynamic dispatch.
+type IPolicy_thoremContext interface {
 	antlr.ParserRuleContext
 
 	// GetParser returns the parser.
@@ -339,43 +339,43 @@ type IPolicy_thoremsContext interface {
 	Authorization_theorems() IAuthorization_theoremsContext
 	Delegation_theorems() IDelegation_theoremsContext
 
-	// IsPolicy_thoremsContext differentiates from other interfaces.
-	IsPolicy_thoremsContext()
+	// IsPolicy_thoremContext differentiates from other interfaces.
+	IsPolicy_thoremContext()
 }
 
-type Policy_thoremsContext struct {
+type Policy_thoremContext struct {
 	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
-func NewEmptyPolicy_thoremsContext() *Policy_thoremsContext {
-	var p = new(Policy_thoremsContext)
+func NewEmptyPolicy_thoremContext() *Policy_thoremContext {
+	var p = new(Policy_thoremContext)
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = TheoremParserRULE_policy_thorems
+	p.RuleIndex = TheoremParserRULE_policy_thorem
 	return p
 }
 
-func InitEmptyPolicy_thoremsContext(p *Policy_thoremsContext) {
+func InitEmptyPolicy_thoremContext(p *Policy_thoremContext) {
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
-	p.RuleIndex = TheoremParserRULE_policy_thorems
+	p.RuleIndex = TheoremParserRULE_policy_thorem
 }
 
-func (*Policy_thoremsContext) IsPolicy_thoremsContext() {}
+func (*Policy_thoremContext) IsPolicy_thoremContext() {}
 
-func NewPolicy_thoremsContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Policy_thoremsContext {
-	var p = new(Policy_thoremsContext)
+func NewPolicy_thoremContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Policy_thoremContext {
+	var p = new(Policy_thoremContext)
 
 	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = TheoremParserRULE_policy_thorems
+	p.RuleIndex = TheoremParserRULE_policy_thorem
 
 	return p
 }
 
-func (s *Policy_thoremsContext) GetParser() antlr.Parser { return s.parser }
+func (s *Policy_thoremContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *Policy_thoremsContext) Authorization_theorems() IAuthorization_theoremsContext {
+func (s *Policy_thoremContext) Authorization_theorems() IAuthorization_theoremsContext {
 	var t antlr.RuleContext
 	for _, ctx := range s.GetChildren() {
 		if _, ok := ctx.(IAuthorization_theoremsContext); ok {
@@ -391,7 +391,7 @@ func (s *Policy_thoremsContext) Authorization_theorems() IAuthorization_theorems
 	return t.(IAuthorization_theoremsContext)
 }
 
-func (s *Policy_thoremsContext) Delegation_theorems() IDelegation_theoremsContext {
+func (s *Policy_thoremContext) Delegation_theorems() IDelegation_theoremsContext {
 	var t antlr.RuleContext
 	for _, ctx := range s.GetChildren() {
 		if _, ok := ctx.(IDelegation_theoremsContext); ok {
@@ -407,27 +407,27 @@ func (s *Policy_thoremsContext) Delegation_theorems() IDelegation_theoremsContex
 	return t.(IDelegation_theoremsContext)
 }
 
-func (s *Policy_thoremsContext) GetRuleContext() antlr.RuleContext {
+func (s *Policy_thoremContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
 
-func (s *Policy_thoremsContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+func (s *Policy_thoremContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-func (s *Policy_thoremsContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+func (s *Policy_thoremContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
 	case TheoremVisitor:
-		return t.VisitPolicy_thorems(s)
+		return t.VisitPolicy_thorem(s)
 
 	default:
 		return t.VisitChildren(s)
 	}
 }
 
-func (p *TheoremParser) Policy_thorems() (localctx IPolicy_thoremsContext) {
-	localctx = NewPolicy_thoremsContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 2, TheoremParserRULE_policy_thorems)
+func (p *TheoremParser) Policy_thorem() (localctx IPolicy_thoremContext) {
+	localctx = NewPolicy_thoremContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 2, TheoremParserRULE_policy_thorem)
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(42)

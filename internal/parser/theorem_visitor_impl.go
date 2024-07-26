@@ -90,7 +90,7 @@ func (l *theoremVisitorImpl) VisitOperation(ctx *OperationContext) any {
 func (l *theoremVisitorImpl) VisitDelegation_theorem(ctx *Delegation_theoremContext) any {
 	actor := &types.Actor{Id: ctx.Actorid().GetText()}
 	operation := l.Visit(ctx.Operation()).(*types.Operation)
-	negate := ctx.NEGATION().GetText() == "!"
+	negate := ctx.NEGATION() != nil
 	return &types.DelegationTheorem{
 		Actor:      actor,
 		Operation:  operation,
@@ -105,7 +105,7 @@ func (l *theoremVisitorImpl) VisitDelegation_theorems(ctx *Delegation_theoremsCo
 }
 
 func (l *theoremVisitorImpl) VisitAuthorization_theorem(ctx *Authorization_theoremContext) any {
-	negate := ctx.NEGATION().GetText() == "!"
+	negate := ctx.NEGATION() != nil
 	relationship := l.Visit(ctx.Relationship()).(*types.Relationship)
 	return &types.AuthorizationTheorem{
 		Operation: &types.Operation{
@@ -123,7 +123,7 @@ func (l *theoremVisitorImpl) VisitAuthorization_theorems(ctx *Authorization_theo
 	})
 }
 
-func (l *theoremVisitorImpl) VisitPolicy_thorems(ctx *Policy_thoremsContext) any {
+func (l *theoremVisitorImpl) VisitPolicy_thorem(ctx *Policy_thoremContext) any {
 	authorizationThms := l.Visit(ctx.Authorization_theorems()).([]*types.AuthorizationTheorem)
 	delegationThms := l.Visit(ctx.Delegation_theorems()).([]*types.DelegationTheorem)
 	return &types.PolicyTheorem{

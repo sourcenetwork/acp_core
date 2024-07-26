@@ -11,7 +11,7 @@ func (v *BaseTheoremVisitor) VisitRelationship_set(ctx *Relationship_setContext)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseTheoremVisitor) VisitPolicy_thorems(ctx *Policy_thoremsContext) interface{} {
+func (v *BaseTheoremVisitor) VisitPolicy_thorem(ctx *Policy_thoremContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
