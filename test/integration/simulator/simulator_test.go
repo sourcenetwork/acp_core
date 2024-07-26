@@ -1,6 +1,7 @@
 package simulator
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -31,7 +32,6 @@ func TestSimulator_Success(t *testing.T) {
                 expr: owner
         `,
 		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
-
 		RelationshipSet: `
 		file:abc#owner@did:ex:bob
 		file:abc#reader@did:ex:alice
@@ -53,7 +53,10 @@ func TestSimulator_Success(t *testing.T) {
 
 	resp, err := ctx.Engine.Simulate(ctx, &req)
 	require.NoError(t, err)
-	_ = resp
+	respJson, err := json.MarshalIndent(resp, "", "  ")
+	require.NoError(t, err)
+	t.Logf("%v", string(respJson))
+	t.Fail()
 	//want := &types.SimulateResponse{ }
 	//require.Equal(t, want, resp)
 }

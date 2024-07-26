@@ -93,7 +93,7 @@ func TestPolicyTheorem_ParsesCorrectly(t *testing.T) {
 
 	require.Nil(t, err)
 	want := &types.PolicyTheorem{
-		AuthorizationThereoms: []*types.AuthorizationTheorem{
+		AuthorizationTheorems: []*types.AuthorizationTheorem{
 			{
 				Operation:  types.NewOperation(types.NewObject("note", "abc"), "owner"),
 				Actor:      types.NewActor("did:example:bob"),
@@ -118,5 +118,5 @@ func TestPolicyTheorem_ParsesCorrectly(t *testing.T) {
 			},
 		},
 	}
-	require.Equal(t, want, thm)
+	require.Equal(t, want, thm.ToPolicyTheorem())
 }

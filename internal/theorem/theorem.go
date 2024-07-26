@@ -71,7 +71,7 @@ func (e *Evaluator) EvaluatePolicyTheorem(ctx context.Context, polId string, the
 		return nil, newEvaluatorErr(errors.NewPolicyNotFound(polId))
 	}
 
-	authzResults, err := utils.MapFailableSlice(theorem.AuthorizationThereoms, func(thm *types.AuthorizationTheorem) (*types.Result, error) {
+	authzResults, err := utils.MapFailableSlice(theorem.AuthorizationTheorems, func(thm *types.AuthorizationTheorem) (*types.Result, error) {
 		return e.evaluateAuthorizationTheorem(ctx, rec.Policy, thm)
 	})
 	if err != nil {

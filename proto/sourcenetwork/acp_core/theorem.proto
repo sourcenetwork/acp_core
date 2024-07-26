@@ -36,7 +36,7 @@ message DelegationTheorem {
 }
 
 message PolicyTheorem {
-  repeated AuthorizationTheorem authorization_thereoms = 1;
+  repeated AuthorizationTheorem authorization_theorems = 1;
   repeated DelegationTheorem delegation_theorems = 2;
   repeated ReachabilityTheorem reachability_theorems = 3;
 }

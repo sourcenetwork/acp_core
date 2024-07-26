@@ -17,8 +17,8 @@ type theoremVisitorImpl struct {
 }
 
 func (l *theoremVisitorImpl) VisitRelationship_set(ctx *Relationship_setContext) any {
-	return utils.MapSlice(ctx.AllRelationship(), func(ctx IRelationshipContext) *types.Relationship {
-		return l.Visit(ctx).(*types.Relationship)
+	return utils.MapSlice(ctx.AllRelationship(), func(ctx IRelationshipContext) IndexedObject[*types.Relationship] {
+		return l.Visit(ctx).(IndexedObject[*types.Relationship])
 	})
 }
 
@@ -39,11 +39,12 @@ func (l *theoremVisitorImpl) VisitUtf_id(c *Utf_idContext) any {
 }
 
 func (l *theoremVisitorImpl) VisitRelationship(c *RelationshipContext) any {
-	return &types.Relationship{
+	rel := &types.Relationship{
 		Object:   l.Visit(c.Object()).(*types.Object),
 		Relation: c.Relation().GetText(),
 		Subject:  l.Visit(c.Subject()).(*types.Subject),
 	}
+	return NewIndexedObject(rel, c.GetStart().GetLine(), c.GetStart().GetColumn())
 }
 
 func (l *theoremVisitorImpl) VisitSubj_obj(ctx *Subj_objContext) any {
@@ -91,23 +92,24 @@ func (l *theoremVisitorImpl) VisitDelegation_theorem(ctx *Delegation_theoremCont
 	actor := &types.Actor{Id: ctx.Actorid().GetText()}
 	operation := l.Visit(ctx.Operation()).(*types.Operation)
 	negate := ctx.NEGATION() != nil
-	return &types.DelegationTheorem{
+	theorem := &types.DelegationTheorem{
 		Actor:      actor,
 		Operation:  operation,
 		AssertTrue: !negate,
 	}
+	return NewIndexedObject(theorem, ctx.GetStart().GetLine(), ctx.GetStart().GetColumn())
 }
 
 func (l *theoremVisitorImpl) VisitDelegation_theorems(ctx *Delegation_theoremsContext) any {
-	return utils.MapSlice(ctx.AllDelegation_theorem(), func(ctx IDelegation_theoremContext) *types.DelegationTheorem {
-		return l.Visit(ctx).(*types.DelegationTheorem)
+	return utils.MapSlice(ctx.AllDelegation_theorem(), func(ctx IDelegation_theoremContext) IndexedObject[*types.DelegationTheorem] {
+		return l.Visit(ctx).(IndexedObject[*types.DelegationTheorem])
 	})
 }
 
 func (l *theoremVisitorImpl) VisitAuthorization_theorem(ctx *Authorization_theoremContext) any {
 	negate := ctx.NEGATION() != nil
-	relationship := l.Visit(ctx.Relationship()).(*types.Relationship)
-	return &types.AuthorizationTheorem{
+	relationship := l.Visit(ctx.Relationship()).(IndexedObject[*types.Relationship]).Obj
+	theorem := &types.AuthorizationTheorem{
 		Operation: &types.Operation{
 			Object:     relationship.Object,
 			Permission: relationship.Relation,
@@ -115,19 +117,20 @@ func (l *theoremVisitorImpl) VisitAuthorization_theorem(ctx *Authorization_theor
 		Actor:      relationship.GetSubject().GetActor(),
 		AssertTrue: !negate,
 	}
+	return NewIndexedObject(theorem, ctx.GetStart().GetLine(), ctx.GetStart().GetColumn())
 }
 
 func (l *theoremVisitorImpl) VisitAuthorization_theorems(ctx *Authorization_theoremsContext) any {
-	return utils.MapSlice(ctx.AllAuthorization_theorem(), func(ctx IAuthorization_theoremContext) *types.AuthorizationTheorem {
-		return l.Visit(ctx).(*types.AuthorizationTheorem)
+	return utils.MapSlice(ctx.AllAuthorization_theorem(), func(ctx IAuthorization_theoremContext) IndexedObject[*types.AuthorizationTheorem] {
+		return l.Visit(ctx).(IndexedObject[*types.AuthorizationTheorem])
 	})
 }
 
 func (l *theoremVisitorImpl) VisitPolicy_thorem(ctx *Policy_thoremContext) any {
-	authorizationThms := l.Visit(ctx.Authorization_theorems()).([]*types.AuthorizationTheorem)
-	delegationThms := l.Visit(ctx.Delegation_theorems()).([]*types.DelegationTheorem)
-	return &types.PolicyTheorem{
-		AuthorizationThereoms: authorizationThms,
+	authorizationThms := l.Visit(ctx.Authorization_theorems()).([]IndexedObject[*types.AuthorizationTheorem])
+	delegationThms := l.Visit(ctx.Delegation_theorems()).([]IndexedObject[*types.DelegationTheorem])
+	return &IndexedPolicyTheorem{
+		AuthorizationTheorems: authorizationThms,
 		DelegationTheorems:    delegationThms,
 	}
 }

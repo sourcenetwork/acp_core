@@ -75,7 +75,7 @@ func HandleSimulateRequest(ctx context.Context, req *types.SimulateRequest) (*ty
 	}
 
 	evaluator := theorem.NewEvaluator(engine)
-	result, err := evaluator.EvaluatePolicyTheorem(ctx, polResp.Policy.Id, policyTheorem)
+	result, err := evaluator.EvaluatePolicyTheorem(ctx, polResp.Policy.Id, policyTheorem.ToPolicyTheorem())
 	if err != nil {
 		return nil, newSimulateErr(err)
 	}
@@ -83,7 +83,7 @@ func HandleSimulateRequest(ctx context.Context, req *types.SimulateRequest) (*ty
 	return &types.SimulateResponse{
 		Policy:        polResp.Policy,
 		Relationships: relationships,
-		PolicyTheorem: policyTheorem,
+		PolicyTheorem: policyTheorem.ToPolicyTheorem(),
 		Result:        result,
 	}, nil
 }
