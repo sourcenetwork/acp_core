@@ -76,6 +76,7 @@ func NewRuntimeManager(opts ...Opt) (RuntimeManager, error) {
 	rt := &runtimeManager{
 		eventMan: &DefaultEventManager{},
 		logger:   nil,
+		memKV:    rcdb.NewMemKV(),
 	}
 	WithMemKV()(rt)
 
@@ -91,6 +92,7 @@ func NewRuntimeManager(opts ...Opt) (RuntimeManager, error) {
 
 type runtimeManager struct {
 	kvStore    KVStore
+	memKV      KVStore
 	eventMan   EventManager
 	logger     Logger
 	metrics    MetricService
@@ -134,12 +136,17 @@ func (m *runtimeManager) Terminate() error {
 	return nil
 }
 
+func (m *runtimeManager) GetInMemKV() KVStore {
+	return m.memKV
+}
+
 type RuntimeManager interface {
 	GetKVStore() KVStore
 	GetEventManager() EventManager
 	GetLogger() Logger
 	GetMetricService() MetricService
 	GetLogicalClock() LogicalClockService
+	GetInMemKV() KVStore
 
 	// Terminate frees up all used up resources, leaving the runtime unusable
 	Terminate() error

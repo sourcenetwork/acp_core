@@ -10,6 +10,12 @@ import (
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
 
+func NewEvaluator(zanzi *zanzi.Adapter) *Evaluator {
+	return &Evaluator{
+		zanzi: zanzi,
+	}
+}
+
 type Evaluator struct {
 	zanzi *zanzi.Adapter
 }
@@ -17,15 +23,11 @@ type Evaluator struct {
 func (e *Evaluator) evaluateAuthorizationTheorem(ctx context.Context, policy *types.Policy, theorem *types.AuthorizationTheorem) (*types.Result, error) {
 	ok, err := e.zanzi.Check(ctx, policy, theorem.Operation, theorem.Actor)
 	if err != nil {
-		// if error is not internal, then user might've supplied invalid data
-		// which shouldn't cause the whole execution to fail
-		if acpErr, ok := err.(*errors.Error); ok && acpErr.Type() != errors.ErrorType_INTERNAL {
-			return &types.Result{
-				Valid:   false,
-				Message: acpErr.Error(),
-			}, nil
-		}
-		return nil, err
+		// FIXME once Zanzi errors are sorted out, assert that the error isn't an IO or internal error
+		return &types.Result{
+			Valid:   false,
+			Message: err.Error(),
+		}, nil
 	}
 	return &types.Result{
 		Valid:   ok,

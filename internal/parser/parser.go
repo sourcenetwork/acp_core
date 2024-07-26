@@ -5,7 +5,7 @@ import (
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
-func ParseRelationship(relationship string) (*types.Relationship, *ParseErrors) {
+func ParseRelationship(relationship string) (*types.Relationship, error) {
 	relationships, err := ParseRelationships(relationship)
 	if err != nil {
 		return nil, err
@@ -16,7 +16,7 @@ func ParseRelationship(relationship string) (*types.Relationship, *ParseErrors) 
 	return relationships[0], nil
 }
 
-func ParseRelationships(relationshipSet string) ([]*types.Relationship, *ParseErrors) {
+func ParseRelationships(relationshipSet string) ([]*types.Relationship, error) {
 	input := antlr.NewInputStream(relationshipSet)
 	lexer := NewTheoremLexer(input)
 	stream := antlr.NewCommonTokenStream(lexer, 0)
@@ -41,7 +41,7 @@ func ParseRelationships(relationshipSet string) ([]*types.Relationship, *ParseEr
 	return result.([]*types.Relationship), nil
 }
 
-func ParsePolicyTheorem(policyTheorem string) (*types.PolicyTheorem, *ParseErrors) {
+func ParsePolicyTheorem(policyTheorem string) (*types.PolicyTheorem, error) {
 	input := antlr.NewInputStream(policyTheorem)
 	lexer := NewTheoremLexer(input)
 	stream := antlr.NewCommonTokenStream(lexer, 0)

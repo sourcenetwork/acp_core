@@ -10,6 +10,7 @@ import "sourcenetwork/acp_core/policy_short.proto";
 import "sourcenetwork/acp_core/relationship.proto";
 import "sourcenetwork/acp_core/relationship_selector.proto";
 import "sourcenetwork/acp_core/system.proto";
+import "sourcenetwork/acp_core/theorem.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
 
@@ -78,6 +79,11 @@ service ACPEngine {
   rpc GetParams(GetParamsRequest) returns (GetParamsResponse);
 
   rpc VerifyAccessRequest(VerifyAccessRequestRequest) returns (VerifyAccessRequestResponse);
+
+  // Simulate receives a triplet of Policy, Relationships and PolicyTheorem and executes
+  // the theorems against the given context and verifies whether they're true or not.
+  // The execution context is ephemeral and the policy is not persisted in memory.
+  rpc Simulate(SimulateRequest) returns (SimulateResponse);
 
   // Expand, Reverse lookup
 
@@ -241,3 +247,16 @@ message VerifyAccessRequestResponse{
     bool valid = 1;
 }
 
+message SimulateRequest {
+  string policy = 1 ;
+  PolicyMarshalingType      marshal_type  = 2;
+  string relationship_set = 3;
+  string policy_theorem = 4;
+}
+
+message SimulateResponse {
+  Policy policy = 1;
+  repeated Relationship relationships = 2;
+  PolicyTheorem policy_theorem = 3;
+  PolicyTheoremResult result = 4;
+}
