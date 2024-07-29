@@ -329,17 +329,329 @@ func (m *Result) GetMessage() string {
 	return ""
 }
 
+type AuthorizationTheoremResult struct {
+	Theorem *AuthorizationTheorem `protobuf:"bytes,1,opt,name=theorem,proto3" json:"theorem,omitempty"`
+	Result  *Result               `protobuf:"bytes,2,opt,name=result,proto3" json:"result,omitempty"`
+}
+
+func (m *AuthorizationTheoremResult) Reset()         { *m = AuthorizationTheoremResult{} }
+func (m *AuthorizationTheoremResult) String() string { return proto.CompactTextString(m) }
+func (*AuthorizationTheoremResult) ProtoMessage()    {}
+func (*AuthorizationTheoremResult) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0a37058f4cb4907c, []int{5}
+}
+func (m *AuthorizationTheoremResult) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AuthorizationTheoremResult) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AuthorizationTheoremResult.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AuthorizationTheoremResult) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AuthorizationTheoremResult.Merge(m, src)
+}
+func (m *AuthorizationTheoremResult) XXX_Size() int {
+	return m.Size()
+}
+func (m *AuthorizationTheoremResult) XXX_DiscardUnknown() {
+	xxx_messageInfo_AuthorizationTheoremResult.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AuthorizationTheoremResult proto.InternalMessageInfo
+
+func (m *AuthorizationTheoremResult) GetTheorem() *AuthorizationTheorem {
+	if m != nil {
+		return m.Theorem
+	}
+	return nil
+}
+
+func (m *AuthorizationTheoremResult) GetResult() *Result {
+	if m != nil {
+		return m.Result
+	}
+	return nil
+}
+
+type DelegationTheoremResult struct {
+	Theorem *DelegationTheorem `protobuf:"bytes,1,opt,name=theorem,proto3" json:"theorem,omitempty"`
+	Result  *Result            `protobuf:"bytes,2,opt,name=result,proto3" json:"result,omitempty"`
+}
+
+func (m *DelegationTheoremResult) Reset()         { *m = DelegationTheoremResult{} }
+func (m *DelegationTheoremResult) String() string { return proto.CompactTextString(m) }
+func (*DelegationTheoremResult) ProtoMessage()    {}
+func (*DelegationTheoremResult) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0a37058f4cb4907c, []int{6}
+}
+func (m *DelegationTheoremResult) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DelegationTheoremResult) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_DelegationTheoremResult.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *DelegationTheoremResult) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DelegationTheoremResult.Merge(m, src)
+}
+func (m *DelegationTheoremResult) XXX_Size() int {
+	return m.Size()
+}
+func (m *DelegationTheoremResult) XXX_DiscardUnknown() {
+	xxx_messageInfo_DelegationTheoremResult.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DelegationTheoremResult proto.InternalMessageInfo
+
+func (m *DelegationTheoremResult) GetTheorem() *DelegationTheorem {
+	if m != nil {
+		return m.Theorem
+	}
+	return nil
+}
+
+func (m *DelegationTheoremResult) GetResult() *Result {
+	if m != nil {
+		return m.Result
+	}
+	return nil
+}
+
+type ReachabilityTheoremResult struct {
+	Theorem *ReachabilityTheorem `protobuf:"bytes,1,opt,name=theorem,proto3" json:"theorem,omitempty"`
+	Result  *Result              `protobuf:"bytes,2,opt,name=result,proto3" json:"result,omitempty"`
+}
+
+func (m *ReachabilityTheoremResult) Reset()         { *m = ReachabilityTheoremResult{} }
+func (m *ReachabilityTheoremResult) String() string { return proto.CompactTextString(m) }
+func (*ReachabilityTheoremResult) ProtoMessage()    {}
+func (*ReachabilityTheoremResult) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0a37058f4cb4907c, []int{7}
+}
+func (m *ReachabilityTheoremResult) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReachabilityTheoremResult) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ReachabilityTheoremResult.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ReachabilityTheoremResult) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReachabilityTheoremResult.Merge(m, src)
+}
+func (m *ReachabilityTheoremResult) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReachabilityTheoremResult) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReachabilityTheoremResult.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReachabilityTheoremResult proto.InternalMessageInfo
+
+func (m *ReachabilityTheoremResult) GetTheorem() *ReachabilityTheorem {
+	if m != nil {
+		return m.Theorem
+	}
+	return nil
+}
+
+func (m *ReachabilityTheoremResult) GetResult() *Result {
+	if m != nil {
+		return m.Result
+	}
+	return nil
+}
+
+type AnnotatedAuthorizationTheoremResult struct {
+	Result *AuthorizationTheoremResult `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+	Range  *BufferRange                `protobuf:"bytes,2,opt,name=range,proto3" json:"range,omitempty"`
+}
+
+func (m *AnnotatedAuthorizationTheoremResult) Reset()         { *m = AnnotatedAuthorizationTheoremResult{} }
+func (m *AnnotatedAuthorizationTheoremResult) String() string { return proto.CompactTextString(m) }
+func (*AnnotatedAuthorizationTheoremResult) ProtoMessage()    {}
+func (*AnnotatedAuthorizationTheoremResult) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0a37058f4cb4907c, []int{8}
+}
+func (m *AnnotatedAuthorizationTheoremResult) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AnnotatedAuthorizationTheoremResult) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AnnotatedAuthorizationTheoremResult.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AnnotatedAuthorizationTheoremResult) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnnotatedAuthorizationTheoremResult.Merge(m, src)
+}
+func (m *AnnotatedAuthorizationTheoremResult) XXX_Size() int {
+	return m.Size()
+}
+func (m *AnnotatedAuthorizationTheoremResult) XXX_DiscardUnknown() {
+	xxx_messageInfo_AnnotatedAuthorizationTheoremResult.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AnnotatedAuthorizationTheoremResult proto.InternalMessageInfo
+
+func (m *AnnotatedAuthorizationTheoremResult) GetResult() *AuthorizationTheoremResult {
+	if m != nil {
+		return m.Result
+	}
+	return nil
+}
+
+func (m *AnnotatedAuthorizationTheoremResult) GetRange() *BufferRange {
+	if m != nil {
+		return m.Range
+	}
+	return nil
+}
+
+type AnnotatedDelegationTheoremResult struct {
+	Result *DelegationTheoremResult `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+	Range  *BufferRange             `protobuf:"bytes,2,opt,name=range,proto3" json:"range,omitempty"`
+}
+
+func (m *AnnotatedDelegationTheoremResult) Reset()         { *m = AnnotatedDelegationTheoremResult{} }
+func (m *AnnotatedDelegationTheoremResult) String() string { return proto.CompactTextString(m) }
+func (*AnnotatedDelegationTheoremResult) ProtoMessage()    {}
+func (*AnnotatedDelegationTheoremResult) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0a37058f4cb4907c, []int{9}
+}
+func (m *AnnotatedDelegationTheoremResult) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AnnotatedDelegationTheoremResult) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AnnotatedDelegationTheoremResult.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AnnotatedDelegationTheoremResult) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnnotatedDelegationTheoremResult.Merge(m, src)
+}
+func (m *AnnotatedDelegationTheoremResult) XXX_Size() int {
+	return m.Size()
+}
+func (m *AnnotatedDelegationTheoremResult) XXX_DiscardUnknown() {
+	xxx_messageInfo_AnnotatedDelegationTheoremResult.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AnnotatedDelegationTheoremResult proto.InternalMessageInfo
+
+func (m *AnnotatedDelegationTheoremResult) GetResult() *DelegationTheoremResult {
+	if m != nil {
+		return m.Result
+	}
+	return nil
+}
+
+func (m *AnnotatedDelegationTheoremResult) GetRange() *BufferRange {
+	if m != nil {
+		return m.Range
+	}
+	return nil
+}
+
+type AnnotatedReachabilityTheoremResult struct {
+	Result *ReachabilityTheoremResult `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+	Range  *BufferRange               `protobuf:"bytes,2,opt,name=range,proto3" json:"range,omitempty"`
+}
+
+func (m *AnnotatedReachabilityTheoremResult) Reset()         { *m = AnnotatedReachabilityTheoremResult{} }
+func (m *AnnotatedReachabilityTheoremResult) String() string { return proto.CompactTextString(m) }
+func (*AnnotatedReachabilityTheoremResult) ProtoMessage()    {}
+func (*AnnotatedReachabilityTheoremResult) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0a37058f4cb4907c, []int{10}
+}
+func (m *AnnotatedReachabilityTheoremResult) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AnnotatedReachabilityTheoremResult) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AnnotatedReachabilityTheoremResult.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AnnotatedReachabilityTheoremResult) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnnotatedReachabilityTheoremResult.Merge(m, src)
+}
+func (m *AnnotatedReachabilityTheoremResult) XXX_Size() int {
+	return m.Size()
+}
+func (m *AnnotatedReachabilityTheoremResult) XXX_DiscardUnknown() {
+	xxx_messageInfo_AnnotatedReachabilityTheoremResult.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AnnotatedReachabilityTheoremResult proto.InternalMessageInfo
+
+func (m *AnnotatedReachabilityTheoremResult) GetResult() *ReachabilityTheoremResult {
+	if m != nil {
+		return m.Result
+	}
+	return nil
+}
+
+func (m *AnnotatedReachabilityTheoremResult) GetRange() *BufferRange {
+	if m != nil {
+		return m.Range
+	}
+	return nil
+}
+
 type PolicyTheoremResult struct {
-	AuthorizationTheoremsResult []*Result `protobuf:"bytes,1,rep,name=authorization_theorems_result,json=authorizationTheoremsResult,proto3" json:"authorization_theorems_result,omitempty"`
-	DelegationTheoremsResult    []*Result `protobuf:"bytes,2,rep,name=delegation_theorems_result,json=delegationTheoremsResult,proto3" json:"delegation_theorems_result,omitempty"`
-	ReachabilityTheoremsResult  []*Result `protobuf:"bytes,3,rep,name=reachability_theorems_result,json=reachabilityTheoremsResult,proto3" json:"reachability_theorems_result,omitempty"`
+	AuthorizationTheoremsResult []*AuthorizationTheoremResult `protobuf:"bytes,1,rep,name=authorization_theorems_result,json=authorizationTheoremsResult,proto3" json:"authorization_theorems_result,omitempty"`
+	DelegationTheoremsResult    []*DelegationTheoremResult    `protobuf:"bytes,2,rep,name=delegation_theorems_result,json=delegationTheoremsResult,proto3" json:"delegation_theorems_result,omitempty"`
+	ReachabilityTheoremsResult  []*ReachabilityTheoremResult  `protobuf:"bytes,3,rep,name=reachability_theorems_result,json=reachabilityTheoremsResult,proto3" json:"reachability_theorems_result,omitempty"`
 }
 
 func (m *PolicyTheoremResult) Reset()         { *m = PolicyTheoremResult{} }
 func (m *PolicyTheoremResult) String() string { return proto.CompactTextString(m) }
 func (*PolicyTheoremResult) ProtoMessage()    {}
 func (*PolicyTheoremResult) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a37058f4cb4907c, []int{5}
+	return fileDescriptor_0a37058f4cb4907c, []int{11}
 }
 func (m *PolicyTheoremResult) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -368,21 +680,81 @@ func (m *PolicyTheoremResult) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_PolicyTheoremResult proto.InternalMessageInfo
 
-func (m *PolicyTheoremResult) GetAuthorizationTheoremsResult() []*Result {
+func (m *PolicyTheoremResult) GetAuthorizationTheoremsResult() []*AuthorizationTheoremResult {
 	if m != nil {
 		return m.AuthorizationTheoremsResult
 	}
 	return nil
 }
 
-func (m *PolicyTheoremResult) GetDelegationTheoremsResult() []*Result {
+func (m *PolicyTheoremResult) GetDelegationTheoremsResult() []*DelegationTheoremResult {
 	if m != nil {
 		return m.DelegationTheoremsResult
 	}
 	return nil
 }
 
-func (m *PolicyTheoremResult) GetReachabilityTheoremsResult() []*Result {
+func (m *PolicyTheoremResult) GetReachabilityTheoremsResult() []*ReachabilityTheoremResult {
+	if m != nil {
+		return m.ReachabilityTheoremsResult
+	}
+	return nil
+}
+
+type AnnotatedPolicyTheoremResult struct {
+	AuthorizationTheoremsResult []*AnnotatedAuthorizationTheoremResult `protobuf:"bytes,1,rep,name=authorization_theorems_result,json=authorizationTheoremsResult,proto3" json:"authorization_theorems_result,omitempty"`
+	DelegationTheoremsResult    []*AnnotatedDelegationTheoremResult    `protobuf:"bytes,2,rep,name=delegation_theorems_result,json=delegationTheoremsResult,proto3" json:"delegation_theorems_result,omitempty"`
+	ReachabilityTheoremsResult  []*AnnotatedReachabilityTheoremResult  `protobuf:"bytes,3,rep,name=reachability_theorems_result,json=reachabilityTheoremsResult,proto3" json:"reachability_theorems_result,omitempty"`
+}
+
+func (m *AnnotatedPolicyTheoremResult) Reset()         { *m = AnnotatedPolicyTheoremResult{} }
+func (m *AnnotatedPolicyTheoremResult) String() string { return proto.CompactTextString(m) }
+func (*AnnotatedPolicyTheoremResult) ProtoMessage()    {}
+func (*AnnotatedPolicyTheoremResult) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0a37058f4cb4907c, []int{12}
+}
+func (m *AnnotatedPolicyTheoremResult) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AnnotatedPolicyTheoremResult) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AnnotatedPolicyTheoremResult.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AnnotatedPolicyTheoremResult) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnnotatedPolicyTheoremResult.Merge(m, src)
+}
+func (m *AnnotatedPolicyTheoremResult) XXX_Size() int {
+	return m.Size()
+}
+func (m *AnnotatedPolicyTheoremResult) XXX_DiscardUnknown() {
+	xxx_messageInfo_AnnotatedPolicyTheoremResult.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AnnotatedPolicyTheoremResult proto.InternalMessageInfo
+
+func (m *AnnotatedPolicyTheoremResult) GetAuthorizationTheoremsResult() []*AnnotatedAuthorizationTheoremResult {
+	if m != nil {
+		return m.AuthorizationTheoremsResult
+	}
+	return nil
+}
+
+func (m *AnnotatedPolicyTheoremResult) GetDelegationTheoremsResult() []*AnnotatedDelegationTheoremResult {
+	if m != nil {
+		return m.DelegationTheoremsResult
+	}
+	return nil
+}
+
+func (m *AnnotatedPolicyTheoremResult) GetReachabilityTheoremsResult() []*AnnotatedReachabilityTheoremResult {
 	if m != nil {
 		return m.ReachabilityTheoremsResult
 	}
@@ -395,7 +767,14 @@ func init() {
 	proto.RegisterType((*DelegationTheorem)(nil), "sourcenetwork.acp_core.DelegationTheorem")
 	proto.RegisterType((*PolicyTheorem)(nil), "sourcenetwork.acp_core.PolicyTheorem")
 	proto.RegisterType((*Result)(nil), "sourcenetwork.acp_core.Result")
+	proto.RegisterType((*AuthorizationTheoremResult)(nil), "sourcenetwork.acp_core.AuthorizationTheoremResult")
+	proto.RegisterType((*DelegationTheoremResult)(nil), "sourcenetwork.acp_core.DelegationTheoremResult")
+	proto.RegisterType((*ReachabilityTheoremResult)(nil), "sourcenetwork.acp_core.ReachabilityTheoremResult")
+	proto.RegisterType((*AnnotatedAuthorizationTheoremResult)(nil), "sourcenetwork.acp_core.AnnotatedAuthorizationTheoremResult")
+	proto.RegisterType((*AnnotatedDelegationTheoremResult)(nil), "sourcenetwork.acp_core.AnnotatedDelegationTheoremResult")
+	proto.RegisterType((*AnnotatedReachabilityTheoremResult)(nil), "sourcenetwork.acp_core.AnnotatedReachabilityTheoremResult")
 	proto.RegisterType((*PolicyTheoremResult)(nil), "sourcenetwork.acp_core.PolicyTheoremResult")
+	proto.RegisterType((*AnnotatedPolicyTheoremResult)(nil), "sourcenetwork.acp_core.AnnotatedPolicyTheoremResult")
 }
 
 func init() {
@@ -403,43 +782,56 @@ func init() {
 }
 
 var fileDescriptor_0a37058f4cb4907c = []byte{
-	// 572 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x94, 0xcf, 0x6e, 0xd3, 0x40,
-	0x10, 0xc6, 0xe3, 0x84, 0x86, 0x76, 0x23, 0x0e, 0x38, 0x69, 0x65, 0x85, 0xd6, 0x0d, 0x81, 0x43,
-	0xaa, 0x56, 0xb1, 0x94, 0x4a, 0x88, 0x5b, 0x55, 0x04, 0x67, 0xd0, 0xaa, 0xa7, 0x0a, 0xc9, 0x5d,
-	0x6f, 0x06, 0x7b, 0xa9, 0x93, 0xb5, 0x76, 0xd7, 0xa0, 0xf0, 0x14, 0x3c, 0x07, 0x12, 0x17, 0x6e,
-	0x1c, 0xb9, 0x71, 0xec, 0x91, 0x23, 0x4a, 0x5e, 0x04, 0x65, 0x6d, 0x37, 0xff, 0x6c, 0x92, 0xf6,
-	0xe8, 0xc9, 0x6f, 0xbe, 0xf9, 0xe6, 0xf3, 0xc4, 0xe8, 0xb9, 0xe4, 0xb1, 0xa0, 0x30, 0x04, 0xf5,
-	0x99, 0x8b, 0x6b, 0x87, 0xd0, 0xc8, 0xa5, 0x5c, 0x80, 0xa3, 0x02, 0xe0, 0x02, 0x06, 0xdd, 0x48,
-	0x70, 0xc5, 0xcd, 0xbd, 0x05, 0xaa, 0x9b, 0x51, 0xcd, 0x43, 0x9f, 0x73, 0x3f, 0x04, 0x47, 0x53,
-	0x5e, 0xfc, 0xc1, 0x51, 0x6c, 0x00, 0x52, 0x91, 0x41, 0x94, 0x34, 0x36, 0x4f, 0x0a, 0xe4, 0x09,
-	0xa5, 0x20, 0xa5, 0xdb, 0x07, 0xca, 0x24, 0xe3, 0xc3, 0x94, 0x7e, 0x56, 0x40, 0x47, 0x3c, 0x64,
-	0x74, 0x94, 0x42, 0x47, 0xff, 0x85, 0x5c, 0x19, 0x70, 0xa1, 0xd6, 0xa0, 0x02, 0x42, 0xa2, 0x18,
-	0x1f, 0xca, 0x80, 0x65, 0x46, 0x7b, 0x1b, 0xa0, 0xae, 0x84, 0x10, 0xa8, 0xe2, 0x62, 0x8d, 0x5d,
-	0x39, 0x92, 0x2a, 0x8b, 0xae, 0xfd, 0xdd, 0x40, 0x8d, 0xf3, 0x58, 0x05, 0x5c, 0xb0, 0x2f, 0x5a,
-	0xe9, 0x22, 0x49, 0xd6, 0x3c, 0x43, 0x3b, 0x3c, 0x02, 0xa1, 0x6b, 0x96, 0xd1, 0x32, 0x3a, 0xb5,
-	0xde, 0xd3, 0x6e, 0x7e, 0xce, 0xdd, 0xb7, 0x19, 0x88, 0x67, 0x3d, 0xe6, 0x29, 0xda, 0x22, 0x53,
-	0x37, 0x56, 0x59, 0x37, 0x1f, 0x14, 0x35, 0x9f, 0x4f, 0x21, 0x9c, 0xb0, 0xe6, 0x21, 0xaa, 0x11,
-	0x29, 0x41, 0x28, 0x57, 0x89, 0x18, 0xac, 0x4a, 0xcb, 0xe8, 0x6c, 0x63, 0x94, 0x94, 0x2e, 0x44,
-	0x0c, 0xed, 0x5f, 0x06, 0xaa, 0x63, 0x20, 0x34, 0x20, 0x1e, 0x0b, 0x99, 0x1a, 0x65, 0x76, 0x6f,
-	0xa7, 0x19, 0x77, 0x98, 0xb6, 0x3f, 0xbf, 0xe3, 0xd4, 0xe6, 0xce, 0xfc, 0x02, 0x2f, 0x50, 0x95,
-	0x7b, 0x1f, 0x81, 0x2a, 0x6d, 0xa3, 0xd6, 0xb3, 0x0b, 0xd7, 0xd7, 0x14, 0x4e, 0xe9, 0xe5, 0x1d,
-	0x1e, 0xac, 0xec, 0xf0, 0xcd, 0x40, 0x8f, 0x5f, 0x43, 0x08, 0xfe, 0x42, 0xe0, 0xf7, 0xda, 0xe0,
-	0x6c, 0x79, 0x83, 0xbb, 0xbe, 0xa5, 0xb5, 0x81, 0xff, 0x28, 0xa3, 0x47, 0xef, 0xf4, 0xed, 0x66,
-	0x46, 0x29, 0xda, 0x23, 0xf3, 0x17, 0xe3, 0xa6, 0x7f, 0x46, 0x69, 0x19, 0xad, 0x4a, 0xa7, 0xd6,
-	0x3b, 0x29, 0x74, 0x9e, 0x73, 0x67, 0x78, 0x97, 0xe4, 0x54, 0xa5, 0x79, 0x89, 0xea, 0xfd, 0xdb,
-	0x88, 0x66, 0x13, 0xca, 0x7a, 0xc2, 0x51, 0xd1, 0x84, 0x95, 0x54, 0xb1, 0xd9, 0x5f, 0x2e, 0x49,
-	0xf3, 0x0a, 0xed, 0x8a, 0xb9, 0x13, 0x9a, 0xa9, 0x57, 0xb4, 0xfa, 0x71, 0x91, 0x7a, 0xce, 0xdd,
-	0xe1, 0x86, 0x58, 0x2d, 0xca, 0xf6, 0x4b, 0x54, 0xc5, 0x20, 0xe3, 0x50, 0x99, 0x0d, 0xb4, 0xf5,
-	0x89, 0x84, 0xac, 0xaf, 0xdf, 0xea, 0x36, 0x4e, 0x1e, 0x4c, 0x0b, 0x3d, 0x1c, 0x80, 0x94, 0xc4,
-	0x87, 0xf4, 0xec, 0xb2, 0xc7, 0xf6, 0xcf, 0x32, 0xaa, 0x2f, 0xc4, 0x9d, 0xea, 0x78, 0xe8, 0x20,
-	0x3f, 0x74, 0x57, 0x68, 0x20, 0xcd, 0xde, 0x2e, 0xf6, 0x3e, 0xa5, 0xf0, 0x93, 0xdc, 0xb4, 0xd3,
-	0x19, 0xef, 0x51, 0x33, 0x27, 0xf3, 0x6c, 0x40, 0x79, 0xa3, 0x01, 0xd6, 0x6a, 0xde, 0xa9, 0xfa,
-	0x15, 0xda, 0xcf, 0x4d, 0x3d, 0xd3, 0xaf, 0x6c, 0xa4, 0xdf, 0xcc, 0xcb, 0x3b, 0xf9, 0xed, 0xd5,
-	0x9b, 0xdf, 0x63, 0xdb, 0xb8, 0x19, 0xdb, 0xc6, 0xdf, 0xb1, 0x6d, 0x7c, 0x9d, 0xd8, 0xa5, 0x9b,
-	0x89, 0x5d, 0xfa, 0x33, 0xb1, 0x4b, 0x97, 0xc7, 0x3e, 0x53, 0x41, 0xec, 0x75, 0x29, 0x1f, 0x38,
-	0x45, 0xdf, 0xe7, 0x6b, 0xdf, 0x51, 0xa3, 0x08, 0xa4, 0x57, 0xd5, 0x5f, 0xc6, 0xd3, 0x7f, 0x01,
-	0x00, 0x00, 0xff, 0xff, 0x22, 0x07, 0x12, 0xfe, 0x7c, 0x06, 0x00, 0x00,
+	// 783 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0x3d, 0x6f, 0xd3, 0x50,
+	0x14, 0xed, 0x4b, 0xe8, 0xd7, 0x8d, 0x18, 0x70, 0x3f, 0x08, 0xa1, 0x75, 0x83, 0xcb, 0xd0, 0xaa,
+	0x55, 0x2c, 0x52, 0x09, 0x15, 0x18, 0xaa, 0x16, 0x0a, 0x82, 0x05, 0x64, 0x75, 0xea, 0x62, 0x5e,
+	0x9c, 0xd7, 0xc4, 0xd4, 0xc9, 0xb3, 0xde, 0x7b, 0x2e, 0x0a, 0x42, 0xe2, 0x2f, 0xb0, 0xc0, 0x80,
+	0x98, 0x19, 0x2a, 0x58, 0xf8, 0x07, 0x6c, 0x8c, 0x1d, 0x19, 0x51, 0xfb, 0x0b, 0xf8, 0x07, 0x28,
+	0xfe, 0x6a, 0xe2, 0xd8, 0x75, 0x9c, 0x76, 0xf4, 0xcb, 0x79, 0xf7, 0x9c, 0x7b, 0xcf, 0xf1, 0x8d,
+	0xe1, 0x2e, 0xa7, 0x0e, 0x33, 0x48, 0x9b, 0x88, 0xb7, 0x94, 0x1d, 0xaa, 0xd8, 0xb0, 0x75, 0x83,
+	0x32, 0xa2, 0x8a, 0x26, 0xa1, 0x8c, 0xb4, 0x2a, 0x36, 0xa3, 0x82, 0x4a, 0xf3, 0x7d, 0xa8, 0x4a,
+	0x80, 0x2a, 0x2d, 0x35, 0x28, 0x6d, 0x58, 0x44, 0x75, 0x51, 0x35, 0xe7, 0x40, 0x15, 0x66, 0x8b,
+	0x70, 0x81, 0x5b, 0xb6, 0x77, 0xb1, 0xb4, 0x9e, 0x50, 0x1e, 0x1b, 0x06, 0xe1, 0x5c, 0xaf, 0x13,
+	0xc3, 0xe4, 0x26, 0x6d, 0xfb, 0xe8, 0xe5, 0x04, 0xb4, 0x4d, 0x2d, 0xd3, 0xe8, 0xf8, 0xa0, 0xd5,
+	0x0b, 0x41, 0x3a, 0x6f, 0x52, 0x26, 0x52, 0xa0, 0x8c, 0x58, 0x58, 0x98, 0xb4, 0xcd, 0x9b, 0x66,
+	0x20, 0xb4, 0x3a, 0x04, 0x54, 0xe7, 0xc4, 0x22, 0x86, 0xa0, 0x2c, 0xa5, 0xb9, 0x9a, 0x73, 0x70,
+	0x40, 0x98, 0x6e, 0x53, 0x6e, 0x8a, 0xf4, 0xe6, 0x78, 0x87, 0x8b, 0x60, 0xd0, 0xca, 0x0f, 0x04,
+	0xb3, 0xdb, 0x8e, 0x68, 0x52, 0x66, 0xbe, 0x73, 0x79, 0xf7, 0x3c, 0x1f, 0xa4, 0x2d, 0x98, 0xa6,
+	0x36, 0x61, 0xee, 0x59, 0x11, 0x95, 0xd1, 0x4a, 0xa1, 0x7a, 0xa7, 0x12, 0xef, 0x4a, 0xe5, 0x65,
+	0x00, 0xd4, 0xce, 0xef, 0x48, 0x1b, 0x30, 0x8e, 0xbb, 0xda, 0x8b, 0x39, 0xf7, 0xf2, 0x62, 0xd2,
+	0xe5, 0xed, 0x2e, 0x48, 0xf3, 0xb0, 0xd2, 0x12, 0x14, 0x30, 0xe7, 0x84, 0x09, 0x5d, 0x30, 0x87,
+	0x14, 0xf3, 0x65, 0xb4, 0x32, 0xa5, 0x81, 0x77, 0xb4, 0xc7, 0x1c, 0xa2, 0xfc, 0x42, 0x30, 0xa3,
+	0x11, 0x6c, 0x34, 0x71, 0xcd, 0xb4, 0x4c, 0xd1, 0x09, 0xe4, 0x86, 0x6c, 0x28, 0x03, 0xdb, 0x42,
+	0x6f, 0x8f, 0x5d, 0x99, 0xd3, 0xbd, 0x0d, 0xdc, 0x87, 0x09, 0x5a, 0x7b, 0x43, 0x0c, 0xe1, 0xca,
+	0x28, 0x54, 0xe5, 0xc4, 0xf6, 0x5d, 0x94, 0xe6, 0xa3, 0xa3, 0x3d, 0x5c, 0x1b, 0xe8, 0xe1, 0x18,
+	0xc1, 0x8d, 0x27, 0xc4, 0x22, 0x8d, 0xbe, 0x81, 0x8f, 0xd4, 0xc1, 0x56, 0xb4, 0x83, 0xac, 0x2e,
+	0xa5, 0x0e, 0xfc, 0x67, 0x0e, 0xae, 0xbf, 0x72, 0x93, 0x1e, 0x08, 0x35, 0x60, 0x1e, 0xf7, 0x26,
+	0x46, 0xf7, 0x5f, 0x5d, 0x5e, 0x44, 0xe5, 0xfc, 0x4a, 0xa1, 0xba, 0x9e, 0xa8, 0x3c, 0x26, 0x67,
+	0xda, 0x1c, 0x8e, 0x39, 0xe5, 0xd2, 0x3e, 0xcc, 0xd4, 0xc3, 0x11, 0x9d, 0x33, 0xe4, 0x5c, 0x86,
+	0xd5, 0x24, 0x86, 0x81, 0xa9, 0x6a, 0x52, 0x3d, 0x7a, 0xc4, 0xa5, 0xd7, 0x30, 0xc7, 0x7a, 0x22,
+	0x74, 0x5e, 0x3d, 0xef, 0x56, 0x5f, 0x4b, 0xaa, 0x1e, 0x93, 0x3b, 0x6d, 0x96, 0x0d, 0x1e, 0x72,
+	0x65, 0x13, 0x26, 0x34, 0xc2, 0x1d, 0x4b, 0x48, 0xb3, 0x30, 0x7e, 0x84, 0x2d, 0xb3, 0xee, 0xba,
+	0x3a, 0xa5, 0x79, 0x0f, 0x52, 0x11, 0x26, 0x5b, 0x84, 0x73, 0xdc, 0x20, 0x7e, 0xec, 0x82, 0x47,
+	0xe5, 0x2b, 0x82, 0x52, 0xec, 0x9c, 0xbc, 0x72, 0x4f, 0x61, 0xd2, 0x57, 0xeb, 0xc7, 0x24, 0xdb,
+	0xb0, 0x83, 0xcb, 0xdd, 0x6c, 0x33, 0xb7, 0xa2, 0x1f, 0x1a, 0x39, 0xb9, 0xe7, 0x2e, 0x4a, 0xf3,
+	0xd1, 0xca, 0x67, 0x04, 0x37, 0x07, 0x87, 0xec, 0x69, 0x7b, 0x1c, 0xd5, 0x96, 0xc1, 0xa6, 0x4b,
+	0x0b, 0xfb, 0x82, 0xe0, 0x56, 0x9c, 0x3f, 0x9e, 0xb4, 0xdd, 0xa8, 0xb4, 0x4c, 0x1e, 0x5f, 0x5a,
+	0xdc, 0x77, 0x04, 0xcb, 0xdb, 0xed, 0x36, 0x15, 0x58, 0x90, 0xfa, 0x05, 0xee, 0xbe, 0x08, 0xeb,
+	0x7b, 0x2a, 0xab, 0x99, 0xcc, 0xed, 0xe3, 0x94, 0x1e, 0xc0, 0x38, 0xc3, 0x6d, 0x3f, 0x60, 0x85,
+	0xea, 0x72, 0x52, 0xa9, 0x1d, 0xf7, 0xbf, 0x43, 0xeb, 0x42, 0x35, 0xef, 0x86, 0xf2, 0x0d, 0x41,
+	0x39, 0x94, 0x9b, 0xe4, 0xf6, 0xb3, 0x88, 0x56, 0x75, 0x78, 0xb3, 0xaf, 0x4c, 0xe8, 0x31, 0x02,
+	0x25, 0x14, 0x9a, 0xec, 0xfe, 0xf3, 0x88, 0xd4, 0x7b, 0x59, 0xcc, 0xbf, 0x32, 0xb1, 0xff, 0x72,
+	0x30, 0xd3, 0xb7, 0x48, 0x7d, 0x75, 0x47, 0xb0, 0x18, 0xbf, 0x4e, 0xf5, 0x50, 0x74, 0x7e, 0xc4,
+	0x2c, 0xdc, 0x8e, 0xdd, 0xad, 0x3e, 0x6f, 0x0b, 0x4a, 0x31, 0x1b, 0x56, 0x0f, 0x03, 0x9e, 0x1f,
+	0xc5, 0xd4, 0xe2, 0xe0, 0xba, 0xf5, 0xe9, 0x38, 0x2c, 0xc4, 0x2e, 0xdd, 0x80, 0xd0, 0xdb, 0xbd,
+	0x23, 0x58, 0x53, 0x8a, 0xdb, 0xc0, 0xde, 0x6f, 0xca, 0xa7, 0x3c, 0x2c, 0x84, 0x01, 0x89, 0x1b,
+	0xfe, 0x87, 0xe1, 0x86, 0xff, 0x28, 0x71, 0xf8, 0xe9, 0x6f, 0xf5, 0xc5, 0x2e, 0x1c, 0x0d, 0xe1,
+	0xc2, 0x66, 0x2a, 0x7b, 0x76, 0x3b, 0xde, 0x0f, 0x65, 0xc7, 0xc3, 0x54, 0xe6, 0x91, 0x7c, 0xd9,
+	0xd9, 0xfd, 0x7d, 0x2a, 0xa3, 0x93, 0x53, 0x19, 0xfd, 0x3d, 0x95, 0xd1, 0xc7, 0x33, 0x79, 0xec,
+	0xe4, 0x4c, 0x1e, 0xfb, 0x73, 0x26, 0x8f, 0xed, 0xaf, 0x35, 0x4c, 0xd1, 0x74, 0x6a, 0x15, 0x83,
+	0xb6, 0xd4, 0xa4, 0xef, 0xee, 0xc3, 0x86, 0x2a, 0x3a, 0x36, 0xe1, 0xb5, 0x09, 0xf7, 0x1b, 0x76,
+	0xe3, 0x7f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x51, 0xba, 0x3c, 0x55, 0x54, 0x0c, 0x00, 0x00,
 }
 
 func (m *AuthorizationTheorem) Marshal() (dAtA []byte, err error) {
@@ -725,6 +1117,288 @@ func (m *Result) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *AuthorizationTheoremResult) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AuthorizationTheoremResult) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AuthorizationTheoremResult) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Result != nil {
+		{
+			size, err := m.Result.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTheorem(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Theorem != nil {
+		{
+			size, err := m.Theorem.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTheorem(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DelegationTheoremResult) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DelegationTheoremResult) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DelegationTheoremResult) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Result != nil {
+		{
+			size, err := m.Result.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTheorem(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Theorem != nil {
+		{
+			size, err := m.Theorem.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTheorem(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ReachabilityTheoremResult) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ReachabilityTheoremResult) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReachabilityTheoremResult) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Result != nil {
+		{
+			size, err := m.Result.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTheorem(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Theorem != nil {
+		{
+			size, err := m.Theorem.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTheorem(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AnnotatedAuthorizationTheoremResult) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AnnotatedAuthorizationTheoremResult) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AnnotatedAuthorizationTheoremResult) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Range != nil {
+		{
+			size, err := m.Range.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTheorem(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Result != nil {
+		{
+			size, err := m.Result.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTheorem(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AnnotatedDelegationTheoremResult) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AnnotatedDelegationTheoremResult) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AnnotatedDelegationTheoremResult) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Range != nil {
+		{
+			size, err := m.Range.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTheorem(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Result != nil {
+		{
+			size, err := m.Result.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTheorem(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AnnotatedReachabilityTheoremResult) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AnnotatedReachabilityTheoremResult) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AnnotatedReachabilityTheoremResult) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Range != nil {
+		{
+			size, err := m.Range.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTheorem(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Result != nil {
+		{
+			size, err := m.Result.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTheorem(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *PolicyTheoremResult) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -741,6 +1415,71 @@ func (m *PolicyTheoremResult) MarshalTo(dAtA []byte) (int, error) {
 }
 
 func (m *PolicyTheoremResult) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ReachabilityTheoremsResult) > 0 {
+		for iNdEx := len(m.ReachabilityTheoremsResult) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ReachabilityTheoremsResult[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTheorem(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.DelegationTheoremsResult) > 0 {
+		for iNdEx := len(m.DelegationTheoremsResult) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.DelegationTheoremsResult[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTheorem(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.AuthorizationTheoremsResult) > 0 {
+		for iNdEx := len(m.AuthorizationTheoremsResult) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.AuthorizationTheoremsResult[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTheorem(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AnnotatedPolicyTheoremResult) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AnnotatedPolicyTheoremResult) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AnnotatedPolicyTheoremResult) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -908,7 +1647,136 @@ func (m *Result) Size() (n int) {
 	return n
 }
 
+func (m *AuthorizationTheoremResult) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Theorem != nil {
+		l = m.Theorem.Size()
+		n += 1 + l + sovTheorem(uint64(l))
+	}
+	if m.Result != nil {
+		l = m.Result.Size()
+		n += 1 + l + sovTheorem(uint64(l))
+	}
+	return n
+}
+
+func (m *DelegationTheoremResult) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Theorem != nil {
+		l = m.Theorem.Size()
+		n += 1 + l + sovTheorem(uint64(l))
+	}
+	if m.Result != nil {
+		l = m.Result.Size()
+		n += 1 + l + sovTheorem(uint64(l))
+	}
+	return n
+}
+
+func (m *ReachabilityTheoremResult) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Theorem != nil {
+		l = m.Theorem.Size()
+		n += 1 + l + sovTheorem(uint64(l))
+	}
+	if m.Result != nil {
+		l = m.Result.Size()
+		n += 1 + l + sovTheorem(uint64(l))
+	}
+	return n
+}
+
+func (m *AnnotatedAuthorizationTheoremResult) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Result != nil {
+		l = m.Result.Size()
+		n += 1 + l + sovTheorem(uint64(l))
+	}
+	if m.Range != nil {
+		l = m.Range.Size()
+		n += 1 + l + sovTheorem(uint64(l))
+	}
+	return n
+}
+
+func (m *AnnotatedDelegationTheoremResult) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Result != nil {
+		l = m.Result.Size()
+		n += 1 + l + sovTheorem(uint64(l))
+	}
+	if m.Range != nil {
+		l = m.Range.Size()
+		n += 1 + l + sovTheorem(uint64(l))
+	}
+	return n
+}
+
+func (m *AnnotatedReachabilityTheoremResult) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Result != nil {
+		l = m.Result.Size()
+		n += 1 + l + sovTheorem(uint64(l))
+	}
+	if m.Range != nil {
+		l = m.Range.Size()
+		n += 1 + l + sovTheorem(uint64(l))
+	}
+	return n
+}
+
 func (m *PolicyTheoremResult) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.AuthorizationTheoremsResult) > 0 {
+		for _, e := range m.AuthorizationTheoremsResult {
+			l = e.Size()
+			n += 1 + l + sovTheorem(uint64(l))
+		}
+	}
+	if len(m.DelegationTheoremsResult) > 0 {
+		for _, e := range m.DelegationTheoremsResult {
+			l = e.Size()
+			n += 1 + l + sovTheorem(uint64(l))
+		}
+	}
+	if len(m.ReachabilityTheoremsResult) > 0 {
+		for _, e := range m.ReachabilityTheoremsResult {
+			l = e.Size()
+			n += 1 + l + sovTheorem(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *AnnotatedPolicyTheoremResult) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1653,6 +2521,738 @@ func (m *Result) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *AuthorizationTheoremResult) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTheorem
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AuthorizationTheoremResult: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AuthorizationTheoremResult: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Theorem", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTheorem
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Theorem == nil {
+				m.Theorem = &AuthorizationTheorem{}
+			}
+			if err := m.Theorem.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTheorem
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Result == nil {
+				m.Result = &Result{}
+			}
+			if err := m.Result.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTheorem(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DelegationTheoremResult) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTheorem
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DelegationTheoremResult: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DelegationTheoremResult: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Theorem", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTheorem
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Theorem == nil {
+				m.Theorem = &DelegationTheorem{}
+			}
+			if err := m.Theorem.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTheorem
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Result == nil {
+				m.Result = &Result{}
+			}
+			if err := m.Result.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTheorem(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ReachabilityTheoremResult) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTheorem
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ReachabilityTheoremResult: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ReachabilityTheoremResult: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Theorem", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTheorem
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Theorem == nil {
+				m.Theorem = &ReachabilityTheorem{}
+			}
+			if err := m.Theorem.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTheorem
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Result == nil {
+				m.Result = &Result{}
+			}
+			if err := m.Result.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTheorem(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AnnotatedAuthorizationTheoremResult) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTheorem
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AnnotatedAuthorizationTheoremResult: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AnnotatedAuthorizationTheoremResult: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTheorem
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Result == nil {
+				m.Result = &AuthorizationTheoremResult{}
+			}
+			if err := m.Result.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Range", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTheorem
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Range == nil {
+				m.Range = &BufferRange{}
+			}
+			if err := m.Range.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTheorem(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AnnotatedDelegationTheoremResult) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTheorem
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AnnotatedDelegationTheoremResult: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AnnotatedDelegationTheoremResult: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTheorem
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Result == nil {
+				m.Result = &DelegationTheoremResult{}
+			}
+			if err := m.Result.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Range", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTheorem
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Range == nil {
+				m.Range = &BufferRange{}
+			}
+			if err := m.Range.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTheorem(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AnnotatedReachabilityTheoremResult) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTheorem
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AnnotatedReachabilityTheoremResult: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AnnotatedReachabilityTheoremResult: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTheorem
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Result == nil {
+				m.Result = &ReachabilityTheoremResult{}
+			}
+			if err := m.Result.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Range", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTheorem
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Range == nil {
+				m.Range = &BufferRange{}
+			}
+			if err := m.Range.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTheorem(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *PolicyTheoremResult) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -1711,7 +3311,7 @@ func (m *PolicyTheoremResult) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.AuthorizationTheoremsResult = append(m.AuthorizationTheoremsResult, &Result{})
+			m.AuthorizationTheoremsResult = append(m.AuthorizationTheoremsResult, &AuthorizationTheoremResult{})
 			if err := m.AuthorizationTheoremsResult[len(m.AuthorizationTheoremsResult)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1745,7 +3345,7 @@ func (m *PolicyTheoremResult) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.DelegationTheoremsResult = append(m.DelegationTheoremsResult, &Result{})
+			m.DelegationTheoremsResult = append(m.DelegationTheoremsResult, &DelegationTheoremResult{})
 			if err := m.DelegationTheoremsResult[len(m.DelegationTheoremsResult)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1779,7 +3379,159 @@ func (m *PolicyTheoremResult) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ReachabilityTheoremsResult = append(m.ReachabilityTheoremsResult, &Result{})
+			m.ReachabilityTheoremsResult = append(m.ReachabilityTheoremsResult, &ReachabilityTheoremResult{})
+			if err := m.ReachabilityTheoremsResult[len(m.ReachabilityTheoremsResult)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTheorem(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AnnotatedPolicyTheoremResult) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTheorem
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AnnotatedPolicyTheoremResult: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AnnotatedPolicyTheoremResult: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AuthorizationTheoremsResult", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTheorem
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AuthorizationTheoremsResult = append(m.AuthorizationTheoremsResult, &AnnotatedAuthorizationTheoremResult{})
+			if err := m.AuthorizationTheoremsResult[len(m.AuthorizationTheoremsResult)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DelegationTheoremsResult", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTheorem
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DelegationTheoremsResult = append(m.DelegationTheoremsResult, &AnnotatedDelegationTheoremResult{})
+			if err := m.DelegationTheoremsResult[len(m.DelegationTheoremsResult)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReachabilityTheoremsResult", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTheorem
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTheorem
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ReachabilityTheoremsResult = append(m.ReachabilityTheoremsResult, &AnnotatedReachabilityTheoremResult{})
 			if err := m.ReachabilityTheoremsResult[len(m.ReachabilityTheoremsResult)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}

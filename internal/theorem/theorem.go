@@ -3,6 +3,7 @@ package theorem
 import (
 	"context"
 
+	"github.com/sourcenetwork/acp_core/internal/parser"
 	"github.com/sourcenetwork/acp_core/internal/relationship"
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
@@ -20,46 +21,73 @@ type Evaluator struct {
 	zanzi *zanzi.Adapter
 }
 
-func (e *Evaluator) evaluateAuthorizationTheorem(ctx context.Context, policy *types.Policy, theorem *types.AuthorizationTheorem) (*types.Result, error) {
+func (e *Evaluator) evaluateAuthorizationTheorem(ctx context.Context, policy *types.Policy, theorem *types.AuthorizationTheorem) (*types.AuthorizationTheoremResult, error) {
 	ok, err := e.zanzi.Check(ctx, policy, theorem.Operation, theorem.Actor)
 	if err != nil {
 		// FIXME once Zanzi errors are sorted out, assert that the error isn't an IO or internal error
-		return &types.Result{
-			Valid:   false,
-			Message: err.Error(),
+		return &types.AuthorizationTheoremResult{
+			Theorem: theorem,
+			Result: &types.Result{
+				Valid:   false,
+				Message: err.Error(),
+			},
 		}, nil
 	}
-	return &types.Result{
-		Valid:   ok,
-		Message: "",
+	return &types.AuthorizationTheoremResult{
+		Theorem: theorem,
+		Result: &types.Result{
+			Valid:   ok,
+			Message: "",
+		},
 	}, nil
 }
 
-func (e *Evaluator) evaluateReacheabilityTheorem(ctx context.Context, polId *types.Policy, theorem *types.ReachabilityTheorem) (*types.Result, error) {
-	return &types.Result{
-		Valid:   true,
-		Message: "",
+func (e *Evaluator) evaluateReacheabilityTheorem(ctx context.Context, polId *types.Policy, theorem *types.ReachabilityTheorem) (*types.ReachabilityTheoremResult, error) {
+	return &types.ReachabilityTheoremResult{
+		Result: &types.Result{
+			Valid:   true,
+			Message: "",
+		},
+		Theorem: theorem,
 	}, nil
 }
 
-func (e *Evaluator) evalDelegationTheorem(ctx context.Context, polId *types.Policy, theorem *types.DelegationTheorem) (*types.Result, error) {
+func (e *Evaluator) evalDelegationTheorem(ctx context.Context, polId *types.Policy, theorem *types.DelegationTheorem) (*types.DelegationTheoremResult, error) {
 	authorizer := relationship.NewRelationshipAuthorizer(e.zanzi)
 	authorized, err := authorizer.IsAuthorized(ctx, polId, theorem.Operation, theorem.Actor)
 	if err != nil {
 		// if error is not internal, then user might've supplied invalid data
 		// which shouldn't cause the whole execution to fail
 		if acpErr, ok := err.(*errors.Error); ok && acpErr.Type() != errors.ErrorType_INTERNAL {
-			return &types.Result{
-				Valid:   false,
-				Message: acpErr.Error(),
+			return &types.DelegationTheoremResult{
+				Result: &types.Result{
+					Valid:   false,
+					Message: acpErr.Error(),
+				},
+				Theorem: theorem,
 			}, nil
 		}
+	}
+	return &types.DelegationTheoremResult{
+		Result: &types.Result{
+			Valid:   authorized,
+			Message: "",
+		},
+		Theorem: theorem,
+	}, nil
+}
+
+func (e *Evaluator) EvaluatePolicyTheoremDSL(ctx context.Context, polId string, theoremDSL string) (*types.AnnotatedPolicyTheoremResult, error) {
+	indexedTheorem, err := parser.ParsePolicyTheorem(theoremDSL)
+	if err != nil {
 		return nil, err
 	}
-	return &types.Result{
-		Valid:   authorized,
-		Message: "",
-	}, nil
+	result, err := e.EvaluatePolicyTheorem(ctx, polId, indexedTheorem.ToPolicyTheorem())
+	if err != nil {
+		return nil, err
+	}
+	// TODO map result
+	return nil, nil
 }
 
 func (e *Evaluator) EvaluatePolicyTheorem(ctx context.Context, polId string, theorem *types.PolicyTheorem) (*types.PolicyTheoremResult, error) {
@@ -71,21 +99,21 @@ func (e *Evaluator) EvaluatePolicyTheorem(ctx context.Context, polId string, the
 		return nil, newEvaluatorErr(errors.NewPolicyNotFound(polId))
 	}
 
-	authzResults, err := utils.MapFailableSlice(theorem.AuthorizationTheorems, func(thm *types.AuthorizationTheorem) (*types.Result, error) {
+	authzResults, err := utils.MapFailableSlice(theorem.AuthorizationTheorems, func(thm *types.AuthorizationTheorem) (*types.AuthorizationTheoremResult, error) {
 		return e.evaluateAuthorizationTheorem(ctx, rec.Policy, thm)
 	})
 	if err != nil {
 		return nil, newEvaluatorErr(err)
 	}
 
-	delegationResults, err := utils.MapFailableSlice(theorem.DelegationTheorems, func(thm *types.DelegationTheorem) (*types.Result, error) {
+	delegationResults, err := utils.MapFailableSlice(theorem.DelegationTheorems, func(thm *types.DelegationTheorem) (*types.DelegationTheoremResult, error) {
 		return e.evalDelegationTheorem(ctx, rec.Policy, thm)
 	})
 	if err != nil {
 		return nil, newEvaluatorErr(err)
 	}
 
-	reachabilityResults, err := utils.MapFailableSlice(theorem.ReachabilityTheorems, func(thm *types.ReachabilityTheorem) (*types.Result, error) {
+	reachabilityResults, err := utils.MapFailableSlice(theorem.ReachabilityTheorems, func(thm *types.ReachabilityTheorem) (*types.ReachabilityTheoremResult, error) {
 		return e.evaluateReacheabilityTheorem(ctx, rec.Policy, thm)
 	})
 	if err != nil {

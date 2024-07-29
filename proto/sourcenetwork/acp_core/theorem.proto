@@ -9,6 +9,7 @@ import "sourcenetwork/acp_core/policy.proto";
 import "sourcenetwork/acp_core/policy_short.proto";
 import "sourcenetwork/acp_core/relationship.proto";
 import "sourcenetwork/acp_core/relationship_selector.proto";
+import "sourcenetwork/acp_core/buffer_position.proto";
 import "sourcenetwork/acp_core/system.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
@@ -50,8 +51,44 @@ message Result {
     string message = 2;
 }
 
+message AuthorizationTheoremResult {
+  AuthorizationTheorem theorem = 1;
+  Result result = 2;
+}
+
+message DelegationTheoremResult {
+  DelegationTheorem theorem = 1;
+  Result result = 2;
+}
+
+message ReachabilityTheoremResult {
+  ReachabilityTheorem theorem = 1;
+  Result result = 2;
+}
+
+message AnnotatedAuthorizationTheoremResult {
+  AuthorizationTheoremResult result = 1;
+  BufferRange range = 2;
+}
+
+message AnnotatedDelegationTheoremResult {
+  DelegationTheoremResult result = 1;
+  BufferRange range = 2;
+}
+
+message AnnotatedReachabilityTheoremResult {
+  ReachabilityTheoremResult result = 1;
+  BufferRange range = 2;
+}
+
 message PolicyTheoremResult {
-  repeated Result authorization_theorems_result = 1;
-  repeated Result delegation_theorems_result = 2;
-  repeated Result reachability_theorems_result = 3;
+  repeated AuthorizationTheoremResult authorization_theorems_result = 1;
+  repeated DelegationTheoremResult delegation_theorems_result = 2;
+  repeated ReachabilityTheoremResult reachability_theorems_result = 3;
+}
+
+message AnnotatedPolicyTheoremResult {
+  repeated AnnotatedAuthorizationTheoremResult authorization_theorems_result = 1;
+  repeated AnnotatedDelegationTheoremResult delegation_theorems_result = 2;
+  repeated AnnotatedReachabilityTheoremResult reachability_theorems_result = 3;
 }

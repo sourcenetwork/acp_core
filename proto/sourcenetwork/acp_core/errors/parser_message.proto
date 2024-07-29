@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package sourcenetwork.acp_core.errors;
+
+import "sourcenetwork/acp_core/buffer_position.proto";
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/errors";
+
+enum Severity {
+    WARNING = 0;
+    ERROR = 1;
+}
+
+// ParserMessage models a message returned by a parser, which points
+// to a position in the given text input
+message ParserMessage {
+    string message = 1;
+    string sevirity = 2;
+    string input_name = 3; 
+    sourcenetwork.acp_core.BufferRange range = 4;
+}
+
+// ParserReport contains a set of messages
+message ParserReport {
+    repeated ParserMessage messages = 1;
+}

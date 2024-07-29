@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package sourcenetwork.acp_core;
+
+import "google/protobuf/timestamp.proto";
+
+import "sourcenetwork/acp_core/access_decision.proto";
+import "sourcenetwork/acp_core/policy.proto";
+import "sourcenetwork/acp_core/policy_short.proto";
+import "sourcenetwork/acp_core/errors/parser_message.proto";
+import "sourcenetwork/acp_core/relationship.proto";
+import "sourcenetwork/acp_core/theorem.proto";
+import "sourcenetwork/acp_core/relationship_selector.proto";
+import "sourcenetwork/acp_core/system.proto";
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+
+// SimulationCtx encapsulated all context data
+// to execute an isolated theorem execution simulation
+message SimulationCtx {
+  Policy policy = 1;
+  repeated Relationship relationships = 2;
+  PolicyTheorem policy_theorem = 3;
+}
+
+message SimulationResult {
+    SimulationCtx ctx = 1;
+    PolicyTheoremResult result = 2;
+}
+
+// SimulationCtxDeclaration declares a SimulationCtx
+// through text elements using the Theorem's DSL
+message SimulationCtxDeclaration {
+    string policy = 1 ;
+    PolicyMarshalingType      marshal_type  = 2;
+    string relationship_set = 3;
+    string policy_theorem = 4;
+}
+
+message DeclarationErrors {
+    // policy_errors contains all errors encountered while
+    // processing the given policy
+    repeated sourcenetwork.acp_core.errors.ParserMessage policy_errors = 1;
+    // policy_errors contains all errors encountered while
+    // processing the relationship set
+    repeated sourcenetwork.acp_core.errors.ParserMessage relationships_errors = 2;
+    // policy_errors contains all errors encountered while
+    // parsing the theorems
+    repeated sourcenetwork.acp_core.errors.ParserMessage theorems_errrors = 3;
+}
+
+// AnnotatedSimulationResult contains the result
+// of the executed simulation, the parsed objects and
+// all errors found
+message AnnotatedSimulationResult {
+    SimulationCtx ctx = 1;
+    DeclarationErrors errors = 2;
+    AnnotatedPolicyTheoremResult policy_theorem_result = 3;
+}
