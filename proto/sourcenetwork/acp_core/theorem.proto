@@ -82,13 +82,15 @@ message AnnotatedReachabilityTheoremResult {
 }
 
 message PolicyTheoremResult {
-  repeated AuthorizationTheoremResult authorization_theorems_result = 1;
-  repeated DelegationTheoremResult delegation_theorems_result = 2;
-  repeated ReachabilityTheoremResult reachability_theorems_result = 3;
+  PolicyTheorem theorem = 1;
+  repeated AuthorizationTheoremResult authorization_theorems_result = 2;
+  repeated DelegationTheoremResult delegation_theorems_result = 3;
+  repeated ReachabilityTheoremResult reachability_theorems_result = 4;
 }
 
 message AnnotatedPolicyTheoremResult {
-  repeated AnnotatedAuthorizationTheoremResult authorization_theorems_result = 1;
-  repeated AnnotatedDelegationTheoremResult delegation_theorems_result = 2;
-  repeated AnnotatedReachabilityTheoremResult reachability_theorems_result = 3;
+  PolicyTheorem theorem = 1;
+  repeated AnnotatedAuthorizationTheoremResult authorization_theorems_result = 2;
+  repeated AnnotatedDelegationTheoremResult delegation_theorems_result = 3;
+  repeated AnnotatedReachabilityTheoremResult reachability_theorems_result = 4;
 }

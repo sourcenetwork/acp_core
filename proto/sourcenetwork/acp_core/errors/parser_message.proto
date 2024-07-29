@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package sourcenetwork.acp_core.errors;
 
-import "sourcenetwork/acp_core/buffer_position.proto";
-
 option go_package = "github.com/sourcenetwork/acp_core/pkg/errors";
 
 enum Severity {
@@ -17,10 +15,26 @@ message ParserMessage {
     string message = 1;
     string sevirity = 2;
     string input_name = 3; 
-    sourcenetwork.acp_core.BufferRange range = 4;
+    BufferRange range = 4;
 }
 
 // ParserReport contains a set of messages
 message ParserReport {
     repeated ParserMessage messages = 1;
+}
+
+// Copied over to remove circular import
+
+// BufferRange models a range in
+// a line oriented buffer
+message BufferRange {
+    BufferPosition start = 1;
+    BufferPosition end = 2;
+}
+
+// BufferPosition models a position in
+// a line oriented buffer
+message BufferPosition {
+    uint64 line = 1;
+    uint64 column = 2;
 }

@@ -14,7 +14,8 @@ func TestSimulator_Success(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
 	req := types.SimulateRequest{
-		Policy: `
+		Declaration: &types.SimulationCtxDeclaration{
+			Policy: `
         name: test
         resources:
           file:
@@ -31,12 +32,12 @@ func TestSimulator_Success(t *testing.T) {
               write:
                 expr: owner
         `,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
-		RelationshipSet: `
+			MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+			RelationshipSet: `
 		file:abc#owner@did:ex:bob
 		file:abc#reader@did:ex:alice
 		`,
-		PolicyTheorem: `
+			PolicyTheorem: `
 		Authorizations {
 		  file:abc#read@did:ex:bob
 		  file:abc#write@did:ex:bob
@@ -49,6 +50,7 @@ func TestSimulator_Success(t *testing.T) {
 		  did:ex:alice > file:abc#reader
 		}
 		`,
+		},
 	}
 
 	resp, err := ctx.Engine.Simulate(ctx, &req)

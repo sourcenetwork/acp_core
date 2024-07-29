@@ -38,13 +38,13 @@ func (l *theoremVisitorImpl) VisitUtf_id(c *Utf_idContext) any {
 	return id
 }
 
-func (l *theoremVisitorImpl) VisitRelationship(c *RelationshipContext) any {
+func (l *theoremVisitorImpl) VisitRelationship(ctx *RelationshipContext) any {
 	rel := &types.Relationship{
-		Object:   l.Visit(c.Object()).(*types.Object),
-		Relation: c.Relation().GetText(),
-		Subject:  l.Visit(c.Subject()).(*types.Subject),
+		Object:   l.Visit(ctx.Object()).(*types.Object),
+		Relation: ctx.Relation().GetText(),
+		Subject:  l.Visit(ctx.Subject()).(*types.Subject),
 	}
-	return NewIndexedObject(rel, c.GetStart().GetLine(), c.GetStart().GetColumn())
+	return NewIndexedObject(rel, ctx)
 }
 
 func (l *theoremVisitorImpl) VisitSubj_obj(ctx *Subj_objContext) any {
@@ -97,7 +97,7 @@ func (l *theoremVisitorImpl) VisitDelegation_theorem(ctx *Delegation_theoremCont
 		Operation:  operation,
 		AssertTrue: !negate,
 	}
-	return NewIndexedObject(theorem, ctx.GetStart().GetLine(), ctx.GetStart().GetColumn())
+	return NewIndexedObject(theorem, ctx)
 }
 
 func (l *theoremVisitorImpl) VisitDelegation_theorems(ctx *Delegation_theoremsContext) any {
@@ -117,7 +117,7 @@ func (l *theoremVisitorImpl) VisitAuthorization_theorem(ctx *Authorization_theor
 		Actor:      relationship.GetSubject().GetActor(),
 		AssertTrue: !negate,
 	}
-	return NewIndexedObject(theorem, ctx.GetStart().GetLine(), ctx.GetStart().GetColumn())
+	return NewIndexedObject(theorem, ctx)
 }
 
 func (l *theoremVisitorImpl) VisitAuthorization_theorems(ctx *Authorization_theoremsContext) any {

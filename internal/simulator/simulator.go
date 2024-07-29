@@ -15,12 +15,7 @@ import (
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
-func HandleSimulateRequest(ctx context.Context, req *types.SimulateRequest) (*types.SimulateResponse, error) {
-	manager, err := runtime.NewRuntimeManager(runtime.WithMemKV())
-	if err != nil {
-		return nil, newSimulateErr(err)
-	}
-
+func SimulateDeclaration(ctx context.Context, manager runtime.RuntimeManager, declaration *types.SimulationCtxDeclaration) (*types.AnnotatedSimulationResult, error) {
 	engine, err := zanzi.NewZanzi(manager.GetKVStore(), manager.GetLogger())
 	if err != nil {
 		return nil, newSimulateErr(err)
@@ -28,23 +23,18 @@ func HandleSimulateRequest(ctx context.Context, req *types.SimulateRequest) (*ty
 
 	polHandler := policy.CreatePolicyHandler{}
 	polResp, err := polHandler.Execute(ctx, manager, &types.CreatePolicyRequest{
-		Policy:       req.Policy,
-		MarshalType:  req.MarshalType,
+		Policy:       declaration.Policy,
+		MarshalType:  declaration.MarshalType,
 		CreationTime: prototypes.TimestampNow(),
 	})
 	if err != nil {
-		return nil, newSimulateErr(err)
+		return nil, newSimulateErr(err) // TODO figure out error type for the result
 	}
 	polId := polResp.Policy.Id
 
-	relationships, err := parser.ParseRelationships(req.RelationshipSet)
+	relationships, err := parser.ParseRelationships(declaration.RelationshipSet)
 	if err != nil {
-		return nil, newSimulateErr(err)
-	}
-
-	policyTheorem, err := parser.ParsePolicyTheorem(req.PolicyTheorem)
-	if err != nil {
-		return nil, newSimulateErr(err)
+		return nil, newSimulateErr(err) // TODO figure out error types
 	}
 
 	for _, rel := range relationships {
@@ -75,15 +65,18 @@ func HandleSimulateRequest(ctx context.Context, req *types.SimulateRequest) (*ty
 	}
 
 	evaluator := theorem.NewEvaluator(engine)
-	result, err := evaluator.EvaluatePolicyTheorem(ctx, polResp.Policy.Id, policyTheorem.ToPolicyTheorem())
+	annotatedResult, err := evaluator.EvaluatePolicyTheoremDSL(ctx, polResp.Policy.Id, declaration.PolicyTheorem)
 	if err != nil {
-		return nil, newSimulateErr(err)
+		return nil, newSimulateErr(err) // TODO figure out error type
 	}
 
-	return &types.SimulateResponse{
-		Policy:        polResp.Policy,
-		Relationships: relationships,
-		PolicyTheorem: policyTheorem.ToPolicyTheorem(),
-		Result:        result,
+	return &types.AnnotatedSimulationResult{
+		Ctx: &types.SimulationCtx{
+			Policy:        polResp.Policy,
+			Relationships: relationships,
+			PolicyTheorem: annotatedResult.Theorem,
+		},
+		Errors:              nil,
+		PolicyTheoremResult: annotatedResult,
 	}, nil
 }

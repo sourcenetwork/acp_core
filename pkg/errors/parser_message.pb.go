@@ -6,7 +6,6 @@ package errors
 import (
 	fmt "fmt"
 	proto "github.com/cosmos/gogoproto/proto"
-	types "github.com/sourcenetwork/acp_core/pkg/types"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -51,10 +50,10 @@ func (Severity) EnumDescriptor() ([]byte, []int) {
 // ParserMessage models a message returned by a parser, which points
 // to a position in the given text input
 type ParserMessage struct {
-	Message   string             `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
-	Sevirity  string             `protobuf:"bytes,2,opt,name=sevirity,proto3" json:"sevirity,omitempty"`
-	InputName string             `protobuf:"bytes,3,opt,name=input_name,json=inputName,proto3" json:"input_name,omitempty"`
-	Range     *types.BufferRange `protobuf:"bytes,4,opt,name=range,proto3" json:"range,omitempty"`
+	Message   string       `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
+	Sevirity  string       `protobuf:"bytes,2,opt,name=sevirity,proto3" json:"sevirity,omitempty"`
+	InputName string       `protobuf:"bytes,3,opt,name=input_name,json=inputName,proto3" json:"input_name,omitempty"`
+	Range     *BufferRange `protobuf:"bytes,4,opt,name=range,proto3" json:"range,omitempty"`
 }
 
 func (m *ParserMessage) Reset()         { *m = ParserMessage{} }
@@ -111,7 +110,7 @@ func (m *ParserMessage) GetInputName() string {
 	return ""
 }
 
-func (m *ParserMessage) GetRange() *types.BufferRange {
+func (m *ParserMessage) GetRange() *BufferRange {
 	if m != nil {
 		return m.Range
 	}
@@ -163,10 +162,120 @@ func (m *ParserReport) GetMessages() []*ParserMessage {
 	return nil
 }
 
+// BufferRange models a range in
+// a line oriented buffer
+type BufferRange struct {
+	Start *BufferPosition `protobuf:"bytes,1,opt,name=start,proto3" json:"start,omitempty"`
+	End   *BufferPosition `protobuf:"bytes,2,opt,name=end,proto3" json:"end,omitempty"`
+}
+
+func (m *BufferRange) Reset()         { *m = BufferRange{} }
+func (m *BufferRange) String() string { return proto.CompactTextString(m) }
+func (*BufferRange) ProtoMessage()    {}
+func (*BufferRange) Descriptor() ([]byte, []int) {
+	return fileDescriptor_52e7d1b8a15bd608, []int{2}
+}
+func (m *BufferRange) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *BufferRange) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_BufferRange.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *BufferRange) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BufferRange.Merge(m, src)
+}
+func (m *BufferRange) XXX_Size() int {
+	return m.Size()
+}
+func (m *BufferRange) XXX_DiscardUnknown() {
+	xxx_messageInfo_BufferRange.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BufferRange proto.InternalMessageInfo
+
+func (m *BufferRange) GetStart() *BufferPosition {
+	if m != nil {
+		return m.Start
+	}
+	return nil
+}
+
+func (m *BufferRange) GetEnd() *BufferPosition {
+	if m != nil {
+		return m.End
+	}
+	return nil
+}
+
+// BufferPosition models a position in
+// a line oriented buffer
+type BufferPosition struct {
+	Line   uint64 `protobuf:"varint,1,opt,name=line,proto3" json:"line,omitempty"`
+	Column uint64 `protobuf:"varint,2,opt,name=column,proto3" json:"column,omitempty"`
+}
+
+func (m *BufferPosition) Reset()         { *m = BufferPosition{} }
+func (m *BufferPosition) String() string { return proto.CompactTextString(m) }
+func (*BufferPosition) ProtoMessage()    {}
+func (*BufferPosition) Descriptor() ([]byte, []int) {
+	return fileDescriptor_52e7d1b8a15bd608, []int{3}
+}
+func (m *BufferPosition) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *BufferPosition) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_BufferPosition.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *BufferPosition) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BufferPosition.Merge(m, src)
+}
+func (m *BufferPosition) XXX_Size() int {
+	return m.Size()
+}
+func (m *BufferPosition) XXX_DiscardUnknown() {
+	xxx_messageInfo_BufferPosition.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BufferPosition proto.InternalMessageInfo
+
+func (m *BufferPosition) GetLine() uint64 {
+	if m != nil {
+		return m.Line
+	}
+	return 0
+}
+
+func (m *BufferPosition) GetColumn() uint64 {
+	if m != nil {
+		return m.Column
+	}
+	return 0
+}
+
 func init() {
 	proto.RegisterEnum("sourcenetwork.acp_core.errors.Severity", Severity_name, Severity_value)
 	proto.RegisterType((*ParserMessage)(nil), "sourcenetwork.acp_core.errors.ParserMessage")
 	proto.RegisterType((*ParserReport)(nil), "sourcenetwork.acp_core.errors.ParserReport")
+	proto.RegisterType((*BufferRange)(nil), "sourcenetwork.acp_core.errors.BufferRange")
+	proto.RegisterType((*BufferPosition)(nil), "sourcenetwork.acp_core.errors.BufferPosition")
 }
 
 func init() {
@@ -174,28 +283,31 @@ func init() {
 }
 
 var fileDescriptor_52e7d1b8a15bd608 = []byte{
-	// 326 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x91, 0x4f, 0x4f, 0x32, 0x31,
-	0x10, 0xc6, 0xb7, 0x2f, 0x2f, 0x02, 0x45, 0x13, 0xd2, 0xd3, 0x86, 0x84, 0x0d, 0xc1, 0x0b, 0x31,
-	0xa4, 0x9b, 0xe0, 0xc9, 0xa3, 0x24, 0xfe, 0x3b, 0x88, 0xa6, 0x1e, 0x34, 0x5e, 0x36, 0xcb, 0x66,
-	0x58, 0x1b, 0xb2, 0xdb, 0x66, 0xda, 0xc5, 0xf8, 0x2d, 0xfc, 0x06, 0x7e, 0x1d, 0x8f, 0x1c, 0x3d,
-	0x1a, 0xf8, 0x22, 0xc6, 0x2e, 0x90, 0x70, 0xc0, 0xe3, 0x74, 0xfa, 0x9b, 0xe7, 0x99, 0x67, 0xe8,
-	0xd0, 0xa8, 0x02, 0x13, 0xc8, 0xc1, 0xbe, 0x2a, 0x9c, 0x85, 0x71, 0xa2, 0xa3, 0x44, 0x21, 0x84,
-	0x80, 0xa8, 0xd0, 0x84, 0x3a, 0x46, 0x03, 0x18, 0x65, 0x60, 0x4c, 0x9c, 0x02, 0xd7, 0xa8, 0xac,
-	0x62, 0x9d, 0x1d, 0x86, 0x6f, 0x18, 0x5e, 0x32, 0xed, 0xc1, 0x9e, 0x91, 0x93, 0x62, 0x3a, 0x05,
-	0x8c, 0xb4, 0x32, 0xd2, 0x4a, 0x95, 0x97, 0xc3, 0x7a, 0x1f, 0x84, 0x1e, 0xdd, 0x3b, 0x95, 0xdb,
-	0x52, 0x84, 0xf9, 0xb4, 0xb6, 0xd6, 0xf3, 0x49, 0x97, 0xf4, 0x1b, 0x62, 0x53, 0xb2, 0x36, 0xad,
-	0x1b, 0x98, 0x4b, 0x94, 0xf6, 0xcd, 0xff, 0xe7, 0x5a, 0xdb, 0x9a, 0x75, 0x28, 0x95, 0xb9, 0x2e,
-	0x6c, 0x94, 0xc7, 0x19, 0xf8, 0x15, 0xd7, 0x6d, 0xb8, 0x97, 0x71, 0x9c, 0x01, 0x3b, 0xa3, 0x55,
-	0x8c, 0xf3, 0x14, 0xfc, 0xff, 0x5d, 0xd2, 0x6f, 0x0e, 0x8f, 0xf9, 0x9e, 0x1d, 0x46, 0xce, 0xa4,
-	0xf8, 0xfd, 0x2a, 0x4a, 0xa2, 0xf7, 0x44, 0x0f, 0x4b, 0x83, 0x02, 0xb4, 0x42, 0xcb, 0xae, 0x69,
-	0x7d, 0x6d, 0xc8, 0xf8, 0xa4, 0x5b, 0xe9, 0x37, 0x87, 0x03, 0xfe, 0x67, 0x22, 0x7c, 0x67, 0x3f,
-	0xb1, 0xa5, 0x4f, 0x7a, 0xb4, 0xfe, 0x00, 0x73, 0x70, 0xfe, 0x9b, 0xb4, 0xf6, 0x78, 0x2e, 0xc6,
-	0x37, 0xe3, 0xab, 0x96, 0xc7, 0x1a, 0xb4, 0x7a, 0x21, 0xc4, 0x9d, 0x68, 0x91, 0xd1, 0xe5, 0xe7,
-	0x32, 0x20, 0x8b, 0x65, 0x40, 0xbe, 0x97, 0x01, 0x79, 0x5f, 0x05, 0xde, 0x62, 0x15, 0x78, 0x5f,
-	0xab, 0xc0, 0x7b, 0x1e, 0xa4, 0xd2, 0xbe, 0x14, 0x13, 0x9e, 0xa8, 0x2c, 0xdc, 0x13, 0xb9, 0x9e,
-	0xa5, 0xeb, 0x4b, 0x4e, 0x0e, 0x5c, 0xdc, 0xa7, 0x3f, 0x01, 0x00, 0x00, 0xff, 0xff, 0xbb, 0x0f,
-	0xac, 0xb4, 0xf1, 0x01, 0x00, 0x00,
+	// 382 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x92, 0x4d, 0xcb, 0xd3, 0x40,
+	0x10, 0xc7, 0xb3, 0x36, 0x7d, 0x9b, 0xa8, 0x94, 0x3d, 0x48, 0x10, 0x1a, 0x4a, 0x4e, 0xa5, 0xd4,
+	0x04, 0xe2, 0x55, 0x50, 0x2b, 0xbe, 0x1d, 0xac, 0x65, 0x3d, 0x28, 0x5e, 0x4a, 0x1a, 0xa7, 0x31,
+	0xb4, 0xd9, 0x0d, 0xbb, 0x9b, 0x8a, 0xdf, 0x42, 0xf0, 0x3b, 0xf8, 0x59, 0x3c, 0xf6, 0xe8, 0x51,
+	0xda, 0x2f, 0xf2, 0xd0, 0x4d, 0x5a, 0x9e, 0x1e, 0x9e, 0xb7, 0xdb, 0xce, 0x0c, 0xbf, 0x99, 0xff,
+	0xec, 0xfc, 0x21, 0x52, 0xa2, 0x94, 0x09, 0x72, 0xd4, 0x3f, 0x84, 0x5c, 0x85, 0x71, 0x52, 0xcc,
+	0x13, 0x21, 0x31, 0x44, 0x29, 0x85, 0x54, 0x61, 0x11, 0x4b, 0x85, 0x72, 0x9e, 0xa3, 0x52, 0x71,
+	0x8a, 0x41, 0x21, 0x85, 0x16, 0xb4, 0x7f, 0xc6, 0x04, 0x47, 0x26, 0xa8, 0x18, 0xff, 0x0f, 0x81,
+	0x07, 0x33, 0xc3, 0x7d, 0xa8, 0x30, 0xea, 0x42, 0xbb, 0xee, 0xe0, 0x92, 0x01, 0x19, 0x76, 0xd9,
+	0x31, 0xa4, 0x8f, 0xa1, 0xa3, 0x70, 0x93, 0xc9, 0x4c, 0xff, 0x74, 0xef, 0x99, 0xd2, 0x29, 0xa6,
+	0x7d, 0x80, 0x8c, 0x17, 0xa5, 0x9e, 0xf3, 0x38, 0x47, 0xb7, 0x61, 0xaa, 0x5d, 0x93, 0x99, 0xc6,
+	0x39, 0xd2, 0x17, 0xd0, 0x94, 0x31, 0x4f, 0xd1, 0xb5, 0x07, 0x64, 0xe8, 0x44, 0xa3, 0xe0, 0x5a,
+	0x55, 0xc1, 0xa4, 0x5c, 0x2e, 0x51, 0xb2, 0x03, 0xc1, 0x2a, 0xd0, 0xff, 0x02, 0xf7, 0x2b, 0x9d,
+	0x0c, 0x0b, 0x21, 0x35, 0x7d, 0x07, 0x9d, 0x5a, 0x97, 0x72, 0xc9, 0xa0, 0x31, 0x74, 0xa2, 0xf1,
+	0x0d, 0x4d, 0xcf, 0xd6, 0x64, 0x27, 0xda, 0xff, 0x4d, 0xc0, 0xb9, 0x34, 0x90, 0xbe, 0x82, 0xa6,
+	0xd2, 0xb1, 0xd4, 0x66, 0x7d, 0x27, 0x7a, 0x72, 0x2b, 0xad, 0x33, 0xa1, 0x32, 0x9d, 0x09, 0xce,
+	0x2a, 0x96, 0x3e, 0x87, 0x06, 0xf2, 0x6f, 0xe6, 0x9b, 0xee, 0xdc, 0xe2, 0x40, 0xfa, 0xcf, 0xe0,
+	0xe1, 0x79, 0x9a, 0x52, 0xb0, 0xd7, 0x19, 0xaf, 0xae, 0x62, 0x33, 0xf3, 0xa6, 0x8f, 0xa0, 0x95,
+	0x88, 0x75, 0x99, 0x73, 0x33, 0xc9, 0x66, 0x75, 0x34, 0xf2, 0xa1, 0xf3, 0x09, 0x37, 0x68, 0x4e,
+	0xe3, 0x40, 0xfb, 0xf3, 0x4b, 0x36, 0x7d, 0x3f, 0x7d, 0xdb, 0xb3, 0x68, 0x17, 0x9a, 0xaf, 0x19,
+	0xfb, 0xc8, 0x7a, 0x64, 0xf2, 0xe6, 0xef, 0xce, 0x23, 0xdb, 0x9d, 0x47, 0xfe, 0xef, 0x3c, 0xf2,
+	0x6b, 0xef, 0x59, 0xdb, 0xbd, 0x67, 0xfd, 0xdb, 0x7b, 0xd6, 0xd7, 0x71, 0x9a, 0xe9, 0xef, 0xe5,
+	0x22, 0x48, 0x44, 0x1e, 0x5e, 0x61, 0xb9, 0x62, 0x95, 0xd6, 0xb6, 0x5b, 0xb4, 0x8c, 0xd1, 0x9e,
+	0x5e, 0x04, 0x00, 0x00, 0xff, 0xff, 0xb6, 0x0b, 0x02, 0xb6, 0x9e, 0x02, 0x00, 0x00,
 }
 
 func (m *ParserMessage) Marshal() (dAtA []byte, err error) {
@@ -291,6 +403,86 @@ func (m *ParserReport) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *BufferRange) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *BufferRange) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BufferRange) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.End != nil {
+		{
+			size, err := m.End.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintParserMessage(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Start != nil {
+		{
+			size, err := m.Start.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintParserMessage(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *BufferPosition) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *BufferPosition) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BufferPosition) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Column != 0 {
+		i = encodeVarintParserMessage(dAtA, i, uint64(m.Column))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Line != 0 {
+		i = encodeVarintParserMessage(dAtA, i, uint64(m.Line))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintParserMessage(dAtA []byte, offset int, v uint64) int {
 	offset -= sovParserMessage(v)
 	base := offset
@@ -338,6 +530,38 @@ func (m *ParserReport) Size() (n int) {
 			l = e.Size()
 			n += 1 + l + sovParserMessage(uint64(l))
 		}
+	}
+	return n
+}
+
+func (m *BufferRange) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Start != nil {
+		l = m.Start.Size()
+		n += 1 + l + sovParserMessage(uint64(l))
+	}
+	if m.End != nil {
+		l = m.End.Size()
+		n += 1 + l + sovParserMessage(uint64(l))
+	}
+	return n
+}
+
+func (m *BufferPosition) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Line != 0 {
+		n += 1 + sovParserMessage(uint64(m.Line))
+	}
+	if m.Column != 0 {
+		n += 1 + sovParserMessage(uint64(m.Column))
 	}
 	return n
 }
@@ -503,7 +727,7 @@ func (m *ParserMessage) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Range == nil {
-				m.Range = &types.BufferRange{}
+				m.Range = &BufferRange{}
 			}
 			if err := m.Range.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -593,6 +817,216 @@ func (m *ParserReport) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipParserMessage(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthParserMessage
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *BufferRange) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowParserMessage
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: BufferRange: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: BufferRange: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Start", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParserMessage
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthParserMessage
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthParserMessage
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Start == nil {
+				m.Start = &BufferPosition{}
+			}
+			if err := m.Start.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field End", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParserMessage
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthParserMessage
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthParserMessage
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.End == nil {
+				m.End = &BufferPosition{}
+			}
+			if err := m.End.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipParserMessage(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthParserMessage
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *BufferPosition) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowParserMessage
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: BufferPosition: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: BufferPosition: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Line", wireType)
+			}
+			m.Line = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParserMessage
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Line |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Column", wireType)
+			}
+			m.Column = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParserMessage
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Column |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipParserMessage(dAtA[iNdEx:])

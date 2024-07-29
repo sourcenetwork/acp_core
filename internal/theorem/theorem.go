@@ -82,12 +82,38 @@ func (e *Evaluator) EvaluatePolicyTheoremDSL(ctx context.Context, polId string, 
 	if err != nil {
 		return nil, err
 	}
-	result, err := e.EvaluatePolicyTheorem(ctx, polId, indexedTheorem.ToPolicyTheorem())
+	policyResult, err := e.EvaluatePolicyTheorem(ctx, polId, indexedTheorem.ToPolicyTheorem())
 	if err != nil {
 		return nil, err
 	}
-	// TODO map result
-	return nil, nil
+	annotatedResult := &types.AnnotatedPolicyTheoremResult{
+		Theorem: indexedTheorem.ToPolicyTheorem(),
+	}
+	for i, theorem := range indexedTheorem.AuthorizationTheorems {
+		result := policyResult.AuthorizationTheoremsResult[i]
+		annotatedAuth := &types.AnnotatedAuthorizationTheoremResult{
+			Result: result,
+			Range:  &theorem.Range,
+		}
+		annotatedResult.AuthorizationTheoremsResult = append(annotatedResult.AuthorizationTheoremsResult, annotatedAuth)
+	}
+	for i, theorem := range indexedTheorem.DelegationTheorems {
+		result := policyResult.DelegationTheoremsResult[i]
+		thmResult := &types.AnnotatedDelegationTheoremResult{
+			Result: result,
+			Range:  &theorem.Range,
+		}
+		annotatedResult.DelegationTheoremsResult = append(annotatedResult.DelegationTheoremsResult, thmResult)
+	}
+	for i, theorem := range indexedTheorem.ReachabilityTheorems {
+		result := policyResult.ReachabilityTheoremsResult[i]
+		thmResult := &types.AnnotatedReachabilityTheoremResult{
+			Result: result,
+			Range:  &theorem.Range,
+		}
+		annotatedResult.ReachabilityTheoremsResult = append(annotatedResult.ReachabilityTheoremsResult, thmResult)
+	}
+	return annotatedResult, nil
 }
 
 func (e *Evaluator) EvaluatePolicyTheorem(ctx context.Context, polId string, theorem *types.PolicyTheorem) (*types.PolicyTheoremResult, error) {

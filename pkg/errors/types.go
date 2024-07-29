@@ -2,6 +2,10 @@ package errors
 
 import "fmt"
 
+type TypedError interface {
+	GetType() ErrorType
+}
+
 // ContextPair is a key value pair used to annotate the context under which the error was found
 type ContextPair struct {
 	key string
