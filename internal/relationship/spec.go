@@ -9,7 +9,7 @@ import (
 // relationshipSpec validates a Relationshp according to the expected format.
 // For now, we can rely on Zanzi to perform the bulk of the validation,
 // however its paramount that a Relationship whose subject type is an Actor must be a DID
-func relationshipSpec(policy *types.Policy, relationship *types.Relationship) error {
+func relationshipSpec(pol *types.Policy, relationship *types.Relationship) error {
 	switch subj := relationship.Subject.Subject.(type) {
 	case *types.Subject_Actor:
 		if err := did.IsValidDID(subj.Actor.Id); err != nil {
@@ -18,16 +18,14 @@ func relationshipSpec(policy *types.Policy, relationship *types.Relationship) er
 		}
 	case *types.Subject_Object:
 		err := did.IsValidDID(subj.Object.Id)
-		if subj.Object.Resource == policy.ActorResource.Name && err != nil {
+		if subj.Object.Resource == pol.ActorResource.Name && err != nil {
 			return errors.Wrap("actor must be a valid did: "+err.Error(),
 				errors.ErrInvalidRelationship, errors.Pair("did", subj.Object.Id))
 		}
 	}
-
 	if relationship.Object.Id == "" {
 		return errors.Wrap("object id must not be empty", errors.ErrInvalidRelationship)
 	}
-
 	return nil
 }
 

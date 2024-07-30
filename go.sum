@@ -205,6 +205,8 @@ github.com/sourcenetwork/raccoondb v0.2.1-0.20240722161350-d4a78b691ec8 h1:d0jNo
 github.com/sourcenetwork/raccoondb v0.2.1-0.20240722161350-d4a78b691ec8/go.mod h1:/WJdZWouiY199DypsN0xaP5PF0zy3rka3FxH5Y8o9Bc=
 github.com/sourcenetwork/zanzi v0.3.1-0.20240722161512-1aa0a9977af7 h1:k/ChZJf2rn5uKtFVzzqs/SCT83Y7901JoYU25kHBcRA=
 github.com/sourcenetwork/zanzi v0.3.1-0.20240722161512-1aa0a9977af7/go.mod h1:c4C+Vd6knqAHX6fl57gb3BROUNC1g3WGGlWROREpC8U=
+github.com/sourcenetwork/zanzi v0.3.1-0.20240730192354-9acb491c57b5 h1:XGIShGKzLsxH0jq/V11Mfm14BmG6Pfo1X7OAYBSqepo=
+github.com/sourcenetwork/zanzi v0.3.1-0.20240730192354-9acb491c57b5/go.mod h1:c4C+Vd6knqAHX6fl57gb3BROUNC1g3WGGlWROREpC8U=
 github.com/spf13/cast v1.6.0 h1:GEiTHELF+vaR5dhz3VqZfFSzZjYbgeKDpBxQVS4GYJ0=
 github.com/spf13/cast v1.6.0/go.mod h1:ancEpBxwJDODSW/UG4rDrAqiKolqNNh2DX3mk86cAdo=
 github.com/spf13/cobra v1.8.0 h1:7aJaZx1B85qltLMc546zn58BxxfZdR/W22ej9CFoEf0=

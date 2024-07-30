@@ -36,7 +36,18 @@ func SimulateDeclaration(ctx context.Context, manager runtime.RuntimeManager, de
 	}
 
 	simCtx := parsedCtx.ToCtx()
-	polId := simCtx.Policy.Id
+
+	parseErrs, err = validateRelationships(ctx, manager, parsedCtx)
+	if err != nil {
+		return nil, newSimulateErr(err)
+	}
+	if parseErrs.HasErrors() {
+		return &types.AnnotatedSimulationResult{
+			Ctx:                 simCtx,
+			Errors:              parseErrs,
+			PolicyTheoremResult: nil,
+		}, nil
+	}
 
 	parseErrs, err = setRelationships(ctx, manager, parsedCtx)
 	if err != nil {
@@ -51,7 +62,7 @@ func SimulateDeclaration(ctx context.Context, manager runtime.RuntimeManager, de
 	}
 
 	evaluator := theorem.NewEvaluator(engine)
-	annotatedResult, err := evaluator.EvaluatePolicyTheoremDSL(ctx, polId, declaration.PolicyTheorem)
+	annotatedResult, err := evaluator.EvaluatePolicyTheoremDSL(ctx, simCtx.Policy.Id, declaration.PolicyTheorem)
 	if err != nil {
 		// since the theorem was previously parsed
 		// any resulting errors won't be parse errors, therefore we can early terminate here
@@ -117,8 +128,6 @@ func parseDeclaration(ctx context.Context, manager runtime.RuntimeManager, decla
 		}
 	}
 
-	// FIXME here I should validate all relationships to make sure they are valid and can be set in a future pass
-
 	theorem, err := parser.ParsePolicyTheorem(declaration.PolicyTheorem)
 	if err != nil {
 		if parserErr, ok := err.(*errors.ParserReport); ok {
@@ -136,6 +145,36 @@ func parseDeclaration(ctx context.Context, manager runtime.RuntimeManager, decla
 	return simCtx, declarationErrors, nil
 }
 
+func validateRelationships(ctx context.Context, manager runtime.RuntimeManager, simCtx *parsedCtx) (*types.DeclarationErrors, error) {
+	var declarationErrors = &types.DeclarationErrors{}
+
+	for _, indexedRel := range simCtx.Relationships {
+		valid, errMsg, err := relationship.ValidateRelationship(ctx, manager, simCtx.Policy.Id, indexedRel.Obj)
+		if err != nil {
+			return nil, newSimulateErr(err)
+		}
+		if !valid {
+			msg := &errors.ParserMessage{
+				Message:   errMsg,
+				Sevirity:  errors.Severity_ERROR,
+				InputName: indexedRel.Obj.String(),
+				Range: &errors.BufferRange{
+					Start: &errors.BufferPosition{
+						Column: indexedRel.Range.Start.Column,
+						Line:   indexedRel.Range.Start.Line,
+					},
+					End: &errors.BufferPosition{
+						Column: indexedRel.Range.End.Column,
+						Line:   indexedRel.Range.End.Line,
+					},
+				},
+			}
+			declarationErrors.RelationshipsErrors = append(declarationErrors.RelationshipsErrors, msg)
+		}
+	}
+	return declarationErrors, nil
+}
+
 func setRelationships(ctx context.Context, manager runtime.RuntimeManager, simCtx *parsedCtx) (*types.DeclarationErrors, error) {
 	errs := &types.DeclarationErrors{}
 	ownerLookup := make(map[string]auth.Principal)
@@ -146,7 +185,6 @@ func setRelationships(ctx context.Context, manager runtime.RuntimeManager, simCt
 	for _, obj := range ownerRels {
 		principal, err := auth.NewDIDPrincipal(obj.Obj.Subject.GetActor().Id)
 		if err != nil {
-			// TODO this would mean the actor is not a valid did which should have been validated
 			return nil, newSimulateErr(err)
 		}
 		authenticatedCtx := auth.InjectPrincipal(ctx, principal)

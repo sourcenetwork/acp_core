@@ -8,7 +8,7 @@ require (
 	github.com/cosmos/gogoproto v1.4.12
 	github.com/google/go-cmp v0.6.0
 	github.com/sourcenetwork/raccoondb v0.2.1-0.20240722161350-d4a78b691ec8
-	github.com/sourcenetwork/zanzi v0.3.1-0.20240722161512-1aa0a9977af7
+	github.com/sourcenetwork/zanzi v0.3.1-0.20240730192354-9acb491c57b5
 	github.com/stretchr/testify v1.9.0
 	google.golang.org/grpc v1.63.2
 	google.golang.org/protobuf v1.33.0
