@@ -13,7 +13,7 @@ enum Severity {
 // to a position in the given text input
 message ParserMessage {
     string message = 1;
-    string sevirity = 2;
+    Severity sevirity = 2;
     string input_name = 3; 
     BufferRange range = 4;
 }

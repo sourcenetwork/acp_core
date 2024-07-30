@@ -25,3 +25,28 @@ func MapFailableSlice[T any, U any](ts []T, mapper func(T) (U, error)) ([]U, err
 	}
 	return us, nil
 }
+
+// FilterSlice iterates over slice and applies predicate to all items
+// Returns the slice of elements that satisfies the predicate
+func FilterSlice[T any](ts []T, predicate func(T) bool) []T {
+	var filteredTs []T
+	for _, t := range ts {
+		if predicate(t) {
+			filteredTs = append(filteredTs, t)
+		}
+	}
+	return filteredTs
+}
+
+// PartitionSlice iterates over the slice and applies predicate to all items.
+// Splits the slice into a slice of members that satisfy it and a slice of members that don't satisfy it
+func PartitionSlice[T any](ts []T, predicate func(T) bool) (accepeted []T, rejected []T) {
+	for _, t := range ts {
+		if predicate(t) {
+			accepeted = append(accepeted, t)
+		} else {
+			rejected = append(rejected, t)
+		}
+	}
+	return
+}

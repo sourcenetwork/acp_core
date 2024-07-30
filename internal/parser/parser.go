@@ -71,7 +71,7 @@ func ParsePolicyTheorem(policyTheorem string) (*IndexedPolicyTheorem, error) {
 	visitor := newTheoremVisitor()
 	result := visitor.Visit(tree)
 	if result == nil {
-		return nil, nil
+		return nil, nil //should prob error here
 	}
 	return result.(*IndexedPolicyTheorem), nil
 }
