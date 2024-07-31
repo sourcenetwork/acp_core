@@ -24,6 +24,7 @@ func SimulateDeclaration(ctx context.Context, manager runtime.RuntimeManager, de
 	}
 	if parseErrs.HasErrors() {
 		return &types.AnnotatedSimulationResult{
+			Declaration:         declaration,
 			Ctx:                 nil,
 			Errors:              parseErrs,
 			PolicyTheoremResult: nil,
@@ -43,6 +44,7 @@ func SimulateDeclaration(ctx context.Context, manager runtime.RuntimeManager, de
 	}
 	if parseErrs.HasErrors() {
 		return &types.AnnotatedSimulationResult{
+			Declaration:         declaration,
 			Ctx:                 simCtx,
 			Errors:              parseErrs,
 			PolicyTheoremResult: nil,
@@ -55,6 +57,7 @@ func SimulateDeclaration(ctx context.Context, manager runtime.RuntimeManager, de
 	}
 	if parseErrs.HasErrors() {
 		return &types.AnnotatedSimulationResult{
+			Declaration:         declaration,
 			Ctx:                 simCtx,
 			Errors:              parseErrs,
 			PolicyTheoremResult: nil,
@@ -70,6 +73,7 @@ func SimulateDeclaration(ctx context.Context, manager runtime.RuntimeManager, de
 	}
 
 	return &types.AnnotatedSimulationResult{
+		Declaration:         declaration,
 		Ctx:                 simCtx,
 		Errors:              nil,
 		PolicyTheoremResult: annotatedResult,
@@ -135,6 +139,10 @@ func parseDeclaration(ctx context.Context, manager runtime.RuntimeManager, decla
 		} else {
 			return nil, nil, newSimulateErr(err)
 		}
+	}
+
+	if declarationErrors.HasErrors() {
+		return nil, declarationErrors, nil
 	}
 
 	simCtx := &parsedCtx{

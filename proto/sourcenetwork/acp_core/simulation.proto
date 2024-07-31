@@ -53,7 +53,8 @@ message DeclarationErrors {
 // of the executed simulation, the parsed objects and
 // all errors found
 message AnnotatedSimulationResult {
-    SimulationCtx ctx = 1;
-    DeclarationErrors errors = 2;
-    AnnotatedPolicyTheoremResult policy_theorem_result = 3;
+    SimulationCtxDeclaration declaration = 1;
+    SimulationCtx ctx = 2;
+    DeclarationErrors errors = 3;
+    AnnotatedPolicyTheoremResult policy_theorem_result = 4;
 }
