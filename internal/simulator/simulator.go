@@ -205,7 +205,7 @@ func setRelationships(ctx context.Context, manager runtime.RuntimeManager, simCt
 		if err != nil {
 			return nil, err // TODO
 		}
-		ownerLookup[obj.Obj.String()] = principal
+		ownerLookup[obj.Obj.Object.String()] = principal
 	}
 
 	for _, indexedObj := range rels {
