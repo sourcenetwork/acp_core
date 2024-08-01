@@ -42,10 +42,17 @@ message PolicyTheorem {
   repeated ReachabilityTheorem reachability_theorems = 3;
 }
 
+// ResultStatus models the possible results from executing a Theorem
+enum ResultStatus {
+  Reject = 0;
+  Accept = 1;
+  Error = 2;
+}
+
 // Result models the result of evaluating a theorem
 message Result {
-    // Valid indicates whether the Theorem is valid
-    bool valid = 1;
+    // status indicates whether the theorem was accepted, rejected or an error happened
+    ResultStatus status = 1;
     
     // Message explains the result
     string message = 2;

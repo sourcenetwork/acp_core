@@ -32,8 +32,10 @@ func sucessReport(result *types.AnnotatedSimulationResult) string {
 
 	builder.WriteString("Authorization Theorems:\n")
 	for _, thm := range result.PolicyTheoremResult.AuthorizationTheoremsResult {
-		if !thm.Result.Result.Valid {
+		if thm.Result.Result.Status == types.ResultStatus_Reject {
 			builder.WriteString("FAIL ")
+		} else if thm.Result.Result.Status == types.ResultStatus_Error {
+			builder.WriteString("ERROR ")
 		}
 		builder.WriteRune('\t')
 		builder.WriteString(theorem.FormatAuthorizationTheorem(thm.Result.Theorem))
@@ -43,8 +45,10 @@ func sucessReport(result *types.AnnotatedSimulationResult) string {
 
 	builder.WriteString("Delegation Theorems:\n")
 	for _, thm := range result.PolicyTheoremResult.DelegationTheoremsResult {
-		if !thm.Result.Result.Valid {
+		if thm.Result.Result.Status == types.ResultStatus_Reject {
 			builder.WriteString("FAIL ")
+		} else if thm.Result.Result.Status == types.ResultStatus_Error {
+			builder.WriteString("ERROR ")
 		}
 		builder.WriteRune('\t')
 		builder.WriteString(theorem.FormatDelegationTheorem(thm.Result.Theorem))
@@ -54,8 +58,10 @@ func sucessReport(result *types.AnnotatedSimulationResult) string {
 
 	builder.WriteString("Reachability Theorems:\n")
 	for _, thm := range result.PolicyTheoremResult.ReachabilityTheoremsResult {
-		if !thm.Result.Result.Valid {
+		if thm.Result.Result.Status == types.ResultStatus_Reject {
 			builder.WriteString("FAIL ")
+		} else if thm.Result.Result.Status == types.ResultStatus_Error {
+			builder.WriteString("ERROR ")
 		}
 		builder.WriteRune('\t')
 		builder.WriteString(theorem.FormatReachabilityTheorem(thm.Result.Theorem))

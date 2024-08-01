@@ -28,7 +28,7 @@ func (e *Evaluator) evaluateAuthorizationTheorem(ctx context.Context, policy *ty
 		return &types.AuthorizationTheoremResult{
 			Theorem: theorem,
 			Result: &types.Result{
-				Valid:   false,
+				Status:  types.ResultStatus_Error,
 				Message: err.Error(),
 			},
 		}, nil
@@ -36,7 +36,7 @@ func (e *Evaluator) evaluateAuthorizationTheorem(ctx context.Context, policy *ty
 	return &types.AuthorizationTheoremResult{
 		Theorem: theorem,
 		Result: &types.Result{
-			Valid:   ok,
+			Status:  toStatus(nxor(ok, theorem.AssertTrue)),
 			Message: "",
 		},
 	}, nil
@@ -45,7 +45,7 @@ func (e *Evaluator) evaluateAuthorizationTheorem(ctx context.Context, policy *ty
 func (e *Evaluator) evaluateReacheabilityTheorem(ctx context.Context, polId *types.Policy, theorem *types.ReachabilityTheorem) (*types.ReachabilityTheoremResult, error) {
 	return &types.ReachabilityTheoremResult{
 		Result: &types.Result{
-			Valid:   true,
+			Status:  types.ResultStatus_Accept,
 			Message: "",
 		},
 		Theorem: theorem,
@@ -61,7 +61,7 @@ func (e *Evaluator) evalDelegationTheorem(ctx context.Context, polId *types.Poli
 		if acpErr, ok := err.(*errors.Error); ok && acpErr.Type() != errors.ErrorType_INTERNAL {
 			return &types.DelegationTheoremResult{
 				Result: &types.Result{
-					Valid:   false,
+					Status:  types.ResultStatus_Error,
 					Message: acpErr.Error(),
 				},
 				Theorem: theorem,
@@ -70,7 +70,7 @@ func (e *Evaluator) evalDelegationTheorem(ctx context.Context, polId *types.Poli
 	}
 	return &types.DelegationTheoremResult{
 		Result: &types.Result{
-			Valid:   authorized,
+			Status:  toStatus(nxor(authorized, theorem.AssertTrue)),
 			Message: "",
 		},
 		Theorem: theorem,
@@ -159,4 +159,16 @@ type TheoremGenerator interface {
 	GenAdminTheorems(ctx context.Context, polId string) ([]*types.DelegationTheorem, error)
 	GenReachabilityTheorems(ctx context.Context, polId string) ([]*types.ReachabilityTheorem, error)
 	GenPolicyTheorem(ctx context.Context, polId string) (*types.PolicyTheorem, error)
+}
+
+// nxor implements a not xor function
+func nxor(a, b bool) bool {
+	return a && b || !a && !b
+}
+
+func toStatus(success bool) types.ResultStatus {
+	if success {
+		return types.ResultStatus_Accept
+	}
+	return types.ResultStatus_Reject
 }
