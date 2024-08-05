@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package sourcenetwork.acp_core.playground;
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/playground";
+
+// Handle is an opaque identifier to an execution environment in the service (aka sandbox)
+message Handle {
+    uint64 handle = 1;
+}
+
+// SandboxRecord represents an instance of a sandbox
+message SandboxRecord {
+  // Handle is an opaque identifier to a sandbox
+  Handle handle = 1;
+
+  // name is a user given designation to a sandbox
+  string name = 2;
+}
+
+// SandboxState encapsulates all the data necessary to create a Sandbox
+message SandboxState {
+    string policy_definition = 1;
+    string relationships = 2;
+    string policy_theorem = 3;
+}

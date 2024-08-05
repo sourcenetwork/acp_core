@@ -153,14 +153,6 @@ func (e *Evaluator) EvaluatePolicyTheorem(ctx context.Context, polId string, the
 	}, nil
 }
 
-// TheoremGenerator receives a Policy and produces all valid theorems for that Policy
-type TheoremGenerator interface {
-	GenAuthTheorems(ctx context.Context, polId string) ([]*types.AuthorizationTheorem, error)
-	GenAdminTheorems(ctx context.Context, polId string) ([]*types.DelegationTheorem, error)
-	GenReachabilityTheorems(ctx context.Context, polId string) ([]*types.ReachabilityTheorem, error)
-	GenPolicyTheorem(ctx context.Context, polId string) (*types.PolicyTheorem, error)
-}
-
 // nxor implements a not xor function
 func nxor(a, b bool) bool {
 	return a && b || !a && !b

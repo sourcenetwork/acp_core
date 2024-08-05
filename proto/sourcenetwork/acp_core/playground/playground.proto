@@ -1,0 +1,188 @@
+syntax = "proto3";
+
+package sourcenetwork.acp_core.playground;
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/playground";
+
+import "sourcenetwork/acp_core/playground/sandbox.proto";
+import "sourcenetwork/acp_core/theorem.proto";
+import "sourcenetwork/acp_core/catalogue.proto";
+import "sourcenetwork/acp_core/errors/parser_message.proto";
+
+service PlaygroundService {
+    // NewSandbox creates a new isolated execution environment in the Service
+    // Returns a handle which references the sandbox
+    rpc NewSandbox (NewSandboxRequest) returns (NewSandboxResponse);
+
+    // ListSandboxes returns the list of sandboxes created in the Playgruond
+    rpc ListSandboxes (ListSandboxesRequest) returns (ListSandboxesResponse);
+
+    // SetState updates the state of a Sandbox environment with the newly provided data
+    rpc SetState (SetStateRequest) returns (SetStateResponse);
+
+    // GetCatalogue returns the catalogue (index/LUT) of defined entities within a sandbox
+    rpc GetCatalogue (GetCatalogueRequest) returns (GetCatalogueResponse);
+
+    // VerifyTheorems executes the defined test suite for a sandbox
+    rpc VerifyTheorems (VerifyTheoremsRequest) returns (VerifyTheoremsResponse);
+
+    // Check runs a Check operation with the provided data for the context of a sandbox.
+    // A Check call is used to verify whether some actor is authorized to act on a some object
+    //rpc Check (CheckRequest) returns (CheckResponse);
+
+    // ReverseLookup runs a reverse lookup operation in a sandbox.
+    // Reverse lookup is used to collect all the permissions an actor can do within a policy
+    //rpc ReverseLookup (ReverseLookupRequest) returns (ReverseLookupResponse);
+
+    // AuthorizeCommand runs an authorize command operation in a sandbox.
+    //
+    // This operation is used to assert whether some actor is allowed to perform a command
+    // in a policy. Commands refer to actions take can be done to the policy itself,
+    // such as creating or deleting relationships.
+    //rpc AuthorizeCommand (AuthorizeCommandRequest) returns (AuthorizeCommandResponse);
+
+    // Expand runs an expand operation in a sandbox.
+    //
+    // Expand is used to walk through the Object graph, starting at an Object Relation node 
+    // and generate the tree of every actor which can perform the specified operation.
+    //rpc Expand(ExpandRequest) returns (ExpandResponse);
+
+    //rpc DeleteSandbox(DeleteSandboxRequest) returns (DeleteSandboxResponse);
+}
+
+message NewSandboxRequest {
+    // user defined name for the sandbox
+    string name = 1;
+}
+
+message NewSandboxResponse {
+    // opaque identifier pointing to the created sandbox
+    Handle handle = 1;
+}
+
+message SetStateRequest {
+    // handle to an existing sandbox
+    Handle handle = 1;
+
+    // new state to set in the sandbox
+    SandboxState state = 2;
+}
+
+message SetStateResponse {
+    // ok indicates the state updated sucessfuly
+    bool ok = 1;
+
+    // policy_errors contains all errors encountered while
+    // processing the given policy
+    repeated sourcenetwork.acp_core.errors.ParserMessage policy_errors = 2;
+
+    // policy_errors contains all errors encountered while
+    // processing the relationship set
+    repeated sourcenetwork.acp_core.errors.ParserMessage relationships_errors = 3;
+
+    // policy_errors contains all errors encountered while
+    // parsing the theorems
+    repeated sourcenetwork.acp_core.errors.ParserMessage theorems_errrors = 4;
+}
+
+message GetCatalogueRequest {
+    // handle to an existing sandbox
+    Handle handle = 1;
+}
+
+message GetCatalogueResponse {
+    // catalogue for the state of the given sandbox
+    sourcenetwork.acp_core.Catalogue catalogue = 1;
+}
+
+message VerifyTheoremsRequest {
+    // handle to an existing sandbox
+    Handle handle = 1;
+}
+
+message VerifyTheoremsResponse {
+    AnnotatedPolicyTheoremResult result = 1;
+}
+
+message ListSandboxesRequest { 
+}
+
+message ListSandboxesResponse { 
+    repeated SandboxRecord records = 1;
+}
+
+/*
+message CheckRequest {
+    // handle to an existing sandbox
+    Handle handle = 1;
+
+    // Object which the actor wants to operate over
+    Object object = 2;
+
+    // action the actor wants to perform against the object
+    string permission = 3;
+
+    // actor that wants to execute the operation
+    string actor = 4;
+}
+
+message CheckResponse {
+    // flag indicating whether the actor is authorized to execute the queried operation
+    bool authorized = 1;
+
+    // TODO walk tree
+
+    string details = 3;
+}
+
+message ReverseLookupRequest {
+    // TODO
+}
+
+message ReverseLookupResponse {
+    // TODO
+}
+
+message AuthorizeCommandRequest {
+    // handle to an existing sandbox
+    Handle handle = 1;
+
+    // actor which will execute the command
+    string actor = 2;
+
+    // Command which will be executed
+    Command command = 3;
+
+    // relationship which the actor wants to operate on
+    string relationship = 4;
+}
+
+message ExpandRequest {
+    // handle to an existing sandbox
+    Handle handle = 1;
+
+    // object to expand on
+    Object object = 2;
+
+    // permission or relation which will be expanded on
+    string relation = 3;
+}
+
+message ExpandResponse {
+    // set of actors allowed to perform the given operation over the object
+    repeated string actors = 1;
+
+    // TODO expand tree
+    string details = 3;
+}
+
+message AuthorizeCommandResponse {
+    // flag signaling whether actor is authorized to execute the given command
+    bool authorized = 1;
+
+    //string reason = 2;
+
+    //string details = 3;
+}
+
+*/

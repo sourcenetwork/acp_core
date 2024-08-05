@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package sourcenetwork.acp_core;
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+
+message Catalogue {
+  repeated string relationships = 1;
+  //repeated ObjectDetails objects = 2;
+  //ActorSet actors = 3;
+  map<string, ResourceCatalogue> resource_catalogue = 4;
+  string actor_resource_name = 5;
+  string policy_definition = 6;
+}
+
+message ResourceCatalogue {
+  repeated string permissions = 1;
+  repeated string relations = 2;
+  repeated string object_ids = 3;
+}
