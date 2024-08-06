@@ -57,37 +57,26 @@ message NewSandboxRequest {
 
 message NewSandboxResponse {
     // opaque identifier pointing to the created sandbox
-    Handle handle = 1;
+    uint64 handle = 1;
 }
 
 message SetStateRequest {
     // handle to an existing sandbox
-    Handle handle = 1;
+    uint64 handle = 1;
 
-    // new state to set in the sandbox
-    SandboxState state = 2;
+    // data to set in the sandbox
+    SandboxData data = 2;
 }
 
 message SetStateResponse {
     // ok indicates the state updated sucessfuly
     bool ok = 1;
-
-    // policy_errors contains all errors encountered while
-    // processing the given policy
-    repeated sourcenetwork.acp_core.errors.ParserMessage policy_errors = 2;
-
-    // policy_errors contains all errors encountered while
-    // processing the relationship set
-    repeated sourcenetwork.acp_core.errors.ParserMessage relationships_errors = 3;
-
-    // policy_errors contains all errors encountered while
-    // parsing the theorems
-    repeated sourcenetwork.acp_core.errors.ParserMessage theorems_errrors = 4;
+    SandboxDataErrors errors = 2;
 }
 
 message GetCatalogueRequest {
     // handle to an existing sandbox
-    Handle handle = 1;
+    uint64 handle = 1;
 }
 
 message GetCatalogueResponse {
@@ -97,11 +86,11 @@ message GetCatalogueResponse {
 
 message VerifyTheoremsRequest {
     // handle to an existing sandbox
-    Handle handle = 1;
+    uint64 handle = 1;
 }
 
 message VerifyTheoremsResponse {
-    AnnotatedPolicyTheoremResult result = 1;
+    sourcenetwork.acp_core.AnnotatedPolicyTheoremResult result = 1;
 }
 
 message ListSandboxesRequest { 

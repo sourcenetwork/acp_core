@@ -2,25 +2,54 @@ syntax = "proto3";
 
 package sourcenetwork.acp_core.playground;
 
-option go_package = "github.com/sourcenetwork/acp_core/pkg/playground";
+import "sourcenetwork/acp_core/errors/parser_message.proto";
+import "sourcenetwork/acp_core/relationship.proto";
+import "sourcenetwork/acp_core/policy.proto";
+import "sourcenetwork/acp_core/theorem.proto";
 
-// Handle is an opaque identifier to an execution environment in the service (aka sandbox)
-message Handle {
-    uint64 handle = 1;
-}
+option go_package = "github.com/sourcenetwork/acp_core/pkg/playground";
 
 // SandboxRecord represents an instance of a sandbox
 message SandboxRecord {
   // Handle is an opaque identifier to a sandbox
-  Handle handle = 1;
+  uint64 handle = 1;
 
   // name is a user given designation to a sandbox
   string name = 2;
+
+  SandboxData data = 3;
+
+  // scratchpad acts as temporary storage for modifications in the sandbox state
+  SandboxData scratchpad = 4;
+
+  SandboxCtx ctx = 5;
+
+  bool initialized = 6;
 }
 
-// SandboxState encapsulates all the data necessary to create a Sandbox
-message SandboxState {
+// SandboxData encapsulates all the data necessary to create a Sandbox
+message SandboxData {
     string policy_definition = 1;
     string relationships = 2;
     string policy_theorem = 3;
+}
+
+// SandboxCtx encapsulated all context data
+// to execute an isolated theorem execution simulation
+message SandboxCtx {
+  sourcenetwork.acp_core.Policy policy = 1;
+  repeated sourcenetwork.acp_core.Relationship relationships = 2;
+  sourcenetwork.acp_core.PolicyTheorem policy_theorem = 3;
+}
+
+message SandboxDataErrors {
+    // policy_errors contains all errors encountered while
+    // processing the given policy
+    repeated sourcenetwork.acp_core.errors.ParserMessage policy_errors = 1;
+    // policy_errors contains all errors encountered while
+    // processing the relationship set
+    repeated sourcenetwork.acp_core.errors.ParserMessage relationships_errors = 2;
+    // policy_errors contains all errors encountered while
+    // parsing the theorems
+    repeated sourcenetwork.acp_core.errors.ParserMessage theorems_errrors = 3;
 }
