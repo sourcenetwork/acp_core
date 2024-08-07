@@ -12,13 +12,13 @@ import (
 type CreatePolicyHandler struct{}
 
 // Execute consumes the data supplied in the command and creates a new ACP Policy and stores it in the given engine.
-func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.RuntimeManager, cmd *types.CreatePolicyRequest) (*types.CreatePolicyResponse, error) {
+func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.RuntimeManager, req *types.CreatePolicyRequest) (*types.CreatePolicyResponse, error) {
 	engine, err := zanzi.NewZanzi(runtime.GetKVStore(), runtime.GetLogger())
 	if err != nil {
 		return nil, err
 	}
 
-	ir, err := Unmarshal(cmd.Policy, cmd.MarshalType)
+	ir, err := Unmarshal(req.Policy, req.MarshalType)
 	if err != nil {
 		return nil, fmt.Errorf("CreatePolicy: %w", err)
 	}
@@ -35,10 +35,12 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 	}
 
 	factory := factory{}
-	record, err := factory.Create(ir, cmd.Metadata, i, cmd.CreationTime)
+	record, err := factory.Create(ir, req.Metadata, i, req.CreationTime)
 	if err != nil {
 		return nil, fmt.Errorf("CreatePolicy: %w", err)
 	}
+	record.PolicyDefinition = req.Policy
+	record.MarshalType = req.MarshalType
 
 	spec := validPolicySpec{}
 	err = spec.Satisfies(record.Policy)

@@ -181,6 +181,11 @@ message GetPolicyRequest {
 
 message GetPolicyResponse { 
   Policy policy = 1;
+  // policy_raw contains the raw policy document the user submitted to create
+  // the policy
+  string policy_raw = 2;
+  // marshal_type flags the format of policy_raw
+  PolicyMarshalingType      marshal_type  = 3;
 }
 
 message ListPoliciesRequest{}
