@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/sourcenetwork/acp_core/pkg/auth"
-	"github.com/sourcenetwork/acp_core/pkg/engine"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
+	"github.com/sourcenetwork/acp_core/pkg/services"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/stretchr/testify/require"
 )
@@ -32,7 +32,7 @@ func (t *TestCtx) SetPrincipal(name string) {
 
 func NewTestCtx(t *testing.T) *TestCtx {
 	runtime := NewTestRuntime(t)
-	engine := engine.NewACPEngine(runtime)
+	engine := services.NewACPEngine(runtime)
 	return &TestCtx{
 		Ctx:     context.Background(),
 		T:       t,

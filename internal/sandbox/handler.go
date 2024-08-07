@@ -302,7 +302,10 @@ func HandleVerifyTheorem(ctx context.Context, manager runtime.RuntimeManager, re
 		return nil, err // TODO WRAP
 	}
 	if record == nil {
-		return nil, errors.Wrap("sandbox not foudn", errors.ErrorType_NOT_FOUND, errors.Pair("handle", req.Handle))
+		return nil, errors.Wrap("sandbox not found", errors.ErrorType_NOT_FOUND, errors.Pair("handle", req.Handle))
+	}
+	if !record.Initialized {
+		return nil, errors.Wrap("uninitialized sandbox cannot execute theorems", errors.ErrorType_OPERATION_FORBIDDEN, errors.Pair("handle", req.Handle))
 	}
 
 	manager, err = GetManagerForSandbox(manager, req.Handle)
