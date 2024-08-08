@@ -26,7 +26,9 @@ func HandleGetPolicy(ctx context.Context, runtime runtime.RuntimeManager, req *t
 	}
 
 	return &types.GetPolicyResponse{
-		Policy: rec.Policy,
+		Policy:      rec.Policy,
+		PolicyRaw:   rec.PolicyDefinition,
+		MarshalType: rec.MarshalType,
 	}, nil
 }
 

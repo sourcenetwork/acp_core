@@ -63,10 +63,3 @@ message PermissionShort {
   string doc = 1;
   string expr = 2;
 }
-
-// MarshaledPolicy represents a PolicyShort object
-// marshaled to a known encoding format
-message MarshaledPolicy {
-  string policy = 1;
-  PolicyMarshalingType type = 2;
-}
