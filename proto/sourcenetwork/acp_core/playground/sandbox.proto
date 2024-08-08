@@ -17,14 +17,16 @@ message SandboxRecord {
   // name is a user given designation to a sandbox
   string name = 2;
 
-  SandboxData data = 3;
+  string description = 3;
+
+  SandboxData data = 4;
 
   // scratchpad acts as temporary storage for modifications in the sandbox state
-  SandboxData scratchpad = 4;
+  SandboxData scratchpad = 5;
 
-  SandboxCtx ctx = 5;
+  SandboxCtx ctx = 6;
 
-  bool initialized = 6;
+  bool initialized = 7;
 }
 
 // SandboxData encapsulates all the data necessary to create a Sandbox

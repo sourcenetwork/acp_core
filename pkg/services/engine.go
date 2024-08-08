@@ -7,7 +7,6 @@ import (
 	"github.com/sourcenetwork/acp_core/internal/authz_db"
 	"github.com/sourcenetwork/acp_core/internal/policy"
 	"github.com/sourcenetwork/acp_core/internal/relationship"
-	"github.com/sourcenetwork/acp_core/internal/simulator"
 	"github.com/sourcenetwork/acp_core/internal/system"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/types"
@@ -139,5 +138,5 @@ func (s *acpEngine) GetParams(ctx context.Context, req *types.GetParamsRequest) 
 }
 
 func (s *acpEngine) Simulate(ctx context.Context, req *types.SimulateRequest) (*types.SimulateResponse, error) {
-	return applyMiddleware(ctx, simulator.HandleSimulateRequest, s.hooks, req)
+	return nil, nil
 }

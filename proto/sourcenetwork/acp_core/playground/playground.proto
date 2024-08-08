@@ -47,17 +47,18 @@ service PlaygroundService {
     // and generate the tree of every actor which can perform the specified operation.
     //rpc Expand(ExpandRequest) returns (ExpandResponse);
 
-    //rpc DeleteSandbox(DeleteSandboxRequest) returns (DeleteSandboxResponse);
 }
 
 message NewSandboxRequest {
     // user defined name for the sandbox
     string name = 1;
+
+    string description =2;
 }
 
 message NewSandboxResponse {
     // opaque identifier pointing to the created sandbox
-    uint64 handle = 1;
+    SandboxRecord record = 1;
 }
 
 message SetStateRequest {
@@ -99,6 +100,7 @@ message ListSandboxesRequest {
 message ListSandboxesResponse { 
     repeated SandboxRecord records = 1;
 }
+
 
 /*
 message CheckRequest {

@@ -1,5 +1,32 @@
 package policy
 
+import (
+	"context"
+
+	"github.com/sourcenetwork/acp_core/github.com/sourcenetwork/acp_core/pkg/types"
+	"github.com/sourcenetwork/acp_core/internal/zanzi"
+	"github.com/sourcenetwork/acp_core/pkg/errors"
+	"github.com/sourcenetwork/acp_core/pkg/runtime"
+)
+
+type BuildCatalogueHandler struct{}
+
+func (h *BuildCatalogueHandler) Handle(ctx context.Context, manager runtime.RuntimeManager, polId string) (*types.Catalogue, error) {
+	engine, err := zanzi.NewZanzi(manager.GetKVStore(), manager.GetLogger())
+	if err != nil {
+		return nil, err
+	}
+
+	rec, err := engine.GetPolicy(ctx, polId)
+	if err != nil {
+		return nil, err
+	}
+	if rec == nil {
+		return nil, errors.NewPolicyNotFound(polId)
+	}
+
+}
+
 /*
 
 func buildCatalogue(ctx context.Context, data *data) (*types.Catalogue, error) {

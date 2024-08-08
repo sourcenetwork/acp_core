@@ -2,6 +2,7 @@ package sandbox
 
 import (
 	"context"
+	"fmt"
 
 	prototypes "github.com/cosmos/gogoproto/types"
 
@@ -27,9 +28,15 @@ func HandleNewSandboxRequest(ctx context.Context, manager runtime.RuntimeManager
 		return nil, err
 	}
 
+	name := req.Name
+	if name == "" {
+		name = fmt.Sprintf("%v", handle)
+	}
+
 	record := &playground.SandboxRecord{
-		Name:   req.Name,
-		Handle: handle,
+		Name:        name,
+		Handle:      handle,
+		Description: req.Description,
 	}
 
 	repository := NewSandboxRepository(manager)
@@ -44,7 +51,7 @@ func HandleNewSandboxRequest(ctx context.Context, manager runtime.RuntimeManager
 	}
 
 	return &playground.NewSandboxResponse{
-		Handle: handle,
+		Record: record,
 	}, nil
 }
 
