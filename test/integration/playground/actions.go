@@ -13,7 +13,7 @@ type NewSandbox struct {
 
 func (a *NewSandbox) Run(ctx *test.TestCtx) *playground.NewSandboxResponse {
 	resp, err := ctx.Playground.NewSandbox(ctx, a.Req)
-	test.AssertResults(ctx, resp, a.Req, err, a.ExpectedErr)
+	test.AssertResults(ctx, resp, a.Expected, err, a.ExpectedErr)
 	return resp
 }
 
@@ -25,7 +25,7 @@ type ListSandboxes struct {
 
 func (a *ListSandboxes) Run(ctx *test.TestCtx) *playground.ListSandboxesResponse {
 	resp, err := ctx.Playground.ListSandboxes(ctx, a.Req)
-	test.AssertResults(ctx, resp, a.Req, err, a.ExpectedErr)
+	test.AssertResults(ctx, resp, a.Expected, err, a.ExpectedErr)
 	return resp
 }
 
@@ -37,7 +37,7 @@ type SetState struct {
 
 func (a *SetState) Run(ctx *test.TestCtx) *playground.SetStateResponse {
 	resp, err := ctx.Playground.SetState(ctx, a.Req)
-	test.AssertResults(ctx, resp, a.Req, err, a.ExpectedErr)
+	test.AssertResults(ctx, resp, a.Expected, err, a.ExpectedErr)
 	return resp
 }
 
@@ -50,7 +50,7 @@ type GetCatalogue struct {
 
 func (a *GetCatalogue) Run(ctx *test.TestCtx) *playground.GetCatalogueResponse {
 	resp, err := ctx.Playground.GetCatalogue(ctx, a.Req)
-	test.AssertResults(ctx, resp, a.Req, err, a.ExpectedErr)
+	test.AssertResults(ctx, resp, a.Expected, err, a.ExpectedErr)
 	return resp
 }
 
@@ -62,7 +62,7 @@ type VerifyTheorems struct {
 
 func (a *VerifyTheorems) Run(ctx *test.TestCtx) *playground.VerifyTheoremsResponse {
 	resp, err := ctx.Playground.VerifyTheorems(ctx, a.Req)
-	test.AssertResults(ctx, resp, a.Req, err, a.ExpectedErr)
+	test.AssertResults(ctx, resp, a.Expected, err, a.ExpectedErr)
 	return resp
 }
 

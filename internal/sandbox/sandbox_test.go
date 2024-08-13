@@ -23,13 +23,13 @@ func simulate(t *testing.T, req *playground.SandboxData) *types.AnnotatedPolicyT
 	handler := SetStateHandler{}
 	resp2, err := handler.Handle(ctx, manager, &playground.SetStateRequest{
 		Data:   req,
-		Handle: resp1.Handle,
+		Handle: resp1.Record.Handle,
 	})
 	require.NoError(t, err)
 	_ = resp2
 
 	resp3, err := HandleVerifyTheorem(ctx, manager, &playground.VerifyTheoremsRequest{
-		Handle: resp1.Handle,
+		Handle: resp1.Record.Handle,
 	})
 	require.NoError(t, err)
 

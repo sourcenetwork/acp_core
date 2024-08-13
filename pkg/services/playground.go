@@ -34,7 +34,7 @@ func (s *playgroundService) SetState(ctx context.Context, req *playground.SetSta
 	return handler.Handle(ctx, s.runtime, req)
 }
 func (s *playgroundService) GetCatalogue(ctx context.Context, req *playground.GetCatalogueRequest) (*playground.GetCatalogueResponse, error) {
-	return nil, nil
+	return sandbox.HandleGetCatalogue(ctx, s.runtime, req)
 }
 func (s *playgroundService) VerifyTheorems(ctx context.Context, req *playground.VerifyTheoremsRequest) (*playground.VerifyTheoremsResponse, error) {
 	return sandbox.HandleVerifyTheorem(ctx, s.runtime, req)

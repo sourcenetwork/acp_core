@@ -81,11 +81,6 @@ service ACPEngine {
 
   rpc VerifyAccessRequest(VerifyAccessRequestRequest) returns (VerifyAccessRequestResponse);
 
-  // Simulate receives a triplet of Policy, Relationships and PolicyTheorem and executes
-  // the theorems against the given context and verifies whether they're true or not.
-  // The execution context is ephemeral and the policy is not persisted in memory.
-  rpc Simulate(SimulateRequest) returns (SimulateResponse);
-
   // Expand, Reverse lookup
 
   /*
@@ -251,12 +246,4 @@ message VerifyAccessRequestRequest{
 
 message VerifyAccessRequestResponse{
     bool valid = 1;
-}
-
-message SimulateRequest {
-  SimulationCtxDeclaration declaration = 1;
-}
-
-message SimulateResponse {
-  AnnotatedSimulationResult result = 1;
 }

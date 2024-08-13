@@ -3,15 +3,13 @@ package policy
 import (
 	"context"
 
-	"github.com/sourcenetwork/acp_core/github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
+	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
-type BuildCatalogueHandler struct{}
-
-func (h *BuildCatalogueHandler) Handle(ctx context.Context, manager runtime.RuntimeManager, polId string) (*types.Catalogue, error) {
+func HandleBuildCatalogue(ctx context.Context, manager runtime.RuntimeManager, polId string) (*types.Catalogue, error) {
 	engine, err := zanzi.NewZanzi(manager.GetKVStore(), manager.GetLogger())
 	if err != nil {
 		return nil, err
@@ -19,12 +17,42 @@ func (h *BuildCatalogueHandler) Handle(ctx context.Context, manager runtime.Runt
 
 	rec, err := engine.GetPolicy(ctx, polId)
 	if err != nil {
-		return nil, err
+		return nil, err // TODO wrap
 	}
 	if rec == nil {
 		return nil, errors.NewPolicyNotFound(polId)
 	}
 
+	catalogue := &types.Catalogue{
+		PolicyDefinition:  rec.PolicyDefinition,
+		ActorResourceName: rec.Policy.ActorResource.Name,
+		ResourceCatalogue: make(map[string]*types.ResourceCatalogue),
+	}
+
+	for _, resource := range rec.Policy.Resources {
+		resCatalogue := &types.ResourceCatalogue{}
+		for _, permission := range resource.Permissions {
+			resCatalogue.Permissions = append(resCatalogue.Permissions, permission.Name)
+		}
+		for _, relation := range resource.Relations {
+			resCatalogue.Relations = append(resCatalogue.Relations, relation.Name)
+		}
+		catalogue.ResourceCatalogue[resource.Name] = resCatalogue
+	}
+
+	builder := types.RelationshipSelectorBuilder{}
+	selector := builder.AnyObject().Relation(OwnerRelation).AnySubject().Build()
+	ownerRelationships, err := engine.FilterRelationships(ctx, rec.Policy, &selector)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, rec := range ownerRelationships {
+		resCat := catalogue.ResourceCatalogue[rec.Relationship.Relation]
+		resCat.ObjectIds = append(resCat.ObjectIds, rec.Relationship.Object.Id)
+	}
+
+	return catalogue, nil
 }
 
 /*

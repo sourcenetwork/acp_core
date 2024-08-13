@@ -335,3 +335,32 @@ func HandleVerifyTheorem(ctx context.Context, manager runtime.RuntimeManager, re
 		Result: result,
 	}, nil
 }
+
+func HandleGetCatalogue(ctx context.Context, manager runtime.RuntimeManager, req *playground.GetCatalogueRequest) (*playground.GetCatalogueResponse, error) {
+	repository := NewSandboxRepository(manager)
+
+	record, err := repository.GetSandbox(ctx, req.Handle)
+	if err != nil {
+		return nil, err // TODO WRAP
+	}
+	if record == nil {
+		return nil, errors.Wrap("sandbox not found", errors.ErrorType_NOT_FOUND, errors.Pair("handle", req.Handle))
+	}
+	if !record.Initialized {
+		return nil, errors.Wrap("uninitialized sandbox cannot execute theorems", errors.ErrorType_OPERATION_FORBIDDEN, errors.Pair("handle", req.Handle))
+	}
+
+	manager, err = GetManagerForSandbox(manager, req.Handle)
+	if err != nil {
+		return nil, err // TODO WRAP
+	}
+
+	catalogue, err := policy.HandleBuildCatalogue(ctx, manager, record.Ctx.Policy.Id)
+	if err != nil {
+		return nil, err // TODO wrap
+	}
+
+	return &playground.GetCatalogueResponse{
+		Catalogue: catalogue,
+	}, nil
+}
