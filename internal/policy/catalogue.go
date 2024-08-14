@@ -7,9 +7,10 @@ import (
 	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/types"
+	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
 
-func HandleBuildCatalogue(ctx context.Context, manager runtime.RuntimeManager, polId string) (*types.Catalogue, error) {
+func HandleBuildCatalogue(ctx context.Context, manager runtime.RuntimeManager, polId string) (*types.PolicyCatalogue, error) {
 	engine, err := zanzi.NewZanzi(manager.GetKVStore(), manager.GetLogger())
 	if err != nil {
 		return nil, err
@@ -23,8 +24,8 @@ func HandleBuildCatalogue(ctx context.Context, manager runtime.RuntimeManager, p
 		return nil, errors.NewPolicyNotFound(polId)
 	}
 
-	catalogue := &types.Catalogue{
-		PolicyDefinition:  rec.PolicyDefinition,
+	actorSet := make(map[string]struct{})
+	catalogue := &types.PolicyCatalogue{
 		ActorResourceName: rec.Policy.ActorResource.Name,
 		ResourceCatalogue: make(map[string]*types.ResourceCatalogue),
 	}
@@ -48,9 +49,15 @@ func HandleBuildCatalogue(ctx context.Context, manager runtime.RuntimeManager, p
 	}
 
 	for _, rec := range ownerRelationships {
-		resCat := catalogue.ResourceCatalogue[rec.Relationship.Relation]
+		resCat := catalogue.ResourceCatalogue[rec.Relationship.Object.Resource]
 		resCat.ObjectIds = append(resCat.ObjectIds, rec.Relationship.Object.Id)
+		actorSet[rec.OwnerDid] = struct{}{}
 	}
+
+	for actor := range actorSet {
+		catalogue.Actors = append(catalogue.Actors, actor)
+	}
+	utils.SortSlice(catalogue.Actors)
 
 	return catalogue, nil
 }

@@ -22,27 +22,25 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-type Catalogue struct {
-	Relationships []string `protobuf:"bytes,1,rep,name=relationships,proto3" json:"relationships,omitempty"`
-	//repeated ObjectDetails objects = 2;
-	//ActorSet actors = 3;
-	ResourceCatalogue map[string]*ResourceCatalogue `protobuf:"bytes,4,rep,name=resource_catalogue,json=resourceCatalogue,proto3" json:"resource_catalogue,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	ActorResourceName string                        `protobuf:"bytes,5,opt,name=actor_resource_name,json=actorResourceName,proto3" json:"actor_resource_name,omitempty"`
-	PolicyDefinition  string                        `protobuf:"bytes,6,opt,name=policy_definition,json=policyDefinition,proto3" json:"policy_definition,omitempty"`
+// PolicyCatalogue represents a lookup table for entities definedw withing a Policy
+type PolicyCatalogue struct {
+	ResourceCatalogue map[string]*ResourceCatalogue `protobuf:"bytes,1,rep,name=resource_catalogue,json=resourceCatalogue,proto3" json:"resource_catalogue,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	ActorResourceName string                        `protobuf:"bytes,2,opt,name=actor_resource_name,json=actorResourceName,proto3" json:"actor_resource_name,omitempty"`
+	Actors            []string                      `protobuf:"bytes,3,rep,name=actors,proto3" json:"actors,omitempty"`
 }
 
-func (m *Catalogue) Reset()         { *m = Catalogue{} }
-func (m *Catalogue) String() string { return proto.CompactTextString(m) }
-func (*Catalogue) ProtoMessage()    {}
-func (*Catalogue) Descriptor() ([]byte, []int) {
+func (m *PolicyCatalogue) Reset()         { *m = PolicyCatalogue{} }
+func (m *PolicyCatalogue) String() string { return proto.CompactTextString(m) }
+func (*PolicyCatalogue) ProtoMessage()    {}
+func (*PolicyCatalogue) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ba5913c2b388e130, []int{0}
 }
-func (m *Catalogue) XXX_Unmarshal(b []byte) error {
+func (m *PolicyCatalogue) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *Catalogue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *PolicyCatalogue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_Catalogue.Marshal(b, m, deterministic)
+		return xxx_messageInfo_PolicyCatalogue.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -52,46 +50,40 @@ func (m *Catalogue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (m *Catalogue) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Catalogue.Merge(m, src)
+func (m *PolicyCatalogue) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PolicyCatalogue.Merge(m, src)
 }
-func (m *Catalogue) XXX_Size() int {
+func (m *PolicyCatalogue) XXX_Size() int {
 	return m.Size()
 }
-func (m *Catalogue) XXX_DiscardUnknown() {
-	xxx_messageInfo_Catalogue.DiscardUnknown(m)
+func (m *PolicyCatalogue) XXX_DiscardUnknown() {
+	xxx_messageInfo_PolicyCatalogue.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_Catalogue proto.InternalMessageInfo
+var xxx_messageInfo_PolicyCatalogue proto.InternalMessageInfo
 
-func (m *Catalogue) GetRelationships() []string {
-	if m != nil {
-		return m.Relationships
-	}
-	return nil
-}
-
-func (m *Catalogue) GetResourceCatalogue() map[string]*ResourceCatalogue {
+func (m *PolicyCatalogue) GetResourceCatalogue() map[string]*ResourceCatalogue {
 	if m != nil {
 		return m.ResourceCatalogue
 	}
 	return nil
 }
 
-func (m *Catalogue) GetActorResourceName() string {
+func (m *PolicyCatalogue) GetActorResourceName() string {
 	if m != nil {
 		return m.ActorResourceName
 	}
 	return ""
 }
 
-func (m *Catalogue) GetPolicyDefinition() string {
+func (m *PolicyCatalogue) GetActors() []string {
 	if m != nil {
-		return m.PolicyDefinition
+		return m.Actors
 	}
-	return ""
+	return nil
 }
 
+// ResourceCatalogue models the set of known objects, permissions and relations for a Resource within a Policy
 type ResourceCatalogue struct {
 	Permissions []string `protobuf:"bytes,1,rep,name=permissions,proto3" json:"permissions,omitempty"`
 	Relations   []string `protobuf:"bytes,2,rep,name=relations,proto3" json:"relations,omitempty"`
@@ -153,8 +145,8 @@ func (m *ResourceCatalogue) GetObjectIds() []string {
 }
 
 func init() {
-	proto.RegisterType((*Catalogue)(nil), "sourcenetwork.acp_core.Catalogue")
-	proto.RegisterMapType((map[string]*ResourceCatalogue)(nil), "sourcenetwork.acp_core.Catalogue.ResourceCatalogueEntry")
+	proto.RegisterType((*PolicyCatalogue)(nil), "sourcenetwork.acp_core.PolicyCatalogue")
+	proto.RegisterMapType((map[string]*ResourceCatalogue)(nil), "sourcenetwork.acp_core.PolicyCatalogue.ResourceCatalogueEntry")
 	proto.RegisterType((*ResourceCatalogue)(nil), "sourcenetwork.acp_core.ResourceCatalogue")
 }
 
@@ -163,33 +155,31 @@ func init() {
 }
 
 var fileDescriptor_ba5913c2b388e130 = []byte{
-	// 363 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x92, 0x31, 0x6b, 0xe3, 0x30,
-	0x14, 0xc7, 0x23, 0xfb, 0x12, 0xb0, 0xc2, 0x41, 0xac, 0x83, 0x20, 0x8e, 0x3b, 0x63, 0xc2, 0x71,
-	0xf8, 0x08, 0xd8, 0x90, 0x5b, 0x42, 0x97, 0x42, 0xdb, 0x0c, 0x5d, 0x3a, 0x78, 0xec, 0x62, 0x14,
-	0x45, 0x75, 0xd4, 0xd8, 0x96, 0x91, 0xe4, 0x16, 0x7f, 0x8b, 0x7e, 0xac, 0x8e, 0x19, 0x3b, 0x96,
-	0x64, 0xe9, 0xc7, 0x28, 0xb1, 0x13, 0xb7, 0x69, 0x92, 0x4d, 0xfc, 0xfe, 0xff, 0xf7, 0xfe, 0x4f,
-	0x8f, 0x07, 0xff, 0x2a, 0x51, 0x48, 0xca, 0x32, 0xa6, 0x1f, 0x85, 0x5c, 0x04, 0x84, 0xe6, 0x11,
-	0x15, 0x92, 0x05, 0x94, 0x68, 0x92, 0x88, 0xb8, 0x60, 0x7e, 0x2e, 0x85, 0x16, 0xa8, 0xbf, 0xe7,
-	0xf3, 0x77, 0xbe, 0xc1, 0x9b, 0x01, 0xad, 0xcb, 0x9d, 0x17, 0xfd, 0x81, 0xdf, 0x25, 0x4b, 0x88,
-	0xe6, 0x22, 0x53, 0x73, 0x9e, 0x2b, 0x0c, 0x5c, 0xd3, 0xb3, 0xc2, 0x7d, 0x88, 0x62, 0x88, 0x24,
-	0xab, 0xfb, 0x45, 0x4d, 0x0e, 0xfe, 0xe6, 0x9a, 0x5e, 0x77, 0x34, 0xf6, 0x8f, 0x07, 0xf9, 0x4d,
-	0x88, 0x1f, 0x6e, 0x6b, 0x1b, 0x32, 0xc9, 0xb4, 0x2c, 0x43, 0x5b, 0x7e, 0xe5, 0xc8, 0x87, 0x3f,
-	0x08, 0xd5, 0x42, 0x46, 0x4d, 0x5c, 0x46, 0x52, 0x86, 0xdb, 0x2e, 0xf0, 0xac, 0xd0, 0xae, 0xa4,
-	0x5d, 0xb3, 0x1b, 0x92, 0x32, 0x34, 0x84, 0x76, 0x2e, 0x12, 0x4e, 0xcb, 0x68, 0xc6, 0xee, 0x78,
-	0xc6, 0x37, 0x23, 0xe3, 0x4e, 0xe5, 0xee, 0xd5, 0xc2, 0x55, 0xc3, 0x7f, 0x0a, 0xd8, 0x3f, 0x3e,
-	0x09, 0xea, 0x41, 0x73, 0xc1, 0x4a, 0x0c, 0xaa, 0xc2, 0xcd, 0x13, 0x9d, 0xc3, 0xf6, 0x03, 0x49,
-	0x0a, 0x86, 0x0d, 0x17, 0x78, 0xdd, 0xd1, 0xbf, 0x53, 0x9f, 0x3c, 0x68, 0x18, 0xd6, 0x75, 0x67,
-	0xc6, 0x18, 0x0c, 0x24, 0xb4, 0x0f, 0x74, 0xe4, 0xc2, 0x6e, 0xce, 0x64, 0xca, 0x95, 0xda, 0xac,
-	0x77, 0xbb, 0xef, 0xcf, 0x08, 0xfd, 0x82, 0x56, 0xb3, 0x7e, 0x6c, 0x54, 0xfa, 0x07, 0x40, 0xbf,
-	0x21, 0x14, 0xd3, 0x7b, 0x46, 0x75, 0xc4, 0x67, 0x0a, 0x9b, 0xb5, 0x5c, 0x93, 0xeb, 0x99, 0xba,
-	0x98, 0x3c, 0xaf, 0x1c, 0xb0, 0x5c, 0x39, 0xe0, 0x75, 0xe5, 0x80, 0xa7, 0xb5, 0xd3, 0x5a, 0xae,
-	0x9d, 0xd6, 0xcb, 0xda, 0x69, 0xdd, 0x0e, 0x63, 0xae, 0xe7, 0xc5, 0xd4, 0xa7, 0x22, 0x0d, 0x4e,
-	0xdc, 0x50, 0xbe, 0x88, 0x03, 0x5d, 0xe6, 0x4c, 0x4d, 0x3b, 0xd5, 0x11, 0xfd, 0x7f, 0x0f, 0x00,
-	0x00, 0xff, 0xff, 0xc9, 0x8c, 0xe4, 0xfd, 0x6e, 0x02, 0x00, 0x00,
+	// 335 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x92, 0xcf, 0x4a, 0xfb, 0x40,
+	0x10, 0xc7, 0xbb, 0x09, 0xbf, 0x42, 0xa6, 0x87, 0x9f, 0x5d, 0xa1, 0x04, 0xd1, 0x10, 0x7a, 0x90,
+	0x8a, 0xb0, 0x81, 0x7a, 0x11, 0x0f, 0x0a, 0x4a, 0x0f, 0x5e, 0x44, 0x72, 0xf4, 0x12, 0xb6, 0xdb,
+	0xa5, 0xc6, 0x26, 0xd9, 0xb0, 0xbb, 0x51, 0xf2, 0x16, 0xbe, 0x8e, 0x6f, 0xe0, 0xb1, 0x47, 0x8f,
+	0xd2, 0xbe, 0x88, 0xb8, 0x69, 0xa2, 0xf6, 0xcf, 0x2d, 0xf9, 0x7c, 0x67, 0x3e, 0xc3, 0x2c, 0x03,
+	0xc7, 0x4a, 0x14, 0x92, 0xf1, 0x8c, 0xeb, 0x17, 0x21, 0x67, 0x01, 0x65, 0x79, 0xc4, 0x84, 0xe4,
+	0x01, 0xa3, 0x9a, 0x26, 0x62, 0x5a, 0x70, 0x92, 0x4b, 0xa1, 0x05, 0xee, 0xfd, 0xa9, 0x23, 0x75,
+	0x5d, 0xff, 0xcd, 0x82, 0xff, 0xf7, 0x22, 0x89, 0x59, 0x79, 0x53, 0x77, 0xe0, 0x14, 0xb0, 0xe4,
+	0x55, 0x7d, 0xd4, 0x78, 0x5c, 0xe4, 0xdb, 0x83, 0xce, 0xf0, 0x92, 0x6c, 0x17, 0x91, 0x35, 0x09,
+	0x09, 0x57, 0x86, 0x86, 0x8c, 0x32, 0x2d, 0xcb, 0xb0, 0x2b, 0xd7, 0x39, 0x26, 0xb0, 0x4f, 0x99,
+	0x16, 0x32, 0x6a, 0x86, 0x66, 0x34, 0xe5, 0xae, 0xe5, 0xa3, 0x81, 0x13, 0x76, 0x4d, 0x54, 0xcb,
+	0xee, 0x68, 0xca, 0x71, 0x0f, 0xda, 0x06, 0x2a, 0xd7, 0xf6, 0xed, 0x81, 0x13, 0xae, 0xfe, 0x0e,
+	0x04, 0xf4, 0xb6, 0x0f, 0xc5, 0x7b, 0x60, 0xcf, 0x78, 0xe9, 0x22, 0x63, 0xfc, 0xfe, 0xc4, 0x57,
+	0xf0, 0xef, 0x99, 0x26, 0x45, 0x35, 0xa5, 0x33, 0x3c, 0xd9, 0xb5, 0xd5, 0x86, 0x30, 0xac, 0xfa,
+	0x2e, 0xac, 0x73, 0xd4, 0x97, 0xd0, 0xdd, 0xc8, 0xb1, 0x0f, 0x9d, 0x9c, 0xcb, 0x34, 0x56, 0x2a,
+	0x16, 0x99, 0x32, 0xaf, 0xe6, 0x84, 0xbf, 0x11, 0x3e, 0x04, 0x47, 0xf2, 0x84, 0x6a, 0x93, 0x5b,
+	0x26, 0xff, 0x01, 0xf8, 0x08, 0x40, 0x8c, 0x9f, 0x38, 0xd3, 0x51, 0x3c, 0xa9, 0x37, 0x74, 0x2a,
+	0x72, 0x3b, 0x51, 0xd7, 0xa3, 0xf7, 0x85, 0x87, 0xe6, 0x0b, 0x0f, 0x7d, 0x2e, 0x3c, 0xf4, 0xba,
+	0xf4, 0x5a, 0xf3, 0xa5, 0xd7, 0xfa, 0x58, 0x7a, 0xad, 0x87, 0xd3, 0x69, 0xac, 0x1f, 0x8b, 0x31,
+	0x61, 0x22, 0x0d, 0x76, 0x1c, 0x45, 0x3e, 0x9b, 0x06, 0xba, 0xcc, 0xb9, 0x1a, 0xb7, 0xcd, 0x55,
+	0x9c, 0x7d, 0x05, 0x00, 0x00, 0xff, 0xff, 0xb8, 0x3f, 0x17, 0xcf, 0x3f, 0x02, 0x00, 0x00,
 }
 
-func (m *Catalogue) Marshal() (dAtA []byte, err error) {
+func (m *PolicyCatalogue) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -199,29 +189,31 @@ func (m *Catalogue) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *Catalogue) MarshalTo(dAtA []byte) (int, error) {
+func (m *PolicyCatalogue) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *Catalogue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *PolicyCatalogue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.PolicyDefinition) > 0 {
-		i -= len(m.PolicyDefinition)
-		copy(dAtA[i:], m.PolicyDefinition)
-		i = encodeVarintCatalogue(dAtA, i, uint64(len(m.PolicyDefinition)))
-		i--
-		dAtA[i] = 0x32
+	if len(m.Actors) > 0 {
+		for iNdEx := len(m.Actors) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Actors[iNdEx])
+			copy(dAtA[i:], m.Actors[iNdEx])
+			i = encodeVarintCatalogue(dAtA, i, uint64(len(m.Actors[iNdEx])))
+			i--
+			dAtA[i] = 0x1a
+		}
 	}
 	if len(m.ActorResourceName) > 0 {
 		i -= len(m.ActorResourceName)
 		copy(dAtA[i:], m.ActorResourceName)
 		i = encodeVarintCatalogue(dAtA, i, uint64(len(m.ActorResourceName)))
 		i--
-		dAtA[i] = 0x2a
+		dAtA[i] = 0x12
 	}
 	if len(m.ResourceCatalogue) > 0 {
 		for k := range m.ResourceCatalogue {
@@ -245,15 +237,6 @@ func (m *Catalogue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i--
 			dAtA[i] = 0xa
 			i = encodeVarintCatalogue(dAtA, i, uint64(baseI-i))
-			i--
-			dAtA[i] = 0x22
-		}
-	}
-	if len(m.Relationships) > 0 {
-		for iNdEx := len(m.Relationships) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.Relationships[iNdEx])
-			copy(dAtA[i:], m.Relationships[iNdEx])
-			i = encodeVarintCatalogue(dAtA, i, uint64(len(m.Relationships[iNdEx])))
 			i--
 			dAtA[i] = 0xa
 		}
@@ -322,18 +305,12 @@ func encodeVarintCatalogue(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *Catalogue) Size() (n int) {
+func (m *PolicyCatalogue) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if len(m.Relationships) > 0 {
-		for _, s := range m.Relationships {
-			l = len(s)
-			n += 1 + l + sovCatalogue(uint64(l))
-		}
-	}
 	if len(m.ResourceCatalogue) > 0 {
 		for k, v := range m.ResourceCatalogue {
 			_ = k
@@ -351,9 +328,11 @@ func (m *Catalogue) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovCatalogue(uint64(l))
 	}
-	l = len(m.PolicyDefinition)
-	if l > 0 {
-		n += 1 + l + sovCatalogue(uint64(l))
+	if len(m.Actors) > 0 {
+		for _, s := range m.Actors {
+			l = len(s)
+			n += 1 + l + sovCatalogue(uint64(l))
+		}
 	}
 	return n
 }
@@ -391,7 +370,7 @@ func sovCatalogue(x uint64) (n int) {
 func sozCatalogue(x uint64) (n int) {
 	return sovCatalogue(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *Catalogue) Unmarshal(dAtA []byte) error {
+func (m *PolicyCatalogue) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -414,45 +393,13 @@ func (m *Catalogue) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: Catalogue: wiretype end group for non-group")
+			return fmt.Errorf("proto: PolicyCatalogue: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Catalogue: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: PolicyCatalogue: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Relationships", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowCatalogue
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthCatalogue
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthCatalogue
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Relationships = append(m.Relationships, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ResourceCatalogue", wireType)
 			}
@@ -581,7 +528,7 @@ func (m *Catalogue) Unmarshal(dAtA []byte) error {
 			}
 			m.ResourceCatalogue[mapkey] = mapvalue
 			iNdEx = postIndex
-		case 5:
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ActorResourceName", wireType)
 			}
@@ -613,9 +560,9 @@ func (m *Catalogue) Unmarshal(dAtA []byte) error {
 			}
 			m.ActorResourceName = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 6:
+		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PolicyDefinition", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Actors", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -643,7 +590,7 @@ func (m *Catalogue) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.PolicyDefinition = string(dAtA[iNdEx:postIndex])
+			m.Actors = append(m.Actors, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

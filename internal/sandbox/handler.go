@@ -94,6 +94,12 @@ func (h *SetStateHandler) Handle(ctx context.Context, manager runtime.RuntimeMan
 		return nil, errors.Wrap("sandbox", errors.ErrorType_NOT_FOUND, errors.Pair("id", req.Handle))
 	}
 
+	record.Scratchpad = req.Data
+	err = repository.SetRecord(ctx, record)
+	if err != nil {
+		return nil, err // TODO
+	}
+
 	simCtx, errs, err := h.parseCtx(ctx, manager, req.Data)
 	if err != nil {
 		return nil, err
@@ -127,6 +133,7 @@ func (h *SetStateHandler) Handle(ctx context.Context, manager runtime.RuntimeMan
 	return &playground.SetStateResponse{
 		Ok:     true,
 		Errors: &playground.SandboxDataErrors{},
+		Record: record,
 	}, nil
 }
 
@@ -362,5 +369,31 @@ func HandleGetCatalogue(ctx context.Context, manager runtime.RuntimeManager, req
 
 	return &playground.GetCatalogueResponse{
 		Catalogue: catalogue,
+	}, nil
+}
+
+func HandleRestoreScratchpad(ctx context.Context, manager runtime.RuntimeManager, req *playground.RestoreScratchpadRequest) (*playground.RestoreScratchpadResponse, error) {
+	repository := NewSandboxRepository(manager)
+
+	record, err := repository.GetSandbox(ctx, req.Handle)
+	if err != nil {
+		return nil, err // TODO WRAP
+	}
+	if record == nil {
+		return nil, errors.Wrap("sandbox not found", errors.ErrorType_NOT_FOUND, errors.Pair("handle", req.Handle))
+	}
+	if !record.Initialized {
+		return nil, errors.Wrap("uninitialized sandbox cannot execute theorems", errors.ErrorType_OPERATION_FORBIDDEN, errors.Pair("handle", req.Handle))
+	}
+
+	record.Scratchpad = record.Data
+
+	err = repository.SetRecord(ctx, record)
+	if err != nil {
+		return nil, err
+	}
+
+	return &playground.RestoreScratchpadResponse{
+		Scratchpad: record.Scratchpad,
 	}, nil
 }

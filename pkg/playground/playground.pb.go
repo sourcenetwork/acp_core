@@ -185,6 +185,7 @@ type SetStateResponse struct {
 	// ok indicates the state updated sucessfuly
 	Ok     bool               `protobuf:"varint,1,opt,name=ok,proto3" json:"ok,omitempty"`
 	Errors *SandboxDataErrors `protobuf:"bytes,2,opt,name=errors,proto3" json:"errors,omitempty"`
+	Record *SandboxRecord     `protobuf:"bytes,3,opt,name=record,proto3" json:"record,omitempty"`
 }
 
 func (m *SetStateResponse) Reset()         { *m = SetStateResponse{} }
@@ -230,6 +231,13 @@ func (m *SetStateResponse) GetOk() bool {
 func (m *SetStateResponse) GetErrors() *SandboxDataErrors {
 	if m != nil {
 		return m.Errors
+	}
+	return nil
+}
+
+func (m *SetStateResponse) GetRecord() *SandboxRecord {
+	if m != nil {
+		return m.Record
 	}
 	return nil
 }
@@ -281,7 +289,7 @@ func (m *GetCatalogueRequest) GetHandle() uint64 {
 
 type GetCatalogueResponse struct {
 	// catalogue for the state of the given sandbox
-	Catalogue *types.Catalogue `protobuf:"bytes,1,opt,name=catalogue,proto3" json:"catalogue,omitempty"`
+	Catalogue *types.PolicyCatalogue `protobuf:"bytes,1,opt,name=catalogue,proto3" json:"catalogue,omitempty"`
 }
 
 func (m *GetCatalogueResponse) Reset()         { *m = GetCatalogueResponse{} }
@@ -317,7 +325,7 @@ func (m *GetCatalogueResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetCatalogueResponse proto.InternalMessageInfo
 
-func (m *GetCatalogueResponse) GetCatalogue() *types.Catalogue {
+func (m *GetCatalogueResponse) GetCatalogue() *types.PolicyCatalogue {
 	if m != nil {
 		return m.Catalogue
 	}
@@ -493,6 +501,209 @@ func (m *ListSandboxesResponse) GetRecords() []*SandboxRecord {
 	return nil
 }
 
+type RestoreScratchpadRequest struct {
+	// handle to an existing sandbox
+	Handle uint64 `protobuf:"varint,1,opt,name=handle,proto3" json:"handle,omitempty"`
+}
+
+func (m *RestoreScratchpadRequest) Reset()         { *m = RestoreScratchpadRequest{} }
+func (m *RestoreScratchpadRequest) String() string { return proto.CompactTextString(m) }
+func (*RestoreScratchpadRequest) ProtoMessage()    {}
+func (*RestoreScratchpadRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_11e240bc3d9e97c1, []int{10}
+}
+func (m *RestoreScratchpadRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RestoreScratchpadRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RestoreScratchpadRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RestoreScratchpadRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RestoreScratchpadRequest.Merge(m, src)
+}
+func (m *RestoreScratchpadRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *RestoreScratchpadRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_RestoreScratchpadRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RestoreScratchpadRequest proto.InternalMessageInfo
+
+func (m *RestoreScratchpadRequest) GetHandle() uint64 {
+	if m != nil {
+		return m.Handle
+	}
+	return 0
+}
+
+type RestoreScratchpadResponse struct {
+	// scratchpad contains the data in the restored scratchpad
+	Scratchpad *SandboxData `protobuf:"bytes,1,opt,name=scratchpad,proto3" json:"scratchpad,omitempty"`
+}
+
+func (m *RestoreScratchpadResponse) Reset()         { *m = RestoreScratchpadResponse{} }
+func (m *RestoreScratchpadResponse) String() string { return proto.CompactTextString(m) }
+func (*RestoreScratchpadResponse) ProtoMessage()    {}
+func (*RestoreScratchpadResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_11e240bc3d9e97c1, []int{11}
+}
+func (m *RestoreScratchpadResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RestoreScratchpadResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RestoreScratchpadResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RestoreScratchpadResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RestoreScratchpadResponse.Merge(m, src)
+}
+func (m *RestoreScratchpadResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *RestoreScratchpadResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_RestoreScratchpadResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RestoreScratchpadResponse proto.InternalMessageInfo
+
+func (m *RestoreScratchpadResponse) GetScratchpad() *SandboxData {
+	if m != nil {
+		return m.Scratchpad
+	}
+	return nil
+}
+
+type SimulateRequest struct {
+	// data to set in the sandbox
+	Data *SandboxData `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+}
+
+func (m *SimulateRequest) Reset()         { *m = SimulateRequest{} }
+func (m *SimulateRequest) String() string { return proto.CompactTextString(m) }
+func (*SimulateRequest) ProtoMessage()    {}
+func (*SimulateRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_11e240bc3d9e97c1, []int{12}
+}
+func (m *SimulateRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SimulateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_SimulateRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *SimulateRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SimulateRequest.Merge(m, src)
+}
+func (m *SimulateRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *SimulateRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_SimulateRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SimulateRequest proto.InternalMessageInfo
+
+func (m *SimulateRequest) GetData() *SandboxData {
+	if m != nil {
+		return m.Data
+	}
+	return nil
+}
+
+type SimulateReponse struct {
+	ValidData bool                                `protobuf:"varint,1,opt,name=valid_data,json=validData,proto3" json:"valid_data,omitempty"`
+	Errors    *SandboxDataErrors                  `protobuf:"bytes,2,opt,name=errors,proto3" json:"errors,omitempty"`
+	Record    *SandboxRecord                      `protobuf:"bytes,3,opt,name=record,proto3" json:"record,omitempty"`
+	Result    *types.AnnotatedPolicyTheoremResult `protobuf:"bytes,4,opt,name=result,proto3" json:"result,omitempty"`
+}
+
+func (m *SimulateReponse) Reset()         { *m = SimulateReponse{} }
+func (m *SimulateReponse) String() string { return proto.CompactTextString(m) }
+func (*SimulateReponse) ProtoMessage()    {}
+func (*SimulateReponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_11e240bc3d9e97c1, []int{13}
+}
+func (m *SimulateReponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SimulateReponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_SimulateReponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *SimulateReponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SimulateReponse.Merge(m, src)
+}
+func (m *SimulateReponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *SimulateReponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_SimulateReponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SimulateReponse proto.InternalMessageInfo
+
+func (m *SimulateReponse) GetValidData() bool {
+	if m != nil {
+		return m.ValidData
+	}
+	return false
+}
+
+func (m *SimulateReponse) GetErrors() *SandboxDataErrors {
+	if m != nil {
+		return m.Errors
+	}
+	return nil
+}
+
+func (m *SimulateReponse) GetRecord() *SandboxRecord {
+	if m != nil {
+		return m.Record
+	}
+	return nil
+}
+
+func (m *SimulateReponse) GetResult() *types.AnnotatedPolicyTheoremResult {
+	if m != nil {
+		return m.Result
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*NewSandboxRequest)(nil), "sourcenetwork.acp_core.playground.NewSandboxRequest")
 	proto.RegisterType((*NewSandboxResponse)(nil), "sourcenetwork.acp_core.playground.NewSandboxResponse")
@@ -504,6 +715,10 @@ func init() {
 	proto.RegisterType((*VerifyTheoremsResponse)(nil), "sourcenetwork.acp_core.playground.VerifyTheoremsResponse")
 	proto.RegisterType((*ListSandboxesRequest)(nil), "sourcenetwork.acp_core.playground.ListSandboxesRequest")
 	proto.RegisterType((*ListSandboxesResponse)(nil), "sourcenetwork.acp_core.playground.ListSandboxesResponse")
+	proto.RegisterType((*RestoreScratchpadRequest)(nil), "sourcenetwork.acp_core.playground.RestoreScratchpadRequest")
+	proto.RegisterType((*RestoreScratchpadResponse)(nil), "sourcenetwork.acp_core.playground.RestoreScratchpadResponse")
+	proto.RegisterType((*SimulateRequest)(nil), "sourcenetwork.acp_core.playground.SimulateRequest")
+	proto.RegisterType((*SimulateReponse)(nil), "sourcenetwork.acp_core.playground.SimulateReponse")
 }
 
 func init() {
@@ -511,44 +726,52 @@ func init() {
 }
 
 var fileDescriptor_11e240bc3d9e97c1 = []byte{
-	// 587 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x95, 0xcf, 0x6e, 0xd3, 0x40,
-	0x10, 0xc6, 0xeb, 0x10, 0x42, 0x3b, 0x81, 0x42, 0x97, 0x36, 0x8a, 0x7c, 0xb0, 0x52, 0x0b, 0x21,
-	0x2e, 0x38, 0x55, 0x0a, 0x14, 0x4e, 0x88, 0x02, 0x02, 0xaa, 0x08, 0x55, 0x0e, 0x02, 0x89, 0x03,
-	0xd5, 0xc6, 0x9e, 0x26, 0x56, 0x12, 0xaf, 0xd9, 0x5d, 0x53, 0x72, 0x42, 0x42, 0xe2, 0x0e, 0x6f,
-	0xc5, 0xb1, 0x47, 0x8e, 0x28, 0x79, 0x11, 0x14, 0x7b, 0x9d, 0x3f, 0x25, 0x56, 0xec, 0xde, 0x9c,
-	0xcd, 0xfc, 0xbe, 0xf9, 0x66, 0x76, 0x46, 0x0b, 0x0d, 0xc1, 0x42, 0xee, 0xa0, 0x8f, 0xf2, 0x8c,
-	0xf1, 0x5e, 0x9d, 0x3a, 0xc1, 0x89, 0xc3, 0x38, 0xd6, 0x83, 0x3e, 0x1d, 0x76, 0x38, 0x0b, 0x7d,
-	0x77, 0xee, 0xd3, 0x0a, 0x38, 0x93, 0x8c, 0xec, 0x2e, 0x30, 0x56, 0xc2, 0x58, 0xb3, 0x40, 0xbd,
-	0xbe, 0x5a, 0x56, 0x50, 0xdf, 0x6d, 0xb3, 0xaf, 0xb1, 0xa6, 0x7e, 0x27, 0x05, 0x90, 0x5d, 0x64,
-	0x1c, 0x07, 0x2a, 0xea, 0x6e, 0x4a, 0x94, 0x43, 0x25, 0xed, 0xb3, 0x4e, 0x88, 0x2a, 0x2e, 0xad,
-	0x2a, 0xe4, 0x9c, 0x71, 0x51, 0x0f, 0x28, 0x17, 0xc8, 0x4f, 0x06, 0x28, 0x04, 0xed, 0x28, 0xc6,
-	0x7c, 0x03, 0x5b, 0x6f, 0xf1, 0xac, 0x15, 0xbb, 0xb2, 0xf1, 0x73, 0x88, 0x42, 0x12, 0x02, 0x45,
-	0x9f, 0x0e, 0xb0, 0xaa, 0xd5, 0xb4, 0x7b, 0x1b, 0x76, 0xf4, 0x4d, 0x6a, 0x50, 0x76, 0x51, 0x38,
-	0xdc, 0x0b, 0xa4, 0xc7, 0xfc, 0x6a, 0x21, 0xfa, 0x6b, 0xfe, 0xc8, 0xfc, 0x04, 0x64, 0x5e, 0x4a,
-	0x04, 0xcc, 0x17, 0x48, 0x5e, 0x43, 0x89, 0xa3, 0xc3, 0xb8, 0x1b, 0xa9, 0x95, 0x1b, 0x7b, 0xd6,
-	0xca, 0x3e, 0x5a, 0x53, 0x8d, 0x09, 0x67, 0x2b, 0xde, 0x1c, 0xc0, 0xcd, 0x16, 0xca, 0x96, 0xa4,
-	0x12, 0x13, 0xa3, 0x15, 0x28, 0x75, 0xa9, 0xef, 0xf6, 0x63, 0xab, 0x45, 0x5b, 0xfd, 0x22, 0x87,
-	0x50, 0x74, 0xa9, 0xa4, 0x91, 0xcb, 0x72, 0xc3, 0xca, 0x9e, 0xf2, 0x05, 0x95, 0xd4, 0x8e, 0x58,
-	0x33, 0x80, 0x5b, 0xb3, 0x74, 0xaa, 0x98, 0x4d, 0x28, 0xb0, 0x5e, 0x94, 0x6b, 0xdd, 0x2e, 0xb0,
-	0x1e, 0x69, 0x42, 0x29, 0x6e, 0xae, 0xca, 0xf4, 0x20, 0x5f, 0xa6, 0x97, 0x11, 0x6b, 0x2b, 0x0d,
-	0xf3, 0x3e, 0xdc, 0x7e, 0x85, 0xf2, 0x79, 0x72, 0xab, 0x2b, 0x8a, 0x34, 0x3f, 0xc0, 0xf6, 0x62,
-	0xb8, 0x32, 0xf9, 0x14, 0x36, 0xa6, 0x93, 0xa1, 0x9a, 0xbe, 0x9b, 0xe6, 0x6b, 0x46, 0xcf, 0x18,
-	0xb3, 0x0e, 0x3b, 0xef, 0x91, 0x7b, 0xa7, 0xc3, 0x77, 0xf1, 0x18, 0x8a, 0x55, 0x4e, 0x4e, 0xa1,
-	0x72, 0x11, 0x50, 0x5e, 0x9a, 0x93, 0xdb, 0x17, 0x61, 0x5f, 0x2a, 0x23, 0xa9, 0x0d, 0x7a, 0xe6,
-	0xfb, 0x6c, 0xd2, 0x6a, 0xf7, 0x98, 0xf5, 0x3d, 0x27, 0x11, 0xb2, 0x23, 0xd6, 0x56, 0x1a, 0x66,
-	0x05, 0xb6, 0x9b, 0x9e, 0x90, 0xaa, 0x83, 0x98, 0xf8, 0x32, 0x1d, 0xd8, 0xb9, 0x70, 0xae, 0xd2,
-	0x1f, 0xc1, 0xb5, 0x78, 0x78, 0x44, 0x55, 0xab, 0x5d, 0xb9, 0xd4, 0xf4, 0x25, 0x02, 0x8d, 0x5f,
-	0x57, 0x61, 0xeb, 0x78, 0x1a, 0xd5, 0x42, 0xfe, 0xc5, 0x73, 0x90, 0x0c, 0x01, 0x66, 0x43, 0x4f,
-	0xb2, 0xdc, 0xff, 0x7f, 0xeb, 0xa6, 0x3f, 0xcc, 0x49, 0xa9, 0xe2, 0xbe, 0x6b, 0x70, 0x63, 0xa1,
-	0x6c, 0x72, 0x90, 0x41, 0x68, 0x59, 0x03, 0xf5, 0xc7, 0xf9, 0x41, 0x65, 0x42, 0xc0, 0x7a, 0xb2,
-	0x25, 0xa4, 0x91, 0xa5, 0xb9, 0x8b, 0x1b, 0xac, 0xef, 0xe7, 0x62, 0x54, 0xd2, 0x6f, 0x70, 0x7d,
-	0x7e, 0xf2, 0xc9, 0xa3, 0x0c, 0x22, 0x4b, 0x36, 0x4b, 0x3f, 0xc8, 0xcd, 0x29, 0x03, 0x3f, 0x34,
-	0xd8, 0x5c, 0x9c, 0x78, 0x92, 0xa5, 0x85, 0x4b, 0xb7, 0x4a, 0x7f, 0x72, 0x09, 0x32, 0xf6, 0x71,
-	0x78, 0xf4, 0x7b, 0x64, 0x68, 0xe7, 0x23, 0x43, 0xfb, 0x3b, 0x32, 0xb4, 0x9f, 0x63, 0x63, 0xed,
-	0x7c, 0x6c, 0xac, 0xfd, 0x19, 0x1b, 0x6b, 0x1f, 0xf7, 0x3a, 0x9e, 0xec, 0x86, 0x6d, 0xcb, 0x61,
-	0x83, 0xd4, 0x57, 0xa9, 0xd7, 0x99, 0x7b, 0x99, 0xda, 0xa5, 0xe8, 0x41, 0xd8, 0xff, 0x17, 0x00,
-	0x00, 0xff, 0xff, 0x6e, 0x9d, 0x4d, 0x50, 0x1c, 0x07, 0x00, 0x00,
+	// 720 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x56, 0xcf, 0x4f, 0x13, 0x41,
+	0x14, 0x66, 0x4b, 0x53, 0xca, 0x43, 0x41, 0x46, 0x20, 0x75, 0x13, 0x1b, 0xdc, 0x18, 0xf5, 0xe2,
+	0x96, 0x14, 0x15, 0x8d, 0x5e, 0x44, 0x89, 0x4a, 0x08, 0x21, 0x5b, 0xf5, 0x60, 0xa2, 0x64, 0x98,
+	0x1d, 0xda, 0x4d, 0xb7, 0x3b, 0xeb, 0xcc, 0x2c, 0xd8, 0x93, 0x89, 0x89, 0x57, 0xe3, 0x89, 0x3f,
+	0xc6, 0xbf, 0xc0, 0x23, 0x47, 0x8f, 0x06, 0xfe, 0x11, 0xd3, 0xdd, 0xd9, 0x76, 0x0b, 0xdd, 0x74,
+	0x17, 0x2e, 0xde, 0xb6, 0xd3, 0xf7, 0x7d, 0xef, 0x9b, 0xef, 0xfd, 0xd8, 0x85, 0xba, 0x60, 0x01,
+	0x27, 0xd4, 0xa3, 0xf2, 0x90, 0xf1, 0x76, 0x0d, 0x13, 0x7f, 0x97, 0x30, 0x4e, 0x6b, 0xbe, 0x8b,
+	0xbb, 0x4d, 0xce, 0x02, 0xcf, 0x4e, 0x3c, 0x9a, 0x3e, 0x67, 0x92, 0xa1, 0x5b, 0x43, 0x18, 0x33,
+	0xc6, 0x98, 0x83, 0x40, 0xbd, 0x36, 0x9e, 0x56, 0x60, 0xcf, 0xde, 0x63, 0x5f, 0x22, 0x4e, 0xfd,
+	0x76, 0x0a, 0x40, 0xb6, 0x28, 0xe3, 0xb4, 0xa3, 0xa2, 0xee, 0xa4, 0x44, 0x11, 0x2c, 0xb1, 0xcb,
+	0x9a, 0x01, 0x55, 0x71, 0x69, 0xb7, 0xa2, 0x9c, 0x33, 0x2e, 0x6a, 0x3e, 0xe6, 0x82, 0xf2, 0xdd,
+	0x0e, 0x15, 0x02, 0x37, 0x15, 0xc6, 0x78, 0x03, 0xf3, 0xdb, 0xf4, 0xb0, 0x11, 0xa9, 0xb2, 0xe8,
+	0xe7, 0x80, 0x0a, 0x89, 0x10, 0x14, 0x3d, 0xdc, 0xa1, 0x15, 0x6d, 0x59, 0xbb, 0x37, 0x6d, 0x85,
+	0xcf, 0x68, 0x19, 0x66, 0x6c, 0x2a, 0x08, 0x77, 0x7c, 0xe9, 0x30, 0xaf, 0x52, 0x08, 0xff, 0x4a,
+	0x1e, 0x19, 0x9f, 0x00, 0x25, 0xa9, 0x84, 0xcf, 0x3c, 0x41, 0xd1, 0x6b, 0x28, 0x71, 0x4a, 0x18,
+	0xb7, 0x43, 0xb6, 0x99, 0xfa, 0x8a, 0x39, 0xd6, 0x47, 0xb3, 0xcf, 0xd1, 0xc3, 0x59, 0x0a, 0x6f,
+	0x74, 0x60, 0xae, 0x41, 0x65, 0x43, 0x62, 0x49, 0x63, 0xa1, 0x4b, 0x50, 0x6a, 0x61, 0xcf, 0x76,
+	0x23, 0xa9, 0x45, 0x4b, 0xfd, 0x42, 0xeb, 0x50, 0xb4, 0xb1, 0xc4, 0xa1, 0xca, 0x99, 0xba, 0x99,
+	0x3d, 0xe5, 0x4b, 0x2c, 0xb1, 0x15, 0x62, 0x8d, 0x5f, 0x1a, 0x5c, 0x1b, 0xe4, 0x53, 0xb7, 0x99,
+	0x85, 0x02, 0x6b, 0x87, 0xc9, 0xca, 0x56, 0x81, 0xb5, 0xd1, 0x16, 0x94, 0x22, 0x77, 0x55, 0xaa,
+	0x07, 0xf9, 0x52, 0x6d, 0x84, 0x58, 0x4b, 0x71, 0x24, 0xbc, 0x9a, 0xbc, 0xa4, 0x57, 0xf7, 0xe1,
+	0xfa, 0x2b, 0x2a, 0x5f, 0xc4, 0x0d, 0x32, 0xc6, 0x2f, 0xe3, 0x23, 0x2c, 0x0c, 0x87, 0xab, 0xeb,
+	0x6e, 0xc0, 0x74, 0xbf, 0xc9, 0x54, 0xfd, 0xee, 0xa6, 0x69, 0xda, 0x61, 0xae, 0x43, 0xba, 0x03,
+	0x8e, 0x01, 0xd2, 0xa8, 0xc1, 0xe2, 0x7b, 0xca, 0x9d, 0xfd, 0xee, 0xdb, 0xa8, 0xaf, 0xc5, 0x38,
+	0x3d, 0xfb, 0xb0, 0x74, 0x16, 0xa0, 0x14, 0x6d, 0xf5, 0x2c, 0x12, 0x81, 0x2b, 0x95, 0x9c, 0x54,
+	0xc3, 0x9f, 0x7b, 0x1e, 0xeb, 0x95, 0xce, 0x8e, 0x74, 0x29, 0x22, 0x2b, 0xc4, 0x5a, 0x8a, 0xc3,
+	0x58, 0x82, 0x85, 0x2d, 0x47, 0x48, 0xe5, 0x21, 0x8d, 0x75, 0x19, 0x04, 0x16, 0xcf, 0x9c, 0xab,
+	0xf4, 0x9b, 0x30, 0x15, 0x39, 0x2c, 0x2a, 0xda, 0xf2, 0xe4, 0x85, 0x4a, 0x14, 0x13, 0x18, 0x75,
+	0xa8, 0x58, 0x54, 0x48, 0xc6, 0x69, 0x83, 0x70, 0x2c, 0x49, 0xcb, 0xc7, 0xf6, 0x38, 0x63, 0xda,
+	0x70, 0x63, 0x04, 0x46, 0x89, 0xdb, 0x06, 0x10, 0xfd, 0x53, 0xe5, 0x4f, 0xde, 0xde, 0x4f, 0x30,
+	0x18, 0xef, 0x60, 0xae, 0xe1, 0x74, 0x02, 0x37, 0x31, 0x70, 0xf1, 0x60, 0x69, 0x97, 0x18, 0xac,
+	0xa3, 0x42, 0x92, 0x37, 0x92, 0x7e, 0x13, 0xe0, 0x00, 0xbb, 0x8e, 0xbd, 0xdb, 0x67, 0x2f, 0x5b,
+	0xd3, 0xe1, 0x49, 0x0f, 0xf8, 0xbf, 0x8e, 0x59, 0xa2, 0x1b, 0x8b, 0x97, 0xef, 0xc6, 0xfa, 0xd1,
+	0x14, 0xcc, 0xef, 0xf4, 0x53, 0x36, 0x28, 0x3f, 0x70, 0x08, 0x45, 0x5d, 0x80, 0xc1, 0x5a, 0x45,
+	0x59, 0x6e, 0x7e, 0x6e, 0xa1, 0xeb, 0x0f, 0x73, 0xa2, 0x54, 0x43, 0x7d, 0xd3, 0xe0, 0xea, 0xd0,
+	0x1c, 0xa0, 0xb5, 0x0c, 0x44, 0xa3, 0x26, 0x4a, 0x7f, 0x9c, 0x1f, 0xa8, 0x44, 0x08, 0x28, 0xc7,
+	0x6b, 0x18, 0xd5, 0xb3, 0x54, 0x6a, 0xf8, 0x1d, 0xa1, 0xaf, 0xe6, 0xc2, 0xa8, 0xa4, 0x3f, 0x34,
+	0x98, 0x3f, 0x37, 0x68, 0xe8, 0x69, 0x06, 0xaa, 0xb4, 0x91, 0xd6, 0x9f, 0x5d, 0x0c, 0xac, 0x04,
+	0x7d, 0x85, 0x2b, 0xc9, 0x0d, 0x8d, 0x1e, 0x65, 0x60, 0x1b, 0xf1, 0x06, 0xd0, 0xd7, 0x72, 0xe3,
+	0x94, 0x80, 0xef, 0x1a, 0xcc, 0x0e, 0xef, 0x64, 0x94, 0xa5, 0xa6, 0x23, 0xf7, 0xbe, 0xfe, 0xe4,
+	0x02, 0x48, 0xa5, 0x83, 0x43, 0x39, 0x5e, 0x1e, 0xd9, 0xda, 0x61, 0x78, 0x83, 0xe9, 0xf9, 0x30,
+	0x61, 0xce, 0xf5, 0xcd, 0xdf, 0x27, 0x55, 0xed, 0xf8, 0xa4, 0xaa, 0xfd, 0x3d, 0xa9, 0x6a, 0x3f,
+	0x4f, 0xab, 0x13, 0xc7, 0xa7, 0xd5, 0x89, 0x3f, 0xa7, 0xd5, 0x89, 0x0f, 0x2b, 0x4d, 0x47, 0xb6,
+	0x82, 0x3d, 0x93, 0xb0, 0x4e, 0xea, 0xc7, 0x5f, 0xbb, 0x99, 0xf8, 0x00, 0xdc, 0x2b, 0x85, 0xdf,
+	0x5d, 0xab, 0xff, 0x02, 0x00, 0x00, 0xff, 0xff, 0x3d, 0x81, 0x92, 0xa2, 0x83, 0x0a, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -570,10 +793,16 @@ type PlaygroundServiceClient interface {
 	ListSandboxes(ctx context.Context, in *ListSandboxesRequest, opts ...grpc.CallOption) (*ListSandboxesResponse, error)
 	// SetState updates the state of a Sandbox environment with the newly provided data
 	SetState(ctx context.Context, in *SetStateRequest, opts ...grpc.CallOption) (*SetStateResponse, error)
+	// RestoreScratchpad restores the data in scratchpad to match the currently loaded sandbox state
+	RestoreScratchpad(ctx context.Context, in *RestoreScratchpadRequest, opts ...grpc.CallOption) (*RestoreScratchpadResponse, error)
 	// GetCatalogue returns the catalogue (index/LUT) of defined entities within a sandbox
 	GetCatalogue(ctx context.Context, in *GetCatalogueRequest, opts ...grpc.CallOption) (*GetCatalogueResponse, error)
 	// VerifyTheorems executes the defined test suite for a sandbox
 	VerifyTheorems(ctx context.Context, in *VerifyTheoremsRequest, opts ...grpc.CallOption) (*VerifyTheoremsResponse, error)
+	// Simulate receives Sandbox state data and a theorem, creates an ephemeral sandbox
+	// evaluates the given theorem against the sandbox's policy and returns the result
+	// Simulate is a oneshot operation and persists no state in the process.
+	Simulate(ctx context.Context, in *SimulateRequest, opts ...grpc.CallOption) (*SimulateReponse, error)
 }
 
 type playgroundServiceClient struct {
@@ -611,6 +840,15 @@ func (c *playgroundServiceClient) SetState(ctx context.Context, in *SetStateRequ
 	return out, nil
 }
 
+func (c *playgroundServiceClient) RestoreScratchpad(ctx context.Context, in *RestoreScratchpadRequest, opts ...grpc.CallOption) (*RestoreScratchpadResponse, error) {
+	out := new(RestoreScratchpadResponse)
+	err := c.cc.Invoke(ctx, "/sourcenetwork.acp_core.playground.PlaygroundService/RestoreScratchpad", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *playgroundServiceClient) GetCatalogue(ctx context.Context, in *GetCatalogueRequest, opts ...grpc.CallOption) (*GetCatalogueResponse, error) {
 	out := new(GetCatalogueResponse)
 	err := c.cc.Invoke(ctx, "/sourcenetwork.acp_core.playground.PlaygroundService/GetCatalogue", in, out, opts...)
@@ -629,6 +867,15 @@ func (c *playgroundServiceClient) VerifyTheorems(ctx context.Context, in *Verify
 	return out, nil
 }
 
+func (c *playgroundServiceClient) Simulate(ctx context.Context, in *SimulateRequest, opts ...grpc.CallOption) (*SimulateReponse, error) {
+	out := new(SimulateReponse)
+	err := c.cc.Invoke(ctx, "/sourcenetwork.acp_core.playground.PlaygroundService/Simulate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PlaygroundServiceServer is the server API for PlaygroundService service.
 type PlaygroundServiceServer interface {
 	// NewSandbox creates a new isolated execution environment in the Service
@@ -638,10 +885,16 @@ type PlaygroundServiceServer interface {
 	ListSandboxes(context.Context, *ListSandboxesRequest) (*ListSandboxesResponse, error)
 	// SetState updates the state of a Sandbox environment with the newly provided data
 	SetState(context.Context, *SetStateRequest) (*SetStateResponse, error)
+	// RestoreScratchpad restores the data in scratchpad to match the currently loaded sandbox state
+	RestoreScratchpad(context.Context, *RestoreScratchpadRequest) (*RestoreScratchpadResponse, error)
 	// GetCatalogue returns the catalogue (index/LUT) of defined entities within a sandbox
 	GetCatalogue(context.Context, *GetCatalogueRequest) (*GetCatalogueResponse, error)
 	// VerifyTheorems executes the defined test suite for a sandbox
 	VerifyTheorems(context.Context, *VerifyTheoremsRequest) (*VerifyTheoremsResponse, error)
+	// Simulate receives Sandbox state data and a theorem, creates an ephemeral sandbox
+	// evaluates the given theorem against the sandbox's policy and returns the result
+	// Simulate is a oneshot operation and persists no state in the process.
+	Simulate(context.Context, *SimulateRequest) (*SimulateReponse, error)
 }
 
 // UnimplementedPlaygroundServiceServer can be embedded to have forward compatible implementations.
@@ -657,11 +910,17 @@ func (*UnimplementedPlaygroundServiceServer) ListSandboxes(ctx context.Context, 
 func (*UnimplementedPlaygroundServiceServer) SetState(ctx context.Context, req *SetStateRequest) (*SetStateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetState not implemented")
 }
+func (*UnimplementedPlaygroundServiceServer) RestoreScratchpad(ctx context.Context, req *RestoreScratchpadRequest) (*RestoreScratchpadResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RestoreScratchpad not implemented")
+}
 func (*UnimplementedPlaygroundServiceServer) GetCatalogue(ctx context.Context, req *GetCatalogueRequest) (*GetCatalogueResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCatalogue not implemented")
 }
 func (*UnimplementedPlaygroundServiceServer) VerifyTheorems(ctx context.Context, req *VerifyTheoremsRequest) (*VerifyTheoremsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method VerifyTheorems not implemented")
+}
+func (*UnimplementedPlaygroundServiceServer) Simulate(ctx context.Context, req *SimulateRequest) (*SimulateReponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Simulate not implemented")
 }
 
 func RegisterPlaygroundServiceServer(s grpc1.Server, srv PlaygroundServiceServer) {
@@ -722,6 +981,24 @@ func _PlaygroundService_SetState_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PlaygroundService_RestoreScratchpad_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RestoreScratchpadRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PlaygroundServiceServer).RestoreScratchpad(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sourcenetwork.acp_core.playground.PlaygroundService/RestoreScratchpad",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PlaygroundServiceServer).RestoreScratchpad(ctx, req.(*RestoreScratchpadRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _PlaygroundService_GetCatalogue_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetCatalogueRequest)
 	if err := dec(in); err != nil {
@@ -758,6 +1035,24 @@ func _PlaygroundService_VerifyTheorems_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PlaygroundService_Simulate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SimulateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PlaygroundServiceServer).Simulate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sourcenetwork.acp_core.playground.PlaygroundService/Simulate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PlaygroundServiceServer).Simulate(ctx, req.(*SimulateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _PlaygroundService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "sourcenetwork.acp_core.playground.PlaygroundService",
 	HandlerType: (*PlaygroundServiceServer)(nil),
@@ -775,12 +1070,20 @@ var _PlaygroundService_serviceDesc = grpc.ServiceDesc{
 			Handler:    _PlaygroundService_SetState_Handler,
 		},
 		{
+			MethodName: "RestoreScratchpad",
+			Handler:    _PlaygroundService_RestoreScratchpad_Handler,
+		},
+		{
 			MethodName: "GetCatalogue",
 			Handler:    _PlaygroundService_GetCatalogue_Handler,
 		},
 		{
 			MethodName: "VerifyTheorems",
 			Handler:    _PlaygroundService_VerifyTheorems_Handler,
+		},
+		{
+			MethodName: "Simulate",
+			Handler:    _PlaygroundService_Simulate_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -919,6 +1222,18 @@ func (m *SetStateResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.Record != nil {
+		{
+			size, err := m.Record.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPlayground(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
 	if m.Errors != nil {
 		{
 			size, err := m.Errors.MarshalToSizedBuffer(dAtA[:i])
@@ -1130,6 +1445,173 @@ func (m *ListSandboxesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *RestoreScratchpadRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RestoreScratchpadRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RestoreScratchpadRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Handle != 0 {
+		i = encodeVarintPlayground(dAtA, i, uint64(m.Handle))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RestoreScratchpadResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RestoreScratchpadResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RestoreScratchpadResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Scratchpad != nil {
+		{
+			size, err := m.Scratchpad.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPlayground(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SimulateRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SimulateRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SimulateRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Data != nil {
+		{
+			size, err := m.Data.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPlayground(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SimulateReponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SimulateReponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SimulateReponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Result != nil {
+		{
+			size, err := m.Result.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPlayground(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.Record != nil {
+		{
+			size, err := m.Record.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPlayground(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Errors != nil {
+		{
+			size, err := m.Errors.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPlayground(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.ValidData {
+		i--
+		if m.ValidData {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintPlayground(dAtA []byte, offset int, v uint64) int {
 	offset -= sovPlayground(v)
 	base := offset
@@ -1198,6 +1680,10 @@ func (m *SetStateResponse) Size() (n int) {
 	}
 	if m.Errors != nil {
 		l = m.Errors.Size()
+		n += 1 + l + sovPlayground(uint64(l))
+	}
+	if m.Record != nil {
+		l = m.Record.Size()
 		n += 1 + l + sovPlayground(uint64(l))
 	}
 	return n
@@ -1273,6 +1759,68 @@ func (m *ListSandboxesResponse) Size() (n int) {
 			l = e.Size()
 			n += 1 + l + sovPlayground(uint64(l))
 		}
+	}
+	return n
+}
+
+func (m *RestoreScratchpadRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Handle != 0 {
+		n += 1 + sovPlayground(uint64(m.Handle))
+	}
+	return n
+}
+
+func (m *RestoreScratchpadResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Scratchpad != nil {
+		l = m.Scratchpad.Size()
+		n += 1 + l + sovPlayground(uint64(l))
+	}
+	return n
+}
+
+func (m *SimulateRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Data != nil {
+		l = m.Data.Size()
+		n += 1 + l + sovPlayground(uint64(l))
+	}
+	return n
+}
+
+func (m *SimulateReponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ValidData {
+		n += 2
+	}
+	if m.Errors != nil {
+		l = m.Errors.Size()
+		n += 1 + l + sovPlayground(uint64(l))
+	}
+	if m.Record != nil {
+		l = m.Record.Size()
+		n += 1 + l + sovPlayground(uint64(l))
+	}
+	if m.Result != nil {
+		l = m.Result.Size()
+		n += 1 + l + sovPlayground(uint64(l))
 	}
 	return n
 }
@@ -1673,6 +2221,42 @@ func (m *SetStateResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Record", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Record == nil {
+				m.Record = &SandboxRecord{}
+			}
+			if err := m.Record.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPlayground(dAtA[iNdEx:])
@@ -1822,7 +2406,7 @@ func (m *GetCatalogueResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Catalogue == nil {
-				m.Catalogue = &types.Catalogue{}
+				m.Catalogue = &types.PolicyCatalogue{}
 			}
 			if err := m.Catalogue.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -2114,6 +2698,425 @@ func (m *ListSandboxesResponse) Unmarshal(dAtA []byte) error {
 			}
 			m.Records = append(m.Records, &SandboxRecord{})
 			if err := m.Records[len(m.Records)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPlayground(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RestoreScratchpadRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPlayground
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RestoreScratchpadRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RestoreScratchpadRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Handle", wireType)
+			}
+			m.Handle = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Handle |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPlayground(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RestoreScratchpadResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPlayground
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RestoreScratchpadResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RestoreScratchpadResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Scratchpad", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Scratchpad == nil {
+				m.Scratchpad = &SandboxData{}
+			}
+			if err := m.Scratchpad.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPlayground(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SimulateRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPlayground
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SimulateRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SimulateRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Data == nil {
+				m.Data = &SandboxData{}
+			}
+			if err := m.Data.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPlayground(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SimulateReponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPlayground
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SimulateReponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SimulateReponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ValidData", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.ValidData = bool(v != 0)
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Errors", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Errors == nil {
+				m.Errors = &SandboxDataErrors{}
+			}
+			if err := m.Errors.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Record", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Record == nil {
+				m.Record = &SandboxRecord{}
+			}
+			if err := m.Record.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Result == nil {
+				m.Result = &types.AnnotatedPolicyTheoremResult{}
+			}
+			if err := m.Result.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

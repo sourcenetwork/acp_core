@@ -14,23 +14,28 @@ import (
 	_ "github.com/sourcenetwork/acp_core/test"
 )
 
+var noopTheorem = `
+Authorizations {}
+Delegations {}
+`
+
 var setupData = &playground.SandboxData{
 	PolicyDefinition: `
 				name: test
 				resources:
 				  file:
 				    relations:
-					  - owner:
-					      types:
-						    - actor
-					  - reader:
-					      types:
-						    - actor
+					  owner:
+					    types:
+						  - actor
+					  reader:
+					    types:
+						  - actor
 				    permissions:
-					  - read:
-					      expr: owner + reader
-					  - write:
-					      expr: owner
+					  read:
+					    expr: owner + reader
+					  write:
+					    expr: owner
 				`,
 	Relationships: `
 				file:readme#owner@did:example:bob
@@ -106,32 +111,20 @@ func Test_NewSandbox_CanCreateSandboxWithoutDescription(t *testing.T) {
 	a.Run(ctx)
 }
 
-func Test_SetState_EmptyTheoremIsAccepted(t *testing.T) {
+func Test_SetState_EmptyTheoremErrors(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
-	new := NewSandbox{
-		Req: &playground.NewSandboxRequest{
-			Name:        "test",
-			Description: "",
+	a1 := NewAndSet{
+		Data: &playground.SandboxData{
+			PolicyDefinition: `name: test`,
+			Relationships:    ``,
+			PolicyTheorem:    "",
+		},
+		Assertions: []Assertion{
+			HasTheoremError("mismatched input"),
 		},
 	}
-	resp := new.Run(ctx)
-
-	a := SetState{
-		Req: &playground.SetStateRequest{
-			Handle: resp.Record.Handle,
-			Data: &playground.SandboxData{
-				PolicyDefinition: `name: test`,
-				Relationships:    "",
-				PolicyTheorem:    "",
-			},
-		},
-		Expected: &playground.SetStateResponse{
-			Ok:     true,
-			Errors: &playground.SandboxDataErrors{},
-		},
-	}
-	a.Run(ctx)
+	a1.Run(ctx)
 }
 
 func Test_Evaluate_SandboxWithEmptyTheoremOk(t *testing.T) {
@@ -141,7 +134,7 @@ func Test_Evaluate_SandboxWithEmptyTheoremOk(t *testing.T) {
 		Data: &playground.SandboxData{
 			PolicyDefinition: `name: test`,
 			Relationships:    ``,
-			PolicyTheorem:    ``,
+			PolicyTheorem:    noopTheorem,
 		},
 	}
 	handle := a1.Run(ctx)
@@ -152,7 +145,10 @@ func Test_Evaluate_SandboxWithEmptyTheoremOk(t *testing.T) {
 		},
 		Expected: &playground.VerifyTheoremsResponse{
 			Result: &types.AnnotatedPolicyTheoremResult{
-				Theorem: &types.PolicyTheorem{},
+				Theorem: &types.PolicyTheorem{
+					AuthorizationTheorems: make([]*types.AuthorizationTheorem, 0),
+					DelegationTheorems:    make([]*types.DelegationTheorem, 0),
+				},
 			},
 		},
 	}
@@ -162,18 +158,14 @@ func Test_Evaluate_SandboxWithEmptyTheoremOk(t *testing.T) {
 func Test_Evaluate_UninitializedSandboxCannotBeEvaluated(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
-	a1 := NewAndSet{
-		Data: &playground.SandboxData{
-			PolicyDefinition: `name: test`,
-			Relationships:    ``,
-			PolicyTheorem:    ``,
-		},
+	a1 := NewSandbox{
+		Req: &playground.NewSandboxRequest{},
 	}
 	handle := a1.Run(ctx)
 
 	a := VerifyTheorems{
 		Req: &playground.VerifyTheoremsRequest{
-			Handle: handle,
+			Handle: handle.Record.Handle,
 		},
 		ExpectedErr: errors.ErrorType_OPERATION_FORBIDDEN,
 	}
@@ -181,7 +173,52 @@ func Test_Evaluate_UninitializedSandboxCannotBeEvaluated(t *testing.T) {
 }
 
 func Test_ListSandboxes_ReturnsExistingSandboxes(t *testing.T) {
+	ctx := test.NewTestCtx(t)
 
+	a := NewAndSet{
+		Data: &playground.SandboxData{
+			PolicyDefinition: `name: test1`,
+			Relationships:    ``,
+			PolicyTheorem:    noopTheorem,
+		},
+	}
+	a.Run(ctx)
+
+	a = NewAndSet{
+		Data: &playground.SandboxData{
+			PolicyDefinition: `name: test2`,
+			Relationships:    ``,
+			PolicyTheorem:    noopTheorem,
+		},
+	}
+	a.Run(ctx)
+
+	action := ListSandboxes{
+		Req: &playground.ListSandboxesRequest{},
+		Expected: &playground.ListSandboxesResponse{
+			Records: []*playground.SandboxRecord{
+				{
+					Handle:      1,
+					Name:        "test1",
+					Description: "",
+					Data:        nil,
+					Scratchpad:  nil,
+					Ctx:         nil,
+					Initialized: false,
+				},
+				{
+					Handle:      2,
+					Name:        "test2",
+					Description: "",
+					Data:        nil,
+					Scratchpad:  nil,
+					Ctx:         nil,
+					Initialized: false,
+				},
+			},
+		},
+	}
+	action.Run(ctx)
 }
 
 func Test_SetState_SettingValidStateReturnsOk(t *testing.T) {
@@ -200,22 +237,21 @@ func Test_SetState_SettingValidStateReturnsOk(t *testing.T) {
 			Handle: resp.Record.Handle,
 			Data: &playground.SandboxData{
 				PolicyDefinition: `
-				name: test
-				resources:
-				  file:
-				    relations:
-					  - owner:
-					      types:
-						    - actor
-					  - reader:
-					      types:
-						    - actor
-				    permissions:
-					  - read:
-					      expr: owner + reader
-					  - write:
-					      expr: owner
-				`,
+                name: test
+                resources:
+                  file:
+                    relations:
+                      owner:
+                        types:
+                          - actor
+                      reader:
+                        types:
+                          - actor
+                    permissions:
+                      read:
+                        expr: owner + reader
+                      write:
+                        expr: owner`,
 				Relationships: `
 				file:readme#owner@did:example:bob
 				file:readme#reader@did:example:alice
@@ -232,10 +268,6 @@ func Test_SetState_SettingValidStateReturnsOk(t *testing.T) {
 				ImpliedRelations {}
 				`,
 			},
-		},
-		Expected: &playground.SetStateResponse{
-			Ok:     true,
-			Errors: &playground.SandboxDataErrors{},
 		},
 	}
 	a.Run(ctx)
@@ -254,7 +286,29 @@ func Test_GetCatalogue_ReturnsSandboxCatalogue(t *testing.T) {
 			Handle: handle,
 		},
 		Expected: &playground.GetCatalogueResponse{
-			Catalogue: &types.Catalogue{},
+			Catalogue: &types.PolicyCatalogue{
+				ActorResourceName: "actor",
+				ResourceCatalogue: map[string]*types.ResourceCatalogue{
+					"file": &types.ResourceCatalogue{
+						Permissions: []string{
+							"read",
+							"write",
+							"_can_manage_owner",
+							"_can_manage_reader",
+						},
+						Relations: []string{
+							"owner",
+							"reader",
+						},
+						ObjectIds: []string{
+							"readme",
+						},
+					},
+				},
+				Actors: []string{
+					"did:example:bob",
+				},
+			},
 		},
 	}
 	a.Run(ctx)

@@ -36,7 +36,7 @@ func (r *CounterStore) getStore() rcdb.KVStore {
 func (r *CounterStore) GetNext(ctx context.Context) (uint64, error) {
 	kv := r.getStore()
 
-	var currID uint64 = 1
+	var currID uint64 = 0
 	counter, err := kv.Get([]byte(key))
 	if err != nil {
 		return 0, err

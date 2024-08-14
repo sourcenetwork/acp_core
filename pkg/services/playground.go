@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/sourcenetwork/acp_core/internal/sandbox"
+	"github.com/sourcenetwork/acp_core/internal/simulator"
 	"github.com/sourcenetwork/acp_core/pkg/playground"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 )
@@ -38,4 +39,12 @@ func (s *playgroundService) GetCatalogue(ctx context.Context, req *playground.Ge
 }
 func (s *playgroundService) VerifyTheorems(ctx context.Context, req *playground.VerifyTheoremsRequest) (*playground.VerifyTheoremsResponse, error) {
 	return sandbox.HandleVerifyTheorem(ctx, s.runtime, req)
+}
+
+func (s *playgroundService) RestoreScratchpad(ctx context.Context, req *playground.RestoreScratchpadRequest) (*playground.RestoreScratchpadResponse, error) {
+	return sandbox.HandleRestoreScratchpad(ctx, s.runtime, req)
+}
+
+func (s *playgroundService) Simulate(ctx context.Context, req *playground.SimulateRequest) (*playground.SimulateReponse, error) {
+	return simulator.HandleSimulate(ctx, s.runtime, req)
 }

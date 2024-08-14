@@ -3,6 +3,7 @@ package playground
 import (
 	"github.com/sourcenetwork/acp_core/pkg/playground"
 	"github.com/sourcenetwork/acp_core/test"
+	"github.com/stretchr/testify/require"
 )
 
 type NewSandbox struct {
@@ -31,13 +32,29 @@ func (a *ListSandboxes) Run(ctx *test.TestCtx) *playground.ListSandboxesResponse
 
 type SetState struct {
 	Req         *playground.SetStateRequest
-	Expected    *playground.SetStateResponse
 	ExpectedErr error
+	Assertions  []Assertion
 }
 
 func (a *SetState) Run(ctx *test.TestCtx) *playground.SetStateResponse {
 	resp, err := ctx.Playground.SetState(ctx, a.Req)
-	test.AssertResults(ctx, resp, a.Expected, err, a.ExpectedErr)
+	if a.ExpectedErr != nil {
+		require.ErrorIs(ctx.T, err, a.ExpectedErr)
+		return nil
+	} else {
+		require.NoError(ctx.T, err)
+	}
+
+	if a.Assertions == nil || len(a.Assertions) == 0 {
+		require.True(ctx.T, resp.Ok)
+		require.Equal(ctx.T, &playground.SandboxDataErrors{}, resp.Errors)
+		return resp
+	}
+
+	for _, assertion := range a.Assertions {
+		assertion(ctx.T, resp.Errors)
+	}
+
 	return resp
 }
 
@@ -67,7 +84,8 @@ func (a *VerifyTheorems) Run(ctx *test.TestCtx) *playground.VerifyTheoremsRespon
 }
 
 type NewAndSet struct {
-	Data *playground.SandboxData
+	Data       *playground.SandboxData
+	Assertions []Assertion
 }
 
 func (a *NewAndSet) Run(ctx *test.TestCtx) uint64 {
@@ -81,6 +99,7 @@ func (a *NewAndSet) Run(ctx *test.TestCtx) uint64 {
 			Handle: resp.Record.Handle,
 			Data:   a.Data,
 		},
+		Assertions: a.Assertions,
 	}
 	a2.Run(ctx)
 

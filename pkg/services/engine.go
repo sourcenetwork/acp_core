@@ -137,6 +137,9 @@ func (s *acpEngine) GetParams(ctx context.Context, req *types.GetParamsRequest) 
 	return applyMiddleware(ctx, h, s.hooks, req)
 }
 
-func (s *acpEngine) Simulate(ctx context.Context, req *types.SimulateRequest) (*types.SimulateResponse, error) {
+func (s *acpEngine) EvaluateTheorem(ctx context.Context, req *types.EvaluateTheoremRequest) (*types.EvaluateTheoremResponse, error) {
+	return nil, nil
+}
+func (s *acpEngine) GetPolicyCatalogue(ctx context.Context, req *types.GetPolicyCatalogueRequest) (*types.GetPolicyCatalogueResponse, error) {
 	return nil, nil
 }

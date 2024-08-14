@@ -20,11 +20,19 @@ service PlaygroundService {
     // SetState updates the state of a Sandbox environment with the newly provided data
     rpc SetState (SetStateRequest) returns (SetStateResponse);
 
+    // RestoreScratchpad restores the data in scratchpad to match the currently loaded sandbox state
+    rpc RestoreScratchpad (RestoreScratchpadRequest) returns (RestoreScratchpadResponse);
+
     // GetCatalogue returns the catalogue (index/LUT) of defined entities within a sandbox
     rpc GetCatalogue (GetCatalogueRequest) returns (GetCatalogueResponse);
 
     // VerifyTheorems executes the defined test suite for a sandbox
     rpc VerifyTheorems (VerifyTheoremsRequest) returns (VerifyTheoremsResponse);
+
+    // Simulate receives Sandbox state data and a theorem, creates an ephemeral sandbox
+    // evaluates the given theorem against the sandbox's policy and returns the result
+    // Simulate is a oneshot operation and persists no state in the process.
+    rpc Simulate (SimulateRequest) returns (SimulateReponse);
 
     // Check runs a Check operation with the provided data for the context of a sandbox.
     // A Check call is used to verify whether some actor is authorized to act on a some object
@@ -73,6 +81,7 @@ message SetStateResponse {
     // ok indicates the state updated sucessfuly
     bool ok = 1;
     SandboxDataErrors errors = 2;
+    SandboxRecord record = 3;
 }
 
 message GetCatalogueRequest {
@@ -82,7 +91,7 @@ message GetCatalogueRequest {
 
 message GetCatalogueResponse {
     // catalogue for the state of the given sandbox
-    sourcenetwork.acp_core.Catalogue catalogue = 1;
+    sourcenetwork.acp_core.PolicyCatalogue catalogue = 1;
 }
 
 message VerifyTheoremsRequest {
@@ -99,6 +108,28 @@ message ListSandboxesRequest {
 
 message ListSandboxesResponse { 
     repeated SandboxRecord records = 1;
+}
+
+message RestoreScratchpadRequest {
+    // handle to an existing sandbox
+    uint64 handle = 1;
+}
+
+message RestoreScratchpadResponse {
+    // scratchpad contains the data in the restored scratchpad
+    SandboxData scratchpad = 1;
+}
+
+message SimulateRequest {
+    // data to set in the sandbox
+    SandboxData data = 1;
+}
+
+message SimulateReponse {
+    bool valid_data = 1;
+    SandboxDataErrors errors = 2;
+    SandboxRecord record = 3;
+    sourcenetwork.acp_core.AnnotatedPolicyTheoremResult result = 4;
 }
 
 
