@@ -12,7 +12,7 @@ func TestCounterStore(t *testing.T) {
 	manager, err := runtime.NewRuntimeManager()
 	require.NoError(t, err)
 
-	counter := NewCounterStore(manager, "")
+	counter := NewCounterStoreFromRunetimeManager(manager, "")
 
 	ctx := context.TODO()
 

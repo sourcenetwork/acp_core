@@ -5,6 +5,7 @@ import (
 
 	prototypes "github.com/cosmos/gogoproto/types"
 
+	"github.com/sourcenetwork/acp_core/internal/authorizer"
 	"github.com/sourcenetwork/acp_core/internal/policy"
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
 	"github.com/sourcenetwork/acp_core/pkg/auth"
@@ -224,7 +225,7 @@ func (c *UnregisterObjectHandler) Execute(ctx context.Context, runtime runtime.R
 		}, nil // noop when object is archived
 	}
 
-	authorizer := NewRelationshipAuthorizer(engine)
+	authorizer := authorizer.NewOperationAuthorizer(engine)
 
 	mutateOwnerOperation := types.Operation{
 		Object:     cmd.Object,

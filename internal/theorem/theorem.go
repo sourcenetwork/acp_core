@@ -3,8 +3,8 @@ package theorem
 import (
 	"context"
 
+	"github.com/sourcenetwork/acp_core/internal/authorizer"
 	"github.com/sourcenetwork/acp_core/internal/parser"
-	"github.com/sourcenetwork/acp_core/internal/relationship"
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
@@ -53,7 +53,7 @@ func (e *Evaluator) evaluateReacheabilityTheorem(ctx context.Context, polId *typ
 }
 
 func (e *Evaluator) evalDelegationTheorem(ctx context.Context, polId *types.Policy, theorem *types.DelegationTheorem) (*types.DelegationTheoremResult, error) {
-	authorizer := relationship.NewRelationshipAuthorizer(e.zanzi)
+	authorizer := authorizer.NewOperationAuthorizer(e.zanzi)
 	authorized, err := authorizer.IsAuthorized(ctx, polId, theorem.Operation, theorem.Actor)
 	if err != nil {
 		// if error is not internal, then user might've supplied invalid data

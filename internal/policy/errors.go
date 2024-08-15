@@ -12,3 +12,11 @@ var (
 	ErrResourceMissingOwnerRelation = errors.Wrap("resource missing owner relation: %w", errors.ErrInvalidPolicy)
 	ErrInvalidManagementRule        = errors.Wrap("invalid relation managamente definition: %w", errors.ErrInvalidPolicy)
 )
+
+func newEvaluateTheoremErr(err error) error {
+	return errors.Wrap("evaluate theorem failed", err)
+}
+
+func newPolicyCatalogueErr(err error) error {
+	return errors.Wrap("get policy catalogue failed", err)
+}

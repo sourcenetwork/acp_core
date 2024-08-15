@@ -3,6 +3,7 @@ package relationship
 import (
 	"context"
 
+	"github.com/sourcenetwork/acp_core/internal/authorizer"
 	"github.com/sourcenetwork/acp_core/internal/policy"
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
 	"github.com/sourcenetwork/acp_core/pkg/auth"
@@ -26,7 +27,7 @@ func (c *SetRelationshipHandler) Execute(ctx context.Context, runtime runtime.Ru
 	}
 	did := principal.Identifier()
 
-	authorizer := NewRelationshipAuthorizer(engine)
+	authorizer := authorizer.NewOperationAuthorizer(engine)
 
 	rec, err := engine.GetPolicy(ctx, cmd.PolicyId)
 	if err != nil {
@@ -131,7 +132,7 @@ func (c *DeleteRelationshipHandler) Execute(ctx context.Context, runtime runtime
 	}
 	did := principal.Identifier()
 
-	authorizer := NewRelationshipAuthorizer(engine)
+	authorizer := authorizer.NewOperationAuthorizer(engine)
 
 	err = c.validate(cmd)
 	if err != nil {
@@ -178,7 +179,7 @@ func (c *DeleteRelationshipHandler) validate(cmd *types.DeleteRelationshipReques
 }
 
 // verifies whether actor is authorized to remove the specified Relationship
-func (c *DeleteRelationshipHandler) isActorAuthorized(ctx context.Context, authorizer *RelationshipAuthorizer, policy *types.Policy, cmd *types.DeleteRelationshipRequest, initiator string) (bool, error) {
+func (c *DeleteRelationshipHandler) isActorAuthorized(ctx context.Context, authorizer *authorizer.OperationAuthorizer, policy *types.Policy, cmd *types.DeleteRelationshipRequest, initiator string) (bool, error) {
 	creatorActor := types.Actor{
 		Id: initiator,
 	}

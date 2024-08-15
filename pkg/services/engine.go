@@ -138,7 +138,10 @@ func (s *acpEngine) GetParams(ctx context.Context, req *types.GetParamsRequest) 
 }
 
 func (s *acpEngine) EvaluateTheorem(ctx context.Context, req *types.EvaluateTheoremRequest) (*types.EvaluateTheoremResponse, error) {
-	return nil, nil
+	h := func(ctx context.Context, msg *types.EvaluateTheoremRequest) (*types.EvaluateTheoremResponse, error) {
+		return policy.EvaluateTheorem(ctx, s.runtime, msg)
+	}
+	return applyMiddleware(ctx, h, s.hooks, req)
 }
 func (s *acpEngine) GetPolicyCatalogue(ctx context.Context, req *types.GetPolicyCatalogueRequest) (*types.GetPolicyCatalogueResponse, error) {
 	return nil, nil

@@ -1,4 +1,4 @@
-package relationship
+package authorizer
 
 import (
 	"context"
@@ -8,13 +8,13 @@ import (
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
-func NewRelationshipAuthorizer(engine *zanzi.Adapter) *RelationshipAuthorizer {
-	return &RelationshipAuthorizer{
+func NewOperationAuthorizer(engine *zanzi.Adapter) *OperationAuthorizer {
+	return &OperationAuthorizer{
 		engine: engine,
 	}
 }
 
-// RelationshipAuthorizer acts as an Authorization Request engine
+// OperationAuthorizer acts as an Authorization Request engine
 // which validates whether a Relationship can be set or deleted by an Actor.
 //
 // The Permission evaluation is done through a Check call using the auxiliary permissions
@@ -23,7 +23,7 @@ func NewRelationshipAuthorizer(engine *zanzi.Adapter) *RelationshipAuthorizer {
 // For instance, take the Relationship (obj:foo, reader, steve) being submitted by Actor Bob.
 // Bob is allowed to Create that relationship if and only if:
 // Bob has the permission _can_manage_reader for "obj:foo".
-type RelationshipAuthorizer struct {
+type OperationAuthorizer struct {
 	engine *zanzi.Adapter
 }
 
@@ -31,7 +31,7 @@ type RelationshipAuthorizer struct {
 //
 // A given Relationship is only valid if for the Relationship's Object and Relation
 // the Actor has an associated permission to manage the Object, Relation pair.
-func (a *RelationshipAuthorizer) IsAuthorized(ctx context.Context, policy *types.Policy, operation *types.Operation, actor *types.Actor) (bool, error) {
+func (a *OperationAuthorizer) IsAuthorized(ctx context.Context, policy *types.Policy, operation *types.Operation, actor *types.Actor) (bool, error) {
 	resource := policy.GetResourceByName(operation.Object.Resource)
 	if resource == nil {
 		return false, errors.New("resource not found in policy", errors.ErrorType_NOT_FOUND,

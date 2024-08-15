@@ -8,12 +8,14 @@ import (
 
 var _ raccoon.Marshaler[gogoproto.Message] = (*GogoProtoMarshaler[gogoproto.Message])(nil)
 
+// Return a new Marshaler from a factory function which produces container objects of type T
 func NewGogoProtoMarshaler[T gogoproto.Message](factory func() T) *GogoProtoMarshaler[T] {
 	return &GogoProtoMarshaler[T]{
 		factory: factory,
 	}
 }
 
+// GogoProtoMarshaler implements Raccoon's Marshaler for cosmos gogoproto messages
 type GogoProtoMarshaler[T gogoproto.Message] struct {
 	factory func() T
 }

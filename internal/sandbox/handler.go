@@ -21,7 +21,7 @@ import (
 )
 
 func HandleNewSandboxRequest(ctx context.Context, manager runtime.RuntimeManager, req *playground.NewSandboxRequest) (*playground.NewSandboxResponse, error) {
-	counter := raccoon.NewCounterStore(manager, sandboxStorePrefix)
+	counter := raccoon.NewCounterStoreFromRunetimeManager(manager, sandboxStorePrefix)
 
 	handle, err := counter.GetNext(ctx)
 	if err != nil {
@@ -215,38 +215,6 @@ func (h *SetStateHandler) populateEngine(ctx context.Context, manager runtime.Ru
 	return h.setRelationships(ctx, engineManager, simCtx)
 }
 
-/*
-func (h *SetStateHandler) validateRelationships(ctx context.Context, manager runtime.RuntimeManager, simCtx *parsedCtx) (*playground.SandboxDataErrors, error) {
-	var declarationErrors = &playground.SandboxDataErrors{}
-
-	for _, indexedRel := range simCtx.Relationships {
-		valid, errMsg, err := relationship.ValidateRelationship(ctx, manager, simCtx.Policy.Id, indexedRel.Obj)
-		if err != nil {
-			return nil, err // TODO
-		}
-		if !valid {
-			msg := &errors.ParserMessage{
-				Message:   errMsg,
-				Sevirity:  errors.Severity_ERROR,
-				InputName: indexedRel.Obj.String(),
-				Range: &errors.BufferRange{
-					Start: &errors.BufferPosition{
-						Column: indexedRel.Range.Start.Column,
-						Line:   indexedRel.Range.Start.Line,
-					},
-					End: &errors.BufferPosition{
-						Column: indexedRel.Range.End.Column,
-						Line:   indexedRel.Range.End.Line,
-					},
-				},
-			}
-			declarationErrors.RelationshipsErrors = append(declarationErrors.RelationshipsErrors, msg)
-		}
-	}
-	return declarationErrors, nil
-}
-*/
-
 func (h *SetStateHandler) setRelationships(ctx context.Context, manager runtime.RuntimeManager, simCtx *parsedCtx) (*playground.SandboxDataErrors, error) {
 	errs := &playground.SandboxDataErrors{}
 	ownerLookup := make(map[string]auth.Principal)
@@ -362,7 +330,11 @@ func HandleGetCatalogue(ctx context.Context, manager runtime.RuntimeManager, req
 		return nil, err // TODO WRAP
 	}
 
-	catalogue, err := policy.HandleBuildCatalogue(ctx, manager, record.Ctx.Policy.Id)
+	engine, err := zanzi.NewZanzi(manager.GetKVStore(), manager.GetLogger())
+	if err != nil {
+		return nil, err // TODO
+	}
+	catalogue, err := policy.BuildCatalogue(ctx, engine, record.Ctx.Policy.Id)
 	if err != nil {
 		return nil, err // TODO wrap
 	}
