@@ -12,6 +12,7 @@ type errListener struct {
 	errors errors.ParserReport
 }
 
+// GetERror produces a ParserReport from the errors stored in the listener
 func (l *errListener) GetError() *errors.ParserReport {
 	if l.errors.Messages == nil || len(l.errors.Messages) == 0 {
 		return nil
@@ -40,7 +41,6 @@ func (l *errListener) SyntaxError(recognizer antlr.Recognizer, offendingSymbol i
 
 }
 
-// TODO maybe?
 func (l *errListener) ReportAmbiguity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex, stopIndex int, exact bool, ambigAlts *antlr.BitSet, configs *antlr.ATNConfigSet) {
 }
 

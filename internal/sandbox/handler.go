@@ -68,15 +68,15 @@ func HandleListSandboxes(ctx context.Context, manager runtime.RuntimeManager, re
 
 type parsedCtx struct {
 	PolicyDefinition string
-	Relationships    []parser.IndexedObject[*types.Relationship]
-	Theorem          *parser.IndexedPolicyTheorem
+	Relationships    []parser.LocatedObject[*types.Relationship]
+	Theorem          *parser.LocatedPolicyTheorem
 	Policy           *types.Policy
 }
 
 func (c *parsedCtx) ToCtx() *playground.SandboxCtx {
 	return &playground.SandboxCtx{
 		Policy:        c.Policy,
-		Relationships: utils.MapSlice(c.Relationships, func(o parser.IndexedObject[*types.Relationship]) *types.Relationship { return o.Obj }),
+		Relationships: utils.MapSlice(c.Relationships, func(o parser.LocatedObject[*types.Relationship]) *types.Relationship { return o.Obj }),
 		PolicyTheorem: c.Theorem.ToPolicyTheorem(),
 	}
 }
@@ -152,7 +152,7 @@ func (h *SetStateHandler) parseCtx(ctx context.Context, manager runtime.RuntimeM
 		errs.PolicyErrors = append(errs.PolicyErrors, err)
 	}
 
-	relationships, err := parser.ParseRelationshipsWithPosition(data.Relationships)
+	relationships, err := parser.ParseRelationshipsWithLocation(data.Relationships)
 	if err != nil {
 		if parserErr, ok := err.(*errors.ParserReport); ok {
 			errs.RelationshipsErrors = append(errs.RelationshipsErrors, parserErr.Messages...)
@@ -250,7 +250,7 @@ func (h *SetStateHandler) validateRelationships(ctx context.Context, manager run
 func (h *SetStateHandler) setRelationships(ctx context.Context, manager runtime.RuntimeManager, simCtx *parsedCtx) (*playground.SandboxDataErrors, error) {
 	errs := &playground.SandboxDataErrors{}
 	ownerLookup := make(map[string]auth.Principal)
-	ownerRels, rels := utils.PartitionSlice(simCtx.Relationships, func(obj parser.IndexedObject[*types.Relationship]) bool {
+	ownerRels, rels := utils.PartitionSlice(simCtx.Relationships, func(obj parser.LocatedObject[*types.Relationship]) bool {
 		return obj.Obj.Relation == policy.OwnerRelation
 	})
 

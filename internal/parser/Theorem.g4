@@ -1,10 +1,8 @@
 grammar Theorem;
 
-relationship_set: relationship*;
-
-policy_thorem: authorization_theorems delegation_theorems;
-
-term: authorization_theorems | implied_relations | delegation_theorems;
+relationship_set: relationship* EOF;
+relationship_document: relationship EOF;
+policy_thorem: authorization_theorems delegation_theorems EOF;
 
 authorization_theorems: 'Authorizations' '{' authorization_theorem* '}';
 authorization_theorem: relationship | NEGATION relationship;

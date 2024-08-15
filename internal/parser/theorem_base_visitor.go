@@ -1,4 +1,4 @@
-// Code generated from Theorem.g4 by ANTLR 4.13.1. DO NOT EDIT.
+// Code generated from ./internal/parser/Theorem.g4 by ANTLR 4.13.2. DO NOT EDIT.
 
 package parser // Theorem
 import "github.com/antlr4-go/antlr/v4"
@@ -11,11 +11,11 @@ func (v *BaseTheoremVisitor) VisitRelationship_set(ctx *Relationship_setContext)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseTheoremVisitor) VisitPolicy_thorem(ctx *Policy_thoremContext) interface{} {
+func (v *BaseTheoremVisitor) VisitRelationship_document(ctx *Relationship_documentContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseTheoremVisitor) VisitTerm(ctx *TermContext) interface{} {
+func (v *BaseTheoremVisitor) VisitPolicy_thorem(ctx *Policy_thoremContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 

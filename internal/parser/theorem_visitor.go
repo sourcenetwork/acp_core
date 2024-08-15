@@ -1,4 +1,4 @@
-// Code generated from Theorem.g4 by ANTLR 4.13.1. DO NOT EDIT.
+// Code generated from ./internal/parser/Theorem.g4 by ANTLR 4.13.2. DO NOT EDIT.
 
 package parser // Theorem
 import "github.com/antlr4-go/antlr/v4"
@@ -10,11 +10,11 @@ type TheoremVisitor interface {
 	// Visit a parse tree produced by TheoremParser#relationship_set.
 	VisitRelationship_set(ctx *Relationship_setContext) interface{}
 
+	// Visit a parse tree produced by TheoremParser#relationship_document.
+	VisitRelationship_document(ctx *Relationship_documentContext) interface{}
+
 	// Visit a parse tree produced by TheoremParser#policy_thorem.
 	VisitPolicy_thorem(ctx *Policy_thoremContext) interface{}
-
-	// Visit a parse tree produced by TheoremParser#term.
-	VisitTerm(ctx *TermContext) interface{}
 
 	// Visit a parse tree produced by TheoremParser#authorization_theorems.
 	VisitAuthorization_theorems(ctx *Authorization_theoremsContext) interface{}

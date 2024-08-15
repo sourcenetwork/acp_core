@@ -7,13 +7,16 @@ import (
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
 
-type IndexedObject[T any] struct {
+// LocatedObject models a parsed Object and a range
+// pointing to the span in the input stream from which the object was parsed
+type LocatedObject[T any] struct {
 	Obj   T
 	Range types.BufferRange
 }
 
-func NewIndexedObject[T any](obj T, ctx antlr.ParserRuleContext) IndexedObject[T] {
-	return IndexedObject[T]{
+// NewLocatedObjectFromCtx creates a new ObjectWithRange from an ANTLR Parser Context
+func NewLocatedObjectFromCtx[T any](obj T, ctx antlr.ParserRuleContext) LocatedObject[T] {
+	return LocatedObject[T]{
 		Obj: obj,
 		Range: types.BufferRange{
 			Start: &types.BufferPosition{
@@ -28,15 +31,18 @@ func NewIndexedObject[T any](obj T, ctx antlr.ParserRuleContext) IndexedObject[T
 	}
 }
 
-type IndexedPolicyTheorem struct {
-	DelegationTheorems    []IndexedObject[*types.DelegationTheorem]
-	AuthorizationTheorems []IndexedObject[*types.AuthorizationTheorem]
-	ReachabilityTheorems  []IndexedObject[*types.ReachabilityTheorem]
+// LocatedPolicyTheorem stores the elements of a PolicyTheorem with
+// relevant data which locates each Theorem back to the input stream.
+type LocatedPolicyTheorem struct {
+	DelegationTheorems    []LocatedObject[*types.DelegationTheorem]
+	AuthorizationTheorems []LocatedObject[*types.AuthorizationTheorem]
+	ReachabilityTheorems  []LocatedObject[*types.ReachabilityTheorem]
 }
 
-func (t *IndexedPolicyTheorem) ToPolicyTheorem() *types.PolicyTheorem {
+// ToPolicyTheorem removes the Location data and returns a PolicyTheorem
+func (t *LocatedPolicyTheorem) ToPolicyTheorem() *types.PolicyTheorem {
 	return &types.PolicyTheorem{
-		DelegationTheorems:    utils.MapSlice(t.DelegationTheorems, func(o IndexedObject[*types.DelegationTheorem]) *types.DelegationTheorem { return o.Obj }),
-		AuthorizationTheorems: utils.MapSlice(t.AuthorizationTheorems, func(o IndexedObject[*types.AuthorizationTheorem]) *types.AuthorizationTheorem { return o.Obj }),
+		DelegationTheorems:    utils.MapSlice(t.DelegationTheorems, func(o LocatedObject[*types.DelegationTheorem]) *types.DelegationTheorem { return o.Obj }),
+		AuthorizationTheorems: utils.MapSlice(t.AuthorizationTheorems, func(o LocatedObject[*types.AuthorizationTheorem]) *types.AuthorizationTheorem { return o.Obj }),
 	}
 }

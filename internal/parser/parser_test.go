@@ -7,10 +7,17 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestParseRelationship_EmptyString(t *testing.T) {
+func TestParseRelationship_EmptyString_ReturnsError(t *testing.T) {
 	relationship, err := ParseRelationship("")
 
-	require.Nil(t, err)
+	require.Error(t, err)
+	require.Nil(t, relationship)
+}
+
+func TestParseRelationship_RelationshipPlusJunk_ReturnsError(t *testing.T) {
+	relationship, err := ParseRelationship("file:abc#owner@did:example:bob aksldfskwer#junk")
+
+	require.Error(t, err)
 	require.Nil(t, relationship)
 }
 
@@ -66,21 +73,35 @@ func TestParseRelationships(t *testing.T) {
 	}
 	require.Equal(t, want, rels)
 }
-func TestParseTestSuite_EmptySuiteGetsParsed(t *testing.T) {
+
+func TestParseRelationships_RelationshipSetWithTrailingData_Errors(t *testing.T) {
+	relationships := `
+	resource:abc#relation@did:example:bob
+	resource:abc#relation@resource:thing
+	resource:abc#relation@resource:userset#member
+
+	abc1234
+	`
+	rels, err := ParseRelationships(relationships)
+
+	require.Error(t, err)
+	require.Nil(t, rels)
+}
+
+func TestParseRelationships_EmptySuiteGetsParsed(t *testing.T) {
 	relationships := ""
 
 	rels, err := ParseRelationships(relationships)
 
 	require.Nil(t, err)
-	want := make([]*types.Relationship, 0)
-	require.Equal(t, want, rels)
+	require.Len(t, rels, 0)
 }
 
 func TestPolicyTheorem_ParsesCorrectly(t *testing.T) {
 	theorem := `
 	Authorizations {
       note:abc#owner@did:example:bob
-      !note:abc#owner@did:example:alice
+      !note:abc#owner@did:example:alice //this is a comment which extensd until the end of the line
 	}
 
 	Delegations {
@@ -119,4 +140,18 @@ func TestPolicyTheorem_ParsesCorrectly(t *testing.T) {
 		},
 	}
 	require.Equal(t, want, thm.ToPolicyTheorem())
+}
+
+func TestPolicyTheorem_TheoremWithTrailingInput_Errors(t *testing.T) {
+	theorem := `
+	Authorizations { }
+
+	Delegations { }
+
+	trailniig-data-abc
+	`
+
+	thm, err := ParsePolicyTheorem(theorem)
+	require.Error(t, err)
+	require.Nil(t, thm)
 }

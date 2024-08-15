@@ -9,16 +9,12 @@ import (
 
 var _ TheoremVisitor = (*theoremVisitorImpl)(nil)
 
-func newTheoremVisitor() *theoremVisitorImpl {
-	return &theoremVisitorImpl{}
-}
-
-type theoremVisitorImpl struct {
-}
+// theoremVisitorImpl implements TheoremVisitor and walks the parse tree to produce relationships and policy theorems
+type theoremVisitorImpl struct{}
 
 func (l *theoremVisitorImpl) VisitRelationship_set(ctx *Relationship_setContext) any {
-	return utils.MapSlice(ctx.AllRelationship(), func(ctx IRelationshipContext) IndexedObject[*types.Relationship] {
-		return l.Visit(ctx).(IndexedObject[*types.Relationship])
+	return utils.MapSlice(ctx.AllRelationship(), func(ctx IRelationshipContext) LocatedObject[*types.Relationship] {
+		return l.Visit(ctx).(LocatedObject[*types.Relationship])
 	})
 }
 
@@ -44,7 +40,7 @@ func (l *theoremVisitorImpl) VisitRelationship(ctx *RelationshipContext) any {
 		Relation: ctx.Relation().GetText(),
 		Subject:  l.Visit(ctx.Subject()).(*types.Subject),
 	}
-	return NewIndexedObject(rel, ctx)
+	return NewLocatedObjectFromCtx(rel, ctx)
 }
 
 func (l *theoremVisitorImpl) VisitSubj_obj(ctx *Subj_objContext) any {
@@ -97,18 +93,18 @@ func (l *theoremVisitorImpl) VisitDelegation_theorem(ctx *Delegation_theoremCont
 		Operation:  operation,
 		AssertTrue: !negate,
 	}
-	return NewIndexedObject(theorem, ctx)
+	return NewLocatedObjectFromCtx(theorem, ctx)
 }
 
 func (l *theoremVisitorImpl) VisitDelegation_theorems(ctx *Delegation_theoremsContext) any {
-	return utils.MapSlice(ctx.AllDelegation_theorem(), func(ctx IDelegation_theoremContext) IndexedObject[*types.DelegationTheorem] {
-		return l.Visit(ctx).(IndexedObject[*types.DelegationTheorem])
+	return utils.MapSlice(ctx.AllDelegation_theorem(), func(ctx IDelegation_theoremContext) LocatedObject[*types.DelegationTheorem] {
+		return l.Visit(ctx).(LocatedObject[*types.DelegationTheorem])
 	})
 }
 
 func (l *theoremVisitorImpl) VisitAuthorization_theorem(ctx *Authorization_theoremContext) any {
 	negate := ctx.NEGATION() != nil
-	relationship := l.Visit(ctx.Relationship()).(IndexedObject[*types.Relationship]).Obj
+	relationship := l.Visit(ctx.Relationship()).(LocatedObject[*types.Relationship]).Obj
 	theorem := &types.AuthorizationTheorem{
 		Operation: &types.Operation{
 			Object:     relationship.Object,
@@ -117,19 +113,19 @@ func (l *theoremVisitorImpl) VisitAuthorization_theorem(ctx *Authorization_theor
 		Actor:      relationship.GetSubject().GetActor(),
 		AssertTrue: !negate,
 	}
-	return NewIndexedObject(theorem, ctx)
+	return NewLocatedObjectFromCtx(theorem, ctx)
 }
 
 func (l *theoremVisitorImpl) VisitAuthorization_theorems(ctx *Authorization_theoremsContext) any {
-	return utils.MapSlice(ctx.AllAuthorization_theorem(), func(ctx IAuthorization_theoremContext) IndexedObject[*types.AuthorizationTheorem] {
-		return l.Visit(ctx).(IndexedObject[*types.AuthorizationTheorem])
+	return utils.MapSlice(ctx.AllAuthorization_theorem(), func(ctx IAuthorization_theoremContext) LocatedObject[*types.AuthorizationTheorem] {
+		return l.Visit(ctx).(LocatedObject[*types.AuthorizationTheorem])
 	})
 }
 
 func (l *theoremVisitorImpl) VisitPolicy_thorem(ctx *Policy_thoremContext) any {
-	authorizationThms := l.Visit(ctx.Authorization_theorems()).([]IndexedObject[*types.AuthorizationTheorem])
-	delegationThms := l.Visit(ctx.Delegation_theorems()).([]IndexedObject[*types.DelegationTheorem])
-	return &IndexedPolicyTheorem{
+	authorizationThms := l.Visit(ctx.Authorization_theorems()).([]LocatedObject[*types.AuthorizationTheorem])
+	delegationThms := l.Visit(ctx.Delegation_theorems()).([]LocatedObject[*types.DelegationTheorem])
+	return &LocatedPolicyTheorem{
 		AuthorizationTheorems: authorizationThms,
 		DelegationTheorems:    delegationThms,
 	}
@@ -139,10 +135,6 @@ func (v *theoremVisitorImpl) Visit(tree antlr.ParseTree) interface{}         { r
 func (v *theoremVisitorImpl) VisitChildren(_ antlr.RuleNode) interface{}     { return nil }
 func (v *theoremVisitorImpl) VisitTerminal(_ antlr.TerminalNode) interface{} { return nil }
 func (v *theoremVisitorImpl) VisitErrorNode(_ antlr.ErrorNode) interface{}   { return nil }
-
-func (v *theoremVisitorImpl) VisitTerm(ctx *TermContext) interface{} {
-	return v.VisitChildren(ctx)
-}
 
 func (v *theoremVisitorImpl) VisitImplied_relations(ctx *Implied_relationsContext) interface{} {
 	return v.VisitChildren(ctx)
@@ -166,4 +158,8 @@ func (v *theoremVisitorImpl) VisitResource(ctx *ResourceContext) interface{} {
 
 func (v *theoremVisitorImpl) VisitActorid(ctx *ActoridContext) interface{} {
 	return v.VisitChildren(ctx)
+}
+
+func (v *theoremVisitorImpl) VisitRelationship_document(ctx *Relationship_documentContext) interface{} {
+	return v.Visit(ctx.Relationship())
 }
