@@ -3,42 +3,37 @@ package parser
 import (
 	"github.com/antlr4-go/antlr/v4"
 
-	"github.com/sourcenetwork/acp_core/pkg/errors"
+	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
 var _ antlr.ErrorListener = (*errListener)(nil)
 
 type errListener struct {
-	errors errors.ParserReport
+	msgs []*types.LocatedMessage
 }
 
 // GetERror produces a ParserReport from the errors stored in the listener
-func (l *errListener) GetError() *errors.ParserReport {
-	if l.errors.Messages == nil || len(l.errors.Messages) == 0 {
-		return nil
-	}
-
-	return &l.errors
+func (l *errListener) GetMessages() []*types.LocatedMessage {
+	return l.msgs
 }
 
 func (l *errListener) SyntaxError(recognizer antlr.Recognizer, offendingSymbol interface{}, line, column int, msg string, e antlr.RecognitionException) {
-	err := &errors.ParserMessage{
+	err := &types.LocatedMessage{
 		Message: msg,
-		Range: &errors.BufferRange{
-			Start: &errors.BufferPosition{
+		Range: &types.BufferRange{
+			Start: &types.BufferPosition{
 				Line:   uint64(line),
 				Column: uint64(column),
 			},
 			// Antlr doesn't provide the end position for the error,
 			// default to 0,0 position
-			End: &errors.BufferPosition{
+			End: &types.BufferPosition{
 				Line:   0,
 				Column: 0,
 			},
 		},
 	}
-	l.errors.Messages = append(l.errors.Messages, err)
-
+	l.msgs = append(l.msgs, err)
 }
 
 func (l *errListener) ReportAmbiguity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex, stopIndex int, exact bool, ambigAlts *antlr.BitSet, configs *antlr.ATNConfigSet) {

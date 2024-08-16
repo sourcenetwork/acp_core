@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package sourcenetwork.acp_core.playground;
 
-import "sourcenetwork/acp_core/errors/parser_message.proto";
+import "sourcenetwork/acp_core/parser_message.proto";
 import "sourcenetwork/acp_core/relationship.proto";
 import "sourcenetwork/acp_core/policy.proto";
 import "sourcenetwork/acp_core/theorem.proto";
@@ -47,11 +47,11 @@ message SandboxCtx {
 message SandboxDataErrors {
     // policy_errors contains all errors encountered while
     // processing the given policy
-    repeated sourcenetwork.acp_core.errors.ParserMessage policy_errors = 1;
+    repeated sourcenetwork.acp_core.LocatedMessage policy_errors = 1;
     // policy_errors contains all errors encountered while
     // processing the relationship set
-    repeated sourcenetwork.acp_core.errors.ParserMessage relationships_errors = 2;
+    repeated sourcenetwork.acp_core.LocatedMessage relationships_errors = 2;
     // policy_errors contains all errors encountered while
     // parsing the theorems
-    repeated sourcenetwork.acp_core.errors.ParserMessage theorems_errrors = 3;
+    repeated sourcenetwork.acp_core.LocatedMessage theorems_errrors = 3;
 }

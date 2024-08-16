@@ -7,7 +7,6 @@ option go_package = "github.com/sourcenetwork/acp_core/pkg/playground";
 import "sourcenetwork/acp_core/playground/sandbox.proto";
 import "sourcenetwork/acp_core/theorem.proto";
 import "sourcenetwork/acp_core/catalogue.proto";
-import "sourcenetwork/acp_core/errors/parser_message.proto";
 
 service PlaygroundService {
     // NewSandbox creates a new isolated execution environment in the Service

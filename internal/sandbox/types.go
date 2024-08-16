@@ -5,7 +5,11 @@ import (
 
 	rcdb "github.com/sourcenetwork/raccoondb"
 
+	"github.com/sourcenetwork/acp_core/internal/parser"
+	"github.com/sourcenetwork/acp_core/pkg/playground"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
+	"github.com/sourcenetwork/acp_core/pkg/types"
+	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
 
 const sandboxStorePrefix = "/sandboxes"
@@ -22,4 +26,22 @@ func GetManagerForSandbox(manager runtime.RuntimeManager, handle uint64) (runtim
 		return nil, err
 	}
 	return engineManager, nil
+}
+
+// parsedSandboxCtx stores all members of SandboxCtx alongside their
+// original Locations from the input text buffers.
+type parsedSandboxCtx struct {
+	PolicyDefinition string
+	Relationships    []parser.LocatedObject[*types.Relationship]
+	Theorem          *parser.LocatedPolicyTheorem
+	Policy           *types.Policy
+}
+
+// ToCtx discards Location data and returns a SandboxCtx
+func (c *parsedSandboxCtx) ToCtx() *playground.SandboxCtx {
+	return &playground.SandboxCtx{
+		Policy:        c.Policy,
+		Relationships: utils.MapSlice(c.Relationships, func(o parser.LocatedObject[*types.Relationship]) *types.Relationship { return o.Obj }),
+		PolicyTheorem: c.Theorem.ToPolicyTheorem(),
+	}
 }

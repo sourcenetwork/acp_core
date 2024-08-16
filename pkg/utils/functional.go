@@ -2,6 +2,8 @@ package utils
 
 import "fmt"
 
+type Predicate[T any] func(T) bool
+
 // MapSlice produces a new slice from a slice of elements and a mapping function
 func MapSlice[T any, U any](ts []T, mapper func(T) U) []U {
 	us := make([]U, 0, len(ts))
@@ -49,4 +51,15 @@ func PartitionSlice[T any](ts []T, predicate func(T) bool) (accepeted []T, rejec
 		}
 	}
 	return
+}
+
+// MapFilterSlice produces a new slice of elements which satisfy the predicate and consequently mapped
+func MapFilterSlice[T any, U any](ts []T, predicate func(T) bool, mapper func(T) U) []U {
+	us := make([]U, 0, len(ts))
+	for _, t := range ts {
+		if predicate(t) {
+			us = append(us, mapper(t))
+		}
+	}
+	return us
 }

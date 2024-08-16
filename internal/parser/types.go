@@ -1,24 +1,30 @@
 package parser
 
 import (
+	"strings"
+
 	"github.com/antlr4-go/antlr/v4"
 
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
+
+var _ error = (*ParserReport)(nil)
+var _ errors.TypedError = (*ParserReport)(nil)
 
 // LocatedObject models a parsed Object and a range
 // pointing to the span in the input stream from which the object was parsed
 type LocatedObject[T any] struct {
 	Obj   T
-	Range types.BufferRange
+	Range *types.BufferRange
 }
 
 // NewLocatedObjectFromCtx creates a new ObjectWithRange from an ANTLR Parser Context
 func NewLocatedObjectFromCtx[T any](obj T, ctx antlr.ParserRuleContext) LocatedObject[T] {
 	return LocatedObject[T]{
 		Obj: obj,
-		Range: types.BufferRange{
+		Range: &types.BufferRange{
 			Start: &types.BufferPosition{
 				Line:   uint64(ctx.GetStart().GetLine()),
 				Column: uint64(ctx.GetStart().GetColumn()),
@@ -45,4 +51,60 @@ func (t *LocatedPolicyTheorem) ToPolicyTheorem() *types.PolicyTheorem {
 		DelegationTheorems:    utils.MapSlice(t.DelegationTheorems, func(o LocatedObject[*types.DelegationTheorem]) *types.DelegationTheorem { return o.Obj }),
 		AuthorizationTheorems: utils.MapSlice(t.AuthorizationTheorems, func(o LocatedObject[*types.AuthorizationTheorem]) *types.AuthorizationTheorem { return o.Obj }),
 	}
+}
+
+// ParserReport models a set of messages emitted by the parser
+type ParserReport struct {
+	msg  string
+	msgs []*types.LocatedMessage
+}
+
+func NewParserReport(msg string, msgs ...*types.LocatedMessage) *ParserReport {
+	return &ParserReport{
+		msg:  msg,
+		msgs: msgs,
+	}
+}
+
+func (r *ParserReport) AddLocatedMessage(msg *types.LocatedMessage) {
+	r.msgs = append(r.msgs, msg)
+}
+
+func (r *ParserReport) GetMessages() []*types.LocatedMessage {
+	return r.msgs
+}
+
+func (r *ParserReport) HasError() bool {
+	errs := utils.FilterSlice(r.msgs, func(msg *types.LocatedMessage) bool { return msg.IsError() })
+	return len(errs) != 0
+}
+
+func (r *ParserReport) GetErrors() []error {
+	return utils.MapFilterSlice(r.msgs,
+		func(msg *types.LocatedMessage) bool { return msg.IsError() },
+		func(msg *types.LocatedMessage) error { return msg.ToError() },
+	)
+}
+
+func (r *ParserReport) Error() string {
+	if !r.HasError() {
+		return ""
+	}
+
+	builder := strings.Builder{}
+	builder.WriteString(r.msg)
+	builder.WriteString("\n")
+	for _, err := range r.GetErrors() {
+		builder.WriteString(err.Error())
+		builder.WriteString("\n")
+	}
+	return builder.String()
+}
+
+func (r *ParserReport) GetType() errors.ErrorType {
+	return errors.ErrorType_BAD_INPUT
+}
+
+func (r *ParserReport) Sucess() bool {
+	return !r.HasError()
 }

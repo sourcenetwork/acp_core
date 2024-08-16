@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	rcdb "github.com/sourcenetwork/raccoondb"
 )
@@ -83,7 +84,7 @@ func NewRuntimeManager(opts ...Opt) (RuntimeManager, error) {
 	for _, o := range opts {
 		err := o(rt)
 		if err != nil {
-			return nil, err
+			return nil, errors.NewFromBaseError(err, errors.ErrorType_INTERNAL, "building runtime manager")
 		}
 	}
 

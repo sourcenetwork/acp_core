@@ -78,9 +78,9 @@ func (e *Evaluator) evalDelegationTheorem(ctx context.Context, polId *types.Poli
 }
 
 func (e *Evaluator) EvaluatePolicyTheoremDSL(ctx context.Context, polId string, theoremDSL string) (*types.AnnotatedPolicyTheoremResult, error) {
-	indexedTheorem, err := parser.ParsePolicyTheorem(theoremDSL)
-	if err != nil {
-		return nil, err
+	indexedTheorem, report := parser.ParsePolicyTheorem(theoremDSL)
+	if report.HasError() {
+		return nil, report
 	}
 	policyResult, err := e.EvaluatePolicyTheorem(ctx, polId, indexedTheorem.ToPolicyTheorem())
 	if err != nil {
@@ -93,7 +93,7 @@ func (e *Evaluator) EvaluatePolicyTheoremDSL(ctx context.Context, polId string, 
 		result := policyResult.AuthorizationTheoremsResult[i]
 		annotatedAuth := &types.AnnotatedAuthorizationTheoremResult{
 			Result: result,
-			Range:  &theorem.Range,
+			Range:  theorem.Range,
 		}
 		annotatedResult.AuthorizationTheoremsResult = append(annotatedResult.AuthorizationTheoremsResult, annotatedAuth)
 	}
@@ -101,7 +101,7 @@ func (e *Evaluator) EvaluatePolicyTheoremDSL(ctx context.Context, polId string, 
 		result := policyResult.DelegationTheoremsResult[i]
 		thmResult := &types.AnnotatedDelegationTheoremResult{
 			Result: result,
-			Range:  &theorem.Range,
+			Range:  theorem.Range,
 		}
 		annotatedResult.DelegationTheoremsResult = append(annotatedResult.DelegationTheoremsResult, thmResult)
 	}
@@ -109,7 +109,7 @@ func (e *Evaluator) EvaluatePolicyTheoremDSL(ctx context.Context, polId string, 
 		result := policyResult.ReachabilityTheoremsResult[i]
 		thmResult := &types.AnnotatedReachabilityTheoremResult{
 			Result: result,
-			Range:  &theorem.Range,
+			Range:  theorem.Range,
 		}
 		annotatedResult.ReachabilityTheoremsResult = append(annotatedResult.ReachabilityTheoremsResult, thmResult)
 	}

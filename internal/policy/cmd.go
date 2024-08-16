@@ -31,11 +31,11 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 
 	counter := raccoon.NewCounterStoreFromRunetimeManager(runtime, policyCounterPrefix)
 	releaser := counter.Acquire()
+	defer releaser.Release()
 	i, err := counter.GetNextAndIncrement(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("CreatePolicy: %w", err)
 	}
-	releaser.Release()
 
 	factory := factory{}
 	record, err := factory.Create(ir, req.Metadata, i, req.CreationTime)

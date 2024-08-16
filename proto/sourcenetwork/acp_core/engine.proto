@@ -12,7 +12,6 @@ import "sourcenetwork/acp_core/relationship_selector.proto";
 import "sourcenetwork/acp_core/system.proto";
 import "sourcenetwork/acp_core/theorem.proto";
 import "sourcenetwork/acp_core/catalogue.proto";
-import "sourcenetwork/acp_core/simulation.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
 
