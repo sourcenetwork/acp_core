@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/playground"
+	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
 type Assertion func(*testing.T, *playground.SandboxDataErrors)
@@ -28,7 +28,7 @@ func HasTheoremError(msg string) Assertion {
 	}
 }
 
-func AssertContainsErrWithMsg(t *testing.T, want string, msgs []*errors.ParserMessage) {
+func AssertContainsErrWithMsg(t *testing.T, want string, msgs []*types.LocatedMessage) {
 	var had []string
 	for _, msg := range msgs {
 		had = append(had, msg.Message)

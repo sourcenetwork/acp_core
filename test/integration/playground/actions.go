@@ -1,6 +1,7 @@
 package playground
 
 import (
+	"github.com/sourcenetwork/acp_core/internal/simulator"
 	"github.com/sourcenetwork/acp_core/pkg/playground"
 	"github.com/sourcenetwork/acp_core/test"
 	"github.com/stretchr/testify/require"
@@ -104,4 +105,16 @@ func (a *NewAndSet) Run(ctx *test.TestCtx) uint64 {
 	a2.Run(ctx)
 
 	return resp.Record.Handle
+}
+
+type Simulate struct {
+	Data       playground.SandboxData
+	Assertions []Assertion
+}
+
+func (a *Simulate) Run(ctx *test.TestCtx) {
+	result, err := simulator.HandleSimulate(ctx, ctx.Runtime, &playground.SimulateRequest{
+		Data: &a.Data,
+	})
+	_, _ = result, err
 }

@@ -19,7 +19,6 @@ func AssertResults(ctx *TestCtx, got, want any, gotErr, wantErr error) {
 		} else {
 			// Errors returned from SDK operations (RPC communication to a SourceHub node)
 			// no longer have the original errors wrapped, therefore we compare a string as fallback strat.
-
 			gotErrStr := gotErr.Error()
 			wantErrStr := wantErr.Error()
 			assert.Contains(ctx.T, gotErrStr, wantErrStr)

@@ -317,3 +317,49 @@ func Test_GetCatalogue_ReturnsSandboxCatalogue(t *testing.T) {
 func Test_SetState_(t *testing.T) {}
 
 func Test_VerifyTheorem_(t *testing.T) {}
+
+func Test_Simulate_(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+
+	data := playground.SandboxData{
+		PolicyDefinition: `
+        name: test
+        resources:
+          file:
+            relations:
+              owner:
+                types:
+                  - actor
+              reader:
+                types:
+                  - actor
+            permissions:
+              read:
+                expr: owner + reader
+              write:
+                expr: owner
+        `,
+		Relationships: `
+		file:abc#owner@did:ex:bob
+		file:abc#reader@did:ex:alice
+		`,
+		PolicyTheorem: `
+		Authorizations {
+		  file:abc#read@did:ex:bob
+		  file:abc#write@did:ex:bob
+		  file:abc#read@did:ex:alice
+		  file:abc#unknown_relation@did:ex:alice
+		  ! file:abc#write@did:ex:alice
+		}
+		Delegations {
+		  did:ex:bob > file:abc#reader
+		  did:ex:alice > file:abc#reader
+		}
+		`,
+	}
+
+	action := Simulate{
+		Data: data,
+	}
+	action.Run(ctx)
+}
