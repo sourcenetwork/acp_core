@@ -14,14 +14,14 @@ func newSetStateErr(err error, handle uint64) error {
 	return errors.Wrap("SetState failed", err, errors.Pair("handle", handle))
 }
 
-func newVerifyTheoremsErr(err error) error {
-	return errors.Wrap("VerifyTheorems failed", err)
+func newVerifyTheoremsErr(err error, handle uint64) error {
+	return errors.Wrap("VerifyTheorems failed", err, errors.Pair("handle", handle))
 }
 
-func newGetCatalogueErr(err error) error {
-	return errors.Wrap("GetCatalogue failed", err)
+func newGetCatalogueErr(err error, handle uint64) error {
+	return errors.Wrap("GetCatalogue failed", err, errors.Pair("handle", handle))
 }
 
-func newRestoreScratchpadErr(err error) error {
-	return errors.Wrap("RestoreScratchpad failed", err)
+func newRestoreScratchpadErr(err error, handle uint64) error {
+	return errors.Wrap("RestoreScratchpad failed", err, errors.Pair("handle", handle))
 }

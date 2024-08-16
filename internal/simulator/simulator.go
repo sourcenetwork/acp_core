@@ -9,14 +9,16 @@ import (
 )
 
 func HandleSimulate(ctx context.Context, manager runtime.RuntimeManager, req *playground.SimulateRequest) (*playground.SimulateReponse, error) {
-	manager, err := runtime.NewRuntimeManager() // TODO transfer over logger and stuff?
+	manager, err := runtime.NewRuntimeManager(
+		runtime.WithLogger(manager.GetLogger()),
+	)
 	if err != nil {
-		return nil, err
+		return nil, newSimulateError(err)
 	}
 
 	newResp, err := sandbox.HandleNewSandboxRequest(ctx, manager, &playground.NewSandboxRequest{})
 	if err != nil {
-		return nil, err
+		return nil, newSimulateError(err)
 	}
 
 	handler := sandbox.SetStateHandler{}
@@ -25,7 +27,7 @@ func HandleSimulate(ctx context.Context, manager runtime.RuntimeManager, req *pl
 		Data:   req.Data,
 	})
 	if err != nil {
-		return nil, err
+		return nil, newSimulateError(err)
 	}
 	if setResp.Errors.HasErrors() {
 		return &playground.SimulateReponse{
@@ -36,7 +38,7 @@ func HandleSimulate(ctx context.Context, manager runtime.RuntimeManager, req *pl
 
 	verifyResp, err := sandbox.HandleVerifyTheorem(ctx, manager, &playground.VerifyTheoremsRequest{Handle: newResp.Record.Handle})
 	if err != nil {
-		return nil, err
+		return nil, newSimulateError(err)
 	}
 
 	return &playground.SimulateReponse{

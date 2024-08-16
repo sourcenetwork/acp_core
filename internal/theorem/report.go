@@ -17,7 +17,7 @@ func GenerateTheoremReport(result *types.PolicyTheoremResult) string {
 			builder.WriteString("ERROR ")
 		}
 		builder.WriteRune('\t')
-		builder.WriteString(FormatAuthorizationTheorem(thm.Theorem))
+		builder.WriteString(thm.Theorem.PrettyString())
 		builder.WriteRune('\n')
 	}
 	builder.WriteRune('\n')
@@ -30,7 +30,7 @@ func GenerateTheoremReport(result *types.PolicyTheoremResult) string {
 			builder.WriteString("ERROR ")
 		}
 		builder.WriteRune('\t')
-		builder.WriteString(FormatDelegationTheorem(thm.Theorem))
+		builder.WriteString(thm.Theorem.PrettyString())
 		builder.WriteRune('\n')
 	}
 	builder.WriteRune('\n')
@@ -43,7 +43,7 @@ func GenerateTheoremReport(result *types.PolicyTheoremResult) string {
 			builder.WriteString("ERROR ")
 		}
 		builder.WriteRune('\t')
-		builder.WriteString(FormatReachabilityTheorem(thm.Theorem))
+		builder.WriteString(thm.Theorem.PrettyString())
 		builder.WriteRune('\n')
 	}
 

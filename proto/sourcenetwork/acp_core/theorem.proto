@@ -3,13 +3,12 @@ syntax = "proto3";
 package sourcenetwork.acp_core;
 
 import "google/protobuf/timestamp.proto";
-
 import "sourcenetwork/acp_core/access_decision.proto";
+import "sourcenetwork/acp_core/buffer_position.proto";
 import "sourcenetwork/acp_core/policy.proto";
 import "sourcenetwork/acp_core/policy_short.proto";
 import "sourcenetwork/acp_core/relationship.proto";
 import "sourcenetwork/acp_core/relationship_selector.proto";
-import "sourcenetwork/acp_core/buffer_position.proto";
 import "sourcenetwork/acp_core/system.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
@@ -51,11 +50,11 @@ enum ResultStatus {
 
 // Result models the result of evaluating a theorem
 message Result {
-    // status indicates whether the theorem was accepted, rejected or an error happened
-    ResultStatus status = 1;
-    
-    // Message explains the result
-    string message = 2;
+  // status indicates whether the theorem was accepted, rejected or an error happened
+  ResultStatus status = 1;
+
+  // Message explains the result
+  string message = 2;
 }
 
 message AuthorizationTheoremResult {

@@ -11,12 +11,14 @@ import (
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
 
+// NewEvaluator returns an Evaluator bound to a Zanzi instance
 func NewEvaluator(zanzi *zanzi.Adapter) *Evaluator {
 	return &Evaluator{
 		zanzi: zanzi,
 	}
 }
 
+// Evaluator verifies the correctness of PolicyTheorems
 type Evaluator struct {
 	zanzi *zanzi.Adapter
 }
@@ -77,6 +79,8 @@ func (e *Evaluator) evalDelegationTheorem(ctx context.Context, polId *types.Poli
 	}, nil
 }
 
+// EvalutePolicyTheoremDSL evaluates a PolicyTheorem represented as a string,
+// and return a Report which references the text location of each theorem alongside its result
 func (e *Evaluator) EvaluatePolicyTheoremDSL(ctx context.Context, polId string, theoremDSL string) (*types.AnnotatedPolicyTheoremResult, error) {
 	indexedTheorem, report := parser.ParsePolicyTheorem(theoremDSL)
 	if report.HasError() {
@@ -116,6 +120,7 @@ func (e *Evaluator) EvaluatePolicyTheoremDSL(ctx context.Context, polId string, 
 	return annotatedResult, nil
 }
 
+// EvaluatePolicyThereom verifies the whether a PolicyTheorem is correct.
 func (e *Evaluator) EvaluatePolicyTheorem(ctx context.Context, polId string, theorem *types.PolicyTheorem) (*types.PolicyTheoremResult, error) {
 	rec, err := e.zanzi.GetPolicy(ctx, polId)
 	if err != nil {

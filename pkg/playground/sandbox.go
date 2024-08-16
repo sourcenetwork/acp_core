@@ -6,5 +6,5 @@ func (e *SandboxDataErrors) HasErrors() bool {
 		return false
 	}
 
-	return !((e.PolicyErrors == nil || len(e.PolicyErrors) == 0) && (e.RelationshipsErrors == nil || len(e.RelationshipsErrors) == 0) && (e.TheoremsErrrors == nil || len(e.TheoremsErrrors) == 0))
+	return !((e.PolicyErrors == nil || len(e.PolicyErrors) == 0) && (e.RelationshipsErrors == nil || len(e.RelationshipsErrors) == 0) && (e.TheoremsErrors == nil || len(e.TheoremsErrors) == 0))
 }

@@ -2,208 +2,129 @@ syntax = "proto3";
 
 package sourcenetwork.acp_core.playground;
 
-option go_package = "github.com/sourcenetwork/acp_core/pkg/playground";
-
+import "sourcenetwork/acp_core/catalogue.proto";
 import "sourcenetwork/acp_core/playground/sandbox.proto";
 import "sourcenetwork/acp_core/theorem.proto";
-import "sourcenetwork/acp_core/catalogue.proto";
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/playground";
 
 service PlaygroundService {
-    // NewSandbox creates a new isolated execution environment in the Service
-    // Returns a handle which references the sandbox
-    rpc NewSandbox (NewSandboxRequest) returns (NewSandboxResponse);
+  // NewSandbox creates a new isolated execution environment in the Service
+  // Returns a handle which references the sandbox
+  rpc NewSandbox(NewSandboxRequest) returns (NewSandboxResponse);
 
-    // ListSandboxes returns the list of sandboxes created in the Playgruond
-    rpc ListSandboxes (ListSandboxesRequest) returns (ListSandboxesResponse);
+  // ListSandboxes returns the list of sandboxes created in the Playgruond
+  rpc ListSandboxes(ListSandboxesRequest) returns (ListSandboxesResponse);
 
-    // SetState updates the state of a Sandbox environment with the newly provided data
-    rpc SetState (SetStateRequest) returns (SetStateResponse);
+  // SetState updates the state of a Sandbox environment with the newly provided data
+  rpc SetState(SetStateRequest) returns (SetStateResponse);
 
-    // RestoreScratchpad restores the data in scratchpad to match the currently loaded sandbox state
-    rpc RestoreScratchpad (RestoreScratchpadRequest) returns (RestoreScratchpadResponse);
+  // RestoreScratchpad restores the data in scratchpad to match the currently loaded sandbox state
+  rpc RestoreScratchpad(RestoreScratchpadRequest) returns (RestoreScratchpadResponse);
 
-    // GetCatalogue returns the catalogue (index/LUT) of defined entities within a sandbox
-    rpc GetCatalogue (GetCatalogueRequest) returns (GetCatalogueResponse);
+  // GetCatalogue returns the catalogue (index/LUT) of defined entities within a sandbox
+  rpc GetCatalogue(GetCatalogueRequest) returns (GetCatalogueResponse);
 
-    // VerifyTheorems executes the defined test suite for a sandbox
-    rpc VerifyTheorems (VerifyTheoremsRequest) returns (VerifyTheoremsResponse);
+  // VerifyTheorems executes the defined test suite for a sandbox
+  rpc VerifyTheorems(VerifyTheoremsRequest) returns (VerifyTheoremsResponse);
 
-    // Simulate receives Sandbox state data and a theorem, creates an ephemeral sandbox
-    // evaluates the given theorem against the sandbox's policy and returns the result
-    // Simulate is a oneshot operation and persists no state in the process.
-    rpc Simulate (SimulateRequest) returns (SimulateReponse);
+  // Simulate receives Sandbox state data and a theorem, creates an ephemeral sandbox
+  // evaluates the given theorem against the sandbox's policy and returns the result
+  // Simulate is a oneshot operation and persists no state in the process.
+  rpc Simulate(SimulateRequest) returns (SimulateReponse);
 
-    // Check runs a Check operation with the provided data for the context of a sandbox.
-    // A Check call is used to verify whether some actor is authorized to act on a some object
-    //rpc Check (CheckRequest) returns (CheckResponse);
+  // Check runs a Check operation with the provided data for the context of a sandbox.
+  // A Check call is used to verify whether some actor is authorized to act on a some object
+  //rpc Check (CheckRequest) returns (CheckResponse);
 
-    // ReverseLookup runs a reverse lookup operation in a sandbox.
-    // Reverse lookup is used to collect all the permissions an actor can do within a policy
-    //rpc ReverseLookup (ReverseLookupRequest) returns (ReverseLookupResponse);
+  // ReverseLookup runs a reverse lookup operation in a sandbox.
+  // Reverse lookup is used to collect all the permissions an actor can do within a policy
+  //rpc ReverseLookup (ReverseLookupRequest) returns (ReverseLookupResponse);
 
-    // AuthorizeCommand runs an authorize command operation in a sandbox.
-    //
-    // This operation is used to assert whether some actor is allowed to perform a command
-    // in a policy. Commands refer to actions take can be done to the policy itself,
-    // such as creating or deleting relationships.
-    //rpc AuthorizeCommand (AuthorizeCommandRequest) returns (AuthorizeCommandResponse);
+  // AuthorizeCommand runs an authorize command operation in a sandbox.
+  //
+  // This operation is used to assert whether some actor is allowed to perform a command
+  // in a policy. Commands refer to actions take can be done to the policy itself,
+  // such as creating or deleting relationships.
+  //rpc AuthorizeCommand (AuthorizeCommandRequest) returns (AuthorizeCommandResponse);
 
-    // Expand runs an expand operation in a sandbox.
-    //
-    // Expand is used to walk through the Object graph, starting at an Object Relation node 
-    // and generate the tree of every actor which can perform the specified operation.
-    //rpc Expand(ExpandRequest) returns (ExpandResponse);
-
+  // Expand runs an expand operation in a sandbox.
+  //
+  // Expand is used to walk through the Object graph, starting at an Object Relation node
+  // and generate the tree of every actor which can perform the specified operation.
+  //rpc Expand(ExpandRequest) returns (ExpandResponse);
 }
 
 message NewSandboxRequest {
-    // user defined name for the sandbox
-    string name = 1;
+  // user defined name for the sandbox
+  string name = 1;
 
-    string description =2;
+  string description = 2;
 }
 
 message NewSandboxResponse {
-    // opaque identifier pointing to the created sandbox
-    SandboxRecord record = 1;
+  // opaque identifier pointing to the created sandbox
+  SandboxRecord record = 1;
 }
 
 message SetStateRequest {
-    // handle to an existing sandbox
-    uint64 handle = 1;
+  // handle to an existing sandbox
+  uint64 handle = 1;
 
-    // data to set in the sandbox
-    SandboxData data = 2;
+  // data to set in the sandbox
+  SandboxData data = 2;
 }
 
 message SetStateResponse {
-    // ok indicates the state updated sucessfuly
-    bool ok = 1;
-    SandboxDataErrors errors = 2;
-    SandboxRecord record = 3;
+  // ok indicates the state updated sucessfuly
+  bool ok = 1;
+  SandboxDataErrors errors = 2;
+  SandboxRecord record = 3;
 }
 
 message GetCatalogueRequest {
-    // handle to an existing sandbox
-    uint64 handle = 1;
+  // handle to an existing sandbox
+  uint64 handle = 1;
 }
 
 message GetCatalogueResponse {
-    // catalogue for the state of the given sandbox
-    sourcenetwork.acp_core.PolicyCatalogue catalogue = 1;
+  // catalogue for the state of the given sandbox
+  sourcenetwork.acp_core.PolicyCatalogue catalogue = 1;
 }
 
 message VerifyTheoremsRequest {
-    // handle to an existing sandbox
-    uint64 handle = 1;
+  // handle to an existing sandbox
+  uint64 handle = 1;
 }
 
 message VerifyTheoremsResponse {
-    sourcenetwork.acp_core.AnnotatedPolicyTheoremResult result = 1;
+  sourcenetwork.acp_core.AnnotatedPolicyTheoremResult result = 1;
 }
 
-message ListSandboxesRequest { 
-}
+message ListSandboxesRequest {}
 
-message ListSandboxesResponse { 
-    repeated SandboxRecord records = 1;
+message ListSandboxesResponse {
+  repeated SandboxRecord records = 1;
 }
 
 message RestoreScratchpadRequest {
-    // handle to an existing sandbox
-    uint64 handle = 1;
+  // handle to an existing sandbox
+  uint64 handle = 1;
 }
 
 message RestoreScratchpadResponse {
-    // scratchpad contains the data in the restored scratchpad
-    SandboxData scratchpad = 1;
+  // scratchpad contains the data in the restored scratchpad
+  SandboxData scratchpad = 1;
 }
 
 message SimulateRequest {
-    // data to set in the sandbox
-    SandboxData data = 1;
+  // data to set in the sandbox
+  SandboxData data = 1;
 }
 
 message SimulateReponse {
-    bool valid_data = 1;
-    SandboxDataErrors errors = 2;
-    SandboxRecord record = 3;
-    sourcenetwork.acp_core.AnnotatedPolicyTheoremResult result = 4;
+  bool valid_data = 1;
+  SandboxDataErrors errors = 2;
+  SandboxRecord record = 3;
+  sourcenetwork.acp_core.AnnotatedPolicyTheoremResult result = 4;
 }
-
-
-/*
-message CheckRequest {
-    // handle to an existing sandbox
-    Handle handle = 1;
-
-    // Object which the actor wants to operate over
-    Object object = 2;
-
-    // action the actor wants to perform against the object
-    string permission = 3;
-
-    // actor that wants to execute the operation
-    string actor = 4;
-}
-
-message CheckResponse {
-    // flag indicating whether the actor is authorized to execute the queried operation
-    bool authorized = 1;
-
-    // TODO walk tree
-
-    string details = 3;
-}
-
-message ReverseLookupRequest {
-    // TODO
-}
-
-message ReverseLookupResponse {
-    // TODO
-}
-
-message AuthorizeCommandRequest {
-    // handle to an existing sandbox
-    Handle handle = 1;
-
-    // actor which will execute the command
-    string actor = 2;
-
-    // Command which will be executed
-    Command command = 3;
-
-    // relationship which the actor wants to operate on
-    string relationship = 4;
-}
-
-message ExpandRequest {
-    // handle to an existing sandbox
-    Handle handle = 1;
-
-    // object to expand on
-    Object object = 2;
-
-    // permission or relation which will be expanded on
-    string relation = 3;
-}
-
-message ExpandResponse {
-    // set of actors allowed to perform the given operation over the object
-    repeated string actors = 1;
-
-    // TODO expand tree
-    string details = 3;
-}
-
-message AuthorizeCommandResponse {
-    // flag signaling whether actor is authorized to execute the given command
-    bool authorized = 1;
-
-    //string reason = 2;
-
-    //string details = 3;
-}
-
-*/

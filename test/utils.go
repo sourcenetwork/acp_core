@@ -8,6 +8,9 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// AssertResults is a general helper for computations which return a result and an error
+// if wantErr is specified, it asserts that gotErr is a match
+// otherwise, it asserts got and want are a match and that gotErr is nil.
 func AssertResults(ctx *TestCtx, got, want any, gotErr, wantErr error) {
 	if wantErr != nil {
 		require.NotNil(ctx.T, gotErr, "expected an error but got none")

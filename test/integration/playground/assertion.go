@@ -24,7 +24,7 @@ func HasRelationshipsError(msg string) Assertion {
 
 func HasTheoremError(msg string) Assertion {
 	return func(t *testing.T, errs *playground.SandboxDataErrors) {
-		AssertContainsErrWithMsg(t, msg, errs.TheoremsErrrors)
+		AssertContainsErrWithMsg(t, msg, errs.TheoremsErrors)
 	}
 }
 

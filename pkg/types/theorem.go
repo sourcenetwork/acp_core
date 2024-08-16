@@ -1,6 +1,10 @@
 package types
 
-import "github.com/sourcenetwork/acp_core/pkg/utils"
+import (
+	"strings"
+
+	"github.com/sourcenetwork/acp_core/pkg/utils"
+)
 
 func FromAnnotatedResult(result *AnnotatedPolicyTheoremResult) *PolicyTheoremResult {
 	azThms := utils.MapSlice(result.AuthorizationTheoremsResult, func(t *AnnotatedAuthorizationTheoremResult) *AuthorizationTheoremResult {
@@ -21,4 +25,41 @@ func FromAnnotatedResult(result *AnnotatedPolicyTheoremResult) *PolicyTheoremRes
 		DelegationTheoremsResult:    delThms,
 		ReachabilityTheoremsResult:  reachThms,
 	}
+}
+
+// PrettyString formats an AuthorizationThereom back to its DSL representation
+func (t *AuthorizationTheorem) PrettyString() string {
+	builder := strings.Builder{}
+	if !t.AssertTrue {
+		builder.WriteRune('!')
+	}
+	builder.WriteString(t.Operation.Object.Resource)
+	builder.WriteRune(':')
+	builder.WriteString(t.Operation.Object.Id)
+	builder.WriteRune('#')
+	builder.WriteString(t.Operation.Permission)
+	builder.WriteRune('@')
+	builder.WriteString(t.Actor.Id)
+	return builder.String()
+}
+
+// PrettyString formats an DelegationTheorem back to its DSL representation
+func (t *DelegationTheorem) PrettyString() string {
+	builder := strings.Builder{}
+	if !t.AssertTrue {
+		builder.WriteRune('!')
+	}
+	builder.WriteString(t.Operation.Object.Resource)
+	builder.WriteRune(':')
+	builder.WriteString(t.Operation.Object.Id)
+	builder.WriteRune('#')
+	builder.WriteString(t.Operation.Permission)
+	builder.WriteString(" > ")
+	builder.WriteString(t.Actor.Id)
+	return builder.String()
+}
+
+// PrettyString formats an ReachabilityTheorem back to its DSL representation
+func (t *ReachabilityTheorem) PrettyString() string {
+	return ""
 }

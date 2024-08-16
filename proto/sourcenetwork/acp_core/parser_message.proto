@@ -6,18 +6,17 @@ import "sourcenetwork/acp_core/buffer_position.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
 
-
 // LocatedMessage models a message which points to a position in a text buffer
 message LocatedMessage {
-    enum MessageKind {
-        UNKNOWN = 0;
-        ERROR = 1;
-        INFO = 2;
-        WARNING = 3;
-    }
+  enum MessageKind {
+    UNKNOWN = 0;
+    ERROR = 1;
+    INFO = 2;
+    WARNING = 3;
+  }
 
-    string message = 1;
-    MessageKind kind = 2;
-    string input_name = 3; 
-    BufferRange range = 4;
+  string message = 1;
+  MessageKind kind = 2;
+  string input_name = 3;
+  BufferRange range = 4;
 }

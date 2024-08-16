@@ -71,7 +71,7 @@ func (z *Adapter) ValidateRelationship(ctx context.Context, policy *types.Policy
 
 	result, err := serv.ValidateRelationship(ctx, req)
 	if err != nil {
-		return false, "", fmt.Errorf("ValidateRelatinship: %w", err)
+		return false, "", fmt.Errorf("ValidateRelationship: %w", err)
 	}
 
 	return result.Valid, result.ErrorMsg, nil

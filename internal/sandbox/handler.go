@@ -41,7 +41,7 @@ func HandleNewSandboxRequest(ctx context.Context, manager runtime.RuntimeManager
 		Description: req.Description,
 	}
 
-	repository := NewSandboxRepository(manager)
+	repository := NewSandboxRepository(manager.GetKVStore())
 	err = repository.SetRecord(ctx, record)
 	if err != nil {
 		return nil, newNewSandboxErr(err)
@@ -58,7 +58,7 @@ func HandleNewSandboxRequest(ctx context.Context, manager runtime.RuntimeManager
 }
 
 func HandleListSandboxes(ctx context.Context, manager runtime.RuntimeManager, req *playground.ListSandboxesRequest) (*playground.ListSandboxesResponse, error) {
-	repository := NewSandboxRepository(manager)
+	repository := NewSandboxRepository(manager.GetKVStore())
 	sandboxes, err := repository.ListSandboxes(ctx)
 	if err != nil {
 		return nil, newListSandboxesErr(err)
@@ -72,7 +72,7 @@ func HandleListSandboxes(ctx context.Context, manager runtime.RuntimeManager, re
 type SetStateHandler struct{}
 
 func (h *SetStateHandler) Handle(ctx context.Context, manager runtime.RuntimeManager, req *playground.SetStateRequest) (*playground.SetStateResponse, error) {
-	repository := NewSandboxRepository(manager)
+	repository := NewSandboxRepository(manager.GetKVStore())
 
 	record, err := repository.GetSandbox(ctx, req.Handle)
 	if err != nil {
@@ -99,7 +99,12 @@ func (h *SetStateHandler) Handle(ctx context.Context, manager runtime.RuntimeMan
 		}, nil
 	}
 
-	errs, err = h.populateEngine(ctx, manager, req.Handle, simCtx)
+	sandboxManager, err := GetManagerForSandbox(manager, req.Handle)
+	if err != nil {
+		return nil, err
+	}
+
+	errs, err = h.populateEngine(ctx, sandboxManager, req.Handle, simCtx)
 	if err != nil {
 		return nil, newSetStateErr(err, req.Handle)
 	}
@@ -146,7 +151,7 @@ func (h *SetStateHandler) parseCtx(ctx context.Context, manager runtime.RuntimeM
 	errs.RelationshipsErrors = append(errs.RelationshipsErrors, report.GetMessages()...)
 
 	theorem, report := parser.ParsePolicyTheorem(data.PolicyTheorem)
-	errs.TheoremsErrrors = append(errs.TheoremsErrrors, report.GetMessages()...)
+	errs.TheoremsErrors = append(errs.TheoremsErrors, report.GetMessages()...)
 
 	if errs.HasErrors() {
 		return nil, errs, nil
@@ -161,42 +166,65 @@ func (h *SetStateHandler) parseCtx(ctx context.Context, manager runtime.RuntimeM
 }
 
 func (h *SetStateHandler) populateEngine(ctx context.Context, manager runtime.RuntimeManager, handle uint64, simCtx *parsedSandboxCtx) (*playground.SandboxDataErrors, error) {
-	var errs = &playground.SandboxDataErrors{}
+	errs, err := h.setPolicy(ctx, manager, handle, simCtx)
+	if err != nil {
+		return nil, err
+	}
+	if errs.HasErrors() {
+		return errs, nil
+	}
 
-	engineManager, err := GetManagerForSandbox(manager, handle)
+	ownerMap, errs, err := h.registerObjects(ctx, manager, handle, simCtx)
 	if err != nil {
 		return nil, err
 	}
 
+	errs2, err := h.setRelationships(ctx, manager, simCtx, ownerMap)
+	if err != nil {
+		return nil, err
+	}
+
+	errs2.PolicyErrors = append(errs2.PolicyErrors, errs.PolicyErrors...)
+	errs2.RelationshipsErrors = append(errs2.RelationshipsErrors, errs.RelationshipsErrors...)
+	errs2.TheoremsErrors = append(errs2.TheoremsErrors, errs.TheoremsErrors...)
+
+	return errs2, nil
+}
+
+func (h *SetStateHandler) setPolicy(ctx context.Context, manager runtime.RuntimeManager, handle uint64, simCtx *parsedSandboxCtx) (*playground.SandboxDataErrors, error) {
+	errs := &playground.SandboxDataErrors{}
+
 	polHandler := policy.CreatePolicyHandler{}
-	polResp, err := polHandler.Execute(ctx, engineManager, &types.CreatePolicyRequest{
+	polResp, err := polHandler.Execute(ctx, manager, &types.CreatePolicyRequest{
 		Policy:       simCtx.PolicyDefinition,
 		MarshalType:  types.PolicyMarshalingType_SHORT_YAML,
 		CreationTime: prototypes.TimestampNow(),
 	})
+
 	if err != nil {
 		if errors.Is(err, errors.ErrorType_BAD_INPUT) {
-			err := &types.LocatedMessage{
+			msg := &types.LocatedMessage{
 				Message:   err.Error(),
 				Kind:      types.LocatedMessage_ERROR,
 				InputName: "policy",
 				// Range is empty because unmarshaling still doesn't support that feature
 			}
-			errs.PolicyErrors = append(errs.PolicyErrors, err)
-			return errs, nil
+			errs.PolicyErrors = append(errs.PolicyErrors, msg)
 		} else {
 			// non marshaling errors should terminate execution
 			return nil, err
 		}
 	}
+
 	simCtx.Policy = polResp.Policy
-	return h.setRelationships(ctx, engineManager, simCtx)
+	return errs, nil
 }
 
-func (h *SetStateHandler) setRelationships(ctx context.Context, manager runtime.RuntimeManager, simCtx *parsedSandboxCtx) (*playground.SandboxDataErrors, error) {
+func (h *SetStateHandler) registerObjects(ctx context.Context, manager runtime.RuntimeManager, handle uint64, simCtx *parsedSandboxCtx) (map[string]auth.Principal, *playground.SandboxDataErrors, error) {
 	errs := &playground.SandboxDataErrors{}
 	ownerLookup := make(map[string]auth.Principal)
-	ownerRels, rels := utils.PartitionSlice(simCtx.Relationships, func(obj parser.LocatedObject[*types.Relationship]) bool {
+
+	ownerRels := utils.FilterSlice(simCtx.Relationships, func(obj parser.LocatedObject[*types.Relationship]) bool {
 		return obj.Obj.Relation == policy.OwnerRelation
 	})
 
@@ -223,60 +251,74 @@ func (h *SetStateHandler) setRelationships(ctx context.Context, manager runtime.
 			Object:       obj.Obj.Object,
 			CreationTime: prototypes.TimestampNow(),
 		})
-		if errors.Is(err, errors.ErrorType_BAD_INPUT) {
-			err := &types.LocatedMessage{
-				Message:   err.Error(),
-				Kind:      types.LocatedMessage_ERROR,
-				InputName: "policy",
-				// Range is empty because unmarshaling still doesn't support that feature
+		if err != nil {
+			if errors.Is(err, errors.ErrorType_BAD_INPUT) {
+				err := &types.LocatedMessage{
+					Message:   err.Error(),
+					Kind:      types.LocatedMessage_ERROR,
+					InputName: "relationships",
+					Range:     obj.Range,
+				}
+				errs.RelationshipsErrors = append(errs.RelationshipsErrors, err)
+			} else {
+				return nil, nil, err
 			}
-			errs.RelationshipsErrors = append(errs.RelationshipsErrors, err)
-		} else {
-			return nil, err
 		}
 		ownerLookup[obj.Obj.Object.String()] = principal
 	}
+	return ownerLookup, errs, nil
+}
+
+func (h *SetStateHandler) setRelationships(ctx context.Context, manager runtime.RuntimeManager, simCtx *parsedSandboxCtx, ownerMap map[string]auth.Principal) (*playground.SandboxDataErrors, error) {
+	errs := &playground.SandboxDataErrors{}
+	rels := utils.FilterSlice(simCtx.Relationships, func(obj parser.LocatedObject[*types.Relationship]) bool {
+		return obj.Obj.Relation != policy.OwnerRelation
+	})
 
 	for _, indexedObj := range rels {
-		principal, ok := ownerLookup[indexedObj.Obj.Object.String()]
+		principal, ok := ownerMap[indexedObj.Obj.Object.String()]
 		if !ok {
 			msg := &types.LocatedMessage{
 				Message:   "object not registered",
 				Kind:      types.LocatedMessage_ERROR,
-				InputName: "",
+				InputName: "relationships",
 				Range:     indexedObj.Range,
 			}
 			errs.RelationshipsErrors = append(errs.RelationshipsErrors, msg)
 			continue
 		}
+
 		authenticatedCtx := auth.InjectPrincipal(ctx, principal)
+
 		handler := relationship.SetRelationshipHandler{}
 		_, err := handler.Execute(authenticatedCtx, manager, &types.SetRelationshipRequest{
 			PolicyId:     simCtx.Policy.Id,
 			CreationTime: prototypes.TimestampNow(),
 			Relationship: indexedObj.Obj,
 		})
-		if errors.Is(err, errors.ErrorType_BAD_INPUT) {
-			err := &types.LocatedMessage{
-				Message:   err.Error(),
-				Kind:      types.LocatedMessage_ERROR,
-				InputName: "policy",
-				// Range is empty because unmarshaling still doesn't support that feature
+		if err != nil {
+			if errors.Is(err, errors.ErrorType_BAD_INPUT) {
+				err := &types.LocatedMessage{
+					Message:   err.Error(),
+					Kind:      types.LocatedMessage_ERROR,
+					InputName: "relationships",
+					Range:     indexedObj.Range,
+				}
+				errs.RelationshipsErrors = append(errs.RelationshipsErrors, err)
+			} else {
+				return nil, err
 			}
-			errs.RelationshipsErrors = append(errs.RelationshipsErrors, err)
-		} else {
-			return nil, err
 		}
 	}
 	return errs, nil
 }
 
 func HandleVerifyTheorem(ctx context.Context, manager runtime.RuntimeManager, req *playground.VerifyTheoremsRequest) (*playground.VerifyTheoremsResponse, error) {
-	repository := NewSandboxRepository(manager)
+	repository := NewSandboxRepository(manager.GetKVStore())
 
 	record, err := repository.GetSandbox(ctx, req.Handle)
 	if err != nil {
-		return nil, newVerifyTheoremsErr(err) // TODO WRAP
+		return nil, newVerifyTheoremsErr(err, req.Handle)
 	}
 	if record == nil {
 		return nil, errors.Wrap("sandbox not found", errors.ErrorType_NOT_FOUND, errors.Pair("handle", req.Handle))
@@ -287,18 +329,18 @@ func HandleVerifyTheorem(ctx context.Context, manager runtime.RuntimeManager, re
 
 	manager, err = GetManagerForSandbox(manager, req.Handle)
 	if err != nil {
-		return nil, newVerifyTheoremsErr(err) // TODO WRAP
+		return nil, newVerifyTheoremsErr(err, req.Handle)
 	}
 
 	engine, err := zanzi.NewZanzi(manager.GetKVStore(), manager.GetLogger())
 	if err != nil {
-		return nil, newVerifyTheoremsErr(err) // TODO
+		return nil, newVerifyTheoremsErr(err, req.Handle)
 	}
 	evaluator := theorem.NewEvaluator(engine)
 
 	result, err := evaluator.EvaluatePolicyTheoremDSL(ctx, record.Ctx.Policy.Id, record.Data.PolicyTheorem)
 	if err != nil {
-		return nil, newVerifyTheoremsErr(err)
+		return nil, newVerifyTheoremsErr(err, req.Handle)
 	}
 
 	return &playground.VerifyTheoremsResponse{
@@ -307,33 +349,33 @@ func HandleVerifyTheorem(ctx context.Context, manager runtime.RuntimeManager, re
 }
 
 func HandleGetCatalogue(ctx context.Context, manager runtime.RuntimeManager, req *playground.GetCatalogueRequest) (*playground.GetCatalogueResponse, error) {
-	repository := NewSandboxRepository(manager)
+	repository := NewSandboxRepository(manager.GetKVStore())
 
 	record, err := repository.GetSandbox(ctx, req.Handle)
 	if err != nil {
-		return nil, newGetCatalogueErr(err) // TODO WRAP
+		return nil, newGetCatalogueErr(err, req.Handle)
 	}
 	if record == nil {
 		return nil, errors.Wrap("sandbox not found", errors.ErrorType_NOT_FOUND, errors.Pair("handle", req.Handle))
 	}
 	if !record.Initialized {
 		err := errors.Wrap("uninitialized sandbox cannot execute theorems",
-			errors.ErrorType_OPERATION_FORBIDDEN, errors.Pair("handle", req.Handle))
-		return nil, newGetCatalogueErr(err)
+			errors.ErrorType_OPERATION_FORBIDDEN)
+		return nil, newGetCatalogueErr(err, req.Handle)
 	}
 
 	manager, err = GetManagerForSandbox(manager, req.Handle)
 	if err != nil {
-		return nil, newGetCatalogueErr(err) // TODO WRAP
+		return nil, newGetCatalogueErr(err, req.Handle)
 	}
 
 	engine, err := zanzi.NewZanzi(manager.GetKVStore(), manager.GetLogger())
 	if err != nil {
-		return nil, newGetCatalogueErr(err) // TODO
+		return nil, newGetCatalogueErr(err, req.Handle)
 	}
 	catalogue, err := policy.BuildCatalogue(ctx, engine, record.Ctx.Policy.Id)
 	if err != nil {
-		return nil, newGetCatalogueErr(err) // TODO wrap
+		return nil, newGetCatalogueErr(err, req.Handle)
 	}
 
 	return &playground.GetCatalogueResponse{
@@ -342,26 +384,26 @@ func HandleGetCatalogue(ctx context.Context, manager runtime.RuntimeManager, req
 }
 
 func HandleRestoreScratchpad(ctx context.Context, manager runtime.RuntimeManager, req *playground.RestoreScratchpadRequest) (*playground.RestoreScratchpadResponse, error) {
-	repository := NewSandboxRepository(manager)
+	repository := NewSandboxRepository(manager.GetKVStore())
 
 	record, err := repository.GetSandbox(ctx, req.Handle)
 	if err != nil {
-		return nil, newRestoreScratchpadErr(err) // TODO WRAP
+		return nil, newRestoreScratchpadErr(err, req.Handle)
 	}
 	if record == nil {
-		err = errors.Wrap("sandbox not found", errors.ErrorType_NOT_FOUND, errors.Pair("handle", req.Handle))
-		return nil, newRestoreScratchpadErr(err) // TODO WRAP
+		err = errors.Wrap("sandbox not found", errors.ErrorType_NOT_FOUND)
+		return nil, newRestoreScratchpadErr(err, req.Handle)
 	}
 	if !record.Initialized {
-		err = errors.Wrap("uninitialized sandbox cannot execute theorems", errors.ErrorType_OPERATION_FORBIDDEN, errors.Pair("handle", req.Handle))
-		return nil, newRestoreScratchpadErr(err) // TODO WRAP
+		err = errors.Wrap("uninitialized sandbox cannot execute theorems", errors.ErrorType_OPERATION_FORBIDDEN)
+		return nil, newRestoreScratchpadErr(err, req.Handle)
 	}
 
 	record.Scratchpad = record.Data
 
 	err = repository.SetRecord(ctx, record)
 	if err != nil {
-		return nil, newRestoreScratchpadErr(err)
+		return nil, newRestoreScratchpadErr(err, req.Handle)
 	}
 
 	return &playground.RestoreScratchpadResponse{

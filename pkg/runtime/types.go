@@ -137,17 +137,12 @@ func (m *runtimeManager) Terminate() error {
 	return nil
 }
 
-func (m *runtimeManager) GetInMemKV() KVStore {
-	return m.memKV
-}
-
 type RuntimeManager interface {
 	GetKVStore() KVStore
 	GetEventManager() EventManager
 	GetLogger() Logger
 	GetMetricService() MetricService
 	GetLogicalClock() LogicalClockService
-	GetInMemKV() KVStore
 
 	// Terminate frees up all used up resources, leaving the runtime unusable
 	Terminate() error

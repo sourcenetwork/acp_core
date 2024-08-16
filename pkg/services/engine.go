@@ -144,5 +144,8 @@ func (s *acpEngine) EvaluateTheorem(ctx context.Context, req *types.EvaluateTheo
 	return applyMiddleware(ctx, h, s.hooks, req)
 }
 func (s *acpEngine) GetPolicyCatalogue(ctx context.Context, req *types.GetPolicyCatalogueRequest) (*types.GetPolicyCatalogueResponse, error) {
-	return nil, nil
+	h := func(ctx context.Context, msg *types.GetPolicyCatalogueRequest) (*types.GetPolicyCatalogueResponse, error) {
+		return policy.GetPolicyCatalogue(ctx, s.runtime, msg)
+	}
+	return applyMiddleware(ctx, h, s.hooks, req)
 }

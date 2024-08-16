@@ -2,6 +2,7 @@ package errors
 
 import "fmt"
 
+// TypedError models an acp_core compatible error, which contains a type
 type TypedError interface {
 	GetType() ErrorType
 }
@@ -20,6 +21,9 @@ func Pair(key string, val any) ContextPair {
 	}
 }
 
+// Error is the general error type for acp_core.
+// It wraps base errors and contains context data
+// in form of key value pairs.
 type Error struct {
 	errType ErrorType
 	base    error

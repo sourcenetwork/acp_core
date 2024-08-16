@@ -6,14 +6,19 @@ import (
 	rcdb "github.com/sourcenetwork/raccoondb"
 
 	"github.com/sourcenetwork/acp_core/internal/parser"
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/playground"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
 
+// sandboxStorePrefix acts as a namspace for the sandbox repository
 const sandboxStorePrefix = "/sandboxes"
 
+// GetManagerForSandbox returns a RuntimeManager which manages the environment of a single sandbox.
+// Effectively it wraps the Manager's KVStore by adding the sandbox handle a a prefix,
+// this ensures that sandboxes are completely isolated from each other
 func GetManagerForSandbox(manager runtime.RuntimeManager, handle uint64) (runtime.RuntimeManager, error) {
 	kv := manager.GetKVStore()
 	prefix := fmt.Sprintf("/engine/%v", handle)
@@ -23,7 +28,7 @@ func GetManagerForSandbox(manager runtime.RuntimeManager, handle uint64) (runtim
 		runtime.WithLogger(manager.GetLogger()),
 	)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap("manager for sandbox", err)
 	}
 	return engineManager, nil
 }

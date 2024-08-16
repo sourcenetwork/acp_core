@@ -251,7 +251,7 @@ type SandboxDataErrors struct {
 	RelationshipsErrors []*types.LocatedMessage `protobuf:"bytes,2,rep,name=relationships_errors,json=relationshipsErrors,proto3" json:"relationships_errors,omitempty"`
 	// policy_errors contains all errors encountered while
 	// parsing the theorems
-	TheoremsErrrors []*types.LocatedMessage `protobuf:"bytes,3,rep,name=theorems_errrors,json=theoremsErrrors,proto3" json:"theorems_errrors,omitempty"`
+	TheoremsErrors []*types.LocatedMessage `protobuf:"bytes,3,rep,name=theorems_errrors,json=theoremsErrrors,proto3" json:"theorems_errrors,omitempty"`
 }
 
 func (m *SandboxDataErrors) Reset()         { *m = SandboxDataErrors{} }
@@ -303,7 +303,7 @@ func (m *SandboxDataErrors) GetRelationshipsErrors() []*types.LocatedMessage {
 
 func (m *SandboxDataErrors) GetTheoremsErrrors() []*types.LocatedMessage {
 	if m != nil {
-		return m.TheoremsErrrors
+		return m.TheoremsErrors
 	}
 	return nil
 }
@@ -569,10 +569,10 @@ func (m *SandboxDataErrors) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.TheoremsErrrors) > 0 {
-		for iNdEx := len(m.TheoremsErrrors) - 1; iNdEx >= 0; iNdEx-- {
+	if len(m.TheoremsErrors) > 0 {
+		for iNdEx := len(m.TheoremsErrors) - 1; iNdEx >= 0; iNdEx-- {
 			{
-				size, err := m.TheoremsErrrors[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				size, err := m.TheoremsErrors[iNdEx].MarshalToSizedBuffer(dAtA[:i])
 				if err != nil {
 					return 0, err
 				}
@@ -722,8 +722,8 @@ func (m *SandboxDataErrors) Size() (n int) {
 			n += 1 + l + sovSandbox(uint64(l))
 		}
 	}
-	if len(m.TheoremsErrrors) > 0 {
-		for _, e := range m.TheoremsErrrors {
+	if len(m.TheoremsErrors) > 0 {
+		for _, e := range m.TheoremsErrors {
 			l = e.Size()
 			n += 1 + l + sovSandbox(uint64(l))
 		}
@@ -1426,8 +1426,8 @@ func (m *SandboxDataErrors) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.TheoremsErrrors = append(m.TheoremsErrrors, &types.LocatedMessage{})
-			if err := m.TheoremsErrrors[len(m.TheoremsErrrors)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.TheoremsErrors = append(m.TheoremsErrors, &types.LocatedMessage{})
+			if err := m.TheoremsErrors[len(m.TheoremsErrors)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
