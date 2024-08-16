@@ -35,6 +35,7 @@ message DelegationTheorem {
   bool assert_true = 3;
 }
 
+// PolicyTheorem models a set of theorems about a Policy
 message PolicyTheorem {
   repeated AuthorizationTheorem authorization_theorems = 1;
   repeated DelegationTheorem delegation_theorems = 2;

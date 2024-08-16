@@ -59,11 +59,12 @@ message NewSandboxRequest {
   // user defined name for the sandbox
   string name = 1;
 
+  // optional description for documentation
   string description = 2;
 }
 
 message NewSandboxResponse {
-  // opaque identifier pointing to the created sandbox
+  // record modeling the created sandbox
   SandboxRecord record = 1;
 }
 
@@ -78,7 +79,9 @@ message SetStateRequest {
 message SetStateResponse {
   // ok indicates the state updated sucessfuly
   bool ok = 1;
+  // errors represent all recoverable errors found while parsing and setting the sandbox state
   SandboxDataErrors errors = 2;
+  // record contains a representation of the sandbox's new internal state
   SandboxRecord record = 3;
 }
 
@@ -98,12 +101,14 @@ message VerifyTheoremsRequest {
 }
 
 message VerifyTheoremsResponse {
+  // result of the provided sandbox theorem
   sourcenetwork.acp_core.AnnotatedPolicyTheoremResult result = 1;
 }
 
 message ListSandboxesRequest {}
 
 message ListSandboxesResponse {
+  // records contains all sandboxes that exist in a playground
   repeated SandboxRecord records = 1;
 }
 
@@ -123,8 +128,15 @@ message SimulateRequest {
 }
 
 message SimulateReponse {
+  // validate_data flags whether the input SandboxData was sucessfuly loaded
   bool valid_data = 1;
+
+  // errors represent all recoverable errors found while parsing and setting the sandbox state
   SandboxDataErrors errors = 2;
+
+  // record contains a representation of the sandbox's new internal state
   SandboxRecord record = 3;
+
+  // result of the provided sandbox theorem
   sourcenetwork.acp_core.AnnotatedPolicyTheoremResult result = 4;
 }

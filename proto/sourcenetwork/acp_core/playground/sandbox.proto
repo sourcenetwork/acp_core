@@ -21,7 +21,7 @@ message SandboxRecord {
 
   SandboxData data = 4;
 
-  // scratchpad acts as temporary storage for modifications in the sandbox state
+  // scratchpad acts as temporary storage for modifications in the sandbox data
   SandboxData scratchpad = 5;
 
   SandboxCtx ctx = 6;
@@ -31,16 +31,24 @@ message SandboxRecord {
 
 // SandboxData encapsulates all the data necessary to create a Sandbox
 message SandboxData {
+  // policy_definition contains a yaml serialized policy which will be loaded in the sandbox
   string policy_definition = 1;
+  // relationships is a set of line separated relationships, as defined in the PolicyTheoremDSL
+  // For an introduction to the language, check acp_core docs
   string relationships = 2;
+  // policy_theorem is a PolicyTheoremDSL document representing a PolicyTheorem.
+  // For an introduction to the language, check acp_core docs
   string policy_theorem = 3;
 }
 
 // SandboxCtx encapsulated all context data
 // to execute an isolated theorem execution simulation
 message SandboxCtx {
+  // policy contains the parsed policy as defined in SandboxData
   sourcenetwork.acp_core.Policy policy = 1;
+  // relationships contains the parsed relationships as defined in SandboxData
   repeated sourcenetwork.acp_core.Relationship relationships = 2;
+  // policy_theorem contains the parsed policy_theorem as defined in SandboxData
   sourcenetwork.acp_core.PolicyTheorem policy_theorem = 3;
 }
 
