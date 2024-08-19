@@ -10,7 +10,9 @@ import (
 var _ TheoremVisitor = (*theoremVisitorImpl)(nil)
 
 // theoremVisitorImpl implements TheoremVisitor and walks the parse tree to produce relationships and policy theorems
-type theoremVisitorImpl struct{}
+type theoremVisitorImpl struct {
+	*antlr.BaseParseTreeVisitor
+}
 
 func (l *theoremVisitorImpl) VisitRelationship_set(ctx *Relationship_setContext) any {
 	return utils.MapSlice(ctx.AllRelationship(), func(ctx IRelationshipContext) LocatedObject[*types.Relationship] {
@@ -131,11 +133,6 @@ func (l *theoremVisitorImpl) VisitPolicy_thorem(ctx *Policy_thoremContext) any {
 	}
 }
 
-func (v *theoremVisitorImpl) Visit(tree antlr.ParseTree) interface{}         { return tree.Accept(v) }
-func (v *theoremVisitorImpl) VisitChildren(_ antlr.RuleNode) interface{}     { return nil }
-func (v *theoremVisitorImpl) VisitTerminal(_ antlr.TerminalNode) interface{} { return nil }
-func (v *theoremVisitorImpl) VisitErrorNode(_ antlr.ErrorNode) interface{}   { return nil }
-
 func (v *theoremVisitorImpl) VisitImplied_relations(ctx *Implied_relationsContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -158,8 +155,4 @@ func (v *theoremVisitorImpl) VisitResource(ctx *ResourceContext) interface{} {
 
 func (v *theoremVisitorImpl) VisitActorid(ctx *ActoridContext) interface{} {
 	return v.VisitChildren(ctx)
-}
-
-func (v *theoremVisitorImpl) VisitRelationship_document(ctx *Relationship_documentContext) interface{} {
-	return v.Visit(ctx.Relationship())
 }

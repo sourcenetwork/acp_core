@@ -56,7 +56,7 @@ actor:
 	require.Nil(t, err)
 	require.Equal(t, metadata, resp.Metadata)
 	require.Equal(t, resp.Policy, &types.Policy{
-		Id:           "d12fa4d041911f2c77f6f49dd73942fb03389ab983714315af67b0f8e7cbcfef",
+		Id:           "d011372c7e2cd34fd63777c513bb5eb16713834b855f424158474b77c1800410",
 		Name:         "policy",
 		Description:  "ok",
 		CreationTime: timestamp,
@@ -240,8 +240,8 @@ resources:
 	resp1, err1 := ctx.Engine.CreatePolicy(ctx, &req)
 	resp2, err2 := ctx.Engine.CreatePolicy(ctx, &req)
 
-	want1 := "94eb195c0e459aa79e02a1986c7e731c5015721c18a373f2b2a0ed140a04b454"
-	want2 := "7bcb558ef8dac6b744a11ea144a61a756ea38475554097ac04612037c36ffe52"
+	want1 := "abe378ae8dac56f43238b56126a5a5ff1d1021e6bf8027d477b5a366e6238fc2"
+	want2 := "94eb195c0e459aa79e02a1986c7e731c5015721c18a373f2b2a0ed140a04b454"
 	require.NoError(t, err1)
 	require.NoError(t, err2)
 	require.Equal(t, want1, resp1.Policy.Id)

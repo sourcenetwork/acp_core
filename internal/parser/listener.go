@@ -1,6 +1,8 @@
 package parser
 
 import (
+	"fmt"
+
 	"github.com/antlr4-go/antlr/v4"
 
 	"github.com/sourcenetwork/acp_core/pkg/types"
@@ -9,17 +11,27 @@ import (
 var _ antlr.ErrorListener = (*errListener)(nil)
 
 type errListener struct {
-	msgs []*types.LocatedMessage
+	report *ParserReport
+}
+
+func newListener(productionRuleName string) *errListener {
+	return &errListener{
+		report: &ParserReport{
+			msg:  fmt.Sprintf("%v parser report", productionRuleName),
+			msgs: nil,
+		},
+	}
 }
 
 // GetERror produces a ParserReport from the errors stored in the listener
-func (l *errListener) GetMessages() []*types.LocatedMessage {
-	return l.msgs
+func (l *errListener) GetReport() *ParserReport {
+	return l.report
 }
 
 func (l *errListener) SyntaxError(recognizer antlr.Recognizer, offendingSymbol interface{}, line, column int, msg string, e antlr.RecognitionException) {
 	err := &types.LocatedMessage{
 		Message: msg,
+		Kind:    types.LocatedMessage_ERROR,
 		Range: &types.BufferRange{
 			Start: &types.BufferPosition{
 				Line:   uint64(line),
@@ -27,13 +39,14 @@ func (l *errListener) SyntaxError(recognizer antlr.Recognizer, offendingSymbol i
 			},
 			// Antlr doesn't provide the end position for the error,
 			// default to 0,0 position
+			// which can understood as EOF
 			End: &types.BufferPosition{
 				Line:   0,
 				Column: 0,
 			},
 		},
 	}
-	l.msgs = append(l.msgs, err)
+	l.report.msgs = append(l.report.msgs, err)
 }
 
 func (l *errListener) ReportAmbiguity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex, stopIndex int, exact bool, ambigAlts *antlr.BitSet, configs *antlr.ATNConfigSet) {

@@ -10,7 +10,6 @@ import (
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 )
 
-// FIXME make this concurrent
 const key = "value"
 
 const kvPrefix = "/counter"

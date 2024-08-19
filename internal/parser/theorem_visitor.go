@@ -10,9 +10,6 @@ type TheoremVisitor interface {
 	// Visit a parse tree produced by TheoremParser#relationship_set.
 	VisitRelationship_set(ctx *Relationship_setContext) interface{}
 
-	// Visit a parse tree produced by TheoremParser#relationship_document.
-	VisitRelationship_document(ctx *Relationship_documentContext) interface{}
-
 	// Visit a parse tree produced by TheoremParser#policy_thorem.
 	VisitPolicy_thorem(ctx *Policy_thoremContext) interface{}
 

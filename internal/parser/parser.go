@@ -1,6 +1,8 @@
 package parser
 
 import (
+	"fmt"
+
 	"github.com/antlr4-go/antlr/v4"
 
 	"github.com/sourcenetwork/acp_core/pkg/types"
@@ -22,15 +24,15 @@ func ParseRelationship(input string) (*types.Relationship, *ParserReport) {
 // ParseRelationship attempts to extract a single Relationship from input.
 // Returns location information about parsed Relationship.
 func ParseRelationshipWithLocation(input string) (*LocatedObject[*types.Relationship], *ParserReport) {
-	result, msgs := parseAndVisit(input, func(p *TheoremParser) antlr.ParseTree {
-		return p.Relationship_document()
-	})
-	report := NewParserReport("relationship parse report", msgs...)
+	rels, report := ParseRelationshipsWithLocation(input)
 	if report.HasError() {
 		return nil, report
 	}
-	obj := result.(LocatedObject[*types.Relationship])
-	return &obj, report
+
+	if len(rels) != 1 {
+		panic(fmt.Sprintf("expected 1 relationship, got %v", len(rels)))
+	}
+	return &rels[0], report
 }
 
 // ParseRelationships greedly parses relationships in input.
@@ -46,10 +48,9 @@ func ParseRelationships(input string) ([]*types.Relationship, *ParserReport) {
 // ParseRelationshipsWithLocation greedily parses the input for all relationships it can find
 // and returns a located object for each.
 func ParseRelationshipsWithLocation(relationshipSet string) ([]LocatedObject[*types.Relationship], *ParserReport) {
-	result, msgs := parseAndVisit(relationshipSet, func(p *TheoremParser) antlr.ParseTree {
+	result, report := parseAndVisit(relationshipSet, "relationship set", func(p *TheoremParser) antlr.ParseTree {
 		return p.Relationship_set()
 	})
-	report := NewParserReport("relationship set parse report", msgs...)
 	if report.HasError() {
 		return nil, report
 	}
@@ -58,10 +59,9 @@ func ParseRelationshipsWithLocation(relationshipSet string) ([]LocatedObject[*ty
 
 // ParsePolicyTheorem greedily consumes the input and returns a PolicyTheorem
 func ParsePolicyTheorem(input string) (*LocatedPolicyTheorem, *ParserReport) {
-	result, msgs := parseAndVisit(input, func(p *TheoremParser) antlr.ParseTree {
+	result, report := parseAndVisit(input, "policy theorem", func(p *TheoremParser) antlr.ParseTree {
 		return p.Policy_thorem()
 	})
-	report := NewParserReport("policy theorem parse report", msgs...)
 	if report.HasError() {
 		return nil, report
 	}
@@ -74,23 +74,24 @@ func ParsePolicyTheorem(input string) (*LocatedPolicyTheorem, *ParserReport) {
 // using the custom visitor.
 //
 // Return visitor result or error
-func parseAndVisit(input string, caller parserCaller) (any, []*types.LocatedMessage) {
+func parseAndVisit(input string, productionName string, caller parserCaller) (any, *ParserReport) {
 	inputStream := antlr.NewInputStream(input)
 	lexer := NewTheoremLexer(inputStream)
 	stream := antlr.NewCommonTokenStream(lexer, 0)
 
-	errListener := errListener{}
+	errListener := newListener(productionName)
 
 	parser := NewTheoremParser(stream)
 	parser.RemoveErrorListeners()
-	parser.AddErrorListener(&errListener)
-
+	parser.AddErrorListener(errListener)
 	tree := caller(parser)
+
+	report := errListener.GetReport()
+	if report.HasError() {
+		return nil, report
+	}
 
 	visitor := theoremVisitorImpl{}
 	result := visitor.Visit(tree)
-	if result == nil {
-		return nil, errListener.GetMessages()
-	}
-	return result, errListener.GetMessages()
+	return result, report
 }

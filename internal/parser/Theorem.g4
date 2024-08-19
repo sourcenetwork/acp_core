@@ -1,8 +1,7 @@
 grammar Theorem;
 
-relationship_set: relationship* EOF;
-relationship_document: relationship EOF;
-policy_thorem: authorization_theorems delegation_theorems EOF;
+relationship_set: relationship* ;
+policy_thorem: authorization_theorems delegation_theorems ;
 
 authorization_theorems: 'Authorizations' '{' authorization_theorem* '}';
 authorization_theorem: relationship | NEGATION relationship;
@@ -36,8 +35,6 @@ OPERATION: 'delete' | 'create';
 ID: [a-zA-Z] [a-zA-Z0-9_]+;
 STRING: '"' .*? '"';
 DID: 'did:' [a-z0-9]+ ':' [a-z0-9A-Z._-]+;
-HEX: '%' HEXDIG HEXDIG;
-HEXDIG: [0-9a-fA-F];
 
 COMMENT: '//' .*? '\r'? '\n' -> skip;
 WS : [ \t]+ -> skip ; // skip spaces, tabs

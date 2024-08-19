@@ -76,7 +76,7 @@ func WithMemKV() Opt {
 func NewRuntimeManager(opts ...Opt) (RuntimeManager, error) {
 	rt := &runtimeManager{
 		eventMan: &DefaultEventManager{},
-		logger:   nil,
+		logger:   types.NoopLogger(),
 		memKV:    rcdb.NewMemKV(),
 	}
 	WithMemKV()(rt)
