@@ -29,7 +29,7 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 		return nil, fmt.Errorf("CreatePolicy: %w", err)
 	}
 
-	counter := raccoon.NewCounterStoreFromRunetimeManager(runtime, policyCounterPrefix)
+	counter := raccoon.NewCounterStoreFromRuntimeManager(runtime, policyCounterPrefix)
 	releaser := counter.Acquire()
 	defer releaser.Release()
 	i, err := counter.GetNextAndIncrement(ctx)

@@ -15,7 +15,7 @@ const key = "value"
 const kvPrefix = "/counter"
 
 // NewCounterStoreFromRuntimeManager builds a CounterStore from resources in the manager
-func NewCounterStoreFromRunetimeManager(manager runtime.RuntimeManager, prefix string) CounterStore {
+func NewCounterStoreFromRuntimeManager(manager runtime.RuntimeManager, prefix string) CounterStore {
 	return NewCounterStore(prefix, manager.GetKVStore(), manager.GetLogger())
 }
 

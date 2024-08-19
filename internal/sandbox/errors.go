@@ -25,3 +25,7 @@ func newGetCatalogueErr(err error, handle uint64) error {
 func newRestoreScratchpadErr(err error, handle uint64) error {
 	return errors.Wrap("RestoreScratchpad failed", err, errors.Pair("handle", handle))
 }
+
+func newGetSandboxErr(err error, handle uint64) error {
+	return errors.Wrap("GetSandbox failed", err, errors.Pair("handle", handle))
+}

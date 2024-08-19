@@ -23,7 +23,7 @@ func (i *sandboxIder) Id(obj *playground.SandboxRecord) []byte {
 
 func (i *sandboxIder) HandleToBytes(handle uint64) []byte {
 	bytes := make([]byte, 8)
-	binary.BigEndian.AppendUint64(bytes, handle)
+	binary.BigEndian.PutUint64(bytes, handle)
 	return bytes
 }
 

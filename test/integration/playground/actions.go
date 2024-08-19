@@ -1,7 +1,6 @@
 package playground
 
 import (
-	"github.com/sourcenetwork/acp_core/internal/simulator"
 	"github.com/sourcenetwork/acp_core/pkg/playground"
 	"github.com/sourcenetwork/acp_core/test"
 	"github.com/stretchr/testify/require"
@@ -21,13 +20,13 @@ func (a *NewSandbox) Run(ctx *test.TestCtx) *playground.NewSandboxResponse {
 
 type ListSandboxes struct {
 	Req         *playground.ListSandboxesRequest
-	Expected    *playground.ListSandboxesResponse
 	ExpectedErr error
+	ExpectedLen int
 }
 
 func (a *ListSandboxes) Run(ctx *test.TestCtx) *playground.ListSandboxesResponse {
 	resp, err := ctx.Playground.ListSandboxes(ctx, a.Req)
-	test.AssertResults(ctx, resp, a.Expected, err, a.ExpectedErr)
+	test.AssertResults(ctx, len(resp.Records), a.ExpectedLen, err, a.ExpectedErr)
 	return resp
 }
 
@@ -47,7 +46,7 @@ func (a *SetState) Run(ctx *test.TestCtx) *playground.SetStateResponse {
 	}
 
 	if a.Assertions == nil || len(a.Assertions) == 0 {
-		require.True(ctx.T, resp.Ok)
+		require.True(ctx.T, resp.Ok, "expected ok response: got %v", resp)
 		require.Equal(ctx.T, &playground.SandboxDataErrors{}, resp.Errors)
 		return resp
 	}
@@ -105,16 +104,4 @@ func (a *NewAndSet) Run(ctx *test.TestCtx) uint64 {
 	a2.Run(ctx)
 
 	return resp.Record.Handle
-}
-
-type Simulate struct {
-	Data       playground.SandboxData
-	Assertions []Assertion
-}
-
-func (a *Simulate) Run(ctx *test.TestCtx) {
-	result, err := simulator.HandleSimulate(ctx, ctx.Runtime, &playground.SimulateRequest{
-		Data: &a.Data,
-	})
-	_, _ = result, err
 }

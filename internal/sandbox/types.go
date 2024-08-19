@@ -15,6 +15,7 @@ import (
 
 // sandboxStorePrefix acts as a namspace for the sandbox repository
 const sandboxStorePrefix = "/sandboxes"
+const sandboxCounterPrefix = "/sandbox-counter"
 
 // GetManagerForSandbox returns a RuntimeManager which manages the environment of a single sandbox.
 // Effectively it wraps the Manager's KVStore by adding the sandbox handle a a prefix,

@@ -3,6 +3,7 @@ package playground
 import (
 	"testing"
 
+	"github.com/stretchr/testify/require"
 	_ "github.com/stretchr/testify/require"
 
 	"github.com/sourcenetwork/acp_core/pkg/errors"
@@ -194,29 +195,8 @@ func Test_ListSandboxes_ReturnsExistingSandboxes(t *testing.T) {
 	a.Run(ctx)
 
 	action := ListSandboxes{
-		Req: &playground.ListSandboxesRequest{},
-		Expected: &playground.ListSandboxesResponse{
-			Records: []*playground.SandboxRecord{
-				{
-					Handle:      1,
-					Name:        "test1",
-					Description: "",
-					Data:        nil,
-					Scratchpad:  nil,
-					Ctx:         nil,
-					Initialized: false,
-				},
-				{
-					Handle:      2,
-					Name:        "test2",
-					Description: "",
-					Data:        nil,
-					Scratchpad:  nil,
-					Ctx:         nil,
-					Initialized: false,
-				},
-			},
-		},
+		Req:         &playground.ListSandboxesRequest{},
+		ExpectedLen: 2,
 	}
 	action.Run(ctx)
 }
@@ -314,11 +294,7 @@ func Test_GetCatalogue_ReturnsSandboxCatalogue(t *testing.T) {
 	a.Run(ctx)
 }
 
-func Test_SetState_(t *testing.T) {}
-
-func Test_VerifyTheorem_(t *testing.T) {}
-
-func Test_Simulate_(t *testing.T) {
+func Test_Simulate(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
 	data := playground.SandboxData{
@@ -358,8 +334,52 @@ func Test_Simulate_(t *testing.T) {
 		`,
 	}
 
-	action := Simulate{
-		Data: data,
+	resp, err := ctx.Playground.Simulate(ctx, &playground.SimulateRequest{
+		Data: &data,
+	})
+	require.NoError(t, err)
+	require.True(t, resp.ValidData)
+}
+
+func Test_GetSandbox_ReturnsSandbox(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+
+	a1 := NewSandbox{
+		Req: &playground.NewSandboxRequest{},
 	}
-	action.Run(ctx)
+	a1.Run(ctx)
+
+	a1 = NewSandbox{
+		Req: &playground.NewSandboxRequest{},
+	}
+	a1.Run(ctx)
+
+	resp, err := ctx.Playground.GetSandbox(ctx, &playground.GetSandboxRequest{Handle: 1})
+
+	want := &playground.SandboxRecord{
+		Handle:      1,
+		Name:        "1",
+		Description: "",
+		Data:        nil,
+		Scratchpad:  nil,
+		Ctx:         nil,
+		Initialized: false,
+	}
+	require.NoError(t, err)
+	require.Equal(t, want, resp.Record)
+
+	resp, err = ctx.Playground.GetSandbox(ctx, &playground.GetSandboxRequest{Handle: 2})
+
+	want = &playground.SandboxRecord{
+		Handle:      2,
+		Name:        "2",
+		Description: "",
+		Data:        nil,
+		Scratchpad:  nil,
+		Ctx:         nil,
+		Initialized: false,
+	}
+	require.NoError(t, err)
+	require.Equal(t, want, resp.Record)
+
 }

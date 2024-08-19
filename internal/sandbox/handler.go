@@ -21,7 +21,7 @@ import (
 )
 
 func HandleNewSandboxRequest(ctx context.Context, manager runtime.RuntimeManager, req *playground.NewSandboxRequest) (*playground.NewSandboxResponse, error) {
-	counter := raccoon.NewCounterStoreFromRunetimeManager(manager, sandboxStorePrefix)
+	counter := raccoon.NewCounterStoreFromRuntimeManager(manager, sandboxCounterPrefix)
 
 	releaser := counter.Acquire()
 	defer releaser.Release()
@@ -58,14 +58,28 @@ func HandleNewSandboxRequest(ctx context.Context, manager runtime.RuntimeManager
 }
 
 func HandleListSandboxes(ctx context.Context, manager runtime.RuntimeManager, req *playground.ListSandboxesRequest) (*playground.ListSandboxesResponse, error) {
-	repository := NewSandboxRepository(manager.GetKVStore())
-	sandboxes, err := repository.ListSandboxes(ctx)
+	// FIXME: there's something weird going on in raccoon and I have no idea what.
+	// Listing isn't working, but indiidual fetching does.
+	// Workaround for now, I'm sorry.
+	counter := raccoon.NewCounterStoreFromRuntimeManager(manager, sandboxCounterPrefix)
+	max, err := counter.GetNext(ctx)
 	if err != nil {
 		return nil, newListSandboxesErr(err)
 	}
 
+	var records []*playground.SandboxRecord
+	repository := NewSandboxRepository(manager.GetKVStore())
+	for i := uint64(1); i < max; i += 1 {
+		record, err := repository.GetSandbox(ctx, i)
+		if err != nil {
+			return nil, newListSandboxesErr(err)
+		}
+		if record != nil {
+			records = append(records, record)
+		}
+	}
 	return &playground.ListSandboxesResponse{
-		Records: sandboxes,
+		Records: records,
 	}, nil
 }
 
@@ -408,5 +422,21 @@ func HandleRestoreScratchpad(ctx context.Context, manager runtime.RuntimeManager
 
 	return &playground.RestoreScratchpadResponse{
 		Scratchpad: record.Scratchpad,
+	}, nil
+}
+
+func HandleGetSandbox(ctx context.Context, manager runtime.RuntimeManager, req *playground.GetSandboxRequest) (*playground.GetSandboxResponse, error) {
+	repository := NewSandboxRepository(manager.GetKVStore())
+
+	record, err := repository.GetSandbox(ctx, req.Handle)
+	if err != nil {
+		return nil, newGetSandboxErr(err, req.Handle)
+	}
+	if record == nil {
+		err = errors.Wrap("sandbox not found", errors.ErrorType_NOT_FOUND)
+		return nil, newGetSandboxErr(err, req.Handle)
+	}
+	return &playground.GetSandboxResponse{
+		Record: record,
 	}, nil
 }

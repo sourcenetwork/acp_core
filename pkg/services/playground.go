@@ -48,3 +48,7 @@ func (s *playgroundService) RestoreScratchpad(ctx context.Context, req *playgrou
 func (s *playgroundService) Simulate(ctx context.Context, req *playground.SimulateRequest) (*playground.SimulateReponse, error) {
 	return simulator.HandleSimulate(ctx, s.runtime, req)
 }
+
+func (s *playgroundService) GetSandbox(ctx context.Context, req *playground.GetSandboxRequest) (*playground.GetSandboxResponse, error) {
+	return sandbox.HandleGetSandbox(ctx, s.runtime, req)
+}
