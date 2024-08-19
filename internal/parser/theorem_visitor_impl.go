@@ -156,3 +156,13 @@ func (v *theoremVisitorImpl) VisitResource(ctx *ResourceContext) interface{} {
 func (v *theoremVisitorImpl) VisitActorid(ctx *ActoridContext) interface{} {
 	return v.VisitChildren(ctx)
 }
+
+func (v *theoremVisitorImpl) VisitRelationship_document(ctx *Relationship_documentContext) any {
+	result := v.Visit(ctx.Relationship())
+	return result.(LocatedObject[*types.Relationship])
+}
+
+func (v *theoremVisitorImpl) Visit(tree antlr.ParseTree) interface{}         { return tree.Accept(v) }
+func (v *theoremVisitorImpl) VisitChildren(_ antlr.RuleNode) interface{}     { return nil }
+func (v *theoremVisitorImpl) VisitTerminal(_ antlr.TerminalNode) interface{} { return nil }
+func (v *theoremVisitorImpl) VisitErrorNode(_ antlr.ErrorNode) interface{}   { return nil }

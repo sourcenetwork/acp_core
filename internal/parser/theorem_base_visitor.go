@@ -7,6 +7,10 @@ type BaseTheoremVisitor struct {
 	*antlr.BaseParseTreeVisitor
 }
 
+func (v *BaseTheoremVisitor) VisitRelationship_document(ctx *Relationship_documentContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseTheoremVisitor) VisitRelationship_set(ctx *Relationship_setContext) interface{} {
 	return v.VisitChildren(ctx)
 }

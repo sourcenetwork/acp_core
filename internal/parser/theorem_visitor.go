@@ -7,6 +7,9 @@ import "github.com/antlr4-go/antlr/v4"
 type TheoremVisitor interface {
 	antlr.ParseTreeVisitor
 
+	// Visit a parse tree produced by TheoremParser#relationship_document.
+	VisitRelationship_document(ctx *Relationship_documentContext) interface{}
+
 	// Visit a parse tree produced by TheoremParser#relationship_set.
 	VisitRelationship_set(ctx *Relationship_setContext) interface{}
 

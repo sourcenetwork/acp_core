@@ -8,51 +8,51 @@ import (
 )
 
 func TestParseRelationship_EmptyString_ReturnsError(t *testing.T) {
-	//relationship, err := ParseRelationship("")
+	relationship, report := ParseRelationship("")
 
-	//require.Error(t, err)
-	//require.Nil(t, relationship)
+	require.True(t, report.HasError())
+	require.Nil(t, relationship)
 }
 
 func TestParseRelationship_RelationshipPlusJunk_ReturnsError(t *testing.T) {
-	relationship, err := ParseRelationship("file:abc#owner@did:example:bob aksldfskwer#junk")
+	relationship, report := ParseRelationship("file:abc#owner@did:example:bob aksldfskwer#junk")
 
-	require.Error(t, err)
+	require.True(t, report.HasError())
 	require.Nil(t, relationship)
 }
 
 func TestParseRelationship_DIDActorRelationship(t *testing.T) {
-	relationship, err := ParseRelationship("test:abc#rel@did:example:bob")
+	relationship, report := ParseRelationship("test:abc#rel@did:example:bob")
 
-	require.Nil(t, err)
+	require.False(t, report.HasError())
 	require.Equal(t, relationship, types.NewActorRelationship("test", "abc", "rel", "did:example:bob"))
 }
 
 func TestParseRelationship_UsersetRelationship(t *testing.T) {
-	relationship, err := ParseRelationship("test:abc#rel@group:blah#member")
+	relationship, report := ParseRelationship("test:abc#rel@group:blah#member")
 
-	require.Nil(t, err)
+	require.False(t, report.HasError())
 	require.Equal(t, relationship, types.NewActorSetRelationship("test", "abc", "rel", "group", "blah", "member"))
 }
 
 func TestParseRelationship_ObjectSubject(t *testing.T) {
-	relationship, err := ParseRelationship("test:abc#rel@file:test")
+	relationship, report := ParseRelationship("test:abc#rel@file:test")
 
-	require.Nil(t, err)
+	require.False(t, report.HasError())
 	require.Equal(t, relationship, types.NewRelationship("test", "abc", "rel", "file", "test"))
 }
 
 func TestParseRelationship_EscapedObjectParsedCorrectly(t *testing.T) {
-	relationship, err := ParseRelationship(`test:"abc:#@1234"#rel@file:test`)
+	relationship, report := ParseRelationship(`test:"abc:#@1234"#rel@file:test`)
 
-	require.Nil(t, err)
+	require.False(t, report.HasError())
 	require.Equal(t, relationship, types.NewRelationship("test", `abc:#@1234`, "rel", "file", "test"))
 }
 
 func TestParseRelationship_InvalidRelationshipError(t *testing.T) {
-	relationship, err := ParseRelationship(`test:invalid#id#rel@file:test`)
+	relationship, report := ParseRelationship(`test:invalid#id#rel@file:test`)
 
-	require.NotNil(t, err)
+	require.True(t, report.HasError())
 	require.Nil(t, relationship)
 }
 
@@ -63,9 +63,9 @@ func TestParseRelationships(t *testing.T) {
 	resource:abc#relation@resource:userset#member
 	`
 
-	rels, err := ParseRelationships(relationships)
+	rels, report := ParseRelationships(relationships)
 
-	require.Nil(t, err)
+	require.False(t, report.HasError())
 	want := []*types.Relationship{
 		types.NewActorRelationship("resource", "abc", "relation", "did:example:bob"),
 		types.NewRelationship("resource", "abc", "relation", "resource", "thing"),
@@ -82,18 +82,18 @@ func TestParseRelationships_RelationshipSetWithTrailingData_Errors(t *testing.T)
 
 	abc1234
 	`
-	rels, err := ParseRelationships(relationships)
+	rels, report := ParseRelationships(relationships)
 
-	require.Error(t, err)
+	require.True(t, report.HasError())
 	require.Nil(t, rels)
 }
 
 func TestParseRelationships_EmptySuiteGetsParsed(t *testing.T) {
 	relationships := ""
 
-	rels, err := ParseRelationships(relationships)
+	rels, report := ParseRelationships(relationships)
 
-	require.Nil(t, err)
+	require.False(t, report.HasError())
 	require.Len(t, rels, 0)
 }
 
@@ -110,9 +110,9 @@ func TestPolicyTheorem_ParsesCorrectly(t *testing.T) {
 	}
 	`
 
-	thm, err := ParsePolicyTheorem(theorem)
+	thm, report := ParsePolicyTheorem(theorem)
 
-	require.Nil(t, err)
+	require.False(t, report.HasError())
 	want := &types.PolicyTheorem{
 		AuthorizationTheorems: []*types.AuthorizationTheorem{
 			{
@@ -151,7 +151,7 @@ func TestPolicyTheorem_TheoremWithTrailingInput_Errors(t *testing.T) {
 	trailniig-data-abc
 	`
 
-	thm, err := ParsePolicyTheorem(theorem)
-	require.Error(t, err)
+	thm, report := ParsePolicyTheorem(theorem)
+	require.True(t, report.HasError())
 	require.Nil(t, thm)
 }

@@ -40,62 +40,65 @@ func theoremParserInit() {
 		"ID", "STRING", "DID", "COMMENT", "WS", "NL",
 	}
 	staticData.RuleNames = []string{
-		"relationship_set", "policy_thorem", "authorization_theorems", "authorization_theorem",
-		"implied_relations", "implied_relation", "object_rel", "delegation_theorems",
-		"delegation_theorem", "relationship", "operation", "subject", "object",
-		"object_id", "relation", "resource", "actorid",
+		"relationship_document", "relationship_set", "policy_thorem", "authorization_theorems",
+		"authorization_theorem", "implied_relations", "implied_relation", "object_rel",
+		"delegation_theorems", "delegation_theorem", "relationship", "operation",
+		"subject", "object", "object_id", "relation", "resource", "actorid",
 	}
 	staticData.PredictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 18, 130, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 1, 18, 138, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
 		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 2, 10, 7,
 		10, 2, 11, 7, 11, 2, 12, 7, 12, 2, 13, 7, 13, 2, 14, 7, 14, 2, 15, 7, 15,
-		2, 16, 7, 16, 1, 0, 5, 0, 36, 8, 0, 10, 0, 12, 0, 39, 9, 0, 1, 1, 1, 1,
-		1, 1, 1, 2, 1, 2, 1, 2, 5, 2, 47, 8, 2, 10, 2, 12, 2, 50, 9, 2, 1, 2, 1,
-		2, 1, 3, 1, 3, 1, 3, 3, 3, 57, 8, 3, 1, 4, 1, 4, 1, 4, 5, 4, 62, 8, 4,
-		10, 4, 12, 4, 65, 9, 4, 1, 4, 1, 4, 1, 5, 1, 5, 1, 5, 1, 5, 1, 6, 1, 6,
-		1, 6, 1, 6, 1, 7, 1, 7, 1, 7, 5, 7, 80, 8, 7, 10, 7, 12, 7, 83, 9, 7, 1,
-		7, 1, 7, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 3, 8, 96,
-		8, 8, 1, 9, 1, 9, 1, 9, 1, 9, 1, 9, 1, 9, 1, 10, 1, 10, 1, 10, 1, 10, 1,
-		11, 1, 11, 1, 11, 1, 11, 1, 11, 1, 11, 3, 11, 114, 8, 11, 1, 12, 1, 12,
-		1, 12, 1, 12, 1, 13, 1, 13, 3, 13, 122, 8, 13, 1, 14, 1, 14, 1, 15, 1,
-		15, 1, 16, 1, 16, 1, 16, 0, 0, 17, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20,
-		22, 24, 26, 28, 30, 32, 0, 0, 121, 0, 37, 1, 0, 0, 0, 2, 40, 1, 0, 0, 0,
-		4, 43, 1, 0, 0, 0, 6, 56, 1, 0, 0, 0, 8, 58, 1, 0, 0, 0, 10, 68, 1, 0,
-		0, 0, 12, 72, 1, 0, 0, 0, 14, 76, 1, 0, 0, 0, 16, 95, 1, 0, 0, 0, 18, 97,
-		1, 0, 0, 0, 20, 103, 1, 0, 0, 0, 22, 113, 1, 0, 0, 0, 24, 115, 1, 0, 0,
-		0, 26, 121, 1, 0, 0, 0, 28, 123, 1, 0, 0, 0, 30, 125, 1, 0, 0, 0, 32, 127,
-		1, 0, 0, 0, 34, 36, 3, 18, 9, 0, 35, 34, 1, 0, 0, 0, 36, 39, 1, 0, 0, 0,
-		37, 35, 1, 0, 0, 0, 37, 38, 1, 0, 0, 0, 38, 1, 1, 0, 0, 0, 39, 37, 1, 0,
-		0, 0, 40, 41, 3, 4, 2, 0, 41, 42, 3, 14, 7, 0, 42, 3, 1, 0, 0, 0, 43, 44,
-		5, 1, 0, 0, 44, 48, 5, 2, 0, 0, 45, 47, 3, 6, 3, 0, 46, 45, 1, 0, 0, 0,
-		47, 50, 1, 0, 0, 0, 48, 46, 1, 0, 0, 0, 48, 49, 1, 0, 0, 0, 49, 51, 1,
-		0, 0, 0, 50, 48, 1, 0, 0, 0, 51, 52, 5, 3, 0, 0, 52, 5, 1, 0, 0, 0, 53,
-		57, 3, 18, 9, 0, 54, 55, 5, 11, 0, 0, 55, 57, 3, 18, 9, 0, 56, 53, 1, 0,
-		0, 0, 56, 54, 1, 0, 0, 0, 57, 7, 1, 0, 0, 0, 58, 59, 5, 4, 0, 0, 59, 63,
-		5, 2, 0, 0, 60, 62, 3, 10, 5, 0, 61, 60, 1, 0, 0, 0, 62, 65, 1, 0, 0, 0,
-		63, 61, 1, 0, 0, 0, 63, 64, 1, 0, 0, 0, 64, 66, 1, 0, 0, 0, 65, 63, 1,
-		0, 0, 0, 66, 67, 5, 3, 0, 0, 67, 9, 1, 0, 0, 0, 68, 69, 3, 12, 6, 0, 69,
-		70, 5, 5, 0, 0, 70, 71, 3, 12, 6, 0, 71, 11, 1, 0, 0, 0, 72, 73, 3, 24,
-		12, 0, 73, 74, 5, 6, 0, 0, 74, 75, 3, 28, 14, 0, 75, 13, 1, 0, 0, 0, 76,
-		77, 5, 7, 0, 0, 77, 81, 5, 2, 0, 0, 78, 80, 3, 16, 8, 0, 79, 78, 1, 0,
-		0, 0, 80, 83, 1, 0, 0, 0, 81, 79, 1, 0, 0, 0, 81, 82, 1, 0, 0, 0, 82, 84,
-		1, 0, 0, 0, 83, 81, 1, 0, 0, 0, 84, 85, 5, 3, 0, 0, 85, 15, 1, 0, 0, 0,
-		86, 87, 3, 32, 16, 0, 87, 88, 5, 8, 0, 0, 88, 89, 3, 20, 10, 0, 89, 96,
-		1, 0, 0, 0, 90, 91, 5, 11, 0, 0, 91, 92, 3, 32, 16, 0, 92, 93, 5, 8, 0,
-		0, 93, 94, 3, 20, 10, 0, 94, 96, 1, 0, 0, 0, 95, 86, 1, 0, 0, 0, 95, 90,
-		1, 0, 0, 0, 96, 17, 1, 0, 0, 0, 97, 98, 3, 24, 12, 0, 98, 99, 5, 6, 0,
-		0, 99, 100, 3, 28, 14, 0, 100, 101, 5, 9, 0, 0, 101, 102, 3, 22, 11, 0,
-		102, 19, 1, 0, 0, 0, 103, 104, 3, 24, 12, 0, 104, 105, 5, 6, 0, 0, 105,
-		106, 3, 28, 14, 0, 106, 21, 1, 0, 0, 0, 107, 108, 3, 24, 12, 0, 108, 109,
-		5, 6, 0, 0, 109, 110, 3, 28, 14, 0, 110, 114, 1, 0, 0, 0, 111, 114, 3,
-		24, 12, 0, 112, 114, 3, 32, 16, 0, 113, 107, 1, 0, 0, 0, 113, 111, 1, 0,
-		0, 0, 113, 112, 1, 0, 0, 0, 114, 23, 1, 0, 0, 0, 115, 116, 3, 30, 15, 0,
-		116, 117, 5, 10, 0, 0, 117, 118, 3, 26, 13, 0, 118, 25, 1, 0, 0, 0, 119,
-		122, 5, 13, 0, 0, 120, 122, 5, 14, 0, 0, 121, 119, 1, 0, 0, 0, 121, 120,
-		1, 0, 0, 0, 122, 27, 1, 0, 0, 0, 123, 124, 5, 13, 0, 0, 124, 29, 1, 0,
-		0, 0, 125, 126, 5, 13, 0, 0, 126, 31, 1, 0, 0, 0, 127, 128, 5, 15, 0, 0,
-		128, 33, 1, 0, 0, 0, 8, 37, 48, 56, 63, 81, 95, 113, 121,
+		2, 16, 7, 16, 2, 17, 7, 17, 1, 0, 1, 0, 1, 0, 1, 1, 5, 1, 41, 8, 1, 10,
+		1, 12, 1, 44, 9, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1, 3, 1, 3, 1,
+		3, 5, 3, 55, 8, 3, 10, 3, 12, 3, 58, 9, 3, 1, 3, 1, 3, 1, 4, 1, 4, 1, 4,
+		3, 4, 65, 8, 4, 1, 5, 1, 5, 1, 5, 5, 5, 70, 8, 5, 10, 5, 12, 5, 73, 9,
+		5, 1, 5, 1, 5, 1, 6, 1, 6, 1, 6, 1, 6, 1, 7, 1, 7, 1, 7, 1, 7, 1, 8, 1,
+		8, 1, 8, 5, 8, 88, 8, 8, 10, 8, 12, 8, 91, 9, 8, 1, 8, 1, 8, 1, 9, 1, 9,
+		1, 9, 1, 9, 1, 9, 1, 9, 1, 9, 1, 9, 1, 9, 3, 9, 104, 8, 9, 1, 10, 1, 10,
+		1, 10, 1, 10, 1, 10, 1, 10, 1, 11, 1, 11, 1, 11, 1, 11, 1, 12, 1, 12, 1,
+		12, 1, 12, 1, 12, 1, 12, 3, 12, 122, 8, 12, 1, 13, 1, 13, 1, 13, 1, 13,
+		1, 14, 1, 14, 3, 14, 130, 8, 14, 1, 15, 1, 15, 1, 16, 1, 16, 1, 17, 1,
+		17, 1, 17, 0, 0, 18, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26,
+		28, 30, 32, 34, 0, 0, 128, 0, 36, 1, 0, 0, 0, 2, 42, 1, 0, 0, 0, 4, 47,
+		1, 0, 0, 0, 6, 51, 1, 0, 0, 0, 8, 64, 1, 0, 0, 0, 10, 66, 1, 0, 0, 0, 12,
+		76, 1, 0, 0, 0, 14, 80, 1, 0, 0, 0, 16, 84, 1, 0, 0, 0, 18, 103, 1, 0,
+		0, 0, 20, 105, 1, 0, 0, 0, 22, 111, 1, 0, 0, 0, 24, 121, 1, 0, 0, 0, 26,
+		123, 1, 0, 0, 0, 28, 129, 1, 0, 0, 0, 30, 131, 1, 0, 0, 0, 32, 133, 1,
+		0, 0, 0, 34, 135, 1, 0, 0, 0, 36, 37, 3, 20, 10, 0, 37, 38, 5, 0, 0, 1,
+		38, 1, 1, 0, 0, 0, 39, 41, 3, 20, 10, 0, 40, 39, 1, 0, 0, 0, 41, 44, 1,
+		0, 0, 0, 42, 40, 1, 0, 0, 0, 42, 43, 1, 0, 0, 0, 43, 45, 1, 0, 0, 0, 44,
+		42, 1, 0, 0, 0, 45, 46, 5, 0, 0, 1, 46, 3, 1, 0, 0, 0, 47, 48, 3, 6, 3,
+		0, 48, 49, 3, 16, 8, 0, 49, 50, 5, 0, 0, 1, 50, 5, 1, 0, 0, 0, 51, 52,
+		5, 1, 0, 0, 52, 56, 5, 2, 0, 0, 53, 55, 3, 8, 4, 0, 54, 53, 1, 0, 0, 0,
+		55, 58, 1, 0, 0, 0, 56, 54, 1, 0, 0, 0, 56, 57, 1, 0, 0, 0, 57, 59, 1,
+		0, 0, 0, 58, 56, 1, 0, 0, 0, 59, 60, 5, 3, 0, 0, 60, 7, 1, 0, 0, 0, 61,
+		65, 3, 20, 10, 0, 62, 63, 5, 11, 0, 0, 63, 65, 3, 20, 10, 0, 64, 61, 1,
+		0, 0, 0, 64, 62, 1, 0, 0, 0, 65, 9, 1, 0, 0, 0, 66, 67, 5, 4, 0, 0, 67,
+		71, 5, 2, 0, 0, 68, 70, 3, 12, 6, 0, 69, 68, 1, 0, 0, 0, 70, 73, 1, 0,
+		0, 0, 71, 69, 1, 0, 0, 0, 71, 72, 1, 0, 0, 0, 72, 74, 1, 0, 0, 0, 73, 71,
+		1, 0, 0, 0, 74, 75, 5, 3, 0, 0, 75, 11, 1, 0, 0, 0, 76, 77, 3, 14, 7, 0,
+		77, 78, 5, 5, 0, 0, 78, 79, 3, 14, 7, 0, 79, 13, 1, 0, 0, 0, 80, 81, 3,
+		26, 13, 0, 81, 82, 5, 6, 0, 0, 82, 83, 3, 30, 15, 0, 83, 15, 1, 0, 0, 0,
+		84, 85, 5, 7, 0, 0, 85, 89, 5, 2, 0, 0, 86, 88, 3, 18, 9, 0, 87, 86, 1,
+		0, 0, 0, 88, 91, 1, 0, 0, 0, 89, 87, 1, 0, 0, 0, 89, 90, 1, 0, 0, 0, 90,
+		92, 1, 0, 0, 0, 91, 89, 1, 0, 0, 0, 92, 93, 5, 3, 0, 0, 93, 17, 1, 0, 0,
+		0, 94, 95, 3, 34, 17, 0, 95, 96, 5, 8, 0, 0, 96, 97, 3, 22, 11, 0, 97,
+		104, 1, 0, 0, 0, 98, 99, 5, 11, 0, 0, 99, 100, 3, 34, 17, 0, 100, 101,
+		5, 8, 0, 0, 101, 102, 3, 22, 11, 0, 102, 104, 1, 0, 0, 0, 103, 94, 1, 0,
+		0, 0, 103, 98, 1, 0, 0, 0, 104, 19, 1, 0, 0, 0, 105, 106, 3, 26, 13, 0,
+		106, 107, 5, 6, 0, 0, 107, 108, 3, 30, 15, 0, 108, 109, 5, 9, 0, 0, 109,
+		110, 3, 24, 12, 0, 110, 21, 1, 0, 0, 0, 111, 112, 3, 26, 13, 0, 112, 113,
+		5, 6, 0, 0, 113, 114, 3, 30, 15, 0, 114, 23, 1, 0, 0, 0, 115, 116, 3, 26,
+		13, 0, 116, 117, 5, 6, 0, 0, 117, 118, 3, 30, 15, 0, 118, 122, 1, 0, 0,
+		0, 119, 122, 3, 26, 13, 0, 120, 122, 3, 34, 17, 0, 121, 115, 1, 0, 0, 0,
+		121, 119, 1, 0, 0, 0, 121, 120, 1, 0, 0, 0, 122, 25, 1, 0, 0, 0, 123, 124,
+		3, 32, 16, 0, 124, 125, 5, 10, 0, 0, 125, 126, 3, 28, 14, 0, 126, 27, 1,
+		0, 0, 0, 127, 130, 5, 13, 0, 0, 128, 130, 5, 14, 0, 0, 129, 127, 1, 0,
+		0, 0, 129, 128, 1, 0, 0, 0, 130, 29, 1, 0, 0, 0, 131, 132, 5, 13, 0, 0,
+		132, 31, 1, 0, 0, 0, 133, 134, 5, 13, 0, 0, 134, 33, 1, 0, 0, 0, 135, 136,
+		5, 15, 0, 0, 136, 35, 1, 0, 0, 0, 8, 42, 56, 64, 71, 89, 103, 121, 129,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -156,24 +159,140 @@ const (
 
 // TheoremParser rules.
 const (
-	TheoremParserRULE_relationship_set       = 0
-	TheoremParserRULE_policy_thorem          = 1
-	TheoremParserRULE_authorization_theorems = 2
-	TheoremParserRULE_authorization_theorem  = 3
-	TheoremParserRULE_implied_relations      = 4
-	TheoremParserRULE_implied_relation       = 5
-	TheoremParserRULE_object_rel             = 6
-	TheoremParserRULE_delegation_theorems    = 7
-	TheoremParserRULE_delegation_theorem     = 8
-	TheoremParserRULE_relationship           = 9
-	TheoremParserRULE_operation              = 10
-	TheoremParserRULE_subject                = 11
-	TheoremParserRULE_object                 = 12
-	TheoremParserRULE_object_id              = 13
-	TheoremParserRULE_relation               = 14
-	TheoremParserRULE_resource               = 15
-	TheoremParserRULE_actorid                = 16
+	TheoremParserRULE_relationship_document  = 0
+	TheoremParserRULE_relationship_set       = 1
+	TheoremParserRULE_policy_thorem          = 2
+	TheoremParserRULE_authorization_theorems = 3
+	TheoremParserRULE_authorization_theorem  = 4
+	TheoremParserRULE_implied_relations      = 5
+	TheoremParserRULE_implied_relation       = 6
+	TheoremParserRULE_object_rel             = 7
+	TheoremParserRULE_delegation_theorems    = 8
+	TheoremParserRULE_delegation_theorem     = 9
+	TheoremParserRULE_relationship           = 10
+	TheoremParserRULE_operation              = 11
+	TheoremParserRULE_subject                = 12
+	TheoremParserRULE_object                 = 13
+	TheoremParserRULE_object_id              = 14
+	TheoremParserRULE_relation               = 15
+	TheoremParserRULE_resource               = 16
+	TheoremParserRULE_actorid                = 17
 )
+
+// IRelationship_documentContext is an interface to support dynamic dispatch.
+type IRelationship_documentContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// Getter signatures
+	Relationship() IRelationshipContext
+	EOF() antlr.TerminalNode
+
+	// IsRelationship_documentContext differentiates from other interfaces.
+	IsRelationship_documentContext()
+}
+
+type Relationship_documentContext struct {
+	antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyRelationship_documentContext() *Relationship_documentContext {
+	var p = new(Relationship_documentContext)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TheoremParserRULE_relationship_document
+	return p
+}
+
+func InitEmptyRelationship_documentContext(p *Relationship_documentContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = TheoremParserRULE_relationship_document
+}
+
+func (*Relationship_documentContext) IsRelationship_documentContext() {}
+
+func NewRelationship_documentContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Relationship_documentContext {
+	var p = new(Relationship_documentContext)
+
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = TheoremParserRULE_relationship_document
+
+	return p
+}
+
+func (s *Relationship_documentContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *Relationship_documentContext) Relationship() IRelationshipContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IRelationshipContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IRelationshipContext)
+}
+
+func (s *Relationship_documentContext) EOF() antlr.TerminalNode {
+	return s.GetToken(TheoremParserEOF, 0)
+}
+
+func (s *Relationship_documentContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *Relationship_documentContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *Relationship_documentContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case TheoremVisitor:
+		return t.VisitRelationship_document(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+func (p *TheoremParser) Relationship_document() (localctx IRelationship_documentContext) {
+	localctx = NewRelationship_documentContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 0, TheoremParserRULE_relationship_document)
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(36)
+		p.Relationship()
+	}
+	{
+		p.SetState(37)
+		p.Match(TheoremParserEOF)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
+	}
+
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
+	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
+}
 
 // IRelationship_setContext is an interface to support dynamic dispatch.
 type IRelationship_setContext interface {
@@ -183,6 +302,7 @@ type IRelationship_setContext interface {
 	GetParser() antlr.Parser
 
 	// Getter signatures
+	EOF() antlr.TerminalNode
 	AllRelationship() []IRelationshipContext
 	Relationship(i int) IRelationshipContext
 
@@ -221,6 +341,10 @@ func NewRelationship_setContext(parser antlr.Parser, parent antlr.ParserRuleCont
 }
 
 func (s *Relationship_setContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *Relationship_setContext) EOF() antlr.TerminalNode {
+	return s.GetToken(TheoremParserEOF, 0)
+}
 
 func (s *Relationship_setContext) AllRelationship() []IRelationshipContext {
 	children := s.GetChildren()
@@ -283,11 +407,11 @@ func (s *Relationship_setContext) Accept(visitor antlr.ParseTreeVisitor) interfa
 
 func (p *TheoremParser) Relationship_set() (localctx IRelationship_setContext) {
 	localctx = NewRelationship_setContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 0, TheoremParserRULE_relationship_set)
+	p.EnterRule(localctx, 2, TheoremParserRULE_relationship_set)
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(37)
+	p.SetState(42)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -296,16 +420,24 @@ func (p *TheoremParser) Relationship_set() (localctx IRelationship_setContext) {
 
 	for _la == TheoremParserID {
 		{
-			p.SetState(34)
+			p.SetState(39)
 			p.Relationship()
 		}
 
-		p.SetState(39)
+		p.SetState(44)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
 		}
 		_la = p.GetTokenStream().LA(1)
+	}
+	{
+		p.SetState(45)
+		p.Match(TheoremParserEOF)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 
 errorExit:
@@ -331,6 +463,7 @@ type IPolicy_thoremContext interface {
 	// Getter signatures
 	Authorization_theorems() IAuthorization_theoremsContext
 	Delegation_theorems() IDelegation_theoremsContext
+	EOF() antlr.TerminalNode
 
 	// IsPolicy_thoremContext differentiates from other interfaces.
 	IsPolicy_thoremContext()
@@ -400,6 +533,10 @@ func (s *Policy_thoremContext) Delegation_theorems() IDelegation_theoremsContext
 	return t.(IDelegation_theoremsContext)
 }
 
+func (s *Policy_thoremContext) EOF() antlr.TerminalNode {
+	return s.GetToken(TheoremParserEOF, 0)
+}
+
 func (s *Policy_thoremContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
@@ -420,15 +557,23 @@ func (s *Policy_thoremContext) Accept(visitor antlr.ParseTreeVisitor) interface{
 
 func (p *TheoremParser) Policy_thorem() (localctx IPolicy_thoremContext) {
 	localctx = NewPolicy_thoremContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 2, TheoremParserRULE_policy_thorem)
+	p.EnterRule(localctx, 4, TheoremParserRULE_policy_thorem)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(40)
+		p.SetState(47)
 		p.Authorization_theorems()
 	}
 	{
-		p.SetState(41)
+		p.SetState(48)
 		p.Delegation_theorems()
+	}
+	{
+		p.SetState(49)
+		p.Match(TheoremParserEOF)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 
 errorExit:
@@ -552,12 +697,12 @@ func (s *Authorization_theoremsContext) Accept(visitor antlr.ParseTreeVisitor) i
 
 func (p *TheoremParser) Authorization_theorems() (localctx IAuthorization_theoremsContext) {
 	localctx = NewAuthorization_theoremsContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 4, TheoremParserRULE_authorization_theorems)
+	p.EnterRule(localctx, 6, TheoremParserRULE_authorization_theorems)
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(43)
+		p.SetState(51)
 		p.Match(TheoremParserT__0)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -565,14 +710,14 @@ func (p *TheoremParser) Authorization_theorems() (localctx IAuthorization_theore
 		}
 	}
 	{
-		p.SetState(44)
+		p.SetState(52)
 		p.Match(TheoremParserT__1)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
 		}
 	}
-	p.SetState(48)
+	p.SetState(56)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -581,11 +726,11 @@ func (p *TheoremParser) Authorization_theorems() (localctx IAuthorization_theore
 
 	for _la == TheoremParserNEGATION || _la == TheoremParserID {
 		{
-			p.SetState(45)
+			p.SetState(53)
 			p.Authorization_theorem()
 		}
 
-		p.SetState(50)
+		p.SetState(58)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -593,7 +738,7 @@ func (p *TheoremParser) Authorization_theorems() (localctx IAuthorization_theore
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(51)
+		p.SetState(59)
 		p.Match(TheoremParserT__2)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -701,8 +846,8 @@ func (s *Authorization_theoremContext) Accept(visitor antlr.ParseTreeVisitor) in
 
 func (p *TheoremParser) Authorization_theorem() (localctx IAuthorization_theoremContext) {
 	localctx = NewAuthorization_theoremContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 6, TheoremParserRULE_authorization_theorem)
-	p.SetState(56)
+	p.EnterRule(localctx, 8, TheoremParserRULE_authorization_theorem)
+	p.SetState(64)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -712,14 +857,14 @@ func (p *TheoremParser) Authorization_theorem() (localctx IAuthorization_theorem
 	case TheoremParserID:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(53)
+			p.SetState(61)
 			p.Relationship()
 		}
 
 	case TheoremParserNEGATION:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(54)
+			p.SetState(62)
 			p.Match(TheoremParserNEGATION)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -727,7 +872,7 @@ func (p *TheoremParser) Authorization_theorem() (localctx IAuthorization_theorem
 			}
 		}
 		{
-			p.SetState(55)
+			p.SetState(63)
 			p.Relationship()
 		}
 
@@ -857,12 +1002,12 @@ func (s *Implied_relationsContext) Accept(visitor antlr.ParseTreeVisitor) interf
 
 func (p *TheoremParser) Implied_relations() (localctx IImplied_relationsContext) {
 	localctx = NewImplied_relationsContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 8, TheoremParserRULE_implied_relations)
+	p.EnterRule(localctx, 10, TheoremParserRULE_implied_relations)
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(58)
+		p.SetState(66)
 		p.Match(TheoremParserT__3)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -870,14 +1015,14 @@ func (p *TheoremParser) Implied_relations() (localctx IImplied_relationsContext)
 		}
 	}
 	{
-		p.SetState(59)
+		p.SetState(67)
 		p.Match(TheoremParserT__1)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
 		}
 	}
-	p.SetState(63)
+	p.SetState(71)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -886,11 +1031,11 @@ func (p *TheoremParser) Implied_relations() (localctx IImplied_relationsContext)
 
 	for _la == TheoremParserID {
 		{
-			p.SetState(60)
+			p.SetState(68)
 			p.Implied_relation()
 		}
 
-		p.SetState(65)
+		p.SetState(73)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -898,7 +1043,7 @@ func (p *TheoremParser) Implied_relations() (localctx IImplied_relationsContext)
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(66)
+		p.SetState(74)
 		p.Match(TheoremParserT__2)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1027,14 +1172,14 @@ func (s *Implied_relationContext) Accept(visitor antlr.ParseTreeVisitor) interfa
 
 func (p *TheoremParser) Implied_relation() (localctx IImplied_relationContext) {
 	localctx = NewImplied_relationContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 10, TheoremParserRULE_implied_relation)
+	p.EnterRule(localctx, 12, TheoremParserRULE_implied_relation)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(68)
+		p.SetState(76)
 		p.Object_rel()
 	}
 	{
-		p.SetState(69)
+		p.SetState(77)
 		p.Match(TheoremParserT__4)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1042,7 +1187,7 @@ func (p *TheoremParser) Implied_relation() (localctx IImplied_relationContext) {
 		}
 	}
 	{
-		p.SetState(70)
+		p.SetState(78)
 		p.Object_rel()
 	}
 
@@ -1158,14 +1303,14 @@ func (s *Object_relContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *TheoremParser) Object_rel() (localctx IObject_relContext) {
 	localctx = NewObject_relContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 12, TheoremParserRULE_object_rel)
+	p.EnterRule(localctx, 14, TheoremParserRULE_object_rel)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(72)
+		p.SetState(80)
 		p.Object()
 	}
 	{
-		p.SetState(73)
+		p.SetState(81)
 		p.Match(TheoremParserT__5)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1173,7 +1318,7 @@ func (p *TheoremParser) Object_rel() (localctx IObject_relContext) {
 		}
 	}
 	{
-		p.SetState(74)
+		p.SetState(82)
 		p.Relation()
 	}
 
@@ -1298,12 +1443,12 @@ func (s *Delegation_theoremsContext) Accept(visitor antlr.ParseTreeVisitor) inte
 
 func (p *TheoremParser) Delegation_theorems() (localctx IDelegation_theoremsContext) {
 	localctx = NewDelegation_theoremsContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 14, TheoremParserRULE_delegation_theorems)
+	p.EnterRule(localctx, 16, TheoremParserRULE_delegation_theorems)
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(76)
+		p.SetState(84)
 		p.Match(TheoremParserT__6)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1311,14 +1456,14 @@ func (p *TheoremParser) Delegation_theorems() (localctx IDelegation_theoremsCont
 		}
 	}
 	{
-		p.SetState(77)
+		p.SetState(85)
 		p.Match(TheoremParserT__1)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
 		}
 	}
-	p.SetState(81)
+	p.SetState(89)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -1327,11 +1472,11 @@ func (p *TheoremParser) Delegation_theorems() (localctx IDelegation_theoremsCont
 
 	for _la == TheoremParserNEGATION || _la == TheoremParserDID {
 		{
-			p.SetState(78)
+			p.SetState(86)
 			p.Delegation_theorem()
 		}
 
-		p.SetState(83)
+		p.SetState(91)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -1339,7 +1484,7 @@ func (p *TheoremParser) Delegation_theorems() (localctx IDelegation_theoremsCont
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(84)
+		p.SetState(92)
 		p.Match(TheoremParserT__2)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1464,8 +1609,8 @@ func (s *Delegation_theoremContext) Accept(visitor antlr.ParseTreeVisitor) inter
 
 func (p *TheoremParser) Delegation_theorem() (localctx IDelegation_theoremContext) {
 	localctx = NewDelegation_theoremContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 16, TheoremParserRULE_delegation_theorem)
-	p.SetState(95)
+	p.EnterRule(localctx, 18, TheoremParserRULE_delegation_theorem)
+	p.SetState(103)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -1475,11 +1620,11 @@ func (p *TheoremParser) Delegation_theorem() (localctx IDelegation_theoremContex
 	case TheoremParserDID:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(86)
+			p.SetState(94)
 			p.Actorid()
 		}
 		{
-			p.SetState(87)
+			p.SetState(95)
 			p.Match(TheoremParserT__7)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1487,14 +1632,14 @@ func (p *TheoremParser) Delegation_theorem() (localctx IDelegation_theoremContex
 			}
 		}
 		{
-			p.SetState(88)
+			p.SetState(96)
 			p.Operation()
 		}
 
 	case TheoremParserNEGATION:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(90)
+			p.SetState(98)
 			p.Match(TheoremParserNEGATION)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1502,11 +1647,11 @@ func (p *TheoremParser) Delegation_theorem() (localctx IDelegation_theoremContex
 			}
 		}
 		{
-			p.SetState(91)
+			p.SetState(99)
 			p.Actorid()
 		}
 		{
-			p.SetState(92)
+			p.SetState(100)
 			p.Match(TheoremParserT__7)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1514,7 +1659,7 @@ func (p *TheoremParser) Delegation_theorem() (localctx IDelegation_theoremContex
 			}
 		}
 		{
-			p.SetState(93)
+			p.SetState(101)
 			p.Operation()
 		}
 
@@ -1652,14 +1797,14 @@ func (s *RelationshipContext) Accept(visitor antlr.ParseTreeVisitor) interface{}
 
 func (p *TheoremParser) Relationship() (localctx IRelationshipContext) {
 	localctx = NewRelationshipContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 18, TheoremParserRULE_relationship)
+	p.EnterRule(localctx, 20, TheoremParserRULE_relationship)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(97)
+		p.SetState(105)
 		p.Object()
 	}
 	{
-		p.SetState(98)
+		p.SetState(106)
 		p.Match(TheoremParserT__5)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1667,11 +1812,11 @@ func (p *TheoremParser) Relationship() (localctx IRelationshipContext) {
 		}
 	}
 	{
-		p.SetState(99)
+		p.SetState(107)
 		p.Relation()
 	}
 	{
-		p.SetState(100)
+		p.SetState(108)
 		p.Match(TheoremParserT__8)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1679,7 +1824,7 @@ func (p *TheoremParser) Relationship() (localctx IRelationshipContext) {
 		}
 	}
 	{
-		p.SetState(101)
+		p.SetState(109)
 		p.Subject()
 	}
 
@@ -1795,14 +1940,14 @@ func (s *OperationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *TheoremParser) Operation() (localctx IOperationContext) {
 	localctx = NewOperationContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 20, TheoremParserRULE_operation)
+	p.EnterRule(localctx, 22, TheoremParserRULE_operation)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(103)
+		p.SetState(111)
 		p.Object()
 	}
 	{
-		p.SetState(104)
+		p.SetState(112)
 		p.Match(TheoremParserT__5)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1810,7 +1955,7 @@ func (p *TheoremParser) Operation() (localctx IOperationContext) {
 		}
 	}
 	{
-		p.SetState(105)
+		p.SetState(113)
 		p.Relation()
 	}
 
@@ -2031,8 +2176,8 @@ func (s *Subj_objContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *TheoremParser) Subject() (localctx ISubjectContext) {
 	localctx = NewSubjectContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 22, TheoremParserRULE_subject)
-	p.SetState(113)
+	p.EnterRule(localctx, 24, TheoremParserRULE_subject)
+	p.SetState(121)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -2043,11 +2188,11 @@ func (p *TheoremParser) Subject() (localctx ISubjectContext) {
 		localctx = NewSubj_usetContext(p, localctx)
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(107)
+			p.SetState(115)
 			p.Object()
 		}
 		{
-			p.SetState(108)
+			p.SetState(116)
 			p.Match(TheoremParserT__5)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2055,7 +2200,7 @@ func (p *TheoremParser) Subject() (localctx ISubjectContext) {
 			}
 		}
 		{
-			p.SetState(109)
+			p.SetState(117)
 			p.Relation()
 		}
 
@@ -2063,7 +2208,7 @@ func (p *TheoremParser) Subject() (localctx ISubjectContext) {
 		localctx = NewSubj_objContext(p, localctx)
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(111)
+			p.SetState(119)
 			p.Object()
 		}
 
@@ -2071,7 +2216,7 @@ func (p *TheoremParser) Subject() (localctx ISubjectContext) {
 		localctx = NewSubj_actorContext(p, localctx)
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(112)
+			p.SetState(120)
 			p.Actorid()
 		}
 
@@ -2191,14 +2336,14 @@ func (s *ObjectContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *TheoremParser) Object() (localctx IObjectContext) {
 	localctx = NewObjectContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 24, TheoremParserRULE_object)
+	p.EnterRule(localctx, 26, TheoremParserRULE_object)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(115)
+		p.SetState(123)
 		p.Resource()
 	}
 	{
-		p.SetState(116)
+		p.SetState(124)
 		p.Match(TheoremParserT__9)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -2206,7 +2351,7 @@ func (p *TheoremParser) Object() (localctx IObjectContext) {
 		}
 	}
 	{
-		p.SetState(117)
+		p.SetState(125)
 		p.Object_id()
 	}
 
@@ -2343,8 +2488,8 @@ func (s *Ascii_idContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *TheoremParser) Object_id() (localctx IObject_idContext) {
 	localctx = NewObject_idContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 26, TheoremParserRULE_object_id)
-	p.SetState(121)
+	p.EnterRule(localctx, 28, TheoremParserRULE_object_id)
+	p.SetState(129)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -2355,7 +2500,7 @@ func (p *TheoremParser) Object_id() (localctx IObject_idContext) {
 		localctx = NewAscii_idContext(p, localctx)
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(119)
+			p.SetState(127)
 			p.Match(TheoremParserID)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2367,7 +2512,7 @@ func (p *TheoremParser) Object_id() (localctx IObject_idContext) {
 		localctx = NewUtf_idContext(p, localctx)
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(120)
+			p.SetState(128)
 			p.Match(TheoremParserSTRING)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2463,10 +2608,10 @@ func (s *RelationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *TheoremParser) Relation() (localctx IRelationContext) {
 	localctx = NewRelationContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 28, TheoremParserRULE_relation)
+	p.EnterRule(localctx, 30, TheoremParserRULE_relation)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(123)
+		p.SetState(131)
 		p.Match(TheoremParserID)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -2557,10 +2702,10 @@ func (s *ResourceContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *TheoremParser) Resource() (localctx IResourceContext) {
 	localctx = NewResourceContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 30, TheoremParserRULE_resource)
+	p.EnterRule(localctx, 32, TheoremParserRULE_resource)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(125)
+		p.SetState(133)
 		p.Match(TheoremParserID)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -2651,10 +2796,10 @@ func (s *ActoridContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 func (p *TheoremParser) Actorid() (localctx IActoridContext) {
 	localctx = NewActoridContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 32, TheoremParserRULE_actorid)
+	p.EnterRule(localctx, 34, TheoremParserRULE_actorid)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(127)
+		p.SetState(135)
 		p.Match(TheoremParserDID)
 		if p.HasError() {
 			// Recognition error - abort rule

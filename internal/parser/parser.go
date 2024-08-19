@@ -1,8 +1,6 @@
 package parser
 
 import (
-	"fmt"
-
 	"github.com/antlr4-go/antlr/v4"
 
 	"github.com/sourcenetwork/acp_core/pkg/types"
@@ -23,16 +21,14 @@ func ParseRelationship(input string) (*types.Relationship, *ParserReport) {
 
 // ParseRelationship attempts to extract a single Relationship from input.
 // Returns location information about parsed Relationship.
-func ParseRelationshipWithLocation(input string) (*LocatedObject[*types.Relationship], *ParserReport) {
-	rels, report := ParseRelationshipsWithLocation(input)
+func ParseRelationshipWithLocation(input string) (LocatedObject[*types.Relationship], *ParserReport) {
+	result, report := parseAndVisit(input, "relationship document", func(p *TheoremParser) antlr.ParseTree {
+		return p.Relationship_document()
+	})
 	if report.HasError() {
-		return nil, report
+		return LocatedObject[*types.Relationship]{}, report
 	}
-
-	if len(rels) != 1 {
-		panic(fmt.Sprintf("expected 1 relationship, got %v", len(rels)))
-	}
-	return &rels[0], report
+	return result.(LocatedObject[*types.Relationship]), report
 }
 
 // ParseRelationships greedly parses relationships in input.
