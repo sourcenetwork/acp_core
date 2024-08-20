@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package sourcenetwork.acp_core;
+package sourcenetwork.acp_core.services;
 
 import "google/protobuf/timestamp.proto";
 import "sourcenetwork/acp_core/access_decision.proto";
@@ -12,7 +12,7 @@ import "sourcenetwork/acp_core/relationship_selector.proto";
 import "sourcenetwork/acp_core/system.proto";
 import "sourcenetwork/acp_core/theorem.proto";
 
-option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+option go_package = "github.com/sourcenetwork/acp_core/pkg/services";
 
 service ACPEngine {
   // CreatePolicy adds a new Policy to SourceHub.
@@ -97,7 +97,7 @@ service ACPEngine {
 
 message CreatePolicyRequest {
   string policy = 1;
-  PolicyMarshalingType marshal_type = 2;
+  sourcenetwork.acp_core.PolicyMarshalingType marshal_type = 2;
   google.protobuf.Timestamp creation_time = 3;
   // metadata is a map of attributes which can be used to store
   // caller supplied satellite data
@@ -112,7 +112,7 @@ message CreatePolicyResponse {
 message SetRelationshipRequest {
   string policy_id = 1;
   google.protobuf.Timestamp creation_time = 2;
-  Relationship relationship = 3;
+  sourcenetwork.acp_core.Relationship relationship = 3;
   // metadata is a map of attributes which can be used to store
   // caller supplied satellite data
   map<string, string> metadata = 4;
@@ -122,12 +122,12 @@ message SetRelationshipResponse {
   // Indicates whether the given Relationship previously existed, ie the Tx was a no op
   bool record_existed = 1;
 
-  RelationshipRecord record = 2;
+  sourcenetwork.acp_core.RelationshipRecord record = 2;
 }
 
 message DeleteRelationshipRequest {
   string policy_id = 1;
-  Relationship relationship = 2;
+  sourcenetwork.acp_core.Relationship relationship = 2;
 }
 
 message DeleteRelationshipResponse {
@@ -136,7 +136,7 @@ message DeleteRelationshipResponse {
 
 message RegisterObjectRequest {
   string policy_id = 1;
-  Object object = 2;
+  sourcenetwork.acp_core.Object object = 2;
   google.protobuf.Timestamp creation_time = 3;
   // metadata is a map of attributes which can be used to store
   // caller supplied satellite data
@@ -144,13 +144,13 @@ message RegisterObjectRequest {
 }
 
 message RegisterObjectResponse {
-  RegistrationResult result = 1;
-  RelationshipRecord record = 2;
+  sourcenetwork.acp_core.RegistrationResult result = 1;
+  sourcenetwork.acp_core.RelationshipRecord record = 2;
 }
 
 message UnregisterObjectRequest {
   string policy_id = 1;
-  Object object = 2;
+  sourcenetwork.acp_core.Object object = 2;
 }
 
 message UnregisterObjectResponse {
@@ -160,7 +160,7 @@ message UnregisterObjectResponse {
 
 message GetObjectRegistrationRequest {
   string policy_id = 1;
-  Object object = 2;
+  sourcenetwork.acp_core.Object object = 2;
 }
 
 message GetObjectRegistrationResponse {
@@ -170,11 +170,11 @@ message GetObjectRegistrationResponse {
 
 message FilterRelationshipsRequest {
   string policy_id = 1;
-  RelationshipSelector selector = 2;
+  sourcenetwork.acp_core.RelationshipSelector selector = 2;
 }
 
 message FilterRelationshipsResponse {
-  repeated RelationshipRecord records = 1;
+  repeated sourcenetwork.acp_core.RelationshipRecord records = 1;
 }
 
 message GetPolicyRequest {
@@ -183,18 +183,18 @@ message GetPolicyRequest {
 }
 
 message GetPolicyResponse {
-  Policy policy = 1;
+  sourcenetwork.acp_core.Policy policy = 1;
   // policy_raw contains the raw policy document the user submitted to create
   // the policy
   string policy_raw = 2;
   // marshal_type flags the format of policy_raw
-  PolicyMarshalingType marshal_type = 3;
+  sourcenetwork.acp_core.PolicyMarshalingType marshal_type = 3;
 }
 
 message ListPoliciesRequest {}
 
 message ListPoliciesResponse {
-  repeated Policy policies = 1;
+  repeated sourcenetwork.acp_core.Policy policies = 1;
 }
 
 message DeletePolicyRequest {
@@ -206,15 +206,15 @@ message DeletePolicyResponse {
 
 message TransferObjectRequest {
   string policy_id = 1;
-  Object object = 2;
-  Actor new_owner = 3;
+  sourcenetwork.acp_core.Object object = 2;
+  sourcenetwork.acp_core.Actor new_owner = 3;
 }
 
 message TransferObjectResponse {}
 
 message ValidatePolicyRequest {
   string policy = 1;
-  PolicyMarshalingType marshal_type = 2;
+  sourcenetwork.acp_core.PolicyMarshalingType marshal_type = 2;
 }
 
 message ValidatePolicyResponse {
@@ -223,7 +223,7 @@ message ValidatePolicyResponse {
 }
 
 message SetParamsRequest {
-  Params params = 1;
+  sourcenetwork.acp_core.Params params = 1;
 }
 
 message SetParamsResponse {}
@@ -231,12 +231,12 @@ message SetParamsResponse {}
 message GetParamsRequest {}
 
 message GetParamsResponse {
-  Params params = 1;
+  sourcenetwork.acp_core.Params params = 1;
 }
 
 message VerifyAccessRequestRequest {
   string policy_id = 1;
-  AccessRequest access_request = 2;
+  sourcenetwork.acp_core.AccessRequest access_request = 2;
 }
 
 message VerifyAccessRequestResponse {
@@ -248,7 +248,7 @@ message GetPolicyCatalogueRequest {
 }
 
 message GetPolicyCatalogueResponse {
-  PolicyCatalogue catalogue = 1;
+  sourcenetwork.acp_core.PolicyCatalogue catalogue = 1;
 }
 message EvaluateTheoremRequest {
   // policy_id is the id of the policy against which the theorem is evaluated
@@ -260,5 +260,5 @@ message EvaluateTheoremRequest {
 
 message EvaluateTheoremResponse {
   // result of theorem verification
-  AnnotatedPolicyTheoremResult result = 1;
+  sourcenetwork.acp_core.AnnotatedPolicyTheoremResult result = 1;
 }
