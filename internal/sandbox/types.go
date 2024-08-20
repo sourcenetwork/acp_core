@@ -7,7 +7,6 @@ import (
 
 	"github.com/sourcenetwork/acp_core/internal/parser"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
-	"github.com/sourcenetwork/acp_core/pkg/playground"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
@@ -44,8 +43,8 @@ type parsedSandboxCtx struct {
 }
 
 // ToCtx discards Location data and returns a SandboxCtx
-func (c *parsedSandboxCtx) ToCtx() *playground.SandboxCtx {
-	return &playground.SandboxCtx{
+func (c *parsedSandboxCtx) ToCtx() *types.SandboxCtx {
+	return &types.SandboxCtx{
 		Policy:        c.Policy,
 		Relationships: utils.MapSlice(c.Relationships, func(o parser.LocatedObject[*types.Relationship]) *types.Relationship { return o.Obj }),
 		PolicyTheorem: c.Theorem.ToPolicyTheorem(),

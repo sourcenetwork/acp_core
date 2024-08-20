@@ -4,11 +4,11 @@ import (
 	"context"
 
 	"github.com/sourcenetwork/acp_core/internal/sandbox"
-	"github.com/sourcenetwork/acp_core/pkg/playground"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
+	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
-func HandleSimulate(ctx context.Context, manager runtime.RuntimeManager, req *playground.SimulateRequest) (*playground.SimulateReponse, error) {
+func HandleSimulate(ctx context.Context, manager runtime.RuntimeManager, req *types.SimulateRequest) (*types.SimulateReponse, error) {
 	manager, err := runtime.NewRuntimeManager(
 		runtime.WithLogger(manager.GetLogger()),
 	)
@@ -16,13 +16,13 @@ func HandleSimulate(ctx context.Context, manager runtime.RuntimeManager, req *pl
 		return nil, newSimulateError(err)
 	}
 
-	newResp, err := sandbox.HandleNewSandboxRequest(ctx, manager, &playground.NewSandboxRequest{})
+	newResp, err := sandbox.HandleNewSandboxRequest(ctx, manager, &types.NewSandboxRequest{})
 	if err != nil {
 		return nil, newSimulateError(err)
 	}
 
 	handler := sandbox.SetStateHandler{}
-	setResp, err := handler.Handle(ctx, manager, &playground.SetStateRequest{
+	setResp, err := handler.Handle(ctx, manager, &types.SetStateRequest{
 		Handle: newResp.Record.Handle,
 		Data:   req.Data,
 	})
@@ -30,18 +30,18 @@ func HandleSimulate(ctx context.Context, manager runtime.RuntimeManager, req *pl
 		return nil, newSimulateError(err)
 	}
 	if setResp.Errors.HasErrors() {
-		return &playground.SimulateReponse{
+		return &types.SimulateReponse{
 			ValidData: false,
 			Errors:    setResp.Errors,
 		}, nil
 	}
 
-	verifyResp, err := sandbox.HandleVerifyTheorem(ctx, manager, &playground.VerifyTheoremsRequest{Handle: newResp.Record.Handle})
+	verifyResp, err := sandbox.HandleVerifyTheorem(ctx, manager, &types.VerifyTheoremsRequest{Handle: newResp.Record.Handle})
 	if err != nil {
 		return nil, newSimulateError(err)
 	}
 
-	return &playground.SimulateReponse{
+	return &types.SimulateReponse{
 		ValidData: true,
 		Errors:    nil,
 		Record:    setResp.Record,

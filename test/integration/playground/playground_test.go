@@ -8,7 +8,6 @@ import (
 
 	"github.com/sourcenetwork/acp_core/pkg/errors"
 	_ "github.com/sourcenetwork/acp_core/pkg/errors"
-	"github.com/sourcenetwork/acp_core/pkg/playground"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	_ "github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/test"
@@ -20,7 +19,7 @@ Authorizations {}
 Delegations {}
 `
 
-var setupData = &playground.SandboxData{
+var setupData = &types.SandboxData{
 	PolicyDefinition: `
 				name: test
 				resources:
@@ -58,12 +57,12 @@ var setupData = &playground.SandboxData{
 func Test_NewSandbox_ReturnsHandle(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	a := NewSandbox{
-		Req: &playground.NewSandboxRequest{
+		Req: &types.NewSandboxRequest{
 			Name:        "test",
 			Description: "test",
 		},
-		Expected: &playground.NewSandboxResponse{
-			Record: &playground.SandboxRecord{
+		Expected: &types.NewSandboxResponse{
+			Record: &types.SandboxRecord{
 				Handle:      1,
 				Name:        "test",
 				Description: "test",
@@ -77,12 +76,12 @@ func Test_NewSandbox_ReturnsHandle(t *testing.T) {
 func Test_NewSandbox_UnamedSandbox_ReturnsSandboxWithHandleAsName(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	a := NewSandbox{
-		Req: &playground.NewSandboxRequest{
+		Req: &types.NewSandboxRequest{
 			Name:        "",
 			Description: "test",
 		},
-		Expected: &playground.NewSandboxResponse{
-			Record: &playground.SandboxRecord{
+		Expected: &types.NewSandboxResponse{
+			Record: &types.SandboxRecord{
 				Handle:      1,
 				Name:        "1",
 				Description: "test",
@@ -96,12 +95,12 @@ func Test_NewSandbox_UnamedSandbox_ReturnsSandboxWithHandleAsName(t *testing.T) 
 func Test_NewSandbox_CanCreateSandboxWithoutDescription(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	a := NewSandbox{
-		Req: &playground.NewSandboxRequest{
+		Req: &types.NewSandboxRequest{
 			Name:        "test",
 			Description: "",
 		},
-		Expected: &playground.NewSandboxResponse{
-			Record: &playground.SandboxRecord{
+		Expected: &types.NewSandboxResponse{
+			Record: &types.SandboxRecord{
 				Handle:      1,
 				Name:        "test",
 				Description: "",
@@ -116,7 +115,7 @@ func Test_SetState_EmptyTheoremErrors(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
 	a1 := NewAndSet{
-		Data: &playground.SandboxData{
+		Data: &types.SandboxData{
 			PolicyDefinition: `name: test`,
 			Relationships:    ``,
 			PolicyTheorem:    "",
@@ -132,7 +131,7 @@ func Test_Evaluate_SandboxWithEmptyTheoremOk(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
 	a1 := NewAndSet{
-		Data: &playground.SandboxData{
+		Data: &types.SandboxData{
 			PolicyDefinition: `name: test`,
 			Relationships:    ``,
 			PolicyTheorem:    noopTheorem,
@@ -141,10 +140,10 @@ func Test_Evaluate_SandboxWithEmptyTheoremOk(t *testing.T) {
 	handle := a1.Run(ctx)
 
 	a := VerifyTheorems{
-		Req: &playground.VerifyTheoremsRequest{
+		Req: &types.VerifyTheoremsRequest{
 			Handle: handle,
 		},
-		Expected: &playground.VerifyTheoremsResponse{
+		Expected: &types.VerifyTheoremsResponse{
 			Result: &types.AnnotatedPolicyTheoremResult{
 				Theorem: &types.PolicyTheorem{
 					AuthorizationTheorems: make([]*types.AuthorizationTheorem, 0),
@@ -160,12 +159,12 @@ func Test_Evaluate_UninitializedSandboxCannotBeEvaluated(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
 	a1 := NewSandbox{
-		Req: &playground.NewSandboxRequest{},
+		Req: &types.NewSandboxRequest{},
 	}
 	handle := a1.Run(ctx)
 
 	a := VerifyTheorems{
-		Req: &playground.VerifyTheoremsRequest{
+		Req: &types.VerifyTheoremsRequest{
 			Handle: handle.Record.Handle,
 		},
 		ExpectedErr: errors.ErrorType_OPERATION_FORBIDDEN,
@@ -177,7 +176,7 @@ func Test_ListSandboxes_ReturnsExistingSandboxes(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
 	a := NewAndSet{
-		Data: &playground.SandboxData{
+		Data: &types.SandboxData{
 			PolicyDefinition: `name: test1`,
 			Relationships:    ``,
 			PolicyTheorem:    noopTheorem,
@@ -186,7 +185,7 @@ func Test_ListSandboxes_ReturnsExistingSandboxes(t *testing.T) {
 	a.Run(ctx)
 
 	a = NewAndSet{
-		Data: &playground.SandboxData{
+		Data: &types.SandboxData{
 			PolicyDefinition: `name: test2`,
 			Relationships:    ``,
 			PolicyTheorem:    noopTheorem,
@@ -195,7 +194,7 @@ func Test_ListSandboxes_ReturnsExistingSandboxes(t *testing.T) {
 	a.Run(ctx)
 
 	action := ListSandboxes{
-		Req:         &playground.ListSandboxesRequest{},
+		Req:         &types.ListSandboxesRequest{},
 		ExpectedLen: 2,
 	}
 	action.Run(ctx)
@@ -205,7 +204,7 @@ func Test_SetState_SettingValidStateReturnsOk(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
 	new := NewSandbox{
-		Req: &playground.NewSandboxRequest{
+		Req: &types.NewSandboxRequest{
 			Name:        "test",
 			Description: "",
 		},
@@ -213,9 +212,9 @@ func Test_SetState_SettingValidStateReturnsOk(t *testing.T) {
 	resp := new.Run(ctx)
 
 	a := SetState{
-		Req: &playground.SetStateRequest{
+		Req: &types.SetStateRequest{
 			Handle: resp.Record.Handle,
-			Data: &playground.SandboxData{
+			Data: &types.SandboxData{
 				PolicyDefinition: `
                 name: test
                 resources:
@@ -262,10 +261,10 @@ func Test_GetCatalogue_ReturnsSandboxCatalogue(t *testing.T) {
 	handle := a1.Run(ctx)
 
 	a := GetCatalogue{
-		Req: &playground.GetCatalogueRequest{
+		Req: &types.GetCatalogueRequest{
 			Handle: handle,
 		},
-		Expected: &playground.GetCatalogueResponse{
+		Expected: &types.GetCatalogueResponse{
 			Catalogue: &types.PolicyCatalogue{
 				ActorResourceName: "actor",
 				ResourceCatalogue: map[string]*types.ResourceCatalogue{
@@ -297,7 +296,7 @@ func Test_GetCatalogue_ReturnsSandboxCatalogue(t *testing.T) {
 func Test_Simulate(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
-	data := playground.SandboxData{
+	data := types.SandboxData{
 		PolicyDefinition: `
         name: test
         resources:
@@ -334,7 +333,7 @@ func Test_Simulate(t *testing.T) {
 		`,
 	}
 
-	resp, err := ctx.Playground.Simulate(ctx, &playground.SimulateRequest{
+	resp, err := ctx.Playground.Simulate(ctx, &types.SimulateRequest{
 		Data: &data,
 	})
 	require.NoError(t, err)
@@ -345,18 +344,18 @@ func Test_GetSandbox_ReturnsSandbox(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
 	a1 := NewSandbox{
-		Req: &playground.NewSandboxRequest{},
+		Req: &types.NewSandboxRequest{},
 	}
 	a1.Run(ctx)
 
 	a1 = NewSandbox{
-		Req: &playground.NewSandboxRequest{},
+		Req: &types.NewSandboxRequest{},
 	}
 	a1.Run(ctx)
 
-	resp, err := ctx.Playground.GetSandbox(ctx, &playground.GetSandboxRequest{Handle: 1})
+	resp, err := ctx.Playground.GetSandbox(ctx, &types.GetSandboxRequest{Handle: 1})
 
-	want := &playground.SandboxRecord{
+	want := &types.SandboxRecord{
 		Handle:      1,
 		Name:        "1",
 		Description: "",
@@ -368,9 +367,9 @@ func Test_GetSandbox_ReturnsSandbox(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, want, resp.Record)
 
-	resp, err = ctx.Playground.GetSandbox(ctx, &playground.GetSandboxRequest{Handle: 2})
+	resp, err = ctx.Playground.GetSandbox(ctx, &types.GetSandboxRequest{Handle: 2})
 
-	want = &playground.SandboxRecord{
+	want = &types.SandboxRecord{
 		Handle:      2,
 		Name:        "2",
 		Description: "",

@@ -1,4 +1,4 @@
-package playground
+package types
 
 // HasErrors return true if DeclarationErrors contains any errors
 func (e *SandboxDataErrors) HasErrors() bool {

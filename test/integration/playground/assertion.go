@@ -4,26 +4,25 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/sourcenetwork/acp_core/pkg/playground"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
-type Assertion func(*testing.T, *playground.SandboxDataErrors)
+type Assertion func(*testing.T, *types.SandboxDataErrors)
 
 func HasPolicyError(msg string) Assertion {
-	return func(t *testing.T, errs *playground.SandboxDataErrors) {
+	return func(t *testing.T, errs *types.SandboxDataErrors) {
 		AssertContainsErrWithMsg(t, msg, errs.PolicyErrors)
 	}
 }
 
 func HasRelationshipsError(msg string) Assertion {
-	return func(t *testing.T, errs *playground.SandboxDataErrors) {
+	return func(t *testing.T, errs *types.SandboxDataErrors) {
 		AssertContainsErrWithMsg(t, msg, errs.RelationshipsErrors)
 	}
 }
 
 func HasTheoremError(msg string) Assertion {
-	return func(t *testing.T, errs *playground.SandboxDataErrors) {
+	return func(t *testing.T, errs *types.SandboxDataErrors) {
 		AssertContainsErrWithMsg(t, msg, errs.TheoremsErrors)
 	}
 }

@@ -14,13 +14,12 @@ import (
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
 	"github.com/sourcenetwork/acp_core/pkg/auth"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
-	"github.com/sourcenetwork/acp_core/pkg/playground"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
 
-func HandleNewSandboxRequest(ctx context.Context, manager runtime.RuntimeManager, req *playground.NewSandboxRequest) (*playground.NewSandboxResponse, error) {
+func HandleNewSandboxRequest(ctx context.Context, manager runtime.RuntimeManager, req *types.NewSandboxRequest) (*types.NewSandboxResponse, error) {
 	counter := raccoon.NewCounterStoreFromRuntimeManager(manager, sandboxCounterPrefix)
 
 	releaser := counter.Acquire()
@@ -35,7 +34,7 @@ func HandleNewSandboxRequest(ctx context.Context, manager runtime.RuntimeManager
 		req.Name = fmt.Sprintf("%v", handle)
 	}
 
-	record := &playground.SandboxRecord{
+	record := &types.SandboxRecord{
 		Name:        req.Name,
 		Handle:      handle,
 		Description: req.Description,
@@ -52,12 +51,12 @@ func HandleNewSandboxRequest(ctx context.Context, manager runtime.RuntimeManager
 		return nil, newNewSandboxErr(err)
 	}
 
-	return &playground.NewSandboxResponse{
+	return &types.NewSandboxResponse{
 		Record: record,
 	}, nil
 }
 
-func HandleListSandboxes(ctx context.Context, manager runtime.RuntimeManager, req *playground.ListSandboxesRequest) (*playground.ListSandboxesResponse, error) {
+func HandleListSandboxes(ctx context.Context, manager runtime.RuntimeManager, req *types.ListSandboxesRequest) (*types.ListSandboxesResponse, error) {
 	// FIXME: there's something weird going on in raccoon and I have no idea what.
 	// Listing isn't working, but indiidual fetching does.
 	// Workaround for now, I'm sorry.
@@ -67,7 +66,7 @@ func HandleListSandboxes(ctx context.Context, manager runtime.RuntimeManager, re
 		return nil, newListSandboxesErr(err)
 	}
 
-	var records []*playground.SandboxRecord
+	var records []*types.SandboxRecord
 	repository := NewSandboxRepository(manager.GetKVStore())
 	for i := uint64(1); i < max; i += 1 {
 		record, err := repository.GetSandbox(ctx, i)
@@ -78,14 +77,14 @@ func HandleListSandboxes(ctx context.Context, manager runtime.RuntimeManager, re
 			records = append(records, record)
 		}
 	}
-	return &playground.ListSandboxesResponse{
+	return &types.ListSandboxesResponse{
 		Records: records,
 	}, nil
 }
 
 type SetStateHandler struct{}
 
-func (h *SetStateHandler) Handle(ctx context.Context, manager runtime.RuntimeManager, req *playground.SetStateRequest) (*playground.SetStateResponse, error) {
+func (h *SetStateHandler) Handle(ctx context.Context, manager runtime.RuntimeManager, req *types.SetStateRequest) (*types.SetStateResponse, error) {
 	repository := NewSandboxRepository(manager.GetKVStore())
 
 	record, err := repository.GetSandbox(ctx, req.Handle)
@@ -107,7 +106,7 @@ func (h *SetStateHandler) Handle(ctx context.Context, manager runtime.RuntimeMan
 		return nil, newSetStateErr(err, req.Handle)
 	}
 	if errs.HasErrors() {
-		return &playground.SetStateResponse{
+		return &types.SetStateResponse{
 			Ok:     false,
 			Errors: errs,
 		}, nil
@@ -123,7 +122,7 @@ func (h *SetStateHandler) Handle(ctx context.Context, manager runtime.RuntimeMan
 		return nil, newSetStateErr(err, req.Handle)
 	}
 	if errs.HasErrors() {
-		return &playground.SetStateResponse{
+		return &types.SetStateResponse{
 			Ok:     false,
 			Errors: errs,
 		}, nil
@@ -137,17 +136,17 @@ func (h *SetStateHandler) Handle(ctx context.Context, manager runtime.RuntimeMan
 		return nil, newSetStateErr(err, req.Handle)
 	}
 
-	return &playground.SetStateResponse{
+	return &types.SetStateResponse{
 		Ok:     true,
-		Errors: &playground.SandboxDataErrors{},
+		Errors: &types.SandboxDataErrors{},
 		Record: record,
 	}, nil
 }
 
 // parseCtx parses the input data and returns a parsed ctx or all errors found while parsing or
 // any other errors encountered during the program execution
-func (h *SetStateHandler) parseCtx(ctx context.Context, manager runtime.RuntimeManager, data *playground.SandboxData) (*parsedSandboxCtx, *playground.SandboxDataErrors, error) {
-	var errs = &playground.SandboxDataErrors{}
+func (h *SetStateHandler) parseCtx(ctx context.Context, manager runtime.RuntimeManager, data *types.SandboxData) (*parsedSandboxCtx, *types.SandboxDataErrors, error) {
+	var errs = &types.SandboxDataErrors{}
 
 	// FIXME do full parsing once independent parsing is implemented
 	_, err := policy.Unmarshal(data.PolicyDefinition, types.PolicyMarshalingType_SHORT_YAML)
@@ -176,10 +175,10 @@ func (h *SetStateHandler) parseCtx(ctx context.Context, manager runtime.RuntimeM
 		PolicyDefinition: data.PolicyDefinition,
 		Theorem:          theorem,
 	}
-	return simCtx, &playground.SandboxDataErrors{}, nil
+	return simCtx, &types.SandboxDataErrors{}, nil
 }
 
-func (h *SetStateHandler) populateEngine(ctx context.Context, manager runtime.RuntimeManager, handle uint64, simCtx *parsedSandboxCtx) (*playground.SandboxDataErrors, error) {
+func (h *SetStateHandler) populateEngine(ctx context.Context, manager runtime.RuntimeManager, handle uint64, simCtx *parsedSandboxCtx) (*types.SandboxDataErrors, error) {
 	errs, err := h.setPolicy(ctx, manager, handle, simCtx)
 	if err != nil {
 		return nil, err
@@ -205,8 +204,8 @@ func (h *SetStateHandler) populateEngine(ctx context.Context, manager runtime.Ru
 	return errs2, nil
 }
 
-func (h *SetStateHandler) setPolicy(ctx context.Context, manager runtime.RuntimeManager, handle uint64, simCtx *parsedSandboxCtx) (*playground.SandboxDataErrors, error) {
-	errs := &playground.SandboxDataErrors{}
+func (h *SetStateHandler) setPolicy(ctx context.Context, manager runtime.RuntimeManager, handle uint64, simCtx *parsedSandboxCtx) (*types.SandboxDataErrors, error) {
+	errs := &types.SandboxDataErrors{}
 
 	polHandler := policy.CreatePolicyHandler{}
 	polResp, err := polHandler.Execute(ctx, manager, &types.CreatePolicyRequest{
@@ -234,8 +233,8 @@ func (h *SetStateHandler) setPolicy(ctx context.Context, manager runtime.Runtime
 	return errs, nil
 }
 
-func (h *SetStateHandler) registerObjects(ctx context.Context, manager runtime.RuntimeManager, handle uint64, simCtx *parsedSandboxCtx) (map[string]auth.Principal, *playground.SandboxDataErrors, error) {
-	errs := &playground.SandboxDataErrors{}
+func (h *SetStateHandler) registerObjects(ctx context.Context, manager runtime.RuntimeManager, handle uint64, simCtx *parsedSandboxCtx) (map[string]auth.Principal, *types.SandboxDataErrors, error) {
+	errs := &types.SandboxDataErrors{}
 	ownerLookup := make(map[string]auth.Principal)
 
 	ownerRels := utils.FilterSlice(simCtx.Relationships, func(obj parser.LocatedObject[*types.Relationship]) bool {
@@ -283,8 +282,8 @@ func (h *SetStateHandler) registerObjects(ctx context.Context, manager runtime.R
 	return ownerLookup, errs, nil
 }
 
-func (h *SetStateHandler) setRelationships(ctx context.Context, manager runtime.RuntimeManager, simCtx *parsedSandboxCtx, ownerMap map[string]auth.Principal) (*playground.SandboxDataErrors, error) {
-	errs := &playground.SandboxDataErrors{}
+func (h *SetStateHandler) setRelationships(ctx context.Context, manager runtime.RuntimeManager, simCtx *parsedSandboxCtx, ownerMap map[string]auth.Principal) (*types.SandboxDataErrors, error) {
+	errs := &types.SandboxDataErrors{}
 	rels := utils.FilterSlice(simCtx.Relationships, func(obj parser.LocatedObject[*types.Relationship]) bool {
 		return obj.Obj.Relation != policy.OwnerRelation
 	})
@@ -327,7 +326,7 @@ func (h *SetStateHandler) setRelationships(ctx context.Context, manager runtime.
 	return errs, nil
 }
 
-func HandleVerifyTheorem(ctx context.Context, manager runtime.RuntimeManager, req *playground.VerifyTheoremsRequest) (*playground.VerifyTheoremsResponse, error) {
+func HandleVerifyTheorem(ctx context.Context, manager runtime.RuntimeManager, req *types.VerifyTheoremsRequest) (*types.VerifyTheoremsResponse, error) {
 	repository := NewSandboxRepository(manager.GetKVStore())
 
 	record, err := repository.GetSandbox(ctx, req.Handle)
@@ -357,12 +356,12 @@ func HandleVerifyTheorem(ctx context.Context, manager runtime.RuntimeManager, re
 		return nil, newVerifyTheoremsErr(err, req.Handle)
 	}
 
-	return &playground.VerifyTheoremsResponse{
+	return &types.VerifyTheoremsResponse{
 		Result: result,
 	}, nil
 }
 
-func HandleGetCatalogue(ctx context.Context, manager runtime.RuntimeManager, req *playground.GetCatalogueRequest) (*playground.GetCatalogueResponse, error) {
+func HandleGetCatalogue(ctx context.Context, manager runtime.RuntimeManager, req *types.GetCatalogueRequest) (*types.GetCatalogueResponse, error) {
 	repository := NewSandboxRepository(manager.GetKVStore())
 
 	record, err := repository.GetSandbox(ctx, req.Handle)
@@ -392,12 +391,12 @@ func HandleGetCatalogue(ctx context.Context, manager runtime.RuntimeManager, req
 		return nil, newGetCatalogueErr(err, req.Handle)
 	}
 
-	return &playground.GetCatalogueResponse{
+	return &types.GetCatalogueResponse{
 		Catalogue: catalogue,
 	}, nil
 }
 
-func HandleRestoreScratchpad(ctx context.Context, manager runtime.RuntimeManager, req *playground.RestoreScratchpadRequest) (*playground.RestoreScratchpadResponse, error) {
+func HandleRestoreScratchpad(ctx context.Context, manager runtime.RuntimeManager, req *types.RestoreScratchpadRequest) (*types.RestoreScratchpadResponse, error) {
 	repository := NewSandboxRepository(manager.GetKVStore())
 
 	record, err := repository.GetSandbox(ctx, req.Handle)
@@ -420,12 +419,12 @@ func HandleRestoreScratchpad(ctx context.Context, manager runtime.RuntimeManager
 		return nil, newRestoreScratchpadErr(err, req.Handle)
 	}
 
-	return &playground.RestoreScratchpadResponse{
+	return &types.RestoreScratchpadResponse{
 		Scratchpad: record.Scratchpad,
 	}, nil
 }
 
-func HandleGetSandbox(ctx context.Context, manager runtime.RuntimeManager, req *playground.GetSandboxRequest) (*playground.GetSandboxResponse, error) {
+func HandleGetSandbox(ctx context.Context, manager runtime.RuntimeManager, req *types.GetSandboxRequest) (*types.GetSandboxResponse, error) {
 	repository := NewSandboxRepository(manager.GetKVStore())
 
 	record, err := repository.GetSandbox(ctx, req.Handle)
@@ -436,7 +435,7 @@ func HandleGetSandbox(ctx context.Context, manager runtime.RuntimeManager, req *
 		err = errors.Wrap("sandbox not found", errors.ErrorType_NOT_FOUND)
 		return nil, newGetSandboxErr(err, req.Handle)
 	}
-	return &playground.GetSandboxResponse{
+	return &types.GetSandboxResponse{
 		Record: record,
 	}, nil
 }

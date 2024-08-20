@@ -1,12 +1,12 @@
 syntax = "proto3";
 
-package sourcenetwork.acp_core.playground.services;
+package sourcenetwork.acp_core;
 
 import "sourcenetwork/acp_core/catalogue.proto";
 import "sourcenetwork/acp_core/sandbox.proto";
 import "sourcenetwork/acp_core/theorem.proto";
 
-option go_package = "github.com/sourcenetwork/acp_core/pkg/services";
+option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
 
 service PlaygroundService {
   // NewSandbox creates a new isolated execution environment in the Service

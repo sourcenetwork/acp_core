@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package sourcenetwork.acp_core.services;
+package sourcenetwork.acp_core;
 
 import "google/protobuf/timestamp.proto";
 import "sourcenetwork/acp_core/access_decision.proto";
@@ -12,7 +12,7 @@ import "sourcenetwork/acp_core/relationship_selector.proto";
 import "sourcenetwork/acp_core/system.proto";
 import "sourcenetwork/acp_core/theorem.proto";
 
-option go_package = "github.com/sourcenetwork/acp_core/pkg/services";
+option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
 
 service ACPEngine {
   // CreatePolicy adds a new Policy to SourceHub.

@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/sourcenetwork/acp_core/pkg/auth"
-	"github.com/sourcenetwork/acp_core/pkg/playground"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/services"
 	"github.com/sourcenetwork/acp_core/pkg/types"
@@ -22,7 +21,7 @@ type TestCtx struct {
 	Engine     types.ACPEngineServer
 	Actors     ActorRegistrar
 	State      ActionState
-	Playground playground.PlaygroundServiceServer
+	Playground types.PlaygroundServiceServer
 }
 
 func (t *TestCtx) SetPrincipal(name string) {
