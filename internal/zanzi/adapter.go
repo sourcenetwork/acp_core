@@ -60,6 +60,23 @@ func (z *Adapter) GetRelationship(ctx context.Context, policy *types.Policy, rel
 	return fetchedRel, nil
 }
 
+func (z *Adapter) ValidateRelationship(ctx context.Context, policy *types.Policy, rel *types.Relationship) (valid bool, msg string, err error) {
+	serv := z.zanzi.GetPolicyService()
+	mapper := newRelationshipMapper(policy.ActorResource.Name)
+
+	req := &api.ValidateRelationshipRequest{
+		PolicyId:     policy.Id,
+		Relationship: mapper.ToZanziRelationship(rel),
+	}
+
+	result, err := serv.ValidateRelationship(ctx, req)
+	if err != nil {
+		return false, "", fmt.Errorf("ValidateRelationship: %w", err)
+	}
+
+	return result.Valid, result.ErrorMsg, nil
+}
+
 // Sets a Relationship within a Policy
 func (z *Adapter) SetRelationship(ctx context.Context, policy *types.Policy, rec *types.RelationshipRecord) (RecordFound, error) {
 	serv := z.zanzi.GetPolicyService()

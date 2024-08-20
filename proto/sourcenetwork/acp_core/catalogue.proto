@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sourcenetwork.acp_core;
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+
+// PolicyCatalogue represents a lookup table for entities definedw withing a Policy
+message PolicyCatalogue {
+  map<string, ResourceCatalogue> resource_catalogue = 1;
+  string actor_resource_name = 2;
+  repeated string actors = 3;
+}
+
+// ResourceCatalogue models the set of known objects, permissions and relations for a Resource within a Policy
+message ResourceCatalogue {
+  repeated string permissions = 1;
+  repeated string relations = 2;
+  repeated string object_ids = 3;
+}

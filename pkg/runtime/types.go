@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	rcdb "github.com/sourcenetwork/raccoondb"
 )
@@ -75,14 +76,15 @@ func WithMemKV() Opt {
 func NewRuntimeManager(opts ...Opt) (RuntimeManager, error) {
 	rt := &runtimeManager{
 		eventMan: &DefaultEventManager{},
-		logger:   nil,
+		logger:   types.NoopLogger(),
+		memKV:    rcdb.NewMemKV(),
 	}
 	WithMemKV()(rt)
 
 	for _, o := range opts {
 		err := o(rt)
 		if err != nil {
-			return nil, err
+			return nil, errors.NewFromBaseError(err, errors.ErrorType_INTERNAL, "building runtime manager")
 		}
 	}
 
@@ -91,6 +93,7 @@ func NewRuntimeManager(opts ...Opt) (RuntimeManager, error) {
 
 type runtimeManager struct {
 	kvStore    KVStore
+	memKV      KVStore
 	eventMan   EventManager
 	logger     Logger
 	metrics    MetricService

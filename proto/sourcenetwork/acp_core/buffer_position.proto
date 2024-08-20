@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sourcenetwork.acp_core;
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+
+// BufferRange models a range in
+// a line oriented buffer
+message BufferRange {
+  BufferPosition start = 1;
+  BufferPosition end = 2;
+}
+
+// BufferPosition models a position in
+// a line oriented buffer
+message BufferPosition {
+  uint64 line = 1;
+  uint64 column = 2;
+}

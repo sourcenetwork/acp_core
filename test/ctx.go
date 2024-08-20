@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/sourcenetwork/acp_core/pkg/auth"
-	"github.com/sourcenetwork/acp_core/pkg/engine"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
+	"github.com/sourcenetwork/acp_core/pkg/services"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/stretchr/testify/require"
 )
@@ -15,12 +15,13 @@ import (
 var _ context.Context = (*TestCtx)(nil)
 
 type TestCtx struct {
-	Ctx     context.Context
-	T       *testing.T
-	Runtime runtime.RuntimeManager
-	Engine  types.ACPEngineServer
-	Actors  ActorRegistrar
-	State   ActionState
+	Ctx        context.Context
+	T          *testing.T
+	Runtime    runtime.RuntimeManager
+	Engine     types.ACPEngineServer
+	Actors     ActorRegistrar
+	State      ActionState
+	Playground types.PlaygroundServiceServer
 }
 
 func (t *TestCtx) SetPrincipal(name string) {
@@ -32,12 +33,14 @@ func (t *TestCtx) SetPrincipal(name string) {
 
 func NewTestCtx(t *testing.T) *TestCtx {
 	runtime := NewTestRuntime(t)
-	engine := engine.NewACPEngine(runtime)
+	engine := services.NewACPEngine(runtime)
+	playground := services.NewPlaygroundService(runtime)
 	return &TestCtx{
-		Ctx:     context.Background(),
-		T:       t,
-		Runtime: runtime,
-		Engine:  engine,
+		Ctx:        context.Background(),
+		T:          t,
+		Runtime:    runtime,
+		Engine:     engine,
+		Playground: playground,
 		Actors: ActorRegistrar{
 			actors: make(map[string]string),
 		},

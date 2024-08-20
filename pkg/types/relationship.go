@@ -90,3 +90,9 @@ func NewObject(resource, id string) *Object {
 		Id:       id,
 	}
 }
+
+func NewActor(actorId string) *Actor {
+	return &Actor{
+		Id: actorId,
+	}
+}

@@ -44,6 +44,9 @@ const typeDivider string = "->"
 
 // Unmarshal a YAML serialized PolicyShort definition
 func (u *shortUnmarshaler) UnmarshalYAML(pol string) (PolicyIR, error) {
+	// remove trailing
+	pol = strings.ReplaceAll(pol, "\t", "    ")
+	pol = strings.Trim(pol, "\n")
 	// Strict returns error if any key is duplicated
 	polBytes, err := yaml.YAMLToJSONStrict([]byte(pol))
 	if err != nil {

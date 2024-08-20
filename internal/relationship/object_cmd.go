@@ -5,6 +5,7 @@ import (
 
 	prototypes "github.com/cosmos/gogoproto/types"
 
+	"github.com/sourcenetwork/acp_core/internal/authorizer"
 	"github.com/sourcenetwork/acp_core/internal/policy"
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
 	"github.com/sourcenetwork/acp_core/pkg/auth"
@@ -224,11 +225,14 @@ func (c *UnregisterObjectHandler) Execute(ctx context.Context, runtime runtime.R
 		}, nil // noop when object is archived
 	}
 
-	authorizer := NewRelationshipAuthorizer(engine)
+	authorizer := authorizer.NewOperationAuthorizer(engine)
 
-	authRelationship := types.NewActorRelationship(cmd.Object.Resource, cmd.Object.Id, policy.OwnerRelation, did)
+	mutateOwnerOperation := types.Operation{
+		Object:     cmd.Object,
+		Permission: policy.OwnerRelation,
+	}
 	actor := types.Actor{Id: did}
-	authorized, err := authorizer.IsAuthorized(ctx, pol, authRelationship, &actor)
+	authorized, err := authorizer.IsAuthorized(ctx, pol, &mutateOwnerOperation, &actor)
 	if err != nil {
 		return nil, newUnregisterObjectErr(err)
 	}

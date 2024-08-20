@@ -32,3 +32,30 @@ func FilterRelationshipsHandler(ctx context.Context, runtime runtime.RuntimeMana
 		Records: records,
 	}, nil
 }
+
+func ValidateRelationship(ctx context.Context, manager runtime.RuntimeManager, policyId string, relationship *types.Relationship) (valid bool, errorMsg string, err error) {
+	engine, err := zanzi.NewZanzi(manager.GetKVStore(), manager.GetLogger())
+	if err != nil {
+		return false, "", newValidateRelationshipErr(err)
+	}
+
+	rec, err := engine.GetPolicy(ctx, policyId)
+	if err != nil {
+		return false, "", newValidateRelationshipErr(err)
+	}
+	if rec == nil {
+		return false, "", newValidateRelationshipErr(errors.NewPolicyNotFound(policyId))
+	}
+
+	err = relationshipSpec(rec.Policy, relationship)
+	if err != nil {
+		return false, err.Error(), nil
+	}
+
+	valid, errMsg, err := engine.ValidateRelationship(ctx, rec.Policy, relationship)
+	if err != nil {
+		return false, "", newValidateRelationshipErr(errors.NewPolicyNotFound(policyId))
+	}
+
+	return valid, errMsg, nil
+}

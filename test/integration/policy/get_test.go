@@ -32,16 +32,16 @@ name: policy
 	action := test.CreatePolicyAction{
 		Policy: pol,
 	}
-	action.Run(ctx)
+	policy := action.Run(ctx)
 
 	req := types.GetPolicyRequest{
-		Id: "a969e15fbc568e85a4fadf4758b0fc69ae59248e7ffc983b6caa63bcff19c3cc",
+		Id: policy.Id,
 	}
 	resp, err := ctx.Engine.GetPolicy(ctx, &req)
 
 	want := &types.GetPolicyResponse{
 		Policy: &types.Policy{
-			Id:           "a969e15fbc568e85a4fadf4758b0fc69ae59248e7ffc983b6caa63bcff19c3cc",
+			Id:           "bc7eb5a8c500111b2459a92ae23f4848537e49599df1b8d70636b5aacb47bd5f",
 			Name:         "policy",
 			CreationTime: test.DefaultTs,
 			ActorResource: &types.ActorResource{

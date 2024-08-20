@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/sourcenetwork/acp_core/internal/raccoon"
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/types"
@@ -28,7 +29,9 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 		return nil, fmt.Errorf("CreatePolicy: %w", err)
 	}
 
-	counter := newPolicyCounter(runtime)
+	counter := raccoon.NewCounterStoreFromRuntimeManager(runtime, policyCounterPrefix)
+	releaser := counter.Acquire()
+	defer releaser.Release()
 	i, err := counter.GetNextAndIncrement(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("CreatePolicy: %w", err)

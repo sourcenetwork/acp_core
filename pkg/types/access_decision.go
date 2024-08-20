@@ -52,3 +52,10 @@ func (d *AccessDecision) hashParams() []byte {
 	hasher.Write([]byte(fmt.Sprintf("%v", d.Params.TicketExpirationDelta)))
 	return hasher.Sum(nil)
 }
+
+func NewOperation(obj *Object, permission string) *Operation {
+	return &Operation{
+		Object:     obj,
+		Permission: permission,
+	}
+}

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/sourcenetwork/acp_core/internal/theorem"
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
@@ -67,14 +68,8 @@ func ValidatePolicy(ctx context.Context, runtime runtime.RuntimeManager, req *ty
 		return resp, nil
 	}
 
-	registry := newPolicyCounter(runtime)
-	i, err := registry.GetNext(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("ValidatePolicy: %w", err)
-	}
-
 	factory := factory{}
-	record, _ := factory.Create(ir, nil, i, nil)
+	record, _ := factory.Create(ir, nil, 0, nil)
 
 	spec := validPolicySpec{}
 	err = spec.Satisfies(record.Policy)
@@ -96,4 +91,37 @@ func ValidatePolicy(ctx context.Context, runtime runtime.RuntimeManager, req *ty
 	resp.ErrorMsg = msg
 
 	return resp, nil
+}
+
+func EvaluateTheorem(ctx context.Context, manager runtime.RuntimeManager, req *types.EvaluateTheoremRequest) (*types.EvaluateTheoremResponse, error) {
+	engine, err := zanzi.NewZanzi(manager.GetKVStore(), manager.GetLogger())
+	if err != nil {
+		return nil, newEvaluateTheoremErr(err)
+	}
+
+	evaluator := theorem.NewEvaluator(engine)
+	result, err := evaluator.EvaluatePolicyTheoremDSL(ctx, req.PolicyId, req.PolicyTheorem)
+	if err != nil {
+		return nil, newEvaluateTheoremErr(err)
+	}
+
+	return &types.EvaluateTheoremResponse{
+		Result: result,
+	}, nil
+}
+
+func GetPolicyCatalogue(ctx context.Context, manager runtime.RuntimeManager, req *types.GetPolicyCatalogueRequest) (*types.GetPolicyCatalogueResponse, error) {
+	engine, err := zanzi.NewZanzi(manager.GetKVStore(), manager.GetLogger())
+	if err != nil {
+		return nil, newEvaluateTheoremErr(err)
+	}
+
+	catalogue, err := BuildCatalogue(ctx, engine, req.PolicyId)
+	if err != nil {
+		return nil, newPolicyCatalogueErr(err)
+	}
+
+	return &types.GetPolicyCatalogueResponse{
+		Catalogue: catalogue,
+	}, nil
 }

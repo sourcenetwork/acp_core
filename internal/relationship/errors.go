@@ -10,25 +10,29 @@ var (
 )
 
 func newFilterRelationshpErr(err error) error {
-	return errors.Wrap("filter relationships error", err)
+	return errors.Wrap("filter relationships failed", err)
 }
 
 func newSetRelationshipErr(err error) error {
-	return errors.Wrap("set relationship error", err)
+	return errors.Wrap("set relationship failed", err)
 }
 
 func newDeleteRelationshipErr(err error) error {
-	return errors.Wrap("delete relationship erro", err)
+	return errors.Wrap("delete relationship failed", err)
 }
 
 func newGetObjectRegistrationErr(err error) error {
-	return errors.Wrap("get object error", err)
+	return errors.Wrap("get object failed", err)
 }
 
 func newRegisterObjectErr(err error) error {
-	return errors.Wrap("register object error", err)
+	return errors.Wrap("register object failed", err)
 }
 
 func newUnregisterObjectErr(err error) error {
-	return errors.Wrap("unregister object error", err)
+	return errors.Wrap("unregister object failed", err)
+}
+
+func newValidateRelationshipErr(err error) error {
+	return errors.Wrap("validate relationship failed", err)
 }
