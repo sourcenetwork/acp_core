@@ -223,6 +223,7 @@ func (h *SetStateHandler) setPolicy(ctx context.Context, manager runtime.Runtime
 				// Range is empty because unmarshaling still doesn't support that feature
 			}
 			errs.PolicyErrors = append(errs.PolicyErrors, msg)
+			return errs, nil
 		} else {
 			// non marshaling errors should terminate execution
 			return nil, err

@@ -380,5 +380,4 @@ func Test_GetSandbox_ReturnsSandbox(t *testing.T) {
 	}
 	require.NoError(t, err)
 	require.Equal(t, want, resp.Record)
-
 }
