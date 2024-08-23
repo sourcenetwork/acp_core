@@ -335,10 +335,10 @@ func HandleVerifyTheorem(ctx context.Context, manager runtime.RuntimeManager, re
 		return nil, newVerifyTheoremsErr(err, req.Handle)
 	}
 	if record == nil {
-		return nil, errors.Wrap("sandbox not found", errors.ErrorType_NOT_FOUND, errors.Pair("handle", req.Handle))
+		return nil, newVerifyTheoremsErr(errors.Wrap("sandbox not found", errors.ErrorType_NOT_FOUND), req.Handle)
 	}
 	if !record.Initialized {
-		return nil, errors.Wrap("uninitialized sandbox cannot execute theorems", errors.ErrorType_OPERATION_FORBIDDEN, errors.Pair("handle", req.Handle))
+		return nil, newVerifyTheoremsErr(errors.Wrap("uninitialized sandbox cannot execute theorems", errors.ErrorType_OPERATION_FORBIDDEN), req.Handle)
 	}
 
 	manager, err = GetManagerForSandbox(manager, req.Handle)
@@ -370,7 +370,7 @@ func HandleGetCatalogue(ctx context.Context, manager runtime.RuntimeManager, req
 		return nil, newGetCatalogueErr(err, req.Handle)
 	}
 	if record == nil {
-		return nil, errors.Wrap("sandbox not found", errors.ErrorType_NOT_FOUND, errors.Pair("handle", req.Handle))
+		return nil, newGetCatalogueErr(errors.Wrap("sandbox not found", errors.ErrorType_NOT_FOUND), req.Handle)
 	}
 	if !record.Initialized {
 		err := errors.Wrap("uninitialized sandbox cannot execute theorems",

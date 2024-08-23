@@ -25,9 +25,12 @@ import (
 // which acts as proxy between the JS runtime and the Go code.
 // The constructor returns the JS representation of the created PlaygroundServiceProxy
 func NewPlayground(ctx context.Context) js.Func {
-	return js.FuncOf(func(this js.Value, args []js.Value) any {
-		playground := newPlaygroundServiceProxy(ctx)
-		return playground.asValue()
+	return asyncFn(func(this js.Value, args []js.Value) (any, error) {
+		playground, err := newPlaygroundServiceProxy(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return playground.asValue(), nil
 	})
 }
 
@@ -40,10 +43,10 @@ type PlaygroundServiceProxy struct {
 }
 
 // newPlaygroundServiceProxy creates a new PlaygroundService from a default context
-func newPlaygroundServiceProxy(ctx context.Context) *PlaygroundServiceProxy {
+func newPlaygroundServiceProxy(ctx context.Context) (*PlaygroundServiceProxy, error) {
 	manager, err := runtime.NewRuntimeManager()
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	service := services.NewPlaygroundService(manager)
 
@@ -53,17 +56,18 @@ func newPlaygroundServiceProxy(ctx context.Context) *PlaygroundServiceProxy {
 		service: service,
 	}
 	proxyMap := map[string]js.Func{
-		"newSandbox":        proxy.newSandbox(),
-		"listSandboxes":     proxy.listSandboxes(),
-		"setState":          proxy.setState(),
-		"restoreScratchpad": proxy.restoreScratchpad(),
-		"getCatalogue":      proxy.getCatalogue(),
-		"verifyTheorems":    proxy.verifyTheorems(),
-		"simulate":          proxy.simulate(),
+		"newSandbox":        asyncHandler(proxy.newSandbox),
+		"listSandboxes":     asyncHandler(proxy.listSandboxes),
+		"setState":          asyncHandler(proxy.setState),
+		"restoreScratchpad": asyncHandler(proxy.restoreScratchpad),
+		"getCatalogue":      asyncHandler(proxy.getCatalogue),
+		"getSandbox":        asyncHandler(proxy.getSandbox),
+		"verifyTheorems":    asyncHandler(proxy.verifyTheorems),
+		"simulate":          asyncHandler(proxy.simulate),
 		"close":             proxy.close(),
 	}
 	proxy.proxyMap = proxyMap
-	return proxy
+	return proxy, nil
 }
 
 // asValue returns a JS Object whose attributes are js functions
@@ -76,151 +80,117 @@ func (s *PlaygroundServiceProxy) asValue() js.Value {
 	return js.ValueOf(obj)
 }
 
-func (s *PlaygroundServiceProxy) newSandbox() js.Func {
-	return js.FuncOf(func(this js.Value, args []js.Value) any {
-		if len(args) != 1 {
-			return invalidNumberOfArgs()
-		}
-		reqStr := valueToJson(args[0])
+func (s *PlaygroundServiceProxy) newSandbox(this js.Value, args []js.Value) (*types.NewSandboxResponse, error) {
+	req := &types.NewSandboxRequest{}
+	err := unmarsahlArgs(req, args)
+	if err != nil {
+		return nil, err
+	}
 
-		req := &types.NewSandboxRequest{}
-		err := jsonpb.UnmarshalString(reqStr, req)
-		if err != nil {
-			return errToJson(err)
-		}
-
-		resp, err := s.service.NewSandbox(s.ctx, req)
-		if err != nil {
-			return errToJson(err)
-		}
-		return toJSObject(resp)
-	})
+	resp, err := s.service.NewSandbox(s.ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
 }
 
-func (s *PlaygroundServiceProxy) listSandboxes() js.Func {
-	return js.FuncOf(func(this js.Value, args []js.Value) any {
-		if len(args) != 1 {
-			return invalidNumberOfArgs()
-		}
-		reqStr := valueToJson(args[0])
+func (s *PlaygroundServiceProxy) listSandboxes(this js.Value, args []js.Value) (*types.ListSandboxesResponse, error) {
+	req := &types.ListSandboxesRequest{}
+	err := unmarsahlArgs(req, args)
+	if err != nil {
+		return nil, err
+	}
 
-		req := &types.ListSandboxesRequest{}
-		err := jsonpb.UnmarshalString(reqStr, req)
-		if err != nil {
-			return errToJson(err)
-		}
-
-		resp, err := s.service.ListSandboxes(s.ctx, req)
-		if err != nil {
-			return errToJson(err)
-		}
-		return toJSObject(resp)
-	})
+	resp, err := s.service.ListSandboxes(s.ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
 }
 
-func (s *PlaygroundServiceProxy) setState() js.Func {
-	return js.FuncOf(func(this js.Value, args []js.Value) any {
-		if len(args) != 1 {
-			return invalidNumberOfArgs()
-		}
-		reqStr := valueToJson(args[0])
+func (s *PlaygroundServiceProxy) setState(this js.Value, args []js.Value) (*types.SetStateResponse, error) {
+	req := &types.SetStateRequest{}
+	err := unmarsahlArgs(req, args)
 
-		req := &types.SetStateRequest{}
-		err := jsonpb.UnmarshalString(reqStr, req)
-		if err != nil {
-			return errToJson(err)
-		}
+	if err != nil {
+		return nil, err
+	}
 
-		resp, err := s.service.SetState(s.ctx, req)
-		if err != nil {
-			return errToJson(err)
-		}
-		return toJSObject(resp)
-	})
+	resp, err := s.service.SetState(s.ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
 }
 
-func (s *PlaygroundServiceProxy) restoreScratchpad() js.Func {
-	return js.FuncOf(func(this js.Value, args []js.Value) any {
-		if len(args) != 1 {
-			return invalidNumberOfArgs()
-		}
-		reqStr := valueToJson(args[0])
+func (s *PlaygroundServiceProxy) restoreScratchpad(this js.Value, args []js.Value) (*types.RestoreScratchpadResponse, error) {
+	req := &types.RestoreScratchpadRequest{}
+	err := unmarsahlArgs(req, args)
+	if err != nil {
+		return nil, err
+	}
 
-		req := &types.RestoreScratchpadRequest{}
-		err := jsonpb.UnmarshalString(reqStr, req)
-		if err != nil {
-			return errToJson(err)
-		}
-
-		resp, err := s.service.RestoreScratchpad(s.ctx, req)
-		if err != nil {
-			return errToJson(err)
-		}
-		return toJSObject(resp)
-	})
+	resp, err := s.service.RestoreScratchpad(s.ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
 }
 
-func (s *PlaygroundServiceProxy) getCatalogue() js.Func {
-	return js.FuncOf(func(this js.Value, args []js.Value) any {
-		if len(args) != 1 {
-			return invalidNumberOfArgs()
-		}
-		reqStr := valueToJson(args[0])
+func (s *PlaygroundServiceProxy) getCatalogue(this js.Value, args []js.Value) (*types.GetCatalogueResponse, error) {
+	req := &types.GetCatalogueRequest{}
+	err := unmarsahlArgs(req, args)
+	if err != nil {
+		return nil, err
+	}
 
-		req := &types.GetCatalogueRequest{}
-		err := jsonpb.UnmarshalString(reqStr, req)
-		if err != nil {
-			return errToJson(err)
-		}
-
-		resp, err := s.service.GetCatalogue(s.ctx, req)
-		if err != nil {
-			return errToJson(err)
-		}
-		return toJSObject(resp)
-	})
+	resp, err := s.service.GetCatalogue(s.ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
 }
 
-func (s *PlaygroundServiceProxy) verifyTheorems() js.Func {
-	return js.FuncOf(func(this js.Value, args []js.Value) any {
-		if len(args) != 1 {
-			return invalidNumberOfArgs()
-		}
-		reqStr := valueToJson(args[0])
+func (s *PlaygroundServiceProxy) getSandbox(this js.Value, args []js.Value) (*types.GetSandboxResponse, error) {
+	req := &types.GetSandboxRequest{}
+	err := unmarsahlArgs(req, args)
+	if err != nil {
+		return nil, err
+	}
 
-		req := &types.VerifyTheoremsRequest{}
-		err := jsonpb.UnmarshalString(reqStr, req)
-		if err != nil {
-			return errToJson(err)
-		}
-
-		resp, err := s.service.VerifyTheorems(s.ctx, req)
-		if err != nil {
-			return errToJson(err)
-		}
-		return toJSObject(resp)
-	})
+	resp, err := s.service.GetSandbox(s.ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
 }
 
-func (s *PlaygroundServiceProxy) simulate() js.Func {
-	return js.FuncOf(func(this js.Value, args []js.Value) any {
-		if len(args) != 1 {
-			return invalidNumberOfArgs()
-		}
-		reqStr := valueToJson(args[0])
+func (s *PlaygroundServiceProxy) verifyTheorems(this js.Value, args []js.Value) (*types.VerifyTheoremsResponse, error) {
+	req := &types.VerifyTheoremsRequest{}
+	err := unmarsahlArgs(req, args)
+	if err != nil {
+		return nil, err
+	}
 
-		req := &types.SimulateRequest{}
-		err := jsonpb.UnmarshalString(reqStr, req)
-		if err != nil {
-			return errToJson(err)
-		}
+	resp, err := s.service.VerifyTheorems(s.ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
 
-		resp, err := s.service.Simulate(s.ctx, req)
-		if err != nil {
-			return errToJson(err)
-		}
-		return toJSObject(resp)
-	})
+func (s *PlaygroundServiceProxy) simulate(this js.Value, args []js.Value) (*types.SimulateReponse, error) {
+	req := &types.SimulateRequest{}
+	err := unmarsahlArgs(req, args)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.service.Simulate(s.ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
 }
 
 func (s *PlaygroundServiceProxy) close() js.Func {
@@ -232,43 +202,14 @@ func (s *PlaygroundServiceProxy) close() js.Func {
 	})
 }
 
-func valueToJson(v js.Value) string {
-	result := js.Global().Get("JSON").Call("stringify", v)
-	if result.Type() != js.TypeString {
-		panic("expected string")
-	}
-
-	return result.String()
-}
-
-func toJSObject[T proto.Message](val T) js.Value {
+func toJSObject[T proto.Message](val T) (js.Value, error) {
 	marshaler := jsonpb.Marshaler{}
 	valStr, err := marshaler.MarshalToString(val)
 	if err != nil {
-		panic(err)
+		return js.Value{}, err
 	}
 	jsVal := js.Global().Get("JSON").Call("parse", valStr)
-	return jsVal
-}
-
-func errToJson(err error) js.Value {
-	errMap := map[string]any{
-		"message": err.Error(),
-	}
-	jsVal := js.ValueOf(errMap)
-	return jsVal
-}
-
-func invalidNumberOfArgs() js.Value {
-	errMap := map[string]any{
-		"message": "expected 1 argument",
-	}
-	jsVal := js.ValueOf(errMap)
-	return jsVal
-}
-
-func newInvalidArgsErr(count int) error {
-	return errors.Wrap("invalid number of arguments", errors.ErrorType_BAD_INPUT, errors.Pair("count", count))
+	return jsVal, nil
 }
 
 func unmarsahlArgs(container proto.Message, args []js.Value) error {
@@ -290,4 +231,64 @@ func unmarsahlArgs(container proto.Message, args []js.Value) error {
 	}
 
 	return nil
+}
+
+// asyncHandler takes a handler and turns it into a JS function which returns a promise.
+// First a Promise executor function is created, inside of which a worker go routine is created and dispatched.
+// The executor returns immediately and the returned Promise is returned as the result of the function
+//
+// Inside the worker go routine, the Handler is invoked and according to the results
+// either invokes the reject if the error wasn't nil or resolves the promise with the result
+func asyncHandler[R proto.Message](handler func(js.Value, []js.Value) (R, error)) js.Func {
+	return js.FuncOf(func(this js.Value, args []js.Value) any {
+		var promiseExecutor js.Func
+		promiseExecutor = js.FuncOf(func(_ js.Value, promiseArgs []js.Value) any {
+			go func() {
+				defer promiseExecutor.Release()
+				resolve := promiseArgs[0]
+				reject := promiseArgs[1]
+
+				result, err := handler(this, args)
+				if err != nil {
+					jsErr := newJSError(err)
+					reject.Invoke(jsErr)
+					return
+				}
+
+				val, err := toJSObject(result)
+				if err != nil {
+					jsErr := newJSError(err)
+					reject.Invoke(jsErr)
+					return
+				}
+
+				resolve.Invoke(val)
+			}()
+			return js.Undefined()
+		})
+		return js.Global().Get("Promise").New(promiseExecutor)
+	})
+}
+
+func asyncFn(f func(js.Value, []js.Value) (any, error)) js.Func {
+	return js.FuncOf(func(this js.Value, args []js.Value) any {
+		var promiseExecutor js.Func
+		promiseExecutor = js.FuncOf(func(_ js.Value, promiseArgs []js.Value) any {
+			go func() {
+				defer promiseExecutor.Release()
+				resolve := promiseArgs[0]
+				reject := promiseArgs[1]
+
+				result, err := f(this, args)
+				if err != nil {
+					jsErr := newJSError(err)
+					reject.Invoke(jsErr)
+					return
+				}
+				resolve.Invoke(result)
+			}()
+			return js.Undefined()
+		})
+		return js.Global().Get("Promise").New(promiseExecutor)
+	})
 }
