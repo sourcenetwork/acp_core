@@ -7,10 +7,6 @@ import (
 	"context"
 	"syscall/js"
 
-	"github.com/cosmos/gogoproto/jsonpb"
-	"github.com/cosmos/gogoproto/proto"
-
-	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/services"
 	"github.com/sourcenetwork/acp_core/pkg/types"
@@ -193,102 +189,12 @@ func (s *PlaygroundServiceProxy) simulate(this js.Value, args []js.Value) (*type
 	return resp, nil
 }
 
+// close frees all resources used by the playground
 func (s *PlaygroundServiceProxy) close() js.Func {
 	return js.FuncOf(func(this js.Value, args []js.Value) any {
 		for _, f := range s.proxyMap {
 			f.Release()
 		}
 		return nil
-	})
-}
-
-func toJSObject[T proto.Message](val T) (js.Value, error) {
-	marshaler := jsonpb.Marshaler{}
-	valStr, err := marshaler.MarshalToString(val)
-	if err != nil {
-		return js.Value{}, err
-	}
-	jsVal := js.Global().Get("JSON").Call("parse", valStr)
-	return jsVal, nil
-}
-
-func unmarsahlArgs(container proto.Message, args []js.Value) error {
-	count := len(args)
-	if count != 1 {
-		return newInvalidArgsErr(count)
-	}
-
-	arg := args[0]
-
-	reqJson := js.Global().Get("JSON").Call("stringify", arg)
-	if reqJson.Type() != js.TypeString {
-		panic("expected string")
-	}
-
-	err := jsonpb.UnmarshalString(reqJson.String(), container)
-	if err != nil {
-		return errors.NewFromCause("could not unmarshal serialized req obj", err, errors.ErrorType_BAD_INPUT)
-	}
-
-	return nil
-}
-
-// asyncHandler takes a handler and turns it into a JS function which returns a promise.
-// First a Promise executor function is created, inside of which a worker go routine is created and dispatched.
-// The executor returns immediately and the returned Promise is returned as the result of the function
-//
-// Inside the worker go routine, the Handler is invoked and according to the results
-// either invokes the reject if the error wasn't nil or resolves the promise with the result
-func asyncHandler[R proto.Message](handler func(js.Value, []js.Value) (R, error)) js.Func {
-	return js.FuncOf(func(this js.Value, args []js.Value) any {
-		var promiseExecutor js.Func
-		promiseExecutor = js.FuncOf(func(_ js.Value, promiseArgs []js.Value) any {
-			go func() {
-				defer promiseExecutor.Release()
-				resolve := promiseArgs[0]
-				reject := promiseArgs[1]
-
-				result, err := handler(this, args)
-				if err != nil {
-					jsErr := newJSError(err)
-					reject.Invoke(jsErr)
-					return
-				}
-
-				val, err := toJSObject(result)
-				if err != nil {
-					jsErr := newJSError(err)
-					reject.Invoke(jsErr)
-					return
-				}
-
-				resolve.Invoke(val)
-			}()
-			return js.Undefined()
-		})
-		return js.Global().Get("Promise").New(promiseExecutor)
-	})
-}
-
-func asyncFn(f func(js.Value, []js.Value) (any, error)) js.Func {
-	return js.FuncOf(func(this js.Value, args []js.Value) any {
-		var promiseExecutor js.Func
-		promiseExecutor = js.FuncOf(func(_ js.Value, promiseArgs []js.Value) any {
-			go func() {
-				defer promiseExecutor.Release()
-				resolve := promiseArgs[0]
-				reject := promiseArgs[1]
-
-				result, err := f(this, args)
-				if err != nil {
-					jsErr := newJSError(err)
-					reject.Invoke(jsErr)
-					return
-				}
-				resolve.Invoke(result)
-			}()
-			return js.Undefined()
-		})
-		return js.Global().Get("Promise").New(promiseExecutor)
 	})
 }
