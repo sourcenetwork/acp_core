@@ -7,7 +7,7 @@ test:
 proto:
 	docker run --rm --volume .:/app acp_core_proto
 
-.PHONY: playground\:wasm
+.PHONY: playground\:wasm_js
 playground\:wasm:
 	mkdir -p build/playground
 	GOOS=js GOARCH=wasm go build -o build/playground/playground.wasm cmd/playground_wasm/main.go

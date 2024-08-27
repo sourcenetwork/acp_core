@@ -12,7 +12,7 @@ import (
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
-// NewPlayground returns a JS function which acts as a contructor for playgrounds.
+// PlaygroundConstructor returns a JS function which acts as a contructor for playgrounds.
 // In JS land, the return of this constructor function is a JS object whose attributes
 // are named similarly to the Playgroung protobuff definition.
 // Calling these attributes will execute the expected Playground sevice operation.
@@ -20,13 +20,18 @@ import (
 // In Go land, the constructor function creates a PlaygroundServiceProxy object,
 // which acts as proxy between the JS runtime and the Go code.
 // The constructor returns the JS representation of the created PlaygroundServiceProxy
-func NewPlayground(ctx context.Context) js.Func {
+func PlaygroundConstructor(ctx context.Context) js.Func {
 	return asyncFn(func(this js.Value, args []js.Value) (any, error) {
-		playground, err := newPlaygroundServiceProxy(ctx)
+		manager, err := runtime.NewRuntimeManager()
 		if err != nil {
 			return nil, err
 		}
-		return playground.asValue(), nil
+
+		playground, err := NewPlaygroundServiceProxy(ctx, manager)
+		if err != nil {
+			return nil, err
+		}
+		return playground.AsJSValue(), nil
 	})
 }
 
@@ -38,12 +43,8 @@ type PlaygroundServiceProxy struct {
 	proxyMap map[string]js.Func
 }
 
-// newPlaygroundServiceProxy creates a new PlaygroundService from a default context
-func newPlaygroundServiceProxy(ctx context.Context) (*PlaygroundServiceProxy, error) {
-	manager, err := runtime.NewRuntimeManager()
-	if err != nil {
-		return nil, err
-	}
+// NewPlaygroundServiceProxy creates a new PlaygroundService from a default context
+func NewPlaygroundServiceProxy(ctx context.Context, manager runtime.RuntimeManager) (*PlaygroundServiceProxy, error) {
 	service := services.NewPlaygroundService(manager)
 
 	proxy := &PlaygroundServiceProxy{
@@ -51,24 +52,30 @@ func newPlaygroundServiceProxy(ctx context.Context) (*PlaygroundServiceProxy, er
 		manager: manager,
 		service: service,
 	}
+
+	closeWrapper := js.FuncOf(func(this js.Value, args []js.Value) any {
+		proxy.Close()
+		return js.Undefined()
+	})
+
 	proxyMap := map[string]js.Func{
-		"newSandbox":        asyncHandler(proxy.newSandbox),
-		"listSandboxes":     asyncHandler(proxy.listSandboxes),
-		"setState":          asyncHandler(proxy.setState),
-		"restoreScratchpad": asyncHandler(proxy.restoreScratchpad),
-		"getCatalogue":      asyncHandler(proxy.getCatalogue),
-		"getSandbox":        asyncHandler(proxy.getSandbox),
-		"verifyTheorems":    asyncHandler(proxy.verifyTheorems),
-		"simulate":          asyncHandler(proxy.simulate),
-		"close":             proxy.close(),
+		"newSandbox":        asyncHandler(proxy.NewSandbox),
+		"listSandboxes":     asyncHandler(proxy.ListSandboxes),
+		"setState":          asyncHandler(proxy.SetState),
+		"restoreScratchpad": asyncHandler(proxy.RestoreScratchpad),
+		"getCatalogue":      asyncHandler(proxy.GetCatalogue),
+		"getSandbox":        asyncHandler(proxy.GetSandbox),
+		"verifyTheorems":    asyncHandler(proxy.VerifyTheorems),
+		"simulate":          asyncHandler(proxy.Simulate),
+		"close":             closeWrapper,
 	}
 	proxy.proxyMap = proxyMap
 	return proxy, nil
 }
 
-// asValue returns a JS Object whose attributes are js functions
+// AsJSValue returns a JS Object whose attributes are js functions
 // that dispatch execution to the playground methods.
-func (s *PlaygroundServiceProxy) asValue() js.Value {
+func (s *PlaygroundServiceProxy) AsJSValue() js.Value {
 	obj := make(map[string]any)
 	for method, f := range s.proxyMap {
 		obj[method] = f
@@ -76,7 +83,7 @@ func (s *PlaygroundServiceProxy) asValue() js.Value {
 	return js.ValueOf(obj)
 }
 
-func (s *PlaygroundServiceProxy) newSandbox(this js.Value, args []js.Value) (*types.NewSandboxResponse, error) {
+func (s *PlaygroundServiceProxy) NewSandbox(this js.Value, args []js.Value) (*types.NewSandboxResponse, error) {
 	req := &types.NewSandboxRequest{}
 	err := unmarsahlArgs(req, args)
 	if err != nil {
@@ -90,7 +97,7 @@ func (s *PlaygroundServiceProxy) newSandbox(this js.Value, args []js.Value) (*ty
 	return resp, nil
 }
 
-func (s *PlaygroundServiceProxy) listSandboxes(this js.Value, args []js.Value) (*types.ListSandboxesResponse, error) {
+func (s *PlaygroundServiceProxy) ListSandboxes(this js.Value, args []js.Value) (*types.ListSandboxesResponse, error) {
 	req := &types.ListSandboxesRequest{}
 	err := unmarsahlArgs(req, args)
 	if err != nil {
@@ -104,7 +111,7 @@ func (s *PlaygroundServiceProxy) listSandboxes(this js.Value, args []js.Value) (
 	return resp, nil
 }
 
-func (s *PlaygroundServiceProxy) setState(this js.Value, args []js.Value) (*types.SetStateResponse, error) {
+func (s *PlaygroundServiceProxy) SetState(this js.Value, args []js.Value) (*types.SetStateResponse, error) {
 	req := &types.SetStateRequest{}
 	err := unmarsahlArgs(req, args)
 
@@ -119,7 +126,7 @@ func (s *PlaygroundServiceProxy) setState(this js.Value, args []js.Value) (*type
 	return resp, nil
 }
 
-func (s *PlaygroundServiceProxy) restoreScratchpad(this js.Value, args []js.Value) (*types.RestoreScratchpadResponse, error) {
+func (s *PlaygroundServiceProxy) RestoreScratchpad(this js.Value, args []js.Value) (*types.RestoreScratchpadResponse, error) {
 	req := &types.RestoreScratchpadRequest{}
 	err := unmarsahlArgs(req, args)
 	if err != nil {
@@ -133,7 +140,7 @@ func (s *PlaygroundServiceProxy) restoreScratchpad(this js.Value, args []js.Valu
 	return resp, nil
 }
 
-func (s *PlaygroundServiceProxy) getCatalogue(this js.Value, args []js.Value) (*types.GetCatalogueResponse, error) {
+func (s *PlaygroundServiceProxy) GetCatalogue(this js.Value, args []js.Value) (*types.GetCatalogueResponse, error) {
 	req := &types.GetCatalogueRequest{}
 	err := unmarsahlArgs(req, args)
 	if err != nil {
@@ -147,7 +154,7 @@ func (s *PlaygroundServiceProxy) getCatalogue(this js.Value, args []js.Value) (*
 	return resp, nil
 }
 
-func (s *PlaygroundServiceProxy) getSandbox(this js.Value, args []js.Value) (*types.GetSandboxResponse, error) {
+func (s *PlaygroundServiceProxy) GetSandbox(this js.Value, args []js.Value) (*types.GetSandboxResponse, error) {
 	req := &types.GetSandboxRequest{}
 	err := unmarsahlArgs(req, args)
 	if err != nil {
@@ -161,7 +168,7 @@ func (s *PlaygroundServiceProxy) getSandbox(this js.Value, args []js.Value) (*ty
 	return resp, nil
 }
 
-func (s *PlaygroundServiceProxy) verifyTheorems(this js.Value, args []js.Value) (*types.VerifyTheoremsResponse, error) {
+func (s *PlaygroundServiceProxy) VerifyTheorems(this js.Value, args []js.Value) (*types.VerifyTheoremsResponse, error) {
 	req := &types.VerifyTheoremsRequest{}
 	err := unmarsahlArgs(req, args)
 	if err != nil {
@@ -175,7 +182,7 @@ func (s *PlaygroundServiceProxy) verifyTheorems(this js.Value, args []js.Value) 
 	return resp, nil
 }
 
-func (s *PlaygroundServiceProxy) simulate(this js.Value, args []js.Value) (*types.SimulateReponse, error) {
+func (s *PlaygroundServiceProxy) Simulate(this js.Value, args []js.Value) (*types.SimulateReponse, error) {
 	req := &types.SimulateRequest{}
 	err := unmarsahlArgs(req, args)
 	if err != nil {
@@ -189,12 +196,9 @@ func (s *PlaygroundServiceProxy) simulate(this js.Value, args []js.Value) (*type
 	return resp, nil
 }
 
-// close frees all resources used by the playground
-func (s *PlaygroundServiceProxy) close() js.Func {
-	return js.FuncOf(func(this js.Value, args []js.Value) any {
-		for _, f := range s.proxyMap {
-			f.Release()
-		}
-		return nil
-	})
+// Close frees all resources used by the playground
+func (s *PlaygroundServiceProxy) Close() {
+	for _, f := range s.proxyMap {
+		f.Release()
+	}
 }
