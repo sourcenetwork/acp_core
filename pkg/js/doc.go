@@ -1,2 +1,0 @@
-// package js
-package js

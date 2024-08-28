@@ -1,0 +1,65 @@
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <script src="wasm_exec.js"></script>
+        <script>
+            const go = new Go();
+            WebAssembly.instantiateStreaming(fetch("playground.wasm"), go.importObject).then((result) => {
+                go.run(result.instance);
+            });
+        </script>
+    </head>
+    <body>
+        <pre>
+        Welcome to the ACP Playground.
+        This page has loaded a WASM module which exports acp_core's PlaygroundService.
+
+        Try it out by inspecting the AcpPlayground object in this page's JS console, or use the following snippet:
+
+
+```
+let playground = await AcpPlayground.new();
+
+let req = {
+    data: {
+        policy_definition: `
+name: test
+resources:
+  file:
+    relations:
+      owner:
+        types:
+          - actor
+      reader:
+        types:
+          - actor
+    permissions:
+      read:
+        expr: owner + reader
+      write:
+       expr: owner
+`,
+        relationships: `
+file:readme#owner@did:example:bob
+file:readme#reader@did:example:alice
+        `,
+        policy_theorem: `
+				Authorizations {
+				  file:readme#read@did:example:bob
+				  file:readme#write@did:example:bob
+
+				  !file:readme#write@did:example:alice
+				  file:readme#read@did:example:alice
+				}
+				Delegations {}
+				ImpliedRelations {}
+        `,
+    }
+}
+
+await playground.simulate(req)
+```
+        </pre>
+    </body>
+</html>
+

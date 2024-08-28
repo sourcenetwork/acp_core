@@ -1,6 +1,6 @@
 //go:build js
 
-package test
+package js
 
 import (
 	"context"
@@ -9,42 +9,49 @@ import (
 
 	"github.com/cosmos/gogoproto/jsonpb"
 	"github.com/cosmos/gogoproto/proto"
-	"github.com/stretchr/testify/require"
 
-	acpjs "github.com/sourcenetwork/acp_core/pkg/js"
+	"github.com/sourcenetwork/acp_core/internal/playground_js"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
 var _ types.PlaygroundServiceServer = (*PlaygroundJS)(nil)
 
-func newPlaygroundJSImpl(t *testing.T, manager runtime.RuntimeManager) *PlaygroundJS {
-	proxy, err := acpjs.NewPlaygroundServiceProxy(context.TODO(), manager)
-	require.NoError(t, err)
+// NewPlaygruondJS returns a new playground JS Wrapper
+func NewPlaygroundJS(t *testing.T, manager runtime.RuntimeManager) *PlaygroundJS {
+	proxy := playground_js.NewPlaygroundServiceProxy(context.TODO(), manager)
 
 	return &PlaygroundJS{
 		proxy: proxy,
-		this:  proxy.AsJSValue(),
+		this:  proxy.GetJSValue(),
 	}
 }
 
+// PlaygroundJS is a wrapper of the js wrapper
+// It implements the Go definition of a Playground service.
+// The wrapper receives Go objects, turns them into JS objects
+// and calls the JS implementation of the Playground
 type PlaygroundJS struct {
-	proxy *acpjs.PlaygroundServiceProxy
+	proxy *playground_js.PlaygroundServiceProxy
 	this  js.Value
 }
 
 func (s *PlaygroundJS) NewSandbox(ctx context.Context, req *types.NewSandboxRequest) (*types.NewSandboxResponse, error) {
 	return s.proxy.NewSandbox(s.this, mustMapArgument(req))
 }
+
 func (s *PlaygroundJS) ListSandboxes(ctx context.Context, req *types.ListSandboxesRequest) (*types.ListSandboxesResponse, error) {
 	return s.proxy.ListSandboxes(s.this, mustMapArgument(req))
 }
+
 func (s *PlaygroundJS) SetState(ctx context.Context, req *types.SetStateRequest) (*types.SetStateResponse, error) {
 	return s.proxy.SetState(s.this, mustMapArgument(req))
 }
+
 func (s *PlaygroundJS) GetCatalogue(ctx context.Context, req *types.GetCatalogueRequest) (*types.GetCatalogueResponse, error) {
 	return s.proxy.GetCatalogue(s.this, mustMapArgument(req))
 }
+
 func (s *PlaygroundJS) VerifyTheorems(ctx context.Context, req *types.VerifyTheoremsRequest) (*types.VerifyTheoremsResponse, error) {
 	return s.proxy.VerifyTheorems(s.this, mustMapArgument(req))
 }

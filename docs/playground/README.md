@@ -4,7 +4,7 @@ date: 2024-08-26
 
 # Playground
 
-ACP Core introduces ships with an experimentation environment called `Playground`.
+ACP Core ships with an experimentation environment called `Playground`.
 While interacting with the playground, users can make use of all the features in ACP Core in an isolated environment.
 The Playground is modeled as a [protobuff service](../../proto/sourcenetwork/acp_core/playground.proto).
 

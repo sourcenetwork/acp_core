@@ -2,7 +2,6 @@ package test
 
 import (
 	"context"
-	goruntime "runtime"
 	"testing"
 	"time"
 
@@ -35,16 +34,8 @@ func (t *TestCtx) SetPrincipal(name string) {
 func NewTestCtx(t *testing.T) *TestCtx {
 	manager := NewTestRuntime(t)
 	engine := services.NewACPEngine(manager)
-	playground := services.NewPlaygroundService(manager)
 
-	// if the current runtime is JS, meaning we are running some sort of external executor
-	// use the playground JS instead, which wraps the proxy js playground back into
-	// a PlaygroundServiceServer implmenetation, while creating objects
-	// in the JS context to receive as arguments
-	if goruntime.GOOS == "js" {
-		t.Log("using JS Playground")
-		playground = newPlaygroundJSImpl(t, manager)
-	}
+	playground := playgroundFactory(t, manager)
 
 	return &TestCtx{
 		Ctx:        context.Background(),

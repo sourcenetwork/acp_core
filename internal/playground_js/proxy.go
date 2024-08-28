@@ -1,37 +1,37 @@
 //go:build js
 
 // package js
-package js
+package playground_js
 
 import (
 	"context"
 	"syscall/js"
 
+	"github.com/cosmos/gogoproto/proto"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/services"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
-// PlaygroundConstructor returns a JS function which acts as a contructor for playgrounds.
-// In JS land, the return of this constructor function is a JS object whose attributes
-// are named similarly to the Playgroung protobuff definition.
-// Calling these attributes will execute the expected Playground sevice operation.
+// PlaygroundConstructor returns a JS function which acts as a contructor for Playground Services.
+// In JS land, the return of this constructor function is a JS object whose attributes implement
+// the Playground protobuff definition.
+// In other words, the returned type implements the TS generated interface for PlaygroundService.
+// Note that, the JS playground contains an additional method, `close`, which should be called
+// to free up resources in the Go runtime once the service is terminated.
 //
 // In Go land, the constructor function creates a PlaygroundServiceProxy object,
 // which acts as proxy between the JS runtime and the Go code.
 // The constructor returns the JS representation of the created PlaygroundServiceProxy
 func PlaygroundConstructor(ctx context.Context) js.Func {
-	return asyncFn(func(this js.Value, args []js.Value) (any, error) {
+	return asyncFn(func(this js.Value, args []js.Value) (js.Value, error) {
 		manager, err := runtime.NewRuntimeManager()
 		if err != nil {
-			return nil, err
+			return js.Undefined(), err
 		}
 
-		playground, err := NewPlaygroundServiceProxy(ctx, manager)
-		if err != nil {
-			return nil, err
-		}
-		return playground.AsJSValue(), nil
+		playground := NewPlaygroundServiceProxy(ctx, manager)
+		return playground.GetJSValue(), nil
 	})
 }
 
@@ -41,10 +41,11 @@ type PlaygroundServiceProxy struct {
 	manager  runtime.RuntimeManager
 	service  types.PlaygroundServiceServer
 	proxyMap map[string]js.Func
+	jsValue  js.Value
 }
 
 // NewPlaygroundServiceProxy creates a new PlaygroundService from a default context
-func NewPlaygroundServiceProxy(ctx context.Context, manager runtime.RuntimeManager) (*PlaygroundServiceProxy, error) {
+func NewPlaygroundServiceProxy(ctx context.Context, manager runtime.RuntimeManager) *PlaygroundServiceProxy {
 	service := services.NewPlaygroundService(manager)
 
 	proxy := &PlaygroundServiceProxy{
@@ -59,28 +60,33 @@ func NewPlaygroundServiceProxy(ctx context.Context, manager runtime.RuntimeManag
 	})
 
 	proxyMap := map[string]js.Func{
-		"newSandbox":        asyncHandler(proxy.NewSandbox),
-		"listSandboxes":     asyncHandler(proxy.ListSandboxes),
-		"setState":          asyncHandler(proxy.SetState),
-		"restoreScratchpad": asyncHandler(proxy.RestoreScratchpad),
-		"getCatalogue":      asyncHandler(proxy.GetCatalogue),
-		"getSandbox":        asyncHandler(proxy.GetSandbox),
-		"verifyTheorems":    asyncHandler(proxy.VerifyTheorems),
-		"simulate":          asyncHandler(proxy.Simulate),
+		"newSandbox":        asyncFn(wrapHandler(proxy.NewSandbox)),
+		"listSandboxes":     asyncFn(wrapHandler(proxy.ListSandboxes)),
+		"setState":          asyncFn(wrapHandler(proxy.SetState)),
+		"restoreScratchpad": asyncFn(wrapHandler(proxy.RestoreScratchpad)),
+		"getCatalogue":      asyncFn(wrapHandler(proxy.GetCatalogue)),
+		"getSandbox":        asyncFn(wrapHandler(proxy.GetSandbox)),
+		"verifyTheorems":    asyncFn(wrapHandler(proxy.VerifyTheorems)),
+		"simulate":          asyncFn(wrapHandler(proxy.Simulate)),
 		"close":             closeWrapper,
 	}
 	proxy.proxyMap = proxyMap
-	return proxy, nil
+	proxy.makeJSValue()
+	return proxy
 }
 
 // AsJSValue returns a JS Object whose attributes are js functions
 // that dispatch execution to the playground methods.
-func (s *PlaygroundServiceProxy) AsJSValue() js.Value {
+func (s *PlaygroundServiceProxy) makeJSValue() {
 	obj := make(map[string]any)
 	for method, f := range s.proxyMap {
 		obj[method] = f
 	}
-	return js.ValueOf(obj)
+	s.jsValue = js.ValueOf(obj)
+}
+
+func (s *PlaygroundServiceProxy) GetJSValue() js.Value {
+	return s.jsValue
 }
 
 func (s *PlaygroundServiceProxy) NewSandbox(this js.Value, args []js.Value) (*types.NewSandboxResponse, error) {
@@ -200,5 +206,24 @@ func (s *PlaygroundServiceProxy) Simulate(this js.Value, args []js.Value) (*type
 func (s *PlaygroundServiceProxy) Close() {
 	for _, f := range s.proxyMap {
 		f.Release()
+	}
+	s.manager.Terminate()
+}
+
+// wrapHandler receives a handler method, which receives js values and return go values
+// and turns into a hybrid which returns JS values or an error
+func wrapHandler[R proto.Message](handler func(js.Value, []js.Value) (R, error)) func(js.Value, []js.Value) (js.Value, error) {
+	return func(this js.Value, args []js.Value) (js.Value, error) {
+		result, err := handler(this, args)
+		if err != nil {
+			return js.Undefined(), err
+		}
+
+		val, err := toJSObject(result)
+		if err != nil {
+			return js.Undefined(), err
+		}
+
+		return val, nil
 	}
 }

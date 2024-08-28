@@ -2,11 +2,11 @@
 
 The Playground JS executable compiles a binary containing a WASM module which exports a [PlaygroundService](../../proto/sourcenetwork/acp_core/playground.proto) implementation.
 
-The WASM binary modifies the [global JS scope](https://pkg.go.dev/syscall/js#Global) and exports an `AcpPlayground` object which acts as a namespace containg a constructor for the Playground Service.
+The WASM binary modifies the [global JS scope](https://pkg.go.dev/syscall/js#Global) and exports an `AcpPlayground` object which acts as a namespace with a constructor for the Playground Service.
 
 ## Building
 
-Run `make playground:wasm_js` to build the playground.
+Run `make playground:wasm_js` to build the playground the Playground as a WASM module.
 
 ## Example
 

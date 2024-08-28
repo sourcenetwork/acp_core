@@ -1,5 +1,5 @@
 version: v1
 plugins:
   - plugin: buf.build/community/stephenh-ts-proto
-    out: ../build/playground/types-js
+    out: ../build/proto-js
     
