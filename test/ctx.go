@@ -32,13 +32,15 @@ func (t *TestCtx) SetPrincipal(name string) {
 }
 
 func NewTestCtx(t *testing.T) *TestCtx {
-	runtime := NewTestRuntime(t)
-	engine := services.NewACPEngine(runtime)
-	playground := services.NewPlaygroundService(runtime)
+	manager := NewTestRuntime(t)
+	engine := services.NewACPEngine(manager)
+
+	playground := playgroundFactory(t, manager)
+
 	return &TestCtx{
 		Ctx:        context.Background(),
 		T:          t,
-		Runtime:    runtime,
+		Runtime:    manager,
 		Engine:     engine,
 		Playground: playground,
 		Actors: ActorRegistrar{

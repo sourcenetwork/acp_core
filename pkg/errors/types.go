@@ -4,6 +4,7 @@ import "fmt"
 
 // TypedError models an acp_core compatible error, which contains a type
 type TypedError interface {
+	error
 	GetType() ErrorType
 }
 
