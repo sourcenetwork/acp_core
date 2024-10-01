@@ -36,3 +36,7 @@ func newUnregisterObjectErr(err error) error {
 func newValidateRelationshipErr(err error) error {
 	return errors.Wrap("validate relationship failed", err)
 }
+
+func newTransferObjectErr(err error) error {
+	return errors.Wrap("transfer object failed", err)
+}

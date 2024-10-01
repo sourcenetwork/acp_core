@@ -307,3 +307,77 @@ func (c *UnregisterObjectHandler) validateCmd(cmd *types.UnregisterObjectRequest
 	}
 	return nil
 }
+
+type TransferObjectHandler struct{}
+
+func (h *TransferObjectHandler) Execute(ctx context.Context, runtime runtime.RuntimeManager, cmd *types.TransferObjectRequest) (*types.TransferObjectResponse, error) {
+	engine, err := zanzi.NewZanzi(runtime.GetKVStore(), runtime.GetLogger())
+	if err != nil {
+		return nil, newTransferObjectErr(err)
+	}
+
+	principal, err := auth.ExtractPrincipalWithType(ctx, auth.DID)
+	if err != nil {
+		return nil, newTransferObjectErr(err)
+	}
+	did := principal.Identifier()
+
+	rec, err := engine.GetPolicy(ctx, cmd.PolicyId)
+	if err != nil {
+		return nil, newTransferObjectErr(err)
+	}
+	if rec == nil {
+		return nil, newTransferObjectErr(errors.NewPolicyNotFound(cmd.PolicyId))
+	}
+	pol := rec.Policy
+
+	ownerRecord, err := queryOwnerRelationship(ctx, engine, pol, cmd.Object)
+	if err != nil {
+		return nil, newTransferObjectErr(err)
+	}
+	if ownerRecord == nil {
+		return nil, newTransferObjectErr(errors.Wrap("cannot transfer an unregistered object",
+			errors.ErrorType_NOT_FOUND,
+			errors.Pair("policy", pol.Id),
+			errors.Pair("resource", cmd.Object.Resource),
+			errors.Pair("object", cmd.Object.Id),
+		))
+	}
+
+	operation := types.Operation{
+		Object:     cmd.Object,
+		Permission: pol.GetManagementPermissionName(policy.OwnerRelation),
+	}
+	authorizer := authorizer.NewOperationAuthorizer(engine)
+	authorized, err := authorizer.IsAuthorized(ctx, pol, &operation, types.NewActor(did))
+	if err != nil {
+		return nil, newTransferObjectErr(err)
+	}
+	if !authorized {
+		return nil, newTransferObjectErr(errors.Wrap("cannot transfer object owned by someone else",
+			errors.ErrorType_UNAUTHORIZED,
+			errors.Pair("policy", pol.Id),
+			errors.Pair("resource", cmd.Object.Resource),
+			errors.Pair("object", cmd.Object.Id),
+		))
+	}
+
+	_, err = engine.DeleteRelationship(ctx, pol, ownerRecord.Relationship)
+	if err != nil {
+		return nil, newTransferObjectErr(err)
+	}
+
+	ownerRecord.Relationship.Subject = &types.Subject{
+		Subject: &types.Subject_Actor{
+			Actor: cmd.NewOwner,
+		},
+	}
+	_, err = engine.SetRelationship(ctx, pol, ownerRecord)
+	if err != nil {
+		return nil, newTransferObjectErr(err)
+	}
+
+	return &types.TransferObjectResponse{
+		Record: ownerRecord,
+	}, nil
+}
