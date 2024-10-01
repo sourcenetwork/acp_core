@@ -166,6 +166,7 @@ message GetObjectRegistrationRequest {
 message GetObjectRegistrationResponse {
   bool is_registered = 1;
   string owner_id = 2;
+  sourcenetwork.acp_core.RelationshipRecord record = 3;
 }
 
 message FilterRelationshipsRequest {
@@ -210,7 +211,9 @@ message TransferObjectRequest {
   sourcenetwork.acp_core.Actor new_owner = 3;
 }
 
-message TransferObjectResponse {}
+message TransferObjectResponse {
+  sourcenetwork.acp_core.RelationshipRecord record = 1;
+}
 
 message ValidatePolicyRequest {
   string policy = 1;

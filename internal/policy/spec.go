@@ -21,7 +21,7 @@ func basicPolicyIRSpec(pol *PolicyIR) error {
 			}
 		}
 		if !found {
-			return fmt.Errorf("resource %v: %w", resource.Name, ErrResourceMissingOwnerRelation)
+			return newErrMissingOwnerRelation(resource.Name)
 		}
 	}
 
