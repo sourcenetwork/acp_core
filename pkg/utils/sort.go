@@ -70,7 +70,7 @@ func (s Sortable[T]) SortInPlace() {
 // Sort returns a sorted slice of the elements given originally
 func (s Sortable[T]) Sort() []T {
 	vals := make([]T, 0, len(s.ts))
-	copy(vals, s.ts)
+	vals = append(vals, s.ts...)
 	sortable := Sortable[T]{
 		ts:         vals,
 		comparator: s.comparator,
