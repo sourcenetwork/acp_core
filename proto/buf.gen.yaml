@@ -10,3 +10,7 @@ plugins:
       - Mgoogle/protobuf/timestamp.proto=github.com/cosmos/gogoproto/types
       - paths=import
       - module=github.com/sourcenetwork/acp_core
+  - name: go-pulsar
+    out: ../pulsar
+    opt: paths=import
+

@@ -2,7 +2,6 @@ package services
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/sourcenetwork/acp_core/internal/authz_db"
 	"github.com/sourcenetwork/acp_core/internal/policy"
@@ -120,7 +119,11 @@ func (s *acpEngine) ListPolicies(ctx context.Context, req *types.ListPoliciesReq
 }
 
 func (s *acpEngine) TransferObject(ctx context.Context, req *types.TransferObjectRequest) (*types.TransferObjectResponse, error) {
-	return nil, fmt.Errorf("transfer object not implemented")
+	h := func(ctx context.Context, msg *types.TransferObjectRequest) (*types.TransferObjectResponse, error) {
+		handler := relationship.TransferObjectHandler{}
+		return handler.Execute(ctx, s.runtime, msg)
+	}
+	return applyMiddleware(ctx, h, s.hooks, req)
 }
 
 func (s *acpEngine) SetParams(ctx context.Context, req *types.SetParamsRequest) (*types.SetParamsResponse, error) {

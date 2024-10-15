@@ -346,7 +346,7 @@ func (h *TransferObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 
 	operation := types.Operation{
 		Object:     cmd.Object,
-		Permission: pol.GetManagementPermissionName(policy.OwnerRelation),
+		Permission: policy.OwnerRelation,
 	}
 	authorizer := authorizer.NewOperationAuthorizer(engine)
 	authorized, err := authorizer.IsAuthorized(ctx, pol, &operation, types.NewActor(did))

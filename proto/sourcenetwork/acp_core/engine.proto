@@ -68,6 +68,10 @@ service ACPEngine {
   // loses autonomy over the object and cannot create or modify relationships.
   rpc TransferObject(TransferObjectRequest) returns (TransferObjectResponse);
 
+  // AmendRegistration transfer an object's ownership between two users
+  // This operation can only be executed by the root principal.
+  rpc AmendRegistration(AmendRegistrationRequest) returns (AmendRegistrationResponse);
+
   rpc EvaluateTheorem(EvaluateTheoremRequest) returns (EvaluateTheoremResponse);
 
   // GetObjectRegistration returns the registration status of an Object
@@ -83,6 +87,7 @@ service ACPEngine {
   rpc GetParams(GetParamsRequest) returns (GetParamsResponse);
 
   rpc VerifyAccessRequest(VerifyAccessRequestRequest) returns (VerifyAccessRequestResponse);
+
 
   // Expand, Reverse lookup
 
@@ -264,4 +269,14 @@ message EvaluateTheoremRequest {
 message EvaluateTheoremResponse {
   // result of theorem verification
   sourcenetwork.acp_core.AnnotatedPolicyTheoremResult result = 1;
+}
+
+message TransferObjectRequest{
+  string policy_id = 1;
+  Object object = 2;
+  Actor new_owner = 3;
+}
+
+message TransferObjectResponse{
+  RelationshipRecord record = 1;
 }
