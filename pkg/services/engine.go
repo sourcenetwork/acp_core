@@ -61,9 +61,9 @@ func (s *acpEngine) RegisterObject(ctx context.Context, msg *types.RegisterObjec
 	return applyMiddleware(ctx, h, s.hooks, msg)
 }
 
-func (s *acpEngine) UnregisterObject(ctx context.Context, msg *types.UnregisterObjectRequest) (*types.UnregisterObjectResponse, error) {
+func (s *acpEngine) UnregisterObject(ctx context.Context, msg *types.ArchiveObjectRequest) (*types.ArchiveObjectResponse, error) {
 	handler := relationship.UnregisterObjectHandler{}
-	h := func(ctx context.Context, msg *types.UnregisterObjectRequest) (*types.UnregisterObjectResponse, error) {
+	h := func(ctx context.Context, msg *types.ArchiveObjectRequest) (*types.ArchiveObjectResponse, error) {
 		return handler.Execute(ctx, s.runtime, msg)
 	}
 	return applyMiddleware(ctx, h, s.hooks, msg)
@@ -146,9 +146,18 @@ func (s *acpEngine) EvaluateTheorem(ctx context.Context, req *types.EvaluateTheo
 	}
 	return applyMiddleware(ctx, h, s.hooks, req)
 }
+
 func (s *acpEngine) GetPolicyCatalogue(ctx context.Context, req *types.GetPolicyCatalogueRequest) (*types.GetPolicyCatalogueResponse, error) {
 	h := func(ctx context.Context, msg *types.GetPolicyCatalogueRequest) (*types.GetPolicyCatalogueResponse, error) {
 		return policy.GetPolicyCatalogue(ctx, s.runtime, msg)
+	}
+	return applyMiddleware(ctx, h, s.hooks, req)
+}
+
+func (s *acpEngine) AmendRegistration(ctx context.Context, req *types.AmendRegistrationRequest) (*types.AmendRegistrationResponse, error) {
+	h := func(ctx context.Context, req *types.AmendRegistrationRequest) (*types.AmendRegistrationResponse, error) {
+		h := relationship.AmendRegistrationHandler{}
+		return h.Handle(ctx, s.runtime, req)
 	}
 	return applyMiddleware(ctx, h, s.hooks, req)
 }

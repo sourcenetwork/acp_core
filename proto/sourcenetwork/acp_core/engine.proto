@@ -50,7 +50,7 @@ service ACPEngine {
   // Object IDs are therefore assumed to be unique within a Policy.
   rpc RegisterObject(RegisterObjectRequest) returns (RegisterObjectResponse);
 
-  // UnregisterObject let's an Object's Owner effectively "unshare" their Object.
+  // ArchiveObject let's an Object's Owner effectively "unshare" their Object.
   // This method wipes all Relationships referencing the given Object.
   //
   // A caveat is that after removing the Relationships, a record of the original Object owner
@@ -62,11 +62,13 @@ service ACPEngine {
   // If Charlie has a copy of the object, Eve could convince Charlie to share his copy, granting Eve access to Foo.
   // The previous scenario where an unauthorized user is able to claim ownership to data previously unaccessible to them
   // is an "ownership hijack".
-  rpc UnregisterObject(UnregisterObjectRequest) returns (UnregisterObjectResponse);
+  rpc ArchiveObject(ArchiveObjectRequest) returns (ArchiveObjectResponse);
 
   // TransferObject updates an Object's Owner to some other actor in the system, after which the original owner
   // loses autonomy over the object and cannot create or modify relationships.
   rpc TransferObject(TransferObjectRequest) returns (TransferObjectResponse);
+
+  rpc UnarchiveObject(UnarchiveObjectRequest) returns (UnarchiveObjectResponse);
 
   // AmendRegistration transfer an object's ownership between two users
   // This operation can only be executed by the root principal.
@@ -153,12 +155,12 @@ message RegisterObjectResponse {
   sourcenetwork.acp_core.RelationshipRecord record = 2;
 }
 
-message UnregisterObjectRequest {
+message ArchiveObjectRequest {
   string policy_id = 1;
   sourcenetwork.acp_core.Object object = 2;
 }
 
-message UnregisterObjectResponse {
+message ArchiveObjectResponse {
   bool found = 1;
   uint64 relationships_removed = 2;
 }
@@ -271,12 +273,15 @@ message EvaluateTheoremResponse {
   sourcenetwork.acp_core.AnnotatedPolicyTheoremResult result = 1;
 }
 
-message TransferObjectRequest{
+message AmendRegistrationRequest{
   string policy_id = 1;
   Object object = 2;
   Actor new_owner = 3;
 }
 
-message TransferObjectResponse{
+message AmendRegistrationResponse{
   RelationshipRecord record = 1;
 }
+
+message UnarchiveObjectRequest {}
+message UnarchiveObjectResponse {}

@@ -40,3 +40,7 @@ func newValidateRelationshipErr(err error) error {
 func newTransferObjectErr(err error) error {
 	return errors.Wrap("transfer object failed", err)
 }
+
+func newAmendRegistrationErr(err error) error {
+	return errors.Wrap("amend registration failed", err)
+}

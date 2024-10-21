@@ -9,6 +9,7 @@ import (
 	"github.com/sourcenetwork/acp_core/internal/policy"
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
 	"github.com/sourcenetwork/acp_core/pkg/auth"
+	"github.com/sourcenetwork/acp_core/pkg/did"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/types"
@@ -182,7 +183,7 @@ func (c *RegisterObjectHandler) archivedObjectStrategy(ctx context.Context, engi
 
 type UnregisterObjectHandler struct{}
 
-func (c *UnregisterObjectHandler) Execute(ctx context.Context, runtime runtime.RuntimeManager, cmd *types.UnregisterObjectRequest) (*types.UnregisterObjectResponse, error) {
+func (c *UnregisterObjectHandler) Execute(ctx context.Context, runtime runtime.RuntimeManager, cmd *types.ArchiveObjectRequest) (*types.ArchiveObjectResponse, error) {
 	err := c.validateCmd(cmd)
 	if err != nil {
 		return nil, newUnregisterObjectErr(err)
@@ -213,13 +214,13 @@ func (c *UnregisterObjectHandler) Execute(ctx context.Context, runtime runtime.R
 		return nil, newUnregisterObjectErr(err)
 	}
 	if ownerRecord == nil {
-		return &types.UnregisterObjectResponse{
+		return &types.ArchiveObjectResponse{
 			Found:                false,
 			RelationshipsRemoved: 0,
 		}, nil //noop when object does not exist
 	}
 	if ownerRecord.Archived {
-		return &types.UnregisterObjectResponse{
+		return &types.ArchiveObjectResponse{
 			Found:                true,
 			RelationshipsRemoved: 0,
 		}, nil // noop when object is archived
@@ -253,7 +254,7 @@ func (c *UnregisterObjectHandler) Execute(ctx context.Context, runtime runtime.R
 		return nil, newUnregisterObjectErr(err)
 	}
 
-	return &types.UnregisterObjectResponse{
+	return &types.ArchiveObjectResponse{
 		Found:                true,
 		RelationshipsRemoved: count,
 	}, nil
@@ -272,7 +273,7 @@ func (c *UnregisterObjectHandler) archiveObject(ctx context.Context, engine *zan
 	return nil
 }
 
-func (c *UnregisterObjectHandler) removeObjectRelationships(ctx context.Context, engine *zanzi.Adapter, pol *types.Policy, cmd *types.UnregisterObjectRequest) (uint64, error) {
+func (c *UnregisterObjectHandler) removeObjectRelationships(ctx context.Context, engine *zanzi.Adapter, pol *types.Policy, cmd *types.ArchiveObjectRequest) (uint64, error) {
 	selector := &types.RelationshipSelector{
 		ObjectSelector: &types.ObjectSelector{
 			Selector: &types.ObjectSelector_Object{
@@ -301,7 +302,7 @@ func (c *UnregisterObjectHandler) removeObjectRelationships(ctx context.Context,
 	return uint64(count), nil
 }
 
-func (c *UnregisterObjectHandler) validateCmd(cmd *types.UnregisterObjectRequest) error {
+func (c *UnregisterObjectHandler) validateCmd(cmd *types.ArchiveObjectRequest) error {
 	if err := ObjectSpec(cmd.Object); err != nil {
 		return err
 	}
@@ -380,4 +381,73 @@ func (h *TransferObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 	return &types.TransferObjectResponse{
 		Record: ownerRecord,
 	}, nil
+}
+
+type AmendRegistrationHandler struct{}
+
+func (h *AmendRegistrationHandler) Handle(ctx context.Context, runtime runtime.RuntimeManager, req *types.AmendRegistrationRequest) (*types.AmendRegistrationResponse, error) {
+	_, err := auth.ExtractPrincipalWithType(ctx, auth.Root)
+	if err != nil {
+		return nil, newAmendRegistrationErr(err)
+	}
+
+	engine, err := zanzi.NewZanzi(runtime.GetKVStore(), runtime.GetLogger())
+	if err != nil {
+		return nil, newAmendRegistrationErr(err)
+	}
+
+	policy, relRec, err := h.verifyPreconditions(ctx, engine, req)
+	if err != nil {
+		return nil, newAmendRegistrationErr(err)
+	}
+
+	_, err = engine.DeleteRelationship(ctx, policy, relRec.Relationship)
+	if err != nil {
+		return nil, newAmendRegistrationErr(errors.Wrap("removing old relationship", err))
+	}
+
+	relRec.OwnerDid = req.NewOwner.Id
+	relRec.Relationship.Subject = &types.Subject{
+		Subject: &types.Subject_Actor{
+			Actor: req.NewOwner,
+		},
+	}
+
+	_, err = engine.SetRelationship(ctx, policy, relRec)
+	if err != nil {
+		return nil, newAmendRegistrationErr(errors.Wrap("creating new relationship", err))
+	}
+
+	return &types.AmendRegistrationResponse{
+		Record: relRec,
+	}, nil
+}
+
+func (h *AmendRegistrationHandler) verifyPreconditions(ctx context.Context, engine *zanzi.Adapter, req *types.AmendRegistrationRequest) (*types.Policy, *types.RelationshipRecord, error) {
+	polRec, err := engine.GetPolicy(ctx, req.PolicyId)
+	if err != nil {
+		return nil, nil, err
+	}
+	if polRec == nil {
+		return nil, nil, errors.NewPolicyNotFound(req.PolicyId)
+	}
+
+	err = did.IsValidDID(req.NewOwner.Id)
+	if err != nil {
+		return nil, nil, errors.NewFromBaseError(err, errors.ErrorType_BAD_INPUT, "invalid actor id", errors.Pair("id", req.NewOwner.Id))
+	}
+
+	relRec, err := queryOwnerRelationship(ctx, engine, polRec.Policy, req.Object)
+	if err != nil {
+		return nil, nil, err
+	}
+	if relRec == nil {
+		return nil, nil, errors.Wrap("object not registered", errors.ErrorType_BAD_INPUT,
+			errors.Pair("policy", req.PolicyId),
+			errors.Pair("resource", req.Object.Resource),
+			errors.Pair("id", req.Object.Id),
+		)
+	}
+
+	return polRec.Policy, relRec, nil
 }

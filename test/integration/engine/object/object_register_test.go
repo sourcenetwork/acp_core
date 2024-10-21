@@ -149,7 +149,7 @@ func TestRegisterObject_RegisteringAnotherUsersArchivedObjectErrors(t *testing.T
 	require.NoError(t, err)
 	_, err = ctx.Engine.UnregisterObject(
 		ctx,
-		&types.UnregisterObjectRequest{
+		&types.ArchiveObjectRequest{
 			PolicyId: ctx.State.PolicyId,
 			Object:   types.NewObject("resource", "foo"),
 		},
@@ -186,7 +186,7 @@ func TestRegisterObject_RegisteringArchivedUserObjectUnarchivesObject(t *testing
 	require.NoError(t, err)
 	_, err = ctx.Engine.UnregisterObject(
 		ctx,
-		&types.UnregisterObjectRequest{
+		&types.ArchiveObjectRequest{
 			PolicyId: ctx.State.PolicyId,
 			Object:   types.NewObject("resource", "foo"),
 		},

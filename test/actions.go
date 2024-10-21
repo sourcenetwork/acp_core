@@ -84,7 +84,7 @@ type UnregisterObjectAction struct {
 
 func (a *UnregisterObjectAction) Run(ctx *TestCtx) {
 	for _, obj := range a.Objects {
-		req := types.UnregisterObjectRequest{
+		req := types.ArchiveObjectRequest{
 			PolicyId: a.PolicyId,
 			Object:   obj,
 		}

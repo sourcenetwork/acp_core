@@ -56,13 +56,13 @@ func TestUnregisterObject_RegisteredObjectCanBeUnregisteredByAuthor(t *testing.T
 	ctx := testUnregisterObjectSetup(t)
 	ctx.SetPrincipal("alice")
 
-	req := &types.UnregisterObjectRequest{
+	req := &types.ArchiveObjectRequest{
 		PolicyId: ctx.State.PolicyId,
 		Object:   types.NewObject("file", "foo"),
 	}
 	resp, err := ctx.Engine.UnregisterObject(ctx, req)
 
-	want := &types.UnregisterObjectResponse{
+	want := &types.ArchiveObjectResponse{
 		Found:                true,
 		RelationshipsRemoved: 2,
 	}
@@ -74,7 +74,7 @@ func TestUnregisterObject_ActorCannotUnregisterObjectTheyDoNotOwn(t *testing.T) 
 	ctx := testUnregisterObjectSetup(t)
 	ctx.SetPrincipal("bob")
 
-	req := &types.UnregisterObjectRequest{
+	req := &types.ArchiveObjectRequest{
 		PolicyId: ctx.State.PolicyId,
 		Object:   types.NewObject("file", "foo"),
 	}
@@ -88,13 +88,13 @@ func TestUnregisterObject_UnregisteringAnObjectThatDoesNotExistReturnsFoundFalse
 	ctx := testUnregisterObjectSetup(t)
 	ctx.SetPrincipal("alice")
 
-	req := &types.UnregisterObjectRequest{
+	req := &types.ArchiveObjectRequest{
 		PolicyId: ctx.State.PolicyId,
 		Object:   types.NewObject("file", "file-that-isn't-registered"),
 	}
 	resp, err := ctx.Engine.UnregisterObject(ctx, req)
 
-	require.Equal(t, &types.UnregisterObjectResponse{
+	require.Equal(t, &types.ArchiveObjectResponse{
 		Found: false,
 	}, resp)
 	require.NoError(t, err, errors.ErrorType_UNAUTHORIZED)
@@ -105,7 +105,7 @@ func TestUnregisterObject_UnregisteringAnAlreadyArchivedObjectIsANoop(t *testing
 
 	// Given the file Foo archived by alice
 	ctx.SetPrincipal("alice")
-	_, err := ctx.Engine.UnregisterObject(ctx, &types.UnregisterObjectRequest{
+	_, err := ctx.Engine.UnregisterObject(ctx, &types.ArchiveObjectRequest{
 		PolicyId: ctx.State.PolicyId,
 		Object:   types.NewObject("file", "foo"),
 	})
@@ -113,12 +113,12 @@ func TestUnregisterObject_UnregisteringAnAlreadyArchivedObjectIsANoop(t *testing
 
 	// When alice file foo
 	ctx.SetPrincipal("alice")
-	resp, err := ctx.Engine.UnregisterObject(ctx, &types.UnregisterObjectRequest{
+	resp, err := ctx.Engine.UnregisterObject(ctx, &types.ArchiveObjectRequest{
 		PolicyId: ctx.State.PolicyId,
 		Object:   types.NewObject("file", "foo"),
 	})
 
-	want := &types.UnregisterObjectResponse{
+	want := &types.ArchiveObjectResponse{
 		Found: true,
 	}
 	require.Equal(t, want, resp)
@@ -130,7 +130,7 @@ func TestUnregisterObject_SendingInvalidPolicyIdErrors(t *testing.T) {
 
 	// When alice file foo
 	ctx.SetPrincipal("alice")
-	resp, err := ctx.Engine.UnregisterObject(ctx, &types.UnregisterObjectRequest{
+	resp, err := ctx.Engine.UnregisterObject(ctx, &types.ArchiveObjectRequest{
 		PolicyId: "invalid-policy-id",
 		Object:   types.NewObject("file", "foo"),
 	})
