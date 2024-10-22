@@ -5,6 +5,7 @@ go 1.21.3
 require (
 	github.com/TBD54566975/ssi-sdk v0.0.4-alpha
 	github.com/antlr4-go/antlr/v4 v4.13.0
+	github.com/cosmos/cosmos-proto v1.0.0-beta.5
 	github.com/cosmos/gogoproto v1.4.12
 	github.com/google/go-cmp v0.6.0
 	github.com/sourcenetwork/raccoondb v0.2.1-0.20240722161350-d4a78b691ec8

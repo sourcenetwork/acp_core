@@ -3,8 +3,6 @@ package relationship
 import (
 	"context"
 
-	prototypes "github.com/cosmos/gogoproto/types"
-
 	"github.com/sourcenetwork/acp_core/internal/authorizer"
 	"github.com/sourcenetwork/acp_core/internal/policy"
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
@@ -33,7 +31,6 @@ func (c *RegisterObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 	if err != nil {
 		return nil, newRegisterObjectErr(err)
 	}
-	did := principal.Identifier()
 
 	registration := &types.Registration{
 		Object: cmd.Object,
@@ -49,7 +46,7 @@ func (c *RegisterObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 	if rec == nil {
 		return nil, newRegisterObjectErr(errors.NewPolicyNotFound(cmd.PolicyId))
 	}
-	policy := rec.Policy
+	pol := rec.Policy
 
 	err = c.validate(cmd)
 	if err != nil {
@@ -57,75 +54,20 @@ func (c *RegisterObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 	}
 
 	err = nil
-	var result types.RegistrationResult
 
-	record, err := queryOwnerRelationship(ctx, engine, policy, registration.Object)
+	record, err := queryOwnerRelationship(ctx, engine, pol, registration.Object)
 	if err != nil {
 		return nil, newRegisterObjectErr(err)
 	}
-
-	switch c.resolveObjectStatus(record) {
-	case statusUnregistered:
-		result, err = c.unregisteredStrategy(ctx, engine, policy, registration, did, cmd.CreationTime, cmd.Metadata)
-	case statusArchived:
-		result, err = c.archivedObjectStrategy(ctx, engine, policy, record, registration)
-	case statusActive:
-		result, err = c.activeObjectStrategy(record, registration)
+	if record != nil {
+		return nil, errors.Wrap("object already registered", errors.ErrorType_BAD_INPUT,
+			errors.Pair("policy", cmd.PolicyId),
+			errors.Pair("resource", cmd.Object.Resource),
+			errors.Pair("id", cmd.Object.Id),
+		)
 	}
 
-	if err != nil {
-		return nil, newRegisterObjectErr(err)
-	}
-
-	record, err = queryOwnerRelationship(ctx, engine, policy, registration.Object)
-	if err != nil {
-		return nil, newRegisterObjectErr(err)
-	}
-
-	// TODO efactor the event type
-	if result == types.RegistrationResult_Registered {
-		eventManager.EmitEvent(&types.EventObjectRegistered{
-			Actor:          registration.Actor.Id,
-			PolicyId:       policy.Id,
-			ObjectResource: registration.Object.Resource,
-			ObjectId:       registration.Object.Id,
-		})
-	} else if result == types.RegistrationResult_Unarchived {
-		eventManager.EmitEvent(&types.EventObjectUnarchived{
-			Actor:          registration.Actor.Id,
-			PolicyId:       policy.Id,
-			ObjectResource: registration.Object.Resource,
-			ObjectId:       registration.Object.Id,
-		})
-	}
-
-	return &types.RegisterObjectResponse{
-		Result: result,
-		Record: record,
-	}, nil
-}
-
-// validates the command input params
-func (c *RegisterObjectHandler) validate(cmd *types.RegisterObjectRequest) error {
-	if err := ObjectSpec(cmd.Object); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (c *RegisterObjectHandler) resolveObjectStatus(record *types.RelationshipRecord) objectRegistrationStatus {
-	if record == nil {
-		return statusUnregistered
-	}
-	if record.Archived {
-		return statusArchived
-	}
-	return statusActive
-}
-
-// unregisteredStrategy creates a relationship with the relation `owner` for the object in Registration
-func (c *RegisterObjectHandler) unregisteredStrategy(ctx context.Context, zanzi *zanzi.Adapter, pol *types.Policy, registration *types.Registration, creator string, creationTs *prototypes.Timestamp, metadata map[string]string) (types.RegistrationResult, error) {
-	record := types.RelationshipRecord{
+	record = &types.RelationshipRecord{
 		Relationship: &types.Relationship{
 			Object:   registration.Object,
 			Relation: policy.OwnerRelation,
@@ -138,91 +80,78 @@ func (c *RegisterObjectHandler) unregisteredStrategy(ctx context.Context, zanzi 
 		OwnerDid:     registration.Actor.Id,
 		PolicyId:     pol.Id,
 		Archived:     false,
-		CreationTime: creationTs,
-		Metadata:     metadata,
+		CreationTime: cmd.CreationTime,
+		Metadata:     cmd.Metadata,
 	}
-	_, err := zanzi.SetRelationship(ctx, pol, &record)
+	_, err = engine.SetRelationship(ctx, pol, record)
 	if err != nil {
-		return types.RegistrationResult_NoOp, err
+		return nil, newRegisterObjectErr(err)
 	}
 
-	return types.RegistrationResult_Registered, nil
+	// TODO efactor the event type
+	eventManager.EmitEvent(&types.EventObjectRegistered{
+		Actor:          registration.Actor.Id,
+		PolicyId:       pol.Id,
+		ObjectResource: registration.Object.Resource,
+		ObjectId:       registration.Object.Id,
+	})
+
+	return &types.RegisterObjectResponse{
+		Record: record,
+	}, nil
 }
 
-func (c *RegisterObjectHandler) activeObjectStrategy(record *types.RelationshipRecord, registration *types.Registration) (types.RegistrationResult, error) {
-	if record.OwnerDid != registration.Actor.Id {
-		return types.RegistrationResult_NoOp, errors.Wrap("object is already registered to a different actor", errors.ErrorType_UNAUTHORIZED,
-			errors.Pair("policy", record.PolicyId),
-			errors.Pair("resource", record.Relationship.Object.Resource),
-			errors.Pair("object", record.Relationship.Object.Id),
-			errors.Pair("owner", record.OwnerDid),
-		)
+// validates the command input params
+func (c *RegisterObjectHandler) validate(cmd *types.RegisterObjectRequest) error {
+	if err := ObjectSpec(cmd.Object); err != nil {
+		return err
 	}
-	return types.RegistrationResult_NoOp, nil
+	return nil
 }
 
-// archivedObjectStrategy modifies the relationship record to be unarchived
-func (c *RegisterObjectHandler) archivedObjectStrategy(ctx context.Context, engine *zanzi.Adapter, policy *types.Policy, record *types.RelationshipRecord, registration *types.Registration) (types.RegistrationResult, error) {
-	if record.OwnerDid != registration.Actor.Id {
-		return types.RegistrationResult_NoOp, errors.Wrap("object was archived by a different actor", errors.ErrorType_UNAUTHORIZED,
-			errors.Pair("policy", record.PolicyId),
-			errors.Pair("resource", record.Relationship.Object.Resource),
-			errors.Pair("object", record.Relationship.Object.Id),
-			errors.Pair("owner", record.OwnerDid),
-		)
-	}
+type ArchiveObjectHandler struct{}
 
-	record.Archived = false
-	_, err := engine.SetRelationship(ctx, policy, record)
-	if err != nil {
-		return types.RegistrationResult_NoOp, err
-	}
-
-	return types.RegistrationResult_Unarchived, nil
-}
-
-type UnregisterObjectHandler struct{}
-
-func (c *UnregisterObjectHandler) Execute(ctx context.Context, runtime runtime.RuntimeManager, cmd *types.ArchiveObjectRequest) (*types.ArchiveObjectResponse, error) {
+func (c *ArchiveObjectHandler) Execute(ctx context.Context, runtime runtime.RuntimeManager, cmd *types.ArchiveObjectRequest) (*types.ArchiveObjectResponse, error) {
 	err := c.validateCmd(cmd)
 	if err != nil {
-		return nil, newUnregisterObjectErr(err)
+		return nil, newArchiveObjectErr(err)
 	}
 
 	engine, err := zanzi.NewZanzi(runtime.GetKVStore(), runtime.GetLogger())
 	if err != nil {
-		return nil, newUnregisterObjectErr(err)
+		return nil, newArchiveObjectErr(err)
 	}
 
 	principal, err := auth.ExtractPrincipalWithType(ctx, auth.DID)
 	if err != nil {
-		return nil, newUnregisterObjectErr(err)
+		return nil, newArchiveObjectErr(err)
 	}
 	did := principal.Identifier()
 
 	rec, err := engine.GetPolicy(ctx, cmd.PolicyId)
 	if err != nil {
-		return nil, newUnregisterObjectErr(err)
+		return nil, newArchiveObjectErr(err)
 	}
 	if rec == nil {
-		return nil, newUnregisterObjectErr(errors.NewPolicyNotFound(cmd.PolicyId))
+		return nil, newArchiveObjectErr(errors.NewPolicyNotFound(cmd.PolicyId))
 	}
 	pol := rec.Policy
 
 	ownerRecord, err := queryOwnerRelationship(ctx, engine, pol, cmd.Object)
 	if err != nil {
-		return nil, newUnregisterObjectErr(err)
+		return nil, newArchiveObjectErr(err)
 	}
 	if ownerRecord == nil {
-		return &types.ArchiveObjectResponse{
-			Found:                false,
-			RelationshipsRemoved: 0,
-		}, nil //noop when object does not exist
+		return nil, newArchiveObjectErr(errors.Wrap("object not registered", errors.ErrorType_BAD_INPUT,
+			errors.Pair("policy", pol.Id),
+			errors.Pair("resource", cmd.Object.Resource),
+			errors.Pair("id", cmd.Object.Id),
+		))
 	}
 	if ownerRecord.Archived {
 		return &types.ArchiveObjectResponse{
-			Found:                true,
 			RelationshipsRemoved: 0,
+			RecordModified:       false,
 		}, nil // noop when object is archived
 	}
 
@@ -235,45 +164,39 @@ func (c *UnregisterObjectHandler) Execute(ctx context.Context, runtime runtime.R
 	actor := types.Actor{Id: did}
 	authorized, err := authorizer.IsAuthorized(ctx, pol, &mutateOwnerOperation, &actor)
 	if err != nil {
-		return nil, newUnregisterObjectErr(err)
+		return nil, newArchiveObjectErr(err)
 	}
 	if !authorized {
-		return nil, newUnregisterObjectErr(errors.Wrap("cannot unregister object: actor is not the owner", errors.ErrorType_UNAUTHORIZED,
+		return nil, newArchiveObjectErr(errors.Wrap("actor cannot manage owner relation", errors.ErrorType_UNAUTHORIZED,
 			errors.Pair("policy", cmd.PolicyId),
 			errors.Pair("resource", cmd.Object.Resource),
-			errors.Pair("object", cmd.Object.Id)))
+			errors.Pair("object", cmd.Object.Id),
+			errors.Pair("actor", did),
+		))
 	}
 
 	count, err := c.removeObjectRelationships(ctx, engine, pol, cmd)
 	if err != nil {
-		return nil, newUnregisterObjectErr(err)
+		return nil, newArchiveObjectErr(err)
 	}
 
-	err = c.archiveObject(ctx, engine, pol, ownerRecord)
-	if err != nil {
-		return nil, newUnregisterObjectErr(err)
-	}
-
-	return &types.ArchiveObjectResponse{
-		Found:                true,
-		RelationshipsRemoved: count,
-	}, nil
-}
-
-func (c *UnregisterObjectHandler) archiveObject(ctx context.Context, engine *zanzi.Adapter, policy *types.Policy, ownerRecord *types.RelationshipRecord) error {
 	ownerRecord.Archived = true
-	_, err := engine.SetRelationship(ctx, policy, ownerRecord)
+	_, err = engine.SetRelationship(ctx, pol, ownerRecord)
 	if err != nil {
-		return errors.Wrap("archiving object", err,
+		return nil, errors.Wrap("archiving object", err,
 			errors.Pair("policy", ownerRecord.PolicyId),
 			errors.Pair("resource", ownerRecord.Relationship.Object.Resource),
 			errors.Pair("object", ownerRecord.Relationship.Object.Id),
 		)
 	}
-	return nil
+
+	return &types.ArchiveObjectResponse{
+		RelationshipsRemoved: count,
+		RecordModified:       true,
+	}, nil
 }
 
-func (c *UnregisterObjectHandler) removeObjectRelationships(ctx context.Context, engine *zanzi.Adapter, pol *types.Policy, cmd *types.ArchiveObjectRequest) (uint64, error) {
+func (c *ArchiveObjectHandler) removeObjectRelationships(ctx context.Context, engine *zanzi.Adapter, pol *types.Policy, cmd *types.ArchiveObjectRequest) (uint64, error) {
 	selector := &types.RelationshipSelector{
 		ObjectSelector: &types.ObjectSelector{
 			Selector: &types.ObjectSelector_Object{
@@ -302,7 +225,7 @@ func (c *UnregisterObjectHandler) removeObjectRelationships(ctx context.Context,
 	return uint64(count), nil
 }
 
-func (c *UnregisterObjectHandler) validateCmd(cmd *types.ArchiveObjectRequest) error {
+func (c *ArchiveObjectHandler) validateCmd(cmd *types.ArchiveObjectRequest) error {
 	if err := ObjectSpec(cmd.Object); err != nil {
 		return err
 	}
@@ -450,4 +373,81 @@ func (h *AmendRegistrationHandler) verifyPreconditions(ctx context.Context, engi
 	}
 
 	return polRec.Policy, relRec, nil
+}
+
+type UnarchiveObjectHandler struct{}
+
+func (h *UnarchiveObjectHandler) Handle(ctx context.Context, runtime runtime.RuntimeManager, cmd *types.UnarchiveObjectRequest) (*types.UnarchiveObjectResponse, error) {
+	engine, err := zanzi.NewZanzi(runtime.GetKVStore(), runtime.GetLogger())
+	if err != nil {
+		return nil, newRegisterObjectErr(err)
+	}
+
+	rec, err := engine.GetPolicy(ctx, cmd.PolicyId)
+	if err != nil {
+		return nil, err
+	}
+	if rec == nil {
+		return nil, newRegisterObjectErr(errors.NewPolicyNotFound(cmd.PolicyId))
+	}
+	pol := rec.Policy
+
+	principal, err := auth.ExtractPrincipalWithType(ctx, auth.DID)
+	if err != nil {
+		return nil, newRegisterObjectErr(err)
+	}
+	did := principal.Identifier()
+
+	ownerRecord, err := queryOwnerRelationship(ctx, engine, pol, cmd.Object)
+	if err != nil {
+		return nil, newArchiveObjectErr(err)
+	}
+	if ownerRecord == nil {
+		return nil, newUnarchiveObjectErr(errors.Wrap("object not registered", errors.ErrorType_BAD_INPUT,
+			errors.Pair("policy", pol.Id),
+			errors.Pair("resource", cmd.Object.Resource),
+			errors.Pair("id", cmd.Object.Id),
+		))
+	}
+	if !ownerRecord.Archived {
+		return &types.UnarchiveObjectResponse{
+			Record:         ownerRecord,
+			RecordModified: false,
+		}, nil
+	}
+
+	authorizer := authorizer.NewOperationAuthorizer(engine)
+
+	mutateOwnerOperation := types.Operation{
+		Object:     cmd.Object,
+		Permission: policy.OwnerRelation,
+	}
+	actor := types.Actor{Id: did}
+	authorized, err := authorizer.IsAuthorized(ctx, pol, &mutateOwnerOperation, &actor)
+	if err != nil {
+		return nil, newUnarchiveObjectErr(err)
+	}
+	if !authorized {
+		return nil, newUnarchiveObjectErr(errors.Wrap("actor cannot manage owner relation", errors.ErrorType_UNAUTHORIZED,
+			errors.Pair("policy", cmd.PolicyId),
+			errors.Pair("resource", cmd.Object.Resource),
+			errors.Pair("object", cmd.Object.Id),
+			errors.Pair("actor", did),
+		))
+	}
+
+	ownerRecord.Archived = false
+	_, err = engine.SetRelationship(ctx, pol, ownerRecord)
+	if err != nil {
+		return nil, errors.Wrap("updating record", err,
+			errors.Pair("policy", ownerRecord.PolicyId),
+			errors.Pair("resource", ownerRecord.Relationship.Object.Resource),
+			errors.Pair("object", ownerRecord.Relationship.Object.Id),
+		)
+	}
+
+	return &types.UnarchiveObjectResponse{
+		Record:         ownerRecord,
+		RecordModified: false,
+	}, nil
 }

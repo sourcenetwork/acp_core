@@ -77,18 +77,18 @@ func (a *SetRelationshipsAction) Run(ctx *TestCtx) {
 	}
 }
 
-type UnregisterObjectAction struct {
+type ArchiveObjectAction struct {
 	PolicyId string
 	Objects  []*types.Object
 }
 
-func (a *UnregisterObjectAction) Run(ctx *TestCtx) {
+func (a *ArchiveObjectAction) Run(ctx *TestCtx) {
 	for _, obj := range a.Objects {
 		req := types.ArchiveObjectRequest{
 			PolicyId: a.PolicyId,
 			Object:   obj,
 		}
-		_, err := ctx.Engine.UnregisterObject(ctx, &req)
+		_, err := ctx.Engine.ArchiveObject(ctx, &req)
 
 		require.NoError(ctx.T, err)
 	}

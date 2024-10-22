@@ -46,7 +46,6 @@ func TestRegisterObject_RegisteringNewObjectIsSucessful(t *testing.T) {
 	resp, err := ctx.Engine.RegisterObject(ctx, &req)
 
 	want := &types.RegisterObjectResponse{
-		Result: types.RegistrationResult_Registered,
 		Record: &types.RelationshipRecord{
 			PolicyId:     ctx.State.PolicyId,
 			OwnerDid:     bob,
@@ -93,10 +92,10 @@ func TestRegisterObject_RegisteringObjectRegisteredToAnotherUserErrors(t *testin
 	resp, err := ctx.Engine.RegisterObject(ctx, &req)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, errors.ErrorType_UNAUTHORIZED)
+	require.ErrorIs(t, err, errors.ErrorType_BAD_INPUT)
 }
 
-func TestRegisterObject_ReregisteringObjectOwnedByUserIsNoop(t *testing.T) {
+func TestRegisterObject_ReregisteringObjectOwnedByUserReturnsError(t *testing.T) {
 	ctx := registerObjectTestSetup(t)
 
 	// Given alice as the owner of foo
@@ -111,26 +110,14 @@ func TestRegisterObject_ReregisteringObjectOwnedByUserIsNoop(t *testing.T) {
 
 	// When alice tries to register foo
 	ctx.SetPrincipal("alice")
-	alice := ctx.Actors.DID("alice")
 	req = types.RegisterObjectRequest{
 		PolicyId:     ctx.State.PolicyId,
 		Object:       types.NewObject("resource", "foo"),
 		CreationTime: timestamp,
 	}
 	resp, err := ctx.Engine.RegisterObject(ctx, &req)
-
-	want := &types.RegisterObjectResponse{
-		Result: types.RegistrationResult_NoOp,
-		Record: &types.RelationshipRecord{
-			CreationTime: timestamp,
-			PolicyId:     ctx.State.PolicyId,
-			Relationship: types.NewActorRelationship("resource", "foo", "owner", alice),
-			Archived:     false,
-			OwnerDid:     alice,
-		},
-	}
-	require.Equal(t, want, resp)
-	require.NoError(t, err)
+	require.Nil(t, resp)
+	require.ErrorIs(t, err, errors.ErrorType_BAD_INPUT)
 }
 
 func TestRegisterObject_RegisteringAnotherUsersArchivedObjectErrors(t *testing.T) {
@@ -147,7 +134,7 @@ func TestRegisterObject_RegisteringAnotherUsersArchivedObjectErrors(t *testing.T
 		},
 	)
 	require.NoError(t, err)
-	_, err = ctx.Engine.UnregisterObject(
+	_, err = ctx.Engine.ArchiveObject(
 		ctx,
 		&types.ArchiveObjectRequest{
 			PolicyId: ctx.State.PolicyId,
@@ -167,10 +154,10 @@ func TestRegisterObject_RegisteringAnotherUsersArchivedObjectErrors(t *testing.T
 	)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, errors.ErrorType_UNAUTHORIZED)
+	require.ErrorIs(t, err, errors.ErrorType_BAD_INPUT)
 }
 
-func TestRegisterObject_RegisteringArchivedUserObjectUnarchivesObject(t *testing.T) {
+func TestRegisterObject_RegisteringArchivedUserObjectReturnsError(t *testing.T) {
 	ctx := registerObjectTestSetup(t)
 
 	// Given alice as the previous owner of foo
@@ -184,7 +171,7 @@ func TestRegisterObject_RegisteringArchivedUserObjectUnarchivesObject(t *testing
 		},
 	)
 	require.NoError(t, err)
-	_, err = ctx.Engine.UnregisterObject(
+	_, err = ctx.Engine.ArchiveObject(
 		ctx,
 		&types.ArchiveObjectRequest{
 			PolicyId: ctx.State.PolicyId,
@@ -195,7 +182,6 @@ func TestRegisterObject_RegisteringArchivedUserObjectUnarchivesObject(t *testing
 
 	// When alice attempt to reregister Foo
 	ctx.SetPrincipal("alice")
-	alice := ctx.Actors.DID("alice")
 	got, err := ctx.Engine.RegisterObject(
 		ctx,
 		&types.RegisterObjectRequest{
@@ -204,20 +190,8 @@ func TestRegisterObject_RegisteringArchivedUserObjectUnarchivesObject(t *testing
 			CreationTime: timestamp,
 		},
 	)
-
-	want := &types.RegisterObjectResponse{
-		Result: types.RegistrationResult_Unarchived,
-		Record: &types.RelationshipRecord{
-			CreationTime: timestamp,
-			PolicyId:     ctx.State.PolicyId,
-			Relationship: types.NewActorRelationship("resource", "foo", "owner", alice),
-			Archived:     false,
-			OwnerDid:     alice,
-		},
-	}
-	require.Equal(t, want, got)
-	require.Nil(t, err)
-
+	require.Nil(t, got)
+	require.ErrorIs(t, err, errors.ErrorType_BAD_INPUT)
 	/*
 		event := &types.EventObjectRegistered{
 			Actor:          bobDID,

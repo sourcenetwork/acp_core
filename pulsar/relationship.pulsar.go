@@ -4664,60 +4664,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// RegistrationResult encodes the possible result set from Registering an Object
-type RegistrationResult int32
-
-const (
-	// NoOp indicates no action was take. The operation failed or the Object already existed and was active
-	RegistrationResult_NoOp RegistrationResult = 0
-	// Registered indicates the Object was sucessfuly registered to the Actor.
-	RegistrationResult_Registered RegistrationResult = 1
-	// Unarchived indicates that a previously deleted Object is active again.
-	// Only the original owners can Unarchive an object.
-	RegistrationResult_Unarchived RegistrationResult = 2
-)
-
-// Enum value maps for RegistrationResult.
-var (
-	RegistrationResult_name = map[int32]string{
-		0: "NoOp",
-		1: "Registered",
-		2: "Unarchived",
-	}
-	RegistrationResult_value = map[string]int32{
-		"NoOp":       0,
-		"Registered": 1,
-		"Unarchived": 2,
-	}
-)
-
-func (x RegistrationResult) Enum() *RegistrationResult {
-	p := new(RegistrationResult)
-	*p = x
-	return p
-}
-
-func (x RegistrationResult) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (RegistrationResult) Descriptor() protoreflect.EnumDescriptor {
-	return file_sourcenetwork_acp_core_relationship_proto_enumTypes[0].Descriptor()
-}
-
-func (RegistrationResult) Type() protoreflect.EnumType {
-	return &file_sourcenetwork_acp_core_relationship_proto_enumTypes[0]
-}
-
-func (x RegistrationResult) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Use RegistrationResult.Descriptor instead.
-func (RegistrationResult) EnumDescriptor() ([]byte, []int) {
-	return file_sourcenetwork_acp_core_relationship_proto_rawDescGZIP(), []int{0}
-}
-
 // Object represents an entity which must be access controlled within a Policy.
 type Object struct {
 	state         protoimpl.MessageState
@@ -5227,11 +5173,7 @@ var file_sourcenetwork_acp_core_relationship_proto_rawDesc = []byte{
 	0x12, 0x33, 0x0a, 0x05, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32,
 	0x1d, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e,
 	0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x41, 0x63, 0x74, 0x6f, 0x72, 0x52, 0x05,
-	0x61, 0x63, 0x74, 0x6f, 0x72, 0x2a, 0x3e, 0x0a, 0x12, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72,
-	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x08, 0x0a, 0x04, 0x4e,
-	0x6f, 0x4f, 0x70, 0x10, 0x00, 0x12, 0x0e, 0x0a, 0x0a, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65,
-	0x72, 0x65, 0x64, 0x10, 0x01, 0x12, 0x0e, 0x0a, 0x0a, 0x55, 0x6e, 0x61, 0x72, 0x63, 0x68, 0x69,
-	0x76, 0x65, 0x64, 0x10, 0x02, 0x42, 0x2d, 0x5a, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e,
+	0x61, 0x63, 0x74, 0x6f, 0x72, 0x42, 0x2d, 0x5a, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e,
 	0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
 	0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x74,
 	0x79, 0x70, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
@@ -5249,34 +5191,32 @@ func file_sourcenetwork_acp_core_relationship_proto_rawDescGZIP() []byte {
 	return file_sourcenetwork_acp_core_relationship_proto_rawDescData
 }
 
-var file_sourcenetwork_acp_core_relationship_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_sourcenetwork_acp_core_relationship_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_sourcenetwork_acp_core_relationship_proto_goTypes = []interface{}{
-	(RegistrationResult)(0),       // 0: sourcenetwork.acp_core.RegistrationResult
-	(*Object)(nil),                // 1: sourcenetwork.acp_core.Object
-	(*Actor)(nil),                 // 2: sourcenetwork.acp_core.Actor
-	(*ActorSet)(nil),              // 3: sourcenetwork.acp_core.ActorSet
-	(*AllActors)(nil),             // 4: sourcenetwork.acp_core.AllActors
-	(*Subject)(nil),               // 5: sourcenetwork.acp_core.Subject
-	(*Relationship)(nil),          // 6: sourcenetwork.acp_core.Relationship
-	(*RelationshipRecord)(nil),    // 7: sourcenetwork.acp_core.RelationshipRecord
-	(*Registration)(nil),          // 8: sourcenetwork.acp_core.Registration
-	nil,                           // 9: sourcenetwork.acp_core.RelationshipRecord.MetadataEntry
-	(*timestamppb.Timestamp)(nil), // 10: google.protobuf.Timestamp
+	(*Object)(nil),                // 0: sourcenetwork.acp_core.Object
+	(*Actor)(nil),                 // 1: sourcenetwork.acp_core.Actor
+	(*ActorSet)(nil),              // 2: sourcenetwork.acp_core.ActorSet
+	(*AllActors)(nil),             // 3: sourcenetwork.acp_core.AllActors
+	(*Subject)(nil),               // 4: sourcenetwork.acp_core.Subject
+	(*Relationship)(nil),          // 5: sourcenetwork.acp_core.Relationship
+	(*RelationshipRecord)(nil),    // 6: sourcenetwork.acp_core.RelationshipRecord
+	(*Registration)(nil),          // 7: sourcenetwork.acp_core.Registration
+	nil,                           // 8: sourcenetwork.acp_core.RelationshipRecord.MetadataEntry
+	(*timestamppb.Timestamp)(nil), // 9: google.protobuf.Timestamp
 }
 var file_sourcenetwork_acp_core_relationship_proto_depIdxs = []int32{
-	1,  // 0: sourcenetwork.acp_core.ActorSet.object:type_name -> sourcenetwork.acp_core.Object
-	2,  // 1: sourcenetwork.acp_core.Subject.actor:type_name -> sourcenetwork.acp_core.Actor
-	3,  // 2: sourcenetwork.acp_core.Subject.actor_set:type_name -> sourcenetwork.acp_core.ActorSet
-	4,  // 3: sourcenetwork.acp_core.Subject.all_actors:type_name -> sourcenetwork.acp_core.AllActors
-	1,  // 4: sourcenetwork.acp_core.Subject.object:type_name -> sourcenetwork.acp_core.Object
-	1,  // 5: sourcenetwork.acp_core.Relationship.object:type_name -> sourcenetwork.acp_core.Object
-	5,  // 6: sourcenetwork.acp_core.Relationship.subject:type_name -> sourcenetwork.acp_core.Subject
-	6,  // 7: sourcenetwork.acp_core.RelationshipRecord.relationship:type_name -> sourcenetwork.acp_core.Relationship
-	10, // 8: sourcenetwork.acp_core.RelationshipRecord.creation_time:type_name -> google.protobuf.Timestamp
-	9,  // 9: sourcenetwork.acp_core.RelationshipRecord.metadata:type_name -> sourcenetwork.acp_core.RelationshipRecord.MetadataEntry
-	1,  // 10: sourcenetwork.acp_core.Registration.object:type_name -> sourcenetwork.acp_core.Object
-	2,  // 11: sourcenetwork.acp_core.Registration.actor:type_name -> sourcenetwork.acp_core.Actor
+	0,  // 0: sourcenetwork.acp_core.ActorSet.object:type_name -> sourcenetwork.acp_core.Object
+	1,  // 1: sourcenetwork.acp_core.Subject.actor:type_name -> sourcenetwork.acp_core.Actor
+	2,  // 2: sourcenetwork.acp_core.Subject.actor_set:type_name -> sourcenetwork.acp_core.ActorSet
+	3,  // 3: sourcenetwork.acp_core.Subject.all_actors:type_name -> sourcenetwork.acp_core.AllActors
+	0,  // 4: sourcenetwork.acp_core.Subject.object:type_name -> sourcenetwork.acp_core.Object
+	0,  // 5: sourcenetwork.acp_core.Relationship.object:type_name -> sourcenetwork.acp_core.Object
+	4,  // 6: sourcenetwork.acp_core.Relationship.subject:type_name -> sourcenetwork.acp_core.Subject
+	5,  // 7: sourcenetwork.acp_core.RelationshipRecord.relationship:type_name -> sourcenetwork.acp_core.Relationship
+	9,  // 8: sourcenetwork.acp_core.RelationshipRecord.creation_time:type_name -> google.protobuf.Timestamp
+	8,  // 9: sourcenetwork.acp_core.RelationshipRecord.metadata:type_name -> sourcenetwork.acp_core.RelationshipRecord.MetadataEntry
+	0,  // 10: sourcenetwork.acp_core.Registration.object:type_name -> sourcenetwork.acp_core.Object
+	1,  // 11: sourcenetwork.acp_core.Registration.actor:type_name -> sourcenetwork.acp_core.Actor
 	12, // [12:12] is the sub-list for method output_type
 	12, // [12:12] is the sub-list for method input_type
 	12, // [12:12] is the sub-list for extension type_name
@@ -5398,14 +5338,13 @@ func file_sourcenetwork_acp_core_relationship_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_sourcenetwork_acp_core_relationship_proto_rawDesc,
-			NumEnums:      1,
+			NumEnums:      0,
 			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_sourcenetwork_acp_core_relationship_proto_goTypes,
 		DependencyIndexes: file_sourcenetwork_acp_core_relationship_proto_depIdxs,
-		EnumInfos:         file_sourcenetwork_acp_core_relationship_proto_enumTypes,
 		MessageInfos:      file_sourcenetwork_acp_core_relationship_proto_msgTypes,
 	}.Build()
 	File_sourcenetwork_acp_core_relationship_proto = out.File

@@ -68,6 +68,11 @@ service ACPEngine {
   // loses autonomy over the object and cannot create or modify relationships.
   rpc TransferObject(TransferObjectRequest) returns (TransferObjectResponse);
 
+  // UnarchiveObject returns a previously archived object to active status, 
+  // such that the owner is able to create relationships and share that object again.
+  // 
+  // Only the original owner of the object can unarchive it, returns an authorization error otherwise.
+  // Attempting to unarchive an active or unregistered object is an error.
   rpc UnarchiveObject(UnarchiveObjectRequest) returns (UnarchiveObjectResponse);
 
   // AmendRegistration transfer an object's ownership between two users
@@ -151,8 +156,7 @@ message RegisterObjectRequest {
 }
 
 message RegisterObjectResponse {
-  sourcenetwork.acp_core.RegistrationResult result = 1;
-  sourcenetwork.acp_core.RelationshipRecord record = 2;
+  sourcenetwork.acp_core.RelationshipRecord record = 1;
 }
 
 message ArchiveObjectRequest {
@@ -161,8 +165,8 @@ message ArchiveObjectRequest {
 }
 
 message ArchiveObjectResponse {
-  bool found = 1;
-  uint64 relationships_removed = 2;
+  uint64 relationships_removed = 1;
+  bool record_modified = 2;
 }
 
 message GetObjectRegistrationRequest {
@@ -283,5 +287,16 @@ message AmendRegistrationResponse{
   RelationshipRecord record = 1;
 }
 
-message UnarchiveObjectRequest {}
-message UnarchiveObjectResponse {}
+message UnarchiveObjectRequest {
+  string policy_id = 1;
+  sourcenetwork.acp_core.Object object = 2;
+  google.protobuf.Timestamp creation_time = 3;
+  // metadata is a map of attributes which can be used to store
+  // caller supplied satellite data
+  map<string, string> metadata = 4;
+}
+
+message UnarchiveObjectResponse {
+  RelationshipRecord record = 1;
+  bool record_modified = 2;
+}
