@@ -69,7 +69,7 @@ func TestRegisterObject_RegisteringNewObjectIsSucessful(t *testing.T) {
 	*/
 }
 
-func TestRegisterObject_RegisteringObjectRegisteredToAnotherUserErrors(t *testing.T) {
+func TestRegisterObject_RegisteringObjectRegisteredToAnotherUser_ErrorsForbidden(t *testing.T) {
 	ctx := registerObjectTestSetup(t)
 
 	// Given alice as the owner of foo
@@ -92,10 +92,10 @@ func TestRegisterObject_RegisteringObjectRegisteredToAnotherUserErrors(t *testin
 	resp, err := ctx.Engine.RegisterObject(ctx, &req)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, errors.ErrorType_BAD_INPUT)
+	require.ErrorIs(t, err, errors.ErrorType_OPERATION_FORBIDDEN)
 }
 
-func TestRegisterObject_ReregisteringObjectOwnedByUserReturnsError(t *testing.T) {
+func TestRegisterObject_ReregisteringObjectOwnedByUser_ReturnsOperationForbidden(t *testing.T) {
 	ctx := registerObjectTestSetup(t)
 
 	// Given alice as the owner of foo
@@ -117,14 +117,13 @@ func TestRegisterObject_ReregisteringObjectOwnedByUserReturnsError(t *testing.T)
 	}
 	resp, err := ctx.Engine.RegisterObject(ctx, &req)
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, errors.ErrorType_BAD_INPUT)
+	require.ErrorIs(t, err, errors.ErrorType_OPERATION_FORBIDDEN)
 }
 
-func TestRegisterObject_RegisteringAnotherUsersArchivedObjectErrors(t *testing.T) {
+func TestRegisterObject_RegisteringAnotherUsersArchivedObject_ReturnsOperationForbidden(t *testing.T) {
 	ctx := registerObjectTestSetup(t)
 
-	// Given alice as the previous owner of foo
-	ctx.SetPrincipal("alice")
+	// Given alice as the previous owner of foo ctx.SetPrincipal("alice")
 	_, err := ctx.Engine.RegisterObject(
 		ctx,
 		&types.RegisterObjectRequest{
@@ -154,10 +153,10 @@ func TestRegisterObject_RegisteringAnotherUsersArchivedObjectErrors(t *testing.T
 	)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, errors.ErrorType_BAD_INPUT)
+	require.ErrorIs(t, err, errors.ErrorType_OPERATION_FORBIDDEN)
 }
 
-func TestRegisterObject_RegisteringArchivedUserObjectReturnsError(t *testing.T) {
+func TestRegisterObject_RegisteringArchivedUserObject_ReturnsOperationForbidden(t *testing.T) {
 	ctx := registerObjectTestSetup(t)
 
 	// Given alice as the previous owner of foo
@@ -191,7 +190,7 @@ func TestRegisterObject_RegisteringArchivedUserObjectReturnsError(t *testing.T) 
 		},
 	)
 	require.Nil(t, got)
-	require.ErrorIs(t, err, errors.ErrorType_BAD_INPUT)
+	require.ErrorIs(t, err, errors.ErrorType_OPERATION_FORBIDDEN)
 	/*
 		event := &types.EventObjectRegistered{
 			Actor:          bobDID,

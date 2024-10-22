@@ -1,5 +1,5 @@
 version: v1
-name: buf.build/sourcenetwork/acp_core
+name: buf.build/sourcenetwork/acp-core
 
 lint:
   use:

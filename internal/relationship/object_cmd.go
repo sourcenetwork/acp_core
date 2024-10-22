@@ -60,7 +60,7 @@ func (c *RegisterObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 		return nil, newRegisterObjectErr(err)
 	}
 	if record != nil {
-		return nil, errors.Wrap("object already registered", errors.ErrorType_BAD_INPUT,
+		return nil, errors.Wrap("object already registered", errors.ErrorType_OPERATION_FORBIDDEN,
 			errors.Pair("policy", cmd.PolicyId),
 			errors.Pair("resource", cmd.Object.Resource),
 			errors.Pair("id", cmd.Object.Id),
