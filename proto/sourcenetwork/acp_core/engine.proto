@@ -110,10 +110,9 @@ service ACPEngine {
 message CreatePolicyRequest {
   string policy = 1;
   sourcenetwork.acp_core.PolicyMarshalingType marshal_type = 2;
-  google.protobuf.Timestamp creation_time = 3;
   // metadata is a map of attributes which can be used to store
   // caller supplied satellite data
-  map<string, string> metadata = 4;
+  map<string, string> metadata = 3;
 }
 
 message CreatePolicyResponse {
@@ -123,11 +122,10 @@ message CreatePolicyResponse {
 
 message SetRelationshipRequest {
   string policy_id = 1;
-  google.protobuf.Timestamp creation_time = 2;
-  sourcenetwork.acp_core.Relationship relationship = 3;
+  sourcenetwork.acp_core.Relationship relationship = 2;
   // metadata is a map of attributes which can be used to store
   // caller supplied satellite data
-  map<string, string> metadata = 4;
+  map<string, string> metadata = 3;
 }
 
 message SetRelationshipResponse {
@@ -149,10 +147,9 @@ message DeleteRelationshipResponse {
 message RegisterObjectRequest {
   string policy_id = 1;
   sourcenetwork.acp_core.Object object = 2;
-  google.protobuf.Timestamp creation_time = 3;
   // metadata is a map of attributes which can be used to store
   // caller supplied satellite data
-  map<string, string> metadata = 4;
+  map<string, string> metadata = 3;
 }
 
 message RegisterObjectResponse {
@@ -290,10 +287,6 @@ message AmendRegistrationResponse{
 message UnarchiveObjectRequest {
   string policy_id = 1;
   sourcenetwork.acp_core.Object object = 2;
-  google.protobuf.Timestamp creation_time = 3;
-  // metadata is a map of attributes which can be used to store
-  // caller supplied satellite data
-  map<string, string> metadata = 4;
 }
 
 message UnarchiveObjectResponse {
