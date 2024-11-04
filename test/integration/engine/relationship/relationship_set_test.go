@@ -52,9 +52,8 @@ func TestSetRelationship_OwnerCanShareObjectTheyOwn(t *testing.T) {
 	bob := ctx.Actors.DID("bob")
 	req := &types.SetRelationshipRequest{
 		PolicyId:     ctx.State.PolicyId,
-		CreationTime: timestamp,
 		Relationship: types.NewActorRelationship("file", "foo", "reader", bob),
-		Metadata:     metadata,
+		Attributes:   attributes,
 	}
 	resp, err := ctx.Engine.SetRelationship(ctx, req)
 
@@ -62,11 +61,11 @@ func TestSetRelationship_OwnerCanShareObjectTheyOwn(t *testing.T) {
 		RecordExisted: false,
 		Record: &types.RelationshipRecord{
 			OwnerDid:     alice,
-			CreationTime: timestamp,
+			CreationTime: ctx.Time,
 			PolicyId:     ctx.State.PolicyId,
 			Relationship: types.NewActorRelationship("file", "foo", "reader", bob),
 			Archived:     false,
-			Metadata:     metadata,
+			Metadata:     attributes,
 		},
 	}
 	require.Equal(t, want, resp)
@@ -79,7 +78,6 @@ func TestSetRelationship_ActorCannotSetRelationshipForUnregisteredObject(t *test
 	ctx.SetPrincipal("alice")
 	req := &types.SetRelationshipRequest{
 		PolicyId:     ctx.State.PolicyId,
-		CreationTime: timestamp,
 		Relationship: types.NewActorRelationship("file", "unregistered", "reader", bob),
 	}
 	resp, err := ctx.Engine.SetRelationship(ctx, req)
@@ -95,7 +93,6 @@ func TestSetRelationship_ActorCannotSetRelationshipForObjectTheyDoNotOwn(t *test
 	bob := ctx.Actors.DID("bob")
 	req := &types.SetRelationshipRequest{
 		PolicyId:     ctx.State.PolicyId,
-		CreationTime: timestamp,
 		Relationship: types.NewActorRelationship("file", "foo", "reader", bob),
 	}
 	resp, err := ctx.Engine.SetRelationship(ctx, req)
@@ -123,7 +120,6 @@ func TestSetRelationship_ManagerActorCanDelegateAccessToAnotherActor(t *testing.
 	charlie := ctx.Actors.DID("charlie")
 	req := &types.SetRelationshipRequest{
 		PolicyId:     ctx.State.PolicyId,
-		CreationTime: timestamp,
 		Relationship: types.NewActorRelationship("file", "foo", "reader", charlie),
 	}
 	resp, err := ctx.Engine.SetRelationship(ctx, req)
@@ -132,7 +128,7 @@ func TestSetRelationship_ManagerActorCanDelegateAccessToAnotherActor(t *testing.
 		RecordExisted: false,
 		Record: &types.RelationshipRecord{
 			OwnerDid:     bob,
-			CreationTime: timestamp,
+			CreationTime: ctx.Time,
 			PolicyId:     ctx.State.PolicyId,
 			Relationship: types.NewActorRelationship("file", "foo", "reader", charlie),
 			Archived:     false,
@@ -161,7 +157,6 @@ func TestSetRelationship_ManagerActorCannotSetRelationshipToRelationshipsTheyDoN
 	charlie := ctx.Actors.DID("charlie")
 	req := &types.SetRelationshipRequest{
 		PolicyId:     ctx.State.PolicyId,
-		CreationTime: timestamp,
 		Relationship: types.NewActorRelationship("file", "foo", "admin", charlie),
 	}
 	resp, err := ctx.Engine.SetRelationship(ctx, req)

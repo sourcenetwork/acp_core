@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	prototypes "github.com/cosmos/gogoproto/types"
-
 	"github.com/sourcenetwork/acp_core/internal/parser"
 	"github.com/sourcenetwork/acp_core/internal/policy"
 	"github.com/sourcenetwork/acp_core/internal/raccoon"
@@ -209,9 +207,8 @@ func (h *SetStateHandler) setPolicy(ctx context.Context, manager runtime.Runtime
 
 	polHandler := policy.CreatePolicyHandler{}
 	polResp, err := polHandler.Execute(ctx, manager, &types.CreatePolicyRequest{
-		Policy:       simCtx.PolicyDefinition,
-		MarshalType:  types.PolicyMarshalingType_SHORT_YAML,
-		CreationTime: prototypes.TimestampNow(),
+		Policy:      simCtx.PolicyDefinition,
+		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
 	})
 
 	if err != nil {
@@ -261,9 +258,8 @@ func (h *SetStateHandler) registerObjects(ctx context.Context, manager runtime.R
 
 		handler := relationship.RegisterObjectHandler{}
 		_, err = handler.Execute(authenticatedCtx, manager, &types.RegisterObjectRequest{
-			PolicyId:     simCtx.Policy.Id,
-			Object:       obj.Obj.Object,
-			CreationTime: prototypes.TimestampNow(),
+			PolicyId: simCtx.Policy.Id,
+			Object:   obj.Obj.Object,
 		})
 		if err != nil {
 			if errors.Is(err, errors.ErrorType_BAD_INPUT) {
@@ -307,7 +303,6 @@ func (h *SetStateHandler) setRelationships(ctx context.Context, manager runtime.
 		handler := relationship.SetRelationshipHandler{}
 		_, err := handler.Execute(authenticatedCtx, manager, &types.SetRelationshipRequest{
 			PolicyId:     simCtx.Policy.Id,
-			CreationTime: prototypes.TimestampNow(),
 			Relationship: indexedObj.Obj,
 		})
 		if err != nil {

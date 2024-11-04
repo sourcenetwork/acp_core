@@ -37,8 +37,13 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 		return nil, fmt.Errorf("CreatePolicy: %w", err)
 	}
 
+	now, err := runtime.GetTimeService().GetNow(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	factory := factory{}
-	record, err := factory.Create(ir, req.Metadata, i, req.CreationTime)
+	record, err := factory.Create(ir, req.Attributes, i, now)
 	if err != nil {
 		return nil, fmt.Errorf("CreatePolicy: %w", err)
 	}
@@ -67,8 +72,8 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 	}
 
 	return &types.CreatePolicyResponse{
-		Policy:   record.Policy,
-		Metadata: record.Metadata,
+		Policy:     record.Policy,
+		Attributes: record.Metadata,
 	}, nil
 }
 

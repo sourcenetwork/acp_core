@@ -2,15 +2,11 @@ package auth
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	didpkg "github.com/sourcenetwork/acp_core/pkg/did"
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 )
-
-var ErrInvalidPrincipal = errors.New("invalid principal")
-var ErrUnauthenticatd = errors.New("unauthenticated: principal must be authenticated")
-var ErrPrincipalMismatch = errors.New("mismatched principal")
 
 type principalKeyType int
 
@@ -134,10 +130,12 @@ func ExtractPrincipalWithType(ctx context.Context, t PrincipalType) (Principal, 
 		return nil, err
 	}
 	if principal.IsAnonymous() {
-		return nil, ErrUnauthenticatd
+		return nil, errors.ErrorType_UNAUTHENTICATED
 	}
 	if principal.GetType() != t {
-		return nil, fmt.Errorf("principal type: wanted %v: got %v: %w", t, principal.GetType(), ErrPrincipalMismatch)
+		msg := fmt.Sprintf("principal type wanted %v: got %v", t, principal.GetType())
+		return nil, errors.Wrap(msg, ErrPrincipalMismatch)
+
 	}
 	return principal, nil
 }

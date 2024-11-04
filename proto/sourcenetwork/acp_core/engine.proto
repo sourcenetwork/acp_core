@@ -110,22 +110,22 @@ service ACPEngine {
 message CreatePolicyRequest {
   string policy = 1;
   sourcenetwork.acp_core.PolicyMarshalingType marshal_type = 2;
-  // metadata is a map of attributes which can be used to store
+  // attributes is a map of attributes which can be used to store
   // caller supplied satellite data
-  map<string, string> metadata = 3;
+  map<string, string> attributes = 3;
 }
 
 message CreatePolicyResponse {
   Policy policy = 1;
-  map<string, string> metadata = 2;
+  map<string, string> attributes = 2;
 }
 
 message SetRelationshipRequest {
   string policy_id = 1;
   sourcenetwork.acp_core.Relationship relationship = 2;
-  // metadata is a map of attributes which can be used to store
+  // attributes is a map of attributes which can be used to store
   // caller supplied satellite data
-  map<string, string> metadata = 3;
+  map<string, string> attributes = 3;
 }
 
 message SetRelationshipResponse {
@@ -147,9 +147,9 @@ message DeleteRelationshipResponse {
 message RegisterObjectRequest {
   string policy_id = 1;
   sourcenetwork.acp_core.Object object = 2;
-  // metadata is a map of attributes which can be used to store
+  // attributes is a map of attributes which can be used to store
   // caller supplied satellite data
-  map<string, string> metadata = 3;
+  map<string, string> attributes = 3;
 }
 
 message RegisterObjectResponse {

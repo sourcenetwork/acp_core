@@ -60,13 +60,17 @@ func (c *RegisterObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 		return nil, newRegisterObjectErr(err)
 	}
 	if record != nil {
-		return nil, errors.Wrap("object already registered", errors.ErrorType_OPERATION_FORBIDDEN,
+		return nil, newRegisterObjectErr(errors.Wrap("object already registered", errors.ErrorType_OPERATION_FORBIDDEN,
 			errors.Pair("policy", cmd.PolicyId),
 			errors.Pair("resource", cmd.Object.Resource),
 			errors.Pair("id", cmd.Object.Id),
-		)
+		))
 	}
 
+	ts, err := runtime.GetTimeService().GetNow(ctx)
+	if err != nil {
+		return nil, newRegisterObjectErr(err)
+	}
 	record = &types.RelationshipRecord{
 		Relationship: &types.Relationship{
 			Object:   registration.Object,
@@ -80,15 +84,14 @@ func (c *RegisterObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 		OwnerDid:     registration.Actor.Id,
 		PolicyId:     pol.Id,
 		Archived:     false,
-		CreationTime: cmd.CreationTime,
-		Metadata:     cmd.Metadata,
+		CreationTime: ts,
+		Metadata:     cmd.Attributes,
 	}
 	_, err = engine.SetRelationship(ctx, pol, record)
 	if err != nil {
 		return nil, newRegisterObjectErr(err)
 	}
 
-	// TODO efactor the event type
 	eventManager.EmitEvent(&types.EventObjectRegistered{
 		Actor:          registration.Actor.Id,
 		PolicyId:       pol.Id,
@@ -183,11 +186,11 @@ func (c *ArchiveObjectHandler) Execute(ctx context.Context, runtime runtime.Runt
 	ownerRecord.Archived = true
 	_, err = engine.SetRelationship(ctx, pol, ownerRecord)
 	if err != nil {
-		return nil, errors.Wrap("archiving object", err,
+		return nil, newArchiveObjectErr(errors.Wrap("updating relationship", err,
 			errors.Pair("policy", ownerRecord.PolicyId),
 			errors.Pair("resource", ownerRecord.Relationship.Object.Resource),
 			errors.Pair("object", ownerRecord.Relationship.Object.Id),
-		)
+		))
 	}
 
 	return &types.ArchiveObjectResponse{
@@ -267,6 +270,14 @@ func (h *TransferObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 			errors.Pair("object", cmd.Object.Id),
 		))
 	}
+	if ownerRecord.Archived {
+		return nil, newTransferObjectErr(errors.Wrap("cannot transfer an archived object",
+			errors.ErrorType_OPERATION_FORBIDDEN,
+			errors.Pair("policy", pol.Id),
+			errors.Pair("resource", cmd.Object.Resource),
+			errors.Pair("object", cmd.Object.Id),
+		))
+	}
 
 	operation := types.Operation{
 		Object:     cmd.Object,
@@ -291,6 +302,7 @@ func (h *TransferObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 		return nil, newTransferObjectErr(err)
 	}
 
+	ownerRecord.OwnerDid = cmd.NewOwner.Id
 	ownerRecord.Relationship.Subject = &types.Subject{
 		Subject: &types.Subject_Actor{
 			Actor: cmd.NewOwner,
@@ -368,8 +380,16 @@ func (h *AmendRegistrationHandler) verifyPreconditions(ctx context.Context, engi
 		return nil, nil, errors.Wrap("object not registered", errors.ErrorType_BAD_INPUT,
 			errors.Pair("policy", req.PolicyId),
 			errors.Pair("resource", req.Object.Resource),
-			errors.Pair("id", req.Object.Id),
+			errors.Pair("object", req.Object.Id),
 		)
+	}
+	if relRec.Archived {
+		return nil, nil, errors.Wrap("cannot amend archived object", errors.ErrorType_OPERATION_FORBIDDEN,
+			errors.Pair("policy", req.PolicyId),
+			errors.Pair("resource", req.Object.Resource),
+			errors.Pair("object", req.Object.Id),
+		)
+
 	}
 
 	return polRec.Policy, relRec, nil
@@ -409,15 +429,8 @@ func (h *UnarchiveObjectHandler) Handle(ctx context.Context, runtime runtime.Run
 			errors.Pair("id", cmd.Object.Id),
 		))
 	}
-	if !ownerRecord.Archived {
-		return &types.UnarchiveObjectResponse{
-			Record:         ownerRecord,
-			RecordModified: false,
-		}, nil
-	}
 
 	authorizer := authorizer.NewOperationAuthorizer(engine)
-
 	mutateOwnerOperation := types.Operation{
 		Object:     cmd.Object,
 		Permission: policy.OwnerRelation,
@@ -436,6 +449,13 @@ func (h *UnarchiveObjectHandler) Handle(ctx context.Context, runtime runtime.Run
 		))
 	}
 
+	if !ownerRecord.Archived {
+		return &types.UnarchiveObjectResponse{
+			Record:         ownerRecord,
+			RecordModified: false,
+		}, nil
+	}
+
 	ownerRecord.Archived = false
 	_, err = engine.SetRelationship(ctx, pol, ownerRecord)
 	if err != nil {
@@ -448,6 +468,6 @@ func (h *UnarchiveObjectHandler) Handle(ctx context.Context, runtime runtime.Run
 
 	return &types.UnarchiveObjectResponse{
 		Record:         ownerRecord,
-		RecordModified: false,
+		RecordModified: true,
 	}, nil
 }

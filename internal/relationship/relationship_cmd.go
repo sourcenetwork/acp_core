@@ -87,13 +87,17 @@ func (c *SetRelationshipHandler) Execute(ctx context.Context, runtime runtime.Ru
 		}, nil
 	}
 
+	ts, err := runtime.GetTimeService().GetNow(ctx)
+	if err != nil {
+		return nil, newSetRelationshipErr(err)
+	}
 	record = &types.RelationshipRecord{
 		PolicyId:     policy.Id,
 		Relationship: cmd.Relationship,
-		CreationTime: cmd.CreationTime,
+		CreationTime: ts,
 		OwnerDid:     did,
 		Archived:     false,
-		Metadata:     cmd.Metadata,
+		Metadata:     cmd.Attributes,
 	}
 	_, err = engine.SetRelationship(ctx, policy, record)
 	if err != nil {

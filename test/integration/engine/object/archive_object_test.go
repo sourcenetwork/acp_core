@@ -136,9 +136,3 @@ func TestArchiveObject_SendingInvalidPolicyIdErrors(t *testing.T) {
 	require.Nil(t, resp)
 	require.ErrorIs(t, err, errors.ErrorType_NOT_FOUND)
 }
-
-/*
-func TestArchiveObject_ArchiveingObjectRemovesRelationshipsLeavingTheObject(t *testing.T) {
-	// TODO
-}
-*/
