@@ -96,24 +96,24 @@ func (e *Evaluator) EvaluatePolicyTheoremDSL(ctx context.Context, polId string, 
 	for i, theorem := range indexedTheorem.AuthorizationTheorems {
 		result := policyResult.AuthorizationTheoremsResult[i]
 		annotatedAuth := &types.AnnotatedAuthorizationTheoremResult{
-			Result: result,
-			Range:  theorem.Range,
+			Result:   result,
+			Interval: theorem.Interval,
 		}
 		annotatedResult.AuthorizationTheoremsResult = append(annotatedResult.AuthorizationTheoremsResult, annotatedAuth)
 	}
 	for i, theorem := range indexedTheorem.DelegationTheorems {
 		result := policyResult.DelegationTheoremsResult[i]
 		thmResult := &types.AnnotatedDelegationTheoremResult{
-			Result: result,
-			Range:  theorem.Range,
+			Result:   result,
+			Interval: theorem.Interval,
 		}
 		annotatedResult.DelegationTheoremsResult = append(annotatedResult.DelegationTheoremsResult, thmResult)
 	}
 	for i, theorem := range indexedTheorem.ReachabilityTheorems {
 		result := policyResult.ReachabilityTheoremsResult[i]
 		thmResult := &types.AnnotatedReachabilityTheoremResult{
-			Result: result,
-			Range:  theorem.Range,
+			Result:   result,
+			Interval: theorem.Interval,
 		}
 		annotatedResult.ReachabilityTheoremsResult = append(annotatedResult.ReachabilityTheoremsResult, thmResult)
 	}
