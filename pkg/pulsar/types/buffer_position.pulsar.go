@@ -13,27 +13,27 @@ import (
 )
 
 var (
-	md_BufferRange       protoreflect.MessageDescriptor
-	fd_BufferRange_start protoreflect.FieldDescriptor
-	fd_BufferRange_end   protoreflect.FieldDescriptor
+	md_BufferInterval       protoreflect.MessageDescriptor
+	fd_BufferInterval_start protoreflect.FieldDescriptor
+	fd_BufferInterval_end   protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sourcenetwork_acp_core_buffer_position_proto_init()
-	md_BufferRange = File_sourcenetwork_acp_core_buffer_position_proto.Messages().ByName("BufferRange")
-	fd_BufferRange_start = md_BufferRange.Fields().ByName("start")
-	fd_BufferRange_end = md_BufferRange.Fields().ByName("end")
+	md_BufferInterval = File_sourcenetwork_acp_core_buffer_position_proto.Messages().ByName("BufferInterval")
+	fd_BufferInterval_start = md_BufferInterval.Fields().ByName("start")
+	fd_BufferInterval_end = md_BufferInterval.Fields().ByName("end")
 }
 
-var _ protoreflect.Message = (*fastReflection_BufferRange)(nil)
+var _ protoreflect.Message = (*fastReflection_BufferInterval)(nil)
 
-type fastReflection_BufferRange BufferRange
+type fastReflection_BufferInterval BufferInterval
 
-func (x *BufferRange) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_BufferRange)(x)
+func (x *BufferInterval) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_BufferInterval)(x)
 }
 
-func (x *BufferRange) slowProtoReflect() protoreflect.Message {
+func (x *BufferInterval) slowProtoReflect() protoreflect.Message {
 	mi := &file_sourcenetwork_acp_core_buffer_position_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -45,43 +45,43 @@ func (x *BufferRange) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_BufferRange_messageType fastReflection_BufferRange_messageType
-var _ protoreflect.MessageType = fastReflection_BufferRange_messageType{}
+var _fastReflection_BufferInterval_messageType fastReflection_BufferInterval_messageType
+var _ protoreflect.MessageType = fastReflection_BufferInterval_messageType{}
 
-type fastReflection_BufferRange_messageType struct{}
+type fastReflection_BufferInterval_messageType struct{}
 
-func (x fastReflection_BufferRange_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_BufferRange)(nil)
+func (x fastReflection_BufferInterval_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_BufferInterval)(nil)
 }
-func (x fastReflection_BufferRange_messageType) New() protoreflect.Message {
-	return new(fastReflection_BufferRange)
+func (x fastReflection_BufferInterval_messageType) New() protoreflect.Message {
+	return new(fastReflection_BufferInterval)
 }
-func (x fastReflection_BufferRange_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_BufferRange
+func (x fastReflection_BufferInterval_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_BufferInterval
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_BufferRange) Descriptor() protoreflect.MessageDescriptor {
-	return md_BufferRange
+func (x *fastReflection_BufferInterval) Descriptor() protoreflect.MessageDescriptor {
+	return md_BufferInterval
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_BufferRange) Type() protoreflect.MessageType {
-	return _fastReflection_BufferRange_messageType
+func (x *fastReflection_BufferInterval) Type() protoreflect.MessageType {
+	return _fastReflection_BufferInterval_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_BufferRange) New() protoreflect.Message {
-	return new(fastReflection_BufferRange)
+func (x *fastReflection_BufferInterval) New() protoreflect.Message {
+	return new(fastReflection_BufferInterval)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_BufferRange) Interface() protoreflect.ProtoMessage {
-	return (*BufferRange)(x)
+func (x *fastReflection_BufferInterval) Interface() protoreflect.ProtoMessage {
+	return (*BufferInterval)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -89,16 +89,16 @@ func (x *fastReflection_BufferRange) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_BufferRange) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_BufferInterval) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Start != nil {
 		value := protoreflect.ValueOfMessage(x.Start.ProtoReflect())
-		if !f(fd_BufferRange_start, value) {
+		if !f(fd_BufferInterval_start, value) {
 			return
 		}
 	}
 	if x.End != nil {
 		value := protoreflect.ValueOfMessage(x.End.ProtoReflect())
-		if !f(fd_BufferRange_end, value) {
+		if !f(fd_BufferInterval_end, value) {
 			return
 		}
 	}
@@ -115,17 +115,17 @@ func (x *fastReflection_BufferRange) Range(f func(protoreflect.FieldDescriptor, 
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_BufferRange) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_BufferInterval) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.BufferRange.start":
+	case "sourcenetwork.acp_core.BufferInterval.start":
 		return x.Start != nil
-	case "sourcenetwork.acp_core.BufferRange.end":
+	case "sourcenetwork.acp_core.BufferInterval.end":
 		return x.End != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.BufferRange"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.BufferInterval"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.BufferRange does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.BufferInterval does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -135,17 +135,17 @@ func (x *fastReflection_BufferRange) Has(fd protoreflect.FieldDescriptor) bool {
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_BufferRange) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_BufferInterval) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.BufferRange.start":
+	case "sourcenetwork.acp_core.BufferInterval.start":
 		x.Start = nil
-	case "sourcenetwork.acp_core.BufferRange.end":
+	case "sourcenetwork.acp_core.BufferInterval.end":
 		x.End = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.BufferRange"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.BufferInterval"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.BufferRange does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.BufferInterval does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -155,19 +155,19 @@ func (x *fastReflection_BufferRange) Clear(fd protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_BufferRange) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_BufferInterval) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sourcenetwork.acp_core.BufferRange.start":
+	case "sourcenetwork.acp_core.BufferInterval.start":
 		value := x.Start
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "sourcenetwork.acp_core.BufferRange.end":
+	case "sourcenetwork.acp_core.BufferInterval.end":
 		value := x.End
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.BufferRange"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.BufferInterval"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.BufferRange does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.BufferInterval does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -181,17 +181,17 @@ func (x *fastReflection_BufferRange) Get(descriptor protoreflect.FieldDescriptor
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_BufferRange) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_BufferInterval) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.BufferRange.start":
+	case "sourcenetwork.acp_core.BufferInterval.start":
 		x.Start = value.Message().Interface().(*BufferPosition)
-	case "sourcenetwork.acp_core.BufferRange.end":
+	case "sourcenetwork.acp_core.BufferInterval.end":
 		x.End = value.Message().Interface().(*BufferPosition)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.BufferRange"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.BufferInterval"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.BufferRange does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.BufferInterval does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -205,52 +205,52 @@ func (x *fastReflection_BufferRange) Set(fd protoreflect.FieldDescriptor, value 
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_BufferRange) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_BufferInterval) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.BufferRange.start":
+	case "sourcenetwork.acp_core.BufferInterval.start":
 		if x.Start == nil {
 			x.Start = new(BufferPosition)
 		}
 		return protoreflect.ValueOfMessage(x.Start.ProtoReflect())
-	case "sourcenetwork.acp_core.BufferRange.end":
+	case "sourcenetwork.acp_core.BufferInterval.end":
 		if x.End == nil {
 			x.End = new(BufferPosition)
 		}
 		return protoreflect.ValueOfMessage(x.End.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.BufferRange"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.BufferInterval"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.BufferRange does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.BufferInterval does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_BufferRange) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_BufferInterval) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.BufferRange.start":
+	case "sourcenetwork.acp_core.BufferInterval.start":
 		m := new(BufferPosition)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "sourcenetwork.acp_core.BufferRange.end":
+	case "sourcenetwork.acp_core.BufferInterval.end":
 		m := new(BufferPosition)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.BufferRange"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.BufferInterval"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.BufferRange does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.BufferInterval does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_BufferRange) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_BufferInterval) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.BufferRange", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.BufferInterval", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -258,7 +258,7 @@ func (x *fastReflection_BufferRange) WhichOneof(d protoreflect.OneofDescriptor) 
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_BufferRange) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_BufferInterval) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -269,7 +269,7 @@ func (x *fastReflection_BufferRange) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_BufferRange) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_BufferInterval) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -281,7 +281,7 @@ func (x *fastReflection_BufferRange) SetUnknown(fields protoreflect.RawFields) {
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_BufferRange) IsValid() bool {
+func (x *fastReflection_BufferInterval) IsValid() bool {
 	return x != nil
 }
 
@@ -291,9 +291,9 @@ func (x *fastReflection_BufferRange) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_BufferRange) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_BufferInterval) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*BufferRange)
+		x := input.Message.Interface().(*BufferInterval)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -323,7 +323,7 @@ func (x *fastReflection_BufferRange) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*BufferRange)
+		x := input.Message.Interface().(*BufferInterval)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -381,7 +381,7 @@ func (x *fastReflection_BufferRange) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*BufferRange)
+		x := input.Message.Interface().(*BufferInterval)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -413,10 +413,10 @@ func (x *fastReflection_BufferRange) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: BufferRange: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: BufferInterval: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: BufferRange: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: BufferInterval: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -991,9 +991,9 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// BufferRange models a range in
+// BufferInterval models a range in
 // a line oriented buffer
-type BufferRange struct {
+type BufferInterval struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -1002,8 +1002,8 @@ type BufferRange struct {
 	End   *BufferPosition `protobuf:"bytes,2,opt,name=end,proto3" json:"end,omitempty"`
 }
 
-func (x *BufferRange) Reset() {
-	*x = BufferRange{}
+func (x *BufferInterval) Reset() {
+	*x = BufferInterval{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sourcenetwork_acp_core_buffer_position_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1011,25 +1011,25 @@ func (x *BufferRange) Reset() {
 	}
 }
 
-func (x *BufferRange) String() string {
+func (x *BufferInterval) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*BufferRange) ProtoMessage() {}
+func (*BufferInterval) ProtoMessage() {}
 
-// Deprecated: Use BufferRange.ProtoReflect.Descriptor instead.
-func (*BufferRange) Descriptor() ([]byte, []int) {
+// Deprecated: Use BufferInterval.ProtoReflect.Descriptor instead.
+func (*BufferInterval) Descriptor() ([]byte, []int) {
 	return file_sourcenetwork_acp_core_buffer_position_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *BufferRange) GetStart() *BufferPosition {
+func (x *BufferInterval) GetStart() *BufferPosition {
 	if x != nil {
 		return x.Start
 	}
 	return nil
 }
 
-func (x *BufferRange) GetEnd() *BufferPosition {
+func (x *BufferInterval) GetEnd() *BufferPosition {
 	if x != nil {
 		return x.End
 	}
@@ -1088,23 +1088,23 @@ var file_sourcenetwork_acp_core_buffer_position_proto_rawDesc = []byte{
 	0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x62, 0x75, 0x66, 0x66, 0x65, 0x72, 0x5f,
 	0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x16,
 	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63,
-	0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x22, 0x85, 0x01, 0x0a, 0x0b, 0x42, 0x75, 0x66, 0x66, 0x65,
-	0x72, 0x52, 0x61, 0x6e, 0x67, 0x65, 0x12, 0x3c, 0x0a, 0x05, 0x73, 0x74, 0x61, 0x72, 0x74, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65,
-	0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x42,
-	0x75, 0x66, 0x66, 0x65, 0x72, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x05, 0x73,
-	0x74, 0x61, 0x72, 0x74, 0x12, 0x38, 0x0a, 0x03, 0x65, 0x6e, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x26, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
-	0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x42, 0x75, 0x66, 0x66, 0x65,
-	0x72, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x03, 0x65, 0x6e, 0x64, 0x22, 0x3c,
-	0x0a, 0x0e, 0x42, 0x75, 0x66, 0x66, 0x65, 0x72, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e,
-	0x12, 0x12, 0x0a, 0x04, 0x6c, 0x69, 0x6e, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x04,
-	0x6c, 0x69, 0x6e, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x63, 0x6f, 0x6c, 0x75, 0x6d, 0x6e, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x63, 0x6f, 0x6c, 0x75, 0x6d, 0x6e, 0x42, 0x2d, 0x5a, 0x2b,
-	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6f, 0x75, 0x72, 0x63,
-	0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72,
-	0x65, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x22, 0x88, 0x01, 0x0a, 0x0e, 0x42, 0x75, 0x66, 0x66, 0x65,
+	0x72, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x76, 0x61, 0x6c, 0x12, 0x3c, 0x0a, 0x05, 0x73, 0x74, 0x61,
+	0x72, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63,
+	0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72,
+	0x65, 0x2e, 0x42, 0x75, 0x66, 0x66, 0x65, 0x72, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e,
+	0x52, 0x05, 0x73, 0x74, 0x61, 0x72, 0x74, 0x12, 0x38, 0x0a, 0x03, 0x65, 0x6e, 0x64, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
+	0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x42, 0x75,
+	0x66, 0x66, 0x65, 0x72, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x03, 0x65, 0x6e,
+	0x64, 0x22, 0x3c, 0x0a, 0x0e, 0x42, 0x75, 0x66, 0x66, 0x65, 0x72, 0x50, 0x6f, 0x73, 0x69, 0x74,
+	0x69, 0x6f, 0x6e, 0x12, 0x12, 0x0a, 0x04, 0x6c, 0x69, 0x6e, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x04, 0x52, 0x04, 0x6c, 0x69, 0x6e, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x63, 0x6f, 0x6c, 0x75, 0x6d,
+	0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x63, 0x6f, 0x6c, 0x75, 0x6d, 0x6e, 0x42,
+	0x2d, 0x5a, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6f,
+	0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f,
+	0x63, 0x6f, 0x72, 0x65, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62, 0x06,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1121,12 +1121,12 @@ func file_sourcenetwork_acp_core_buffer_position_proto_rawDescGZIP() []byte {
 
 var file_sourcenetwork_acp_core_buffer_position_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_sourcenetwork_acp_core_buffer_position_proto_goTypes = []interface{}{
-	(*BufferRange)(nil),    // 0: sourcenetwork.acp_core.BufferRange
+	(*BufferInterval)(nil), // 0: sourcenetwork.acp_core.BufferInterval
 	(*BufferPosition)(nil), // 1: sourcenetwork.acp_core.BufferPosition
 }
 var file_sourcenetwork_acp_core_buffer_position_proto_depIdxs = []int32{
-	1, // 0: sourcenetwork.acp_core.BufferRange.start:type_name -> sourcenetwork.acp_core.BufferPosition
-	1, // 1: sourcenetwork.acp_core.BufferRange.end:type_name -> sourcenetwork.acp_core.BufferPosition
+	1, // 0: sourcenetwork.acp_core.BufferInterval.start:type_name -> sourcenetwork.acp_core.BufferPosition
+	1, // 1: sourcenetwork.acp_core.BufferInterval.end:type_name -> sourcenetwork.acp_core.BufferPosition
 	2, // [2:2] is the sub-list for method output_type
 	2, // [2:2] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
@@ -1141,7 +1141,7 @@ func file_sourcenetwork_acp_core_buffer_position_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_sourcenetwork_acp_core_buffer_position_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*BufferRange); i {
+			switch v := v.(*BufferInterval); i {
 			case 0:
 				return &v.state
 			case 1:

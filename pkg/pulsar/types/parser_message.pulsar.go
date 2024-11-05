@@ -17,7 +17,7 @@ var (
 	fd_LocatedMessage_message    protoreflect.FieldDescriptor
 	fd_LocatedMessage_kind       protoreflect.FieldDescriptor
 	fd_LocatedMessage_input_name protoreflect.FieldDescriptor
-	fd_LocatedMessage_range      protoreflect.FieldDescriptor
+	fd_LocatedMessage_interval   protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -26,7 +26,7 @@ func init() {
 	fd_LocatedMessage_message = md_LocatedMessage.Fields().ByName("message")
 	fd_LocatedMessage_kind = md_LocatedMessage.Fields().ByName("kind")
 	fd_LocatedMessage_input_name = md_LocatedMessage.Fields().ByName("input_name")
-	fd_LocatedMessage_range = md_LocatedMessage.Fields().ByName("range")
+	fd_LocatedMessage_interval = md_LocatedMessage.Fields().ByName("interval")
 }
 
 var _ protoreflect.Message = (*fastReflection_LocatedMessage)(nil)
@@ -112,9 +112,9 @@ func (x *fastReflection_LocatedMessage) Range(f func(protoreflect.FieldDescripto
 			return
 		}
 	}
-	if x.Range_ != nil {
-		value := protoreflect.ValueOfMessage(x.Range_.ProtoReflect())
-		if !f(fd_LocatedMessage_range, value) {
+	if x.Interval != nil {
+		value := protoreflect.ValueOfMessage(x.Interval.ProtoReflect())
+		if !f(fd_LocatedMessage_interval, value) {
 			return
 		}
 	}
@@ -139,8 +139,8 @@ func (x *fastReflection_LocatedMessage) Has(fd protoreflect.FieldDescriptor) boo
 		return x.Kind != 0
 	case "sourcenetwork.acp_core.LocatedMessage.input_name":
 		return x.InputName != ""
-	case "sourcenetwork.acp_core.LocatedMessage.range":
-		return x.Range_ != nil
+	case "sourcenetwork.acp_core.LocatedMessage.interval":
+		return x.Interval != nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.LocatedMessage"))
@@ -163,8 +163,8 @@ func (x *fastReflection_LocatedMessage) Clear(fd protoreflect.FieldDescriptor) {
 		x.Kind = 0
 	case "sourcenetwork.acp_core.LocatedMessage.input_name":
 		x.InputName = ""
-	case "sourcenetwork.acp_core.LocatedMessage.range":
-		x.Range_ = nil
+	case "sourcenetwork.acp_core.LocatedMessage.interval":
+		x.Interval = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.LocatedMessage"))
@@ -190,8 +190,8 @@ func (x *fastReflection_LocatedMessage) Get(descriptor protoreflect.FieldDescrip
 	case "sourcenetwork.acp_core.LocatedMessage.input_name":
 		value := x.InputName
 		return protoreflect.ValueOfString(value)
-	case "sourcenetwork.acp_core.LocatedMessage.range":
-		value := x.Range_
+	case "sourcenetwork.acp_core.LocatedMessage.interval":
+		value := x.Interval
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
@@ -219,8 +219,8 @@ func (x *fastReflection_LocatedMessage) Set(fd protoreflect.FieldDescriptor, val
 		x.Kind = (LocatedMessage_MessageKind)(value.Enum())
 	case "sourcenetwork.acp_core.LocatedMessage.input_name":
 		x.InputName = value.Interface().(string)
-	case "sourcenetwork.acp_core.LocatedMessage.range":
-		x.Range_ = value.Message().Interface().(*BufferRange)
+	case "sourcenetwork.acp_core.LocatedMessage.interval":
+		x.Interval = value.Message().Interface().(*BufferInterval)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.LocatedMessage"))
@@ -241,11 +241,11 @@ func (x *fastReflection_LocatedMessage) Set(fd protoreflect.FieldDescriptor, val
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_LocatedMessage) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.LocatedMessage.range":
-		if x.Range_ == nil {
-			x.Range_ = new(BufferRange)
+	case "sourcenetwork.acp_core.LocatedMessage.interval":
+		if x.Interval == nil {
+			x.Interval = new(BufferInterval)
 		}
-		return protoreflect.ValueOfMessage(x.Range_.ProtoReflect())
+		return protoreflect.ValueOfMessage(x.Interval.ProtoReflect())
 	case "sourcenetwork.acp_core.LocatedMessage.message":
 		panic(fmt.Errorf("field message of message sourcenetwork.acp_core.LocatedMessage is not mutable"))
 	case "sourcenetwork.acp_core.LocatedMessage.kind":
@@ -271,8 +271,8 @@ func (x *fastReflection_LocatedMessage) NewField(fd protoreflect.FieldDescriptor
 		return protoreflect.ValueOfEnum(0)
 	case "sourcenetwork.acp_core.LocatedMessage.input_name":
 		return protoreflect.ValueOfString("")
-	case "sourcenetwork.acp_core.LocatedMessage.range":
-		m := new(BufferRange)
+	case "sourcenetwork.acp_core.LocatedMessage.interval":
+		m := new(BufferInterval)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
@@ -354,8 +354,8 @@ func (x *fastReflection_LocatedMessage) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.Range_ != nil {
-			l = options.Size(x.Range_)
+		if x.Interval != nil {
+			l = options.Size(x.Interval)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
@@ -387,8 +387,8 @@ func (x *fastReflection_LocatedMessage) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if x.Range_ != nil {
-			encoded, err := options.Marshal(x.Range_)
+		if x.Interval != nil {
+			encoded, err := options.Marshal(x.Interval)
 			if err != nil {
 				return protoiface.MarshalOutput{
 					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -554,7 +554,7 @@ func (x *fastReflection_LocatedMessage) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 4:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Range_", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Interval", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -581,10 +581,10 @@ func (x *fastReflection_LocatedMessage) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				if x.Range_ == nil {
-					x.Range_ = &BufferRange{}
+				if x.Interval == nil {
+					x.Interval = &BufferInterval{}
 				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Range_); err != nil {
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Interval); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -697,7 +697,7 @@ type LocatedMessage struct {
 	Message   string                     `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
 	Kind      LocatedMessage_MessageKind `protobuf:"varint,2,opt,name=kind,proto3,enum=sourcenetwork.acp_core.LocatedMessage_MessageKind" json:"kind,omitempty"`
 	InputName string                     `protobuf:"bytes,3,opt,name=input_name,json=inputName,proto3" json:"input_name,omitempty"`
-	Range_    *BufferRange               `protobuf:"bytes,4,opt,name=range,proto3" json:"range,omitempty"`
+	Interval  *BufferInterval            `protobuf:"bytes,4,opt,name=interval,proto3" json:"interval,omitempty"`
 }
 
 func (x *LocatedMessage) Reset() {
@@ -741,9 +741,9 @@ func (x *LocatedMessage) GetInputName() string {
 	return ""
 }
 
-func (x *LocatedMessage) GetRange_() *BufferRange {
+func (x *LocatedMessage) GetInterval() *BufferInterval {
 	if x != nil {
-		return x.Range_
+		return x.Interval
 	}
 	return nil
 }
@@ -758,7 +758,7 @@ var file_sourcenetwork_acp_core_parser_message_proto_rawDesc = []byte{
 	0x5f, 0x63, 0x6f, 0x72, 0x65, 0x1a, 0x2c, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
 	0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x62, 0x75,
 	0x66, 0x66, 0x65, 0x72, 0x5f, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x22, 0x8a, 0x02, 0x0a, 0x0e, 0x4c, 0x6f, 0x63, 0x61, 0x74, 0x65, 0x64, 0x4d,
+	0x6f, 0x74, 0x6f, 0x22, 0x93, 0x02, 0x0a, 0x0e, 0x4c, 0x6f, 0x63, 0x61, 0x74, 0x65, 0x64, 0x4d,
 	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67,
 	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65,
 	0x12, 0x46, 0x0a, 0x04, 0x6b, 0x69, 0x6e, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x32,
@@ -767,18 +767,18 @@ var file_sourcenetwork_acp_core_parser_message_proto_rawDesc = []byte{
 	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x2e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x4b, 0x69,
 	0x6e, 0x64, 0x52, 0x04, 0x6b, 0x69, 0x6e, 0x64, 0x12, 0x1d, 0x0a, 0x0a, 0x69, 0x6e, 0x70, 0x75,
 	0x74, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x69, 0x6e,
-	0x70, 0x75, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x39, 0x0a, 0x05, 0x72, 0x61, 0x6e, 0x67, 0x65,
-	0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e,
-	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e,
-	0x42, 0x75, 0x66, 0x66, 0x65, 0x72, 0x52, 0x61, 0x6e, 0x67, 0x65, 0x52, 0x05, 0x72, 0x61, 0x6e,
-	0x67, 0x65, 0x22, 0x3c, 0x0a, 0x0b, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x4b, 0x69, 0x6e,
-	0x64, 0x12, 0x0b, 0x0a, 0x07, 0x55, 0x4e, 0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x10, 0x00, 0x12, 0x09,
-	0x0a, 0x05, 0x45, 0x52, 0x52, 0x4f, 0x52, 0x10, 0x01, 0x12, 0x08, 0x0a, 0x04, 0x49, 0x4e, 0x46,
-	0x4f, 0x10, 0x02, 0x12, 0x0b, 0x0a, 0x07, 0x57, 0x41, 0x52, 0x4e, 0x49, 0x4e, 0x47, 0x10, 0x03,
-	0x42, 0x2d, 0x5a, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73,
-	0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70,
-	0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62,
-	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x70, 0x75, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x42, 0x0a, 0x08, 0x69, 0x6e, 0x74, 0x65, 0x72,
+	0x76, 0x61, 0x6c, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x73, 0x6f, 0x75, 0x72,
+	0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f,
+	0x72, 0x65, 0x2e, 0x42, 0x75, 0x66, 0x66, 0x65, 0x72, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x76, 0x61,
+	0x6c, 0x52, 0x08, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x76, 0x61, 0x6c, 0x22, 0x3c, 0x0a, 0x0b, 0x4d,
+	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x4b, 0x69, 0x6e, 0x64, 0x12, 0x0b, 0x0a, 0x07, 0x55, 0x4e,
+	0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x10, 0x00, 0x12, 0x09, 0x0a, 0x05, 0x45, 0x52, 0x52, 0x4f, 0x52,
+	0x10, 0x01, 0x12, 0x08, 0x0a, 0x04, 0x49, 0x4e, 0x46, 0x4f, 0x10, 0x02, 0x12, 0x0b, 0x0a, 0x07,
+	0x57, 0x41, 0x52, 0x4e, 0x49, 0x4e, 0x47, 0x10, 0x03, 0x42, 0x2d, 0x5a, 0x2b, 0x67, 0x69, 0x74,
+	0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65,
+	0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x70,
+	0x6b, 0x67, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -798,11 +798,11 @@ var file_sourcenetwork_acp_core_parser_message_proto_msgTypes = make([]protoimpl
 var file_sourcenetwork_acp_core_parser_message_proto_goTypes = []interface{}{
 	(LocatedMessage_MessageKind)(0), // 0: sourcenetwork.acp_core.LocatedMessage.MessageKind
 	(*LocatedMessage)(nil),          // 1: sourcenetwork.acp_core.LocatedMessage
-	(*BufferRange)(nil),             // 2: sourcenetwork.acp_core.BufferRange
+	(*BufferInterval)(nil),          // 2: sourcenetwork.acp_core.BufferInterval
 }
 var file_sourcenetwork_acp_core_parser_message_proto_depIdxs = []int32{
 	0, // 0: sourcenetwork.acp_core.LocatedMessage.kind:type_name -> sourcenetwork.acp_core.LocatedMessage.MessageKind
-	2, // 1: sourcenetwork.acp_core.LocatedMessage.range:type_name -> sourcenetwork.acp_core.BufferRange
+	2, // 1: sourcenetwork.acp_core.LocatedMessage.interval:type_name -> sourcenetwork.acp_core.BufferInterval
 	2, // [2:2] is the sub-list for method output_type
 	2, // [2:2] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
