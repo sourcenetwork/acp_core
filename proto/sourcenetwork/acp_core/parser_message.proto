@@ -18,5 +18,5 @@ message LocatedMessage {
   string message = 1;
   MessageKind kind = 2;
   string input_name = 3;
-  BufferRange range = 4;
+  BufferInterval interval = 4;
 }

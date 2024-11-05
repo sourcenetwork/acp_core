@@ -4,9 +4,9 @@ package sourcenetwork.acp_core;
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
 
-// BufferRange models a range in
+// BufferInterval models a range in
 // a line oriented buffer
-message BufferRange {
+message BufferInterval {
   BufferPosition start = 1;
   BufferPosition end = 2;
 }

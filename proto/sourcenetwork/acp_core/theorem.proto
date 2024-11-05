@@ -75,17 +75,17 @@ message ReachabilityTheoremResult {
 
 message AnnotatedAuthorizationTheoremResult {
   AuthorizationTheoremResult result = 1;
-  BufferRange range = 2;
+  BufferInterval interval = 2;
 }
 
 message AnnotatedDelegationTheoremResult {
   DelegationTheoremResult result = 1;
-  BufferRange range = 2;
+  BufferInterval interval = 2;
 }
 
 message AnnotatedReachabilityTheoremResult {
   ReachabilityTheoremResult result = 1;
-  BufferRange range = 2;
+  BufferInterval interval = 2;
 }
 
 message PolicyTheoremResult {
