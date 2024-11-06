@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	prototypes "github.com/cosmos/gogoproto/types"
-
 	"github.com/sourcenetwork/acp_core/internal/parser"
 	"github.com/sourcenetwork/acp_core/internal/policy"
 	"github.com/sourcenetwork/acp_core/internal/raccoon"
@@ -155,7 +153,7 @@ func (h *SetStateHandler) parseCtx(ctx context.Context, manager runtime.RuntimeM
 			Message:   err.Error(),
 			Kind:      types.LocatedMessage_ERROR,
 			InputName: "policy",
-			// Range is empty because unmarshaling still doesn't support that feature
+			// Interval is empty because unmarshaling still doesn't support that feature
 		}
 		errs.PolicyErrors = append(errs.PolicyErrors, err)
 	}
@@ -209,9 +207,8 @@ func (h *SetStateHandler) setPolicy(ctx context.Context, manager runtime.Runtime
 
 	polHandler := policy.CreatePolicyHandler{}
 	polResp, err := polHandler.Execute(ctx, manager, &types.CreatePolicyRequest{
-		Policy:       simCtx.PolicyDefinition,
-		MarshalType:  types.PolicyMarshalingType_SHORT_YAML,
-		CreationTime: prototypes.TimestampNow(),
+		Policy:      simCtx.PolicyDefinition,
+		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
 	})
 
 	if err != nil {
@@ -220,7 +217,7 @@ func (h *SetStateHandler) setPolicy(ctx context.Context, manager runtime.Runtime
 				Message:   err.Error(),
 				Kind:      types.LocatedMessage_ERROR,
 				InputName: "policy",
-				// Range is empty because unmarshaling still doesn't support that feature
+				// Interval is empty because unmarshaling still doesn't support that feature
 			}
 			errs.PolicyErrors = append(errs.PolicyErrors, msg)
 			return errs, nil
@@ -251,7 +248,7 @@ func (h *SetStateHandler) registerObjects(ctx context.Context, manager runtime.R
 				Message:   err.Error(),
 				Kind:      types.LocatedMessage_ERROR,
 				InputName: "relationships",
-				Range:     obj.Range,
+				Interval:  obj.Interval,
 			}
 			errs.RelationshipsErrors = append(errs.RelationshipsErrors, err)
 			continue
@@ -261,9 +258,8 @@ func (h *SetStateHandler) registerObjects(ctx context.Context, manager runtime.R
 
 		handler := relationship.RegisterObjectHandler{}
 		_, err = handler.Execute(authenticatedCtx, manager, &types.RegisterObjectRequest{
-			PolicyId:     simCtx.Policy.Id,
-			Object:       obj.Obj.Object,
-			CreationTime: prototypes.TimestampNow(),
+			PolicyId: simCtx.Policy.Id,
+			Object:   obj.Obj.Object,
 		})
 		if err != nil {
 			if errors.Is(err, errors.ErrorType_BAD_INPUT) {
@@ -271,7 +267,7 @@ func (h *SetStateHandler) registerObjects(ctx context.Context, manager runtime.R
 					Message:   err.Error(),
 					Kind:      types.LocatedMessage_ERROR,
 					InputName: "relationships",
-					Range:     obj.Range,
+					Interval:  obj.Interval,
 				}
 				errs.RelationshipsErrors = append(errs.RelationshipsErrors, err)
 			} else {
@@ -296,7 +292,7 @@ func (h *SetStateHandler) setRelationships(ctx context.Context, manager runtime.
 				Message:   "object not registered",
 				Kind:      types.LocatedMessage_ERROR,
 				InputName: "relationships",
-				Range:     indexedObj.Range,
+				Interval:  indexedObj.Interval,
 			}
 			errs.RelationshipsErrors = append(errs.RelationshipsErrors, msg)
 			continue
@@ -307,7 +303,6 @@ func (h *SetStateHandler) setRelationships(ctx context.Context, manager runtime.
 		handler := relationship.SetRelationshipHandler{}
 		_, err := handler.Execute(authenticatedCtx, manager, &types.SetRelationshipRequest{
 			PolicyId:     simCtx.Policy.Id,
-			CreationTime: prototypes.TimestampNow(),
 			Relationship: indexedObj.Obj,
 		})
 		if err != nil {
@@ -316,7 +311,7 @@ func (h *SetStateHandler) setRelationships(ctx context.Context, manager runtime.
 					Message:   err.Error(),
 					Kind:      types.LocatedMessage_ERROR,
 					InputName: "relationships",
-					Range:     indexedObj.Range,
+					Interval:  indexedObj.Interval,
 				}
 				errs.RelationshipsErrors = append(errs.RelationshipsErrors, err)
 			} else {

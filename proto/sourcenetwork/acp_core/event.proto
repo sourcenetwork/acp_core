@@ -24,9 +24,31 @@ message EventObjectRegistered {
   string object_id = 4;
 }
 
+message EventObjectArchived {
+  string actor = 1;
+  string policy_id = 2;
+  string object_resource = 3;
+  string object_id = 4;
+}
+
 message EventObjectUnarchived {
   string actor = 1;
   string policy_id = 2;
   string object_resource = 3;
   string object_id = 4;
+}
+
+message EventObjectTransfered {
+  string new_owner = 1;
+  string policy_id = 2;
+  string object_resource = 3;
+  string object_id = 4;
+}
+
+message EventObjectRegistrationAmended {
+  string old_owner = 1;
+  string new_owner = 2;
+  string policy_id = 3;
+  string object_resource = 4;
+  string object_id = 5;
 }

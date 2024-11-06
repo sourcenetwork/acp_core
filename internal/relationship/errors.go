@@ -29,10 +29,22 @@ func newRegisterObjectErr(err error) error {
 	return errors.Wrap("register object failed", err)
 }
 
-func newUnregisterObjectErr(err error) error {
-	return errors.Wrap("unregister object failed", err)
+func newArchiveObjectErr(err error) error {
+	return errors.Wrap("archive object failed", err)
 }
 
 func newValidateRelationshipErr(err error) error {
 	return errors.Wrap("validate relationship failed", err)
+}
+
+func newTransferObjectErr(err error) error {
+	return errors.Wrap("transfer object failed", err)
+}
+
+func newAmendRegistrationErr(err error) error {
+	return errors.Wrap("amend registration failed", err)
+}
+
+func newUnarchiveObjectErr(err error) error {
+	return errors.Wrap("unarchiving object failed", err)
 }

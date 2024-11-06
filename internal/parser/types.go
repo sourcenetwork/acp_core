@@ -16,15 +16,15 @@ var _ errors.TypedError = (*ParserReport)(nil)
 // LocatedObject models a parsed Object and a range
 // pointing to the span in the input stream from which the object was parsed
 type LocatedObject[T any] struct {
-	Obj   T
-	Range *types.BufferRange
+	Obj      T
+	Interval *types.BufferInterval
 }
 
-// NewLocatedObjectFromCtx creates a new ObjectWithRange from an ANTLR Parser Context
+// NewLocatedObjectFromCtx creates a new ObjectWithInterval from an ANTLR Parser Context
 func NewLocatedObjectFromCtx[T any](obj T, ctx antlr.ParserRuleContext) LocatedObject[T] {
 	return LocatedObject[T]{
 		Obj: obj,
-		Range: &types.BufferRange{
+		Interval: &types.BufferInterval{
 			Start: &types.BufferPosition{
 				Line:   uint64(ctx.GetStart().GetLine()),
 				Column: uint64(ctx.GetStart().GetColumn()),

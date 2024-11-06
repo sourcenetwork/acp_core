@@ -8,7 +8,7 @@ import (
 
 func (e *LocatedMessage) ToError() error {
 	return errors.New(fmt.Sprintf("%v:%v:%v %v",
-		e.InputName, e.Range.Start.Line, e.Range.Start.Column, e.Message),
+		e.InputName, e.Interval.Start.Line, e.Interval.Start.Column, e.Message),
 		errors.ErrorType_BAD_INPUT)
 }
 

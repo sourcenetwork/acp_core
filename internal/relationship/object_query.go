@@ -50,5 +50,6 @@ func GetObjectRegistrationHandler(ctx context.Context, runtime runtime.RuntimeMa
 	return &types.GetObjectRegistrationResponse{
 		IsRegistered: true,
 		OwnerId:      actor.Id,
+		Record:       record,
 	}, nil
 }

@@ -46,28 +46,58 @@ service ACPEngine {
   // giving them autonomy to share the object and revoke acces to the object,
   // much like owners in a Discretionary Access Control model.
   //
-  // Attempting to register a previously registered Object is an error,
-  // Object IDs are therefore assumed to be unique within a Policy.
+  // Attempting to register a previously registered Object - whether active or archived -
+  // is an error, Object IDs are therefore assumed to be unique within a Policy.
   rpc RegisterObject(RegisterObjectRequest) returns (RegisterObjectResponse);
 
-  // UnregisterObject let's an Object's Owner effectively "unshare" their Object.
-  // This method wipes all Relationships referencing the given Object.
+  // ArchiveObject sets an Object's state as "archived"
   //
-  // A caveat is that after removing the Relationships, a record of the original Object owner
-  // is maintained to prevent an "ownership hijack" attack.
+  // Archiving an object removes all relationships and effectively disables it.
+  // No relationships can be created for it and no checks can be executed against it.
+  // Note that the original owner record is preserved for security reasons.
   //
+  // Attempting to archive an already archived object is a noop.
+  // Archiving an object that isn't registered is an error
+  // Only the owner can archive an object
+  //
+  // Note: ownership records aren't removed since doing so could lead to an ownership hijack attack.
+  // In order to pass ownership to another owner, use the TransferObject method.
+  //
+  // Hijack attacks look like the following:
   // Suppose Bob owns object Foo, which is shared with Bob but not Eve.
-  // Eve wants to access Foo but was not given permission to, they could "hijack" Bob's object by waiting for Bob to Unregister Foo,
+  // Eve wants to access Foo but was not given permission to it.
+  // Eve could "hijack" Bob's object by waiting for Bob to delete its ownership record for Foo,
   // then submitting a RegisterObject Cmd, effectively becoming Foo's new owner.
   // If Charlie has a copy of the object, Eve could convince Charlie to share his copy, granting Eve access to Foo.
   // The previous scenario where an unauthorized user is able to claim ownership to data previously unaccessible to them
   // is an "ownership hijack".
-  rpc UnregisterObject(UnregisterObjectRequest) returns (UnregisterObjectResponse);
+  rpc ArchiveObject(ArchiveObjectRequest) returns (ArchiveObjectResponse);
 
   // TransferObject updates an Object's Owner to some other actor in the system, after which the original owner
   // loses autonomy over the object and cannot create or modify relationships.
+  //
+  // Transfering object cannot be reversed, unless another Transfer is initiated by the new owner.
+  //
+  // Transfering an archived or unregistered object is an error.
+  // Only the owner can transfer an object.
   rpc TransferObject(TransferObjectRequest) returns (TransferObjectResponse);
 
+  // UnarchiveObject returns a previously archived object to active status,
+  // such that the owner is able to create relationships and share that object again.
+  //
+  // Only the original owner of the object can unarchive it, returns an authorization error otherwise.
+  // Attempting to unarchive an active or unregistered object is an error.
+  rpc UnarchiveObject(UnarchiveObjectRequest) returns (UnarchiveObjectResponse);
+
+  // AmendRegistration transfer an object's ownership between two users
+  // This operation can only be executed by the root principal.
+  //
+  // Amending the registration of an archived or unregistered object is an error.
+  rpc AmendRegistration(AmendRegistrationRequest) returns (AmendRegistrationResponse);
+
+  // EvaluateTheorem executes the given theorem against a stored policy.
+  //
+  // Returns an error if the policy does not exist.
   rpc EvaluateTheorem(EvaluateTheoremRequest) returns (EvaluateTheoremResponse);
 
   // GetObjectRegistration returns the registration status of an Object
@@ -76,46 +106,47 @@ service ACPEngine {
   // FilterRelationships returns filtered set of Relationships in a Policy.
   rpc FilterRelationships(FilterRelationshipsRequest) returns (FilterRelationshipsResponse);
 
+  // ValidatePolicy verifies whether a policy payload is valid and would be accepted
+  // by the engine, without creating it.
+  //
+  // Returns ok or validation errors found within the policy construction
   rpc ValidatePolicy(ValidatePolicyRequest) returns (ValidatePolicyResponse);
 
+  // SetParams tunes the parameters of the ACP Engine.
+  // This operation can only be done by the root principal
   rpc SetParams(SetParamsRequest) returns (SetParamsResponse);
 
+  // GetParams returns the current params set in the ACP Engine.
   rpc GetParams(GetParamsRequest) returns (GetParamsResponse);
 
+  // VerifyAccessRequest evaluates an AccessRequest
+  // Returns true if the authenticated actor is allowed to perform the operations they are requesting.
+  // FIXME: there is no need to bind the authenticated principal to the AccessRequest,
+  // the verification is often done by someone else
   rpc VerifyAccessRequest(VerifyAccessRequestRequest) returns (VerifyAccessRequestResponse);
 
-  // Expand, Reverse lookup
-
-  /*
-     not sure how to handle the capability system yet
-     // CheckAccess executes an Access Request for an User and stores the result of the evaluation in SourceHub.
-     // The resulting evaluation is used to generate a cryptographic proof that the given Access Request
-     // was valid at a particular block height.
-     rpc CheckAccess (CmdCheckAccess) returns (CmdCheckAccessResponse);
-  */
+  // TODO: Expand and Reverse lookup
 }
 
 message CreatePolicyRequest {
   string policy = 1;
   sourcenetwork.acp_core.PolicyMarshalingType marshal_type = 2;
-  google.protobuf.Timestamp creation_time = 3;
-  // metadata is a map of attributes which can be used to store
+  // attributes is a map of attributes which can be used to store
   // caller supplied satellite data
-  map<string, string> metadata = 4;
+  map<string, string> attributes = 3;
 }
 
 message CreatePolicyResponse {
   Policy policy = 1;
-  map<string, string> metadata = 2;
+  map<string, string> attributes = 2;
 }
 
 message SetRelationshipRequest {
   string policy_id = 1;
-  google.protobuf.Timestamp creation_time = 2;
-  sourcenetwork.acp_core.Relationship relationship = 3;
-  // metadata is a map of attributes which can be used to store
+  sourcenetwork.acp_core.Relationship relationship = 2;
+  // attributes is a map of attributes which can be used to store
   // caller supplied satellite data
-  map<string, string> metadata = 4;
+  map<string, string> attributes = 3;
 }
 
 message SetRelationshipResponse {
@@ -137,25 +168,23 @@ message DeleteRelationshipResponse {
 message RegisterObjectRequest {
   string policy_id = 1;
   sourcenetwork.acp_core.Object object = 2;
-  google.protobuf.Timestamp creation_time = 3;
-  // metadata is a map of attributes which can be used to store
+  // attributes is a map of attributes which can be used to store
   // caller supplied satellite data
-  map<string, string> metadata = 4;
+  map<string, string> attributes = 3;
 }
 
 message RegisterObjectResponse {
-  sourcenetwork.acp_core.RegistrationResult result = 1;
-  sourcenetwork.acp_core.RelationshipRecord record = 2;
+  sourcenetwork.acp_core.RelationshipRecord record = 1;
 }
 
-message UnregisterObjectRequest {
+message ArchiveObjectRequest {
   string policy_id = 1;
   sourcenetwork.acp_core.Object object = 2;
 }
 
-message UnregisterObjectResponse {
-  bool found = 1;
-  uint64 relationships_removed = 2;
+message ArchiveObjectResponse {
+  uint64 relationships_removed = 1;
+  bool record_modified = 2;
 }
 
 message GetObjectRegistrationRequest {
@@ -166,6 +195,7 @@ message GetObjectRegistrationRequest {
 message GetObjectRegistrationResponse {
   bool is_registered = 1;
   string owner_id = 2;
+  sourcenetwork.acp_core.RelationshipRecord record = 3;
 }
 
 message FilterRelationshipsRequest {
@@ -210,7 +240,9 @@ message TransferObjectRequest {
   sourcenetwork.acp_core.Actor new_owner = 3;
 }
 
-message TransferObjectResponse {}
+message TransferObjectResponse {
+  sourcenetwork.acp_core.RelationshipRecord record = 1;
+}
 
 message ValidatePolicyRequest {
   string policy = 1;
@@ -261,4 +293,24 @@ message EvaluateTheoremRequest {
 message EvaluateTheoremResponse {
   // result of theorem verification
   sourcenetwork.acp_core.AnnotatedPolicyTheoremResult result = 1;
+}
+
+message AmendRegistrationRequest {
+  string policy_id = 1;
+  Object object = 2;
+  Actor new_owner = 3;
+}
+
+message AmendRegistrationResponse {
+  RelationshipRecord record = 1;
+}
+
+message UnarchiveObjectRequest {
+  string policy_id = 1;
+  sourcenetwork.acp_core.Object object = 2;
+}
+
+message UnarchiveObjectResponse {
+  RelationshipRecord record = 1;
+  bool record_modified = 2;
 }

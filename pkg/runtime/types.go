@@ -3,7 +3,9 @@ package runtime
 import (
 	"context"
 	"fmt"
+	"time"
 
+	prototypes "github.com/cosmos/gogoproto/types"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	rcdb "github.com/sourcenetwork/raccoondb"
@@ -56,10 +58,10 @@ func WithEventManager(manager EventManager) Opt {
 	}
 }
 
-// WithLogicalClock sets the LogicalClock implementation for the Runtime
-func WithLogicalClock(clock LogicalClockService) Opt {
+// WithTimeService sets the TimeService implementation for the Runtime
+func WithTimeService(service TimeService) Opt {
 	return func(m *runtimeManager) error {
-		m.clock = clock
+		m.timeServ = service
 		return nil
 	}
 }
@@ -78,6 +80,7 @@ func NewRuntimeManager(opts ...Opt) (RuntimeManager, error) {
 		eventMan: &DefaultEventManager{},
 		logger:   types.NoopLogger(),
 		memKV:    rcdb.NewMemKV(),
+		timeServ: NewLocalTimeService(),
 	}
 	WithMemKV()(rt)
 
@@ -97,7 +100,7 @@ type runtimeManager struct {
 	eventMan   EventManager
 	logger     Logger
 	metrics    MetricService
-	clock      LogicalClockService
+	timeServ   TimeService
 	cleanupFns []func() error
 	terminated bool
 }
@@ -122,8 +125,8 @@ func (m *runtimeManager) GetAccountDIDIssuer() AccountDIDIssuer {
 	return nil
 }
 
-func (m *runtimeManager) GetLogicalClock() LogicalClockService {
-	return m.clock
+func (m *runtimeManager) GetTimeService() TimeService {
+	return m.timeServ
 }
 
 func (m *runtimeManager) Terminate() error {
@@ -142,7 +145,7 @@ type RuntimeManager interface {
 	GetEventManager() EventManager
 	GetLogger() Logger
 	GetMetricService() MetricService
-	GetLogicalClock() LogicalClockService
+	GetTimeService() TimeService
 
 	// Terminate frees up all used up resources, leaving the runtime unusable
 	Terminate() error
@@ -159,6 +162,28 @@ type EventManager interface {
 	EmitEvent(any) error
 }
 
-type LogicalClockService interface {
-	GetCurrentTime(ctx context.Context) uint64 // maybe make this generic over seomthing that can be compared
+// TimeService models a Time oracle
+type TimeService interface {
+	// GetNow returns the current Time
+	GetNow(ctx context.Context) (*prototypes.Timestamp, error)
+}
+
+var _ TimeService = (*LocalTimeService)(nil)
+
+// NewLocalTimeService returns a TimeService implementation which uses the local clock to return the time
+// This is the default TimeService implementation used in the RuntimeManager
+func NewLocalTimeService() TimeService {
+	return &LocalTimeService{}
+}
+
+// LocalTimeService returns time from the local clock
+type LocalTimeService struct{}
+
+func (s *LocalTimeService) GetNow(ctx context.Context) (*prototypes.Timestamp, error) {
+	now := time.Now()
+	ts, err := prototypes.TimestampProto(now)
+	if err != nil {
+		return nil, errors.NewFromBaseError(err, errors.ErrorType_INTERNAL, "LocalTimeService failed: converting timestamp")
+	}
+	return ts, nil
 }

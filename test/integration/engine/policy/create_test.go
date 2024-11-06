@@ -9,12 +9,9 @@ import (
 	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/test"
-	testutil "github.com/sourcenetwork/acp_core/test/util"
 )
 
-var timestamp = testutil.MustDateTimeToProto("2024-01-01 00:00:00")
-
-var metadata map[string]string = map[string]string{
+var attributes map[string]string = map[string]string{
 	"test": "abc",
 }
 
@@ -46,20 +43,19 @@ actor:
   doc: my actor
 `
 	msg := types.CreatePolicyRequest{
-		Policy:       policyStr,
-		MarshalType:  types.PolicyMarshalingType_SHORT_YAML,
-		CreationTime: timestamp,
-		Metadata:     metadata,
+		Policy:      policyStr,
+		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		Attributes:  attributes,
 	}
 	resp, err := ctx.Engine.CreatePolicy(ctx, &msg)
 
 	require.Nil(t, err)
-	require.Equal(t, metadata, resp.Metadata)
+	require.Equal(t, attributes, resp.Attributes)
 	require.Equal(t, resp.Policy, &types.Policy{
 		Id:           "d011372c7e2cd34fd63777c513bb5eb16713834b855f424158474b77c1800410",
 		Name:         "policy",
 		Description:  "ok",
-		CreationTime: timestamp,
+		CreationTime: ctx.Time,
 		Resources: []*types.Resource{
 			&types.Resource{
 				Name: "file",

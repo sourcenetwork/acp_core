@@ -1187,6 +1187,7 @@ func _PlaygroundService_Simulate_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+var PlaygroundService_serviceDesc = _PlaygroundService_serviceDesc
 var _PlaygroundService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "sourcenetwork.acp_core.PlaygroundService",
 	HandlerType: (*PlaygroundServiceServer)(nil),

@@ -5,10 +5,7 @@ import (
 
 	"github.com/sourcenetwork/acp_core/pkg/auth"
 	"github.com/sourcenetwork/acp_core/pkg/types"
-	testutil "github.com/sourcenetwork/acp_core/test/util"
 )
-
-var DefaultTs = testutil.MustDateTimeToProto("2024-01-01 00:00:00")
 
 type ActionState struct {
 	PolicyId      string
@@ -22,9 +19,8 @@ type CreatePolicyAction struct {
 
 func (a *CreatePolicyAction) Run(ctx *TestCtx) *types.Policy {
 	req := types.CreatePolicyRequest{
-		Policy:       a.Policy,
-		MarshalType:  types.PolicyMarshalingType_SHORT_YAML,
-		CreationTime: DefaultTs,
+		Policy:      a.Policy,
+		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
 	}
 
 	resp, err := ctx.Engine.CreatePolicy(ctx, &req)
@@ -50,9 +46,8 @@ type RegisterObjectsAction struct {
 func (a *RegisterObjectsAction) Run(ctx *TestCtx) {
 	for _, obj := range a.Objects {
 		req := types.RegisterObjectRequest{
-			PolicyId:     a.PolicyId,
-			Object:       obj,
-			CreationTime: DefaultTs,
+			PolicyId: a.PolicyId,
+			Object:   obj,
 		}
 		_, err := ctx.Engine.RegisterObject(ctx, &req)
 
@@ -69,7 +64,6 @@ func (a *SetRelationshipsAction) Run(ctx *TestCtx) {
 	for _, rel := range a.Relationships {
 		req := types.SetRelationshipRequest{
 			PolicyId:     a.PolicyId,
-			CreationTime: DefaultTs,
 			Relationship: rel,
 		}
 		_, err := ctx.Engine.SetRelationship(ctx, &req)
@@ -77,21 +71,107 @@ func (a *SetRelationshipsAction) Run(ctx *TestCtx) {
 	}
 }
 
-type UnregisterObjectAction struct {
-	PolicyId string
-	Objects  []*types.Object
+type ArchiveObjectAction struct {
+	PolicyId    string
+	Object      *types.Object
+	Expected    *types.ArchiveObjectResponse
+	ExpectedErr error
 }
 
-func (a *UnregisterObjectAction) Run(ctx *TestCtx) {
-	for _, obj := range a.Objects {
-		req := types.UnregisterObjectRequest{
-			PolicyId: a.PolicyId,
-			Object:   obj,
-		}
-		_, err := ctx.Engine.UnregisterObject(ctx, &req)
-
-		require.NoError(ctx.T, err)
+func (a *ArchiveObjectAction) Run(ctx *TestCtx) {
+	req := types.ArchiveObjectRequest{
+		PolicyId: a.PolicyId,
+		Object:   a.Object,
 	}
+	resp, err := ctx.Engine.ArchiveObject(ctx, &req)
+
+	if a.ExpectedErr != nil {
+		require.ErrorIs(ctx.T, err, a.ExpectedErr)
+	} else {
+		require.NoError(ctx.T, err)
+		if a.Expected != nil {
+			require.Equal(ctx.T, a.Expected, resp)
+		}
+	}
+}
+
+type UnarchiveObjectAction struct {
+	PolicyId    string
+	Object      *types.Object
+	Expected    *types.UnarchiveObjectResponse
+	ExpectedErr error
+}
+
+func (a *UnarchiveObjectAction) Run(ctx *TestCtx) {
+	req := types.UnarchiveObjectRequest{
+		PolicyId: a.PolicyId,
+		Object:   a.Object,
+	}
+	resp, err := ctx.Engine.UnarchiveObject(ctx, &req)
+
+	if a.ExpectedErr != nil {
+		require.ErrorIs(ctx.T, err, a.ExpectedErr)
+	} else {
+		require.NoError(ctx.T, err)
+		if a.Expected != nil {
+			require.Equal(ctx.T, a.Expected, resp)
+		}
+	}
+}
+
+type TransferObjectAction struct {
+	PolicyId    string
+	Object      *types.Object
+	NewOwner    string
+	Expected    *types.TransferObjectResponse
+	ExpectedErr error
+}
+
+func (a *TransferObjectAction) Run(ctx *TestCtx) *types.TransferObjectResponse {
+	req := types.TransferObjectRequest{
+		PolicyId: a.PolicyId,
+		Object:   a.Object,
+		NewOwner: types.NewActor(a.NewOwner),
+	}
+	resp, err := ctx.Engine.TransferObject(ctx, &req)
+
+	if a.ExpectedErr != nil {
+		require.ErrorIs(ctx.T, err, a.ExpectedErr)
+	} else {
+		require.NoError(ctx.T, err)
+		if a.Expected != nil {
+			require.Equal(ctx.T, a.Expected, resp)
+		}
+	}
+	return resp
+}
+
+type AmendRegistrationAction struct {
+	PolicyId    string
+	Object      *types.Object
+	NewOwner    string
+	Expected    *types.AmendRegistrationResponse
+	ExpectedErr error
+}
+
+func (a *AmendRegistrationAction) Run(ctx *TestCtx) *types.AmendRegistrationResponse {
+	req := types.AmendRegistrationRequest{
+		PolicyId: a.PolicyId,
+		Object:   a.Object,
+		NewOwner: types.NewActor(a.NewOwner),
+	}
+	resp, err := ctx.Engine.AmendRegistration(ctx, &req)
+
+	if a.ExpectedErr != nil {
+		require.ErrorIs(ctx.T, err, a.ExpectedErr)
+	} else {
+		require.NoError(ctx.T, err)
+		if a.Expected != nil {
+
+			require.Equal(ctx.T, a.Expected, resp)
+		}
+	}
+	return resp
 }
 
 type PolicySetupAction struct {

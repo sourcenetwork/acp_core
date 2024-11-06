@@ -8,7 +8,7 @@ import (
 	fmt "fmt"
 	grpc1 "github.com/cosmos/gogoproto/grpc"
 	proto "github.com/cosmos/gogoproto/proto"
-	types "github.com/cosmos/gogoproto/types"
+	_ "github.com/cosmos/gogoproto/types"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -29,12 +29,11 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type CreatePolicyRequest struct {
-	Policy       string               `protobuf:"bytes,1,opt,name=policy,proto3" json:"policy,omitempty"`
-	MarshalType  PolicyMarshalingType `protobuf:"varint,2,opt,name=marshal_type,json=marshalType,proto3,enum=sourcenetwork.acp_core.PolicyMarshalingType" json:"marshal_type,omitempty"`
-	CreationTime *types.Timestamp     `protobuf:"bytes,3,opt,name=creation_time,json=creationTime,proto3" json:"creation_time,omitempty"`
-	// metadata is a map of attributes which can be used to store
+	Policy      string               `protobuf:"bytes,1,opt,name=policy,proto3" json:"policy,omitempty"`
+	MarshalType PolicyMarshalingType `protobuf:"varint,2,opt,name=marshal_type,json=marshalType,proto3,enum=sourcenetwork.acp_core.PolicyMarshalingType" json:"marshal_type,omitempty"`
+	// attributes is a map of attributes which can be used to store
 	// caller supplied satellite data
-	Metadata map[string]string `protobuf:"bytes,4,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Attributes map[string]string `protobuf:"bytes,3,rep,name=attributes,proto3" json:"attributes,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (m *CreatePolicyRequest) Reset()         { *m = CreatePolicyRequest{} }
@@ -84,23 +83,16 @@ func (m *CreatePolicyRequest) GetMarshalType() PolicyMarshalingType {
 	return PolicyMarshalingType_UNKNOWN
 }
 
-func (m *CreatePolicyRequest) GetCreationTime() *types.Timestamp {
+func (m *CreatePolicyRequest) GetAttributes() map[string]string {
 	if m != nil {
-		return m.CreationTime
-	}
-	return nil
-}
-
-func (m *CreatePolicyRequest) GetMetadata() map[string]string {
-	if m != nil {
-		return m.Metadata
+		return m.Attributes
 	}
 	return nil
 }
 
 type CreatePolicyResponse struct {
-	Policy   *Policy           `protobuf:"bytes,1,opt,name=policy,proto3" json:"policy,omitempty"`
-	Metadata map[string]string `protobuf:"bytes,2,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Policy     *Policy           `protobuf:"bytes,1,opt,name=policy,proto3" json:"policy,omitempty"`
+	Attributes map[string]string `protobuf:"bytes,2,rep,name=attributes,proto3" json:"attributes,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (m *CreatePolicyResponse) Reset()         { *m = CreatePolicyResponse{} }
@@ -143,20 +135,19 @@ func (m *CreatePolicyResponse) GetPolicy() *Policy {
 	return nil
 }
 
-func (m *CreatePolicyResponse) GetMetadata() map[string]string {
+func (m *CreatePolicyResponse) GetAttributes() map[string]string {
 	if m != nil {
-		return m.Metadata
+		return m.Attributes
 	}
 	return nil
 }
 
 type SetRelationshipRequest struct {
-	PolicyId     string           `protobuf:"bytes,1,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`
-	CreationTime *types.Timestamp `protobuf:"bytes,2,opt,name=creation_time,json=creationTime,proto3" json:"creation_time,omitempty"`
-	Relationship *Relationship    `protobuf:"bytes,3,opt,name=relationship,proto3" json:"relationship,omitempty"`
-	// metadata is a map of attributes which can be used to store
+	PolicyId     string        `protobuf:"bytes,1,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`
+	Relationship *Relationship `protobuf:"bytes,2,opt,name=relationship,proto3" json:"relationship,omitempty"`
+	// attributes is a map of attributes which can be used to store
 	// caller supplied satellite data
-	Metadata map[string]string `protobuf:"bytes,4,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Attributes map[string]string `protobuf:"bytes,3,rep,name=attributes,proto3" json:"attributes,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (m *SetRelationshipRequest) Reset()         { *m = SetRelationshipRequest{} }
@@ -199,13 +190,6 @@ func (m *SetRelationshipRequest) GetPolicyId() string {
 	return ""
 }
 
-func (m *SetRelationshipRequest) GetCreationTime() *types.Timestamp {
-	if m != nil {
-		return m.CreationTime
-	}
-	return nil
-}
-
 func (m *SetRelationshipRequest) GetRelationship() *Relationship {
 	if m != nil {
 		return m.Relationship
@@ -213,9 +197,9 @@ func (m *SetRelationshipRequest) GetRelationship() *Relationship {
 	return nil
 }
 
-func (m *SetRelationshipRequest) GetMetadata() map[string]string {
+func (m *SetRelationshipRequest) GetAttributes() map[string]string {
 	if m != nil {
-		return m.Metadata
+		return m.Attributes
 	}
 	return nil
 }
@@ -370,12 +354,11 @@ func (m *DeleteRelationshipResponse) GetRecordFound() bool {
 }
 
 type RegisterObjectRequest struct {
-	PolicyId     string           `protobuf:"bytes,1,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`
-	Object       *Object          `protobuf:"bytes,2,opt,name=object,proto3" json:"object,omitempty"`
-	CreationTime *types.Timestamp `protobuf:"bytes,3,opt,name=creation_time,json=creationTime,proto3" json:"creation_time,omitempty"`
-	// metadata is a map of attributes which can be used to store
+	PolicyId string  `protobuf:"bytes,1,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`
+	Object   *Object `protobuf:"bytes,2,opt,name=object,proto3" json:"object,omitempty"`
+	// attributes is a map of attributes which can be used to store
 	// caller supplied satellite data
-	Metadata map[string]string `protobuf:"bytes,4,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Attributes map[string]string `protobuf:"bytes,3,rep,name=attributes,proto3" json:"attributes,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (m *RegisterObjectRequest) Reset()         { *m = RegisterObjectRequest{} }
@@ -425,23 +408,15 @@ func (m *RegisterObjectRequest) GetObject() *Object {
 	return nil
 }
 
-func (m *RegisterObjectRequest) GetCreationTime() *types.Timestamp {
+func (m *RegisterObjectRequest) GetAttributes() map[string]string {
 	if m != nil {
-		return m.CreationTime
-	}
-	return nil
-}
-
-func (m *RegisterObjectRequest) GetMetadata() map[string]string {
-	if m != nil {
-		return m.Metadata
+		return m.Attributes
 	}
 	return nil
 }
 
 type RegisterObjectResponse struct {
-	Result RegistrationResult  `protobuf:"varint,1,opt,name=result,proto3,enum=sourcenetwork.acp_core.RegistrationResult" json:"result,omitempty"`
-	Record *RelationshipRecord `protobuf:"bytes,2,opt,name=record,proto3" json:"record,omitempty"`
+	Record *RelationshipRecord `protobuf:"bytes,1,opt,name=record,proto3" json:"record,omitempty"`
 }
 
 func (m *RegisterObjectResponse) Reset()         { *m = RegisterObjectResponse{} }
@@ -477,13 +452,6 @@ func (m *RegisterObjectResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_RegisterObjectResponse proto.InternalMessageInfo
 
-func (m *RegisterObjectResponse) GetResult() RegistrationResult {
-	if m != nil {
-		return m.Result
-	}
-	return RegistrationResult_NoOp
-}
-
 func (m *RegisterObjectResponse) GetRecord() *RelationshipRecord {
 	if m != nil {
 		return m.Record
@@ -491,23 +459,23 @@ func (m *RegisterObjectResponse) GetRecord() *RelationshipRecord {
 	return nil
 }
 
-type UnregisterObjectRequest struct {
+type ArchiveObjectRequest struct {
 	PolicyId string  `protobuf:"bytes,1,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`
 	Object   *Object `protobuf:"bytes,2,opt,name=object,proto3" json:"object,omitempty"`
 }
 
-func (m *UnregisterObjectRequest) Reset()         { *m = UnregisterObjectRequest{} }
-func (m *UnregisterObjectRequest) String() string { return proto.CompactTextString(m) }
-func (*UnregisterObjectRequest) ProtoMessage()    {}
-func (*UnregisterObjectRequest) Descriptor() ([]byte, []int) {
+func (m *ArchiveObjectRequest) Reset()         { *m = ArchiveObjectRequest{} }
+func (m *ArchiveObjectRequest) String() string { return proto.CompactTextString(m) }
+func (*ArchiveObjectRequest) ProtoMessage()    {}
+func (*ArchiveObjectRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_57413e5d6b87f68c, []int{8}
 }
-func (m *UnregisterObjectRequest) XXX_Unmarshal(b []byte) error {
+func (m *ArchiveObjectRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *UnregisterObjectRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *ArchiveObjectRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_UnregisterObjectRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_ArchiveObjectRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -517,49 +485,49 @@ func (m *UnregisterObjectRequest) XXX_Marshal(b []byte, deterministic bool) ([]b
 		return b[:n], nil
 	}
 }
-func (m *UnregisterObjectRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UnregisterObjectRequest.Merge(m, src)
+func (m *ArchiveObjectRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ArchiveObjectRequest.Merge(m, src)
 }
-func (m *UnregisterObjectRequest) XXX_Size() int {
+func (m *ArchiveObjectRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *UnregisterObjectRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_UnregisterObjectRequest.DiscardUnknown(m)
+func (m *ArchiveObjectRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ArchiveObjectRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_UnregisterObjectRequest proto.InternalMessageInfo
+var xxx_messageInfo_ArchiveObjectRequest proto.InternalMessageInfo
 
-func (m *UnregisterObjectRequest) GetPolicyId() string {
+func (m *ArchiveObjectRequest) GetPolicyId() string {
 	if m != nil {
 		return m.PolicyId
 	}
 	return ""
 }
 
-func (m *UnregisterObjectRequest) GetObject() *Object {
+func (m *ArchiveObjectRequest) GetObject() *Object {
 	if m != nil {
 		return m.Object
 	}
 	return nil
 }
 
-type UnregisterObjectResponse struct {
-	Found                bool   `protobuf:"varint,1,opt,name=found,proto3" json:"found,omitempty"`
-	RelationshipsRemoved uint64 `protobuf:"varint,2,opt,name=relationships_removed,json=relationshipsRemoved,proto3" json:"relationships_removed,omitempty"`
+type ArchiveObjectResponse struct {
+	RelationshipsRemoved uint64 `protobuf:"varint,1,opt,name=relationships_removed,json=relationshipsRemoved,proto3" json:"relationships_removed,omitempty"`
+	RecordModified       bool   `protobuf:"varint,2,opt,name=record_modified,json=recordModified,proto3" json:"record_modified,omitempty"`
 }
 
-func (m *UnregisterObjectResponse) Reset()         { *m = UnregisterObjectResponse{} }
-func (m *UnregisterObjectResponse) String() string { return proto.CompactTextString(m) }
-func (*UnregisterObjectResponse) ProtoMessage()    {}
-func (*UnregisterObjectResponse) Descriptor() ([]byte, []int) {
+func (m *ArchiveObjectResponse) Reset()         { *m = ArchiveObjectResponse{} }
+func (m *ArchiveObjectResponse) String() string { return proto.CompactTextString(m) }
+func (*ArchiveObjectResponse) ProtoMessage()    {}
+func (*ArchiveObjectResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_57413e5d6b87f68c, []int{9}
 }
-func (m *UnregisterObjectResponse) XXX_Unmarshal(b []byte) error {
+func (m *ArchiveObjectResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *UnregisterObjectResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *ArchiveObjectResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_UnregisterObjectResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_ArchiveObjectResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -569,30 +537,30 @@ func (m *UnregisterObjectResponse) XXX_Marshal(b []byte, deterministic bool) ([]
 		return b[:n], nil
 	}
 }
-func (m *UnregisterObjectResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UnregisterObjectResponse.Merge(m, src)
+func (m *ArchiveObjectResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ArchiveObjectResponse.Merge(m, src)
 }
-func (m *UnregisterObjectResponse) XXX_Size() int {
+func (m *ArchiveObjectResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *UnregisterObjectResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_UnregisterObjectResponse.DiscardUnknown(m)
+func (m *ArchiveObjectResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ArchiveObjectResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_UnregisterObjectResponse proto.InternalMessageInfo
+var xxx_messageInfo_ArchiveObjectResponse proto.InternalMessageInfo
 
-func (m *UnregisterObjectResponse) GetFound() bool {
-	if m != nil {
-		return m.Found
-	}
-	return false
-}
-
-func (m *UnregisterObjectResponse) GetRelationshipsRemoved() uint64 {
+func (m *ArchiveObjectResponse) GetRelationshipsRemoved() uint64 {
 	if m != nil {
 		return m.RelationshipsRemoved
 	}
 	return 0
+}
+
+func (m *ArchiveObjectResponse) GetRecordModified() bool {
+	if m != nil {
+		return m.RecordModified
+	}
+	return false
 }
 
 type GetObjectRegistrationRequest struct {
@@ -648,8 +616,9 @@ func (m *GetObjectRegistrationRequest) GetObject() *Object {
 }
 
 type GetObjectRegistrationResponse struct {
-	IsRegistered bool   `protobuf:"varint,1,opt,name=is_registered,json=isRegistered,proto3" json:"is_registered,omitempty"`
-	OwnerId      string `protobuf:"bytes,2,opt,name=owner_id,json=ownerId,proto3" json:"owner_id,omitempty"`
+	IsRegistered bool                `protobuf:"varint,1,opt,name=is_registered,json=isRegistered,proto3" json:"is_registered,omitempty"`
+	OwnerId      string              `protobuf:"bytes,2,opt,name=owner_id,json=ownerId,proto3" json:"owner_id,omitempty"`
+	Record       *RelationshipRecord `protobuf:"bytes,3,opt,name=record,proto3" json:"record,omitempty"`
 }
 
 func (m *GetObjectRegistrationResponse) Reset()         { *m = GetObjectRegistrationResponse{} }
@@ -697,6 +666,13 @@ func (m *GetObjectRegistrationResponse) GetOwnerId() string {
 		return m.OwnerId
 	}
 	return ""
+}
+
+func (m *GetObjectRegistrationResponse) GetRecord() *RelationshipRecord {
+	if m != nil {
+		return m.Record
+	}
+	return nil
 }
 
 type FilterRelationshipsRequest struct {
@@ -1132,6 +1108,7 @@ func (m *TransferObjectRequest) GetNewOwner() *Actor {
 }
 
 type TransferObjectResponse struct {
+	Record *RelationshipRecord `protobuf:"bytes,1,opt,name=record,proto3" json:"record,omitempty"`
 }
 
 func (m *TransferObjectResponse) Reset()         { *m = TransferObjectResponse{} }
@@ -1166,6 +1143,13 @@ func (m *TransferObjectResponse) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_TransferObjectResponse proto.InternalMessageInfo
+
+func (m *TransferObjectResponse) GetRecord() *RelationshipRecord {
+	if m != nil {
+		return m.Record
+	}
+	return nil
+}
 
 type ValidatePolicyRequest struct {
 	Policy      string               `protobuf:"bytes,1,opt,name=policy,proto3" json:"policy,omitempty"`
@@ -1714,21 +1698,229 @@ func (m *EvaluateTheoremResponse) GetResult() *AnnotatedPolicyTheoremResult {
 	return nil
 }
 
+type AmendRegistrationRequest struct {
+	PolicyId string  `protobuf:"bytes,1,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`
+	Object   *Object `protobuf:"bytes,2,opt,name=object,proto3" json:"object,omitempty"`
+	NewOwner *Actor  `protobuf:"bytes,3,opt,name=new_owner,json=newOwner,proto3" json:"new_owner,omitempty"`
+}
+
+func (m *AmendRegistrationRequest) Reset()         { *m = AmendRegistrationRequest{} }
+func (m *AmendRegistrationRequest) String() string { return proto.CompactTextString(m) }
+func (*AmendRegistrationRequest) ProtoMessage()    {}
+func (*AmendRegistrationRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_57413e5d6b87f68c, []int{34}
+}
+func (m *AmendRegistrationRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AmendRegistrationRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AmendRegistrationRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AmendRegistrationRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AmendRegistrationRequest.Merge(m, src)
+}
+func (m *AmendRegistrationRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *AmendRegistrationRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_AmendRegistrationRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AmendRegistrationRequest proto.InternalMessageInfo
+
+func (m *AmendRegistrationRequest) GetPolicyId() string {
+	if m != nil {
+		return m.PolicyId
+	}
+	return ""
+}
+
+func (m *AmendRegistrationRequest) GetObject() *Object {
+	if m != nil {
+		return m.Object
+	}
+	return nil
+}
+
+func (m *AmendRegistrationRequest) GetNewOwner() *Actor {
+	if m != nil {
+		return m.NewOwner
+	}
+	return nil
+}
+
+type AmendRegistrationResponse struct {
+	Record *RelationshipRecord `protobuf:"bytes,1,opt,name=record,proto3" json:"record,omitempty"`
+}
+
+func (m *AmendRegistrationResponse) Reset()         { *m = AmendRegistrationResponse{} }
+func (m *AmendRegistrationResponse) String() string { return proto.CompactTextString(m) }
+func (*AmendRegistrationResponse) ProtoMessage()    {}
+func (*AmendRegistrationResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_57413e5d6b87f68c, []int{35}
+}
+func (m *AmendRegistrationResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AmendRegistrationResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AmendRegistrationResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AmendRegistrationResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AmendRegistrationResponse.Merge(m, src)
+}
+func (m *AmendRegistrationResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *AmendRegistrationResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_AmendRegistrationResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AmendRegistrationResponse proto.InternalMessageInfo
+
+func (m *AmendRegistrationResponse) GetRecord() *RelationshipRecord {
+	if m != nil {
+		return m.Record
+	}
+	return nil
+}
+
+type UnarchiveObjectRequest struct {
+	PolicyId string  `protobuf:"bytes,1,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`
+	Object   *Object `protobuf:"bytes,2,opt,name=object,proto3" json:"object,omitempty"`
+}
+
+func (m *UnarchiveObjectRequest) Reset()         { *m = UnarchiveObjectRequest{} }
+func (m *UnarchiveObjectRequest) String() string { return proto.CompactTextString(m) }
+func (*UnarchiveObjectRequest) ProtoMessage()    {}
+func (*UnarchiveObjectRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_57413e5d6b87f68c, []int{36}
+}
+func (m *UnarchiveObjectRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *UnarchiveObjectRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_UnarchiveObjectRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *UnarchiveObjectRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UnarchiveObjectRequest.Merge(m, src)
+}
+func (m *UnarchiveObjectRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *UnarchiveObjectRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_UnarchiveObjectRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UnarchiveObjectRequest proto.InternalMessageInfo
+
+func (m *UnarchiveObjectRequest) GetPolicyId() string {
+	if m != nil {
+		return m.PolicyId
+	}
+	return ""
+}
+
+func (m *UnarchiveObjectRequest) GetObject() *Object {
+	if m != nil {
+		return m.Object
+	}
+	return nil
+}
+
+type UnarchiveObjectResponse struct {
+	Record         *RelationshipRecord `protobuf:"bytes,1,opt,name=record,proto3" json:"record,omitempty"`
+	RecordModified bool                `protobuf:"varint,2,opt,name=record_modified,json=recordModified,proto3" json:"record_modified,omitempty"`
+}
+
+func (m *UnarchiveObjectResponse) Reset()         { *m = UnarchiveObjectResponse{} }
+func (m *UnarchiveObjectResponse) String() string { return proto.CompactTextString(m) }
+func (*UnarchiveObjectResponse) ProtoMessage()    {}
+func (*UnarchiveObjectResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_57413e5d6b87f68c, []int{37}
+}
+func (m *UnarchiveObjectResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *UnarchiveObjectResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_UnarchiveObjectResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *UnarchiveObjectResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UnarchiveObjectResponse.Merge(m, src)
+}
+func (m *UnarchiveObjectResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *UnarchiveObjectResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_UnarchiveObjectResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UnarchiveObjectResponse proto.InternalMessageInfo
+
+func (m *UnarchiveObjectResponse) GetRecord() *RelationshipRecord {
+	if m != nil {
+		return m.Record
+	}
+	return nil
+}
+
+func (m *UnarchiveObjectResponse) GetRecordModified() bool {
+	if m != nil {
+		return m.RecordModified
+	}
+	return false
+}
+
 func init() {
 	proto.RegisterType((*CreatePolicyRequest)(nil), "sourcenetwork.acp_core.CreatePolicyRequest")
-	proto.RegisterMapType((map[string]string)(nil), "sourcenetwork.acp_core.CreatePolicyRequest.MetadataEntry")
+	proto.RegisterMapType((map[string]string)(nil), "sourcenetwork.acp_core.CreatePolicyRequest.AttributesEntry")
 	proto.RegisterType((*CreatePolicyResponse)(nil), "sourcenetwork.acp_core.CreatePolicyResponse")
-	proto.RegisterMapType((map[string]string)(nil), "sourcenetwork.acp_core.CreatePolicyResponse.MetadataEntry")
+	proto.RegisterMapType((map[string]string)(nil), "sourcenetwork.acp_core.CreatePolicyResponse.AttributesEntry")
 	proto.RegisterType((*SetRelationshipRequest)(nil), "sourcenetwork.acp_core.SetRelationshipRequest")
-	proto.RegisterMapType((map[string]string)(nil), "sourcenetwork.acp_core.SetRelationshipRequest.MetadataEntry")
+	proto.RegisterMapType((map[string]string)(nil), "sourcenetwork.acp_core.SetRelationshipRequest.AttributesEntry")
 	proto.RegisterType((*SetRelationshipResponse)(nil), "sourcenetwork.acp_core.SetRelationshipResponse")
 	proto.RegisterType((*DeleteRelationshipRequest)(nil), "sourcenetwork.acp_core.DeleteRelationshipRequest")
 	proto.RegisterType((*DeleteRelationshipResponse)(nil), "sourcenetwork.acp_core.DeleteRelationshipResponse")
 	proto.RegisterType((*RegisterObjectRequest)(nil), "sourcenetwork.acp_core.RegisterObjectRequest")
-	proto.RegisterMapType((map[string]string)(nil), "sourcenetwork.acp_core.RegisterObjectRequest.MetadataEntry")
+	proto.RegisterMapType((map[string]string)(nil), "sourcenetwork.acp_core.RegisterObjectRequest.AttributesEntry")
 	proto.RegisterType((*RegisterObjectResponse)(nil), "sourcenetwork.acp_core.RegisterObjectResponse")
-	proto.RegisterType((*UnregisterObjectRequest)(nil), "sourcenetwork.acp_core.UnregisterObjectRequest")
-	proto.RegisterType((*UnregisterObjectResponse)(nil), "sourcenetwork.acp_core.UnregisterObjectResponse")
+	proto.RegisterType((*ArchiveObjectRequest)(nil), "sourcenetwork.acp_core.ArchiveObjectRequest")
+	proto.RegisterType((*ArchiveObjectResponse)(nil), "sourcenetwork.acp_core.ArchiveObjectResponse")
 	proto.RegisterType((*GetObjectRegistrationRequest)(nil), "sourcenetwork.acp_core.GetObjectRegistrationRequest")
 	proto.RegisterType((*GetObjectRegistrationResponse)(nil), "sourcenetwork.acp_core.GetObjectRegistrationResponse")
 	proto.RegisterType((*FilterRelationshipsRequest)(nil), "sourcenetwork.acp_core.FilterRelationshipsRequest")
@@ -1753,6 +1945,10 @@ func init() {
 	proto.RegisterType((*GetPolicyCatalogueResponse)(nil), "sourcenetwork.acp_core.GetPolicyCatalogueResponse")
 	proto.RegisterType((*EvaluateTheoremRequest)(nil), "sourcenetwork.acp_core.EvaluateTheoremRequest")
 	proto.RegisterType((*EvaluateTheoremResponse)(nil), "sourcenetwork.acp_core.EvaluateTheoremResponse")
+	proto.RegisterType((*AmendRegistrationRequest)(nil), "sourcenetwork.acp_core.AmendRegistrationRequest")
+	proto.RegisterType((*AmendRegistrationResponse)(nil), "sourcenetwork.acp_core.AmendRegistrationResponse")
+	proto.RegisterType((*UnarchiveObjectRequest)(nil), "sourcenetwork.acp_core.UnarchiveObjectRequest")
+	proto.RegisterType((*UnarchiveObjectResponse)(nil), "sourcenetwork.acp_core.UnarchiveObjectResponse")
 }
 
 func init() {
@@ -1760,100 +1956,103 @@ func init() {
 }
 
 var fileDescriptor_57413e5d6b87f68c = []byte{
-	// 1474 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x59, 0x4f, 0x6f, 0x1b, 0x45,
-	0x14, 0xef, 0x3a, 0x6d, 0x1a, 0xbf, 0x38, 0x6e, 0xba, 0x49, 0x5c, 0x77, 0x4b, 0x4d, 0x98, 0x36,
-	0x90, 0xd2, 0x60, 0x83, 0x53, 0xaa, 0x92, 0x22, 0x55, 0xfd, 0x93, 0x96, 0xd2, 0x56, 0x8d, 0xb6,
-	0x69, 0x41, 0x08, 0xc9, 0xdd, 0xac, 0x27, 0xce, 0x50, 0x7b, 0xc7, 0xcc, 0x8c, 0x1b, 0x22, 0xa4,
-	0x0a, 0x41, 0x25, 0xae, 0x7c, 0x04, 0x2e, 0x48, 0x7c, 0x07, 0x8e, 0x5c, 0x38, 0x56, 0xe2, 0x00,
-	0x47, 0xd4, 0x7c, 0x11, 0xb4, 0x3b, 0xb3, 0xce, 0xae, 0xbd, 0x63, 0xaf, 0x1b, 0x52, 0x6e, 0x99,
-	0xd9, 0xf7, 0xf7, 0xf7, 0x7e, 0x33, 0xf3, 0x9e, 0x03, 0x67, 0x38, 0xed, 0x30, 0x17, 0x7b, 0x58,
-	0x6c, 0x53, 0xf6, 0xa4, 0xe2, 0xb8, 0xed, 0x9a, 0x4b, 0x19, 0xae, 0x60, 0xaf, 0x41, 0x3c, 0x5c,
-	0x6e, 0x33, 0x2a, 0xa8, 0x59, 0x88, 0x09, 0x95, 0x43, 0x21, 0xeb, 0xcd, 0x06, 0xa5, 0x8d, 0x26,
-	0xae, 0x04, 0x52, 0x1b, 0x9d, 0xcd, 0x8a, 0x20, 0x2d, 0xcc, 0x85, 0xd3, 0x6a, 0x4b, 0x45, 0x6b,
-	0x49, 0x63, 0xdd, 0x71, 0x5d, 0xcc, 0x79, 0xad, 0x8e, 0x5d, 0xc2, 0x09, 0xf5, 0x94, 0xf4, 0xdb,
-	0x1a, 0x69, 0xd7, 0x11, 0x4e, 0x93, 0x36, 0x3a, 0x2a, 0x1c, 0x4b, 0x17, 0x73, 0x9b, 0x36, 0x89,
-	0xbb, 0xa3, 0x84, 0xce, 0x0d, 0x14, 0xaa, 0xf1, 0x2d, 0xca, 0xc4, 0x10, 0x51, 0x86, 0x9b, 0x8e,
-	0x20, 0xd4, 0xe3, 0x5b, 0x24, 0x4c, 0xa8, 0x9a, 0x42, 0xb4, 0xc6, 0x71, 0x13, 0xbb, 0x82, 0xb2,
-	0x21, 0xe1, 0xf2, 0x1d, 0x2e, 0x70, 0x4b, 0x09, 0x9d, 0xd5, 0x08, 0x89, 0x2d, 0x4c, 0x59, 0x28,
-	0x85, 0xfe, 0xcc, 0xc0, 0xcc, 0x75, 0x86, 0x1d, 0x81, 0xd7, 0x82, 0x34, 0x6c, 0xfc, 0x75, 0x07,
-	0x73, 0x61, 0x16, 0x60, 0x5c, 0xe6, 0x55, 0x34, 0xe6, 0x8d, 0xc5, 0xac, 0xad, 0x56, 0xe6, 0x7d,
-	0xc8, 0xb5, 0x1c, 0xc6, 0xb7, 0x9c, 0x66, 0x4d, 0xec, 0xb4, 0x71, 0x31, 0x33, 0x6f, 0x2c, 0xe6,
-	0xab, 0x4b, 0xe5, 0xe4, 0x7a, 0x96, 0xa5, 0xd1, 0x7b, 0x52, 0x83, 0x78, 0x8d, 0xf5, 0x9d, 0x36,
-	0xb6, 0x27, 0x95, 0x05, 0x7f, 0x61, 0x5e, 0x81, 0x29, 0xd7, 0xf7, 0x4f, 0xa8, 0x57, 0xf3, 0x8b,
-	0x5d, 0x1c, 0x9b, 0x37, 0x16, 0x27, 0xab, 0x56, 0x59, 0x32, 0xa1, 0x1c, 0x32, 0xa1, 0xbc, 0x1e,
-	0x32, 0xc1, 0xce, 0x85, 0x0a, 0xfe, 0x96, 0xf9, 0x10, 0x26, 0x5a, 0x58, 0x38, 0x75, 0x47, 0x38,
-	0xc5, 0xc3, 0xf3, 0x63, 0x8b, 0x93, 0xd5, 0x8f, 0x74, 0xd1, 0x24, 0x24, 0x5a, 0xbe, 0xa7, 0x74,
-	0x57, 0x3d, 0xc1, 0x76, 0xec, 0xae, 0x29, 0xeb, 0x32, 0x4c, 0xc5, 0x3e, 0x99, 0xd3, 0x30, 0xf6,
-	0x04, 0x87, 0x70, 0xf8, 0x7f, 0x9a, 0xb3, 0x70, 0xe4, 0xa9, 0xd3, 0xec, 0x48, 0x10, 0xb2, 0xb6,
-	0x5c, 0xac, 0x64, 0x2e, 0x19, 0x68, 0xd7, 0x80, 0xd9, 0xb8, 0x33, 0xde, 0xa6, 0x1e, 0xc7, 0xe6,
-	0xc5, 0x18, 0xac, 0x93, 0xd5, 0xd2, 0x60, 0xe0, 0xba, 0xb0, 0x3f, 0x8a, 0x24, 0x99, 0x09, 0x92,
-	0x5c, 0x49, 0x97, 0xa4, 0xf4, 0x7b, 0x30, 0x59, 0xfe, 0x95, 0x81, 0xc2, 0x03, 0x2c, 0xec, 0x08,
-	0x53, 0x43, 0xfa, 0x9c, 0x82, 0xac, 0x3a, 0x16, 0xa4, 0xae, 0x8c, 0x4d, 0xc8, 0x8d, 0xdb, 0xf5,
-	0xfe, 0x92, 0x67, 0x46, 0x2c, 0xf9, 0x27, 0x90, 0x8b, 0x1e, 0x0f, 0x45, 0x99, 0xb3, 0x3a, 0x44,
-	0x62, 0x01, 0xc6, 0x34, 0xcd, 0xcf, 0xfb, 0xc8, 0xf3, 0xb1, 0xce, 0x4a, 0x72, 0xa6, 0x07, 0x83,
-	0xec, 0x73, 0x03, 0x4e, 0xf4, 0xf9, 0x53, 0x14, 0x5a, 0x80, 0x3c, 0xc3, 0x2e, 0x65, 0xf5, 0x1a,
-	0xfe, 0x86, 0x70, 0x81, 0x25, 0xbe, 0x13, 0xf6, 0x94, 0xdc, 0x5d, 0x95, 0x9b, 0xe6, 0x35, 0x18,
-	0x97, 0x1b, 0x0a, 0xdd, 0x77, 0x53, 0xa1, 0x13, 0x68, 0xd8, 0x4a, 0x13, 0x7d, 0x6f, 0xc0, 0xc9,
-	0x1b, 0xb8, 0x89, 0x05, 0x1e, 0xb9, 0xc6, 0xbd, 0x25, 0xca, 0xbc, 0x6a, 0x89, 0xd0, 0x15, 0xb0,
-	0x92, 0x62, 0x50, 0x68, 0xbc, 0xe5, 0xfb, 0x09, 0xd0, 0xd8, 0xa4, 0x1d, 0x2f, 0xc4, 0x62, 0x52,
-	0xee, 0xdd, 0xf4, 0xb7, 0xd0, 0xef, 0x19, 0x98, 0xb3, 0x71, 0xc3, 0x87, 0x85, 0xdd, 0xdf, 0xf8,
-	0x0a, 0xbb, 0x22, 0x55, 0x06, 0x17, 0x61, 0x9c, 0x06, 0xd2, 0x2a, 0x76, 0xed, 0x51, 0x55, 0x36,
-	0x95, 0xf4, 0xfe, 0x2f, 0xb4, 0xcf, 0xfa, 0x38, 0x79, 0x59, 0x0f, 0x5b, 0x42, 0x5a, 0x07, 0x43,
-	0xc9, 0x9f, 0x0d, 0x28, 0xf4, 0xba, 0x53, 0x35, 0x08, 0xa8, 0xc6, 0x3b, 0x4d, 0x11, 0x58, 0xca,
-	0x0f, 0xa2, 0x9a, 0xaf, 0xcf, 0x82, 0x54, 0xed, 0x40, 0xc3, 0x56, 0x9a, 0xff, 0x09, 0x5d, 0x3d,
-	0x38, 0xf1, 0xd0, 0x63, 0xaf, 0xad, 0xd2, 0x08, 0x43, 0xb1, 0xdf, 0x9f, 0xc2, 0x64, 0x16, 0x8e,
-	0x44, 0x09, 0x29, 0x17, 0xe6, 0x32, 0xcc, 0x45, 0xb9, 0xcd, 0x6b, 0x0c, 0xb7, 0xe8, 0x53, 0x2c,
-	0x93, 0x3e, 0x6c, 0xcf, 0xc6, 0x3e, 0xda, 0xf2, 0x1b, 0xe2, 0xf0, 0xc6, 0x2d, 0x2c, 0x42, 0xfb,
-	0x51, 0x04, 0x0f, 0x30, 0xb7, 0x1a, 0x9c, 0xd6, 0x38, 0x55, 0x09, 0x9e, 0x81, 0x29, 0xe2, 0xc7,
-	0x2f, 0xb3, 0xef, 0xde, 0x42, 0x39, 0xc2, 0xed, 0xee, 0x9e, 0x79, 0x12, 0x26, 0xe8, 0xb6, 0x87,
-	0x99, 0x1f, 0x99, 0x64, 0xd4, 0xd1, 0x60, 0x7d, 0xbb, 0x8e, 0x7e, 0x30, 0xc0, 0xba, 0x49, 0x9a,
-	0x02, 0x33, 0x3b, 0x9e, 0x74, 0xaa, 0xcb, 0x65, 0x22, 0xec, 0x88, 0x54, 0x5a, 0x4b, 0x69, 0xe8,
-	0xf2, 0x40, 0xe9, 0xd8, 0x5d, 0x6d, 0xe4, 0xc2, 0xa9, 0xc4, 0x20, 0x54, 0x92, 0x37, 0xe0, 0xa8,
-	0xe4, 0x16, 0x2f, 0x1a, 0xc1, 0x49, 0x1c, 0x85, 0x96, 0xa1, 0x2a, 0x42, 0x30, 0x7d, 0x0b, 0x8b,
-	0x78, 0x7f, 0x95, 0x87, 0x4c, 0x37, 0xb1, 0x0c, 0xa9, 0xa3, 0xdf, 0x0c, 0x38, 0x1e, 0x11, 0xda,
-	0x67, 0xbb, 0x70, 0x1a, 0x40, 0xa1, 0xc7, 0x9c, 0x6d, 0x85, 0xbc, 0xc2, 0xd3, 0x76, 0xb6, 0xfb,
-	0x9a, 0xb8, 0xb1, 0x7d, 0x36, 0x71, 0x68, 0x0e, 0x66, 0xee, 0x12, 0x2e, 0xa3, 0x27, 0x38, 0x2c,
-	0x22, 0xb2, 0x61, 0x36, 0xbe, 0xad, 0xd2, 0x5a, 0x01, 0x59, 0x4b, 0x82, 0x43, 0x5c, 0x87, 0x25,
-	0xd6, 0x95, 0x47, 0x0b, 0x30, 0x23, 0x9f, 0x83, 0xc1, 0x78, 0x2e, 0xc1, 0x6c, 0x5c, 0x6c, 0xd0,
-	0xb9, 0x44, 0xbf, 0x1a, 0x30, 0xb7, 0xce, 0x1c, 0x8f, 0x6f, 0xbe, 0x96, 0x27, 0x62, 0x05, 0xb2,
-	0x1e, 0xde, 0xae, 0x05, 0x47, 0x41, 0x3d, 0x0f, 0xa7, 0x75, 0xaa, 0x57, 0x25, 0x63, 0x3d, 0xbc,
-	0x7d, 0xdf, 0x17, 0x47, 0x45, 0x28, 0xf4, 0x46, 0x2a, 0x53, 0x43, 0xdf, 0x19, 0x30, 0xf7, 0xc8,
-	0x69, 0x92, 0xfa, 0xff, 0xd6, 0xcc, 0xa3, 0x3b, 0x50, 0xe8, 0x8d, 0x60, 0x0f, 0xf7, 0xa7, 0xfe,
-	0x97, 0x10, 0xf7, 0x60, 0xe1, 0xa3, 0x8b, 0x19, 0xa3, 0xac, 0xd6, 0xe2, 0x0d, 0x45, 0xd3, 0x89,
-	0x60, 0xe3, 0x1e, 0x6f, 0xa0, 0x4f, 0x61, 0xfa, 0x01, 0x16, 0x6b, 0x0e, 0x73, 0x5a, 0xdd, 0x6b,
-	0xc1, 0x3f, 0x10, 0xc1, 0xc6, 0xd0, 0x03, 0x21, 0xd5, 0x94, 0x34, 0x9a, 0x81, 0xe3, 0x11, 0x5b,
-	0x0a, 0x30, 0x53, 0x9e, 0xcb, 0xa8, 0x03, 0x74, 0x47, 0x1e, 0xc3, 0x98, 0xe0, 0x2b, 0x7b, 0xfd,
-	0xd1, 0x00, 0xeb, 0x11, 0x66, 0x64, 0x73, 0xe7, 0x6a, 0x30, 0x9e, 0x2a, 0x27, 0xa9, 0xb8, 0x75,
-	0x17, 0xf2, 0x6a, 0xa6, 0x65, 0x52, 0x5c, 0x71, 0x6c, 0x41, 0x4f, 0x94, 0xa8, 0x8b, 0x29, 0x27,
-	0xba, 0x44, 0xcb, 0x70, 0x2a, 0x31, 0x90, 0x41, 0xd5, 0x41, 0x97, 0xe0, 0x64, 0xf7, 0x4a, 0xba,
-	0x1e, 0x4e, 0xcc, 0x69, 0x82, 0x47, 0x2e, 0x58, 0x49, 0x9a, 0xca, 0xdb, 0x2a, 0x64, 0xbb, 0x03,
-	0xb8, 0x42, 0xf4, 0x9d, 0xc1, 0x9c, 0xdb, 0xb3, 0xb1, 0xa7, 0x89, 0xbe, 0x84, 0xc2, 0xaa, 0xdf,
-	0x9f, 0x38, 0x02, 0xaf, 0xcb, 0x99, 0x36, 0x15, 0xb0, 0x0b, 0x90, 0x57, 0x1f, 0xd5, 0x24, 0xac,
-	0x88, 0x37, 0x25, 0x77, 0x95, 0x29, 0xd4, 0x80, 0x13, 0x7d, 0xd6, 0x55, 0xfc, 0x77, 0x63, 0xfd,
-	0xce, 0x64, 0xf5, 0x82, 0xb6, 0x24, 0x9e, 0x47, 0x85, 0x23, 0x70, 0x7d, 0x2d, 0x6a, 0x3a, 0xde,
-	0xf9, 0x54, 0x7f, 0x39, 0x06, 0xd9, 0xab, 0xd7, 0xd7, 0x56, 0x83, 0x9f, 0x47, 0x4c, 0x02, 0xb9,
-	0xe8, 0x00, 0x67, 0x9e, 0x1f, 0x61, 0x96, 0xb5, 0x96, 0x46, 0x99, 0x09, 0xcd, 0xc7, 0x90, 0xed,
-	0x16, 0xc9, 0x5c, 0xd4, 0xa9, 0xf6, 0xbe, 0x5c, 0xd6, 0xb9, 0x14, 0x92, 0xca, 0xc3, 0xb7, 0x60,
-	0xf6, 0xd3, 0xc0, 0xfc, 0x60, 0xa8, 0x81, 0x5e, 0xb2, 0x59, 0xd5, 0x51, 0x54, 0x94, 0x73, 0x02,
-	0xb9, 0xe8, 0xe3, 0xa3, 0x47, 0x32, 0xe1, 0xe5, 0xd2, 0x23, 0x99, 0xf8, 0x9e, 0x11, 0xc8, 0x45,
-	0x1f, 0x1b, 0xbd, 0xab, 0x84, 0x97, 0x4b, 0xef, 0x2a, 0xf1, 0xfd, 0x62, 0x70, 0xac, 0x67, 0x30,
-	0x34, 0xcb, 0xa3, 0x4d, 0xac, 0x56, 0x25, 0xb5, 0xfc, 0x5e, 0x19, 0xfb, 0x27, 0x30, 0x7d, 0x19,
-	0xb5, 0x13, 0xa3, 0xbe, 0x8c, 0x03, 0x06, 0x3c, 0x0a, 0xf9, 0xf8, 0xd8, 0x61, 0xbe, 0x37, 0xd2,
-	0x34, 0x64, 0x95, 0xd3, 0x8a, 0x2b, 0x87, 0x1d, 0x98, 0xee, 0xed, 0xea, 0x4d, 0x2d, 0x64, 0x9a,
-	0x79, 0xc3, 0x7a, 0x3f, 0xbd, 0xc2, 0x5e, 0x9e, 0xf1, 0x77, 0x5d, 0x9f, 0x67, 0x62, 0xa7, 0xa2,
-	0xcf, 0x33, 0xb9, 0x5d, 0xf0, 0x99, 0xd4, 0x73, 0xc1, 0xe9, 0x99, 0x94, 0x7c, 0xcf, 0xea, 0x99,
-	0xa4, 0xbb, 0x39, 0x9f, 0x1b, 0x30, 0x97, 0x38, 0x56, 0x98, 0x17, 0x06, 0x9c, 0x70, 0xed, 0xe8,
-	0x63, 0x7d, 0x38, 0xa2, 0x96, 0x0a, 0xe3, 0x19, 0xcc, 0x24, 0x74, 0xfd, 0xa6, 0x96, 0x9e, 0xfa,
-	0x39, 0xc5, 0x5a, 0x1e, 0x49, 0x67, 0xaf, 0xd6, 0xf1, 0x36, 0x49, 0x5f, 0xeb, 0xc4, 0x86, 0x4e,
-	0x5f, 0x6b, 0x4d, 0xf7, 0xf5, 0x18, 0xb2, 0xdd, 0xf6, 0x47, 0x7f, 0xd5, 0xf7, 0x76, 0x5b, 0xfa,
-	0xab, 0xbe, 0xaf, 0x97, 0x0a, 0x1f, 0x93, 0x21, 0x1e, 0x6e, 0xa5, 0xf6, 0xd0, 0xdf, 0x84, 0x3d,
-	0x83, 0x99, 0x84, 0x16, 0x46, 0x5f, 0x34, 0x7d, 0xe3, 0xa5, 0x2f, 0xda, 0x80, 0x1e, 0xe9, 0xda,
-	0xea, 0x1f, 0x2f, 0x4b, 0xc6, 0x8b, 0x97, 0x25, 0xe3, 0x9f, 0x97, 0x25, 0xe3, 0xa7, 0xdd, 0xd2,
-	0xa1, 0x17, 0xbb, 0xa5, 0x43, 0x7f, 0xef, 0x96, 0x0e, 0x7d, 0x71, 0xbe, 0x41, 0xc4, 0x56, 0x67,
-	0xa3, 0xec, 0xd2, 0x56, 0x45, 0xf7, 0x3f, 0x82, 0x27, 0x8d, 0x8a, 0xdf, 0x62, 0xf3, 0x8d, 0xf1,
-	0xe0, 0xf7, 0x9f, 0xe5, 0x7f, 0x03, 0x00, 0x00, 0xff, 0xff, 0x11, 0x6f, 0x43, 0x72, 0x27, 0x19,
-	0x00, 0x00,
+	// 1525 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x59, 0x4d, 0x73, 0xd3, 0xc6,
+	0x1b, 0x47, 0xce, 0x9f, 0x10, 0x3f, 0x79, 0x23, 0x1b, 0x3b, 0x24, 0xe2, 0x8f, 0x4b, 0x05, 0x29,
+	0xa1, 0x04, 0xbb, 0x38, 0x94, 0x61, 0x68, 0x69, 0x27, 0x40, 0xa0, 0x14, 0x18, 0x32, 0x82, 0x72,
+	0x68, 0x69, 0x8d, 0x22, 0x6f, 0x9c, 0x6d, 0x6c, 0xad, 0xbb, 0xbb, 0x4e, 0xc8, 0x74, 0x86, 0xe9,
+	0xb4, 0x4c, 0x3b, 0xc3, 0xa9, 0xe7, 0x1e, 0x7a, 0xe9, 0xa5, 0x33, 0xfd, 0x08, 0xfd, 0x02, 0x3d,
+	0x72, 0xec, 0xb1, 0x03, 0xc7, 0x7e, 0x89, 0x8e, 0xb4, 0x2b, 0x5b, 0xb2, 0xb5, 0x8e, 0x0c, 0x04,
+	0x6e, 0xd6, 0xea, 0x79, 0xfb, 0x3d, 0x6f, 0xfb, 0x3c, 0x32, 0x1c, 0xe3, 0xb4, 0xc5, 0x5c, 0xec,
+	0x61, 0xb1, 0x4d, 0xd9, 0x66, 0xc9, 0x71, 0x9b, 0x15, 0x97, 0x32, 0x5c, 0xc2, 0x5e, 0x8d, 0x78,
+	0xb8, 0xd8, 0x64, 0x54, 0x50, 0x34, 0x13, 0x23, 0x2a, 0x86, 0x44, 0xe6, 0x5b, 0x35, 0x4a, 0x6b,
+	0x75, 0x5c, 0x0a, 0xa8, 0xd6, 0x5a, 0xeb, 0x25, 0x41, 0x1a, 0x98, 0x0b, 0xa7, 0xd1, 0x94, 0x8c,
+	0xe6, 0xa2, 0x46, 0xba, 0xe3, 0xba, 0x98, 0xf3, 0x4a, 0x15, 0xbb, 0x84, 0x13, 0xea, 0x29, 0xea,
+	0x77, 0x34, 0xd4, 0xae, 0x23, 0x9c, 0x3a, 0xad, 0xb5, 0x94, 0x39, 0xa6, 0xce, 0xe6, 0x26, 0xad,
+	0x13, 0x77, 0x47, 0x11, 0x9d, 0xec, 0x4b, 0x54, 0xe1, 0x1b, 0x94, 0x89, 0x5d, 0x48, 0x19, 0xae,
+	0x3b, 0x82, 0x50, 0x8f, 0x6f, 0x90, 0x10, 0x50, 0x39, 0x05, 0x69, 0x85, 0xe3, 0x3a, 0x76, 0x05,
+	0x65, 0xbb, 0x98, 0xcb, 0x77, 0xb8, 0xc0, 0x0d, 0x45, 0x74, 0x5c, 0x43, 0x24, 0x36, 0x30, 0x65,
+	0x21, 0x95, 0xf5, 0x4b, 0x06, 0xa6, 0x2f, 0x33, 0xec, 0x08, 0xbc, 0x1a, 0xc0, 0xb0, 0xf1, 0x37,
+	0x2d, 0xcc, 0x05, 0x9a, 0x81, 0x61, 0x89, 0x6b, 0xd6, 0x38, 0x6a, 0x2c, 0x64, 0x6d, 0xf5, 0x84,
+	0x6e, 0xc3, 0x58, 0xc3, 0x61, 0x7c, 0xc3, 0xa9, 0x57, 0xc4, 0x4e, 0x13, 0xcf, 0x66, 0x8e, 0x1a,
+	0x0b, 0x13, 0xe5, 0xc5, 0x62, 0x72, 0x3c, 0x8b, 0x52, 0xe8, 0x2d, 0xc9, 0x41, 0xbc, 0xda, 0xdd,
+	0x9d, 0x26, 0xb6, 0x47, 0x95, 0x04, 0xff, 0x01, 0x7d, 0x01, 0xe0, 0x08, 0xc1, 0xc8, 0x5a, 0x4b,
+	0x60, 0x3e, 0x3b, 0x74, 0x74, 0x68, 0x61, 0xb4, 0xfc, 0x81, 0x4e, 0x5c, 0x82, 0xa5, 0xc5, 0xe5,
+	0x36, 0xf7, 0x8a, 0x27, 0xd8, 0x8e, 0x1d, 0x11, 0x67, 0x5e, 0x84, 0xc9, 0xae, 0xd7, 0xe8, 0x20,
+	0x0c, 0x6d, 0xe2, 0x10, 0x95, 0xff, 0x13, 0xe5, 0x60, 0xff, 0x96, 0x53, 0x6f, 0x49, 0x2c, 0x59,
+	0x5b, 0x3e, 0x5c, 0xc8, 0x9c, 0x37, 0xac, 0x7f, 0x0d, 0xc8, 0xc5, 0x55, 0xf2, 0x26, 0xf5, 0x38,
+	0x46, 0xe7, 0x62, 0xde, 0x19, 0x2d, 0x17, 0xfa, 0xe3, 0x6f, 0x7b, 0xef, 0x7e, 0x0c, 0x6c, 0x26,
+	0x00, 0xfb, 0x61, 0x3a, 0xb0, 0x52, 0xf3, 0x5e, 0xa2, 0xfd, 0x35, 0x03, 0x33, 0x77, 0xb0, 0xb0,
+	0x23, 0x89, 0x17, 0x66, 0xc3, 0x61, 0xc8, 0xaa, 0x2c, 0x27, 0x55, 0x25, 0x6c, 0x44, 0x1e, 0x5c,
+	0xaf, 0xa2, 0x4f, 0x60, 0x2c, 0x9a, 0xac, 0x81, 0xe0, 0xd1, 0xf2, 0x71, 0x1d, 0xac, 0x98, 0xfc,
+	0x18, 0x27, 0xfa, 0x2a, 0x21, 0x17, 0x3e, 0xd2, 0xc9, 0x49, 0x36, 0x75, 0x2f, 0x1d, 0xf4, 0xd8,
+	0x80, 0x43, 0x3d, 0x5a, 0x55, 0x46, 0xcc, 0xc3, 0x04, 0xc3, 0x2e, 0x65, 0xd5, 0x0a, 0x7e, 0x48,
+	0xb8, 0xc0, 0xd2, 0x4d, 0x23, 0xf6, 0xb8, 0x3c, 0x5d, 0x91, 0x87, 0xe8, 0x12, 0x0c, 0xcb, 0x03,
+	0xe5, 0xa5, 0x77, 0x53, 0x79, 0x29, 0xe0, 0xb0, 0x15, 0xa7, 0xf5, 0xbd, 0x01, 0x73, 0x57, 0x70,
+	0x1d, 0x0b, 0xfc, 0xe6, 0x42, 0x65, 0x7d, 0x0c, 0x66, 0x92, 0x0d, 0xca, 0x1b, 0x6f, 0xfb, 0x7a,
+	0x02, 0x6f, 0xac, 0xd3, 0x96, 0x17, 0xfa, 0x62, 0x54, 0x9e, 0x5d, 0xf5, 0x8f, 0xac, 0x27, 0x19,
+	0xc8, 0xdb, 0xb8, 0xe6, 0xbb, 0x85, 0xdd, 0x5e, 0xfb, 0x1a, 0xbb, 0x22, 0x15, 0x82, 0x73, 0x30,
+	0x4c, 0x03, 0x6a, 0x65, 0xbb, 0xb6, 0xf2, 0x94, 0x4c, 0x45, 0x8d, 0xbe, 0x4c, 0x48, 0xad, 0x8b,
+	0x7a, 0xdc, 0x09, 0x76, 0xed, 0x65, 0x66, 0xdd, 0x87, 0x99, 0x6e, 0x9d, 0xca, 0x93, 0x9d, 0x84,
+	0x31, 0x5e, 0x38, 0x61, 0x36, 0x21, 0xb7, 0xcc, 0xdc, 0x0d, 0xb2, 0x85, 0xf7, 0xde, 0xd1, 0x56,
+	0x0b, 0xf2, 0x5d, 0xca, 0x14, 0x92, 0x25, 0xc8, 0x47, 0x33, 0x88, 0x57, 0x18, 0x6e, 0xd0, 0x2d,
+	0x55, 0x28, 0xff, 0xb3, 0x73, 0xb1, 0x97, 0xb6, 0x7c, 0x87, 0x4e, 0xc0, 0xa4, 0x4a, 0xa4, 0x06,
+	0xad, 0x92, 0x75, 0x82, 0x65, 0xe1, 0x8c, 0xd8, 0xaa, 0xda, 0x6e, 0xa9, 0x53, 0x8b, 0xc3, 0xff,
+	0xaf, 0x61, 0x11, 0xaa, 0xf4, 0x5d, 0xc9, 0x02, 0x69, 0x7b, 0x8a, 0xf5, 0x37, 0x03, 0x8e, 0x68,
+	0xb4, 0x2a, 0xd0, 0xc7, 0x60, 0x9c, 0xf8, 0x48, 0x65, 0x6c, 0xdb, 0x5d, 0x61, 0x8c, 0x70, 0xbb,
+	0x7d, 0x86, 0xe6, 0x60, 0x84, 0x6e, 0x7b, 0x98, 0xf9, 0xa6, 0xc9, 0xd4, 0x38, 0x10, 0x3c, 0x5f,
+	0x8f, 0xf6, 0x8b, 0xa1, 0x17, 0x0e, 0xff, 0x0f, 0x06, 0x98, 0x57, 0x49, 0x5d, 0x60, 0x66, 0xc7,
+	0x5d, 0x9c, 0xaa, 0x61, 0x8c, 0x84, 0xb3, 0x87, 0xf2, 0xcd, 0x62, 0x1a, 0x0b, 0xee, 0x28, 0x1e,
+	0xbb, 0xcd, 0x6d, 0xb9, 0x70, 0x38, 0xd1, 0x08, 0xe5, 0xa8, 0x2b, 0x70, 0x40, 0x9a, 0xcb, 0x67,
+	0x8d, 0xa0, 0x38, 0x07, 0x41, 0x1a, 0xb2, 0x5a, 0x16, 0x1c, 0xbc, 0x86, 0x45, 0x7c, 0x92, 0x99,
+	0x80, 0x4c, 0x1b, 0x58, 0x86, 0x54, 0xad, 0x3f, 0x0d, 0x98, 0x8a, 0x10, 0xbd, 0xe4, 0x8d, 0x7e,
+	0x04, 0x40, 0x79, 0x8f, 0x39, 0xdb, 0x2a, 0x7a, 0xca, 0x9f, 0xb6, 0xb3, 0xdd, 0x33, 0x2e, 0x0d,
+	0xbd, 0xe4, 0xb8, 0x64, 0xe5, 0x61, 0xfa, 0x26, 0xe1, 0xd2, 0x7a, 0x82, 0xc3, 0x20, 0x5a, 0x36,
+	0xe4, 0xe2, 0xc7, 0x0a, 0xd6, 0x05, 0x90, 0xb1, 0x24, 0x38, 0xf4, 0xeb, 0x6e, 0xc0, 0xda, 0xf4,
+	0xd6, 0x3c, 0x4c, 0xcb, 0x16, 0xdf, 0xdf, 0x9f, 0x8b, 0x90, 0x8b, 0x93, 0x29, 0xd5, 0x39, 0xd8,
+	0x1f, 0x6d, 0xfe, 0xf2, 0xc1, 0xfa, 0xdd, 0x80, 0xfc, 0x5d, 0xe6, 0x78, 0x7c, 0xfd, 0xb5, 0xb4,
+	0xfd, 0x0b, 0x90, 0xf5, 0xf0, 0x76, 0x25, 0x28, 0x27, 0x55, 0x42, 0x47, 0x74, 0xac, 0xcb, 0x32,
+	0x63, 0x3d, 0xbc, 0x7d, 0xdb, 0x27, 0xf7, 0x9b, 0x72, 0xb7, 0xa5, 0xaf, 0xb0, 0x29, 0x7f, 0x67,
+	0x40, 0xfe, 0x9e, 0x53, 0x27, 0xd5, 0x37, 0x36, 0x7a, 0x5b, 0x37, 0x60, 0xa6, 0xdb, 0x82, 0x4e,
+	0xec, 0xb6, 0xfc, 0x37, 0x61, 0xec, 0x82, 0x07, 0x3f, 0x42, 0x98, 0x31, 0xca, 0x2a, 0x0d, 0x5e,
+	0x53, 0xa9, 0x3e, 0x12, 0x1c, 0xdc, 0xe2, 0x35, 0xeb, 0x53, 0x38, 0x78, 0x07, 0x8b, 0x55, 0x87,
+	0x39, 0x8d, 0x76, 0x6b, 0xf1, 0x8b, 0x2a, 0x38, 0xd8, 0xb5, 0xa8, 0x24, 0x9b, 0xa2, 0xb6, 0xa6,
+	0x61, 0x2a, 0x22, 0x4b, 0xda, 0x64, 0x21, 0x59, 0xdb, 0x51, 0x05, 0xd6, 0x0d, 0x59, 0xca, 0x31,
+	0xc2, 0x17, 0xd6, 0xfa, 0x93, 0x01, 0xe6, 0x3d, 0xcc, 0xc8, 0xfa, 0xce, 0x72, 0xb0, 0x4c, 0x2a,
+	0x25, 0xa9, 0xf2, 0xf3, 0x26, 0x4c, 0xa8, 0x0d, 0x94, 0x49, 0x72, 0x95, 0xa7, 0xf3, 0xfa, 0x64,
+	0x8b, 0xaa, 0x18, 0x77, 0xa2, 0x8f, 0xd6, 0x12, 0x1c, 0x4e, 0x34, 0xa4, 0x5f, 0x74, 0xac, 0xf3,
+	0x30, 0xd7, 0x6e, 0x6b, 0x97, 0xc3, 0xfd, 0x36, 0x8d, 0xf1, 0x96, 0x0b, 0x66, 0x12, 0xa7, 0xd2,
+	0xb6, 0x02, 0xd9, 0xf6, 0xba, 0xac, 0x3c, 0x7a, 0xa2, 0x7f, 0xce, 0x75, 0x64, 0x74, 0x38, 0xfd,
+	0x6a, 0x5a, 0xf1, 0x07, 0x1e, 0x47, 0xe0, 0xbb, 0x72, 0x03, 0x4d, 0xe5, 0xd8, 0x79, 0x98, 0x50,
+	0x2f, 0xd5, 0xde, 0xaa, 0x12, 0x6f, 0x5c, 0x9e, 0x2a, 0x51, 0x56, 0x0d, 0x0e, 0xf5, 0x48, 0x57,
+	0xf6, 0xdf, 0xf4, 0x8b, 0x95, 0xb7, 0xea, 0x42, 0x19, 0x7f, 0x56, 0x1b, 0x12, 0xcf, 0xa3, 0xc2,
+	0x11, 0xb8, 0xba, 0x1a, 0x15, 0x6d, 0x07, 0xbc, 0xb6, 0x92, 0x61, 0xfd, 0x61, 0xc0, 0xec, 0x72,
+	0x03, 0x7b, 0xd5, 0xd7, 0x35, 0x64, 0xbc, 0x54, 0x0b, 0xab, 0xc0, 0x5c, 0x82, 0xb1, 0xaf, 0xb0,
+	0x8b, 0x35, 0x60, 0xe6, 0x33, 0xcf, 0x79, 0x6d, 0xc3, 0xe5, 0x8f, 0x06, 0x1c, 0xea, 0xd1, 0xf7,
+	0xea, 0xe0, 0xa4, 0x1e, 0x37, 0xcb, 0x4f, 0xa6, 0x20, 0xbb, 0x7c, 0x79, 0x75, 0x25, 0xf8, 0xa6,
+	0x85, 0x08, 0x8c, 0x45, 0x97, 0x75, 0x74, 0x6a, 0x80, 0xef, 0x17, 0xe6, 0xe2, 0x20, 0xfb, 0x3f,
+	0x7a, 0x00, 0xd9, 0x76, 0xad, 0xa2, 0x05, 0x1d, 0x6b, 0xf7, 0x10, 0x64, 0x9e, 0x4c, 0x41, 0xa9,
+	0x34, 0x7c, 0x0b, 0xa8, 0xb7, 0x1b, 0xa0, 0x33, 0xbb, 0x0a, 0xe8, 0xee, 0x39, 0x66, 0x79, 0x10,
+	0x16, 0xa5, 0x9c, 0xc0, 0x58, 0x74, 0x8e, 0xd1, 0x7b, 0x32, 0x61, 0x08, 0xd2, 0x7b, 0x32, 0x71,
+	0x34, 0x22, 0x30, 0x16, 0x9d, 0x5b, 0xf4, 0xaa, 0x12, 0x86, 0x20, 0xbd, 0xaa, 0xc4, 0x51, 0x88,
+	0xc1, 0x64, 0xd7, 0x77, 0x03, 0x54, 0x1c, 0xec, 0xb3, 0x86, 0x59, 0x4a, 0x4d, 0xdf, 0x09, 0x63,
+	0xef, 0x82, 0xae, 0x0f, 0xa3, 0xf6, 0x83, 0x82, 0x3e, 0x8c, 0x7d, 0xf6, 0x7f, 0x0a, 0x13, 0xf1,
+	0x7d, 0x16, 0x9d, 0x1e, 0x68, 0xd7, 0x36, 0x8b, 0x69, 0xc9, 0x95, 0xc2, 0x3a, 0x8c, 0xc7, 0xb6,
+	0x4e, 0xa4, 0x0d, 0x50, 0xd2, 0x26, 0x6c, 0x9e, 0x4e, 0x49, 0xdd, 0x81, 0x17, 0x9f, 0x0c, 0xf5,
+	0xf0, 0x12, 0x67, 0x5d, 0x3d, 0x3c, 0xcd, 0xc0, 0xc9, 0x60, 0xb2, 0xab, 0xed, 0xe9, 0x13, 0x28,
+	0xb9, 0x1f, 0xeb, 0x13, 0x48, 0xd7, 0x4f, 0x1f, 0xc2, 0x54, 0xcf, 0xdd, 0x81, 0xde, 0xd3, 0x3a,
+	0x4a, 0x73, 0x27, 0x9a, 0x67, 0x06, 0xe0, 0xe8, 0xa0, 0xed, 0xba, 0xcc, 0xf5, 0x68, 0x93, 0x67,
+	0x0a, 0x3d, 0x5a, 0xdd, 0x94, 0xf0, 0xd8, 0x80, 0x7c, 0xe2, 0x2a, 0x8f, 0xce, 0xf6, 0x69, 0x63,
+	0xda, 0xef, 0x0d, 0xe6, 0xfb, 0x03, 0x72, 0x29, 0x33, 0x1e, 0xc1, 0x74, 0xc2, 0x96, 0x8c, 0xb4,
+	0x35, 0xa8, 0xdf, 0xeb, 0xcd, 0xa5, 0x81, 0x78, 0x3a, 0x99, 0x1d, 0x5f, 0x09, 0xf4, 0x99, 0x9d,
+	0xb8, 0xbc, 0xe8, 0x33, 0x5b, 0xb3, 0x69, 0x3c, 0x80, 0x6c, 0x7b, 0xd4, 0xd7, 0xdf, 0x67, 0xdd,
+	0x9b, 0x85, 0xfe, 0x3e, 0xeb, 0xd9, 0x1b, 0xc2, 0x1b, 0x73, 0x17, 0x0d, 0xd7, 0x52, 0x6b, 0xe8,
+	0x5d, 0x38, 0x1e, 0xc1, 0x74, 0xc2, 0xb8, 0xae, 0x0f, 0x9a, 0x7e, 0xc9, 0xd0, 0x07, 0xad, 0xcf,
+	0x3e, 0x70, 0x69, 0xe5, 0xaf, 0x67, 0x05, 0xe3, 0xe9, 0xb3, 0x82, 0xf1, 0xcf, 0xb3, 0x82, 0xf1,
+	0xf3, 0xf3, 0xc2, 0xbe, 0xa7, 0xcf, 0x0b, 0xfb, 0xfe, 0x7e, 0x5e, 0xd8, 0xf7, 0xf9, 0xa9, 0x1a,
+	0x11, 0x1b, 0xad, 0xb5, 0xa2, 0x4b, 0x1b, 0x25, 0xdd, 0xbf, 0x57, 0x9b, 0xb5, 0x92, 0xbf, 0x4e,
+	0xf2, 0xb5, 0xe1, 0xe0, 0x1f, 0xa1, 0xa5, 0xff, 0x02, 0x00, 0x00, 0xff, 0xff, 0xf3, 0x7f, 0x08,
+	0x39, 0xc1, 0x1b, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1892,33 +2091,72 @@ type ACPEngineClient interface {
 	// giving them autonomy to share the object and revoke acces to the object,
 	// much like owners in a Discretionary Access Control model.
 	//
-	// Attempting to register a previously registered Object is an error,
-	// Object IDs are therefore assumed to be unique within a Policy.
+	// Attempting to register a previously registered Object - whether active or archived -
+	// is an error, Object IDs are therefore assumed to be unique within a Policy.
 	RegisterObject(ctx context.Context, in *RegisterObjectRequest, opts ...grpc.CallOption) (*RegisterObjectResponse, error)
-	// UnregisterObject let's an Object's Owner effectively "unshare" their Object.
-	// This method wipes all Relationships referencing the given Object.
+	// ArchiveObject sets an Object's state as "archived"
 	//
-	// A caveat is that after removing the Relationships, a record of the original Object owner
-	// is maintained to prevent an "ownership hijack" attack.
+	// Archiving an object removes all relationships and effectively disables it.
+	// No relationships can be created for it and no checks can be executed against it.
+	// Note that the original owner record is preserved for security reasons.
 	//
+	// Attempting to archive an already archived object is a noop.
+	// Archiving an object that isn't registered is an error
+	// Only the owner can archive an object
+	//
+	// Note: ownership records aren't removed since doing so could lead to an ownership hijack attack.
+	// In order to pass ownership to another owner, use the TransferObject method.
+	//
+	// Hijack attacks look like the following:
 	// Suppose Bob owns object Foo, which is shared with Bob but not Eve.
-	// Eve wants to access Foo but was not given permission to, they could "hijack" Bob's object by waiting for Bob to Unregister Foo,
+	// Eve wants to access Foo but was not given permission to it.
+	// Eve could "hijack" Bob's object by waiting for Bob to delete its ownership record for Foo,
 	// then submitting a RegisterObject Cmd, effectively becoming Foo's new owner.
 	// If Charlie has a copy of the object, Eve could convince Charlie to share his copy, granting Eve access to Foo.
 	// The previous scenario where an unauthorized user is able to claim ownership to data previously unaccessible to them
 	// is an "ownership hijack".
-	UnregisterObject(ctx context.Context, in *UnregisterObjectRequest, opts ...grpc.CallOption) (*UnregisterObjectResponse, error)
+	ArchiveObject(ctx context.Context, in *ArchiveObjectRequest, opts ...grpc.CallOption) (*ArchiveObjectResponse, error)
 	// TransferObject updates an Object's Owner to some other actor in the system, after which the original owner
 	// loses autonomy over the object and cannot create or modify relationships.
+	//
+	// Transfering object cannot be reversed, unless another Transfer is initiated by the new owner.
+	//
+	// Transfering an archived or unregistered object is an error.
+	// Only the owner can transfer an object.
 	TransferObject(ctx context.Context, in *TransferObjectRequest, opts ...grpc.CallOption) (*TransferObjectResponse, error)
+	// UnarchiveObject returns a previously archived object to active status,
+	// such that the owner is able to create relationships and share that object again.
+	//
+	// Only the original owner of the object can unarchive it, returns an authorization error otherwise.
+	// Attempting to unarchive an active or unregistered object is an error.
+	UnarchiveObject(ctx context.Context, in *UnarchiveObjectRequest, opts ...grpc.CallOption) (*UnarchiveObjectResponse, error)
+	// AmendRegistration transfer an object's ownership between two users
+	// This operation can only be executed by the root principal.
+	//
+	// Amending the registration of an archived or unregistered object is an error.
+	AmendRegistration(ctx context.Context, in *AmendRegistrationRequest, opts ...grpc.CallOption) (*AmendRegistrationResponse, error)
+	// EvaluateTheorem executes the given theorem against a stored policy.
+	//
+	// Returns an error if the policy does not exist.
 	EvaluateTheorem(ctx context.Context, in *EvaluateTheoremRequest, opts ...grpc.CallOption) (*EvaluateTheoremResponse, error)
 	// GetObjectRegistration returns the registration status of an Object
 	GetObjectRegistration(ctx context.Context, in *GetObjectRegistrationRequest, opts ...grpc.CallOption) (*GetObjectRegistrationResponse, error)
 	// FilterRelationships returns filtered set of Relationships in a Policy.
 	FilterRelationships(ctx context.Context, in *FilterRelationshipsRequest, opts ...grpc.CallOption) (*FilterRelationshipsResponse, error)
+	// ValidatePolicy verifies whether a policy payload is valid and would be accepted
+	// by the engine, without creating it.
+	//
+	// Returns ok or validation errors found within the policy construction
 	ValidatePolicy(ctx context.Context, in *ValidatePolicyRequest, opts ...grpc.CallOption) (*ValidatePolicyResponse, error)
+	// SetParams tunes the parameters of the ACP Engine.
+	// This operation can only be done by the root principal
 	SetParams(ctx context.Context, in *SetParamsRequest, opts ...grpc.CallOption) (*SetParamsResponse, error)
+	// GetParams returns the current params set in the ACP Engine.
 	GetParams(ctx context.Context, in *GetParamsRequest, opts ...grpc.CallOption) (*GetParamsResponse, error)
+	// VerifyAccessRequest evaluates an AccessRequest
+	// Returns true if the authenticated actor is allowed to perform the operations they are requesting.
+	// FIXME: there is no need to bind the authenticated principal to the AccessRequest,
+	// the verification is often done by someone else
 	VerifyAccessRequest(ctx context.Context, in *VerifyAccessRequestRequest, opts ...grpc.CallOption) (*VerifyAccessRequestResponse, error)
 }
 
@@ -2002,9 +2240,9 @@ func (c *aCPEngineClient) RegisterObject(ctx context.Context, in *RegisterObject
 	return out, nil
 }
 
-func (c *aCPEngineClient) UnregisterObject(ctx context.Context, in *UnregisterObjectRequest, opts ...grpc.CallOption) (*UnregisterObjectResponse, error) {
-	out := new(UnregisterObjectResponse)
-	err := c.cc.Invoke(ctx, "/sourcenetwork.acp_core.ACPEngine/UnregisterObject", in, out, opts...)
+func (c *aCPEngineClient) ArchiveObject(ctx context.Context, in *ArchiveObjectRequest, opts ...grpc.CallOption) (*ArchiveObjectResponse, error) {
+	out := new(ArchiveObjectResponse)
+	err := c.cc.Invoke(ctx, "/sourcenetwork.acp_core.ACPEngine/ArchiveObject", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -2014,6 +2252,24 @@ func (c *aCPEngineClient) UnregisterObject(ctx context.Context, in *UnregisterOb
 func (c *aCPEngineClient) TransferObject(ctx context.Context, in *TransferObjectRequest, opts ...grpc.CallOption) (*TransferObjectResponse, error) {
 	out := new(TransferObjectResponse)
 	err := c.cc.Invoke(ctx, "/sourcenetwork.acp_core.ACPEngine/TransferObject", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *aCPEngineClient) UnarchiveObject(ctx context.Context, in *UnarchiveObjectRequest, opts ...grpc.CallOption) (*UnarchiveObjectResponse, error) {
+	out := new(UnarchiveObjectResponse)
+	err := c.cc.Invoke(ctx, "/sourcenetwork.acp_core.ACPEngine/UnarchiveObject", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *aCPEngineClient) AmendRegistration(ctx context.Context, in *AmendRegistrationRequest, opts ...grpc.CallOption) (*AmendRegistrationResponse, error) {
+	out := new(AmendRegistrationResponse)
+	err := c.cc.Invoke(ctx, "/sourcenetwork.acp_core.ACPEngine/AmendRegistration", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -2109,33 +2365,72 @@ type ACPEngineServer interface {
 	// giving them autonomy to share the object and revoke acces to the object,
 	// much like owners in a Discretionary Access Control model.
 	//
-	// Attempting to register a previously registered Object is an error,
-	// Object IDs are therefore assumed to be unique within a Policy.
+	// Attempting to register a previously registered Object - whether active or archived -
+	// is an error, Object IDs are therefore assumed to be unique within a Policy.
 	RegisterObject(context.Context, *RegisterObjectRequest) (*RegisterObjectResponse, error)
-	// UnregisterObject let's an Object's Owner effectively "unshare" their Object.
-	// This method wipes all Relationships referencing the given Object.
+	// ArchiveObject sets an Object's state as "archived"
 	//
-	// A caveat is that after removing the Relationships, a record of the original Object owner
-	// is maintained to prevent an "ownership hijack" attack.
+	// Archiving an object removes all relationships and effectively disables it.
+	// No relationships can be created for it and no checks can be executed against it.
+	// Note that the original owner record is preserved for security reasons.
 	//
+	// Attempting to archive an already archived object is a noop.
+	// Archiving an object that isn't registered is an error
+	// Only the owner can archive an object
+	//
+	// Note: ownership records aren't removed since doing so could lead to an ownership hijack attack.
+	// In order to pass ownership to another owner, use the TransferObject method.
+	//
+	// Hijack attacks look like the following:
 	// Suppose Bob owns object Foo, which is shared with Bob but not Eve.
-	// Eve wants to access Foo but was not given permission to, they could "hijack" Bob's object by waiting for Bob to Unregister Foo,
+	// Eve wants to access Foo but was not given permission to it.
+	// Eve could "hijack" Bob's object by waiting for Bob to delete its ownership record for Foo,
 	// then submitting a RegisterObject Cmd, effectively becoming Foo's new owner.
 	// If Charlie has a copy of the object, Eve could convince Charlie to share his copy, granting Eve access to Foo.
 	// The previous scenario where an unauthorized user is able to claim ownership to data previously unaccessible to them
 	// is an "ownership hijack".
-	UnregisterObject(context.Context, *UnregisterObjectRequest) (*UnregisterObjectResponse, error)
+	ArchiveObject(context.Context, *ArchiveObjectRequest) (*ArchiveObjectResponse, error)
 	// TransferObject updates an Object's Owner to some other actor in the system, after which the original owner
 	// loses autonomy over the object and cannot create or modify relationships.
+	//
+	// Transfering object cannot be reversed, unless another Transfer is initiated by the new owner.
+	//
+	// Transfering an archived or unregistered object is an error.
+	// Only the owner can transfer an object.
 	TransferObject(context.Context, *TransferObjectRequest) (*TransferObjectResponse, error)
+	// UnarchiveObject returns a previously archived object to active status,
+	// such that the owner is able to create relationships and share that object again.
+	//
+	// Only the original owner of the object can unarchive it, returns an authorization error otherwise.
+	// Attempting to unarchive an active or unregistered object is an error.
+	UnarchiveObject(context.Context, *UnarchiveObjectRequest) (*UnarchiveObjectResponse, error)
+	// AmendRegistration transfer an object's ownership between two users
+	// This operation can only be executed by the root principal.
+	//
+	// Amending the registration of an archived or unregistered object is an error.
+	AmendRegistration(context.Context, *AmendRegistrationRequest) (*AmendRegistrationResponse, error)
+	// EvaluateTheorem executes the given theorem against a stored policy.
+	//
+	// Returns an error if the policy does not exist.
 	EvaluateTheorem(context.Context, *EvaluateTheoremRequest) (*EvaluateTheoremResponse, error)
 	// GetObjectRegistration returns the registration status of an Object
 	GetObjectRegistration(context.Context, *GetObjectRegistrationRequest) (*GetObjectRegistrationResponse, error)
 	// FilterRelationships returns filtered set of Relationships in a Policy.
 	FilterRelationships(context.Context, *FilterRelationshipsRequest) (*FilterRelationshipsResponse, error)
+	// ValidatePolicy verifies whether a policy payload is valid and would be accepted
+	// by the engine, without creating it.
+	//
+	// Returns ok or validation errors found within the policy construction
 	ValidatePolicy(context.Context, *ValidatePolicyRequest) (*ValidatePolicyResponse, error)
+	// SetParams tunes the parameters of the ACP Engine.
+	// This operation can only be done by the root principal
 	SetParams(context.Context, *SetParamsRequest) (*SetParamsResponse, error)
+	// GetParams returns the current params set in the ACP Engine.
 	GetParams(context.Context, *GetParamsRequest) (*GetParamsResponse, error)
+	// VerifyAccessRequest evaluates an AccessRequest
+	// Returns true if the authenticated actor is allowed to perform the operations they are requesting.
+	// FIXME: there is no need to bind the authenticated principal to the AccessRequest,
+	// the verification is often done by someone else
 	VerifyAccessRequest(context.Context, *VerifyAccessRequestRequest) (*VerifyAccessRequestResponse, error)
 }
 
@@ -2167,11 +2462,17 @@ func (*UnimplementedACPEngineServer) DeleteRelationship(ctx context.Context, req
 func (*UnimplementedACPEngineServer) RegisterObject(ctx context.Context, req *RegisterObjectRequest) (*RegisterObjectResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterObject not implemented")
 }
-func (*UnimplementedACPEngineServer) UnregisterObject(ctx context.Context, req *UnregisterObjectRequest) (*UnregisterObjectResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UnregisterObject not implemented")
+func (*UnimplementedACPEngineServer) ArchiveObject(ctx context.Context, req *ArchiveObjectRequest) (*ArchiveObjectResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ArchiveObject not implemented")
 }
 func (*UnimplementedACPEngineServer) TransferObject(ctx context.Context, req *TransferObjectRequest) (*TransferObjectResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TransferObject not implemented")
+}
+func (*UnimplementedACPEngineServer) UnarchiveObject(ctx context.Context, req *UnarchiveObjectRequest) (*UnarchiveObjectResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UnarchiveObject not implemented")
+}
+func (*UnimplementedACPEngineServer) AmendRegistration(ctx context.Context, req *AmendRegistrationRequest) (*AmendRegistrationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AmendRegistration not implemented")
 }
 func (*UnimplementedACPEngineServer) EvaluateTheorem(ctx context.Context, req *EvaluateTheoremRequest) (*EvaluateTheoremResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EvaluateTheorem not implemented")
@@ -2343,20 +2644,20 @@ func _ACPEngine_RegisterObject_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ACPEngine_UnregisterObject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UnregisterObjectRequest)
+func _ACPEngine_ArchiveObject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ArchiveObjectRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ACPEngineServer).UnregisterObject(ctx, in)
+		return srv.(ACPEngineServer).ArchiveObject(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sourcenetwork.acp_core.ACPEngine/UnregisterObject",
+		FullMethod: "/sourcenetwork.acp_core.ACPEngine/ArchiveObject",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ACPEngineServer).UnregisterObject(ctx, req.(*UnregisterObjectRequest))
+		return srv.(ACPEngineServer).ArchiveObject(ctx, req.(*ArchiveObjectRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2375,6 +2676,42 @@ func _ACPEngine_TransferObject_Handler(srv interface{}, ctx context.Context, dec
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ACPEngineServer).TransferObject(ctx, req.(*TransferObjectRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ACPEngine_UnarchiveObject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UnarchiveObjectRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ACPEngineServer).UnarchiveObject(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sourcenetwork.acp_core.ACPEngine/UnarchiveObject",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ACPEngineServer).UnarchiveObject(ctx, req.(*UnarchiveObjectRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ACPEngine_AmendRegistration_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AmendRegistrationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ACPEngineServer).AmendRegistration(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sourcenetwork.acp_core.ACPEngine/AmendRegistration",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ACPEngineServer).AmendRegistration(ctx, req.(*AmendRegistrationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2505,6 +2842,7 @@ func _ACPEngine_VerifyAccessRequest_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+var ACPEngine_serviceDesc = _ACPEngine_serviceDesc
 var _ACPEngine_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "sourcenetwork.acp_core.ACPEngine",
 	HandlerType: (*ACPEngineServer)(nil),
@@ -2542,12 +2880,20 @@ var _ACPEngine_serviceDesc = grpc.ServiceDesc{
 			Handler:    _ACPEngine_RegisterObject_Handler,
 		},
 		{
-			MethodName: "UnregisterObject",
-			Handler:    _ACPEngine_UnregisterObject_Handler,
+			MethodName: "ArchiveObject",
+			Handler:    _ACPEngine_ArchiveObject_Handler,
 		},
 		{
 			MethodName: "TransferObject",
 			Handler:    _ACPEngine_TransferObject_Handler,
+		},
+		{
+			MethodName: "UnarchiveObject",
+			Handler:    _ACPEngine_UnarchiveObject_Handler,
+		},
+		{
+			MethodName: "AmendRegistration",
+			Handler:    _ACPEngine_AmendRegistration_Handler,
 		},
 		{
 			MethodName: "EvaluateTheorem",
@@ -2602,9 +2948,9 @@ func (m *CreatePolicyRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Metadata) > 0 {
-		for k := range m.Metadata {
-			v := m.Metadata[k]
+	if len(m.Attributes) > 0 {
+		for k := range m.Attributes {
+			v := m.Attributes[k]
 			baseI := i
 			i -= len(v)
 			copy(dAtA[i:], v)
@@ -2618,20 +2964,8 @@ func (m *CreatePolicyRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0xa
 			i = encodeVarintEngine(dAtA, i, uint64(baseI-i))
 			i--
-			dAtA[i] = 0x22
+			dAtA[i] = 0x1a
 		}
-	}
-	if m.CreationTime != nil {
-		{
-			size, err := m.CreationTime.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintEngine(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
 	}
 	if m.MarshalType != 0 {
 		i = encodeVarintEngine(dAtA, i, uint64(m.MarshalType))
@@ -2668,9 +3002,9 @@ func (m *CreatePolicyResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Metadata) > 0 {
-		for k := range m.Metadata {
-			v := m.Metadata[k]
+	if len(m.Attributes) > 0 {
+		for k := range m.Attributes {
+			v := m.Attributes[k]
 			baseI := i
 			i -= len(v)
 			copy(dAtA[i:], v)
@@ -2722,9 +3056,9 @@ func (m *SetRelationshipRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	_ = i
 	var l int
 	_ = l
-	if len(m.Metadata) > 0 {
-		for k := range m.Metadata {
-			v := m.Metadata[k]
+	if len(m.Attributes) > 0 {
+		for k := range m.Attributes {
+			v := m.Attributes[k]
 			baseI := i
 			i -= len(v)
 			copy(dAtA[i:], v)
@@ -2738,24 +3072,12 @@ func (m *SetRelationshipRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 			dAtA[i] = 0xa
 			i = encodeVarintEngine(dAtA, i, uint64(baseI-i))
 			i--
-			dAtA[i] = 0x22
+			dAtA[i] = 0x1a
 		}
 	}
 	if m.Relationship != nil {
 		{
 			size, err := m.Relationship.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintEngine(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	if m.CreationTime != nil {
-		{
-			size, err := m.CreationTime.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -2915,9 +3237,9 @@ func (m *RegisterObjectRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Metadata) > 0 {
-		for k := range m.Metadata {
-			v := m.Metadata[k]
+	if len(m.Attributes) > 0 {
+		for k := range m.Attributes {
+			v := m.Attributes[k]
 			baseI := i
 			i -= len(v)
 			copy(dAtA[i:], v)
@@ -2931,20 +3253,8 @@ func (m *RegisterObjectRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0xa
 			i = encodeVarintEngine(dAtA, i, uint64(baseI-i))
 			i--
-			dAtA[i] = 0x22
+			dAtA[i] = 0x1a
 		}
-	}
-	if m.CreationTime != nil {
-		{
-			size, err := m.CreationTime.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintEngine(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
 	}
 	if m.Object != nil {
 		{
@@ -2998,17 +3308,12 @@ func (m *RegisterObjectResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 			i = encodeVarintEngine(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0x12
-	}
-	if m.Result != 0 {
-		i = encodeVarintEngine(dAtA, i, uint64(m.Result))
-		i--
-		dAtA[i] = 0x8
+		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *UnregisterObjectRequest) Marshal() (dAtA []byte, err error) {
+func (m *ArchiveObjectRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -3018,12 +3323,12 @@ func (m *UnregisterObjectRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *UnregisterObjectRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *ArchiveObjectRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *UnregisterObjectRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *ArchiveObjectRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -3050,7 +3355,7 @@ func (m *UnregisterObjectRequest) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	return len(dAtA) - i, nil
 }
 
-func (m *UnregisterObjectResponse) Marshal() (dAtA []byte, err error) {
+func (m *ArchiveObjectResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -3060,28 +3365,28 @@ func (m *UnregisterObjectResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *UnregisterObjectResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *ArchiveObjectResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *UnregisterObjectResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *ArchiveObjectResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.RelationshipsRemoved != 0 {
-		i = encodeVarintEngine(dAtA, i, uint64(m.RelationshipsRemoved))
+	if m.RecordModified {
 		i--
-		dAtA[i] = 0x10
-	}
-	if m.Found {
-		i--
-		if m.Found {
+		if m.RecordModified {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.RelationshipsRemoved != 0 {
+		i = encodeVarintEngine(dAtA, i, uint64(m.RelationshipsRemoved))
 		i--
 		dAtA[i] = 0x8
 	}
@@ -3150,6 +3455,18 @@ func (m *GetObjectRegistrationResponse) MarshalToSizedBuffer(dAtA []byte) (int, 
 	_ = i
 	var l int
 	_ = l
+	if m.Record != nil {
+		{
+			size, err := m.Record.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintEngine(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
 	if len(m.OwnerId) > 0 {
 		i -= len(m.OwnerId)
 		copy(dAtA[i:], m.OwnerId)
@@ -3523,6 +3840,18 @@ func (m *TransferObjectResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	_ = i
 	var l int
 	_ = l
+	if m.Record != nil {
+		{
+			size, err := m.Record.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintEngine(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
 	return len(dAtA) - i, nil
 }
 
@@ -3929,6 +4258,182 @@ func (m *EvaluateTheoremResponse) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	return len(dAtA) - i, nil
 }
 
+func (m *AmendRegistrationRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AmendRegistrationRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AmendRegistrationRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.NewOwner != nil {
+		{
+			size, err := m.NewOwner.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintEngine(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Object != nil {
+		{
+			size, err := m.Object.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintEngine(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.PolicyId) > 0 {
+		i -= len(m.PolicyId)
+		copy(dAtA[i:], m.PolicyId)
+		i = encodeVarintEngine(dAtA, i, uint64(len(m.PolicyId)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AmendRegistrationResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AmendRegistrationResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AmendRegistrationResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Record != nil {
+		{
+			size, err := m.Record.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintEngine(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *UnarchiveObjectRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *UnarchiveObjectRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *UnarchiveObjectRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Object != nil {
+		{
+			size, err := m.Object.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintEngine(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.PolicyId) > 0 {
+		i -= len(m.PolicyId)
+		copy(dAtA[i:], m.PolicyId)
+		i = encodeVarintEngine(dAtA, i, uint64(len(m.PolicyId)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *UnarchiveObjectResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *UnarchiveObjectResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *UnarchiveObjectResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.RecordModified {
+		i--
+		if m.RecordModified {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Record != nil {
+		{
+			size, err := m.Record.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintEngine(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintEngine(dAtA []byte, offset int, v uint64) int {
 	offset -= sovEngine(v)
 	base := offset
@@ -3953,12 +4458,8 @@ func (m *CreatePolicyRequest) Size() (n int) {
 	if m.MarshalType != 0 {
 		n += 1 + sovEngine(uint64(m.MarshalType))
 	}
-	if m.CreationTime != nil {
-		l = m.CreationTime.Size()
-		n += 1 + l + sovEngine(uint64(l))
-	}
-	if len(m.Metadata) > 0 {
-		for k, v := range m.Metadata {
+	if len(m.Attributes) > 0 {
+		for k, v := range m.Attributes {
 			_ = k
 			_ = v
 			mapEntrySize := 1 + len(k) + sovEngine(uint64(len(k))) + 1 + len(v) + sovEngine(uint64(len(v)))
@@ -3978,8 +4479,8 @@ func (m *CreatePolicyResponse) Size() (n int) {
 		l = m.Policy.Size()
 		n += 1 + l + sovEngine(uint64(l))
 	}
-	if len(m.Metadata) > 0 {
-		for k, v := range m.Metadata {
+	if len(m.Attributes) > 0 {
+		for k, v := range m.Attributes {
 			_ = k
 			_ = v
 			mapEntrySize := 1 + len(k) + sovEngine(uint64(len(k))) + 1 + len(v) + sovEngine(uint64(len(v)))
@@ -3999,16 +4500,12 @@ func (m *SetRelationshipRequest) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovEngine(uint64(l))
 	}
-	if m.CreationTime != nil {
-		l = m.CreationTime.Size()
-		n += 1 + l + sovEngine(uint64(l))
-	}
 	if m.Relationship != nil {
 		l = m.Relationship.Size()
 		n += 1 + l + sovEngine(uint64(l))
 	}
-	if len(m.Metadata) > 0 {
-		for k, v := range m.Metadata {
+	if len(m.Attributes) > 0 {
+		for k, v := range m.Attributes {
 			_ = k
 			_ = v
 			mapEntrySize := 1 + len(k) + sovEngine(uint64(len(k))) + 1 + len(v) + sovEngine(uint64(len(v)))
@@ -4077,12 +4574,8 @@ func (m *RegisterObjectRequest) Size() (n int) {
 		l = m.Object.Size()
 		n += 1 + l + sovEngine(uint64(l))
 	}
-	if m.CreationTime != nil {
-		l = m.CreationTime.Size()
-		n += 1 + l + sovEngine(uint64(l))
-	}
-	if len(m.Metadata) > 0 {
-		for k, v := range m.Metadata {
+	if len(m.Attributes) > 0 {
+		for k, v := range m.Attributes {
 			_ = k
 			_ = v
 			mapEntrySize := 1 + len(k) + sovEngine(uint64(len(k))) + 1 + len(v) + sovEngine(uint64(len(v)))
@@ -4098,9 +4591,6 @@ func (m *RegisterObjectResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Result != 0 {
-		n += 1 + sovEngine(uint64(m.Result))
-	}
 	if m.Record != nil {
 		l = m.Record.Size()
 		n += 1 + l + sovEngine(uint64(l))
@@ -4108,7 +4598,7 @@ func (m *RegisterObjectResponse) Size() (n int) {
 	return n
 }
 
-func (m *UnregisterObjectRequest) Size() (n int) {
+func (m *ArchiveObjectRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -4125,17 +4615,17 @@ func (m *UnregisterObjectRequest) Size() (n int) {
 	return n
 }
 
-func (m *UnregisterObjectResponse) Size() (n int) {
+func (m *ArchiveObjectResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.Found {
-		n += 2
-	}
 	if m.RelationshipsRemoved != 0 {
 		n += 1 + sovEngine(uint64(m.RelationshipsRemoved))
+	}
+	if m.RecordModified {
+		n += 2
 	}
 	return n
 }
@@ -4168,6 +4658,10 @@ func (m *GetObjectRegistrationResponse) Size() (n int) {
 	}
 	l = len(m.OwnerId)
 	if l > 0 {
+		n += 1 + l + sovEngine(uint64(l))
+	}
+	if m.Record != nil {
+		l = m.Record.Size()
 		n += 1 + l + sovEngine(uint64(l))
 	}
 	return n
@@ -4314,6 +4808,10 @@ func (m *TransferObjectResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
+	if m.Record != nil {
+		l = m.Record.Size()
+		n += 1 + l + sovEngine(uint64(l))
+	}
 	return n
 }
 
@@ -4478,6 +4976,73 @@ func (m *EvaluateTheoremResponse) Size() (n int) {
 	return n
 }
 
+func (m *AmendRegistrationRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.PolicyId)
+	if l > 0 {
+		n += 1 + l + sovEngine(uint64(l))
+	}
+	if m.Object != nil {
+		l = m.Object.Size()
+		n += 1 + l + sovEngine(uint64(l))
+	}
+	if m.NewOwner != nil {
+		l = m.NewOwner.Size()
+		n += 1 + l + sovEngine(uint64(l))
+	}
+	return n
+}
+
+func (m *AmendRegistrationResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Record != nil {
+		l = m.Record.Size()
+		n += 1 + l + sovEngine(uint64(l))
+	}
+	return n
+}
+
+func (m *UnarchiveObjectRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.PolicyId)
+	if l > 0 {
+		n += 1 + l + sovEngine(uint64(l))
+	}
+	if m.Object != nil {
+		l = m.Object.Size()
+		n += 1 + l + sovEngine(uint64(l))
+	}
+	return n
+}
+
+func (m *UnarchiveObjectResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Record != nil {
+		l = m.Record.Size()
+		n += 1 + l + sovEngine(uint64(l))
+	}
+	if m.RecordModified {
+		n += 2
+	}
+	return n
+}
+
 func sovEngine(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
@@ -4566,7 +5131,7 @@ func (m *CreatePolicyRequest) Unmarshal(dAtA []byte) error {
 			}
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CreationTime", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Attributes", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4593,44 +5158,8 @@ func (m *CreatePolicyRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.CreationTime == nil {
-				m.CreationTime = &types.Timestamp{}
-			}
-			if err := m.CreationTime.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEngine
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthEngine
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthEngine
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Metadata == nil {
-				m.Metadata = make(map[string]string)
+			if m.Attributes == nil {
+				m.Attributes = make(map[string]string)
 			}
 			var mapkey string
 			var mapvalue string
@@ -4725,7 +5254,7 @@ func (m *CreatePolicyRequest) Unmarshal(dAtA []byte) error {
 					iNdEx += skippy
 				}
 			}
-			m.Metadata[mapkey] = mapvalue
+			m.Attributes[mapkey] = mapvalue
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -4815,7 +5344,7 @@ func (m *CreatePolicyResponse) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Attributes", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4842,8 +5371,8 @@ func (m *CreatePolicyResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Metadata == nil {
-				m.Metadata = make(map[string]string)
+			if m.Attributes == nil {
+				m.Attributes = make(map[string]string)
 			}
 			var mapkey string
 			var mapvalue string
@@ -4938,7 +5467,7 @@ func (m *CreatePolicyResponse) Unmarshal(dAtA []byte) error {
 					iNdEx += skippy
 				}
 			}
-			m.Metadata[mapkey] = mapvalue
+			m.Attributes[mapkey] = mapvalue
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -5024,42 +5553,6 @@ func (m *SetRelationshipRequest) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CreationTime", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEngine
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthEngine
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthEngine
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.CreationTime == nil {
-				m.CreationTime = &types.Timestamp{}
-			}
-			if err := m.CreationTime.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Relationship", wireType)
 			}
 			var msglen int
@@ -5094,9 +5587,9 @@ func (m *SetRelationshipRequest) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 4:
+		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Attributes", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -5123,8 +5616,8 @@ func (m *SetRelationshipRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Metadata == nil {
-				m.Metadata = make(map[string]string)
+			if m.Attributes == nil {
+				m.Attributes = make(map[string]string)
 			}
 			var mapkey string
 			var mapvalue string
@@ -5219,7 +5712,7 @@ func (m *SetRelationshipRequest) Unmarshal(dAtA []byte) error {
 					iNdEx += skippy
 				}
 			}
-			m.Metadata[mapkey] = mapvalue
+			m.Attributes[mapkey] = mapvalue
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -5635,7 +6128,7 @@ func (m *RegisterObjectRequest) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CreationTime", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Attributes", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -5662,44 +6155,8 @@ func (m *RegisterObjectRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.CreationTime == nil {
-				m.CreationTime = &types.Timestamp{}
-			}
-			if err := m.CreationTime.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEngine
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthEngine
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthEngine
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Metadata == nil {
-				m.Metadata = make(map[string]string)
+			if m.Attributes == nil {
+				m.Attributes = make(map[string]string)
 			}
 			var mapkey string
 			var mapvalue string
@@ -5794,7 +6251,7 @@ func (m *RegisterObjectRequest) Unmarshal(dAtA []byte) error {
 					iNdEx += skippy
 				}
 			}
-			m.Metadata[mapkey] = mapvalue
+			m.Attributes[mapkey] = mapvalue
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -5847,25 +6304,6 @@ func (m *RegisterObjectResponse) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
-			}
-			m.Result = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEngine
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Result |= RegistrationResult(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Record", wireType)
 			}
@@ -5922,7 +6360,7 @@ func (m *RegisterObjectResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *UnregisterObjectRequest) Unmarshal(dAtA []byte) error {
+func (m *ArchiveObjectRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -5945,10 +6383,10 @@ func (m *UnregisterObjectRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: UnregisterObjectRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: ArchiveObjectRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: UnregisterObjectRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: ArchiveObjectRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -6040,7 +6478,7 @@ func (m *UnregisterObjectRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *UnregisterObjectResponse) Unmarshal(dAtA []byte) error {
+func (m *ArchiveObjectResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -6063,33 +6501,13 @@ func (m *UnregisterObjectResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: UnregisterObjectResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: ArchiveObjectResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: UnregisterObjectResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: ArchiveObjectResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Found", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEngine
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.Found = bool(v != 0)
-		case 2:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field RelationshipsRemoved", wireType)
 			}
@@ -6108,6 +6526,26 @@ func (m *UnregisterObjectResponse) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RecordModified", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEngine
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.RecordModified = bool(v != 0)
 		default:
 			iNdEx = preIndex
 			skippy, err := skipEngine(dAtA[iNdEx:])
@@ -6327,6 +6765,42 @@ func (m *GetObjectRegistrationResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.OwnerId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Record", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEngine
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthEngine
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthEngine
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Record == nil {
+				m.Record = &RelationshipRecord{}
+			}
+			if err := m.Record.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -7239,6 +7713,42 @@ func (m *TransferObjectResponse) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: TransferObjectResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Record", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEngine
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthEngine
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthEngine
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Record == nil {
+				m.Record = &RelationshipRecord{}
+			}
+			if err := m.Record.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipEngine(dAtA[iNdEx:])
@@ -8270,6 +8780,470 @@ func (m *EvaluateTheoremResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipEngine(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthEngine
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AmendRegistrationRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowEngine
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AmendRegistrationRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AmendRegistrationRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PolicyId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEngine
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthEngine
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthEngine
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PolicyId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Object", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEngine
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthEngine
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthEngine
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Object == nil {
+				m.Object = &Object{}
+			}
+			if err := m.Object.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NewOwner", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEngine
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthEngine
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthEngine
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.NewOwner == nil {
+				m.NewOwner = &Actor{}
+			}
+			if err := m.NewOwner.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipEngine(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthEngine
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AmendRegistrationResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowEngine
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AmendRegistrationResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AmendRegistrationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Record", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEngine
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthEngine
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthEngine
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Record == nil {
+				m.Record = &RelationshipRecord{}
+			}
+			if err := m.Record.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipEngine(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthEngine
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *UnarchiveObjectRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowEngine
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: UnarchiveObjectRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: UnarchiveObjectRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PolicyId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEngine
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthEngine
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthEngine
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PolicyId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Object", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEngine
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthEngine
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthEngine
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Object == nil {
+				m.Object = &Object{}
+			}
+			if err := m.Object.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipEngine(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthEngine
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *UnarchiveObjectResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowEngine
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: UnarchiveObjectResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: UnarchiveObjectResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Record", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEngine
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthEngine
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthEngine
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Record == nil {
+				m.Record = &RelationshipRecord{}
+			}
+			if err := m.Record.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RecordModified", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEngine
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.RecordModified = bool(v != 0)
 		default:
 			iNdEx = preIndex
 			skippy, err := skipEngine(dAtA[iNdEx:])

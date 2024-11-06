@@ -2,7 +2,6 @@ package services
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/sourcenetwork/acp_core/internal/authz_db"
 	"github.com/sourcenetwork/acp_core/internal/policy"
@@ -62,9 +61,9 @@ func (s *acpEngine) RegisterObject(ctx context.Context, msg *types.RegisterObjec
 	return applyMiddleware(ctx, h, s.hooks, msg)
 }
 
-func (s *acpEngine) UnregisterObject(ctx context.Context, msg *types.UnregisterObjectRequest) (*types.UnregisterObjectResponse, error) {
-	handler := relationship.UnregisterObjectHandler{}
-	h := func(ctx context.Context, msg *types.UnregisterObjectRequest) (*types.UnregisterObjectResponse, error) {
+func (s *acpEngine) ArchiveObject(ctx context.Context, msg *types.ArchiveObjectRequest) (*types.ArchiveObjectResponse, error) {
+	handler := relationship.ArchiveObjectHandler{}
+	h := func(ctx context.Context, msg *types.ArchiveObjectRequest) (*types.ArchiveObjectResponse, error) {
 		return handler.Execute(ctx, s.runtime, msg)
 	}
 	return applyMiddleware(ctx, h, s.hooks, msg)
@@ -120,7 +119,11 @@ func (s *acpEngine) ListPolicies(ctx context.Context, req *types.ListPoliciesReq
 }
 
 func (s *acpEngine) TransferObject(ctx context.Context, req *types.TransferObjectRequest) (*types.TransferObjectResponse, error) {
-	return nil, fmt.Errorf("transfer object not implemented")
+	h := func(ctx context.Context, msg *types.TransferObjectRequest) (*types.TransferObjectResponse, error) {
+		handler := relationship.TransferObjectHandler{}
+		return handler.Execute(ctx, s.runtime, msg)
+	}
+	return applyMiddleware(ctx, h, s.hooks, req)
 }
 
 func (s *acpEngine) SetParams(ctx context.Context, req *types.SetParamsRequest) (*types.SetParamsResponse, error) {
@@ -143,9 +146,26 @@ func (s *acpEngine) EvaluateTheorem(ctx context.Context, req *types.EvaluateTheo
 	}
 	return applyMiddleware(ctx, h, s.hooks, req)
 }
+
 func (s *acpEngine) GetPolicyCatalogue(ctx context.Context, req *types.GetPolicyCatalogueRequest) (*types.GetPolicyCatalogueResponse, error) {
 	h := func(ctx context.Context, msg *types.GetPolicyCatalogueRequest) (*types.GetPolicyCatalogueResponse, error) {
 		return policy.GetPolicyCatalogue(ctx, s.runtime, msg)
+	}
+	return applyMiddleware(ctx, h, s.hooks, req)
+}
+
+func (s *acpEngine) AmendRegistration(ctx context.Context, req *types.AmendRegistrationRequest) (*types.AmendRegistrationResponse, error) {
+	h := func(ctx context.Context, req *types.AmendRegistrationRequest) (*types.AmendRegistrationResponse, error) {
+		h := relationship.AmendRegistrationHandler{}
+		return h.Handle(ctx, s.runtime, req)
+	}
+	return applyMiddleware(ctx, h, s.hooks, req)
+}
+
+func (s *acpEngine) UnarchiveObject(ctx context.Context, req *types.UnarchiveObjectRequest) (*types.UnarchiveObjectResponse, error) {
+	h := func(ctx context.Context, req *types.UnarchiveObjectRequest) (*types.UnarchiveObjectResponse, error) {
+		h := relationship.UnarchiveObjectHandler{}
+		return h.Handle(ctx, s.runtime, req)
 	}
 	return applyMiddleware(ctx, h, s.hooks, req)
 }

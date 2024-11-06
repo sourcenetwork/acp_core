@@ -4,9 +4,16 @@ plugins:
   - name: gocosmos
     out: ../
     opt:
+      - paths=import
+      # for some reason, gocosmos does not respect the module flag
+      # so we need a script to move the files in place
+      - module=github.com/sourcenetwork/acp_core 
       - plugins=grpc
       - Mgoogle/protobuf/any.proto=github.com/cosmos/cosmos-sdk/codec/types
       - Mcosmos/orm/v1/orm.proto=cosmossdk.io/orm
       - Mgoogle/protobuf/timestamp.proto=github.com/cosmos/gogoproto/types
+  - name: go-pulsar
+    out: ../pkg/pulsar
+    opt: 
       - paths=import
-      - module=github.com/sourcenetwork/acp_core
+      - module=github.com/sourcenetwork/acp_core/pkg

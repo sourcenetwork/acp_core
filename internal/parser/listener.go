@@ -32,7 +32,7 @@ func (l *errListener) SyntaxError(recognizer antlr.Recognizer, offendingSymbol i
 	err := &types.LocatedMessage{
 		Message: msg,
 		Kind:    types.LocatedMessage_ERROR,
-		Range: &types.BufferRange{
+		Interval: &types.BufferInterval{
 			Start: &types.BufferPosition{
 				Line:   uint64(line),
 				Column: uint64(column),

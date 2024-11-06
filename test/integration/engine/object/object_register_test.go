@@ -38,22 +38,20 @@ func TestRegisterObject_RegisteringNewObjectIsSucessful(t *testing.T) {
 	bob := ctx.Actors.DID("bob")
 
 	req := types.RegisterObjectRequest{
-		PolicyId:     ctx.State.PolicyId,
-		Object:       types.NewObject("resource", "foo"),
-		CreationTime: timestamp,
-		Metadata:     metadata,
+		PolicyId:   ctx.State.PolicyId,
+		Object:     types.NewObject("resource", "foo"),
+		Attributes: attributes,
 	}
 	resp, err := ctx.Engine.RegisterObject(ctx, &req)
 
 	want := &types.RegisterObjectResponse{
-		Result: types.RegistrationResult_Registered,
 		Record: &types.RelationshipRecord{
 			PolicyId:     ctx.State.PolicyId,
 			OwnerDid:     bob,
 			Relationship: types.NewActorRelationship("resource", "foo", "owner", bob),
 			Archived:     false,
-			CreationTime: timestamp,
-			Metadata:     metadata,
+			CreationTime: ctx.Time,
+			Metadata:     attributes,
 		},
 	}
 	require.NoError(t, err)
@@ -70,15 +68,14 @@ func TestRegisterObject_RegisteringNewObjectIsSucessful(t *testing.T) {
 	*/
 }
 
-func TestRegisterObject_RegisteringObjectRegisteredToAnotherUserErrors(t *testing.T) {
+func TestRegisterObject_RegisteringObjectRegisteredToAnotherUser_ErrorsForbidden(t *testing.T) {
 	ctx := registerObjectTestSetup(t)
 
 	// Given alice as the owner of foo
 	ctx.SetPrincipal("alice")
 	req := types.RegisterObjectRequest{
-		PolicyId:     ctx.State.PolicyId,
-		Object:       types.NewObject("resource", "foo"),
-		CreationTime: timestamp,
+		PolicyId: ctx.State.PolicyId,
+		Object:   types.NewObject("resource", "foo"),
 	}
 	_, err := ctx.Engine.RegisterObject(ctx, &req)
 	require.NoError(t, err)
@@ -86,70 +83,53 @@ func TestRegisterObject_RegisteringObjectRegisteredToAnotherUserErrors(t *testin
 	// When bob tries to register foo
 	ctx.SetPrincipal("bob")
 	req = types.RegisterObjectRequest{
-		PolicyId:     ctx.State.PolicyId,
-		Object:       types.NewObject("resource", "foo"),
-		CreationTime: timestamp,
+		PolicyId: ctx.State.PolicyId,
+		Object:   types.NewObject("resource", "foo"),
 	}
 	resp, err := ctx.Engine.RegisterObject(ctx, &req)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, errors.ErrorType_UNAUTHORIZED)
+	require.ErrorIs(t, err, errors.ErrorType_OPERATION_FORBIDDEN)
 }
 
-func TestRegisterObject_ReregisteringObjectOwnedByUserIsNoop(t *testing.T) {
+func TestRegisterObject_ReregisteringObjectOwnedByUser_ReturnsOperationForbidden(t *testing.T) {
 	ctx := registerObjectTestSetup(t)
 
 	// Given alice as the owner of foo
 	ctx.SetPrincipal("alice")
 	req := types.RegisterObjectRequest{
-		PolicyId:     ctx.State.PolicyId,
-		Object:       types.NewObject("resource", "foo"),
-		CreationTime: timestamp,
+		PolicyId: ctx.State.PolicyId,
+		Object:   types.NewObject("resource", "foo"),
 	}
 	_, err := ctx.Engine.RegisterObject(ctx, &req)
 	require.NoError(t, err)
 
 	// When alice tries to register foo
 	ctx.SetPrincipal("alice")
-	alice := ctx.Actors.DID("alice")
 	req = types.RegisterObjectRequest{
-		PolicyId:     ctx.State.PolicyId,
-		Object:       types.NewObject("resource", "foo"),
-		CreationTime: timestamp,
+		PolicyId: ctx.State.PolicyId,
+		Object:   types.NewObject("resource", "foo"),
 	}
 	resp, err := ctx.Engine.RegisterObject(ctx, &req)
-
-	want := &types.RegisterObjectResponse{
-		Result: types.RegistrationResult_NoOp,
-		Record: &types.RelationshipRecord{
-			CreationTime: timestamp,
-			PolicyId:     ctx.State.PolicyId,
-			Relationship: types.NewActorRelationship("resource", "foo", "owner", alice),
-			Archived:     false,
-			OwnerDid:     alice,
-		},
-	}
-	require.Equal(t, want, resp)
-	require.NoError(t, err)
+	require.Nil(t, resp)
+	require.ErrorIs(t, err, errors.ErrorType_OPERATION_FORBIDDEN)
 }
 
-func TestRegisterObject_RegisteringAnotherUsersArchivedObjectErrors(t *testing.T) {
+func TestRegisterObject_RegisteringAnotherUsersArchivedObject_ReturnsOperationForbidden(t *testing.T) {
 	ctx := registerObjectTestSetup(t)
 
-	// Given alice as the previous owner of foo
-	ctx.SetPrincipal("alice")
+	// Given alice as the previous owner of foo ctx.SetPrincipal("alice")
 	_, err := ctx.Engine.RegisterObject(
 		ctx,
 		&types.RegisterObjectRequest{
-			PolicyId:     ctx.State.PolicyId,
-			Object:       types.NewObject("resource", "foo"),
-			CreationTime: timestamp,
+			PolicyId: ctx.State.PolicyId,
+			Object:   types.NewObject("resource", "foo"),
 		},
 	)
 	require.NoError(t, err)
-	_, err = ctx.Engine.UnregisterObject(
+	_, err = ctx.Engine.ArchiveObject(
 		ctx,
-		&types.UnregisterObjectRequest{
+		&types.ArchiveObjectRequest{
 			PolicyId: ctx.State.PolicyId,
 			Object:   types.NewObject("resource", "foo"),
 		},
@@ -160,17 +140,16 @@ func TestRegisterObject_RegisteringAnotherUsersArchivedObjectErrors(t *testing.T
 	ctx.SetPrincipal("bob")
 	resp, err := ctx.Engine.RegisterObject(ctx,
 		&types.RegisterObjectRequest{
-			PolicyId:     ctx.State.PolicyId,
-			Object:       types.NewObject("resource", "foo"),
-			CreationTime: timestamp,
+			PolicyId: ctx.State.PolicyId,
+			Object:   types.NewObject("resource", "foo"),
 		},
 	)
 
 	require.Nil(t, resp)
-	require.ErrorIs(t, err, errors.ErrorType_UNAUTHORIZED)
+	require.ErrorIs(t, err, errors.ErrorType_OPERATION_FORBIDDEN)
 }
 
-func TestRegisterObject_RegisteringArchivedUserObjectUnarchivesObject(t *testing.T) {
+func TestRegisterObject_RegisteringArchivedUserObject_ReturnsOperationForbidden(t *testing.T) {
 	ctx := registerObjectTestSetup(t)
 
 	// Given alice as the previous owner of foo
@@ -178,15 +157,14 @@ func TestRegisterObject_RegisteringArchivedUserObjectUnarchivesObject(t *testing
 	_, err := ctx.Engine.RegisterObject(
 		ctx,
 		&types.RegisterObjectRequest{
-			PolicyId:     ctx.State.PolicyId,
-			Object:       types.NewObject("resource", "foo"),
-			CreationTime: timestamp,
+			PolicyId: ctx.State.PolicyId,
+			Object:   types.NewObject("resource", "foo"),
 		},
 	)
 	require.NoError(t, err)
-	_, err = ctx.Engine.UnregisterObject(
+	_, err = ctx.Engine.ArchiveObject(
 		ctx,
-		&types.UnregisterObjectRequest{
+		&types.ArchiveObjectRequest{
 			PolicyId: ctx.State.PolicyId,
 			Object:   types.NewObject("resource", "foo"),
 		},
@@ -195,29 +173,15 @@ func TestRegisterObject_RegisteringArchivedUserObjectUnarchivesObject(t *testing
 
 	// When alice attempt to reregister Foo
 	ctx.SetPrincipal("alice")
-	alice := ctx.Actors.DID("alice")
 	got, err := ctx.Engine.RegisterObject(
 		ctx,
 		&types.RegisterObjectRequest{
-			PolicyId:     ctx.State.PolicyId,
-			Object:       types.NewObject("resource", "foo"),
-			CreationTime: timestamp,
+			PolicyId: ctx.State.PolicyId,
+			Object:   types.NewObject("resource", "foo"),
 		},
 	)
-
-	want := &types.RegisterObjectResponse{
-		Result: types.RegistrationResult_Unarchived,
-		Record: &types.RelationshipRecord{
-			CreationTime: timestamp,
-			PolicyId:     ctx.State.PolicyId,
-			Relationship: types.NewActorRelationship("resource", "foo", "owner", alice),
-			Archived:     false,
-			OwnerDid:     alice,
-		},
-	}
-	require.Equal(t, want, got)
-	require.Nil(t, err)
-
+	require.Nil(t, got)
+	require.ErrorIs(t, err, errors.ErrorType_OPERATION_FORBIDDEN)
 	/*
 		event := &types.EventObjectRegistered{
 			Actor:          bobDID,
@@ -236,9 +200,8 @@ func TestRegisterObject_RegisteringObjectInAnUndefinedResourceErrors(t *testing.
 	resp, err := ctx.Engine.RegisterObject(
 		ctx,
 		&types.RegisterObjectRequest{
-			PolicyId:     ctx.State.PolicyId,
-			Object:       types.NewObject("undefined-resource", "foo"),
-			CreationTime: timestamp,
+			PolicyId: ctx.State.PolicyId,
+			Object:   types.NewObject("undefined-resource", "foo"),
 		},
 	)
 
@@ -253,9 +216,8 @@ func TestRegisterObject_RegisteringToUnknownPolicyReturnsError(t *testing.T) {
 	resp, err := ctx.Engine.RegisterObject(
 		ctx,
 		&types.RegisterObjectRequest{
-			PolicyId:     "abc1234",
-			Object:       types.NewObject("resource", "foo"),
-			CreationTime: timestamp,
+			PolicyId: "abc1234",
+			Object:   types.NewObject("resource", "foo"),
 		},
 	)
 
@@ -270,9 +232,8 @@ func TestRegisterObject_BlankResourceErrors(t *testing.T) {
 	resp, err := ctx.Engine.RegisterObject(
 		ctx,
 		&types.RegisterObjectRequest{
-			PolicyId:     ctx.State.PolicyId,
-			Object:       types.NewObject("", "foo"),
-			CreationTime: timestamp,
+			PolicyId: ctx.State.PolicyId,
+			Object:   types.NewObject("", "foo"),
 		},
 	)
 
@@ -287,9 +248,8 @@ func TestRegisterObject_BlankObjectIdErrors(t *testing.T) {
 	resp, err := ctx.Engine.RegisterObject(
 		ctx,
 		&types.RegisterObjectRequest{
-			PolicyId:     ctx.State.PolicyId,
-			Object:       types.NewObject("resource", ""),
-			CreationTime: timestamp,
+			PolicyId: ctx.State.PolicyId,
+			Object:   types.NewObject("resource", ""),
 		},
 	)
 

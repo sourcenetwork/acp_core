@@ -67,6 +67,13 @@ func TestGetObjectRegistration_ReturnsObjectOwner(t *testing.T) {
 	want := &types.GetObjectRegistrationResponse{
 		IsRegistered: true,
 		OwnerId:      ctx.Actors.DID("alice"),
+		Record: &types.RelationshipRecord{
+			PolicyId:     ctx.State.PolicyId,
+			OwnerDid:     ctx.Actors.DID("alice"),
+			Relationship: types.NewActorRelationship("file", "1", "owner", ctx.Actors.DID("alice")),
+			Archived:     false,
+			CreationTime: test.DefaultTs,
+		},
 	}
 	require.Equal(t, want, resp)
 	require.NoError(t, err)

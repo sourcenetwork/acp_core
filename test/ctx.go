@@ -5,12 +5,16 @@ import (
 	"testing"
 	"time"
 
+	prototypes "github.com/cosmos/gogoproto/types"
 	"github.com/sourcenetwork/acp_core/pkg/auth"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/services"
 	"github.com/sourcenetwork/acp_core/pkg/types"
+	testutil "github.com/sourcenetwork/acp_core/test/util"
 	"github.com/stretchr/testify/require"
 )
+
+var DefaultTs = testutil.MustDateTimeToProto("2024-01-01 00:00:00")
 
 var _ context.Context = (*TestCtx)(nil)
 
@@ -22,6 +26,11 @@ type TestCtx struct {
 	Actors     ActorRegistrar
 	State      ActionState
 	Playground types.PlaygroundServiceServer
+	Time       *prototypes.Timestamp
+}
+
+func (t *TestCtx) SetRootPrincipal() {
+	t.Ctx = auth.InjectPrincipal(t.Ctx, auth.RootPrincipal())
 }
 
 func (t *TestCtx) SetPrincipal(name string) {
@@ -32,7 +41,8 @@ func (t *TestCtx) SetPrincipal(name string) {
 }
 
 func NewTestCtx(t *testing.T) *TestCtx {
-	manager := NewTestRuntime(t)
+	timeServ := NewConstantTimeService(DefaultTs)
+	manager := NewTestRuntime(t, timeServ)
 	engine := services.NewACPEngine(manager)
 
 	playground := playgroundFactory(t, manager)
@@ -46,6 +56,7 @@ func NewTestCtx(t *testing.T) *TestCtx {
 		Actors: ActorRegistrar{
 			actors: make(map[string]string),
 		},
+		Time: DefaultTs,
 	}
 }
 
