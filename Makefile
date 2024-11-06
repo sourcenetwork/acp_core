@@ -14,6 +14,11 @@ proto:
 	mv github.com/sourcenetwork/acp_core/pkg/errors/* pkg/errors/
 	rm -r github.com
 
+.PHONY: fmt
+fmt:
+	docker run --rm --volume=".:/app" --workdir="/app/proto" --user="$$(id -u)" acp_core_proto format -w
+	gofmt -w .
+
 .PHONY: playground\:wasm_js
 playground\:wasm_js:
 	GOOS=js GOARCH=wasm go build -o build/playground.wasm cmd/playground_js/main.go
