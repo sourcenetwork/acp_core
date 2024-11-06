@@ -8,7 +8,11 @@ test\:js:
 
 .PHONY: proto
 proto:
-	docker run --rm --volume .:/app acp_core_proto
+	docker image build --file proto/Dockerfile --tag acp_core_proto:latest .
+	docker run --rm --volume=".:/app" --workdir="/app/proto" --user="$$(id -u)" acp_core_proto generate
+	mv github.com/sourcenetwork/acp_core/pkg/types/* pkg/types/
+	mv github.com/sourcenetwork/acp_core/pkg/errors/* pkg/errors/
+	rm -r github.com
 
 .PHONY: playground\:wasm_js
 playground\:wasm_js:

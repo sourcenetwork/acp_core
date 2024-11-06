@@ -2842,6 +2842,7 @@ func _ACPEngine_VerifyAccessRequest_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+var ACPEngine_serviceDesc = _ACPEngine_serviceDesc
 var _ACPEngine_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "sourcenetwork.acp_core.ACPEngine",
 	HandlerType: (*ACPEngineServer)(nil),
