@@ -55,8 +55,14 @@ func (e *Evaluator) evaluateReacheabilityTheorem(ctx context.Context, polId *typ
 }
 
 func (e *Evaluator) evalDelegationTheorem(ctx context.Context, polId *types.Policy, theorem *types.DelegationTheorem) (*types.DelegationTheoremResult, error) {
-	authorizer := authorizer.NewOperationAuthorizer(e.zanzi)
-	authorized, err := authorizer.IsAuthorized(ctx, polId, theorem.Operation, theorem.Actor)
+	req := authorizer.ManagementRequest{
+		Policy:   polId,
+		Object:   theorem.Operation.Object,
+		Relation: theorem.Operation.Permission,
+		Actor:    theorem.Actor,
+	}
+	authz := authorizer.NewOperationAuthorizer(e.zanzi)
+	authorized, err := authz.IsAuthorized(ctx, &req)
 	if err != nil {
 		// if error is not internal, then user might've supplied invalid data
 		// which shouldn't cause the whole execution to fail

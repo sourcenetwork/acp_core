@@ -158,14 +158,15 @@ func (c *ArchiveObjectHandler) Execute(ctx context.Context, runtime runtime.Runt
 		}, nil // noop when object is archived
 	}
 
-	authorizer := authorizer.NewOperationAuthorizer(engine)
+	authz := authorizer.NewOperationAuthorizer(engine)
 
-	mutateOwnerOperation := types.Operation{
-		Object:     cmd.Object,
-		Permission: policy.OwnerRelation,
+	request := authorizer.ManagementRequest{
+		Policy:   pol,
+		Object:   cmd.Object,
+		Relation: policy.OwnerRelation,
+		Actor:    types.NewActor(did),
 	}
-	actor := types.Actor{Id: did}
-	authorized, err := authorizer.IsAuthorized(ctx, pol, &mutateOwnerOperation, &actor)
+	authorized, err := authz.IsAuthorized(ctx, &request)
 	if err != nil {
 		return nil, newArchiveObjectErr(err)
 	}
@@ -279,12 +280,14 @@ func (h *TransferObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 		))
 	}
 
-	operation := types.Operation{
-		Object:     cmd.Object,
-		Permission: policy.OwnerRelation,
+	request := authorizer.ManagementRequest{
+		Policy:   pol,
+		Object:   cmd.Object,
+		Relation: policy.OwnerRelation,
+		Actor:    types.NewActor(did),
 	}
-	authorizer := authorizer.NewOperationAuthorizer(engine)
-	authorized, err := authorizer.IsAuthorized(ctx, pol, &operation, types.NewActor(did))
+	authz := authorizer.NewOperationAuthorizer(engine)
+	authorized, err := authz.IsAuthorized(ctx, &request)
 	if err != nil {
 		return nil, newTransferObjectErr(err)
 	}
@@ -430,13 +433,14 @@ func (h *UnarchiveObjectHandler) Handle(ctx context.Context, runtime runtime.Run
 		))
 	}
 
-	authorizer := authorizer.NewOperationAuthorizer(engine)
-	mutateOwnerOperation := types.Operation{
-		Object:     cmd.Object,
-		Permission: policy.OwnerRelation,
+	req := authorizer.ManagementRequest{
+		Policy:   pol,
+		Object:   cmd.Object,
+		Relation: policy.OwnerRelation,
+		Actor:    types.NewActor(did),
 	}
-	actor := types.Actor{Id: did}
-	authorized, err := authorizer.IsAuthorized(ctx, pol, &mutateOwnerOperation, &actor)
+	authz := authorizer.NewOperationAuthorizer(engine)
+	authorized, err := authz.IsAuthorized(ctx, &req)
 	if err != nil {
 		return nil, newUnarchiveObjectErr(err)
 	}

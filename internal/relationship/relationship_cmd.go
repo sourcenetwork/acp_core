@@ -27,7 +27,7 @@ func (c *SetRelationshipHandler) Execute(ctx context.Context, runtime runtime.Ru
 	}
 	did := principal.Identifier()
 
-	authorizer := authorizer.NewOperationAuthorizer(engine)
+	authz := authorizer.NewOperationAuthorizer(engine)
 
 	rec, err := engine.GetPolicy(ctx, cmd.PolicyId)
 	if err != nil {
@@ -60,11 +60,13 @@ func (c *SetRelationshipHandler) Execute(ctx context.Context, runtime runtime.Ru
 		))
 	}
 
-	operation := types.Operation{
-		Object:     cmd.Relationship.Object,
-		Permission: cmd.Relationship.Relation,
+	req := authorizer.ManagementRequest{
+		Policy:   policy,
+		Object:   cmd.Relationship.Object,
+		Relation: cmd.Relationship.Relation,
+		Actor:    &creatorActor,
 	}
-	authorized, err := authorizer.IsAuthorized(ctx, policy, &operation, &creatorActor)
+	authorized, err := authz.IsAuthorized(ctx, &req)
 	if err != nil {
 		return nil, newSetRelationshipErr(err)
 	}
@@ -183,13 +185,12 @@ func (c *DeleteRelationshipHandler) validate(cmd *types.DeleteRelationshipReques
 }
 
 // verifies whether actor is authorized to remove the specified Relationship
-func (c *DeleteRelationshipHandler) isActorAuthorized(ctx context.Context, authorizer *authorizer.OperationAuthorizer, policy *types.Policy, cmd *types.DeleteRelationshipRequest, initiator string) (bool, error) {
-	creatorActor := types.Actor{
-		Id: initiator,
+func (c *DeleteRelationshipHandler) isActorAuthorized(ctx context.Context, authz *authorizer.OperationAuthorizer, policy *types.Policy, cmd *types.DeleteRelationshipRequest, initiator string) (bool, error) {
+	req := authorizer.ManagementRequest{
+		Policy:   policy,
+		Object:   cmd.Relationship.Object,
+		Relation: cmd.Relationship.Relation,
+		Actor:    types.NewActor(initiator),
 	}
-	operation := types.Operation{
-		Object:     cmd.Relationship.Object,
-		Permission: cmd.Relationship.Relation,
-	}
-	return authorizer.IsAuthorized(ctx, policy, &operation, &creatorActor)
+	return authz.IsAuthorized(ctx, &req)
 }

@@ -8,6 +8,15 @@ import (
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
+// ManagementRequest models an Actor's request to modify
+// a set of Relationships for a given object and relation
+type ManagementRequest struct {
+	Policy   *types.Policy
+	Object   *types.Object
+	Relation string
+	Actor    *types.Actor
+}
+
 func NewOperationAuthorizer(engine *zanzi.Adapter) *OperationAuthorizer {
 	return &OperationAuthorizer{
 		engine: engine,
@@ -27,31 +36,31 @@ type OperationAuthorizer struct {
 	engine *zanzi.Adapter
 }
 
-// IsAuthorized validates whether actor is a manager for the given relationship.
+// IsAuthorized validates the given management request
 //
 // A given Relationship is only valid if for the Relationship's Object and Relation
 // the Actor has an associated permission to manage the Object, Relation pair.
-func (a *OperationAuthorizer) IsAuthorized(ctx context.Context, policy *types.Policy, operation *types.Operation, actor *types.Actor) (bool, error) {
-	resource := policy.GetResourceByName(operation.Object.Resource)
+func (a *OperationAuthorizer) IsAuthorized(ctx context.Context, request *ManagementRequest) (bool, error) {
+	resource := request.Policy.GetResourceByName(request.Object.Resource)
 	if resource == nil {
 		return false, errors.New("resource not found in policy", errors.ErrorType_NOT_FOUND,
-			errors.Pair("policy", policy.Id),
-			errors.Pair("resource", operation.Object.Resource),
+			errors.Pair("policy", request.Policy.Id),
+			errors.Pair("resource", request.Object.Resource),
 		)
 	}
-	relation := resource.GetRelationByName(operation.Permission)
+	relation := resource.GetRelationByName(request.Relation)
 	if relation == nil {
 		return false, errors.New("relation not found in resource", errors.ErrorType_NOT_FOUND,
-			errors.Pair("policy", policy.Id),
-			errors.Pair("resource", operation.Object.Resource),
-			errors.Pair("relation", operation.Permission),
+			errors.Pair("policy", request.Policy.Id),
+			errors.Pair("resource", request.Object.Resource),
+			errors.Pair("relation", request.Relation),
 		)
 	}
 
 	authRequest := &types.Operation{
-		Object:     operation.Object,
-		Permission: policy.GetManagementPermissionName(operation.Permission),
+		Object:     request.Object,
+		Permission: request.Policy.GetManagementPermissionName(request.Relation),
 	}
 
-	return a.engine.Check(ctx, policy, authRequest, actor)
+	return a.engine.Check(ctx, request.Policy, authRequest, request.Actor)
 }
