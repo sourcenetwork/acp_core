@@ -60,15 +60,15 @@ func NewPlaygroundServiceProxy(ctx context.Context, manager runtime.RuntimeManag
 	})
 
 	proxyMap := map[string]js.Func{
-		"newSandbox":        asyncFn(wrapHandler(proxy.NewSandbox)),
-		"listSandboxes":     asyncFn(wrapHandler(proxy.ListSandboxes)),
-		"setState":          asyncFn(wrapHandler(proxy.SetState)),
-		"restoreScratchpad": asyncFn(wrapHandler(proxy.RestoreScratchpad)),
-		"getCatalogue":      asyncFn(wrapHandler(proxy.GetCatalogue)),
-		"getSandbox":        asyncFn(wrapHandler(proxy.GetSandbox)),
-		"verifyTheorems":    asyncFn(wrapHandler(proxy.VerifyTheorems)),
-		"simulate":          asyncFn(wrapHandler(proxy.Simulate)),
-		"close":             closeWrapper,
+		"NewSandbox":        asyncFn(wrapHandler(proxy.NewSandbox)),
+		"ListSandboxes":     asyncFn(wrapHandler(proxy.ListSandboxes)),
+		"SetState":          asyncFn(wrapHandler(proxy.SetState)),
+		"RestoreScratchpad": asyncFn(wrapHandler(proxy.RestoreScratchpad)),
+		"GetCatalogue":      asyncFn(wrapHandler(proxy.GetCatalogue)),
+		"GetSandbox":        asyncFn(wrapHandler(proxy.GetSandbox)),
+		"VerifyTheorems":    asyncFn(wrapHandler(proxy.VerifyTheorems)),
+		"Simulate":          asyncFn(wrapHandler(proxy.Simulate)),
+		"Close":             closeWrapper,
 	}
 	proxy.proxyMap = proxyMap
 	proxy.makeJSValue()
