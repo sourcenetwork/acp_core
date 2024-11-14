@@ -2,4 +2,5 @@ version: v1
 plugins:
   - plugin: buf.build/community/stephenh-ts-proto
     out: ../build/proto-js
-    
+    opt:
+      - outputEncodeMethods=false

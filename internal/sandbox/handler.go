@@ -3,6 +3,7 @@ package sandbox
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/sourcenetwork/acp_core/internal/parser"
 	"github.com/sourcenetwork/acp_core/internal/policy"
@@ -149,11 +150,18 @@ func (h *SetStateHandler) parseCtx(ctx context.Context, manager runtime.RuntimeM
 	// FIXME do full parsing once independent parsing is implemented
 	_, err := policy.Unmarshal(data.PolicyDefinition, types.PolicyMarshalingType_SHORT_YAML)
 	if err != nil {
+		end := getPolicyEndPosition(data.PolicyDefinition)
 		err := &types.LocatedMessage{
 			Message:   err.Error(),
 			Kind:      types.LocatedMessage_ERROR,
 			InputName: "policy",
-			// Interval is empty because unmarshaling still doesn't support that feature
+			Interval: &types.BufferInterval{
+				Start: &types.BufferPosition{
+					Line:   1,
+					Column: 1,
+				},
+				End: &end,
+			},
 		}
 		errs.PolicyErrors = append(errs.PolicyErrors, err)
 	}
@@ -212,12 +220,19 @@ func (h *SetStateHandler) setPolicy(ctx context.Context, manager runtime.Runtime
 	})
 
 	if err != nil {
+		end := getPolicyEndPosition(simCtx.PolicyDefinition)
 		if errors.Is(err, errors.ErrorType_BAD_INPUT) {
 			msg := &types.LocatedMessage{
 				Message:   err.Error(),
 				Kind:      types.LocatedMessage_ERROR,
 				InputName: "policy",
-				// Interval is empty because unmarshaling still doesn't support that feature
+				Interval: &types.BufferInterval{
+					Start: &types.BufferPosition{
+						Line:   1,
+						Column: 1,
+					},
+					End: &end,
+				},
 			}
 			errs.PolicyErrors = append(errs.PolicyErrors, msg)
 			return errs, nil
@@ -434,4 +449,22 @@ func HandleGetSandbox(ctx context.Context, manager runtime.RuntimeManager, req *
 	return &types.GetSandboxResponse{
 		Record: record,
 	}, nil
+}
+
+// getPolicyEndPosition return a BufferPosition to the last character
+// in pol. If an empty string, returns position 1,1
+func getPolicyEndPosition(pol string) types.BufferPosition {
+	pos := types.BufferPosition{
+		Line:   1,
+		Column: 1,
+	}
+	lines := strings.Split(pol, "\n")
+	if len(lines) > 0 {
+		lineCount := uint64(len(lines))
+		lastLine := lines[lineCount-1]
+		lastCol := uint64(len(lastLine))
+		pos.Line = lineCount
+		pos.Column = lastCol
+	}
+	return pos
 }

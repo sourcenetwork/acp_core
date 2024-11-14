@@ -38,7 +38,9 @@ func unmarsahlArgs(container proto.Message, args []js.Value) error {
 // The proto value is dumped as a JSON string and loaded in the JS runtime
 // using the JSON.parse method.
 func toJSObject[T proto.Message](val T) (js.Value, error) {
-	marshaler := jsonpb.Marshaler{}
+	marshaler := jsonpb.Marshaler{
+		EmitDefaults: true,
+	}
 	valStr, err := marshaler.MarshalToString(val)
 	if err != nil {
 		return js.Value{}, err

@@ -1,0 +1,12 @@
+.Editor {
+	width: 70vw;
+	height: 60vh;
+}
+
+.Selected {
+	color:brown;
+}
+
+#menu {
+	flex-direction: column;
+}
