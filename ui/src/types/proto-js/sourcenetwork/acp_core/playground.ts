@@ -5,7 +5,7 @@
 // source: sourcenetwork/acp_core/playground.proto
 
 /* eslint-disable */
-import { BinaryReader } from "@bufbuild/protobuf/wire";
+import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { PolicyCatalogue } from "./catalogue";
 import { SandboxData, SandboxDataErrors, SandboxRecord } from "./sandbox";
 import { AnnotatedPolicyTheoremResult } from "./theorem";
@@ -115,6 +115,46 @@ function createBaseNewSandboxRequest(): NewSandboxRequest {
 }
 
 export const NewSandboxRequest: MessageFns<NewSandboxRequest> = {
+  encode(message: NewSandboxRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.name !== "") {
+      writer.uint32(10).string(message.name);
+    }
+    if (message.description !== "") {
+      writer.uint32(18).string(message.description);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): NewSandboxRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseNewSandboxRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.description = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): NewSandboxRequest {
     return {
       name: isSet(object.name) ? globalThis.String(object.name) : "",
@@ -149,6 +189,36 @@ function createBaseNewSandboxResponse(): NewSandboxResponse {
 }
 
 export const NewSandboxResponse: MessageFns<NewSandboxResponse> = {
+  encode(message: NewSandboxResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.record !== undefined) {
+      SandboxRecord.encode(message.record, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): NewSandboxResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseNewSandboxResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.record = SandboxRecord.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): NewSandboxResponse {
     return { record: isSet(object.record) ? SandboxRecord.fromJSON(object.record) : undefined };
   },
@@ -178,6 +248,46 @@ function createBaseSetStateRequest(): SetStateRequest {
 }
 
 export const SetStateRequest: MessageFns<SetStateRequest> = {
+  encode(message: SetStateRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.handle !== 0) {
+      writer.uint32(8).uint64(message.handle);
+    }
+    if (message.data !== undefined) {
+      SandboxData.encode(message.data, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): SetStateRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSetStateRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.handle = longToNumber(reader.uint64());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.data = SandboxData.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): SetStateRequest {
     return {
       handle: isSet(object.handle) ? globalThis.Number(object.handle) : 0,
@@ -214,6 +324,56 @@ function createBaseSetStateResponse(): SetStateResponse {
 }
 
 export const SetStateResponse: MessageFns<SetStateResponse> = {
+  encode(message: SetStateResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.ok !== false) {
+      writer.uint32(8).bool(message.ok);
+    }
+    if (message.errors !== undefined) {
+      SandboxDataErrors.encode(message.errors, writer.uint32(18).fork()).join();
+    }
+    if (message.record !== undefined) {
+      SandboxRecord.encode(message.record, writer.uint32(26).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): SetStateResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSetStateResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.ok = reader.bool();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.errors = SandboxDataErrors.decode(reader, reader.uint32());
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.record = SandboxRecord.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): SetStateResponse {
     return {
       ok: isSet(object.ok) ? globalThis.Boolean(object.ok) : false,
@@ -257,6 +417,36 @@ function createBaseGetCatalogueRequest(): GetCatalogueRequest {
 }
 
 export const GetCatalogueRequest: MessageFns<GetCatalogueRequest> = {
+  encode(message: GetCatalogueRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.handle !== 0) {
+      writer.uint32(8).uint64(message.handle);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetCatalogueRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetCatalogueRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.handle = longToNumber(reader.uint64());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): GetCatalogueRequest {
     return { handle: isSet(object.handle) ? globalThis.Number(object.handle) : 0 };
   },
@@ -284,6 +474,36 @@ function createBaseGetCatalogueResponse(): GetCatalogueResponse {
 }
 
 export const GetCatalogueResponse: MessageFns<GetCatalogueResponse> = {
+  encode(message: GetCatalogueResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.catalogue !== undefined) {
+      PolicyCatalogue.encode(message.catalogue, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetCatalogueResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetCatalogueResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.catalogue = PolicyCatalogue.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): GetCatalogueResponse {
     return { catalogue: isSet(object.catalogue) ? PolicyCatalogue.fromJSON(object.catalogue) : undefined };
   },
@@ -313,6 +533,36 @@ function createBaseVerifyTheoremsRequest(): VerifyTheoremsRequest {
 }
 
 export const VerifyTheoremsRequest: MessageFns<VerifyTheoremsRequest> = {
+  encode(message: VerifyTheoremsRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.handle !== 0) {
+      writer.uint32(8).uint64(message.handle);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): VerifyTheoremsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseVerifyTheoremsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.handle = longToNumber(reader.uint64());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): VerifyTheoremsRequest {
     return { handle: isSet(object.handle) ? globalThis.Number(object.handle) : 0 };
   },
@@ -340,6 +590,36 @@ function createBaseVerifyTheoremsResponse(): VerifyTheoremsResponse {
 }
 
 export const VerifyTheoremsResponse: MessageFns<VerifyTheoremsResponse> = {
+  encode(message: VerifyTheoremsResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.result !== undefined) {
+      AnnotatedPolicyTheoremResult.encode(message.result, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): VerifyTheoremsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseVerifyTheoremsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.result = AnnotatedPolicyTheoremResult.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): VerifyTheoremsResponse {
     return { result: isSet(object.result) ? AnnotatedPolicyTheoremResult.fromJSON(object.result) : undefined };
   },
@@ -369,6 +649,26 @@ function createBaseListSandboxesRequest(): ListSandboxesRequest {
 }
 
 export const ListSandboxesRequest: MessageFns<ListSandboxesRequest> = {
+  encode(_: ListSandboxesRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ListSandboxesRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseListSandboxesRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(_: any): ListSandboxesRequest {
     return {};
   },
@@ -392,6 +692,36 @@ function createBaseListSandboxesResponse(): ListSandboxesResponse {
 }
 
 export const ListSandboxesResponse: MessageFns<ListSandboxesResponse> = {
+  encode(message: ListSandboxesResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    for (const v of message.records) {
+      SandboxRecord.encode(v!, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ListSandboxesResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseListSandboxesResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.records.push(SandboxRecord.decode(reader, reader.uint32()));
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): ListSandboxesResponse {
     return {
       records: globalThis.Array.isArray(object?.records)
@@ -423,6 +753,36 @@ function createBaseRestoreScratchpadRequest(): RestoreScratchpadRequest {
 }
 
 export const RestoreScratchpadRequest: MessageFns<RestoreScratchpadRequest> = {
+  encode(message: RestoreScratchpadRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.handle !== 0) {
+      writer.uint32(8).uint64(message.handle);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RestoreScratchpadRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRestoreScratchpadRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.handle = longToNumber(reader.uint64());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): RestoreScratchpadRequest {
     return { handle: isSet(object.handle) ? globalThis.Number(object.handle) : 0 };
   },
@@ -450,6 +810,36 @@ function createBaseRestoreScratchpadResponse(): RestoreScratchpadResponse {
 }
 
 export const RestoreScratchpadResponse: MessageFns<RestoreScratchpadResponse> = {
+  encode(message: RestoreScratchpadResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.scratchpad !== undefined) {
+      SandboxData.encode(message.scratchpad, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RestoreScratchpadResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRestoreScratchpadResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.scratchpad = SandboxData.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): RestoreScratchpadResponse {
     return { scratchpad: isSet(object.scratchpad) ? SandboxData.fromJSON(object.scratchpad) : undefined };
   },
@@ -479,6 +869,36 @@ function createBaseSimulateRequest(): SimulateRequest {
 }
 
 export const SimulateRequest: MessageFns<SimulateRequest> = {
+  encode(message: SimulateRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.data !== undefined) {
+      SandboxData.encode(message.data, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): SimulateRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSimulateRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.data = SandboxData.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): SimulateRequest {
     return { data: isSet(object.data) ? SandboxData.fromJSON(object.data) : undefined };
   },
@@ -508,6 +928,66 @@ function createBaseSimulateReponse(): SimulateReponse {
 }
 
 export const SimulateReponse: MessageFns<SimulateReponse> = {
+  encode(message: SimulateReponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.validData !== false) {
+      writer.uint32(8).bool(message.validData);
+    }
+    if (message.errors !== undefined) {
+      SandboxDataErrors.encode(message.errors, writer.uint32(18).fork()).join();
+    }
+    if (message.record !== undefined) {
+      SandboxRecord.encode(message.record, writer.uint32(26).fork()).join();
+    }
+    if (message.result !== undefined) {
+      AnnotatedPolicyTheoremResult.encode(message.result, writer.uint32(34).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): SimulateReponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSimulateReponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.validData = reader.bool();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.errors = SandboxDataErrors.decode(reader, reader.uint32());
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.record = SandboxRecord.decode(reader, reader.uint32());
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.result = AnnotatedPolicyTheoremResult.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): SimulateReponse {
     return {
       validData: isSet(object.validData) ? globalThis.Boolean(object.validData) : false,
@@ -558,6 +1038,36 @@ function createBaseGetSandboxRequest(): GetSandboxRequest {
 }
 
 export const GetSandboxRequest: MessageFns<GetSandboxRequest> = {
+  encode(message: GetSandboxRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.handle !== 0) {
+      writer.uint32(8).uint64(message.handle);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetSandboxRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetSandboxRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.handle = longToNumber(reader.uint64());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): GetSandboxRequest {
     return { handle: isSet(object.handle) ? globalThis.Number(object.handle) : 0 };
   },
@@ -585,6 +1095,36 @@ function createBaseGetSandboxResponse(): GetSandboxResponse {
 }
 
 export const GetSandboxResponse: MessageFns<GetSandboxResponse> = {
+  encode(message: GetSandboxResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.record !== undefined) {
+      SandboxRecord.encode(message.record, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetSandboxResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetSandboxResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.record = SandboxRecord.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): GetSandboxResponse {
     return { record: isSet(object.record) ? SandboxRecord.fromJSON(object.record) : undefined };
   },
@@ -716,11 +1256,24 @@ type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
+function longToNumber(int64: { toString(): string }): number {
+  const num = globalThis.Number(int64.toString());
+  if (num > globalThis.Number.MAX_SAFE_INTEGER) {
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+  }
+  if (num < globalThis.Number.MIN_SAFE_INTEGER) {
+    throw new globalThis.Error("Value is smaller than Number.MIN_SAFE_INTEGER");
+  }
+  return num;
+}
+
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;
 }
 
 export interface MessageFns<T> {
+  encode(message: T, writer?: BinaryWriter): BinaryWriter;
+  decode(input: BinaryReader | Uint8Array, length?: number): T;
   fromJSON(object: any): T;
   toJSON(message: T): unknown;
   create<I extends Exact<DeepPartial<T>, I>>(base?: I): T;

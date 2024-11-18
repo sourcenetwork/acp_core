@@ -5,6 +5,7 @@
 // source: sourcenetwork/acp_core/catalogue.proto
 
 /* eslint-disable */
+import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 
 export const protobufPackage = "sourcenetwork.acp_core";
 
@@ -32,6 +33,59 @@ function createBasePolicyCatalogue(): PolicyCatalogue {
 }
 
 export const PolicyCatalogue: MessageFns<PolicyCatalogue> = {
+  encode(message: PolicyCatalogue, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    Object.entries(message.resourceCatalogue).forEach(([key, value]) => {
+      PolicyCatalogue_ResourceCatalogueEntry.encode({ key: key as any, value }, writer.uint32(10).fork()).join();
+    });
+    if (message.actorResourceName !== "") {
+      writer.uint32(18).string(message.actorResourceName);
+    }
+    for (const v of message.actors) {
+      writer.uint32(26).string(v!);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): PolicyCatalogue {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePolicyCatalogue();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          const entry1 = PolicyCatalogue_ResourceCatalogueEntry.decode(reader, reader.uint32());
+          if (entry1.value !== undefined) {
+            message.resourceCatalogue[entry1.key] = entry1.value;
+          }
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.actorResourceName = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.actors.push(reader.string());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): PolicyCatalogue {
     return {
       resourceCatalogue: isObject(object.resourceCatalogue)
@@ -41,9 +95,7 @@ export const PolicyCatalogue: MessageFns<PolicyCatalogue> = {
         }, {})
         : {},
       actorResourceName: isSet(object.actorResourceName) ? globalThis.String(object.actorResourceName) : "",
-      actors: globalThis.Array.isArray(object?.actors)
-        ? object.actors.map((e: any) => globalThis.String(e))
-        : [],
+      actors: globalThis.Array.isArray(object?.actors) ? object.actors.map((e: any) => globalThis.String(e)) : [],
     };
   },
 
@@ -91,6 +143,46 @@ function createBasePolicyCatalogue_ResourceCatalogueEntry(): PolicyCatalogue_Res
 }
 
 export const PolicyCatalogue_ResourceCatalogueEntry: MessageFns<PolicyCatalogue_ResourceCatalogueEntry> = {
+  encode(message: PolicyCatalogue_ResourceCatalogueEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== undefined) {
+      ResourceCatalogue.encode(message.value, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): PolicyCatalogue_ResourceCatalogueEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePolicyCatalogue_ResourceCatalogueEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.key = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.value = ResourceCatalogue.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): PolicyCatalogue_ResourceCatalogueEntry {
     return {
       key: isSet(object.key) ? globalThis.String(object.key) : "",
@@ -131,6 +223,56 @@ function createBaseResourceCatalogue(): ResourceCatalogue {
 }
 
 export const ResourceCatalogue: MessageFns<ResourceCatalogue> = {
+  encode(message: ResourceCatalogue, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    for (const v of message.permissions) {
+      writer.uint32(10).string(v!);
+    }
+    for (const v of message.relations) {
+      writer.uint32(18).string(v!);
+    }
+    for (const v of message.objectIds) {
+      writer.uint32(26).string(v!);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ResourceCatalogue {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseResourceCatalogue();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.permissions.push(reader.string());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.relations.push(reader.string());
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.objectIds.push(reader.string());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): ResourceCatalogue {
     return {
       permissions: globalThis.Array.isArray(object?.permissions)
@@ -192,6 +334,8 @@ function isSet(value: any): boolean {
 }
 
 export interface MessageFns<T> {
+  encode(message: T, writer?: BinaryWriter): BinaryWriter;
+  decode(input: BinaryReader | Uint8Array, length?: number): T;
   fromJSON(object: any): T;
   toJSON(message: T): unknown;
   create<I extends Exact<DeepPartial<T>, I>>(base?: I): T;

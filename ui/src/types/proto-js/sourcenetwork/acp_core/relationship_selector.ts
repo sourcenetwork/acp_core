@@ -5,6 +5,7 @@
 // source: sourcenetwork/acp_core/relationship_selector.proto
 
 /* eslint-disable */
+import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { Object, Subject } from "./relationship";
 
 export const protobufPackage = "sourcenetwork.acp_core";
@@ -59,6 +60,56 @@ function createBaseRelationshipSelector(): RelationshipSelector {
 }
 
 export const RelationshipSelector: MessageFns<RelationshipSelector> = {
+  encode(message: RelationshipSelector, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.objectSelector !== undefined) {
+      ObjectSelector.encode(message.objectSelector, writer.uint32(10).fork()).join();
+    }
+    if (message.relationSelector !== undefined) {
+      RelationSelector.encode(message.relationSelector, writer.uint32(18).fork()).join();
+    }
+    if (message.subjectSelector !== undefined) {
+      SubjectSelector.encode(message.subjectSelector, writer.uint32(26).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RelationshipSelector {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRelationshipSelector();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.objectSelector = ObjectSelector.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.relationSelector = RelationSelector.decode(reader, reader.uint32());
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.subjectSelector = SubjectSelector.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): RelationshipSelector {
     return {
       objectSelector: isSet(object.objectSelector) ? ObjectSelector.fromJSON(object.objectSelector) : undefined,
@@ -104,6 +155,56 @@ function createBaseObjectSelector(): ObjectSelector {
 }
 
 export const ObjectSelector: MessageFns<ObjectSelector> = {
+  encode(message: ObjectSelector, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.object !== undefined) {
+      Object.encode(message.object, writer.uint32(10).fork()).join();
+    }
+    if (message.wildcard !== undefined) {
+      WildcardSelector.encode(message.wildcard, writer.uint32(18).fork()).join();
+    }
+    if (message.resourcePredicate !== undefined) {
+      writer.uint32(26).string(message.resourcePredicate);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ObjectSelector {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseObjectSelector();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.object = Object.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.wildcard = WildcardSelector.decode(reader, reader.uint32());
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.resourcePredicate = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): ObjectSelector {
     return {
       object: isSet(object.object) ? Object.fromJSON(object.object) : undefined,
@@ -147,6 +248,46 @@ function createBaseRelationSelector(): RelationSelector {
 }
 
 export const RelationSelector: MessageFns<RelationSelector> = {
+  encode(message: RelationSelector, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.relation !== undefined) {
+      writer.uint32(10).string(message.relation);
+    }
+    if (message.wildcard !== undefined) {
+      WildcardSelector.encode(message.wildcard, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RelationSelector {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRelationSelector();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.relation = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.wildcard = WildcardSelector.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): RelationSelector {
     return {
       relation: isSet(object.relation) ? globalThis.String(object.relation) : undefined,
@@ -183,6 +324,46 @@ function createBaseSubjectSelector(): SubjectSelector {
 }
 
 export const SubjectSelector: MessageFns<SubjectSelector> = {
+  encode(message: SubjectSelector, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.subject !== undefined) {
+      Subject.encode(message.subject, writer.uint32(10).fork()).join();
+    }
+    if (message.wildcard !== undefined) {
+      WildcardSelector.encode(message.wildcard, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): SubjectSelector {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSubjectSelector();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.subject = Subject.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.wildcard = WildcardSelector.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): SubjectSelector {
     return {
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
@@ -221,6 +402,26 @@ function createBaseWildcardSelector(): WildcardSelector {
 }
 
 export const WildcardSelector: MessageFns<WildcardSelector> = {
+  encode(_: WildcardSelector, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): WildcardSelector {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseWildcardSelector();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(_: any): WildcardSelector {
     return {};
   },
@@ -256,6 +457,8 @@ function isSet(value: any): boolean {
 }
 
 export interface MessageFns<T> {
+  encode(message: T, writer?: BinaryWriter): BinaryWriter;
+  decode(input: BinaryReader | Uint8Array, length?: number): T;
   fromJSON(object: any): T;
   toJSON(message: T): unknown;
   create<I extends Exact<DeepPartial<T>, I>>(base?: I): T;

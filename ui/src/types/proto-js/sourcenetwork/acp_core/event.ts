@@ -5,6 +5,7 @@
 // source: sourcenetwork/acp_core/event.proto
 
 /* eslint-disable */
+import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 
 export const protobufPackage = "sourcenetwork.acp_core";
 
@@ -62,6 +63,46 @@ function createBaseEventPolicyCreated(): EventPolicyCreated {
 }
 
 export const EventPolicyCreated: MessageFns<EventPolicyCreated> = {
+  encode(message: EventPolicyCreated, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.policyId !== "") {
+      writer.uint32(18).string(message.policyId);
+    }
+    if (message.policyName !== "") {
+      writer.uint32(26).string(message.policyName);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): EventPolicyCreated {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventPolicyCreated();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.policyId = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.policyName = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): EventPolicyCreated {
     return {
       policyId: isSet(object.policyId) ? globalThis.String(object.policyId) : "",
@@ -96,6 +137,76 @@ function createBaseEventAccessDecisionCreated(): EventAccessDecisionCreated {
 }
 
 export const EventAccessDecisionCreated: MessageFns<EventAccessDecisionCreated> = {
+  encode(message: EventAccessDecisionCreated, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.policyId !== "") {
+      writer.uint32(18).string(message.policyId);
+    }
+    if (message.decisionId !== "") {
+      writer.uint32(26).string(message.decisionId);
+    }
+    if (message.actor !== "") {
+      writer.uint32(34).string(message.actor);
+    }
+    if (message.actorDid !== "") {
+      writer.uint32(42).string(message.actorDid);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): EventAccessDecisionCreated {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventAccessDecisionCreated();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.creator = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.policyId = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.decisionId = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.actor = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.actorDid = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): EventAccessDecisionCreated {
     return {
       creator: isSet(object.creator) ? globalThis.String(object.creator) : "",
@@ -145,6 +256,66 @@ function createBaseEventObjectRegistered(): EventObjectRegistered {
 }
 
 export const EventObjectRegistered: MessageFns<EventObjectRegistered> = {
+  encode(message: EventObjectRegistered, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.actor !== "") {
+      writer.uint32(10).string(message.actor);
+    }
+    if (message.policyId !== "") {
+      writer.uint32(18).string(message.policyId);
+    }
+    if (message.objectResource !== "") {
+      writer.uint32(26).string(message.objectResource);
+    }
+    if (message.objectId !== "") {
+      writer.uint32(34).string(message.objectId);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): EventObjectRegistered {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventObjectRegistered();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.actor = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.policyId = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.objectResource = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.objectId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): EventObjectRegistered {
     return {
       actor: isSet(object.actor) ? globalThis.String(object.actor) : "",
@@ -189,6 +360,66 @@ function createBaseEventObjectArchived(): EventObjectArchived {
 }
 
 export const EventObjectArchived: MessageFns<EventObjectArchived> = {
+  encode(message: EventObjectArchived, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.actor !== "") {
+      writer.uint32(10).string(message.actor);
+    }
+    if (message.policyId !== "") {
+      writer.uint32(18).string(message.policyId);
+    }
+    if (message.objectResource !== "") {
+      writer.uint32(26).string(message.objectResource);
+    }
+    if (message.objectId !== "") {
+      writer.uint32(34).string(message.objectId);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): EventObjectArchived {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventObjectArchived();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.actor = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.policyId = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.objectResource = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.objectId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): EventObjectArchived {
     return {
       actor: isSet(object.actor) ? globalThis.String(object.actor) : "",
@@ -233,6 +464,66 @@ function createBaseEventObjectUnarchived(): EventObjectUnarchived {
 }
 
 export const EventObjectUnarchived: MessageFns<EventObjectUnarchived> = {
+  encode(message: EventObjectUnarchived, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.actor !== "") {
+      writer.uint32(10).string(message.actor);
+    }
+    if (message.policyId !== "") {
+      writer.uint32(18).string(message.policyId);
+    }
+    if (message.objectResource !== "") {
+      writer.uint32(26).string(message.objectResource);
+    }
+    if (message.objectId !== "") {
+      writer.uint32(34).string(message.objectId);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): EventObjectUnarchived {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventObjectUnarchived();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.actor = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.policyId = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.objectResource = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.objectId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): EventObjectUnarchived {
     return {
       actor: isSet(object.actor) ? globalThis.String(object.actor) : "",
@@ -277,6 +568,66 @@ function createBaseEventObjectTransfered(): EventObjectTransfered {
 }
 
 export const EventObjectTransfered: MessageFns<EventObjectTransfered> = {
+  encode(message: EventObjectTransfered, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.newOwner !== "") {
+      writer.uint32(10).string(message.newOwner);
+    }
+    if (message.policyId !== "") {
+      writer.uint32(18).string(message.policyId);
+    }
+    if (message.objectResource !== "") {
+      writer.uint32(26).string(message.objectResource);
+    }
+    if (message.objectId !== "") {
+      writer.uint32(34).string(message.objectId);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): EventObjectTransfered {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventObjectTransfered();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.newOwner = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.policyId = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.objectResource = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.objectId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): EventObjectTransfered {
     return {
       newOwner: isSet(object.newOwner) ? globalThis.String(object.newOwner) : "",
@@ -321,6 +672,76 @@ function createBaseEventObjectRegistrationAmended(): EventObjectRegistrationAmen
 }
 
 export const EventObjectRegistrationAmended: MessageFns<EventObjectRegistrationAmended> = {
+  encode(message: EventObjectRegistrationAmended, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.oldOwner !== "") {
+      writer.uint32(10).string(message.oldOwner);
+    }
+    if (message.newOwner !== "") {
+      writer.uint32(18).string(message.newOwner);
+    }
+    if (message.policyId !== "") {
+      writer.uint32(26).string(message.policyId);
+    }
+    if (message.objectResource !== "") {
+      writer.uint32(34).string(message.objectResource);
+    }
+    if (message.objectId !== "") {
+      writer.uint32(42).string(message.objectId);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): EventObjectRegistrationAmended {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventObjectRegistrationAmended();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.oldOwner = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.newOwner = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.policyId = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.objectResource = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.objectId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): EventObjectRegistrationAmended {
     return {
       oldOwner: isSet(object.oldOwner) ? globalThis.String(object.oldOwner) : "",
@@ -384,6 +805,8 @@ function isSet(value: any): boolean {
 }
 
 export interface MessageFns<T> {
+  encode(message: T, writer?: BinaryWriter): BinaryWriter;
+  decode(input: BinaryReader | Uint8Array, length?: number): T;
   fromJSON(object: any): T;
   toJSON(message: T): unknown;
   create<I extends Exact<DeepPartial<T>, I>>(base?: I): T;

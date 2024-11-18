@@ -5,6 +5,7 @@
 // source: sourcenetwork/acp_core/policy_short.proto
 
 /* eslint-disable */
+import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { ActorResource } from "./policy";
 
 export const protobufPackage = "sourcenetwork.acp_core";
@@ -126,6 +127,92 @@ function createBasePolicyShort(): PolicyShort {
 }
 
 export const PolicyShort: MessageFns<PolicyShort> = {
+  encode(message: PolicyShort, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.name !== "") {
+      writer.uint32(10).string(message.name);
+    }
+    if (message.description !== "") {
+      writer.uint32(18).string(message.description);
+    }
+    Object.entries(message.meta).forEach(([key, value]) => {
+      PolicyShort_MetaEntry.encode({ key: key as any, value }, writer.uint32(34).fork()).join();
+    });
+    Object.entries(message.resources).forEach(([key, value]) => {
+      PolicyShort_ResourcesEntry.encode({ key: key as any, value }, writer.uint32(42).fork()).join();
+    });
+    if (message.actor !== undefined) {
+      ActorResource.encode(message.actor, writer.uint32(50).fork()).join();
+    }
+    if (message.version !== "") {
+      writer.uint32(58).string(message.version);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): PolicyShort {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePolicyShort();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.description = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          const entry4 = PolicyShort_MetaEntry.decode(reader, reader.uint32());
+          if (entry4.value !== undefined) {
+            message.meta[entry4.key] = entry4.value;
+          }
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          const entry5 = PolicyShort_ResourcesEntry.decode(reader, reader.uint32());
+          if (entry5.value !== undefined) {
+            message.resources[entry5.key] = entry5.value;
+          }
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.actor = ActorResource.decode(reader, reader.uint32());
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.version = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): PolicyShort {
     return {
       name: isSet(object.name) ? globalThis.String(object.name) : "",
@@ -217,6 +304,46 @@ function createBasePolicyShort_MetaEntry(): PolicyShort_MetaEntry {
 }
 
 export const PolicyShort_MetaEntry: MessageFns<PolicyShort_MetaEntry> = {
+  encode(message: PolicyShort_MetaEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== "") {
+      writer.uint32(18).string(message.value);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): PolicyShort_MetaEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePolicyShort_MetaEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.key = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.value = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): PolicyShort_MetaEntry {
     return {
       key: isSet(object.key) ? globalThis.String(object.key) : "",
@@ -251,6 +378,46 @@ function createBasePolicyShort_ResourcesEntry(): PolicyShort_ResourcesEntry {
 }
 
 export const PolicyShort_ResourcesEntry: MessageFns<PolicyShort_ResourcesEntry> = {
+  encode(message: PolicyShort_ResourcesEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== undefined) {
+      ResourceShort.encode(message.value, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): PolicyShort_ResourcesEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePolicyShort_ResourcesEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.key = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.value = ResourceShort.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): PolicyShort_ResourcesEntry {
     return {
       key: isSet(object.key) ? globalThis.String(object.key) : "",
@@ -287,6 +454,62 @@ function createBaseResourceShort(): ResourceShort {
 }
 
 export const ResourceShort: MessageFns<ResourceShort> = {
+  encode(message: ResourceShort, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.doc !== "") {
+      writer.uint32(10).string(message.doc);
+    }
+    Object.entries(message.permissions).forEach(([key, value]) => {
+      ResourceShort_PermissionsEntry.encode({ key: key as any, value }, writer.uint32(18).fork()).join();
+    });
+    Object.entries(message.relations).forEach(([key, value]) => {
+      ResourceShort_RelationsEntry.encode({ key: key as any, value }, writer.uint32(26).fork()).join();
+    });
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ResourceShort {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseResourceShort();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.doc = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          const entry2 = ResourceShort_PermissionsEntry.decode(reader, reader.uint32());
+          if (entry2.value !== undefined) {
+            message.permissions[entry2.key] = entry2.value;
+          }
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          const entry3 = ResourceShort_RelationsEntry.decode(reader, reader.uint32());
+          if (entry3.value !== undefined) {
+            message.relations[entry3.key] = entry3.value;
+          }
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): ResourceShort {
     return {
       doc: isSet(object.doc) ? globalThis.String(object.doc) : "",
@@ -364,6 +587,46 @@ function createBaseResourceShort_PermissionsEntry(): ResourceShort_PermissionsEn
 }
 
 export const ResourceShort_PermissionsEntry: MessageFns<ResourceShort_PermissionsEntry> = {
+  encode(message: ResourceShort_PermissionsEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== undefined) {
+      PermissionShort.encode(message.value, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ResourceShort_PermissionsEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseResourceShort_PermissionsEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.key = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.value = PermissionShort.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): ResourceShort_PermissionsEntry {
     return {
       key: isSet(object.key) ? globalThis.String(object.key) : "",
@@ -402,6 +665,46 @@ function createBaseResourceShort_RelationsEntry(): ResourceShort_RelationsEntry 
 }
 
 export const ResourceShort_RelationsEntry: MessageFns<ResourceShort_RelationsEntry> = {
+  encode(message: ResourceShort_RelationsEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== undefined) {
+      RelationShort.encode(message.value, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ResourceShort_RelationsEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseResourceShort_RelationsEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.key = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.value = RelationShort.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): ResourceShort_RelationsEntry {
     return {
       key: isSet(object.key) ? globalThis.String(object.key) : "",
@@ -438,6 +741,56 @@ function createBaseRelationShort(): RelationShort {
 }
 
 export const RelationShort: MessageFns<RelationShort> = {
+  encode(message: RelationShort, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.doc !== "") {
+      writer.uint32(10).string(message.doc);
+    }
+    for (const v of message.manages) {
+      writer.uint32(18).string(v!);
+    }
+    for (const v of message.types) {
+      writer.uint32(26).string(v!);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RelationShort {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRelationShort();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.doc = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.manages.push(reader.string());
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.types.push(reader.string());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): RelationShort {
     return {
       doc: isSet(object.doc) ? globalThis.String(object.doc) : "",
@@ -477,6 +830,46 @@ function createBasePermissionShort(): PermissionShort {
 }
 
 export const PermissionShort: MessageFns<PermissionShort> = {
+  encode(message: PermissionShort, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.doc !== "") {
+      writer.uint32(10).string(message.doc);
+    }
+    if (message.expr !== "") {
+      writer.uint32(18).string(message.expr);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): PermissionShort {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePermissionShort();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.doc = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.expr = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): PermissionShort {
     return {
       doc: isSet(object.doc) ? globalThis.String(object.doc) : "",
@@ -527,6 +920,8 @@ function isSet(value: any): boolean {
 }
 
 export interface MessageFns<T> {
+  encode(message: T, writer?: BinaryWriter): BinaryWriter;
+  decode(input: BinaryReader | Uint8Array, length?: number): T;
   fromJSON(object: any): T;
   toJSON(message: T): unknown;
   create<I extends Exact<DeepPartial<T>, I>>(base?: I): T;

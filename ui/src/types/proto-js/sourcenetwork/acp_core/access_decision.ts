@@ -5,6 +5,7 @@
 // source: sourcenetwork/acp_core/access_decision.proto
 
 /* eslint-disable */
+import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { Timestamp } from "../../google/protobuf/timestamp";
 import { Actor, Object } from "./relationship";
 
@@ -74,6 +75,116 @@ function createBaseAccessDecision(): AccessDecision {
 }
 
 export const AccessDecision: MessageFns<AccessDecision> = {
+  encode(message: AccessDecision, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.policyId !== "") {
+      writer.uint32(18).string(message.policyId);
+    }
+    if (message.creator !== "") {
+      writer.uint32(26).string(message.creator);
+    }
+    if (message.creatorAccSequence !== 0) {
+      writer.uint32(32).uint64(message.creatorAccSequence);
+    }
+    for (const v of message.operations) {
+      Operation.encode(v!, writer.uint32(42).fork()).join();
+    }
+    if (message.actor !== "") {
+      writer.uint32(50).string(message.actor);
+    }
+    if (message.params !== undefined) {
+      DecisionParams.encode(message.params, writer.uint32(58).fork()).join();
+    }
+    if (message.creationTime !== undefined) {
+      Timestamp.encode(toTimestamp(message.creationTime), writer.uint32(66).fork()).join();
+    }
+    if (message.issuedHeight !== 0) {
+      writer.uint32(72).uint64(message.issuedHeight);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): AccessDecision {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAccessDecision();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.policyId = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.creator = reader.string();
+          continue;
+        case 4:
+          if (tag !== 32) {
+            break;
+          }
+
+          message.creatorAccSequence = longToNumber(reader.uint64());
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.operations.push(Operation.decode(reader, reader.uint32()));
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.actor = reader.string();
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.params = DecisionParams.decode(reader, reader.uint32());
+          continue;
+        case 8:
+          if (tag !== 66) {
+            break;
+          }
+
+          message.creationTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          continue;
+        case 9:
+          if (tag !== 72) {
+            break;
+          }
+
+          message.issuedHeight = longToNumber(reader.uint64());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): AccessDecision {
     return {
       id: isSet(object.id) ? globalThis.String(object.id) : "",
@@ -147,6 +258,56 @@ function createBaseDecisionParams(): DecisionParams {
 }
 
 export const DecisionParams: MessageFns<DecisionParams> = {
+  encode(message: DecisionParams, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.decisionExpirationDelta !== 0) {
+      writer.uint32(8).uint64(message.decisionExpirationDelta);
+    }
+    if (message.proofExpirationDelta !== 0) {
+      writer.uint32(16).uint64(message.proofExpirationDelta);
+    }
+    if (message.ticketExpirationDelta !== 0) {
+      writer.uint32(24).uint64(message.ticketExpirationDelta);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): DecisionParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDecisionParams();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.decisionExpirationDelta = longToNumber(reader.uint64());
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.proofExpirationDelta = longToNumber(reader.uint64());
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.ticketExpirationDelta = longToNumber(reader.uint64());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): DecisionParams {
     return {
       decisionExpirationDelta: isSet(object.decisionExpirationDelta)
@@ -188,6 +349,46 @@ function createBaseAccessRequest(): AccessRequest {
 }
 
 export const AccessRequest: MessageFns<AccessRequest> = {
+  encode(message: AccessRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    for (const v of message.operations) {
+      Operation.encode(v!, writer.uint32(10).fork()).join();
+    }
+    if (message.actor !== undefined) {
+      Actor.encode(message.actor, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): AccessRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAccessRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.operations.push(Operation.decode(reader, reader.uint32()));
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.actor = Actor.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): AccessRequest {
     return {
       operations: globalThis.Array.isArray(object?.operations)
@@ -224,6 +425,46 @@ function createBaseOperation(): Operation {
 }
 
 export const Operation: MessageFns<Operation> = {
+  encode(message: Operation, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.object !== undefined) {
+      Object.encode(message.object, writer.uint32(10).fork()).join();
+    }
+    if (message.permission !== "") {
+      writer.uint32(18).string(message.permission);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): Operation {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseOperation();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.object = Object.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.permission = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): Operation {
     return {
       object: isSet(object.object) ? Object.fromJSON(object.object) : undefined,
@@ -267,6 +508,12 @@ type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
+function toTimestamp(date: Date): Timestamp {
+  const seconds = Math.trunc(date.getTime() / 1_000);
+  const nanos = (date.getTime() % 1_000) * 1_000_000;
+  return { seconds, nanos };
+}
+
 function fromTimestamp(t: Timestamp): Date {
   let millis = (t.seconds || 0) * 1_000;
   millis += (t.nanos || 0) / 1_000_000;
@@ -283,11 +530,24 @@ function fromJsonTimestamp(o: any): Date {
   }
 }
 
+function longToNumber(int64: { toString(): string }): number {
+  const num = globalThis.Number(int64.toString());
+  if (num > globalThis.Number.MAX_SAFE_INTEGER) {
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+  }
+  if (num < globalThis.Number.MIN_SAFE_INTEGER) {
+    throw new globalThis.Error("Value is smaller than Number.MIN_SAFE_INTEGER");
+  }
+  return num;
+}
+
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;
 }
 
 export interface MessageFns<T> {
+  encode(message: T, writer?: BinaryWriter): BinaryWriter;
+  decode(input: BinaryReader | Uint8Array, length?: number): T;
   fromJSON(object: any): T;
   toJSON(message: T): unknown;
   create<I extends Exact<DeepPartial<T>, I>>(base?: I): T;

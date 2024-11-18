@@ -5,6 +5,7 @@
 // source: sourcenetwork/acp_core/theorem.proto
 
 /* eslint-disable */
+import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { Operation } from "./access_decision";
 import { BufferInterval } from "./buffer_position";
 import { Actor, Object } from "./relationship";
@@ -139,6 +140,56 @@ function createBaseAuthorizationTheorem(): AuthorizationTheorem {
 }
 
 export const AuthorizationTheorem: MessageFns<AuthorizationTheorem> = {
+  encode(message: AuthorizationTheorem, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.operation !== undefined) {
+      Operation.encode(message.operation, writer.uint32(10).fork()).join();
+    }
+    if (message.actor !== undefined) {
+      Actor.encode(message.actor, writer.uint32(18).fork()).join();
+    }
+    if (message.assertTrue !== false) {
+      writer.uint32(24).bool(message.assertTrue);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): AuthorizationTheorem {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAuthorizationTheorem();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.operation = Operation.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.actor = Actor.decode(reader, reader.uint32());
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.assertTrue = reader.bool();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): AuthorizationTheorem {
     return {
       operation: isSet(object.operation) ? Operation.fromJSON(object.operation) : undefined,
@@ -180,6 +231,66 @@ function createBaseReachabilityTheorem(): ReachabilityTheorem {
 }
 
 export const ReachabilityTheorem: MessageFns<ReachabilityTheorem> = {
+  encode(message: ReachabilityTheorem, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.actor !== undefined) {
+      Actor.encode(message.actor, writer.uint32(10).fork()).join();
+    }
+    if (message.operation !== "") {
+      writer.uint32(18).string(message.operation);
+    }
+    if (message.object !== undefined) {
+      Object.encode(message.object, writer.uint32(26).fork()).join();
+    }
+    if (message.assertTrue !== false) {
+      writer.uint32(32).bool(message.assertTrue);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ReachabilityTheorem {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseReachabilityTheorem();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.actor = Actor.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.operation = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.object = Object.decode(reader, reader.uint32());
+          continue;
+        case 4:
+          if (tag !== 32) {
+            break;
+          }
+
+          message.assertTrue = reader.bool();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): ReachabilityTheorem {
     return {
       actor: isSet(object.actor) ? Actor.fromJSON(object.actor) : undefined,
@@ -226,6 +337,56 @@ function createBaseDelegationTheorem(): DelegationTheorem {
 }
 
 export const DelegationTheorem: MessageFns<DelegationTheorem> = {
+  encode(message: DelegationTheorem, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.actor !== undefined) {
+      Actor.encode(message.actor, writer.uint32(10).fork()).join();
+    }
+    if (message.operation !== undefined) {
+      Operation.encode(message.operation, writer.uint32(18).fork()).join();
+    }
+    if (message.assertTrue !== false) {
+      writer.uint32(24).bool(message.assertTrue);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): DelegationTheorem {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDelegationTheorem();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.actor = Actor.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.operation = Operation.decode(reader, reader.uint32());
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.assertTrue = reader.bool();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): DelegationTheorem {
     return {
       actor: isSet(object.actor) ? Actor.fromJSON(object.actor) : undefined,
@@ -267,6 +428,56 @@ function createBasePolicyTheorem(): PolicyTheorem {
 }
 
 export const PolicyTheorem: MessageFns<PolicyTheorem> = {
+  encode(message: PolicyTheorem, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    for (const v of message.authorizationTheorems) {
+      AuthorizationTheorem.encode(v!, writer.uint32(10).fork()).join();
+    }
+    for (const v of message.delegationTheorems) {
+      DelegationTheorem.encode(v!, writer.uint32(18).fork()).join();
+    }
+    for (const v of message.reachabilityTheorems) {
+      ReachabilityTheorem.encode(v!, writer.uint32(26).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): PolicyTheorem {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePolicyTheorem();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.authorizationTheorems.push(AuthorizationTheorem.decode(reader, reader.uint32()));
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.delegationTheorems.push(DelegationTheorem.decode(reader, reader.uint32()));
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.reachabilityTheorems.push(ReachabilityTheorem.decode(reader, reader.uint32()));
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): PolicyTheorem {
     return {
       authorizationTheorems: globalThis.Array.isArray(object?.authorizationTheorems)
@@ -312,6 +523,46 @@ function createBaseResult(): Result {
 }
 
 export const Result: MessageFns<Result> = {
+  encode(message: Result, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.status !== 0) {
+      writer.uint32(8).int32(message.status);
+    }
+    if (message.message !== "") {
+      writer.uint32(18).string(message.message);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): Result {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseResult();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.status = reader.int32() as any;
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): Result {
     return {
       status: isSet(object.status) ? resultStatusFromJSON(object.status) : 0,
@@ -346,6 +597,46 @@ function createBaseAuthorizationTheoremResult(): AuthorizationTheoremResult {
 }
 
 export const AuthorizationTheoremResult: MessageFns<AuthorizationTheoremResult> = {
+  encode(message: AuthorizationTheoremResult, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.theorem !== undefined) {
+      AuthorizationTheorem.encode(message.theorem, writer.uint32(10).fork()).join();
+    }
+    if (message.result !== undefined) {
+      Result.encode(message.result, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): AuthorizationTheoremResult {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAuthorizationTheoremResult();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.theorem = AuthorizationTheorem.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.result = Result.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): AuthorizationTheoremResult {
     return {
       theorem: isSet(object.theorem) ? AuthorizationTheorem.fromJSON(object.theorem) : undefined,
@@ -384,6 +675,46 @@ function createBaseDelegationTheoremResult(): DelegationTheoremResult {
 }
 
 export const DelegationTheoremResult: MessageFns<DelegationTheoremResult> = {
+  encode(message: DelegationTheoremResult, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.theorem !== undefined) {
+      DelegationTheorem.encode(message.theorem, writer.uint32(10).fork()).join();
+    }
+    if (message.result !== undefined) {
+      Result.encode(message.result, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): DelegationTheoremResult {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDelegationTheoremResult();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.theorem = DelegationTheorem.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.result = Result.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): DelegationTheoremResult {
     return {
       theorem: isSet(object.theorem) ? DelegationTheorem.fromJSON(object.theorem) : undefined,
@@ -422,6 +753,46 @@ function createBaseReachabilityTheoremResult(): ReachabilityTheoremResult {
 }
 
 export const ReachabilityTheoremResult: MessageFns<ReachabilityTheoremResult> = {
+  encode(message: ReachabilityTheoremResult, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.theorem !== undefined) {
+      ReachabilityTheorem.encode(message.theorem, writer.uint32(10).fork()).join();
+    }
+    if (message.result !== undefined) {
+      Result.encode(message.result, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ReachabilityTheoremResult {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseReachabilityTheoremResult();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.theorem = ReachabilityTheorem.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.result = Result.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): ReachabilityTheoremResult {
     return {
       theorem: isSet(object.theorem) ? ReachabilityTheorem.fromJSON(object.theorem) : undefined,
@@ -460,6 +831,46 @@ function createBaseAnnotatedAuthorizationTheoremResult(): AnnotatedAuthorization
 }
 
 export const AnnotatedAuthorizationTheoremResult: MessageFns<AnnotatedAuthorizationTheoremResult> = {
+  encode(message: AnnotatedAuthorizationTheoremResult, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.result !== undefined) {
+      AuthorizationTheoremResult.encode(message.result, writer.uint32(10).fork()).join();
+    }
+    if (message.interval !== undefined) {
+      BufferInterval.encode(message.interval, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): AnnotatedAuthorizationTheoremResult {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAnnotatedAuthorizationTheoremResult();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.result = AuthorizationTheoremResult.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.interval = BufferInterval.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): AnnotatedAuthorizationTheoremResult {
     return {
       result: isSet(object.result) ? AuthorizationTheoremResult.fromJSON(object.result) : undefined,
@@ -502,6 +913,46 @@ function createBaseAnnotatedDelegationTheoremResult(): AnnotatedDelegationTheore
 }
 
 export const AnnotatedDelegationTheoremResult: MessageFns<AnnotatedDelegationTheoremResult> = {
+  encode(message: AnnotatedDelegationTheoremResult, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.result !== undefined) {
+      DelegationTheoremResult.encode(message.result, writer.uint32(10).fork()).join();
+    }
+    if (message.interval !== undefined) {
+      BufferInterval.encode(message.interval, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): AnnotatedDelegationTheoremResult {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAnnotatedDelegationTheoremResult();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.result = DelegationTheoremResult.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.interval = BufferInterval.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): AnnotatedDelegationTheoremResult {
     return {
       result: isSet(object.result) ? DelegationTheoremResult.fromJSON(object.result) : undefined,
@@ -544,6 +995,46 @@ function createBaseAnnotatedReachabilityTheoremResult(): AnnotatedReachabilityTh
 }
 
 export const AnnotatedReachabilityTheoremResult: MessageFns<AnnotatedReachabilityTheoremResult> = {
+  encode(message: AnnotatedReachabilityTheoremResult, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.result !== undefined) {
+      ReachabilityTheoremResult.encode(message.result, writer.uint32(10).fork()).join();
+    }
+    if (message.interval !== undefined) {
+      BufferInterval.encode(message.interval, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): AnnotatedReachabilityTheoremResult {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAnnotatedReachabilityTheoremResult();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.result = ReachabilityTheoremResult.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.interval = BufferInterval.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): AnnotatedReachabilityTheoremResult {
     return {
       result: isSet(object.result) ? ReachabilityTheoremResult.fromJSON(object.result) : undefined,
@@ -591,6 +1082,66 @@ function createBasePolicyTheoremResult(): PolicyTheoremResult {
 }
 
 export const PolicyTheoremResult: MessageFns<PolicyTheoremResult> = {
+  encode(message: PolicyTheoremResult, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.theorem !== undefined) {
+      PolicyTheorem.encode(message.theorem, writer.uint32(10).fork()).join();
+    }
+    for (const v of message.authorizationTheoremsResult) {
+      AuthorizationTheoremResult.encode(v!, writer.uint32(18).fork()).join();
+    }
+    for (const v of message.delegationTheoremsResult) {
+      DelegationTheoremResult.encode(v!, writer.uint32(26).fork()).join();
+    }
+    for (const v of message.reachabilityTheoremsResult) {
+      ReachabilityTheoremResult.encode(v!, writer.uint32(34).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): PolicyTheoremResult {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePolicyTheoremResult();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.theorem = PolicyTheorem.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.authorizationTheoremsResult.push(AuthorizationTheoremResult.decode(reader, reader.uint32()));
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.delegationTheoremsResult.push(DelegationTheoremResult.decode(reader, reader.uint32()));
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.reachabilityTheoremsResult.push(ReachabilityTheoremResult.decode(reader, reader.uint32()));
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): PolicyTheoremResult {
     return {
       theorem: isSet(object.theorem) ? PolicyTheorem.fromJSON(object.theorem) : undefined,
@@ -655,6 +1206,66 @@ function createBaseAnnotatedPolicyTheoremResult(): AnnotatedPolicyTheoremResult 
 }
 
 export const AnnotatedPolicyTheoremResult: MessageFns<AnnotatedPolicyTheoremResult> = {
+  encode(message: AnnotatedPolicyTheoremResult, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.theorem !== undefined) {
+      PolicyTheorem.encode(message.theorem, writer.uint32(10).fork()).join();
+    }
+    for (const v of message.authorizationTheoremsResult) {
+      AnnotatedAuthorizationTheoremResult.encode(v!, writer.uint32(18).fork()).join();
+    }
+    for (const v of message.delegationTheoremsResult) {
+      AnnotatedDelegationTheoremResult.encode(v!, writer.uint32(26).fork()).join();
+    }
+    for (const v of message.reachabilityTheoremsResult) {
+      AnnotatedReachabilityTheoremResult.encode(v!, writer.uint32(34).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): AnnotatedPolicyTheoremResult {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAnnotatedPolicyTheoremResult();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.theorem = PolicyTheorem.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.authorizationTheoremsResult.push(AnnotatedAuthorizationTheoremResult.decode(reader, reader.uint32()));
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.delegationTheoremsResult.push(AnnotatedDelegationTheoremResult.decode(reader, reader.uint32()));
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.reachabilityTheoremsResult.push(AnnotatedReachabilityTheoremResult.decode(reader, reader.uint32()));
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): AnnotatedPolicyTheoremResult {
     return {
       theorem: isSet(object.theorem) ? PolicyTheorem.fromJSON(object.theorem) : undefined,
@@ -728,6 +1339,8 @@ function isSet(value: any): boolean {
 }
 
 export interface MessageFns<T> {
+  encode(message: T, writer?: BinaryWriter): BinaryWriter;
+  decode(input: BinaryReader | Uint8Array, length?: number): T;
   fromJSON(object: any): T;
   toJSON(message: T): unknown;
   create<I extends Exact<DeepPartial<T>, I>>(base?: I): T;

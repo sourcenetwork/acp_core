@@ -5,6 +5,7 @@
 // source: sourcenetwork/acp_core/sandbox.proto
 
 /* eslint-disable */
+import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { LocatedMessage } from "./parser_message";
 import { Policy } from "./policy";
 import { Relationship } from "./relationship";
@@ -90,6 +91,96 @@ function createBaseSandboxRecord(): SandboxRecord {
 }
 
 export const SandboxRecord: MessageFns<SandboxRecord> = {
+  encode(message: SandboxRecord, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.handle !== 0) {
+      writer.uint32(8).uint64(message.handle);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.description !== "") {
+      writer.uint32(26).string(message.description);
+    }
+    if (message.data !== undefined) {
+      SandboxData.encode(message.data, writer.uint32(34).fork()).join();
+    }
+    if (message.scratchpad !== undefined) {
+      SandboxData.encode(message.scratchpad, writer.uint32(42).fork()).join();
+    }
+    if (message.ctx !== undefined) {
+      SandboxCtx.encode(message.ctx, writer.uint32(50).fork()).join();
+    }
+    if (message.initialized !== false) {
+      writer.uint32(56).bool(message.initialized);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): SandboxRecord {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSandboxRecord();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.handle = longToNumber(reader.uint64());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.description = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.data = SandboxData.decode(reader, reader.uint32());
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.scratchpad = SandboxData.decode(reader, reader.uint32());
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.ctx = SandboxCtx.decode(reader, reader.uint32());
+          continue;
+        case 7:
+          if (tag !== 56) {
+            break;
+          }
+
+          message.initialized = reader.bool();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): SandboxRecord {
     return {
       handle: isSet(object.handle) ? globalThis.Number(object.handle) : 0,
@@ -153,6 +244,56 @@ function createBaseSandboxData(): SandboxData {
 }
 
 export const SandboxData: MessageFns<SandboxData> = {
+  encode(message: SandboxData, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.policyDefinition !== "") {
+      writer.uint32(10).string(message.policyDefinition);
+    }
+    if (message.relationships !== "") {
+      writer.uint32(18).string(message.relationships);
+    }
+    if (message.policyTheorem !== "") {
+      writer.uint32(26).string(message.policyTheorem);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): SandboxData {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSandboxData();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.policyDefinition = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.relationships = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.policyTheorem = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): SandboxData {
     return {
       policyDefinition: isSet(object.policyDefinition) ? globalThis.String(object.policyDefinition) : "",
@@ -192,6 +333,56 @@ function createBaseSandboxCtx(): SandboxCtx {
 }
 
 export const SandboxCtx: MessageFns<SandboxCtx> = {
+  encode(message: SandboxCtx, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.policy !== undefined) {
+      Policy.encode(message.policy, writer.uint32(10).fork()).join();
+    }
+    for (const v of message.relationships) {
+      Relationship.encode(v!, writer.uint32(18).fork()).join();
+    }
+    if (message.policyTheorem !== undefined) {
+      PolicyTheorem.encode(message.policyTheorem, writer.uint32(26).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): SandboxCtx {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSandboxCtx();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.policy = Policy.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.relationships.push(Relationship.decode(reader, reader.uint32()));
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.policyTheorem = PolicyTheorem.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): SandboxCtx {
     return {
       policy: isSet(object.policy) ? Policy.fromJSON(object.policy) : undefined,
@@ -237,6 +428,56 @@ function createBaseSandboxDataErrors(): SandboxDataErrors {
 }
 
 export const SandboxDataErrors: MessageFns<SandboxDataErrors> = {
+  encode(message: SandboxDataErrors, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    for (const v of message.policyErrors) {
+      LocatedMessage.encode(v!, writer.uint32(10).fork()).join();
+    }
+    for (const v of message.relationshipsErrors) {
+      LocatedMessage.encode(v!, writer.uint32(18).fork()).join();
+    }
+    for (const v of message.theoremsErrors) {
+      LocatedMessage.encode(v!, writer.uint32(26).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): SandboxDataErrors {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSandboxDataErrors();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.policyErrors.push(LocatedMessage.decode(reader, reader.uint32()));
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.relationshipsErrors.push(LocatedMessage.decode(reader, reader.uint32()));
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.theoremsErrors.push(LocatedMessage.decode(reader, reader.uint32()));
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): SandboxDataErrors {
     return {
       policyErrors: globalThis.Array.isArray(object?.policyErrors)
@@ -289,11 +530,24 @@ type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
+function longToNumber(int64: { toString(): string }): number {
+  const num = globalThis.Number(int64.toString());
+  if (num > globalThis.Number.MAX_SAFE_INTEGER) {
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+  }
+  if (num < globalThis.Number.MIN_SAFE_INTEGER) {
+    throw new globalThis.Error("Value is smaller than Number.MIN_SAFE_INTEGER");
+  }
+  return num;
+}
+
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;
 }
 
 export interface MessageFns<T> {
+  encode(message: T, writer?: BinaryWriter): BinaryWriter;
+  decode(input: BinaryReader | Uint8Array, length?: number): T;
   fromJSON(object: any): T;
   toJSON(message: T): unknown;
   create<I extends Exact<DeepPartial<T>, I>>(base?: I): T;

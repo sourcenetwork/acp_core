@@ -5,7 +5,7 @@
 // source: sourcenetwork/acp_core/engine.proto
 
 /* eslint-disable */
-import { BinaryReader } from "@bufbuild/protobuf/wire";
+import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { AccessRequest } from "./access_decision";
 import { PolicyCatalogue } from "./catalogue";
 import { Policy } from "./policy";
@@ -246,6 +246,59 @@ function createBaseCreatePolicyRequest(): CreatePolicyRequest {
 }
 
 export const CreatePolicyRequest: MessageFns<CreatePolicyRequest> = {
+  encode(message: CreatePolicyRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.policy !== "") {
+      writer.uint32(10).string(message.policy);
+    }
+    if (message.marshalType !== 0) {
+      writer.uint32(16).int32(message.marshalType);
+    }
+    Object.entries(message.attributes).forEach(([key, value]) => {
+      CreatePolicyRequest_AttributesEntry.encode({ key: key as any, value }, writer.uint32(26).fork()).join();
+    });
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): CreatePolicyRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCreatePolicyRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.policy = reader.string();
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.marshalType = reader.int32() as any;
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          const entry3 = CreatePolicyRequest_AttributesEntry.decode(reader, reader.uint32());
+          if (entry3.value !== undefined) {
+            message.attributes[entry3.key] = entry3.value;
+          }
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): CreatePolicyRequest {
     return {
       policy: isSet(object.policy) ? globalThis.String(object.policy) : "",
@@ -304,6 +357,46 @@ function createBaseCreatePolicyRequest_AttributesEntry(): CreatePolicyRequest_At
 }
 
 export const CreatePolicyRequest_AttributesEntry: MessageFns<CreatePolicyRequest_AttributesEntry> = {
+  encode(message: CreatePolicyRequest_AttributesEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== "") {
+      writer.uint32(18).string(message.value);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): CreatePolicyRequest_AttributesEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCreatePolicyRequest_AttributesEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.key = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.value = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): CreatePolicyRequest_AttributesEntry {
     return {
       key: isSet(object.key) ? globalThis.String(object.key) : "",
@@ -342,6 +435,49 @@ function createBaseCreatePolicyResponse(): CreatePolicyResponse {
 }
 
 export const CreatePolicyResponse: MessageFns<CreatePolicyResponse> = {
+  encode(message: CreatePolicyResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.policy !== undefined) {
+      Policy.encode(message.policy, writer.uint32(10).fork()).join();
+    }
+    Object.entries(message.attributes).forEach(([key, value]) => {
+      CreatePolicyResponse_AttributesEntry.encode({ key: key as any, value }, writer.uint32(18).fork()).join();
+    });
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): CreatePolicyResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCreatePolicyResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.policy = Policy.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          const entry2 = CreatePolicyResponse_AttributesEntry.decode(reader, reader.uint32());
+          if (entry2.value !== undefined) {
+            message.attributes[entry2.key] = entry2.value;
+          }
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): CreatePolicyResponse {
     return {
       policy: isSet(object.policy) ? Policy.fromJSON(object.policy) : undefined,
@@ -397,6 +533,46 @@ function createBaseCreatePolicyResponse_AttributesEntry(): CreatePolicyResponse_
 }
 
 export const CreatePolicyResponse_AttributesEntry: MessageFns<CreatePolicyResponse_AttributesEntry> = {
+  encode(message: CreatePolicyResponse_AttributesEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== "") {
+      writer.uint32(18).string(message.value);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): CreatePolicyResponse_AttributesEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCreatePolicyResponse_AttributesEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.key = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.value = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): CreatePolicyResponse_AttributesEntry {
     return {
       key: isSet(object.key) ? globalThis.String(object.key) : "",
@@ -435,6 +611,59 @@ function createBaseSetRelationshipRequest(): SetRelationshipRequest {
 }
 
 export const SetRelationshipRequest: MessageFns<SetRelationshipRequest> = {
+  encode(message: SetRelationshipRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.policyId !== "") {
+      writer.uint32(10).string(message.policyId);
+    }
+    if (message.relationship !== undefined) {
+      Relationship.encode(message.relationship, writer.uint32(18).fork()).join();
+    }
+    Object.entries(message.attributes).forEach(([key, value]) => {
+      SetRelationshipRequest_AttributesEntry.encode({ key: key as any, value }, writer.uint32(26).fork()).join();
+    });
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): SetRelationshipRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSetRelationshipRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.policyId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.relationship = Relationship.decode(reader, reader.uint32());
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          const entry3 = SetRelationshipRequest_AttributesEntry.decode(reader, reader.uint32());
+          if (entry3.value !== undefined) {
+            message.attributes[entry3.key] = entry3.value;
+          }
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): SetRelationshipRequest {
     return {
       policyId: isSet(object.policyId) ? globalThis.String(object.policyId) : "",
@@ -495,6 +724,46 @@ function createBaseSetRelationshipRequest_AttributesEntry(): SetRelationshipRequ
 }
 
 export const SetRelationshipRequest_AttributesEntry: MessageFns<SetRelationshipRequest_AttributesEntry> = {
+  encode(message: SetRelationshipRequest_AttributesEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== "") {
+      writer.uint32(18).string(message.value);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): SetRelationshipRequest_AttributesEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSetRelationshipRequest_AttributesEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.key = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.value = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): SetRelationshipRequest_AttributesEntry {
     return {
       key: isSet(object.key) ? globalThis.String(object.key) : "",
@@ -533,6 +802,46 @@ function createBaseSetRelationshipResponse(): SetRelationshipResponse {
 }
 
 export const SetRelationshipResponse: MessageFns<SetRelationshipResponse> = {
+  encode(message: SetRelationshipResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.recordExisted !== false) {
+      writer.uint32(8).bool(message.recordExisted);
+    }
+    if (message.record !== undefined) {
+      RelationshipRecord.encode(message.record, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): SetRelationshipResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSetRelationshipResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.recordExisted = reader.bool();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.record = RelationshipRecord.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): SetRelationshipResponse {
     return {
       recordExisted: isSet(object.recordExisted) ? globalThis.Boolean(object.recordExisted) : false,
@@ -569,6 +878,46 @@ function createBaseDeleteRelationshipRequest(): DeleteRelationshipRequest {
 }
 
 export const DeleteRelationshipRequest: MessageFns<DeleteRelationshipRequest> = {
+  encode(message: DeleteRelationshipRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.policyId !== "") {
+      writer.uint32(10).string(message.policyId);
+    }
+    if (message.relationship !== undefined) {
+      Relationship.encode(message.relationship, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): DeleteRelationshipRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDeleteRelationshipRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.policyId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.relationship = Relationship.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): DeleteRelationshipRequest {
     return {
       policyId: isSet(object.policyId) ? globalThis.String(object.policyId) : "",
@@ -605,6 +954,36 @@ function createBaseDeleteRelationshipResponse(): DeleteRelationshipResponse {
 }
 
 export const DeleteRelationshipResponse: MessageFns<DeleteRelationshipResponse> = {
+  encode(message: DeleteRelationshipResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.recordFound !== false) {
+      writer.uint32(8).bool(message.recordFound);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): DeleteRelationshipResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDeleteRelationshipResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.recordFound = reader.bool();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): DeleteRelationshipResponse {
     return { recordFound: isSet(object.recordFound) ? globalThis.Boolean(object.recordFound) : false };
   },
@@ -632,6 +1011,59 @@ function createBaseRegisterObjectRequest(): RegisterObjectRequest {
 }
 
 export const RegisterObjectRequest: MessageFns<RegisterObjectRequest> = {
+  encode(message: RegisterObjectRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.policyId !== "") {
+      writer.uint32(10).string(message.policyId);
+    }
+    if (message.object !== undefined) {
+      Object.encode(message.object, writer.uint32(18).fork()).join();
+    }
+    Object.entries(message.attributes).forEach(([key, value]) => {
+      RegisterObjectRequest_AttributesEntry.encode({ key: key as any, value }, writer.uint32(26).fork()).join();
+    });
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RegisterObjectRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRegisterObjectRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.policyId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.object = Object.decode(reader, reader.uint32());
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          const entry3 = RegisterObjectRequest_AttributesEntry.decode(reader, reader.uint32());
+          if (entry3.value !== undefined) {
+            message.attributes[entry3.key] = entry3.value;
+          }
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): RegisterObjectRequest {
     return {
       policyId: isSet(object.policyId) ? globalThis.String(object.policyId) : "",
@@ -692,6 +1124,46 @@ function createBaseRegisterObjectRequest_AttributesEntry(): RegisterObjectReques
 }
 
 export const RegisterObjectRequest_AttributesEntry: MessageFns<RegisterObjectRequest_AttributesEntry> = {
+  encode(message: RegisterObjectRequest_AttributesEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== "") {
+      writer.uint32(18).string(message.value);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RegisterObjectRequest_AttributesEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRegisterObjectRequest_AttributesEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.key = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.value = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): RegisterObjectRequest_AttributesEntry {
     return {
       key: isSet(object.key) ? globalThis.String(object.key) : "",
@@ -730,6 +1202,36 @@ function createBaseRegisterObjectResponse(): RegisterObjectResponse {
 }
 
 export const RegisterObjectResponse: MessageFns<RegisterObjectResponse> = {
+  encode(message: RegisterObjectResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.record !== undefined) {
+      RelationshipRecord.encode(message.record, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RegisterObjectResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRegisterObjectResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.record = RelationshipRecord.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): RegisterObjectResponse {
     return { record: isSet(object.record) ? RelationshipRecord.fromJSON(object.record) : undefined };
   },
@@ -759,6 +1261,46 @@ function createBaseArchiveObjectRequest(): ArchiveObjectRequest {
 }
 
 export const ArchiveObjectRequest: MessageFns<ArchiveObjectRequest> = {
+  encode(message: ArchiveObjectRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.policyId !== "") {
+      writer.uint32(10).string(message.policyId);
+    }
+    if (message.object !== undefined) {
+      Object.encode(message.object, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ArchiveObjectRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseArchiveObjectRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.policyId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.object = Object.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): ArchiveObjectRequest {
     return {
       policyId: isSet(object.policyId) ? globalThis.String(object.policyId) : "",
@@ -795,6 +1337,46 @@ function createBaseArchiveObjectResponse(): ArchiveObjectResponse {
 }
 
 export const ArchiveObjectResponse: MessageFns<ArchiveObjectResponse> = {
+  encode(message: ArchiveObjectResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.relationshipsRemoved !== 0) {
+      writer.uint32(8).uint64(message.relationshipsRemoved);
+    }
+    if (message.recordModified !== false) {
+      writer.uint32(16).bool(message.recordModified);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ArchiveObjectResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseArchiveObjectResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.relationshipsRemoved = longToNumber(reader.uint64());
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.recordModified = reader.bool();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): ArchiveObjectResponse {
     return {
       relationshipsRemoved: isSet(object.relationshipsRemoved) ? globalThis.Number(object.relationshipsRemoved) : 0,
@@ -829,6 +1411,46 @@ function createBaseGetObjectRegistrationRequest(): GetObjectRegistrationRequest 
 }
 
 export const GetObjectRegistrationRequest: MessageFns<GetObjectRegistrationRequest> = {
+  encode(message: GetObjectRegistrationRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.policyId !== "") {
+      writer.uint32(10).string(message.policyId);
+    }
+    if (message.object !== undefined) {
+      Object.encode(message.object, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetObjectRegistrationRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetObjectRegistrationRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.policyId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.object = Object.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): GetObjectRegistrationRequest {
     return {
       policyId: isSet(object.policyId) ? globalThis.String(object.policyId) : "",
@@ -865,6 +1487,56 @@ function createBaseGetObjectRegistrationResponse(): GetObjectRegistrationRespons
 }
 
 export const GetObjectRegistrationResponse: MessageFns<GetObjectRegistrationResponse> = {
+  encode(message: GetObjectRegistrationResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.isRegistered !== false) {
+      writer.uint32(8).bool(message.isRegistered);
+    }
+    if (message.ownerId !== "") {
+      writer.uint32(18).string(message.ownerId);
+    }
+    if (message.record !== undefined) {
+      RelationshipRecord.encode(message.record, writer.uint32(26).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetObjectRegistrationResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetObjectRegistrationResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.isRegistered = reader.bool();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.ownerId = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.record = RelationshipRecord.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): GetObjectRegistrationResponse {
     return {
       isRegistered: isSet(object.isRegistered) ? globalThis.Boolean(object.isRegistered) : false,
@@ -908,6 +1580,46 @@ function createBaseFilterRelationshipsRequest(): FilterRelationshipsRequest {
 }
 
 export const FilterRelationshipsRequest: MessageFns<FilterRelationshipsRequest> = {
+  encode(message: FilterRelationshipsRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.policyId !== "") {
+      writer.uint32(10).string(message.policyId);
+    }
+    if (message.selector !== undefined) {
+      RelationshipSelector.encode(message.selector, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): FilterRelationshipsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseFilterRelationshipsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.policyId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.selector = RelationshipSelector.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): FilterRelationshipsRequest {
     return {
       policyId: isSet(object.policyId) ? globalThis.String(object.policyId) : "",
@@ -944,6 +1656,36 @@ function createBaseFilterRelationshipsResponse(): FilterRelationshipsResponse {
 }
 
 export const FilterRelationshipsResponse: MessageFns<FilterRelationshipsResponse> = {
+  encode(message: FilterRelationshipsResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    for (const v of message.records) {
+      RelationshipRecord.encode(v!, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): FilterRelationshipsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseFilterRelationshipsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.records.push(RelationshipRecord.decode(reader, reader.uint32()));
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): FilterRelationshipsResponse {
     return {
       records: globalThis.Array.isArray(object?.records)
@@ -975,6 +1717,36 @@ function createBaseGetPolicyRequest(): GetPolicyRequest {
 }
 
 export const GetPolicyRequest: MessageFns<GetPolicyRequest> = {
+  encode(message: GetPolicyRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetPolicyRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetPolicyRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): GetPolicyRequest {
     return { id: isSet(object.id) ? globalThis.String(object.id) : "" };
   },
@@ -1002,6 +1774,56 @@ function createBaseGetPolicyResponse(): GetPolicyResponse {
 }
 
 export const GetPolicyResponse: MessageFns<GetPolicyResponse> = {
+  encode(message: GetPolicyResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.policy !== undefined) {
+      Policy.encode(message.policy, writer.uint32(10).fork()).join();
+    }
+    if (message.policyRaw !== "") {
+      writer.uint32(18).string(message.policyRaw);
+    }
+    if (message.marshalType !== 0) {
+      writer.uint32(24).int32(message.marshalType);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetPolicyResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetPolicyResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.policy = Policy.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.policyRaw = reader.string();
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.marshalType = reader.int32() as any;
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): GetPolicyResponse {
     return {
       policy: isSet(object.policy) ? Policy.fromJSON(object.policy) : undefined,
@@ -1043,6 +1865,26 @@ function createBaseListPoliciesRequest(): ListPoliciesRequest {
 }
 
 export const ListPoliciesRequest: MessageFns<ListPoliciesRequest> = {
+  encode(_: ListPoliciesRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ListPoliciesRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseListPoliciesRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(_: any): ListPoliciesRequest {
     return {};
   },
@@ -1066,6 +1908,36 @@ function createBaseListPoliciesResponse(): ListPoliciesResponse {
 }
 
 export const ListPoliciesResponse: MessageFns<ListPoliciesResponse> = {
+  encode(message: ListPoliciesResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    for (const v of message.policies) {
+      Policy.encode(v!, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ListPoliciesResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseListPoliciesResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.policies.push(Policy.decode(reader, reader.uint32()));
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): ListPoliciesResponse {
     return {
       policies: globalThis.Array.isArray(object?.policies) ? object.policies.map((e: any) => Policy.fromJSON(e)) : [],
@@ -1095,6 +1967,36 @@ function createBaseDeletePolicyRequest(): DeletePolicyRequest {
 }
 
 export const DeletePolicyRequest: MessageFns<DeletePolicyRequest> = {
+  encode(message: DeletePolicyRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): DeletePolicyRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDeletePolicyRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): DeletePolicyRequest {
     return { id: isSet(object.id) ? globalThis.String(object.id) : "" };
   },
@@ -1122,6 +2024,36 @@ function createBaseDeletePolicyResponse(): DeletePolicyResponse {
 }
 
 export const DeletePolicyResponse: MessageFns<DeletePolicyResponse> = {
+  encode(message: DeletePolicyResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.found !== false) {
+      writer.uint32(8).bool(message.found);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): DeletePolicyResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDeletePolicyResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.found = reader.bool();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): DeletePolicyResponse {
     return { found: isSet(object.found) ? globalThis.Boolean(object.found) : false };
   },
@@ -1149,6 +2081,56 @@ function createBaseTransferObjectRequest(): TransferObjectRequest {
 }
 
 export const TransferObjectRequest: MessageFns<TransferObjectRequest> = {
+  encode(message: TransferObjectRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.policyId !== "") {
+      writer.uint32(10).string(message.policyId);
+    }
+    if (message.object !== undefined) {
+      Object.encode(message.object, writer.uint32(18).fork()).join();
+    }
+    if (message.newOwner !== undefined) {
+      Actor.encode(message.newOwner, writer.uint32(26).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): TransferObjectRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTransferObjectRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.policyId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.object = Object.decode(reader, reader.uint32());
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.newOwner = Actor.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): TransferObjectRequest {
     return {
       policyId: isSet(object.policyId) ? globalThis.String(object.policyId) : "",
@@ -1192,6 +2174,36 @@ function createBaseTransferObjectResponse(): TransferObjectResponse {
 }
 
 export const TransferObjectResponse: MessageFns<TransferObjectResponse> = {
+  encode(message: TransferObjectResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.record !== undefined) {
+      RelationshipRecord.encode(message.record, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): TransferObjectResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTransferObjectResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.record = RelationshipRecord.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): TransferObjectResponse {
     return { record: isSet(object.record) ? RelationshipRecord.fromJSON(object.record) : undefined };
   },
@@ -1221,6 +2233,46 @@ function createBaseValidatePolicyRequest(): ValidatePolicyRequest {
 }
 
 export const ValidatePolicyRequest: MessageFns<ValidatePolicyRequest> = {
+  encode(message: ValidatePolicyRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.policy !== "") {
+      writer.uint32(10).string(message.policy);
+    }
+    if (message.marshalType !== 0) {
+      writer.uint32(16).int32(message.marshalType);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ValidatePolicyRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseValidatePolicyRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.policy = reader.string();
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.marshalType = reader.int32() as any;
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): ValidatePolicyRequest {
     return {
       policy: isSet(object.policy) ? globalThis.String(object.policy) : "",
@@ -1255,6 +2307,46 @@ function createBaseValidatePolicyResponse(): ValidatePolicyResponse {
 }
 
 export const ValidatePolicyResponse: MessageFns<ValidatePolicyResponse> = {
+  encode(message: ValidatePolicyResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.valid !== false) {
+      writer.uint32(8).bool(message.valid);
+    }
+    if (message.errorMsg !== "") {
+      writer.uint32(18).string(message.errorMsg);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ValidatePolicyResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseValidatePolicyResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.valid = reader.bool();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.errorMsg = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): ValidatePolicyResponse {
     return {
       valid: isSet(object.valid) ? globalThis.Boolean(object.valid) : false,
@@ -1289,6 +2381,36 @@ function createBaseSetParamsRequest(): SetParamsRequest {
 }
 
 export const SetParamsRequest: MessageFns<SetParamsRequest> = {
+  encode(message: SetParamsRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.params !== undefined) {
+      Params.encode(message.params, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): SetParamsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSetParamsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.params = Params.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): SetParamsRequest {
     return { params: isSet(object.params) ? Params.fromJSON(object.params) : undefined };
   },
@@ -1318,6 +2440,26 @@ function createBaseSetParamsResponse(): SetParamsResponse {
 }
 
 export const SetParamsResponse: MessageFns<SetParamsResponse> = {
+  encode(_: SetParamsResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): SetParamsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSetParamsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(_: any): SetParamsResponse {
     return {};
   },
@@ -1341,6 +2483,26 @@ function createBaseGetParamsRequest(): GetParamsRequest {
 }
 
 export const GetParamsRequest: MessageFns<GetParamsRequest> = {
+  encode(_: GetParamsRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetParamsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetParamsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(_: any): GetParamsRequest {
     return {};
   },
@@ -1364,6 +2526,36 @@ function createBaseGetParamsResponse(): GetParamsResponse {
 }
 
 export const GetParamsResponse: MessageFns<GetParamsResponse> = {
+  encode(message: GetParamsResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.params !== undefined) {
+      Params.encode(message.params, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetParamsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetParamsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.params = Params.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): GetParamsResponse {
     return { params: isSet(object.params) ? Params.fromJSON(object.params) : undefined };
   },
@@ -1393,6 +2585,46 @@ function createBaseVerifyAccessRequestRequest(): VerifyAccessRequestRequest {
 }
 
 export const VerifyAccessRequestRequest: MessageFns<VerifyAccessRequestRequest> = {
+  encode(message: VerifyAccessRequestRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.policyId !== "") {
+      writer.uint32(10).string(message.policyId);
+    }
+    if (message.accessRequest !== undefined) {
+      AccessRequest.encode(message.accessRequest, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): VerifyAccessRequestRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseVerifyAccessRequestRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.policyId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.accessRequest = AccessRequest.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): VerifyAccessRequestRequest {
     return {
       policyId: isSet(object.policyId) ? globalThis.String(object.policyId) : "",
@@ -1429,6 +2661,36 @@ function createBaseVerifyAccessRequestResponse(): VerifyAccessRequestResponse {
 }
 
 export const VerifyAccessRequestResponse: MessageFns<VerifyAccessRequestResponse> = {
+  encode(message: VerifyAccessRequestResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.valid !== false) {
+      writer.uint32(8).bool(message.valid);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): VerifyAccessRequestResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseVerifyAccessRequestResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.valid = reader.bool();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): VerifyAccessRequestResponse {
     return { valid: isSet(object.valid) ? globalThis.Boolean(object.valid) : false };
   },
@@ -1456,6 +2718,36 @@ function createBaseGetPolicyCatalogueRequest(): GetPolicyCatalogueRequest {
 }
 
 export const GetPolicyCatalogueRequest: MessageFns<GetPolicyCatalogueRequest> = {
+  encode(message: GetPolicyCatalogueRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.policyId !== "") {
+      writer.uint32(10).string(message.policyId);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetPolicyCatalogueRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetPolicyCatalogueRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.policyId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): GetPolicyCatalogueRequest {
     return { policyId: isSet(object.policyId) ? globalThis.String(object.policyId) : "" };
   },
@@ -1483,6 +2775,36 @@ function createBaseGetPolicyCatalogueResponse(): GetPolicyCatalogueResponse {
 }
 
 export const GetPolicyCatalogueResponse: MessageFns<GetPolicyCatalogueResponse> = {
+  encode(message: GetPolicyCatalogueResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.catalogue !== undefined) {
+      PolicyCatalogue.encode(message.catalogue, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetPolicyCatalogueResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetPolicyCatalogueResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.catalogue = PolicyCatalogue.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): GetPolicyCatalogueResponse {
     return { catalogue: isSet(object.catalogue) ? PolicyCatalogue.fromJSON(object.catalogue) : undefined };
   },
@@ -1512,6 +2834,46 @@ function createBaseEvaluateTheoremRequest(): EvaluateTheoremRequest {
 }
 
 export const EvaluateTheoremRequest: MessageFns<EvaluateTheoremRequest> = {
+  encode(message: EvaluateTheoremRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.policyId !== "") {
+      writer.uint32(10).string(message.policyId);
+    }
+    if (message.policyTheorem !== "") {
+      writer.uint32(18).string(message.policyTheorem);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): EvaluateTheoremRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEvaluateTheoremRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.policyId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.policyTheorem = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): EvaluateTheoremRequest {
     return {
       policyId: isSet(object.policyId) ? globalThis.String(object.policyId) : "",
@@ -1546,6 +2908,36 @@ function createBaseEvaluateTheoremResponse(): EvaluateTheoremResponse {
 }
 
 export const EvaluateTheoremResponse: MessageFns<EvaluateTheoremResponse> = {
+  encode(message: EvaluateTheoremResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.result !== undefined) {
+      AnnotatedPolicyTheoremResult.encode(message.result, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): EvaluateTheoremResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEvaluateTheoremResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.result = AnnotatedPolicyTheoremResult.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): EvaluateTheoremResponse {
     return { result: isSet(object.result) ? AnnotatedPolicyTheoremResult.fromJSON(object.result) : undefined };
   },
@@ -1575,6 +2967,56 @@ function createBaseAmendRegistrationRequest(): AmendRegistrationRequest {
 }
 
 export const AmendRegistrationRequest: MessageFns<AmendRegistrationRequest> = {
+  encode(message: AmendRegistrationRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.policyId !== "") {
+      writer.uint32(10).string(message.policyId);
+    }
+    if (message.object !== undefined) {
+      Object.encode(message.object, writer.uint32(18).fork()).join();
+    }
+    if (message.newOwner !== undefined) {
+      Actor.encode(message.newOwner, writer.uint32(26).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): AmendRegistrationRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAmendRegistrationRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.policyId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.object = Object.decode(reader, reader.uint32());
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.newOwner = Actor.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): AmendRegistrationRequest {
     return {
       policyId: isSet(object.policyId) ? globalThis.String(object.policyId) : "",
@@ -1618,6 +3060,36 @@ function createBaseAmendRegistrationResponse(): AmendRegistrationResponse {
 }
 
 export const AmendRegistrationResponse: MessageFns<AmendRegistrationResponse> = {
+  encode(message: AmendRegistrationResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.record !== undefined) {
+      RelationshipRecord.encode(message.record, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): AmendRegistrationResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAmendRegistrationResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.record = RelationshipRecord.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): AmendRegistrationResponse {
     return { record: isSet(object.record) ? RelationshipRecord.fromJSON(object.record) : undefined };
   },
@@ -1647,6 +3119,46 @@ function createBaseUnarchiveObjectRequest(): UnarchiveObjectRequest {
 }
 
 export const UnarchiveObjectRequest: MessageFns<UnarchiveObjectRequest> = {
+  encode(message: UnarchiveObjectRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.policyId !== "") {
+      writer.uint32(10).string(message.policyId);
+    }
+    if (message.object !== undefined) {
+      Object.encode(message.object, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): UnarchiveObjectRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseUnarchiveObjectRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.policyId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.object = Object.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): UnarchiveObjectRequest {
     return {
       policyId: isSet(object.policyId) ? globalThis.String(object.policyId) : "",
@@ -1683,6 +3195,46 @@ function createBaseUnarchiveObjectResponse(): UnarchiveObjectResponse {
 }
 
 export const UnarchiveObjectResponse: MessageFns<UnarchiveObjectResponse> = {
+  encode(message: UnarchiveObjectResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.record !== undefined) {
+      RelationshipRecord.encode(message.record, writer.uint32(10).fork()).join();
+    }
+    if (message.recordModified !== false) {
+      writer.uint32(16).bool(message.recordModified);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): UnarchiveObjectResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseUnarchiveObjectResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.record = RelationshipRecord.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.recordModified = reader.bool();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): UnarchiveObjectResponse {
     return {
       record: isSet(object.record) ? RelationshipRecord.fromJSON(object.record) : undefined,
@@ -1990,6 +3542,17 @@ type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
+function longToNumber(int64: { toString(): string }): number {
+  const num = globalThis.Number(int64.toString());
+  if (num > globalThis.Number.MAX_SAFE_INTEGER) {
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+  }
+  if (num < globalThis.Number.MIN_SAFE_INTEGER) {
+    throw new globalThis.Error("Value is smaller than Number.MIN_SAFE_INTEGER");
+  }
+  return num;
+}
+
 function isObject(value: any): boolean {
   return typeof value === "object" && value !== null;
 }
@@ -1999,6 +3562,8 @@ function isSet(value: any): boolean {
 }
 
 export interface MessageFns<T> {
+  encode(message: T, writer?: BinaryWriter): BinaryWriter;
+  decode(input: BinaryReader | Uint8Array, length?: number): T;
   fromJSON(object: any): T;
   toJSON(message: T): unknown;
   create<I extends Exact<DeepPartial<T>, I>>(base?: I): T;

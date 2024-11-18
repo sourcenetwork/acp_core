@@ -5,6 +5,7 @@
 // source: sourcenetwork/acp_core/access_ticket.proto
 
 /* eslint-disable */
+import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { AccessDecision } from "./access_decision";
 
 export const protobufPackage = "sourcenetwork.acp_core";
@@ -41,6 +42,76 @@ function createBaseAccessTicket(): AccessTicket {
 }
 
 export const AccessTicket: MessageFns<AccessTicket> = {
+  encode(message: AccessTicket, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.versionDenominator !== "") {
+      writer.uint32(10).string(message.versionDenominator);
+    }
+    if (message.decisionId !== "") {
+      writer.uint32(18).string(message.decisionId);
+    }
+    if (message.decision !== undefined) {
+      AccessDecision.encode(message.decision, writer.uint32(26).fork()).join();
+    }
+    if (message.decisionProof.length !== 0) {
+      writer.uint32(34).bytes(message.decisionProof);
+    }
+    if (message.signature.length !== 0) {
+      writer.uint32(42).bytes(message.signature);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): AccessTicket {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAccessTicket();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.versionDenominator = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.decisionId = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.decision = AccessDecision.decode(reader, reader.uint32());
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.decisionProof = reader.bytes();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.signature = reader.bytes();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): AccessTicket {
     return {
       versionDenominator: isSet(object.versionDenominator) ? globalThis.String(object.versionDenominator) : "",
@@ -129,6 +200,8 @@ function isSet(value: any): boolean {
 }
 
 export interface MessageFns<T> {
+  encode(message: T, writer?: BinaryWriter): BinaryWriter;
+  decode(input: BinaryReader | Uint8Array, length?: number): T;
   fromJSON(object: any): T;
   toJSON(message: T): unknown;
   create<I extends Exact<DeepPartial<T>, I>>(base?: I): T;

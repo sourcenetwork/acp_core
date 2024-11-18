@@ -5,6 +5,7 @@
 // source: sourcenetwork/acp_core/policy_record.proto
 
 /* eslint-disable */
+import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { Policy } from "./policy";
 import { PolicyMarshalingType, policyMarshalingTypeFromJSON, policyMarshalingTypeToJSON } from "./policy_short";
 
@@ -91,6 +92,79 @@ function createBasePolicyRecord(): PolicyRecord {
 }
 
 export const PolicyRecord: MessageFns<PolicyRecord> = {
+  encode(message: PolicyRecord, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.policy !== undefined) {
+      Policy.encode(message.policy, writer.uint32(10).fork()).join();
+    }
+    if (message.managementGraph !== undefined) {
+      ManagementGraph.encode(message.managementGraph, writer.uint32(18).fork()).join();
+    }
+    Object.entries(message.metadata).forEach(([key, value]) => {
+      PolicyRecord_MetadataEntry.encode({ key: key as any, value }, writer.uint32(26).fork()).join();
+    });
+    if (message.policyDefinition !== "") {
+      writer.uint32(34).string(message.policyDefinition);
+    }
+    if (message.marshalType !== 0) {
+      writer.uint32(40).int32(message.marshalType);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): PolicyRecord {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePolicyRecord();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.policy = Policy.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.managementGraph = ManagementGraph.decode(reader, reader.uint32());
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          const entry3 = PolicyRecord_MetadataEntry.decode(reader, reader.uint32());
+          if (entry3.value !== undefined) {
+            message.metadata[entry3.key] = entry3.value;
+          }
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.policyDefinition = reader.string();
+          continue;
+        case 5:
+          if (tag !== 40) {
+            break;
+          }
+
+          message.marshalType = reader.int32() as any;
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): PolicyRecord {
     return {
       policy: isSet(object.policy) ? Policy.fromJSON(object.policy) : undefined,
@@ -160,6 +234,46 @@ function createBasePolicyRecord_MetadataEntry(): PolicyRecord_MetadataEntry {
 }
 
 export const PolicyRecord_MetadataEntry: MessageFns<PolicyRecord_MetadataEntry> = {
+  encode(message: PolicyRecord_MetadataEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== "") {
+      writer.uint32(18).string(message.value);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): PolicyRecord_MetadataEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePolicyRecord_MetadataEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.key = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.value = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): PolicyRecord_MetadataEntry {
     return {
       key: isSet(object.key) ? globalThis.String(object.key) : "",
@@ -194,6 +308,65 @@ function createBaseManagementGraph(): ManagementGraph {
 }
 
 export const ManagementGraph: MessageFns<ManagementGraph> = {
+  encode(message: ManagementGraph, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    Object.entries(message.nodes).forEach(([key, value]) => {
+      ManagementGraph_NodesEntry.encode({ key: key as any, value }, writer.uint32(10).fork()).join();
+    });
+    Object.entries(message.forwardEdges).forEach(([key, value]) => {
+      ManagementGraph_ForwardEdgesEntry.encode({ key: key as any, value }, writer.uint32(18).fork()).join();
+    });
+    Object.entries(message.backwardEdges).forEach(([key, value]) => {
+      ManagementGraph_BackwardEdgesEntry.encode({ key: key as any, value }, writer.uint32(26).fork()).join();
+    });
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ManagementGraph {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseManagementGraph();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          const entry1 = ManagementGraph_NodesEntry.decode(reader, reader.uint32());
+          if (entry1.value !== undefined) {
+            message.nodes[entry1.key] = entry1.value;
+          }
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          const entry2 = ManagementGraph_ForwardEdgesEntry.decode(reader, reader.uint32());
+          if (entry2.value !== undefined) {
+            message.forwardEdges[entry2.key] = entry2.value;
+          }
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          const entry3 = ManagementGraph_BackwardEdgesEntry.decode(reader, reader.uint32());
+          if (entry3.value !== undefined) {
+            message.backwardEdges[entry3.key] = entry3.value;
+          }
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): ManagementGraph {
     return {
       nodes: isObject(object.nodes)
@@ -287,6 +460,46 @@ function createBaseManagementGraph_NodesEntry(): ManagementGraph_NodesEntry {
 }
 
 export const ManagementGraph_NodesEntry: MessageFns<ManagementGraph_NodesEntry> = {
+  encode(message: ManagementGraph_NodesEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== undefined) {
+      ManagerNode.encode(message.value, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ManagementGraph_NodesEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseManagementGraph_NodesEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.key = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.value = ManagerNode.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): ManagementGraph_NodesEntry {
     return {
       key: isSet(object.key) ? globalThis.String(object.key) : "",
@@ -323,6 +536,46 @@ function createBaseManagementGraph_ForwardEdgesEntry(): ManagementGraph_ForwardE
 }
 
 export const ManagementGraph_ForwardEdgesEntry: MessageFns<ManagementGraph_ForwardEdgesEntry> = {
+  encode(message: ManagementGraph_ForwardEdgesEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== undefined) {
+      ManagerEdges.encode(message.value, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ManagementGraph_ForwardEdgesEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseManagementGraph_ForwardEdgesEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.key = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.value = ManagerEdges.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): ManagementGraph_ForwardEdgesEntry {
     return {
       key: isSet(object.key) ? globalThis.String(object.key) : "",
@@ -363,6 +616,46 @@ function createBaseManagementGraph_BackwardEdgesEntry(): ManagementGraph_Backwar
 }
 
 export const ManagementGraph_BackwardEdgesEntry: MessageFns<ManagementGraph_BackwardEdgesEntry> = {
+  encode(message: ManagementGraph_BackwardEdgesEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== undefined) {
+      ManagerEdges.encode(message.value, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ManagementGraph_BackwardEdgesEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseManagementGraph_BackwardEdgesEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.key = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.value = ManagerEdges.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): ManagementGraph_BackwardEdgesEntry {
     return {
       key: isSet(object.key) ? globalThis.String(object.key) : "",
@@ -403,6 +696,46 @@ function createBaseManagerNode(): ManagerNode {
 }
 
 export const ManagerNode: MessageFns<ManagerNode> = {
+  encode(message: ManagerNode, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.text !== "") {
+      writer.uint32(18).string(message.text);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ManagerNode {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseManagerNode();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.text = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): ManagerNode {
     return {
       id: isSet(object.id) ? globalThis.String(object.id) : "",
@@ -437,6 +770,39 @@ function createBaseManagerEdges(): ManagerEdges {
 }
 
 export const ManagerEdges: MessageFns<ManagerEdges> = {
+  encode(message: ManagerEdges, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    Object.entries(message.edges).forEach(([key, value]) => {
+      ManagerEdges_EdgesEntry.encode({ key: key as any, value }, writer.uint32(10).fork()).join();
+    });
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ManagerEdges {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseManagerEdges();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          const entry1 = ManagerEdges_EdgesEntry.decode(reader, reader.uint32());
+          if (entry1.value !== undefined) {
+            message.edges[entry1.key] = entry1.value;
+          }
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): ManagerEdges {
     return {
       edges: isObject(object.edges)
@@ -482,6 +848,46 @@ function createBaseManagerEdges_EdgesEntry(): ManagerEdges_EdgesEntry {
 }
 
 export const ManagerEdges_EdgesEntry: MessageFns<ManagerEdges_EdgesEntry> = {
+  encode(message: ManagerEdges_EdgesEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== false) {
+      writer.uint32(16).bool(message.value);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ManagerEdges_EdgesEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseManagerEdges_EdgesEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.key = reader.string();
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.value = reader.bool();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): ManagerEdges_EdgesEntry {
     return {
       key: isSet(object.key) ? globalThis.String(object.key) : "",
@@ -532,6 +938,8 @@ function isSet(value: any): boolean {
 }
 
 export interface MessageFns<T> {
+  encode(message: T, writer?: BinaryWriter): BinaryWriter;
+  decode(input: BinaryReader | Uint8Array, length?: number): T;
   fromJSON(object: any): T;
   toJSON(message: T): unknown;
   create<I extends Exact<DeepPartial<T>, I>>(base?: I): T;

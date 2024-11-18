@@ -5,6 +5,7 @@
 // source: sourcenetwork/acp_core/relationship.proto
 
 /* eslint-disable */
+import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { Timestamp } from "../../google/protobuf/timestamp";
 
 export const protobufPackage = "sourcenetwork.acp_core";
@@ -89,6 +90,46 @@ function createBaseObject(): Object {
 }
 
 export const Object: MessageFns<Object> = {
+  encode(message: Object, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.resource !== "") {
+      writer.uint32(10).string(message.resource);
+    }
+    if (message.id !== "") {
+      writer.uint32(18).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): Object {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseObject();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.resource = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): Object {
     return {
       resource: isSet(object.resource) ? globalThis.String(object.resource) : "",
@@ -123,6 +164,36 @@ function createBaseActor(): Actor {
 }
 
 export const Actor: MessageFns<Actor> = {
+  encode(message: Actor, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): Actor {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseActor();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): Actor {
     return { id: isSet(object.id) ? globalThis.String(object.id) : "" };
   },
@@ -150,6 +221,46 @@ function createBaseActorSet(): ActorSet {
 }
 
 export const ActorSet: MessageFns<ActorSet> = {
+  encode(message: ActorSet, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.object !== undefined) {
+      Object.encode(message.object, writer.uint32(10).fork()).join();
+    }
+    if (message.relation !== "") {
+      writer.uint32(18).string(message.relation);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ActorSet {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseActorSet();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.object = Object.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.relation = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): ActorSet {
     return {
       object: isSet(object.object) ? Object.fromJSON(object.object) : undefined,
@@ -186,6 +297,26 @@ function createBaseAllActors(): AllActors {
 }
 
 export const AllActors: MessageFns<AllActors> = {
+  encode(_: AllActors, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): AllActors {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAllActors();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(_: any): AllActors {
     return {};
   },
@@ -209,6 +340,66 @@ function createBaseSubject(): Subject {
 }
 
 export const Subject: MessageFns<Subject> = {
+  encode(message: Subject, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.actor !== undefined) {
+      Actor.encode(message.actor, writer.uint32(10).fork()).join();
+    }
+    if (message.actorSet !== undefined) {
+      ActorSet.encode(message.actorSet, writer.uint32(18).fork()).join();
+    }
+    if (message.allActors !== undefined) {
+      AllActors.encode(message.allActors, writer.uint32(26).fork()).join();
+    }
+    if (message.object !== undefined) {
+      Object.encode(message.object, writer.uint32(34).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): Subject {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSubject();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.actor = Actor.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.actorSet = ActorSet.decode(reader, reader.uint32());
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.allActors = AllActors.decode(reader, reader.uint32());
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.object = Object.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): Subject {
     return {
       actor: isSet(object.actor) ? Actor.fromJSON(object.actor) : undefined,
@@ -259,6 +450,56 @@ function createBaseRelationship(): Relationship {
 }
 
 export const Relationship: MessageFns<Relationship> = {
+  encode(message: Relationship, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.object !== undefined) {
+      Object.encode(message.object, writer.uint32(10).fork()).join();
+    }
+    if (message.relation !== "") {
+      writer.uint32(18).string(message.relation);
+    }
+    if (message.subject !== undefined) {
+      Subject.encode(message.subject, writer.uint32(26).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): Relationship {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRelationship();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.object = Object.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.relation = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.subject = Subject.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): Relationship {
     return {
       object: isSet(object.object) ? Object.fromJSON(object.object) : undefined,
@@ -309,6 +550,89 @@ function createBaseRelationshipRecord(): RelationshipRecord {
 }
 
 export const RelationshipRecord: MessageFns<RelationshipRecord> = {
+  encode(message: RelationshipRecord, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.policyId !== "") {
+      writer.uint32(10).string(message.policyId);
+    }
+    if (message.ownerDid !== "") {
+      writer.uint32(18).string(message.ownerDid);
+    }
+    if (message.relationship !== undefined) {
+      Relationship.encode(message.relationship, writer.uint32(26).fork()).join();
+    }
+    if (message.archived !== false) {
+      writer.uint32(32).bool(message.archived);
+    }
+    if (message.creationTime !== undefined) {
+      Timestamp.encode(toTimestamp(message.creationTime), writer.uint32(42).fork()).join();
+    }
+    Object.entries(message.metadata).forEach(([key, value]) => {
+      RelationshipRecord_MetadataEntry.encode({ key: key as any, value }, writer.uint32(50).fork()).join();
+    });
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RelationshipRecord {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRelationshipRecord();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.policyId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.ownerDid = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.relationship = Relationship.decode(reader, reader.uint32());
+          continue;
+        case 4:
+          if (tag !== 32) {
+            break;
+          }
+
+          message.archived = reader.bool();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.creationTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          const entry6 = RelationshipRecord_MetadataEntry.decode(reader, reader.uint32());
+          if (entry6.value !== undefined) {
+            message.metadata[entry6.key] = entry6.value;
+          }
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): RelationshipRecord {
     return {
       policyId: isSet(object.policyId) ? globalThis.String(object.policyId) : "",
@@ -381,6 +705,46 @@ function createBaseRelationshipRecord_MetadataEntry(): RelationshipRecord_Metada
 }
 
 export const RelationshipRecord_MetadataEntry: MessageFns<RelationshipRecord_MetadataEntry> = {
+  encode(message: RelationshipRecord_MetadataEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== "") {
+      writer.uint32(18).string(message.value);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): RelationshipRecord_MetadataEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRelationshipRecord_MetadataEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.key = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.value = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): RelationshipRecord_MetadataEntry {
     return {
       key: isSet(object.key) ? globalThis.String(object.key) : "",
@@ -419,6 +783,46 @@ function createBaseRegistration(): Registration {
 }
 
 export const Registration: MessageFns<Registration> = {
+  encode(message: Registration, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.object !== undefined) {
+      Object.encode(message.object, writer.uint32(10).fork()).join();
+    }
+    if (message.actor !== undefined) {
+      Actor.encode(message.actor, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): Registration {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRegistration();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.object = Object.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.actor = Actor.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): Registration {
     return {
       object: isSet(object.object) ? Object.fromJSON(object.object) : undefined,
@@ -462,6 +866,12 @@ type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
+function toTimestamp(date: Date): Timestamp {
+  const seconds = Math.trunc(date.getTime() / 1_000);
+  const nanos = (date.getTime() % 1_000) * 1_000_000;
+  return { seconds, nanos };
+}
+
 function fromTimestamp(t: Timestamp): Date {
   let millis = (t.seconds || 0) * 1_000;
   millis += (t.nanos || 0) / 1_000_000;
@@ -487,6 +897,8 @@ function isSet(value: any): boolean {
 }
 
 export interface MessageFns<T> {
+  encode(message: T, writer?: BinaryWriter): BinaryWriter;
+  decode(input: BinaryReader | Uint8Array, length?: number): T;
   fromJSON(object: any): T;
   toJSON(message: T): unknown;
   create<I extends Exact<DeepPartial<T>, I>>(base?: I): T;

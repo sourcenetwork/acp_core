@@ -5,6 +5,7 @@
 // source: sourcenetwork/acp_core/parser_message.proto
 
 /* eslint-disable */
+import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { BufferInterval } from "./buffer_position";
 
 export const protobufPackage = "sourcenetwork.acp_core";
@@ -67,6 +68,66 @@ function createBaseLocatedMessage(): LocatedMessage {
 }
 
 export const LocatedMessage: MessageFns<LocatedMessage> = {
+  encode(message: LocatedMessage, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.message !== "") {
+      writer.uint32(10).string(message.message);
+    }
+    if (message.kind !== 0) {
+      writer.uint32(16).int32(message.kind);
+    }
+    if (message.inputName !== "") {
+      writer.uint32(26).string(message.inputName);
+    }
+    if (message.interval !== undefined) {
+      BufferInterval.encode(message.interval, writer.uint32(34).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): LocatedMessage {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseLocatedMessage();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.kind = reader.int32() as any;
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.inputName = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.interval = BufferInterval.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
   fromJSON(object: any): LocatedMessage {
     return {
       message: isSet(object.message) ? globalThis.String(object.message) : "",
@@ -125,6 +186,8 @@ function isSet(value: any): boolean {
 }
 
 export interface MessageFns<T> {
+  encode(message: T, writer?: BinaryWriter): BinaryWriter;
+  decode(input: BinaryReader | Uint8Array, length?: number): T;
   fromJSON(object: any): T;
   toJSON(message: T): unknown;
   create<I extends Exact<DeepPartial<T>, I>>(base?: I): T;
