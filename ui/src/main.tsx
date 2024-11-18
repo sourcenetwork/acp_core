@@ -1,17 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Editor } from './components/editor/Editor';
-import './userWorker';
-import './runtime/wasm_exec.js';
-import { loadGoWASM } from './utils/wasm';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { BrowserRouter } from "react-router-dom"
+import App from './App.tsx'
+import { ThemeProvider } from './ThemeProvider.tsx'
+import './index.css'
+import './lib/wasm_exec.js'
 
-
-const module = await loadGoWASM("playground.wasm");
-
-
-ReactDOM.render(
-	<React.StrictMode>
-		<Editor/>
-	</React.StrictMode>,
-	document.getElementById('root')
-);
+ReactDOM.createRoot(document.getElementById('root')!).render(
+    <React.StrictMode>
+        <BrowserRouter>
+            <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+                <App />
+            </ThemeProvider>
+        </BrowserRouter>
+    </React.StrictMode>
+)
