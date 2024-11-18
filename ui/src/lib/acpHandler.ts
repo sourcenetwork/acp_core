@@ -9,19 +9,18 @@ import {
   SandboxRecord,
 } from "@/types/proto-js/sourcenetwork/acp_core/sandbox";
 import { AnnotatedPolicyTheoremResult } from "@/types/proto-js/sourcenetwork/acp_core/theorem";
+import { WASM_PATH } from "@/utils/constants";
 import { loadPlaygroundWasm } from "@/utils/loadWasm";
 import { theoremResultPassing } from "@/utils/mapTheoremResultMarkers";
 import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import { usePlaygroundStorageStore } from "./acpStorage";
 
-// type StateType = keyof
 export interface PlaygroundState {
   status: "uninitialized" | "loading" | "ready" | "error";
   error?: string;
   module?: WebAssembly.Instance;
   playground?: PlaygroundService | null;
-
   active?: SandboxRecord;
   sandboxErrors?: SandboxDataErrors;
   sandboxErrorCount: number;
@@ -55,7 +54,7 @@ export const usePlaygroundStore = create<PlaygroundState>()(
         try {
           set({ status: "loading" });
 
-          const module = await loadPlaygroundWasm("playground.wasm");
+          const module = await loadPlaygroundWasm(WASM_PATH);
           const playground = await window.AcpPlayground.new();
 
           set({

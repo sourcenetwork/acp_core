@@ -6,9 +6,7 @@ import {
   subscribeWithSelector,
 } from "zustand/middleware";
 import { samples } from "./acpSamples";
-
-const STORE_KEY = "acp-playground-storage";
-const STORE_VERSION = "0";
+import { STORE_KEY, STORE_VERSION } from "@/utils/constants";
 
 export interface PlaygroundStorageState {
   data: SandboxData;
