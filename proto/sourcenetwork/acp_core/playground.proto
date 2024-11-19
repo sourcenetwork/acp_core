@@ -36,6 +36,10 @@ service PlaygroundService {
   // Simulate is a oneshot operation and persists no state in the process.
   rpc Simulate(SimulateRequest) returns (SimulateReponse);
 
+  // GetSampleSandboxes returns a set of preloaded SandboxData objects
+  // which are used to demo different ACP Features
+  rpc GetSampleSandboxes(GetSampleSandboxesRequest) returns (GetSampleSandboxesResponse);
+
   // Check runs a Check operation with the provided data for the context of a sandbox.
   // A Check call is used to verify whether some actor is authorized to act on a some object
   //rpc Check (CheckRequest) returns (CheckResponse);
@@ -152,4 +156,10 @@ message GetSandboxRequest {
 message GetSandboxResponse {
   // record contains a representation of the sandbox's new internal state
   sourcenetwork.acp_core.SandboxRecord record = 1;
+}
+
+message GetSampleSandboxesRequest{} 
+
+message GetSampleSandboxesResponse{
+  repeated SandboxTemplate samples = 1;
 }

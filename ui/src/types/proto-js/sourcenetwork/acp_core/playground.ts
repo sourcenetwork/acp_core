@@ -6,7 +6,7 @@
 
 /* eslint-disable */
 import { type PolicyCatalogue } from "./catalogue";
-import { type SandboxData, type SandboxDataErrors, type SandboxRecord } from "./sandbox";
+import { type SandboxData, type SandboxDataErrors, type SandboxRecord, type SandboxTemplate } from "./sandbox";
 import { type AnnotatedPolicyTheoremResult } from "./theorem";
 
 export const protobufPackage = "sourcenetwork.acp_core";
@@ -109,6 +109,13 @@ export interface GetSandboxResponse {
   record: SandboxRecord | undefined;
 }
 
+export interface GetSampleSandboxesRequest {
+}
+
+export interface GetSampleSandboxesResponse {
+  samples: SandboxTemplate[];
+}
+
 export interface PlaygroundService {
   /**
    * NewSandbox creates a new isolated execution environment in the Service
@@ -133,4 +140,9 @@ export interface PlaygroundService {
    * Simulate is a oneshot operation and persists no state in the process.
    */
   Simulate(request: SimulateRequest): Promise<SimulateReponse>;
+  /**
+   * GetSampleSandboxes returns a set of preloaded SandboxData objects
+   * which are used to demo different ACP Features
+   */
+  GetSampleSandboxes(request: GetSampleSandboxesRequest): Promise<GetSampleSandboxesResponse>;
 }

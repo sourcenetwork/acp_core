@@ -76,3 +76,13 @@ export interface SandboxDataErrors {
    */
   theoremsErrors: LocatedMessage[];
 }
+
+/**
+ * SandboxTemplate models a template sandbox
+ * containing its data, a name and description
+ */
+export interface SandboxTemplate {
+  name: string;
+  description: string;
+  data: SandboxData | undefined;
+}

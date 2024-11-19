@@ -7270,6 +7270,856 @@ func (x *fastReflection_GetSandboxResponse) ProtoMethods() *protoiface.Methods {
 	}
 }
 
+var (
+	md_GetSampleSandboxesRequest protoreflect.MessageDescriptor
+)
+
+func init() {
+	file_sourcenetwork_acp_core_playground_proto_init()
+	md_GetSampleSandboxesRequest = File_sourcenetwork_acp_core_playground_proto.Messages().ByName("GetSampleSandboxesRequest")
+}
+
+var _ protoreflect.Message = (*fastReflection_GetSampleSandboxesRequest)(nil)
+
+type fastReflection_GetSampleSandboxesRequest GetSampleSandboxesRequest
+
+func (x *GetSampleSandboxesRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_GetSampleSandboxesRequest)(x)
+}
+
+func (x *GetSampleSandboxesRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[16]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_GetSampleSandboxesRequest_messageType fastReflection_GetSampleSandboxesRequest_messageType
+var _ protoreflect.MessageType = fastReflection_GetSampleSandboxesRequest_messageType{}
+
+type fastReflection_GetSampleSandboxesRequest_messageType struct{}
+
+func (x fastReflection_GetSampleSandboxesRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_GetSampleSandboxesRequest)(nil)
+}
+func (x fastReflection_GetSampleSandboxesRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_GetSampleSandboxesRequest)
+}
+func (x fastReflection_GetSampleSandboxesRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_GetSampleSandboxesRequest
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_GetSampleSandboxesRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_GetSampleSandboxesRequest
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_GetSampleSandboxesRequest) Type() protoreflect.MessageType {
+	return _fastReflection_GetSampleSandboxesRequest_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_GetSampleSandboxesRequest) New() protoreflect.Message {
+	return new(fastReflection_GetSampleSandboxesRequest)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_GetSampleSandboxesRequest) Interface() protoreflect.ProtoMessage {
+	return (*GetSampleSandboxesRequest)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_GetSampleSandboxesRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_GetSampleSandboxesRequest) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSampleSandboxesRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSampleSandboxesRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_GetSampleSandboxesRequest) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSampleSandboxesRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSampleSandboxesRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_GetSampleSandboxesRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSampleSandboxesRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSampleSandboxesRequest does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_GetSampleSandboxesRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSampleSandboxesRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSampleSandboxesRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_GetSampleSandboxesRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSampleSandboxesRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSampleSandboxesRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_GetSampleSandboxesRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSampleSandboxesRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSampleSandboxesRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_GetSampleSandboxesRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.GetSampleSandboxesRequest", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_GetSampleSandboxesRequest) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_GetSampleSandboxesRequest) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_GetSampleSandboxesRequest) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_GetSampleSandboxesRequest) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*GetSampleSandboxesRequest)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*GetSampleSandboxesRequest)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*GetSampleSandboxesRequest)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: GetSampleSandboxesRequest: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: GetSampleSandboxesRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var _ protoreflect.List = (*_GetSampleSandboxesResponse_1_list)(nil)
+
+type _GetSampleSandboxesResponse_1_list struct {
+	list *[]*SandboxTemplate
+}
+
+func (x *_GetSampleSandboxesResponse_1_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_GetSampleSandboxesResponse_1_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_GetSampleSandboxesResponse_1_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*SandboxTemplate)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_GetSampleSandboxesResponse_1_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*SandboxTemplate)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_GetSampleSandboxesResponse_1_list) AppendMutable() protoreflect.Value {
+	v := new(SandboxTemplate)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GetSampleSandboxesResponse_1_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_GetSampleSandboxesResponse_1_list) NewElement() protoreflect.Value {
+	v := new(SandboxTemplate)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GetSampleSandboxesResponse_1_list) IsValid() bool {
+	return x.list != nil
+}
+
+var (
+	md_GetSampleSandboxesResponse         protoreflect.MessageDescriptor
+	fd_GetSampleSandboxesResponse_samples protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_sourcenetwork_acp_core_playground_proto_init()
+	md_GetSampleSandboxesResponse = File_sourcenetwork_acp_core_playground_proto.Messages().ByName("GetSampleSandboxesResponse")
+	fd_GetSampleSandboxesResponse_samples = md_GetSampleSandboxesResponse.Fields().ByName("samples")
+}
+
+var _ protoreflect.Message = (*fastReflection_GetSampleSandboxesResponse)(nil)
+
+type fastReflection_GetSampleSandboxesResponse GetSampleSandboxesResponse
+
+func (x *GetSampleSandboxesResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_GetSampleSandboxesResponse)(x)
+}
+
+func (x *GetSampleSandboxesResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[17]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_GetSampleSandboxesResponse_messageType fastReflection_GetSampleSandboxesResponse_messageType
+var _ protoreflect.MessageType = fastReflection_GetSampleSandboxesResponse_messageType{}
+
+type fastReflection_GetSampleSandboxesResponse_messageType struct{}
+
+func (x fastReflection_GetSampleSandboxesResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_GetSampleSandboxesResponse)(nil)
+}
+func (x fastReflection_GetSampleSandboxesResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_GetSampleSandboxesResponse)
+}
+func (x fastReflection_GetSampleSandboxesResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_GetSampleSandboxesResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_GetSampleSandboxesResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_GetSampleSandboxesResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_GetSampleSandboxesResponse) Type() protoreflect.MessageType {
+	return _fastReflection_GetSampleSandboxesResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_GetSampleSandboxesResponse) New() protoreflect.Message {
+	return new(fastReflection_GetSampleSandboxesResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_GetSampleSandboxesResponse) Interface() protoreflect.ProtoMessage {
+	return (*GetSampleSandboxesResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_GetSampleSandboxesResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if len(x.Samples) != 0 {
+		value := protoreflect.ValueOfList(&_GetSampleSandboxesResponse_1_list{list: &x.Samples})
+		if !f(fd_GetSampleSandboxesResponse_samples, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_GetSampleSandboxesResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.GetSampleSandboxesResponse.samples":
+		return len(x.Samples) != 0
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSampleSandboxesResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSampleSandboxesResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_GetSampleSandboxesResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.GetSampleSandboxesResponse.samples":
+		x.Samples = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSampleSandboxesResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSampleSandboxesResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_GetSampleSandboxesResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "sourcenetwork.acp_core.GetSampleSandboxesResponse.samples":
+		if len(x.Samples) == 0 {
+			return protoreflect.ValueOfList(&_GetSampleSandboxesResponse_1_list{})
+		}
+		listValue := &_GetSampleSandboxesResponse_1_list{list: &x.Samples}
+		return protoreflect.ValueOfList(listValue)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSampleSandboxesResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSampleSandboxesResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_GetSampleSandboxesResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.GetSampleSandboxesResponse.samples":
+		lv := value.List()
+		clv := lv.(*_GetSampleSandboxesResponse_1_list)
+		x.Samples = *clv.list
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSampleSandboxesResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSampleSandboxesResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_GetSampleSandboxesResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.GetSampleSandboxesResponse.samples":
+		if x.Samples == nil {
+			x.Samples = []*SandboxTemplate{}
+		}
+		value := &_GetSampleSandboxesResponse_1_list{list: &x.Samples}
+		return protoreflect.ValueOfList(value)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSampleSandboxesResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSampleSandboxesResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_GetSampleSandboxesResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.GetSampleSandboxesResponse.samples":
+		list := []*SandboxTemplate{}
+		return protoreflect.ValueOfList(&_GetSampleSandboxesResponse_1_list{list: &list})
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSampleSandboxesResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSampleSandboxesResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_GetSampleSandboxesResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.GetSampleSandboxesResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_GetSampleSandboxesResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_GetSampleSandboxesResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_GetSampleSandboxesResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_GetSampleSandboxesResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*GetSampleSandboxesResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if len(x.Samples) > 0 {
+			for _, e := range x.Samples {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*GetSampleSandboxesResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.Samples) > 0 {
+			for iNdEx := len(x.Samples) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.Samples[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0xa
+			}
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*GetSampleSandboxesResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: GetSampleSandboxesResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: GetSampleSandboxesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Samples", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Samples = append(x.Samples, &SandboxTemplate{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Samples[len(x.Samples)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
 // Code generated by protoc-gen-go. DO NOT EDIT.
 // versions:
 // 	protoc-gen-go v1.27.0
@@ -7912,6 +8762,67 @@ func (x *GetSandboxResponse) GetRecord() *SandboxRecord {
 	return nil
 }
 
+type GetSampleSandboxesRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *GetSampleSandboxesRequest) Reset() {
+	*x = GetSampleSandboxesRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[16]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetSampleSandboxesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSampleSandboxesRequest) ProtoMessage() {}
+
+// Deprecated: Use GetSampleSandboxesRequest.ProtoReflect.Descriptor instead.
+func (*GetSampleSandboxesRequest) Descriptor() ([]byte, []int) {
+	return file_sourcenetwork_acp_core_playground_proto_rawDescGZIP(), []int{16}
+}
+
+type GetSampleSandboxesResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Samples []*SandboxTemplate `protobuf:"bytes,1,rep,name=samples,proto3" json:"samples,omitempty"`
+}
+
+func (x *GetSampleSandboxesResponse) Reset() {
+	*x = GetSampleSandboxesResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[17]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetSampleSandboxesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSampleSandboxesResponse) ProtoMessage() {}
+
+// Deprecated: Use GetSampleSandboxesResponse.ProtoReflect.Descriptor instead.
+func (*GetSampleSandboxesResponse) Descriptor() ([]byte, []int) {
+	return file_sourcenetwork_acp_core_playground_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *GetSampleSandboxesResponse) GetSamples() []*SandboxTemplate {
+	if x != nil {
+		return x.Samples
+	}
+	return nil
+}
+
 var File_sourcenetwork_acp_core_playground_proto protoreflect.FileDescriptor
 
 var file_sourcenetwork_acp_core_playground_proto_rawDesc = []byte{
@@ -8017,64 +8928,80 @@ var file_sourcenetwork_acp_core_playground_proto_rawDesc = []byte{
 	0x0b, 0x32, 0x25, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
 	0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x61, 0x6e, 0x64, 0x62,
 	0x6f, 0x78, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x52, 0x06, 0x72, 0x65, 0x63, 0x6f, 0x72, 0x64,
-	0x32, 0xde, 0x06, 0x0a, 0x11, 0x50, 0x6c, 0x61, 0x79, 0x67, 0x72, 0x6f, 0x75, 0x6e, 0x64, 0x53,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x63, 0x0a, 0x0a, 0x4e, 0x65, 0x77, 0x53, 0x61, 0x6e,
-	0x64, 0x62, 0x6f, 0x78, 0x12, 0x29, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
-	0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4e, 0x65,
-	0x77, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x2a, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e,
-	0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4e, 0x65, 0x77, 0x53, 0x61, 0x6e, 0x64,
-	0x62, 0x6f, 0x78, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6c, 0x0a, 0x0d, 0x4c,
-	0x69, 0x73, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x12, 0x2c, 0x2e, 0x73,
+	0x22, 0x1b, 0x0a, 0x19, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x53, 0x61, 0x6e,
+	0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x5f, 0x0a,
+	0x1a, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f,
+	0x78, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x41, 0x0a, 0x07, 0x73,
+	0x61, 0x6d, 0x70, 0x6c, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x73,
 	0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70,
-	0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f,
-	0x78, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2d, 0x2e, 0x73, 0x6f, 0x75,
+	0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x54, 0x65, 0x6d,
+	0x70, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x07, 0x73, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x73, 0x32, 0xdb,
+	0x07, 0x0a, 0x11, 0x50, 0x6c, 0x61, 0x79, 0x67, 0x72, 0x6f, 0x75, 0x6e, 0x64, 0x53, 0x65, 0x72,
+	0x76, 0x69, 0x63, 0x65, 0x12, 0x63, 0x0a, 0x0a, 0x4e, 0x65, 0x77, 0x53, 0x61, 0x6e, 0x64, 0x62,
+	0x6f, 0x78, 0x12, 0x29, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f,
+	0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4e, 0x65, 0x77, 0x53,
+	0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2a, 0x2e,
+	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63,
+	0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4e, 0x65, 0x77, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f,
+	0x78, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6c, 0x0a, 0x0d, 0x4c, 0x69, 0x73,
+	0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x12, 0x2c, 0x2e, 0x73, 0x6f, 0x75,
 	0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63,
 	0x6f, 0x72, 0x65, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65,
-	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x5d, 0x0a, 0x08, 0x53, 0x65, 0x74,
-	0x53, 0x74, 0x61, 0x74, 0x65, 0x12, 0x27, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65,
-	0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53,
-	0x65, 0x74, 0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x28,
-	0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61,
-	0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x65, 0x74, 0x53, 0x74, 0x61, 0x74, 0x65,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x78, 0x0a, 0x11, 0x52, 0x65, 0x73, 0x74,
-	0x6f, 0x72, 0x65, 0x53, 0x63, 0x72, 0x61, 0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x12, 0x30, 0x2e,
+	0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2d, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63,
+	0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72,
+	0x65, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x5d, 0x0a, 0x08, 0x53, 0x65, 0x74, 0x53, 0x74,
+	0x61, 0x74, 0x65, 0x12, 0x27, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77,
+	0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x65, 0x74,
+	0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x28, 0x2e, 0x73,
+	0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70,
+	0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x65, 0x74, 0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x78, 0x0a, 0x11, 0x52, 0x65, 0x73, 0x74, 0x6f, 0x72,
+	0x65, 0x53, 0x63, 0x72, 0x61, 0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x12, 0x30, 0x2e, 0x73, 0x6f,
+	0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f,
+	0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x53, 0x63, 0x72, 0x61,
+	0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x31, 0x2e,
 	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63,
 	0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x53, 0x63,
-	0x72, 0x61, 0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x31, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e,
-	0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65,
-	0x53, 0x63, 0x72, 0x61, 0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x12, 0x69, 0x0a, 0x0c, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67,
-	0x75, 0x65, 0x12, 0x2b, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f,
-	0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x43,
-	0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x75, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x2c, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e,
-	0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x61,
-	0x6c, 0x6f, 0x67, 0x75, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x63, 0x0a,
-	0x0a, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x12, 0x29, 0x2e, 0x73, 0x6f,
-	0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f,
-	0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2a, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e,
+	0x72, 0x61, 0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x69, 0x0a, 0x0c, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x75, 0x65,
+	0x12, 0x2b, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b,
+	0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74,
+	0x61, 0x6c, 0x6f, 0x67, 0x75, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2c, 0x2e,
+	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63,
+	0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f,
+	0x67, 0x75, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x63, 0x0a, 0x0a, 0x47,
+	0x65, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x12, 0x29, 0x2e, 0x73, 0x6f, 0x75, 0x72,
+	0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f,
+	0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x2a, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
+	0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65,
+	0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x6f, 0x0a, 0x0e, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65,
+	0x6d, 0x73, 0x12, 0x2d, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f,
+	0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x56, 0x65, 0x72, 0x69,
+	0x66, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x2e, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
+	0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x56, 0x65, 0x72, 0x69, 0x66,
+	0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x12, 0x5c, 0x0a, 0x08, 0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x12, 0x27, 0x2e,
+	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63,
+	0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x27, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e,
 	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e,
-	0x47, 0x65, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x12, 0x6f, 0x0a, 0x0e, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x54, 0x68, 0x65, 0x6f,
-	0x72, 0x65, 0x6d, 0x73, 0x12, 0x2d, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
-	0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x56, 0x65,
-	0x72, 0x69, 0x66, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x1a, 0x2e, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77,
-	0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x56, 0x65, 0x72,
-	0x69, 0x66, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x12, 0x5c, 0x0a, 0x08, 0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x12,
-	0x27, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e,
-	0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74,
-	0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x27, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63,
+	0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x7b, 0x0a, 0x12, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x53, 0x61, 0x6e, 0x64,
+	0x62, 0x6f, 0x78, 0x65, 0x73, 0x12, 0x31, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65,
+	0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47,
+	0x65, 0x74, 0x53, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65,
+	0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x32, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63,
 	0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72,
-	0x65, 0x2e, 0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x42, 0x2d, 0x5a, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
-	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63,
-	0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73,
-	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x2e, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x53, 0x61, 0x6e, 0x64, 0x62,
+	0x6f, 0x78, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x2d, 0x5a, 0x2b,
+	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6f, 0x75, 0x72, 0x63,
+	0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72,
+	0x65, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x33,
 }
 
 var (
@@ -8089,7 +9016,7 @@ func file_sourcenetwork_acp_core_playground_proto_rawDescGZIP() []byte {
 	return file_sourcenetwork_acp_core_playground_proto_rawDescData
 }
 
-var file_sourcenetwork_acp_core_playground_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_sourcenetwork_acp_core_playground_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_sourcenetwork_acp_core_playground_proto_goTypes = []interface{}{
 	(*NewSandboxRequest)(nil),            // 0: sourcenetwork.acp_core.NewSandboxRequest
 	(*NewSandboxResponse)(nil),           // 1: sourcenetwork.acp_core.NewSandboxResponse
@@ -8107,47 +9034,53 @@ var file_sourcenetwork_acp_core_playground_proto_goTypes = []interface{}{
 	(*SimulateReponse)(nil),              // 13: sourcenetwork.acp_core.SimulateReponse
 	(*GetSandboxRequest)(nil),            // 14: sourcenetwork.acp_core.GetSandboxRequest
 	(*GetSandboxResponse)(nil),           // 15: sourcenetwork.acp_core.GetSandboxResponse
-	(*SandboxRecord)(nil),                // 16: sourcenetwork.acp_core.SandboxRecord
-	(*SandboxData)(nil),                  // 17: sourcenetwork.acp_core.SandboxData
-	(*SandboxDataErrors)(nil),            // 18: sourcenetwork.acp_core.SandboxDataErrors
-	(*PolicyCatalogue)(nil),              // 19: sourcenetwork.acp_core.PolicyCatalogue
-	(*AnnotatedPolicyTheoremResult)(nil), // 20: sourcenetwork.acp_core.AnnotatedPolicyTheoremResult
+	(*GetSampleSandboxesRequest)(nil),    // 16: sourcenetwork.acp_core.GetSampleSandboxesRequest
+	(*GetSampleSandboxesResponse)(nil),   // 17: sourcenetwork.acp_core.GetSampleSandboxesResponse
+	(*SandboxRecord)(nil),                // 18: sourcenetwork.acp_core.SandboxRecord
+	(*SandboxData)(nil),                  // 19: sourcenetwork.acp_core.SandboxData
+	(*SandboxDataErrors)(nil),            // 20: sourcenetwork.acp_core.SandboxDataErrors
+	(*PolicyCatalogue)(nil),              // 21: sourcenetwork.acp_core.PolicyCatalogue
+	(*AnnotatedPolicyTheoremResult)(nil), // 22: sourcenetwork.acp_core.AnnotatedPolicyTheoremResult
+	(*SandboxTemplate)(nil),              // 23: sourcenetwork.acp_core.SandboxTemplate
 }
 var file_sourcenetwork_acp_core_playground_proto_depIdxs = []int32{
-	16, // 0: sourcenetwork.acp_core.NewSandboxResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
-	17, // 1: sourcenetwork.acp_core.SetStateRequest.data:type_name -> sourcenetwork.acp_core.SandboxData
-	18, // 2: sourcenetwork.acp_core.SetStateResponse.errors:type_name -> sourcenetwork.acp_core.SandboxDataErrors
-	16, // 3: sourcenetwork.acp_core.SetStateResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
-	19, // 4: sourcenetwork.acp_core.GetCatalogueResponse.catalogue:type_name -> sourcenetwork.acp_core.PolicyCatalogue
-	20, // 5: sourcenetwork.acp_core.VerifyTheoremsResponse.result:type_name -> sourcenetwork.acp_core.AnnotatedPolicyTheoremResult
-	16, // 6: sourcenetwork.acp_core.ListSandboxesResponse.records:type_name -> sourcenetwork.acp_core.SandboxRecord
-	17, // 7: sourcenetwork.acp_core.RestoreScratchpadResponse.scratchpad:type_name -> sourcenetwork.acp_core.SandboxData
-	17, // 8: sourcenetwork.acp_core.SimulateRequest.data:type_name -> sourcenetwork.acp_core.SandboxData
-	18, // 9: sourcenetwork.acp_core.SimulateReponse.errors:type_name -> sourcenetwork.acp_core.SandboxDataErrors
-	16, // 10: sourcenetwork.acp_core.SimulateReponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
-	20, // 11: sourcenetwork.acp_core.SimulateReponse.result:type_name -> sourcenetwork.acp_core.AnnotatedPolicyTheoremResult
-	16, // 12: sourcenetwork.acp_core.GetSandboxResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
-	0,  // 13: sourcenetwork.acp_core.PlaygroundService.NewSandbox:input_type -> sourcenetwork.acp_core.NewSandboxRequest
-	8,  // 14: sourcenetwork.acp_core.PlaygroundService.ListSandboxes:input_type -> sourcenetwork.acp_core.ListSandboxesRequest
-	2,  // 15: sourcenetwork.acp_core.PlaygroundService.SetState:input_type -> sourcenetwork.acp_core.SetStateRequest
-	10, // 16: sourcenetwork.acp_core.PlaygroundService.RestoreScratchpad:input_type -> sourcenetwork.acp_core.RestoreScratchpadRequest
-	4,  // 17: sourcenetwork.acp_core.PlaygroundService.GetCatalogue:input_type -> sourcenetwork.acp_core.GetCatalogueRequest
-	14, // 18: sourcenetwork.acp_core.PlaygroundService.GetSandbox:input_type -> sourcenetwork.acp_core.GetSandboxRequest
-	6,  // 19: sourcenetwork.acp_core.PlaygroundService.VerifyTheorems:input_type -> sourcenetwork.acp_core.VerifyTheoremsRequest
-	12, // 20: sourcenetwork.acp_core.PlaygroundService.Simulate:input_type -> sourcenetwork.acp_core.SimulateRequest
-	1,  // 21: sourcenetwork.acp_core.PlaygroundService.NewSandbox:output_type -> sourcenetwork.acp_core.NewSandboxResponse
-	9,  // 22: sourcenetwork.acp_core.PlaygroundService.ListSandboxes:output_type -> sourcenetwork.acp_core.ListSandboxesResponse
-	3,  // 23: sourcenetwork.acp_core.PlaygroundService.SetState:output_type -> sourcenetwork.acp_core.SetStateResponse
-	11, // 24: sourcenetwork.acp_core.PlaygroundService.RestoreScratchpad:output_type -> sourcenetwork.acp_core.RestoreScratchpadResponse
-	5,  // 25: sourcenetwork.acp_core.PlaygroundService.GetCatalogue:output_type -> sourcenetwork.acp_core.GetCatalogueResponse
-	15, // 26: sourcenetwork.acp_core.PlaygroundService.GetSandbox:output_type -> sourcenetwork.acp_core.GetSandboxResponse
-	7,  // 27: sourcenetwork.acp_core.PlaygroundService.VerifyTheorems:output_type -> sourcenetwork.acp_core.VerifyTheoremsResponse
-	13, // 28: sourcenetwork.acp_core.PlaygroundService.Simulate:output_type -> sourcenetwork.acp_core.SimulateReponse
-	21, // [21:29] is the sub-list for method output_type
-	13, // [13:21] is the sub-list for method input_type
-	13, // [13:13] is the sub-list for extension type_name
-	13, // [13:13] is the sub-list for extension extendee
-	0,  // [0:13] is the sub-list for field type_name
+	18, // 0: sourcenetwork.acp_core.NewSandboxResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
+	19, // 1: sourcenetwork.acp_core.SetStateRequest.data:type_name -> sourcenetwork.acp_core.SandboxData
+	20, // 2: sourcenetwork.acp_core.SetStateResponse.errors:type_name -> sourcenetwork.acp_core.SandboxDataErrors
+	18, // 3: sourcenetwork.acp_core.SetStateResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
+	21, // 4: sourcenetwork.acp_core.GetCatalogueResponse.catalogue:type_name -> sourcenetwork.acp_core.PolicyCatalogue
+	22, // 5: sourcenetwork.acp_core.VerifyTheoremsResponse.result:type_name -> sourcenetwork.acp_core.AnnotatedPolicyTheoremResult
+	18, // 6: sourcenetwork.acp_core.ListSandboxesResponse.records:type_name -> sourcenetwork.acp_core.SandboxRecord
+	19, // 7: sourcenetwork.acp_core.RestoreScratchpadResponse.scratchpad:type_name -> sourcenetwork.acp_core.SandboxData
+	19, // 8: sourcenetwork.acp_core.SimulateRequest.data:type_name -> sourcenetwork.acp_core.SandboxData
+	20, // 9: sourcenetwork.acp_core.SimulateReponse.errors:type_name -> sourcenetwork.acp_core.SandboxDataErrors
+	18, // 10: sourcenetwork.acp_core.SimulateReponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
+	22, // 11: sourcenetwork.acp_core.SimulateReponse.result:type_name -> sourcenetwork.acp_core.AnnotatedPolicyTheoremResult
+	18, // 12: sourcenetwork.acp_core.GetSandboxResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
+	23, // 13: sourcenetwork.acp_core.GetSampleSandboxesResponse.samples:type_name -> sourcenetwork.acp_core.SandboxTemplate
+	0,  // 14: sourcenetwork.acp_core.PlaygroundService.NewSandbox:input_type -> sourcenetwork.acp_core.NewSandboxRequest
+	8,  // 15: sourcenetwork.acp_core.PlaygroundService.ListSandboxes:input_type -> sourcenetwork.acp_core.ListSandboxesRequest
+	2,  // 16: sourcenetwork.acp_core.PlaygroundService.SetState:input_type -> sourcenetwork.acp_core.SetStateRequest
+	10, // 17: sourcenetwork.acp_core.PlaygroundService.RestoreScratchpad:input_type -> sourcenetwork.acp_core.RestoreScratchpadRequest
+	4,  // 18: sourcenetwork.acp_core.PlaygroundService.GetCatalogue:input_type -> sourcenetwork.acp_core.GetCatalogueRequest
+	14, // 19: sourcenetwork.acp_core.PlaygroundService.GetSandbox:input_type -> sourcenetwork.acp_core.GetSandboxRequest
+	6,  // 20: sourcenetwork.acp_core.PlaygroundService.VerifyTheorems:input_type -> sourcenetwork.acp_core.VerifyTheoremsRequest
+	12, // 21: sourcenetwork.acp_core.PlaygroundService.Simulate:input_type -> sourcenetwork.acp_core.SimulateRequest
+	16, // 22: sourcenetwork.acp_core.PlaygroundService.GetSampleSandboxes:input_type -> sourcenetwork.acp_core.GetSampleSandboxesRequest
+	1,  // 23: sourcenetwork.acp_core.PlaygroundService.NewSandbox:output_type -> sourcenetwork.acp_core.NewSandboxResponse
+	9,  // 24: sourcenetwork.acp_core.PlaygroundService.ListSandboxes:output_type -> sourcenetwork.acp_core.ListSandboxesResponse
+	3,  // 25: sourcenetwork.acp_core.PlaygroundService.SetState:output_type -> sourcenetwork.acp_core.SetStateResponse
+	11, // 26: sourcenetwork.acp_core.PlaygroundService.RestoreScratchpad:output_type -> sourcenetwork.acp_core.RestoreScratchpadResponse
+	5,  // 27: sourcenetwork.acp_core.PlaygroundService.GetCatalogue:output_type -> sourcenetwork.acp_core.GetCatalogueResponse
+	15, // 28: sourcenetwork.acp_core.PlaygroundService.GetSandbox:output_type -> sourcenetwork.acp_core.GetSandboxResponse
+	7,  // 29: sourcenetwork.acp_core.PlaygroundService.VerifyTheorems:output_type -> sourcenetwork.acp_core.VerifyTheoremsResponse
+	13, // 30: sourcenetwork.acp_core.PlaygroundService.Simulate:output_type -> sourcenetwork.acp_core.SimulateReponse
+	17, // 31: sourcenetwork.acp_core.PlaygroundService.GetSampleSandboxes:output_type -> sourcenetwork.acp_core.GetSampleSandboxesResponse
+	23, // [23:32] is the sub-list for method output_type
+	14, // [14:23] is the sub-list for method input_type
+	14, // [14:14] is the sub-list for extension type_name
+	14, // [14:14] is the sub-list for extension extendee
+	0,  // [0:14] is the sub-list for field type_name
 }
 
 func init() { file_sourcenetwork_acp_core_playground_proto_init() }
@@ -8351,6 +9284,30 @@ func file_sourcenetwork_acp_core_playground_proto_init() {
 				return nil
 			}
 		}
+		file_sourcenetwork_acp_core_playground_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetSampleSandboxesRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_sourcenetwork_acp_core_playground_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetSampleSandboxesResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -8358,7 +9315,7 @@ func file_sourcenetwork_acp_core_playground_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_sourcenetwork_acp_core_playground_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   16,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
