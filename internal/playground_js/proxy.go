@@ -60,17 +60,16 @@ func NewPlaygroundServiceProxy(ctx context.Context, manager runtime.RuntimeManag
 	})
 
 	proxyMap := map[string]js.Func{
-		"NewSandbox":        asyncFn(wrapHandler(proxy.NewSandbox)),
-		"ListSandboxes":     asyncFn(wrapHandler(proxy.ListSandboxes)),
-		"SetState":          asyncFn(wrapHandler(proxy.SetState)),
-		"RestoreScratchpad": asyncFn(wrapHandler(proxy.RestoreScratchpad)),
-		"GetCatalogue":      asyncFn(wrapHandler(proxy.GetCatalogue)),
-		"GetSandbox":        asyncFn(wrapHandler(proxy.GetSandbox)),
-		"VerifyTheorems":    asyncFn(wrapHandler(proxy.VerifyTheorems)),
-		"Simulate":          asyncFn(wrapHandler(proxy.Simulate)),
-		"Simulate":          asyncFn(wrapHandler(proxy.Simulate)),
+		"NewSandbox":         asyncFn(wrapHandler(proxy.NewSandbox)),
+		"ListSandboxes":      asyncFn(wrapHandler(proxy.ListSandboxes)),
+		"SetState":           asyncFn(wrapHandler(proxy.SetState)),
+		"RestoreScratchpad":  asyncFn(wrapHandler(proxy.RestoreScratchpad)),
+		"GetCatalogue":       asyncFn(wrapHandler(proxy.GetCatalogue)),
+		"GetSandbox":         asyncFn(wrapHandler(proxy.GetSandbox)),
+		"VerifyTheorems":     asyncFn(wrapHandler(proxy.VerifyTheorems)),
+		"Simulate":           asyncFn(wrapHandler(proxy.Simulate)),
 		"GetSampleSandboxes": asyncFn(wrapHandler(proxy.GetSampleSandboxes)),
-		"Close":             closeWrapper,
+		"Close":              closeWrapper,
 	}
 	proxy.proxyMap = proxyMap
 	proxy.makeJSValue()
