@@ -3,7 +3,6 @@ import {
   AnnotatedPolicyTheoremResult,
   AnnotatedReachabilityTheoremResult,
   ResultStatus,
-  resultStatusFromJSON,
 } from "@/types/proto-js/sourcenetwork/acp_core/theorem";
 import * as monaco from "monaco-editor";
 
@@ -18,7 +17,7 @@ function mapTheoremMarkers(
   return theoremResult
     .filter(
       ({ result }) =>
-        resultStatusFromJSON(result?.result?.status) !== ResultStatus.Accept
+        result?.result?.status !== "Accept" // FIXME
     )
     .map((result) => {
       return {
