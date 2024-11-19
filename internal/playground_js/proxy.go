@@ -68,6 +68,8 @@ func NewPlaygroundServiceProxy(ctx context.Context, manager runtime.RuntimeManag
 		"GetSandbox":        asyncFn(wrapHandler(proxy.GetSandbox)),
 		"VerifyTheorems":    asyncFn(wrapHandler(proxy.VerifyTheorems)),
 		"Simulate":          asyncFn(wrapHandler(proxy.Simulate)),
+		"Simulate":          asyncFn(wrapHandler(proxy.Simulate)),
+		"GetSampleSandboxes": asyncFn(wrapHandler(proxy.GetSampleSandboxes)),
 		"Close":             closeWrapper,
 	}
 	proxy.proxyMap = proxyMap
