@@ -202,6 +202,20 @@ func (s *PlaygroundServiceProxy) Simulate(this js.Value, args []js.Value) (*type
 	return resp, nil
 }
 
+func (s *PlaygroundServiceProxy) GetSampleSandboxes(this js.Value, args []js.Value) (*types.GetSampleSandboxesResponse, error) {
+	req := &types.GetSampleSandboxesRequest{}
+	err := unmarsahlArgs(req, args)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.service.GetSampleSandboxes(s.ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
 // Close frees all resources used by the playground
 func (s *PlaygroundServiceProxy) Close() {
 	for _, f := range s.proxyMap {

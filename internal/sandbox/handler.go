@@ -468,3 +468,9 @@ func getPolicyEndPosition(pol string) types.BufferPosition {
 	}
 	return pos
 }
+
+func HandleGetSandboxSamples(ctx context.Context, _ runtime.RuntimeManager, req *types.GetSampleSandboxesRequest) (*types.GetSampleSandboxesResponse, error) {
+	return &types.GetSampleSandboxesResponse{
+		Samples: Samples,
+	}, nil
+}

@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	_ "github.com/stretchr/testify/require"
 
+	"github.com/sourcenetwork/acp_core/internal/sandbox"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
 	_ "github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
@@ -380,4 +381,16 @@ func Test_GetSandbox_ReturnsSandbox(t *testing.T) {
 	}
 	require.NoError(t, err)
 	require.Equal(t, want, resp.Record)
+}
+
+func Test_GetPlaygroundSamples_ReturnSamples(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+
+	resp, err := ctx.Playground.GetSampleSandboxes(ctx, &types.GetSampleSandboxesRequest{})
+	require.NoError(t, err)
+
+	want := &types.GetSampleSandboxesResponse{
+		Samples: sandbox.Samples,
+	}
+	require.Equal(t, want, resp)
 }

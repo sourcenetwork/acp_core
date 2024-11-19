@@ -52,3 +52,7 @@ func (s *playgroundService) Simulate(ctx context.Context, req *types.SimulateReq
 func (s *playgroundService) GetSandbox(ctx context.Context, req *types.GetSandboxRequest) (*types.GetSandboxResponse, error) {
 	return sandbox.HandleGetSandbox(ctx, s.runtime, req)
 }
+
+func (s *playgroundService) GetSampleSandboxes(ctx context.Context, req *types.GetSampleSandboxesRequest) (*types.GetSampleSandboxesResponse, error) {
+	return sandbox.HandleGetSandboxSamples(ctx, s.runtime, req)
+}

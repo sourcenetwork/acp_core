@@ -68,6 +68,10 @@ func (s *PlaygroundJS) GetSandbox(ctx context.Context, req *types.GetSandboxRequ
 	return s.proxy.GetSandbox(s.this, mustMapArgument(req))
 }
 
+func (s *PlaygroundJS) GetSampleSandboxes(ctx context.Context, req *types.GetSampleSandboxesRequest) (*types.GetSampleSandboxesResponse, error) {
+	return s.proxy.GetSampleSandboxes(s.this, mustMapArgument(req))
+}
+
 func mustMapArgument(req proto.Message) []js.Value {
 	marshaler := jsonpb.Marshaler{}
 	valStr, err := marshaler.MarshalToString(req)
