@@ -23,10 +23,6 @@ fmt:
 playground\:wasm_js:
 	GOOS=js GOARCH=wasm go build -o build/playground.wasm cmd/playground_js/main.go
 
-.PHONY: proto\:ts
-proto\:ts:
-	cd proto && buf generate --template buf.ts.gen.yaml
-
 .PHONY: playground
 playground: playground\:wasm_js
 	cp build/playground.wasm cmd/playground/content/playground.wasm
