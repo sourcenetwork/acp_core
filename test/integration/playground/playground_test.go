@@ -141,9 +141,7 @@ func Test_Evaluate_SandboxWithEmptyTheoremOk(t *testing.T) {
 	handle := a1.Run(ctx)
 
 	a := VerifyTheorems{
-		Req: &types.VerifyTheoremsRequest{
-			Handle: handle,
-		},
+		Handle: handle,
 		Expected: &types.VerifyTheoremsResponse{
 			Result: &types.AnnotatedPolicyTheoremResult{
 				Theorem: &types.PolicyTheorem{
@@ -165,9 +163,7 @@ func Test_Evaluate_UninitializedSandboxCannotBeEvaluated(t *testing.T) {
 	handle := a1.Run(ctx)
 
 	a := VerifyTheorems{
-		Req: &types.VerifyTheoremsRequest{
-			Handle: handle.Record.Handle,
-		},
+		Handle:      handle.Record.Handle,
 		ExpectedErr: errors.ErrorType_OPERATION_FORBIDDEN,
 	}
 	a.Run(ctx)
@@ -393,4 +389,16 @@ func Test_GetPlaygroundSamples_ReturnSamples(t *testing.T) {
 		Samples: sandbox.Samples,
 	}
 	require.Equal(t, want, resp)
+
+	for _, data := range want.Samples {
+		action := NewAndSet{
+			Data: data.Data,
+		}
+		handle := action.Run(ctx)
+
+		a2 := VerifyTheorems{
+			Handle: handle,
+		}
+		a2.Run(ctx)
+	}
 }

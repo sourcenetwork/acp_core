@@ -72,13 +72,14 @@ func (a *GetCatalogue) Run(ctx *test.TestCtx) *types.GetCatalogueResponse {
 }
 
 type VerifyTheorems struct {
-	Req         *types.VerifyTheoremsRequest
+	Handle      uint64
 	Expected    *types.VerifyTheoremsResponse
 	ExpectedErr error
 }
 
 func (a *VerifyTheorems) Run(ctx *test.TestCtx) *types.VerifyTheoremsResponse {
-	resp, err := ctx.Playground.VerifyTheorems(ctx, a.Req)
+	req := &types.VerifyTheoremsRequest{Handle: a.Handle}
+	resp, err := ctx.Playground.VerifyTheorems(ctx, req)
 	test.AssertResults(ctx, resp, a.Expected, err, a.ExpectedErr)
 	return resp
 }
