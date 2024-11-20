@@ -68,6 +68,9 @@ Authorizations {
   !file:readme#write@did:user:steve
   !file:readme#write@did:user:eve
 }
+
+Delegations {
+}
 `,
 		},
 	},
