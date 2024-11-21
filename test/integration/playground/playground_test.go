@@ -148,6 +148,9 @@ func Test_Evaluate_SandboxWithEmptyTheoremOk(t *testing.T) {
 					AuthorizationTheorems: make([]*types.AuthorizationTheorem, 0),
 					DelegationTheorems:    make([]*types.DelegationTheorem, 0),
 				},
+				Ok:           true,
+				TheoremCount: 0,
+				Failures:     0,
 			},
 		},
 	}
@@ -399,6 +402,7 @@ func Test_GetPlaygroundSamples_ReturnSamples(t *testing.T) {
 		a2 := VerifyTheorems{
 			Handle: handle,
 		}
-		a2.Run(ctx)
+		response := a2.Run(ctx)
+		require.True(t, response.Result.Ok)
 	}
 }

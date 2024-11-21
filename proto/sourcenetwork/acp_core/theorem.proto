@@ -54,8 +54,11 @@ message Result {
   // status indicates whether the theorem was accepted, rejected or an error happened
   ResultStatus status = 1;
 
+  // ok is true if theorem was accepted
+  bool ok = 2;
+
   // Message explains the result
-  string message = 2;
+  string message = 3;
 }
 
 message AuthorizationTheoremResult {
@@ -93,6 +96,12 @@ message PolicyTheoremResult {
   repeated AuthorizationTheoremResult authorization_theorems_result = 2;
   repeated DelegationTheoremResult delegation_theorems_result = 3;
   repeated ReachabilityTheoremResult reachability_theorems_result = 4;
+  // ok is true if all theorems were accepted
+  bool ok = 5;
+  // theorem_count is the total number of theorems processed
+  uint32 theorem_count = 6;
+  // failures returns a count of how many theorems weren't accepted or errored out
+  uint32 failures = 7;
 }
 
 message AnnotatedPolicyTheoremResult {
@@ -100,4 +109,10 @@ message AnnotatedPolicyTheoremResult {
   repeated AnnotatedAuthorizationTheoremResult authorization_theorems_result = 2;
   repeated AnnotatedDelegationTheoremResult delegation_theorems_result = 3;
   repeated AnnotatedReachabilityTheoremResult reachability_theorems_result = 4;
+  // ok is true if all theorems were accepted
+  bool ok = 5;
+  // theorem_count is the total number of theorems processed
+  uint32 theorem_count = 6;
+  // failures returns a count of how many theorems weren't accepted or errored out
+  uint32 failures = 7;
 }

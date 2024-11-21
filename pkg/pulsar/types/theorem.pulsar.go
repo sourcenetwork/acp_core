@@ -2554,6 +2554,7 @@ func (x *fastReflection_PolicyTheorem) ProtoMethods() *protoiface.Methods {
 var (
 	md_Result         protoreflect.MessageDescriptor
 	fd_Result_status  protoreflect.FieldDescriptor
+	fd_Result_ok      protoreflect.FieldDescriptor
 	fd_Result_message protoreflect.FieldDescriptor
 )
 
@@ -2561,6 +2562,7 @@ func init() {
 	file_sourcenetwork_acp_core_theorem_proto_init()
 	md_Result = File_sourcenetwork_acp_core_theorem_proto.Messages().ByName("Result")
 	fd_Result_status = md_Result.Fields().ByName("status")
+	fd_Result_ok = md_Result.Fields().ByName("ok")
 	fd_Result_message = md_Result.Fields().ByName("message")
 }
 
@@ -2635,6 +2637,12 @@ func (x *fastReflection_Result) Range(f func(protoreflect.FieldDescriptor, proto
 			return
 		}
 	}
+	if x.Ok != false {
+		value := protoreflect.ValueOfBool(x.Ok)
+		if !f(fd_Result_ok, value) {
+			return
+		}
+	}
 	if x.Message != "" {
 		value := protoreflect.ValueOfString(x.Message)
 		if !f(fd_Result_message, value) {
@@ -2658,6 +2666,8 @@ func (x *fastReflection_Result) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	case "sourcenetwork.acp_core.Result.status":
 		return x.Status != 0
+	case "sourcenetwork.acp_core.Result.ok":
+		return x.Ok != false
 	case "sourcenetwork.acp_core.Result.message":
 		return x.Message != ""
 	default:
@@ -2678,6 +2688,8 @@ func (x *fastReflection_Result) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "sourcenetwork.acp_core.Result.status":
 		x.Status = 0
+	case "sourcenetwork.acp_core.Result.ok":
+		x.Ok = false
 	case "sourcenetwork.acp_core.Result.message":
 		x.Message = ""
 	default:
@@ -2699,6 +2711,9 @@ func (x *fastReflection_Result) Get(descriptor protoreflect.FieldDescriptor) pro
 	case "sourcenetwork.acp_core.Result.status":
 		value := x.Status
 		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
+	case "sourcenetwork.acp_core.Result.ok":
+		value := x.Ok
+		return protoreflect.ValueOfBool(value)
 	case "sourcenetwork.acp_core.Result.message":
 		value := x.Message
 		return protoreflect.ValueOfString(value)
@@ -2724,6 +2739,8 @@ func (x *fastReflection_Result) Set(fd protoreflect.FieldDescriptor, value proto
 	switch fd.FullName() {
 	case "sourcenetwork.acp_core.Result.status":
 		x.Status = (ResultStatus)(value.Enum())
+	case "sourcenetwork.acp_core.Result.ok":
+		x.Ok = value.Bool()
 	case "sourcenetwork.acp_core.Result.message":
 		x.Message = value.Interface().(string)
 	default:
@@ -2748,6 +2765,8 @@ func (x *fastReflection_Result) Mutable(fd protoreflect.FieldDescriptor) protore
 	switch fd.FullName() {
 	case "sourcenetwork.acp_core.Result.status":
 		panic(fmt.Errorf("field status of message sourcenetwork.acp_core.Result is not mutable"))
+	case "sourcenetwork.acp_core.Result.ok":
+		panic(fmt.Errorf("field ok of message sourcenetwork.acp_core.Result is not mutable"))
 	case "sourcenetwork.acp_core.Result.message":
 		panic(fmt.Errorf("field message of message sourcenetwork.acp_core.Result is not mutable"))
 	default:
@@ -2765,6 +2784,8 @@ func (x *fastReflection_Result) NewField(fd protoreflect.FieldDescriptor) protor
 	switch fd.FullName() {
 	case "sourcenetwork.acp_core.Result.status":
 		return protoreflect.ValueOfEnum(0)
+	case "sourcenetwork.acp_core.Result.ok":
+		return protoreflect.ValueOfBool(false)
 	case "sourcenetwork.acp_core.Result.message":
 		return protoreflect.ValueOfString("")
 	default:
@@ -2839,6 +2860,9 @@ func (x *fastReflection_Result) ProtoMethods() *protoiface.Methods {
 		if x.Status != 0 {
 			n += 1 + runtime.Sov(uint64(x.Status))
 		}
+		if x.Ok {
+			n += 2
+		}
 		l = len(x.Message)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
@@ -2877,7 +2901,17 @@ func (x *fastReflection_Result) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], x.Message)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Message)))
 			i--
-			dAtA[i] = 0x12
+			dAtA[i] = 0x1a
+		}
+		if x.Ok {
+			i--
+			if x.Ok {
+				dAtA[i] = 1
+			} else {
+				dAtA[i] = 0
+			}
+			i--
+			dAtA[i] = 0x10
 		}
 		if x.Status != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.Status))
@@ -2953,6 +2987,26 @@ func (x *fastReflection_Result) ProtoMethods() *protoiface.Methods {
 					}
 				}
 			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Ok", wireType)
+				}
+				var v int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				x.Ok = bool(v != 0)
+			case 3:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Message", wireType)
 				}
@@ -6262,6 +6316,9 @@ var (
 	fd_PolicyTheoremResult_authorization_theorems_result protoreflect.FieldDescriptor
 	fd_PolicyTheoremResult_delegation_theorems_result    protoreflect.FieldDescriptor
 	fd_PolicyTheoremResult_reachability_theorems_result  protoreflect.FieldDescriptor
+	fd_PolicyTheoremResult_ok                            protoreflect.FieldDescriptor
+	fd_PolicyTheoremResult_theorem_count                 protoreflect.FieldDescriptor
+	fd_PolicyTheoremResult_failures                      protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -6271,6 +6328,9 @@ func init() {
 	fd_PolicyTheoremResult_authorization_theorems_result = md_PolicyTheoremResult.Fields().ByName("authorization_theorems_result")
 	fd_PolicyTheoremResult_delegation_theorems_result = md_PolicyTheoremResult.Fields().ByName("delegation_theorems_result")
 	fd_PolicyTheoremResult_reachability_theorems_result = md_PolicyTheoremResult.Fields().ByName("reachability_theorems_result")
+	fd_PolicyTheoremResult_ok = md_PolicyTheoremResult.Fields().ByName("ok")
+	fd_PolicyTheoremResult_theorem_count = md_PolicyTheoremResult.Fields().ByName("theorem_count")
+	fd_PolicyTheoremResult_failures = md_PolicyTheoremResult.Fields().ByName("failures")
 }
 
 var _ protoreflect.Message = (*fastReflection_PolicyTheoremResult)(nil)
@@ -6362,6 +6422,24 @@ func (x *fastReflection_PolicyTheoremResult) Range(f func(protoreflect.FieldDesc
 			return
 		}
 	}
+	if x.Ok != false {
+		value := protoreflect.ValueOfBool(x.Ok)
+		if !f(fd_PolicyTheoremResult_ok, value) {
+			return
+		}
+	}
+	if x.TheoremCount != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.TheoremCount)
+		if !f(fd_PolicyTheoremResult_theorem_count, value) {
+			return
+		}
+	}
+	if x.Failures != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.Failures)
+		if !f(fd_PolicyTheoremResult_failures, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -6385,6 +6463,12 @@ func (x *fastReflection_PolicyTheoremResult) Has(fd protoreflect.FieldDescriptor
 		return len(x.DelegationTheoremsResult) != 0
 	case "sourcenetwork.acp_core.PolicyTheoremResult.reachability_theorems_result":
 		return len(x.ReachabilityTheoremsResult) != 0
+	case "sourcenetwork.acp_core.PolicyTheoremResult.ok":
+		return x.Ok != false
+	case "sourcenetwork.acp_core.PolicyTheoremResult.theorem_count":
+		return x.TheoremCount != uint32(0)
+	case "sourcenetwork.acp_core.PolicyTheoremResult.failures":
+		return x.Failures != uint32(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.PolicyTheoremResult"))
@@ -6409,6 +6493,12 @@ func (x *fastReflection_PolicyTheoremResult) Clear(fd protoreflect.FieldDescript
 		x.DelegationTheoremsResult = nil
 	case "sourcenetwork.acp_core.PolicyTheoremResult.reachability_theorems_result":
 		x.ReachabilityTheoremsResult = nil
+	case "sourcenetwork.acp_core.PolicyTheoremResult.ok":
+		x.Ok = false
+	case "sourcenetwork.acp_core.PolicyTheoremResult.theorem_count":
+		x.TheoremCount = uint32(0)
+	case "sourcenetwork.acp_core.PolicyTheoremResult.failures":
+		x.Failures = uint32(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.PolicyTheoremResult"))
@@ -6446,6 +6536,15 @@ func (x *fastReflection_PolicyTheoremResult) Get(descriptor protoreflect.FieldDe
 		}
 		listValue := &_PolicyTheoremResult_4_list{list: &x.ReachabilityTheoremsResult}
 		return protoreflect.ValueOfList(listValue)
+	case "sourcenetwork.acp_core.PolicyTheoremResult.ok":
+		value := x.Ok
+		return protoreflect.ValueOfBool(value)
+	case "sourcenetwork.acp_core.PolicyTheoremResult.theorem_count":
+		value := x.TheoremCount
+		return protoreflect.ValueOfUint32(value)
+	case "sourcenetwork.acp_core.PolicyTheoremResult.failures":
+		value := x.Failures
+		return protoreflect.ValueOfUint32(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.PolicyTheoremResult"))
@@ -6480,6 +6579,12 @@ func (x *fastReflection_PolicyTheoremResult) Set(fd protoreflect.FieldDescriptor
 		lv := value.List()
 		clv := lv.(*_PolicyTheoremResult_4_list)
 		x.ReachabilityTheoremsResult = *clv.list
+	case "sourcenetwork.acp_core.PolicyTheoremResult.ok":
+		x.Ok = value.Bool()
+	case "sourcenetwork.acp_core.PolicyTheoremResult.theorem_count":
+		x.TheoremCount = uint32(value.Uint())
+	case "sourcenetwork.acp_core.PolicyTheoremResult.failures":
+		x.Failures = uint32(value.Uint())
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.PolicyTheoremResult"))
@@ -6523,6 +6628,12 @@ func (x *fastReflection_PolicyTheoremResult) Mutable(fd protoreflect.FieldDescri
 		}
 		value := &_PolicyTheoremResult_4_list{list: &x.ReachabilityTheoremsResult}
 		return protoreflect.ValueOfList(value)
+	case "sourcenetwork.acp_core.PolicyTheoremResult.ok":
+		panic(fmt.Errorf("field ok of message sourcenetwork.acp_core.PolicyTheoremResult is not mutable"))
+	case "sourcenetwork.acp_core.PolicyTheoremResult.theorem_count":
+		panic(fmt.Errorf("field theorem_count of message sourcenetwork.acp_core.PolicyTheoremResult is not mutable"))
+	case "sourcenetwork.acp_core.PolicyTheoremResult.failures":
+		panic(fmt.Errorf("field failures of message sourcenetwork.acp_core.PolicyTheoremResult is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.PolicyTheoremResult"))
@@ -6548,6 +6659,12 @@ func (x *fastReflection_PolicyTheoremResult) NewField(fd protoreflect.FieldDescr
 	case "sourcenetwork.acp_core.PolicyTheoremResult.reachability_theorems_result":
 		list := []*ReachabilityTheoremResult{}
 		return protoreflect.ValueOfList(&_PolicyTheoremResult_4_list{list: &list})
+	case "sourcenetwork.acp_core.PolicyTheoremResult.ok":
+		return protoreflect.ValueOfBool(false)
+	case "sourcenetwork.acp_core.PolicyTheoremResult.theorem_count":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "sourcenetwork.acp_core.PolicyTheoremResult.failures":
+		return protoreflect.ValueOfUint32(uint32(0))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.PolicyTheoremResult"))
@@ -6639,6 +6756,15 @@ func (x *fastReflection_PolicyTheoremResult) ProtoMethods() *protoiface.Methods 
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
 		}
+		if x.Ok {
+			n += 2
+		}
+		if x.TheoremCount != 0 {
+			n += 1 + runtime.Sov(uint64(x.TheoremCount))
+		}
+		if x.Failures != 0 {
+			n += 1 + runtime.Sov(uint64(x.Failures))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -6667,6 +6793,26 @@ func (x *fastReflection_PolicyTheoremResult) ProtoMethods() *protoiface.Methods 
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Failures != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Failures))
+			i--
+			dAtA[i] = 0x38
+		}
+		if x.TheoremCount != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.TheoremCount))
+			i--
+			dAtA[i] = 0x30
+		}
+		if x.Ok {
+			i--
+			if x.Ok {
+				dAtA[i] = 1
+			} else {
+				dAtA[i] = 0
+			}
+			i--
+			dAtA[i] = 0x28
 		}
 		if len(x.ReachabilityTheoremsResult) > 0 {
 			for iNdEx := len(x.ReachabilityTheoremsResult) - 1; iNdEx >= 0; iNdEx-- {
@@ -6917,6 +7063,64 @@ func (x *fastReflection_PolicyTheoremResult) ProtoMethods() *protoiface.Methods 
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
+			case 5:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Ok", wireType)
+				}
+				var v int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				x.Ok = bool(v != 0)
+			case 6:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TheoremCount", wireType)
+				}
+				x.TheoremCount = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.TheoremCount |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 7:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Failures", wireType)
+				}
+				x.Failures = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Failures |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -7111,6 +7315,9 @@ var (
 	fd_AnnotatedPolicyTheoremResult_authorization_theorems_result protoreflect.FieldDescriptor
 	fd_AnnotatedPolicyTheoremResult_delegation_theorems_result    protoreflect.FieldDescriptor
 	fd_AnnotatedPolicyTheoremResult_reachability_theorems_result  protoreflect.FieldDescriptor
+	fd_AnnotatedPolicyTheoremResult_ok                            protoreflect.FieldDescriptor
+	fd_AnnotatedPolicyTheoremResult_theorem_count                 protoreflect.FieldDescriptor
+	fd_AnnotatedPolicyTheoremResult_failures                      protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -7120,6 +7327,9 @@ func init() {
 	fd_AnnotatedPolicyTheoremResult_authorization_theorems_result = md_AnnotatedPolicyTheoremResult.Fields().ByName("authorization_theorems_result")
 	fd_AnnotatedPolicyTheoremResult_delegation_theorems_result = md_AnnotatedPolicyTheoremResult.Fields().ByName("delegation_theorems_result")
 	fd_AnnotatedPolicyTheoremResult_reachability_theorems_result = md_AnnotatedPolicyTheoremResult.Fields().ByName("reachability_theorems_result")
+	fd_AnnotatedPolicyTheoremResult_ok = md_AnnotatedPolicyTheoremResult.Fields().ByName("ok")
+	fd_AnnotatedPolicyTheoremResult_theorem_count = md_AnnotatedPolicyTheoremResult.Fields().ByName("theorem_count")
+	fd_AnnotatedPolicyTheoremResult_failures = md_AnnotatedPolicyTheoremResult.Fields().ByName("failures")
 }
 
 var _ protoreflect.Message = (*fastReflection_AnnotatedPolicyTheoremResult)(nil)
@@ -7211,6 +7421,24 @@ func (x *fastReflection_AnnotatedPolicyTheoremResult) Range(f func(protoreflect.
 			return
 		}
 	}
+	if x.Ok != false {
+		value := protoreflect.ValueOfBool(x.Ok)
+		if !f(fd_AnnotatedPolicyTheoremResult_ok, value) {
+			return
+		}
+	}
+	if x.TheoremCount != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.TheoremCount)
+		if !f(fd_AnnotatedPolicyTheoremResult_theorem_count, value) {
+			return
+		}
+	}
+	if x.Failures != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.Failures)
+		if !f(fd_AnnotatedPolicyTheoremResult_failures, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -7234,6 +7462,12 @@ func (x *fastReflection_AnnotatedPolicyTheoremResult) Has(fd protoreflect.FieldD
 		return len(x.DelegationTheoremsResult) != 0
 	case "sourcenetwork.acp_core.AnnotatedPolicyTheoremResult.reachability_theorems_result":
 		return len(x.ReachabilityTheoremsResult) != 0
+	case "sourcenetwork.acp_core.AnnotatedPolicyTheoremResult.ok":
+		return x.Ok != false
+	case "sourcenetwork.acp_core.AnnotatedPolicyTheoremResult.theorem_count":
+		return x.TheoremCount != uint32(0)
+	case "sourcenetwork.acp_core.AnnotatedPolicyTheoremResult.failures":
+		return x.Failures != uint32(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AnnotatedPolicyTheoremResult"))
@@ -7258,6 +7492,12 @@ func (x *fastReflection_AnnotatedPolicyTheoremResult) Clear(fd protoreflect.Fiel
 		x.DelegationTheoremsResult = nil
 	case "sourcenetwork.acp_core.AnnotatedPolicyTheoremResult.reachability_theorems_result":
 		x.ReachabilityTheoremsResult = nil
+	case "sourcenetwork.acp_core.AnnotatedPolicyTheoremResult.ok":
+		x.Ok = false
+	case "sourcenetwork.acp_core.AnnotatedPolicyTheoremResult.theorem_count":
+		x.TheoremCount = uint32(0)
+	case "sourcenetwork.acp_core.AnnotatedPolicyTheoremResult.failures":
+		x.Failures = uint32(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AnnotatedPolicyTheoremResult"))
@@ -7295,6 +7535,15 @@ func (x *fastReflection_AnnotatedPolicyTheoremResult) Get(descriptor protoreflec
 		}
 		listValue := &_AnnotatedPolicyTheoremResult_4_list{list: &x.ReachabilityTheoremsResult}
 		return protoreflect.ValueOfList(listValue)
+	case "sourcenetwork.acp_core.AnnotatedPolicyTheoremResult.ok":
+		value := x.Ok
+		return protoreflect.ValueOfBool(value)
+	case "sourcenetwork.acp_core.AnnotatedPolicyTheoremResult.theorem_count":
+		value := x.TheoremCount
+		return protoreflect.ValueOfUint32(value)
+	case "sourcenetwork.acp_core.AnnotatedPolicyTheoremResult.failures":
+		value := x.Failures
+		return protoreflect.ValueOfUint32(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AnnotatedPolicyTheoremResult"))
@@ -7329,6 +7578,12 @@ func (x *fastReflection_AnnotatedPolicyTheoremResult) Set(fd protoreflect.FieldD
 		lv := value.List()
 		clv := lv.(*_AnnotatedPolicyTheoremResult_4_list)
 		x.ReachabilityTheoremsResult = *clv.list
+	case "sourcenetwork.acp_core.AnnotatedPolicyTheoremResult.ok":
+		x.Ok = value.Bool()
+	case "sourcenetwork.acp_core.AnnotatedPolicyTheoremResult.theorem_count":
+		x.TheoremCount = uint32(value.Uint())
+	case "sourcenetwork.acp_core.AnnotatedPolicyTheoremResult.failures":
+		x.Failures = uint32(value.Uint())
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AnnotatedPolicyTheoremResult"))
@@ -7372,6 +7627,12 @@ func (x *fastReflection_AnnotatedPolicyTheoremResult) Mutable(fd protoreflect.Fi
 		}
 		value := &_AnnotatedPolicyTheoremResult_4_list{list: &x.ReachabilityTheoremsResult}
 		return protoreflect.ValueOfList(value)
+	case "sourcenetwork.acp_core.AnnotatedPolicyTheoremResult.ok":
+		panic(fmt.Errorf("field ok of message sourcenetwork.acp_core.AnnotatedPolicyTheoremResult is not mutable"))
+	case "sourcenetwork.acp_core.AnnotatedPolicyTheoremResult.theorem_count":
+		panic(fmt.Errorf("field theorem_count of message sourcenetwork.acp_core.AnnotatedPolicyTheoremResult is not mutable"))
+	case "sourcenetwork.acp_core.AnnotatedPolicyTheoremResult.failures":
+		panic(fmt.Errorf("field failures of message sourcenetwork.acp_core.AnnotatedPolicyTheoremResult is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AnnotatedPolicyTheoremResult"))
@@ -7397,6 +7658,12 @@ func (x *fastReflection_AnnotatedPolicyTheoremResult) NewField(fd protoreflect.F
 	case "sourcenetwork.acp_core.AnnotatedPolicyTheoremResult.reachability_theorems_result":
 		list := []*AnnotatedReachabilityTheoremResult{}
 		return protoreflect.ValueOfList(&_AnnotatedPolicyTheoremResult_4_list{list: &list})
+	case "sourcenetwork.acp_core.AnnotatedPolicyTheoremResult.ok":
+		return protoreflect.ValueOfBool(false)
+	case "sourcenetwork.acp_core.AnnotatedPolicyTheoremResult.theorem_count":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "sourcenetwork.acp_core.AnnotatedPolicyTheoremResult.failures":
+		return protoreflect.ValueOfUint32(uint32(0))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AnnotatedPolicyTheoremResult"))
@@ -7488,6 +7755,15 @@ func (x *fastReflection_AnnotatedPolicyTheoremResult) ProtoMethods() *protoiface
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
 		}
+		if x.Ok {
+			n += 2
+		}
+		if x.TheoremCount != 0 {
+			n += 1 + runtime.Sov(uint64(x.TheoremCount))
+		}
+		if x.Failures != 0 {
+			n += 1 + runtime.Sov(uint64(x.Failures))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -7516,6 +7792,26 @@ func (x *fastReflection_AnnotatedPolicyTheoremResult) ProtoMethods() *protoiface
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Failures != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Failures))
+			i--
+			dAtA[i] = 0x38
+		}
+		if x.TheoremCount != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.TheoremCount))
+			i--
+			dAtA[i] = 0x30
+		}
+		if x.Ok {
+			i--
+			if x.Ok {
+				dAtA[i] = 1
+			} else {
+				dAtA[i] = 0
+			}
+			i--
+			dAtA[i] = 0x28
 		}
 		if len(x.ReachabilityTheoremsResult) > 0 {
 			for iNdEx := len(x.ReachabilityTheoremsResult) - 1; iNdEx >= 0; iNdEx-- {
@@ -7766,6 +8062,64 @@ func (x *fastReflection_AnnotatedPolicyTheoremResult) ProtoMethods() *protoiface
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
+			case 5:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Ok", wireType)
+				}
+				var v int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				x.Ok = bool(v != 0)
+			case 6:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TheoremCount", wireType)
+				}
+				x.TheoremCount = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.TheoremCount |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 7:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Failures", wireType)
+				}
+				x.Failures = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Failures |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -8088,8 +8442,10 @@ type Result struct {
 
 	// status indicates whether the theorem was accepted, rejected or an error happened
 	Status ResultStatus `protobuf:"varint,1,opt,name=status,proto3,enum=sourcenetwork.acp_core.ResultStatus" json:"status,omitempty"`
+	// ok is true if theorem was accepted
+	Ok bool `protobuf:"varint,2,opt,name=ok,proto3" json:"ok,omitempty"`
 	// Message explains the result
-	Message string `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Message string `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"`
 }
 
 func (x *Result) Reset() {
@@ -8117,6 +8473,13 @@ func (x *Result) GetStatus() ResultStatus {
 		return x.Status
 	}
 	return ResultStatus_Reject
+}
+
+func (x *Result) GetOk() bool {
+	if x != nil {
+		return x.Ok
+	}
+	return false
 }
 
 func (x *Result) GetMessage() string {
@@ -8393,6 +8756,12 @@ type PolicyTheoremResult struct {
 	AuthorizationTheoremsResult []*AuthorizationTheoremResult `protobuf:"bytes,2,rep,name=authorization_theorems_result,json=authorizationTheoremsResult,proto3" json:"authorization_theorems_result,omitempty"`
 	DelegationTheoremsResult    []*DelegationTheoremResult    `protobuf:"bytes,3,rep,name=delegation_theorems_result,json=delegationTheoremsResult,proto3" json:"delegation_theorems_result,omitempty"`
 	ReachabilityTheoremsResult  []*ReachabilityTheoremResult  `protobuf:"bytes,4,rep,name=reachability_theorems_result,json=reachabilityTheoremsResult,proto3" json:"reachability_theorems_result,omitempty"`
+	// ok is true if all theorems were accepted
+	Ok bool `protobuf:"varint,5,opt,name=ok,proto3" json:"ok,omitempty"`
+	// theorem_count is the total number of theorems processed
+	TheoremCount uint32 `protobuf:"varint,6,opt,name=theorem_count,json=theoremCount,proto3" json:"theorem_count,omitempty"`
+	// failures returns a count of how many theorems weren't accepted or errored out
+	Failures uint32 `protobuf:"varint,7,opt,name=failures,proto3" json:"failures,omitempty"`
 }
 
 func (x *PolicyTheoremResult) Reset() {
@@ -8443,6 +8812,27 @@ func (x *PolicyTheoremResult) GetReachabilityTheoremsResult() []*ReachabilityThe
 	return nil
 }
 
+func (x *PolicyTheoremResult) GetOk() bool {
+	if x != nil {
+		return x.Ok
+	}
+	return false
+}
+
+func (x *PolicyTheoremResult) GetTheoremCount() uint32 {
+	if x != nil {
+		return x.TheoremCount
+	}
+	return 0
+}
+
+func (x *PolicyTheoremResult) GetFailures() uint32 {
+	if x != nil {
+		return x.Failures
+	}
+	return 0
+}
+
 type AnnotatedPolicyTheoremResult struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -8452,6 +8842,12 @@ type AnnotatedPolicyTheoremResult struct {
 	AuthorizationTheoremsResult []*AnnotatedAuthorizationTheoremResult `protobuf:"bytes,2,rep,name=authorization_theorems_result,json=authorizationTheoremsResult,proto3" json:"authorization_theorems_result,omitempty"`
 	DelegationTheoremsResult    []*AnnotatedDelegationTheoremResult    `protobuf:"bytes,3,rep,name=delegation_theorems_result,json=delegationTheoremsResult,proto3" json:"delegation_theorems_result,omitempty"`
 	ReachabilityTheoremsResult  []*AnnotatedReachabilityTheoremResult  `protobuf:"bytes,4,rep,name=reachability_theorems_result,json=reachabilityTheoremsResult,proto3" json:"reachability_theorems_result,omitempty"`
+	// ok is true if all theorems were accepted
+	Ok bool `protobuf:"varint,5,opt,name=ok,proto3" json:"ok,omitempty"`
+	// theorem_count is the total number of theorems processed
+	TheoremCount uint32 `protobuf:"varint,6,opt,name=theorem_count,json=theoremCount,proto3" json:"theorem_count,omitempty"`
+	// failures returns a count of how many theorems weren't accepted or errored out
+	Failures uint32 `protobuf:"varint,7,opt,name=failures,proto3" json:"failures,omitempty"`
 }
 
 func (x *AnnotatedPolicyTheoremResult) Reset() {
@@ -8500,6 +8896,27 @@ func (x *AnnotatedPolicyTheoremResult) GetReachabilityTheoremsResult() []*Annota
 		return x.ReachabilityTheoremsResult
 	}
 	return nil
+}
+
+func (x *AnnotatedPolicyTheoremResult) GetOk() bool {
+	if x != nil {
+		return x.Ok
+	}
+	return false
+}
+
+func (x *AnnotatedPolicyTheoremResult) GetTheoremCount() uint32 {
+	if x != nil {
+		return x.TheoremCount
+	}
+	return 0
+}
+
+func (x *AnnotatedPolicyTheoremResult) GetFailures() uint32 {
+	if x != nil {
+		return x.Failures
+	}
+	return 0
 }
 
 var File_sourcenetwork_acp_core_theorem_proto protoreflect.FileDescriptor
@@ -8583,12 +9000,13 @@ var file_sourcenetwork_acp_core_theorem_proto_rawDesc = []byte{
 	0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65, 0x61, 0x63,
 	0x68, 0x61, 0x62, 0x69, 0x6c, 0x69, 0x74, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x52,
 	0x14, 0x72, 0x65, 0x61, 0x63, 0x68, 0x61, 0x62, 0x69, 0x6c, 0x69, 0x74, 0x79, 0x54, 0x68, 0x65,
-	0x6f, 0x72, 0x65, 0x6d, 0x73, 0x22, 0x60, 0x0a, 0x06, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12,
+	0x6f, 0x72, 0x65, 0x6d, 0x73, 0x22, 0x70, 0x0a, 0x06, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12,
 	0x3c, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32,
 	0x24, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e,
 	0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x53,
-	0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x18, 0x0a,
-	0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07,
+	0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x0e, 0x0a,
+	0x02, 0x6f, 0x6b, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x52, 0x02, 0x6f, 0x6b, 0x12, 0x18, 0x0a,
+	0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07,
 	0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x22, 0x9c, 0x01, 0x0a, 0x1a, 0x41, 0x75, 0x74, 0x68,
 	0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d,
 	0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x46, 0x0a, 0x07, 0x74, 0x68, 0x65, 0x6f, 0x72, 0x65,
@@ -8652,7 +9070,7 @@ var file_sourcenetwork_acp_core_theorem_proto_rawDesc = []byte{
 	0x72, 0x76, 0x61, 0x6c, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x73, 0x6f, 0x75,
 	0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63,
 	0x6f, 0x72, 0x65, 0x2e, 0x42, 0x75, 0x66, 0x66, 0x65, 0x72, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x76,
-	0x61, 0x6c, 0x52, 0x08, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x76, 0x61, 0x6c, 0x22, 0xb2, 0x03, 0x0a,
+	0x61, 0x6c, 0x52, 0x08, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x76, 0x61, 0x6c, 0x22, 0x83, 0x04, 0x0a,
 	0x13, 0x50, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x52, 0x65,
 	0x73, 0x75, 0x6c, 0x74, 0x12, 0x3f, 0x0a, 0x07, 0x74, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x18,
 	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65,
@@ -8680,43 +9098,53 @@ var file_sourcenetwork_acp_core_theorem_proto_rawDesc = []byte{
 	0x68, 0x61, 0x62, 0x69, 0x6c, 0x69, 0x74, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x52,
 	0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x1a, 0x72, 0x65, 0x61, 0x63, 0x68, 0x61, 0x62, 0x69, 0x6c,
 	0x69, 0x74, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x75, 0x6c,
-	0x74, 0x22, 0xd6, 0x03, 0x0a, 0x1c, 0x41, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x65, 0x64, 0x50,
-	0x6f, 0x6c, 0x69, 0x63, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x52, 0x65, 0x73, 0x75,
-	0x6c, 0x74, 0x12, 0x3f, 0x0a, 0x07, 0x74, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77,
-	0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x50, 0x6f, 0x6c,
-	0x69, 0x63, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x52, 0x07, 0x74, 0x68, 0x65, 0x6f,
-	0x72, 0x65, 0x6d, 0x12, 0x7f, 0x0a, 0x1d, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x5f, 0x72, 0x65,
-	0x73, 0x75, 0x6c, 0x74, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x3b, 0x2e, 0x73, 0x6f, 0x75,
-	0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63,
-	0x6f, 0x72, 0x65, 0x2e, 0x41, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x65, 0x64, 0x41, 0x75, 0x74,
-	0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65,
-	0x6d, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x1b, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69,
-	0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x52, 0x65,
-	0x73, 0x75, 0x6c, 0x74, 0x12, 0x76, 0x0a, 0x1a, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69,
-	0x6f, 0x6e, 0x5f, 0x74, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x5f, 0x72, 0x65, 0x73, 0x75,
-	0x6c, 0x74, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x38, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63,
-	0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72,
-	0x65, 0x2e, 0x41, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x65, 0x64, 0x44, 0x65, 0x6c, 0x65, 0x67,
-	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x52, 0x65, 0x73, 0x75,
-	0x6c, 0x74, 0x52, 0x18, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x68,
-	0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x7c, 0x0a, 0x1c,
-	0x72, 0x65, 0x61, 0x63, 0x68, 0x61, 0x62, 0x69, 0x6c, 0x69, 0x74, 0x79, 0x5f, 0x74, 0x68, 0x65,
-	0x6f, 0x72, 0x65, 0x6d, 0x73, 0x5f, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x18, 0x04, 0x20, 0x03,
-	0x28, 0x0b, 0x32, 0x3a, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f,
-	0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x41, 0x6e, 0x6e, 0x6f,
-	0x74, 0x61, 0x74, 0x65, 0x64, 0x52, 0x65, 0x61, 0x63, 0x68, 0x61, 0x62, 0x69, 0x6c, 0x69, 0x74,
-	0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x1a,
-	0x72, 0x65, 0x61, 0x63, 0x68, 0x61, 0x62, 0x69, 0x6c, 0x69, 0x74, 0x79, 0x54, 0x68, 0x65, 0x6f,
-	0x72, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2a, 0x31, 0x0a, 0x0c, 0x52, 0x65,
-	0x73, 0x75, 0x6c, 0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x0a, 0x0a, 0x06, 0x52, 0x65,
-	0x6a, 0x65, 0x63, 0x74, 0x10, 0x00, 0x12, 0x0a, 0x0a, 0x06, 0x41, 0x63, 0x63, 0x65, 0x70, 0x74,
-	0x10, 0x01, 0x12, 0x09, 0x0a, 0x05, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x10, 0x02, 0x42, 0x2d, 0x5a,
-	0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6f, 0x75, 0x72,
-	0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f,
-	0x72, 0x65, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x74, 0x12, 0x0e, 0x0a, 0x02, 0x6f, 0x6b, 0x18, 0x05, 0x20, 0x01, 0x28, 0x08, 0x52, 0x02, 0x6f,
+	0x6b, 0x12, 0x23, 0x0a, 0x0d, 0x74, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x5f, 0x63, 0x6f, 0x75,
+	0x6e, 0x74, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0c, 0x74, 0x68, 0x65, 0x6f, 0x72, 0x65,
+	0x6d, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x1a, 0x0a, 0x08, 0x66, 0x61, 0x69, 0x6c, 0x75, 0x72,
+	0x65, 0x73, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x08, 0x66, 0x61, 0x69, 0x6c, 0x75, 0x72,
+	0x65, 0x73, 0x22, 0xa7, 0x04, 0x0a, 0x1c, 0x41, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x65, 0x64,
+	0x50, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x52, 0x65, 0x73,
+	0x75, 0x6c, 0x74, 0x12, 0x3f, 0x0a, 0x07, 0x74, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
+	0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x50, 0x6f,
+	0x6c, 0x69, 0x63, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x52, 0x07, 0x74, 0x68, 0x65,
+	0x6f, 0x72, 0x65, 0x6d, 0x12, 0x7f, 0x0a, 0x1d, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x5f, 0x72,
+	0x65, 0x73, 0x75, 0x6c, 0x74, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x3b, 0x2e, 0x73, 0x6f,
+	0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f,
+	0x63, 0x6f, 0x72, 0x65, 0x2e, 0x41, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x65, 0x64, 0x41, 0x75,
+	0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x68, 0x65, 0x6f, 0x72,
+	0x65, 0x6d, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x1b, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72,
+	0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x52,
+	0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x76, 0x0a, 0x1a, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x5f, 0x72, 0x65, 0x73,
+	0x75, 0x6c, 0x74, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x38, 0x2e, 0x73, 0x6f, 0x75, 0x72,
+	0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f,
+	0x72, 0x65, 0x2e, 0x41, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x65, 0x64, 0x44, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x52, 0x65, 0x73,
+	0x75, 0x6c, 0x74, 0x52, 0x18, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54,
+	0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x7c, 0x0a,
+	0x1c, 0x72, 0x65, 0x61, 0x63, 0x68, 0x61, 0x62, 0x69, 0x6c, 0x69, 0x74, 0x79, 0x5f, 0x74, 0x68,
+	0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x5f, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x18, 0x04, 0x20,
+	0x03, 0x28, 0x0b, 0x32, 0x3a, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77,
+	0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x41, 0x6e, 0x6e,
+	0x6f, 0x74, 0x61, 0x74, 0x65, 0x64, 0x52, 0x65, 0x61, 0x63, 0x68, 0x61, 0x62, 0x69, 0x6c, 0x69,
+	0x74, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52,
+	0x1a, 0x72, 0x65, 0x61, 0x63, 0x68, 0x61, 0x62, 0x69, 0x6c, 0x69, 0x74, 0x79, 0x54, 0x68, 0x65,
+	0x6f, 0x72, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x6f,
+	0x6b, 0x18, 0x05, 0x20, 0x01, 0x28, 0x08, 0x52, 0x02, 0x6f, 0x6b, 0x12, 0x23, 0x0a, 0x0d, 0x74,
+	0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x06, 0x20, 0x01,
+	0x28, 0x0d, 0x52, 0x0c, 0x74, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x43, 0x6f, 0x75, 0x6e, 0x74,
+	0x12, 0x1a, 0x0a, 0x08, 0x66, 0x61, 0x69, 0x6c, 0x75, 0x72, 0x65, 0x73, 0x18, 0x07, 0x20, 0x01,
+	0x28, 0x0d, 0x52, 0x08, 0x66, 0x61, 0x69, 0x6c, 0x75, 0x72, 0x65, 0x73, 0x2a, 0x31, 0x0a, 0x0c,
+	0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x0a, 0x0a, 0x06,
+	0x52, 0x65, 0x6a, 0x65, 0x63, 0x74, 0x10, 0x00, 0x12, 0x0a, 0x0a, 0x06, 0x41, 0x63, 0x63, 0x65,
+	0x70, 0x74, 0x10, 0x01, 0x12, 0x09, 0x0a, 0x05, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x10, 0x02, 0x42,
+	0x2d, 0x5a, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6f,
+	0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f,
+	0x63, 0x6f, 0x72, 0x65, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62, 0x06,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
