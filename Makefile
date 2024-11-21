@@ -9,7 +9,7 @@ test\:js:
 .PHONY: proto
 proto:
 	docker image build --file proto/Dockerfile --tag acp_core_proto:latest .
-	docker run --rm --volume=".:/app" --workdir="/app/proto" --user="$$(id -u)" acp_core_proto generate
+	docker run --rm --volume=".:/app" --workdir="/app/proto" --env="HOST_USER=$$(id -u)" --entrypoint sh acp_core_proto ./docker-generate.sh
 	mv github.com/sourcenetwork/acp_core/pkg/types/* pkg/types/
 	mv github.com/sourcenetwork/acp_core/pkg/errors/* pkg/errors/
 	rm -r github.com
