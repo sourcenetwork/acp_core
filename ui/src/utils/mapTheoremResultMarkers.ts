@@ -1,14 +1,14 @@
 import {
+  AnnotatedAuthorizationTheoremResult,
   AnnotatedDelegationTheoremResult,
   AnnotatedPolicyTheoremResult,
   AnnotatedReachabilityTheoremResult,
-  ResultStatus,
-} from "@/types/proto-js/sourcenetwork/acp_core/theorem";
+} from "@acp/theorem";
 import * as monaco from "monaco-editor";
 
 type TheoremResultType =
   | AnnotatedDelegationTheoremResult
-  | AnnotatedDelegationTheoremResult
+  | AnnotatedAuthorizationTheoremResult
   | AnnotatedReachabilityTheoremResult;
 
 function mapTheoremMarkers(
@@ -16,8 +16,7 @@ function mapTheoremMarkers(
 ): monaco.editor.IMarkerData[] {
   return theoremResult
     .filter(
-      ({ result }) =>
-        result?.result?.status !== "Accept" // FIXME
+      ({ result }) => (result?.result?.status as unknown as string) !== "Accept" // FIXME
     )
     .map((result) => {
       return {
@@ -41,7 +40,9 @@ export function mapTheoremResultMarkers(result?: AnnotatedPolicyTheoremResult) {
   return [...authMarkers, ...delegationMarkers];
 }
 
-export function theoremResultPassing(result: AnnotatedPolicyTheoremResult) {
+export function theoremResultPassing(result?: AnnotatedPolicyTheoremResult) {
+  if (!result) return false;
+
   const {
     delegationTheoremsResult,
     authorizationTheoremsResult,
@@ -54,8 +55,7 @@ export function theoremResultPassing(result: AnnotatedPolicyTheoremResult) {
     reachabilityTheoremsResult,
   ]?.some((type) =>
     type?.some(
-      (set) =>
-        resultStatusFromJSON(set.result?.result?.status) !== ResultStatus.Accept
+      (set) => (set?.result?.result?.status as unknown as string) !== "Accept" // FIXME
     )
   );
 

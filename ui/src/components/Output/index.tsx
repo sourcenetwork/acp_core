@@ -1,11 +1,11 @@
-import { usePlaygroundStore } from "@/lib/acpHandler";
-import { SandboxDataErrors } from "@/types/proto-js/sourcenetwork/acp_core/sandbox";
+import { usePlaygroundStore } from "@/lib/playgroundStore";
+import { SandboxDataErrors } from "@acp/sandbox";
 import OutputMessage from "../OutputMessage";
 import { Badge } from "../ui/badge";
 import { ScrollArea } from "../ui/scroll-area";
 
 const Output = () => {
-    const [dataErrors, setStateError] = usePlaygroundStore((state) => [state.sandboxErrors, state.setStateError]);
+    const [dataErrors, setStateError, verifyTheoremsError] = usePlaygroundStore((state) => [state.setStateDataErrors, state.setStateError, state.verifyTheoremsError]);
 
     const messageInfo: Record<keyof SandboxDataErrors, { prefix: string, path: string }> = {
         "policyErrors": {
@@ -33,14 +33,21 @@ const Output = () => {
                     return messages;
                 }, []);
 
+    const problemCount =
+        (errorMessages?.length ?? 0) +
+        (setStateError ? 1 : 0) +
+        (verifyTheoremsError ? 1 : 0);
+
     return <div className="py-4 pr-4 h-full flex flex-col">
-        <div className="pb-2 text-sm leading-none font-light">
+        <div className="pb-2 text-sm leading-none font-light items-center flex min-h-8">
             Problems
-            {errorMessages?.length !== 0 && <Badge className="ml-2" variant="outline">{errorMessages?.length}</Badge>}
+            {problemCount ? <Badge className="ml-2" variant="outline">{problemCount}</Badge> : null}
         </div>
         <ScrollArea className="p-4 bg-editor flex-1 rounded-md border font-mono text-[12px]">
 
-            {!!setStateError && <OutputMessage message={"Something wen't wrong setting playground state"} />}
+            {!!setStateError && <OutputMessage message={setStateError} />}
+
+            {!!verifyTheoremsError && <OutputMessage message={verifyTheoremsError} />}
 
             {errorMessages?.map((error, index) => <OutputMessage key={index} path={error.path} prefix={error.prefix} message={error.message} />)}
 

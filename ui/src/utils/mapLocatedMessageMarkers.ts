@@ -1,4 +1,4 @@
-import { LocatedMessage } from "@/types/proto-js/sourcenetwork/acp_core/parser_message";
+import { LocatedMessage } from "@acp/parser_message";
 import * as monaco from "monaco-editor";
 
 export function mapLocatedMessageMarkers(

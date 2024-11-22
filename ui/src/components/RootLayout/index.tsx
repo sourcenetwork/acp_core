@@ -8,7 +8,7 @@ import SideMenu from "../SideMenu";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../ui/resizable";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 
-export type PanelDefiniton = {
+export interface PanelDefiniton {
     key: string,
     label: string,
     component: ComponentType

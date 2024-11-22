@@ -22,10 +22,9 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
-    // "noImplicitAny": false,
-
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@acp/*": ["./src/types/proto-js/sourcenetwork/acp_core/*"]
     }
   },
   "include": ["src"]

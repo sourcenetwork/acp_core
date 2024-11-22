@@ -19,8 +19,8 @@
     --accent: #f1f5f9;
     --accent-foreground: #0f1729;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: #ef4444;
+    --destructive-foreground: #f8fafc;
 
     --border: #e1e7ef;
     --input: #e1e7ef;
@@ -53,8 +53,8 @@
     --accent: #383838;
     --accent-foreground: #f8fafc;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: #fb2222;
+    --destructive-foreground: #f8fafc;
 
     --border: #414141;
     --input: #303030;
@@ -63,7 +63,7 @@
     --card: #020817;
     --card-foreground: #f8fafc;
 
-    --popover: #131313;
+    --popover: #1d1d1d;
     --popover-foreground: #f8fafc;
 
     --editor: #1e1e1e;

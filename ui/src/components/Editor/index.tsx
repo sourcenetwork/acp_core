@@ -1,9 +1,9 @@
+import { useActiveSandbox } from "@/hooks/useActiveSandbox";
 import { useDebounce } from "@/hooks/useDebounce";
-import { usePlaygroundStore } from "@/lib/acpHandler";
-import { usePlaygroundStorageStore } from "@/lib/acpStorage";
-import { SandboxData, SandboxDataErrors } from "@/types/proto-js/sourcenetwork/acp_core/sandbox";
+import { usePlaygroundStore } from "@/lib/playgroundStore";
 import { mapLocatedMessageMarkers } from "@/utils/mapLocatedMessageMarkers";
 import { mapTheoremResultMarkers } from "@/utils/mapTheoremResultMarkers";
+import { SandboxData, SandboxDataErrors } from "@acp/sandbox";
 import { Editor, EditorProps, OnChange, OnMount, useMonaco } from "@monaco-editor/react";
 import * as monaco from 'monaco-editor';
 import { useCallback, useEffect, useRef } from "react";
@@ -27,13 +27,16 @@ const SandboxDataType: Record<keyof SandboxData, { errorKey: keyof SandboxDataEr
 
 const BaseEditor = (props: EditorProps & BaseEditorProps) => {
     const { sandboxDataType } = props;
+
+    const dataType = SandboxDataType[sandboxDataType];
+
     const monacoRef = useMonaco();
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
     const { theme } = useTheme();
-    const dataType = SandboxDataType[sandboxDataType];
-    const [dataContent] = usePlaygroundStorageStore((state) => [state.data[sandboxDataType], state.updateStore]);
-    const [dataErrors, annotatedPolicyTheoremResult, setState] = usePlaygroundStore((state) => [state.sandboxErrors?.[dataType.errorKey], state.annotatedPolicyTheoremResult, state.setState]);
+    const activeSandbox = useActiveSandbox();
+    const [dataErrors, annotatedPolicyTheoremResult, updateSandboxState] = usePlaygroundStore((state) => [state.setStateDataErrors?.[dataType.errorKey], state.verifyTheoremsResult, state.setPlaygroundState]);
 
+    const editorData = activeSandbox?.data?.[sandboxDataType];
     const isTestEditor = sandboxDataType === 'policyTheorem';
 
     const updateMarkers = useCallback(() => {
@@ -54,7 +57,7 @@ const BaseEditor = (props: EditorProps & BaseEditorProps) => {
     }, [dataErrors, annotatedPolicyTheoremResult, updateMarkers])
 
     const handleEditorChange: OnChange = useDebounce((value) => {
-        setState({ [sandboxDataType]: value });
+        void updateSandboxState({ [sandboxDataType]: value });
     }, 500);
 
     const handleEditorMounted: OnMount = (editor) => {
@@ -67,8 +70,8 @@ const BaseEditor = (props: EditorProps & BaseEditorProps) => {
             <Editor
                 height="100%"
                 defaultLanguage="yaml"
-                defaultValue={dataContent}
-                value={dataContent}
+                defaultValue={editorData}
+                value={editorData}
                 onChange={handleEditorChange}
                 onMount={handleEditorMounted}
                 theme={theme === 'dark' ? 'vs-dark' : 'vs-light'}

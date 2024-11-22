@@ -2,14 +2,14 @@
 import { useEffect } from 'react';
 import Header from './components/Header';
 import RootLayout from './components/RootLayout';
-import { usePlaygroundStore } from './lib/acpHandler';
+import { usePlaygroundStore } from './lib/playgroundStore';
 
 function App() {
-    const { initialize } = usePlaygroundStore();
+    const [initPlayground] = usePlaygroundStore((state) => [state.initPlayground]);
 
     useEffect(() => {
-        initialize();
-    }, [initialize])
+        void initPlayground();
+    }, [initPlayground])
 
     return <>
         <Header />

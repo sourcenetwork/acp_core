@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { usePlaygroundStore } from "@/lib/acpHandler";
-import clsx from "clsx";
+import { usePlaygroundStore } from "@/lib/playgroundStore";
+import { cn } from "@/utils/classnames";
 import { CircleCheck, CircleX, LoaderCircle } from "lucide-react";
 import BaseEditor from "../components/Editor";
 
 const Tests = () => {
-    const [verifyTheoremsStatus, verifyTheorems, sandboxErrorCount] = usePlaygroundStore((state) => [state.verifyTheoremsStatus, state.verifyTheorems, state.sandboxErrorCount]);
+    const [verifyTheoremsStatus, verifyTheorems, sandboxErrorCount] = usePlaygroundStore((state) => [state.verifyTheoremsStatus, state.verifyTheorems, state.setStateDataErrorCount]);
 
     const isDisabled = sandboxErrorCount > 0;
     const status = isDisabled ? 'disabled' : verifyTheoremsStatus;
@@ -47,7 +47,7 @@ const Tests = () => {
     return <>
         <div className="mb-2 flex justify-end gap-x-2">
             <div className="my-auto font-bold text-[12px]">
-                <span className={clsx('inline-block text-[12px] leading-none ',
+                <span className={cn('inline-block text-[12px] leading-none ',
                     currentStatus.color,
                     { 'opacity-50': isDisabled }
                 )}>

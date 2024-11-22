@@ -6,10 +6,11 @@ import { Link, useLocation } from "react-router-dom";
 const SideMenu = () => {
     const location = useLocation();
     const [collapsed, setCollapsed] = useState(false);
+
     const paths = [
-        { label: "Policy", path: '/', icon: icons['BookText'] },
-        { label: "Relationship", path: '/relationship', icon: icons['Waypoints'] },
-        { label: "Tests", path: '/tests', icon: icons['FlaskConical'] },
+        { label: "Policy", path: '/', icon: icons.BookText },
+        { label: "Relationship", path: '/relationship', icon: icons.Waypoints },
+        { label: "Tests", path: '/tests', icon: icons.FlaskConical },
     ];
 
     return <div className={cn("p-1 transition-all md:min-w-[200px] mx-2 min-w-0", {
@@ -40,11 +41,14 @@ const SideMenu = () => {
                     })}
             >
                 <PathIcon className="w-5" />
+
                 <span className={cn("ml-2 text-sm hidden md:block", {
                     "hidden md:hidden": collapsed === true
                 })}>{p.label}</span>
             </Link>;
         })}
+
+        {/* <pre>{JSON.stringify(IdHandleMap, null, 2)}</pre> */}
     </div>
 }
 

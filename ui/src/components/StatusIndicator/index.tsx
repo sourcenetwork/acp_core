@@ -1,17 +1,17 @@
 // import { WasmStatus } from "@/lib/wasm";
 
-import { PlaygroundState } from "@/lib/acpHandler";
-import clsx from "clsx";
+import { PlaygroundState } from "@/lib/playgroundStore";
+import { cn } from "@/utils/classnames";
 import { CircleCheck, CircleX, LoaderCircle } from "lucide-react";
 import { ReactNode } from "react";
 
 interface StatusIndicatorProps {
-    status: PlaygroundState['status']
+    status: PlaygroundState['playgroundStatus']
 }
 
 const StatusIndicator = ({ status }: StatusIndicatorProps) => {
 
-    const statuses: Record<PlaygroundState['status'], { label: string, color: string, icon: ReactNode } | null> = {
+    const statuses: Record<PlaygroundState['playgroundStatus'], { label: string, color: string, icon: ReactNode } | null> = {
         'ready': {
             color: "text-green-500",
             label: "Loaded",
@@ -32,9 +32,9 @@ const StatusIndicator = ({ status }: StatusIndicatorProps) => {
 
     const currentStatus = statuses[status];
 
-    return <div className="flex justify-between p-4">
+    return <div className="flex justify-between p-3">
         {currentStatus &&
-            <span className={clsx('inline-block text-[12px] leading-none ', currentStatus.color)}>
+            <span className={cn('inline-block text-[12px] leading-none ', currentStatus.color)}>
                 {currentStatus.label}
                 {currentStatus.icon}
             </span>
