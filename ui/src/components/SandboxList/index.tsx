@@ -1,12 +1,20 @@
 import { usePlaygroundStore } from "@/lib/playgroundStore";
 import { cn } from "@/utils/classnames";
-import { Edit2, Trash } from "lucide-react";
+import { Edit2, MoreHorizontal, Trash } from "lucide-react";
 import { MouseEvent, useState } from "react";
 import EditSandboxDialog from "../EditSandboxDialog";
-import TextTooltip from "../TextTooltip";
 import { Button } from "../ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
-const SandboxList = () => {
+interface SandboxListProps {
+    className?: string;
+    collpased?: boolean;
+    format: 'small' | 'expanded';
+    onSandboxClick?: (id: string) => unknown;
+}
+
+const SandboxList = (props: SandboxListProps) => {
+    const { className, format, onSandboxClick } = props;
     const [showEditSandbox, setShowEditSandbox] = useState(false);
     const [selectedSandboxId, setSelectedSandboxId] = useState<string | null>(null);
 
@@ -19,17 +27,20 @@ const SandboxList = () => {
 
     const handleEditSandbox = (sandboxId: string) => (event: MouseEvent) => {
         event.preventDefault();
+        event.stopPropagation();
         setSelectedSandboxId(sandboxId);
         setShowEditSandbox(true);
     };
 
     const handleDeleteSandbox = (id: string) => (event: MouseEvent) => {
         event.preventDefault();
+        event.stopPropagation();
         void deleteStoredSandbox(id);
     }
 
     const handleSandboxClick = (id: string) => () => {
         void setActiveSandbox(id);
+        if (onSandboxClick != null) onSandboxClick(id);
     }
 
     return <>
@@ -38,31 +49,42 @@ const SandboxList = () => {
             sandboxId={selectedSandboxId}
             setOpen={(state) => setShowEditSandbox(state)} />
 
-        <ul className="flex flex-col gap-y-2 p-3 w-[200px] md:w-[500px]">
+        <ul className={cn("space-y-1 w-full", className)}>
+
             {sandboxes?.map((sandbox) => (
-                <div key={sandbox.id} className={cn(
-                    "border-l-2 border-transparent group flex p-3 text-left hover:bg-accent hover:text-accent-foreground w-full text-xs transition-colors",
-                    {
-                        "border-green-500": lastActiveId === sandbox.id,
-                    }
-                )} onClick={handleSandboxClick(sandbox.id)}>
+                <div key={sandbox.id}
+                    className={cn(`flex px-2 py-1 group 
+                    border-l-2 border-transparent rounded text-left 
+                    hover:bg-accent hover:text-accent-foreground text-xs transition-colors`,
+                        {
+                            "border-green-500 bg-secondary": lastActiveId === sandbox.id,
+                            "py-3": format === 'expanded'
+                        }
+                    )}
+                    onClick={handleSandboxClick(sandbox.id)}>
+
                     <button className="block w-full text-left">
-                        <div className="text-[13px] font-medium leading-none mb-1">{sandbox.name}</div>
-                        <p className="line-clamp-2 text-[12px] leading-snug text-muted-foreground">{sandbox?.description || " -"}</p>
+                        <div className={
+                            cn("text-xs leading-none overflow-hidden whitespace-nowrap text-ellipsis max-w-[180px] mr-2", {
+                                "text-sm leading-normal max-w-full": format === 'expanded',
+                            })
+                        }>{sandbox.name}</div>
+
+                        {format === 'expanded' &&
+                            <div className="text-[12px] opacity-60 leading-relaxed mr-2">{sandbox.description || '-'}</div>}
                     </button>
 
-                    <div className="ml-4 opacity-0 group-hover:opacity-100 whitespace-nowrap flex gap-x-1">
-                        <TextTooltip content={"Edit"}>
-                            <Button variant={"outline"} className="hover:border-accent-foreground" size={"iconSm"} onClick={handleEditSandbox(sandbox.id)}>
-                                <Edit2 size={15} />
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant={"outline"} size={"iconXs"} className="opacity-100 group-hover:opacity-100 md:opacity-0" >
+                                <MoreHorizontal size={15} />
                             </Button>
-                        </TextTooltip>
-                        <TextTooltip content={"Delete"}>
-                            <Button variant={"outline"} className="hover:border-destructive hover:text-destructive" size={"iconSm"} onClick={handleDeleteSandbox(sandbox.id)}>
-                                <Trash size={15} />
-                            </Button>
-                        </TextTooltip>
-                    </div>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem onClick={handleEditSandbox(sandbox.id)}><Edit2 size={15} /> Edit</DropdownMenuItem>
+                            <DropdownMenuItem onClick={handleDeleteSandbox(sandbox.id)}><Trash size={15} /> Delete</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
             ))}
         </ul>

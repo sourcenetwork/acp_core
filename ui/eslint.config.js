@@ -37,5 +37,18 @@ export default tseslint.config(
       ...react.configs.recommended.rules,
       ...react.configs["jsx-runtime"].rules,
     },
-  }
+  },
+
+  // Ignore shadcn errors
+  // https://github.com/shadcn-ui/ui/issues/120
+  {
+    files: ["**/components/ui/*.tsx"],
+    rules: {
+      "react/prop-types": "off",
+      "react-refresh/only-export-components": "off",
+    },
+  },
+
+  // Ignore proto generated files
+  { ignores: ["src/types/proto-js"] }
 );

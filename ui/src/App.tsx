@@ -1,6 +1,5 @@
 
 import { useEffect } from 'react';
-import Header from './components/Header';
 import RootLayout from './components/RootLayout';
 import { usePlaygroundStore } from './lib/playgroundStore';
 
@@ -12,7 +11,6 @@ function App() {
     }, [initPlayground])
 
     return <>
-        <Header />
         <RootLayout />
     </>
 }

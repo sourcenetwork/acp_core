@@ -1,16 +1,23 @@
-import { icons } from "lucide-react";
+import { LucideIcon, LucideProps, MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "../../ThemeProvider";
-import { Button } from "../ui/button";
+import { Button, ButtonProps } from "../ui/button";
 
-const ThemeToggle = () => {
-    const { theme, setTheme } = useTheme();
-    const Icon = theme === "dark" ? icons.Moon : icons.Sun;
+interface ThemeToggleProps {
+    buttonProps?: ButtonProps,
+    darkIcon?: LucideIcon, // Default dark mode icon
+    lightIcon?: LucideIcon, // Default light mode icon
+    iconProps?: LucideProps
+}
+
+const ThemeToggle = (props: ButtonProps & ThemeToggleProps) => {
+    const { darkIcon = MoonIcon, lightIcon = SunIcon, buttonProps, iconProps } = props;
+    const { theme } = useTheme();
+    const Icon = theme === "dark" ? darkIcon : lightIcon;
+
     return (
-        <div className="flex">
-            <Button variant="outline" size="iconSm" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
-                <Icon size={16} />
-            </Button>
-        </div>
+        <Button {...buttonProps} >
+            <Icon size={16} {...iconProps} />
+        </Button>
     )
 }
 

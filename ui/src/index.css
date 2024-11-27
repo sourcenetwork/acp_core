@@ -78,7 +78,13 @@
     @apply bg-background text-foreground;
   }
   #root {
-    @apply min-h-screen flex flex-col;
+    @apply min-h-dvh flex flex-col;
+  }
+}
+
+@layer components {
+  .sidemenu-button {
+    @apply flex mb-2 p-2 items-center border border-transparent rounded-md opacity-60 transition-all hover:opacity-80 hover:border-border;
   }
 }
 

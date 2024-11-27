@@ -17,10 +17,16 @@ import {
   getLastActiveSandbox,
 } from "./playgroundUtils";
 
-export const blankSandbox = {
-  policyDefinition: `name: ""`,
+export const blankSandboxData: SandboxData = {
+  policyDefinition: `name: new-sandbox \n`,
   policyTheorem: `Authorizations {\n\n}\n\nDelegations {\n}`,
   relationships: "",
+};
+
+export const blankSandboxTemplate = {
+  name: "New Sandbox",
+  description: "",
+  data: blankSandboxData,
 };
 
 export interface PersistedSandboxData {
@@ -68,12 +74,14 @@ export interface PlaygroundState {
     handle: number | null;
   };
   setActiveSandbox: (id: string) => Promise<void>;
-  newSandbox: (sandbox: Partial<PersistedSandboxData>) => string;
+  newSandbox: (sandbox: Partial<PersistedSandboxData>) => Promise<string>;
+  newEmptySandbox: () => Promise<string>;
   deleteStoredSandbox: (id: string) => void;
   updateStoredSandbox: (
     data: Partial<PersistedSandboxData>,
-    id?: string
+    id?: string | null
   ) => void;
+  updateActiveSandbox: (data: Partial<PersistedSandboxData>) => void;
   mapIdToHandle: (id: string, handle: number) => void;
 }
 
@@ -97,14 +105,10 @@ export const usePlaygroundStore = create<PlaygroundState>()(
 
           initPlayground: async () => {
             try {
-              const {
-                playgroundStatus,
-                setPlaygroundState,
-                newPlaygroundSandbox,
-                newSandbox,
-              } = get();
+              const { playgroundStatus, newSandbox, setActiveSandbox } = get();
 
               const { active } = getLastActiveSandbox();
+              const activeSandboxId = active?.id;
 
               if (playgroundStatus !== "uninitialized") return;
 
@@ -115,6 +119,7 @@ export const usePlaygroundStore = create<PlaygroundState>()(
 
               const playground = await window.AcpPlayground.new();
               const sampleResult = await playground.GetSampleSandboxes({});
+              const firstTemplate = sampleResult?.samples[0];
 
               // Mark the playground ready
               set({
@@ -123,32 +128,16 @@ export const usePlaygroundStore = create<PlaygroundState>()(
                 sandboxTemplates: sampleResult?.samples,
               });
 
-              const sandboxToLoad = active ?? sampleResult?.samples[0];
-
-              const sandboxInput = {
-                name: sandboxToLoad?.name ?? "default",
-                description: sandboxToLoad?.description ?? "",
-                data: sandboxToLoad?.data ?? blankSandbox,
-              };
-
-              // If there is no loaded sandboxes
-              const sandboxId = active?.id || newSandbox(sandboxInput);
-
-              const handle = await newPlaygroundSandbox({
-                name: sandboxInput?.name,
-                description: sandboxInput?.description,
-              });
-
-              if (!handle) {
-                // TODO
-                throw new Error("Failed to lookup sandbox handle");
+              if (activeSandboxId != null) {
+                await setActiveSandbox(activeSandboxId);
+                return;
               }
 
-              set((state) => ({
-                idHandleMap: { ...state.idHandleMap, [sandboxId]: handle },
-              }));
-
-              void setPlaygroundState(sandboxInput.data);
+              await newSandbox({
+                name: firstTemplate?.name ?? "New Sandbox",
+                description: firstTemplate?.description ?? "",
+                data: firstTemplate?.data ?? blankSandboxData,
+              });
             } catch (error) {
               set({
                 playgroundStatus: "error",
@@ -161,18 +150,14 @@ export const usePlaygroundStore = create<PlaygroundState>()(
             const { playground } = get();
             if (!playground) throw new Error("Playground is not initialized");
 
-            // Initialize a new sandbox
             const sandbox = await playground.NewSandbox(args);
-            const handle = sandbox.record?.handle;
 
-            set({ activeHandle: handle });
-
-            return handle;
+            return sandbox.record?.handle;
           },
 
           setPlaygroundState: async (updates) => {
             try {
-              const { updateStoredSandbox } = get();
+              const { updateActiveSandbox } = get();
               const { playground, handle } = getActiveSandboxHandle();
               const { active } = getLastActiveSandbox();
 
@@ -180,16 +165,14 @@ export const usePlaygroundStore = create<PlaygroundState>()(
               set(initialStates.setStateState);
 
               const newState = {
-                ...(active?.data ?? blankSandbox),
+                ...(active?.data ?? blankSandboxData),
                 ...updates,
               };
 
-              updateStoredSandbox({ data: newState });
+              updateActiveSandbox({ data: newState });
 
-              const stateResult = await playground?.SetState({
-                handle,
-                data: newState,
-              });
+              const setStateInput = { handle, data: newState };
+              const stateResult = await playground?.SetState(setStateInput);
 
               set({
                 setStateDataErrors: stateResult?.errors,
@@ -200,7 +183,6 @@ export const usePlaygroundStore = create<PlaygroundState>()(
 
               // Persist state data into storage
             } catch (error) {
-              console.error(error, "Failed to run playground SetState");
               set({ setStateError: (error as Error)?.message });
             }
           },
@@ -209,6 +191,7 @@ export const usePlaygroundStore = create<PlaygroundState>()(
             try {
               const { playground, handle } = getActiveSandboxHandle();
 
+              // Reset state for theorems
               set(initialStates.verifyTheoremsState);
 
               const { result } = await playground.VerifyTheorems({ handle });
@@ -220,57 +203,76 @@ export const usePlaygroundStore = create<PlaygroundState>()(
                 verifyTheoremsResult: result,
               });
             } catch (error) {
-              console.error(error, "Failed to run playground VerifyTheorems");
               set({ verifyTheoremsError: (error as Error)?.message });
             }
           },
 
           loadTemplate: async (template) => {
             try {
-              const { setPlaygroundState, updateStoredSandbox } = get();
-              const { active } = getLastActiveSandbox();
+              const { setPlaygroundState } = get();
 
               if (!template.data) throw new Error("Template data not found");
+
               await setPlaygroundState(template.data);
-              updateStoredSandbox({ data: template.data }, active?.id);
             } catch (error) {
               console.error(error, "Failed to load sample template data");
             }
           },
 
-          newSandbox: (input) => {
+          newSandbox: async (input, setActive = true) => {
+            const { setActiveSandbox } = get();
             const sandboxId = self.crypto.randomUUID();
             const newSandbox: PersistedSandboxData = {
               id: sandboxId,
-              name: `name: ""`,
-              description: ``,
-              data: blankSandbox,
+              ...blankSandboxTemplate,
               ...input,
             };
 
-            set((state) => ({
-              sandboxes: [newSandbox, ...state.sandboxes],
-              lastActiveId: sandboxId,
-            }));
+            set((state) => ({ sandboxes: [newSandbox, ...state.sandboxes] }));
+
+            if (setActive === true) {
+              try {
+                await setActiveSandbox(sandboxId);
+              } catch (error) {
+                console.error(error, "Failed to set sandbox active"); // TODO
+              }
+            }
 
             return `${sandboxId}`;
           },
 
+          newEmptySandbox: async () => {
+            return await get().newSandbox(blankSandboxTemplate);
+          },
+
           deleteStoredSandbox: (id) => {
+            const { setActiveSandbox, newEmptySandbox } = get();
+
             set((state) => {
               const isActive = state.lastActiveId === id;
               const sandboxes = state.sandboxes.filter((s) => s.id !== id);
+              const idHandleMap = { ...state.idHandleMap };
+              delete idHandleMap[id];
 
               return {
-                sandboxes: state.sandboxes.filter((s) => s.id !== id),
+                sandboxes: sandboxes,
+                idHandleMap: idHandleMap,
                 lastActiveId: isActive ? sandboxes[0]?.id : state.lastActiveId,
               };
             });
+
+            const { sandboxes, lastActiveId } = get();
+
+            // If there is a new active id, set it active
+            if (lastActiveId) void setActiveSandbox(lastActiveId);
+
+            // If there are no sandboxes, replace with an empty one
+            if (!sandboxes.length) void newEmptySandbox();
           },
 
           updateStoredSandbox: (data, id) => {
             const { lastActiveId } = get();
-            const sandboxId = lastActiveId ?? id;
+            const sandboxId = id ?? lastActiveId;
 
             set((state) => {
               const sandboxes = state.sandboxes.map((sandbox) => {
@@ -283,6 +285,11 @@ export const usePlaygroundStore = create<PlaygroundState>()(
             });
           },
 
+          updateActiveSandbox: (data) => {
+            const { lastActiveId, updateStoredSandbox } = get();
+            updateStoredSandbox(data, lastActiveId);
+          },
+
           setActiveSandbox: async (id: string) => {
             try {
               const {
@@ -292,33 +299,26 @@ export const usePlaygroundStore = create<PlaygroundState>()(
                 findSandboxById,
               } = get();
 
-              const { active, handle: currentSandboxHandle } =
-                findSandboxById(id);
+              const { active, handle: activeHandle } = findSandboxById(id);
 
-              //
-              const newSandboxHandle =
-                !currentSandboxHandle &&
+              const sandboxHandle =
+                activeHandle ??
                 (await newPlaygroundSandbox({
                   name: active?.name ?? "",
                   description: active?.description ?? "",
                 }));
 
-              // Use existing handle or create a new sandbox
-              const sandboxHandle = currentSandboxHandle ?? newSandboxHandle;
-
-              if (newSandboxHandle) mapIdToHandle(id, newSandboxHandle);
-
-              if (!sandboxHandle || !active) {
-                // TODO
+              // TODO
+              if (!sandboxHandle || !active)
                 throw new Error("Failed to find handle for sandbox");
-              }
 
               set(() => ({
                 lastActiveId: id,
                 activeHandle: sandboxHandle,
               }));
 
-              setPlaygroundState(active.data);
+              void mapIdToHandle(id, sandboxHandle);
+              void setPlaygroundState(active.data);
             } catch (error) {
               console.error(error, "Failed to set sandbox active");
             }
@@ -326,6 +326,7 @@ export const usePlaygroundStore = create<PlaygroundState>()(
 
           findSandboxById: (id) => {
             const { sandboxes, idHandleMap } = get();
+
             return {
               active: sandboxes?.find((s) => s.id === id),
               handle: id ? idHandleMap[id] : null,

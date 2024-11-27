@@ -1,4 +1,4 @@
-import { useActiveSandbox } from "@/hooks/useActiveSandbox";
+import { useSandbox } from "@/hooks/useSandbox";
 import { useDebounce } from "@/hooks/useDebounce";
 import { usePlaygroundStore } from "@/lib/playgroundStore";
 import { mapLocatedMessageMarkers } from "@/utils/mapLocatedMessageMarkers";
@@ -27,13 +27,12 @@ const SandboxDataType: Record<keyof SandboxData, { errorKey: keyof SandboxDataEr
 
 const BaseEditor = (props: EditorProps & BaseEditorProps) => {
     const { sandboxDataType } = props;
-
     const dataType = SandboxDataType[sandboxDataType];
 
     const monacoRef = useMonaco();
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
     const { theme } = useTheme();
-    const activeSandbox = useActiveSandbox();
+    const activeSandbox = useSandbox();
     const [dataErrors, annotatedPolicyTheoremResult, updateSandboxState] = usePlaygroundStore((state) => [state.setStateDataErrors?.[dataType.errorKey], state.verifyTheoremsResult, state.setPlaygroundState]);
 
     const editorData = activeSandbox?.data?.[sandboxDataType];
@@ -45,7 +44,6 @@ const BaseEditor = (props: EditorProps & BaseEditorProps) => {
 
         const errorMarkers = mapLocatedMessageMarkers(dataErrors ?? []);
         const theoremResultMarkers = isTestEditor ? mapTheoremResultMarkers(annotatedPolicyTheoremResult) : [];
-
         monacoRef?.editor.setModelMarkers(editor.getModel()!, 'owner', [
             ...errorMarkers,
             ...theoremResultMarkers

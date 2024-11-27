@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import Policy from "../../routes/Policy";
 import Relationship from "../../routes/Relationship";
 import Tests from "../../routes/Tests";
+import Header from "../Header";
 import Output from "../Output";
 import SideMenu from "../SideMenu";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../ui/resizable";
@@ -67,9 +68,12 @@ const RootLayout = () => {
     const secondary = pathComponents[location?.pathname]?.secondary ?? [];
 
     return (
-        <>
-            <div className="h-full flex flex-1">
-                <div className=""><SideMenu /></div>
+        <div className="flex h-dvh flex-col">
+            <Header />
+            <div className="flex flex-1 overflow-y-auto">
+
+                <SideMenu />
+
                 <div className="w-full min-w-0 ">
                     <ResizablePanelGroup direction="vertical" className="h-full w-full rounded-lg" >
                         <ResizablePanel defaultSize={75} className="flex h-full" >
@@ -77,7 +81,6 @@ const RootLayout = () => {
                                 <ResizablePanel className="py-4 pr-4" >
                                     {primary.map(({ component: Component, key }) => <Component key={key} />)}
                                 </ResizablePanel>
-
                                 {secondary?.length !== 0 && <>
                                     <ResizableHandle className="" withHandle />
                                     <ResizablePanel className="py-2 pl-4">
@@ -98,7 +101,7 @@ const RootLayout = () => {
                     </ResizablePanelGroup>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 

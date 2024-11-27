@@ -1,12 +1,13 @@
+import { useSandbox } from "@/hooks/useSandbox";
 import { usePlaygroundStore } from "@/lib/playgroundStore";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { FormInputField } from "../FormInput";
 import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Form } from "../ui/form";
-import { useEffect } from "react";
 
 interface ConfirmationDialogProps {
     sandboxId: string | null,
@@ -14,32 +15,37 @@ interface ConfirmationDialogProps {
     setOpen: (state: boolean) => unknown
 }
 
-const FormSchema = z.object({
-    name: z.string().min(2),
+const EditSandboxFormSchema = z.object({
+    name: z.string().min(1),
     description: z.string()
 });
 
-const EditSandboxDialog = ({ sandboxId, open, setOpen }: ConfirmationDialogProps) => {
-    const { findSandboxById, updateStoredSandbox } = usePlaygroundStore();
-    const sandbox = findSandboxById(sandboxId);
+type EditSandboxFormData = z.infer<typeof EditSandboxFormSchema>;
 
-    const form = useForm<z.infer<typeof FormSchema>>({
-        resolver: zodResolver(FormSchema),
+const EditSandboxDialog = ({ sandboxId, open, setOpen }: ConfirmationDialogProps) => {
+
+    const sandbox = useSandbox(sandboxId);
+    const [updateStoredSandbox] = usePlaygroundStore((state) => [
+        state.updateStoredSandbox,
+    ]);
+
+    const form = useForm<EditSandboxFormData>({
+        resolver: zodResolver(EditSandboxFormSchema),
         defaultValues: {
-            name: sandbox?.active?.name,
-            description: sandbox?.active?.description,
+            name: sandbox?.name,
+            description: sandbox?.description,
         },
     })
 
     useEffect(() => {
         form.reset({
-            name: sandbox?.active?.name || "",
-            description: sandbox?.active?.description || "",
+            name: sandbox?.name ?? "",
+            description: sandbox?.description ?? "",
         });
-    }, [sandboxId]);
+    }, [sandboxId, sandbox]);
 
-    const onSubmit = (data: z.infer<typeof FormSchema>) => {
-        updateStoredSandbox(data);
+    const onSubmit = (data: EditSandboxFormData) => {
+        if (sandboxId) updateStoredSandbox(data, sandboxId);
         setOpen(false);
         form.reset();
     };
@@ -48,14 +54,15 @@ const EditSandboxDialog = ({ sandboxId, open, setOpen }: ConfirmationDialogProps
         <DialogContent className="sm:max-w-md">
             <DialogHeader>
                 <DialogTitle>Edit Sandbox</DialogTitle>
+                <DialogDescription>Update sandbox details</DialogDescription>
             </DialogHeader>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)}>
+                <form onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}>
                     <div className="grid gap-y-2 mb-4">
                         <FormInputField name="name" placeholder="Enter Name" control={form.control} />
                         <FormInputField name="description" placeholder="Enter Description" control={form.control} />
                     </div>
-                    <DialogFooter className="sm:justify-end">
+                    <DialogFooter className="sm:justify-end ">
                         <Button type="submit" variant="default">Save</Button>
                         <Button type="button" variant="secondary" onClick={() => setOpen(false)}>Close</Button>
                     </DialogFooter>

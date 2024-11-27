@@ -41,7 +41,7 @@ const Tests = () => {
     const currentStatus = validationStatus[status];
 
     const runVerification = () => {
-        verifyTheorems();
+        void verifyTheorems();
     };
 
     return <>
@@ -57,7 +57,7 @@ const Tests = () => {
             </div>
 
             <Button variant="outline" disabled={sandboxErrorCount > 0} onClick={runVerification}>Run</Button>
-            <Button variant="outline" asChild><a href="https://docs.source.network" target="_blank">Guide</a></Button>
+            <Button variant="outline" asChild><a href="https://docs.source.network" target="_blank" rel="noreferrer">Guide</a></Button>
         </div >
         <BaseEditor sandboxDataType={"policyTheorem"} />
     </>;

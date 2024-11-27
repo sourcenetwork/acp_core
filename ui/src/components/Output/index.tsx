@@ -5,7 +5,7 @@ import { Badge } from "../ui/badge";
 import { ScrollArea } from "../ui/scroll-area";
 
 const Output = () => {
-    const [dataErrors, setStateError, verifyTheoremsError] = usePlaygroundStore((state) => [state.setStateDataErrors, state.setStateError, state.verifyTheoremsError]);
+    const [dataErrors, setStateError, verifyTheoremsError, playgroundStatus] = usePlaygroundStore((state) => [state.setStateDataErrors, state.setStateError, state.verifyTheoremsError, state.playgroundStatus]);
 
     const messageInfo: Record<keyof SandboxDataErrors, { prefix: string, path: string }> = {
         "policyErrors": {
@@ -44,6 +44,8 @@ const Output = () => {
             {problemCount ? <Badge className="ml-2" variant="outline">{problemCount}</Badge> : null}
         </div>
         <ScrollArea className="p-4 bg-editor flex-1 rounded-md border font-mono text-[12px]">
+
+            {playgroundStatus === 'loading' && <OutputMessage message={"Playground Loading ..."} />}
 
             {!!setStateError && <OutputMessage message={setStateError} />}
 
