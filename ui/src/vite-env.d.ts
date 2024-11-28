@@ -4,6 +4,7 @@ interface ImportMetaEnv {
   readonly VITE_WASM_PATH: string;
   readonly VITE_STORE_KEY: string;
   readonly VITE_STORE_VERSION: string;
+  readonly VITE_SHARE_URL: string;
   // more env variables...
 }
 

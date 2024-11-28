@@ -1,13 +1,15 @@
-import { ComponentType } from "react";
-import { useLocation } from "react-router-dom";
+import { ComponentType, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import Policy from "../../routes/Policy";
 import Relationship from "../../routes/Relationship";
 import Tests from "../../routes/Tests";
 import Header from "../Header";
+import DialogLoadShare from "../DialogLoadShare";
 import Output from "../Output";
 import SideMenu from "../SideMenu";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../ui/resizable";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
+import { Toaster } from "../ui/toaster";
 
 export interface PanelDefiniton {
     key: string,
@@ -16,8 +18,21 @@ export interface PanelDefiniton {
 }
 
 const RootLayout = () => {
-
     const location = useLocation();
+    const navigate = useNavigate();
+    const [shareDialogOpen, setShareDialogOpen] = useState(false);
+    const queryParams = new URLSearchParams(location.search);
+    const shareId = queryParams.get('share');
+
+    const clearShareParam = () => {
+        const params = new URLSearchParams(window.location.search);
+        params.delete('share');
+        navigate({ pathname: window.location.pathname, search: params.toString() });
+    };
+
+    useEffect(() => {
+        if (shareId) setShareDialogOpen(true);
+    }, [shareId]);
 
     const panels = {
         'policy': {
@@ -101,6 +116,13 @@ const RootLayout = () => {
                     </ResizablePanelGroup>
                 </div>
             </div>
+
+            <DialogLoadShare shareId={shareId} open={shareDialogOpen} setOpen={(state) => {
+                setShareDialogOpen(state)
+                clearShareParam();
+            }} />
+
+            <Toaster />
         </div>
     )
 }

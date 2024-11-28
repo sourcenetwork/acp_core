@@ -1,70 +1,44 @@
 import { useSandbox } from "@/hooks/useSandbox";
 import { usePlaygroundStore } from "@/lib/playgroundStore";
 import { useTheme } from "@/ThemeProvider";
-import { SandboxData } from "@/types/proto-js/sourcenetwork/acp_core/sandbox";
+import { exportSandboxData, importSandboxData } from "@/utils/sandboxFileUtils";
 import { EllipsisVertical } from "lucide-react";
-import { ComponentProps, ComponentType, useRef } from "react";
+import { ComponentProps, ComponentType, useState } from "react";
+import DialogCopyShare from "../DialogCopyShare";
 import ThemeToggle from "../ThemeToggle";
 import { Button } from "../ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { useToast } from "@/hooks/use-toast";
 
 const HeaderActions = () => {
     const { theme, setTheme } = useTheme();
     const activeSandbox = useSandbox();
     const [setState] = usePlaygroundStore((state) => [state.setPlaygroundState]);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [showShareDialog, setShowShareDialog] = useState<boolean>(false);
+    const { toast } = useToast()
 
-    const computeHash = async (data: string) => {
-        const encodedData = new TextEncoder().encode(data);
-        const buffer = await crypto.subtle.digest("SHA-256", encodedData);
-        return Array.from(new Uint8Array(buffer))
-            .map((b) => b.toString(16).padStart(2, "0"))
-            .join("").substring(0, 8);
+    const handleShareButtonClick = () => {
+        setShowShareDialog(true);
     };
 
-    const exportState = async () => {
+    const handleExportButtonClick = async () => {
         try {
-            const activeStateData = activeSandbox?.data;
-            const jsonBlob = new Blob([JSON.stringify(activeStateData, null, 2)], { type: "application/json" });
-            const url = URL.createObjectURL(jsonBlob);
-            const link = document.createElement("a");
-            const filename = await computeHash(JSON.stringify(activeStateData));
-            link.href = url;
-            link.download = `acp-playground-export-${filename}.json`;
-            link.click();
-            URL.revokeObjectURL(url);
+            await exportSandboxData(activeSandbox?.data);
         } catch (error) {
-            // TODO
             console.error(error);
+            toast({ description: "Something went wrong exporting" })
         }
     };
 
-    const handleImportFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                if (typeof reader.result !== 'string') {
-                    return false;
-                }
-
-                const parsedData = JSON.parse(reader.result) as Partial<SandboxData>;
-                void setState(parsedData);
-
-                return true;
-            };
-            reader.readAsText(file);
+    const handleImportButtonClick = async () => {
+        try {
+            const data = await importSandboxData();
+            if (!data) return;
+            void setState(data);
+        } catch (error) {
+            console.error(error);
+            toast({ description: "Something went wrong importing" })
         }
-    };
-
-    const handleExportButtonClick = () => {
-        void exportState();
-    };
-
-    const handleImportButtonClick = () => {
-        if (!fileInputRef.current) return;
-        fileInputRef.current.value = "";
-        fileInputRef.current.click();
     };
 
     const handeThemeToggleClick = () => {
@@ -77,14 +51,19 @@ const HeaderActions = () => {
         label: string;
     }[] = [
             {
+                label: "Share",
+                component: Button,
+                props: { className: "text-xs", variant: "outline", size: "xs", onClick: handleShareButtonClick },
+            },
+            {
                 label: "Import",
                 component: Button,
-                props: { className: "text-xs", variant: "outline", size: "xs", onClick: handleImportButtonClick },
+                props: { className: "text-xs", variant: "outline", size: "xs", onClick: () => void handleImportButtonClick() },
             },
             {
                 label: "Export",
                 component: Button,
-                props: { className: "text-xs", variant: "default", size: "xs", onClick: handleExportButtonClick, },
+                props: { className: "text-xs", variant: "default", size: "xs", onClick: () => void handleExportButtonClick(), },
             },
             {
                 label: "Theme",
@@ -95,6 +74,9 @@ const HeaderActions = () => {
 
     return (
         <div className="flex items-center justify-end">
+
+            <DialogCopyShare open={showShareDialog} setOpen={(state) => setShowShareDialog(state)} />
+
             <div className="hidden md:flex space-x-2">
                 {menuItems.map((item, index) => {
                     const Component = item.component;
@@ -118,14 +100,6 @@ const HeaderActions = () => {
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
-
-            <input
-                ref={fileInputRef}
-                type="file"
-                accept=".json"
-                onChange={handleImportFileChange}
-                className="hidden"
-            />
         </div>
     );
 };

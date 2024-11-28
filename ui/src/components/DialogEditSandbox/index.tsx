@@ -9,7 +9,7 @@ import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Form } from "../ui/form";
 
-interface ConfirmationDialogProps {
+interface DialogEditSandboxProps {
     sandboxId: string | null,
     open: boolean,
     setOpen: (state: boolean) => unknown
@@ -22,12 +22,10 @@ const EditSandboxFormSchema = z.object({
 
 type EditSandboxFormData = z.infer<typeof EditSandboxFormSchema>;
 
-const EditSandboxDialog = ({ sandboxId, open, setOpen }: ConfirmationDialogProps) => {
+const DialogEditSandbox = ({ sandboxId, open, setOpen }: DialogEditSandboxProps) => {
 
     const sandbox = useSandbox(sandboxId);
-    const [updateStoredSandbox] = usePlaygroundStore((state) => [
-        state.updateStoredSandbox,
-    ]);
+    const [updateStoredSandbox] = usePlaygroundStore((state) => [state.updateStoredSandbox]);
 
     const form = useForm<EditSandboxFormData>({
         resolver: zodResolver(EditSandboxFormSchema),
@@ -72,4 +70,4 @@ const EditSandboxDialog = ({ sandboxId, open, setOpen }: ConfirmationDialogProps
     </Dialog>
 }
 
-export default EditSandboxDialog;
+export default DialogEditSandbox;

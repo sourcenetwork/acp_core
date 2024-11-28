@@ -1,14 +1,14 @@
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 
-interface LoadTemplateDialogProps {
+interface DialogLoadTemplateProps {
     title?: string,
     description?: string,
     open: boolean,
     onAction: (type: 'new' | 'replace' | false) => unknown
 }
 
-const LoadTemplateDialog = ({ title, description, open, onAction }: LoadTemplateDialogProps) => {
+const DialogLoadTemplate = ({ title, description, open, onAction }: DialogLoadTemplateProps) => {
 
     return <Dialog open={open} defaultOpen={true} onOpenChange={(state) => state === false && onAction(false)}>
         <DialogContent className="sm:max-w-md">
@@ -26,4 +26,4 @@ const LoadTemplateDialog = ({ title, description, open, onAction }: LoadTemplate
     </Dialog>
 }
 
-export default LoadTemplateDialog;
+export default DialogLoadTemplate;

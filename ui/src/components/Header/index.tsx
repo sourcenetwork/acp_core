@@ -1,8 +1,8 @@
 import { usePlaygroundStore } from "@/lib/playgroundStore";
 import { SandboxTemplate } from "@acp/sandbox";
 import { useState } from "react";
+import DialogLoadTemplate from "../DialogLoadTemplate";
 import HeaderActions from "../HeaderActions";
-import LoadTemplateDialog from "../LoadTemplateDialog";
 import StatusIndicator from "../StatusIndicator";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuList, NavigationMenuTrigger } from "../ui/navigation-menu";
 
@@ -24,7 +24,7 @@ const Header = () => {
 
     return <div className="flex items-center justify-between px-4 py-2 border-b md:border-b-0">
 
-        <LoadTemplateDialog
+        <DialogLoadTemplate
             title={`Load Policy - ${selectedSample?.name ?? ""}`}
             description={`Load this policy template to a new sandbox or override the current schema with ${selectedSample?.name ?? ""}`}
             open={showConfirmation}

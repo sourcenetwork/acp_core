@@ -2,7 +2,7 @@ import { usePlaygroundStore } from "@/lib/playgroundStore";
 import { cn } from "@/utils/classnames";
 import { Edit2, MoreHorizontal, Trash } from "lucide-react";
 import { MouseEvent, useState } from "react";
-import EditSandboxDialog from "../EditSandboxDialog";
+import DialogEditSandbox from "../DialogEditSandbox";
 import { Button } from "../ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
@@ -44,7 +44,7 @@ const SandboxList = (props: SandboxListProps) => {
     }
 
     return <>
-        <EditSandboxDialog
+        <DialogEditSandbox
             open={showEditSandbox}
             sandboxId={selectedSandboxId}
             setOpen={(state) => setShowEditSandbox(state)} />
