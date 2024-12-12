@@ -39,18 +39,14 @@ name: policy
 	}
 	resp, err := ctx.Engine.GetPolicy(ctx, &req)
 
-	want := &types.GetPolicyResponse{
-		Policy: &types.Policy{
-			Id:           "bc7eb5a8c500111b2459a92ae23f4848537e49599df1b8d70636b5aacb47bd5f",
-			Name:         "policy",
-			CreationTime: test.DefaultTs,
-			ActorResource: &types.ActorResource{
-				Name: "actor",
-			},
+	wantPolicy := &types.Policy{
+		Id:   "bc7eb5a8c500111b2459a92ae23f4848537e49599df1b8d70636b5aacb47bd5f",
+		Name: "policy",
+		ActorResource: &types.ActorResource{
+			Name: "actor",
 		},
-		PolicyRaw:   pol,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
 	}
-	require.Equal(t, want, resp)
+	require.Equal(t, wantPolicy, resp.Record.Policy)
+	require.Equal(t, types.PolicyMarshalingType_SHORT_YAML, resp.Record.MarshalType)
 	require.NoError(t, err)
 }

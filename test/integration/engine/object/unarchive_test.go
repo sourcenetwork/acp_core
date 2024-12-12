@@ -66,10 +66,15 @@ func TestUnarchive_ActiveObjectOwnedByActor_NoopAndModifiedFalse(t *testing.T) {
 			RecordModified: false,
 			Record: &types.RelationshipRecord{
 				PolicyId:     ctx.State.PolicyId,
-				OwnerDid:     bob,
 				Archived:     false,
-				CreationTime: ctx.Time,
 				Relationship: types.NewActorRelationship("resource", "active", "owner", bob),
+				Metadata: &types.RecordMetadata{
+					Creator: &types.Principal{
+						Kind:       types.PrincipalKind_DID,
+						Identifier: bob,
+					},
+					CreationTs: ctx.Time,
+				},
 			},
 		},
 	}
@@ -113,10 +118,15 @@ func TestUnarchive_UnarchiveMyOwnObject_Ok(t *testing.T) {
 			RecordModified: true,
 			Record: &types.RelationshipRecord{
 				PolicyId:     ctx.State.PolicyId,
-				OwnerDid:     bob,
-				Archived:     false,
-				CreationTime: ctx.Time,
 				Relationship: types.NewActorRelationship("resource", "archived", "owner", bob),
+				Archived:     false,
+				Metadata: &types.RecordMetadata{
+					Creator: &types.Principal{
+						Kind:       types.PrincipalKind_DID,
+						Identifier: bob,
+					},
+					CreationTs: ctx.Time,
+				},
 			},
 		},
 	}

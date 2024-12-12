@@ -133,9 +133,7 @@ service ACPEngine {
 message CreatePolicyRequest {
   string policy = 1;
   sourcenetwork.acp_core.PolicyMarshalingType marshal_type = 2;
-  // attributes stores policy writer defined metadata
-  map<string, string> attributes = 3;
-  SuppliedMetadata metadata = 4;
+  SuppliedMetadata metadata = 3;
 }
 
 message CreatePolicyResponse {

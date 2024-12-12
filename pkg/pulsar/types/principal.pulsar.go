@@ -13,16 +13,16 @@ import (
 )
 
 var (
-	md_Principal             protoreflect.MessageDescriptor
-	fd_Principal_kind        protoreflect.FieldDescriptor
-	fd_Principal_indentifier protoreflect.FieldDescriptor
+	md_Principal            protoreflect.MessageDescriptor
+	fd_Principal_kind       protoreflect.FieldDescriptor
+	fd_Principal_identifier protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sourcenetwork_acp_core_principal_proto_init()
 	md_Principal = File_sourcenetwork_acp_core_principal_proto.Messages().ByName("Principal")
 	fd_Principal_kind = md_Principal.Fields().ByName("kind")
-	fd_Principal_indentifier = md_Principal.Fields().ByName("indentifier")
+	fd_Principal_identifier = md_Principal.Fields().ByName("identifier")
 }
 
 var _ protoreflect.Message = (*fastReflection_Principal)(nil)
@@ -96,9 +96,9 @@ func (x *fastReflection_Principal) Range(f func(protoreflect.FieldDescriptor, pr
 			return
 		}
 	}
-	if x.Indentifier != "" {
-		value := protoreflect.ValueOfString(x.Indentifier)
-		if !f(fd_Principal_indentifier, value) {
+	if x.Identifier != "" {
+		value := protoreflect.ValueOfString(x.Identifier)
+		if !f(fd_Principal_identifier, value) {
 			return
 		}
 	}
@@ -119,8 +119,8 @@ func (x *fastReflection_Principal) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	case "sourcenetwork.acp_core.Principal.kind":
 		return x.Kind != 0
-	case "sourcenetwork.acp_core.Principal.indentifier":
-		return x.Indentifier != ""
+	case "sourcenetwork.acp_core.Principal.identifier":
+		return x.Identifier != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Principal"))
@@ -139,8 +139,8 @@ func (x *fastReflection_Principal) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "sourcenetwork.acp_core.Principal.kind":
 		x.Kind = 0
-	case "sourcenetwork.acp_core.Principal.indentifier":
-		x.Indentifier = ""
+	case "sourcenetwork.acp_core.Principal.identifier":
+		x.Identifier = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Principal"))
@@ -160,8 +160,8 @@ func (x *fastReflection_Principal) Get(descriptor protoreflect.FieldDescriptor) 
 	case "sourcenetwork.acp_core.Principal.kind":
 		value := x.Kind
 		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
-	case "sourcenetwork.acp_core.Principal.indentifier":
-		value := x.Indentifier
+	case "sourcenetwork.acp_core.Principal.identifier":
+		value := x.Identifier
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
@@ -185,8 +185,8 @@ func (x *fastReflection_Principal) Set(fd protoreflect.FieldDescriptor, value pr
 	switch fd.FullName() {
 	case "sourcenetwork.acp_core.Principal.kind":
 		x.Kind = (PrincipalKind)(value.Enum())
-	case "sourcenetwork.acp_core.Principal.indentifier":
-		x.Indentifier = value.Interface().(string)
+	case "sourcenetwork.acp_core.Principal.identifier":
+		x.Identifier = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Principal"))
@@ -209,8 +209,8 @@ func (x *fastReflection_Principal) Mutable(fd protoreflect.FieldDescriptor) prot
 	switch fd.FullName() {
 	case "sourcenetwork.acp_core.Principal.kind":
 		panic(fmt.Errorf("field kind of message sourcenetwork.acp_core.Principal is not mutable"))
-	case "sourcenetwork.acp_core.Principal.indentifier":
-		panic(fmt.Errorf("field indentifier of message sourcenetwork.acp_core.Principal is not mutable"))
+	case "sourcenetwork.acp_core.Principal.identifier":
+		panic(fmt.Errorf("field identifier of message sourcenetwork.acp_core.Principal is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Principal"))
@@ -226,7 +226,7 @@ func (x *fastReflection_Principal) NewField(fd protoreflect.FieldDescriptor) pro
 	switch fd.FullName() {
 	case "sourcenetwork.acp_core.Principal.kind":
 		return protoreflect.ValueOfEnum(0)
-	case "sourcenetwork.acp_core.Principal.indentifier":
+	case "sourcenetwork.acp_core.Principal.identifier":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
@@ -300,7 +300,7 @@ func (x *fastReflection_Principal) ProtoMethods() *protoiface.Methods {
 		if x.Kind != 0 {
 			n += 1 + runtime.Sov(uint64(x.Kind))
 		}
-		l = len(x.Indentifier)
+		l = len(x.Identifier)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -333,10 +333,10 @@ func (x *fastReflection_Principal) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.Indentifier) > 0 {
-			i -= len(x.Indentifier)
-			copy(dAtA[i:], x.Indentifier)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Indentifier)))
+		if len(x.Identifier) > 0 {
+			i -= len(x.Identifier)
+			copy(dAtA[i:], x.Identifier)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Identifier)))
 			i--
 			dAtA[i] = 0x12
 		}
@@ -415,7 +415,7 @@ func (x *fastReflection_Principal) ProtoMethods() *protoiface.Methods {
 				}
 			case 2:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Indentifier", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Identifier", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -443,7 +443,7 @@ func (x *fastReflection_Principal) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Indentifier = string(dAtA[iNdEx:postIndex])
+				x.Identifier = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -552,8 +552,8 @@ type Principal struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Kind        PrincipalKind `protobuf:"varint,1,opt,name=kind,proto3,enum=sourcenetwork.acp_core.PrincipalKind" json:"kind,omitempty"`
-	Indentifier string        `protobuf:"bytes,2,opt,name=indentifier,proto3" json:"indentifier,omitempty"`
+	Kind       PrincipalKind `protobuf:"varint,1,opt,name=kind,proto3,enum=sourcenetwork.acp_core.PrincipalKind" json:"kind,omitempty"`
+	Identifier string        `protobuf:"bytes,2,opt,name=identifier,proto3" json:"identifier,omitempty"`
 }
 
 func (x *Principal) Reset() {
@@ -583,9 +583,9 @@ func (x *Principal) GetKind() PrincipalKind {
 	return PrincipalKind_Anonymous
 }
 
-func (x *Principal) GetIndentifier() string {
+func (x *Principal) GetIdentifier() string {
 	if x != nil {
-		return x.Indentifier
+		return x.Identifier
 	}
 	return ""
 }
@@ -597,20 +597,20 @@ var file_sourcenetwork_acp_core_principal_proto_rawDesc = []byte{
 	0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x70, 0x72, 0x69, 0x6e, 0x63, 0x69, 0x70,
 	0x61, 0x6c, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x16, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
 	0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65,
-	0x22, 0x68, 0x0a, 0x09, 0x50, 0x72, 0x69, 0x6e, 0x63, 0x69, 0x70, 0x61, 0x6c, 0x12, 0x39, 0x0a,
+	0x22, 0x66, 0x0a, 0x09, 0x50, 0x72, 0x69, 0x6e, 0x63, 0x69, 0x70, 0x61, 0x6c, 0x12, 0x39, 0x0a,
 	0x04, 0x6b, 0x69, 0x6e, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x25, 0x2e, 0x73, 0x6f,
 	0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f,
 	0x63, 0x6f, 0x72, 0x65, 0x2e, 0x50, 0x72, 0x69, 0x6e, 0x63, 0x69, 0x70, 0x61, 0x6c, 0x4b, 0x69,
-	0x6e, 0x64, 0x52, 0x04, 0x6b, 0x69, 0x6e, 0x64, 0x12, 0x20, 0x0a, 0x0b, 0x69, 0x6e, 0x64, 0x65,
-	0x6e, 0x74, 0x69, 0x66, 0x69, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x69,
-	0x6e, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x66, 0x69, 0x65, 0x72, 0x2a, 0x31, 0x0a, 0x0d, 0x50, 0x72,
-	0x69, 0x6e, 0x63, 0x69, 0x70, 0x61, 0x6c, 0x4b, 0x69, 0x6e, 0x64, 0x12, 0x0d, 0x0a, 0x09, 0x41,
-	0x6e, 0x6f, 0x6e, 0x79, 0x6d, 0x6f, 0x75, 0x73, 0x10, 0x00, 0x12, 0x08, 0x0a, 0x04, 0x52, 0x6f,
-	0x6f, 0x74, 0x10, 0x01, 0x12, 0x07, 0x0a, 0x03, 0x44, 0x49, 0x44, 0x10, 0x02, 0x42, 0x2d, 0x5a,
-	0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6f, 0x75, 0x72,
-	0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f,
-	0x72, 0x65, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x6e, 0x64, 0x52, 0x04, 0x6b, 0x69, 0x6e, 0x64, 0x12, 0x1e, 0x0a, 0x0a, 0x69, 0x64, 0x65, 0x6e,
+	0x74, 0x69, 0x66, 0x69, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x69, 0x64,
+	0x65, 0x6e, 0x74, 0x69, 0x66, 0x69, 0x65, 0x72, 0x2a, 0x31, 0x0a, 0x0d, 0x50, 0x72, 0x69, 0x6e,
+	0x63, 0x69, 0x70, 0x61, 0x6c, 0x4b, 0x69, 0x6e, 0x64, 0x12, 0x0d, 0x0a, 0x09, 0x41, 0x6e, 0x6f,
+	0x6e, 0x79, 0x6d, 0x6f, 0x75, 0x73, 0x10, 0x00, 0x12, 0x08, 0x0a, 0x04, 0x52, 0x6f, 0x6f, 0x74,
+	0x10, 0x01, 0x12, 0x07, 0x0a, 0x03, 0x44, 0x49, 0x44, 0x10, 0x02, 0x42, 0x2d, 0x5a, 0x2b, 0x67,
+	0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
+	0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65,
+	0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x33,
 }
 
 var (

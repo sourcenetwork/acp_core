@@ -27,15 +27,15 @@ func (a *CreatePolicyAction) Run(ctx *TestCtx) *types.Policy {
 	require.NoError(ctx.T, err)
 
 	if a.Expected != nil {
-		require.Equal(ctx.T, resp.Policy, a.Expected)
+		require.Equal(ctx.T, resp.Record.Policy, a.Expected)
 	}
 
-	ctx.State.PolicyId = resp.Policy.Id
+	ctx.State.PolicyId = resp.Record.Policy.Id
 	principal, err := auth.ExtractPrincipal(ctx.Ctx)
 	require.NoError(ctx.T, err)
-	ctx.State.PolicyCreator = principal.Identifier()
+	ctx.State.PolicyCreator = principal.Identifier
 
-	return resp.Policy
+	return resp.Record.Policy
 }
 
 type RegisterObjectsAction struct {

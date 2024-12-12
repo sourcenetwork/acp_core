@@ -75,10 +75,15 @@ func TestTransfer_OwnerCanTransfer(t *testing.T) {
 		Expected: &types.TransferObjectResponse{
 			Record: &types.RelationshipRecord{
 				PolicyId:     ctx.State.PolicyId,
-				OwnerDid:     alice,
 				Relationship: types.NewActorRelationship("resource", "a", "owner", alice),
 				Archived:     false,
-				CreationTime: ctx.Time,
+				Metadata: &types.RecordMetadata{
+					Creator: &types.Principal{
+						Kind:       types.PrincipalKind_DID,
+						Identifier: alice,
+					},
+					CreationTs: ctx.Time,
+				},
 			},
 		},
 	}

@@ -47,10 +47,15 @@ func TestAmend_RootCanAmendRegistration(t *testing.T) {
 		Expected: &types.AmendRegistrationResponse{
 			Record: &types.RelationshipRecord{
 				PolicyId:     ctx.State.PolicyId,
-				OwnerDid:     alice,
 				Relationship: types.NewActorRelationship("resource", "a", "owner", alice),
 				Archived:     false,
-				CreationTime: ctx.Time,
+				Metadata: &types.RecordMetadata{
+					CreationTs: ctx.Time,
+					Creator: &types.Principal{
+						Identifier: alice,
+						Kind:       types.PrincipalKind_DID,
+					},
+				},
 			},
 		},
 	}
