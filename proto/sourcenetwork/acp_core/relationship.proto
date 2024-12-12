@@ -3,6 +3,7 @@ syntax = "proto3";
 package sourcenetwork.acp_core;
 
 import "google/protobuf/timestamp.proto";
+import "sourcenetwork/acp_core/metadata.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
 
@@ -52,18 +53,12 @@ message Relationship {
 message RelationshipRecord {
   string policy_id = 1;
 
-  // owner_did is the DID of the Actor which created the relationship
-  string owner_did = 2;
-
-  Relationship relationship = 3;
+  Relationship relationship = 2;
 
   // archived indicates whether an object has been unregistered
-  bool archived = 4;
+  bool archived = 3;
 
-  google.protobuf.Timestamp creation_time = 5;
-
-  // metadata contains arbitrary caller specified metadata
-  map<string, string> metadata = 6;
+  RecordMetadata metadata = 4;
 }
 
 // Registration represents a record assigning an Object as being owned by an Actor

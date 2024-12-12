@@ -6,11 +6,13 @@ import "google/protobuf/timestamp.proto";
 import "sourcenetwork/acp_core/access_decision.proto";
 import "sourcenetwork/acp_core/catalogue.proto";
 import "sourcenetwork/acp_core/policy.proto";
+import "sourcenetwork/acp_core/policy_record.proto";
 import "sourcenetwork/acp_core/policy_short.proto";
 import "sourcenetwork/acp_core/relationship.proto";
 import "sourcenetwork/acp_core/relationship_selector.proto";
 import "sourcenetwork/acp_core/system.proto";
 import "sourcenetwork/acp_core/theorem.proto";
+import "sourcenetwork/acp_core/metadata.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
 
@@ -131,22 +133,19 @@ service ACPEngine {
 message CreatePolicyRequest {
   string policy = 1;
   sourcenetwork.acp_core.PolicyMarshalingType marshal_type = 2;
-  // attributes is a map of attributes which can be used to store
-  // caller supplied satellite data
+  // attributes stores policy writer defined metadata
   map<string, string> attributes = 3;
+  SuppliedMetadata metadata = 4;
 }
 
 message CreatePolicyResponse {
-  Policy policy = 1;
-  map<string, string> attributes = 2;
+  PolicyRecord record = 1;
 }
 
 message SetRelationshipRequest {
   string policy_id = 1;
   sourcenetwork.acp_core.Relationship relationship = 2;
-  // attributes is a map of attributes which can be used to store
-  // caller supplied satellite data
-  map<string, string> attributes = 3;
+  SuppliedMetadata metadata = 3;
 }
 
 message SetRelationshipResponse {
@@ -168,9 +167,7 @@ message DeleteRelationshipResponse {
 message RegisterObjectRequest {
   string policy_id = 1;
   sourcenetwork.acp_core.Object object = 2;
-  // attributes is a map of attributes which can be used to store
-  // caller supplied satellite data
-  map<string, string> attributes = 3;
+  SuppliedMetadata metadata = 3;
 }
 
 message RegisterObjectResponse {
@@ -213,18 +210,13 @@ message GetPolicyRequest {
 }
 
 message GetPolicyResponse {
-  sourcenetwork.acp_core.Policy policy = 1;
-  // policy_raw contains the raw policy document the user submitted to create
-  // the policy
-  string policy_raw = 2;
-  // marshal_type flags the format of policy_raw
-  sourcenetwork.acp_core.PolicyMarshalingType marshal_type = 3;
+  PolicyRecord record = 1;
 }
 
 message ListPoliciesRequest {}
 
 message ListPoliciesResponse {
-  repeated sourcenetwork.acp_core.Policy policies = 1;
+  repeated PolicyRecord records = 1;
 }
 
 message DeletePolicyRequest {

@@ -4,16 +4,17 @@ package sourcenetwork.acp_core;
 import "google/protobuf/timestamp.proto";
 import "sourcenetwork/acp_core/policy.proto";
 import "sourcenetwork/acp_core/policy_short.proto";
+import "sourcenetwork/acp_core/metadata.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
 
 // PolicyRecord represents a the Policy Document which will be persisted in the data layer
 message PolicyRecord {
   Policy policy = 1;
-  ManagementGraph management_graph = 2;
-  // metadata contains any application specific data
-  // which was not supplied by the policy creator directly
-  map<string, string> metadata = 3;
+
+  RecordMetadata metadata = 2;
+
+  ManagementGraph management_graph = 3;
 
   // policy_definition contains the policy payload as the client
   // originally submitted

@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package sourcenetwork.acp_core;
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+
+// PrincipalType enumerates possible types of system users
+enum PrincipalType {
+    // Anonymous models an user which hasn't authenticated
+    Anonymous = 0;
+
+    // Root models the super user / admin
+    Root = 1;
+
+    // DID models a principal identified through a DID
+    DID = 2;
+}
+
+// Principal models an user which was authenticated with acp_core
+message Principal {
+    PrincipalType type = 1;
+    string handle = 2;
+}
