@@ -45,7 +45,7 @@ func BuildCatalogue(ctx context.Context, engine *zanzi.Adapter, polId string) (*
 	for _, rec := range ownerRelationships {
 		resCat := catalogue.ResourceCatalogue[rec.Relationship.Object.Resource]
 		resCat.ObjectIds = append(resCat.ObjectIds, rec.Relationship.Object.Id)
-		actorSet[rec.OwnerDid] = struct{}{}
+		actorSet[rec.Metadata.Creator.Identifier] = struct{}{}
 	}
 
 	for actor := range actorSet {

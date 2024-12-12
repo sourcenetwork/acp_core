@@ -5,7 +5,7 @@ package sourcenetwork.acp_core;
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
 
 // PrincipalType enumerates possible types of system users
-enum PrincipalType {
+enum PrincipalKind {
     // Anonymous models an user which hasn't authenticated
     Anonymous = 0;
 
@@ -18,6 +18,6 @@ enum PrincipalType {
 
 // Principal models an user which was authenticated with acp_core
 message Principal {
-    PrincipalType type = 1;
-    string handle = 2;
+    PrincipalKind kind = 1;
+    string identifier = 2;
 }

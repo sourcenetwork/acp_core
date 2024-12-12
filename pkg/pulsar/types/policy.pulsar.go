@@ -7,27 +7,78 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
+	_ "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
 	reflect "reflect"
 	sort "sort"
 	sync "sync"
 )
 
-var _ protoreflect.Map = (*_Policy_5_map)(nil)
+var _ protoreflect.List = (*_Policy_4_list)(nil)
 
-type _Policy_5_map struct {
+type _Policy_4_list struct {
+	list *[]*Resource
+}
+
+func (x *_Policy_4_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_Policy_4_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_Policy_4_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*Resource)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_Policy_4_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*Resource)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_Policy_4_list) AppendMutable() protoreflect.Value {
+	v := new(Resource)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_Policy_4_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_Policy_4_list) NewElement() protoreflect.Value {
+	v := new(Resource)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_Policy_4_list) IsValid() bool {
+	return x.list != nil
+}
+
+var _ protoreflect.Map = (*_Policy_6_map)(nil)
+
+type _Policy_6_map struct {
 	m *map[string]string
 }
 
-func (x *_Policy_5_map) Len() int {
+func (x *_Policy_6_map) Len() int {
 	if x.m == nil {
 		return 0
 	}
 	return len(*x.m)
 }
 
-func (x *_Policy_5_map) Range(f func(protoreflect.MapKey, protoreflect.Value) bool) {
+func (x *_Policy_6_map) Range(f func(protoreflect.MapKey, protoreflect.Value) bool) {
 	if x.m == nil {
 		return
 	}
@@ -40,7 +91,7 @@ func (x *_Policy_5_map) Range(f func(protoreflect.MapKey, protoreflect.Value) bo
 	}
 }
 
-func (x *_Policy_5_map) Has(key protoreflect.MapKey) bool {
+func (x *_Policy_6_map) Has(key protoreflect.MapKey) bool {
 	if x.m == nil {
 		return false
 	}
@@ -50,7 +101,7 @@ func (x *_Policy_5_map) Has(key protoreflect.MapKey) bool {
 	return ok
 }
 
-func (x *_Policy_5_map) Clear(key protoreflect.MapKey) {
+func (x *_Policy_6_map) Clear(key protoreflect.MapKey) {
 	if x.m == nil {
 		return
 	}
@@ -59,7 +110,7 @@ func (x *_Policy_5_map) Clear(key protoreflect.MapKey) {
 	delete(*x.m, concreteKey)
 }
 
-func (x *_Policy_5_map) Get(key protoreflect.MapKey) protoreflect.Value {
+func (x *_Policy_6_map) Get(key protoreflect.MapKey) protoreflect.Value {
 	if x.m == nil {
 		return protoreflect.Value{}
 	}
@@ -72,7 +123,7 @@ func (x *_Policy_5_map) Get(key protoreflect.MapKey) protoreflect.Value {
 	return protoreflect.ValueOfString(v)
 }
 
-func (x *_Policy_5_map) Set(key protoreflect.MapKey, value protoreflect.Value) {
+func (x *_Policy_6_map) Set(key protoreflect.MapKey, value protoreflect.Value) {
 	if !key.IsValid() || !value.IsValid() {
 		panic("invalid key or value provided")
 	}
@@ -83,68 +134,17 @@ func (x *_Policy_5_map) Set(key protoreflect.MapKey, value protoreflect.Value) {
 	(*x.m)[concreteKey] = concreteValue
 }
 
-func (x *_Policy_5_map) Mutable(key protoreflect.MapKey) protoreflect.Value {
+func (x *_Policy_6_map) Mutable(key protoreflect.MapKey) protoreflect.Value {
 	panic("should not call Mutable on protoreflect.Map whose value is not of type protoreflect.Message")
 }
 
-func (x *_Policy_5_map) NewValue() protoreflect.Value {
+func (x *_Policy_6_map) NewValue() protoreflect.Value {
 	v := ""
 	return protoreflect.ValueOfString(v)
 }
 
-func (x *_Policy_5_map) IsValid() bool {
+func (x *_Policy_6_map) IsValid() bool {
 	return x.m != nil
-}
-
-var _ protoreflect.List = (*_Policy_6_list)(nil)
-
-type _Policy_6_list struct {
-	list *[]*Resource
-}
-
-func (x *_Policy_6_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_Policy_6_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
-}
-
-func (x *_Policy_6_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*Resource)
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_Policy_6_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*Resource)
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_Policy_6_list) AppendMutable() protoreflect.Value {
-	v := new(Resource)
-	*x.list = append(*x.list, v)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_Policy_6_list) Truncate(n int) {
-	for i := n; i < len(*x.list); i++ {
-		(*x.list)[i] = nil
-	}
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_Policy_6_list) NewElement() protoreflect.Value {
-	v := new(Resource)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_Policy_6_list) IsValid() bool {
-	return x.list != nil
 }
 
 var (
@@ -152,10 +152,9 @@ var (
 	fd_Policy_id             protoreflect.FieldDescriptor
 	fd_Policy_name           protoreflect.FieldDescriptor
 	fd_Policy_description    protoreflect.FieldDescriptor
-	fd_Policy_creation_time  protoreflect.FieldDescriptor
-	fd_Policy_attributes     protoreflect.FieldDescriptor
 	fd_Policy_resources      protoreflect.FieldDescriptor
 	fd_Policy_actor_resource protoreflect.FieldDescriptor
+	fd_Policy_attributes     protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -164,10 +163,9 @@ func init() {
 	fd_Policy_id = md_Policy.Fields().ByName("id")
 	fd_Policy_name = md_Policy.Fields().ByName("name")
 	fd_Policy_description = md_Policy.Fields().ByName("description")
-	fd_Policy_creation_time = md_Policy.Fields().ByName("creation_time")
-	fd_Policy_attributes = md_Policy.Fields().ByName("attributes")
 	fd_Policy_resources = md_Policy.Fields().ByName("resources")
 	fd_Policy_actor_resource = md_Policy.Fields().ByName("actor_resource")
+	fd_Policy_attributes = md_Policy.Fields().ByName("attributes")
 }
 
 var _ protoreflect.Message = (*fastReflection_Policy)(nil)
@@ -253,20 +251,8 @@ func (x *fastReflection_Policy) Range(f func(protoreflect.FieldDescriptor, proto
 			return
 		}
 	}
-	if x.CreationTime != nil {
-		value := protoreflect.ValueOfMessage(x.CreationTime.ProtoReflect())
-		if !f(fd_Policy_creation_time, value) {
-			return
-		}
-	}
-	if len(x.Attributes) != 0 {
-		value := protoreflect.ValueOfMap(&_Policy_5_map{m: &x.Attributes})
-		if !f(fd_Policy_attributes, value) {
-			return
-		}
-	}
 	if len(x.Resources) != 0 {
-		value := protoreflect.ValueOfList(&_Policy_6_list{list: &x.Resources})
+		value := protoreflect.ValueOfList(&_Policy_4_list{list: &x.Resources})
 		if !f(fd_Policy_resources, value) {
 			return
 		}
@@ -274,6 +260,12 @@ func (x *fastReflection_Policy) Range(f func(protoreflect.FieldDescriptor, proto
 	if x.ActorResource != nil {
 		value := protoreflect.ValueOfMessage(x.ActorResource.ProtoReflect())
 		if !f(fd_Policy_actor_resource, value) {
+			return
+		}
+	}
+	if len(x.Attributes) != 0 {
+		value := protoreflect.ValueOfMap(&_Policy_6_map{m: &x.Attributes})
+		if !f(fd_Policy_attributes, value) {
 			return
 		}
 	}
@@ -298,14 +290,12 @@ func (x *fastReflection_Policy) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.Name != ""
 	case "sourcenetwork.acp_core.Policy.description":
 		return x.Description != ""
-	case "sourcenetwork.acp_core.Policy.creation_time":
-		return x.CreationTime != nil
-	case "sourcenetwork.acp_core.Policy.attributes":
-		return len(x.Attributes) != 0
 	case "sourcenetwork.acp_core.Policy.resources":
 		return len(x.Resources) != 0
 	case "sourcenetwork.acp_core.Policy.actor_resource":
 		return x.ActorResource != nil
+	case "sourcenetwork.acp_core.Policy.attributes":
+		return len(x.Attributes) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Policy"))
@@ -328,14 +318,12 @@ func (x *fastReflection_Policy) Clear(fd protoreflect.FieldDescriptor) {
 		x.Name = ""
 	case "sourcenetwork.acp_core.Policy.description":
 		x.Description = ""
-	case "sourcenetwork.acp_core.Policy.creation_time":
-		x.CreationTime = nil
-	case "sourcenetwork.acp_core.Policy.attributes":
-		x.Attributes = nil
 	case "sourcenetwork.acp_core.Policy.resources":
 		x.Resources = nil
 	case "sourcenetwork.acp_core.Policy.actor_resource":
 		x.ActorResource = nil
+	case "sourcenetwork.acp_core.Policy.attributes":
+		x.Attributes = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Policy"))
@@ -361,24 +349,21 @@ func (x *fastReflection_Policy) Get(descriptor protoreflect.FieldDescriptor) pro
 	case "sourcenetwork.acp_core.Policy.description":
 		value := x.Description
 		return protoreflect.ValueOfString(value)
-	case "sourcenetwork.acp_core.Policy.creation_time":
-		value := x.CreationTime
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "sourcenetwork.acp_core.Policy.attributes":
-		if len(x.Attributes) == 0 {
-			return protoreflect.ValueOfMap(&_Policy_5_map{})
-		}
-		mapValue := &_Policy_5_map{m: &x.Attributes}
-		return protoreflect.ValueOfMap(mapValue)
 	case "sourcenetwork.acp_core.Policy.resources":
 		if len(x.Resources) == 0 {
-			return protoreflect.ValueOfList(&_Policy_6_list{})
+			return protoreflect.ValueOfList(&_Policy_4_list{})
 		}
-		listValue := &_Policy_6_list{list: &x.Resources}
+		listValue := &_Policy_4_list{list: &x.Resources}
 		return protoreflect.ValueOfList(listValue)
 	case "sourcenetwork.acp_core.Policy.actor_resource":
 		value := x.ActorResource
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "sourcenetwork.acp_core.Policy.attributes":
+		if len(x.Attributes) == 0 {
+			return protoreflect.ValueOfMap(&_Policy_6_map{})
+		}
+		mapValue := &_Policy_6_map{m: &x.Attributes}
+		return protoreflect.ValueOfMap(mapValue)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Policy"))
@@ -405,18 +390,16 @@ func (x *fastReflection_Policy) Set(fd protoreflect.FieldDescriptor, value proto
 		x.Name = value.Interface().(string)
 	case "sourcenetwork.acp_core.Policy.description":
 		x.Description = value.Interface().(string)
-	case "sourcenetwork.acp_core.Policy.creation_time":
-		x.CreationTime = value.Message().Interface().(*timestamppb.Timestamp)
-	case "sourcenetwork.acp_core.Policy.attributes":
-		mv := value.Map()
-		cmv := mv.(*_Policy_5_map)
-		x.Attributes = *cmv.m
 	case "sourcenetwork.acp_core.Policy.resources":
 		lv := value.List()
-		clv := lv.(*_Policy_6_list)
+		clv := lv.(*_Policy_4_list)
 		x.Resources = *clv.list
 	case "sourcenetwork.acp_core.Policy.actor_resource":
 		x.ActorResource = value.Message().Interface().(*ActorResource)
+	case "sourcenetwork.acp_core.Policy.attributes":
+		mv := value.Map()
+		cmv := mv.(*_Policy_6_map)
+		x.Attributes = *cmv.m
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Policy"))
@@ -437,28 +420,23 @@ func (x *fastReflection_Policy) Set(fd protoreflect.FieldDescriptor, value proto
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Policy) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.Policy.creation_time":
-		if x.CreationTime == nil {
-			x.CreationTime = new(timestamppb.Timestamp)
-		}
-		return protoreflect.ValueOfMessage(x.CreationTime.ProtoReflect())
-	case "sourcenetwork.acp_core.Policy.attributes":
-		if x.Attributes == nil {
-			x.Attributes = make(map[string]string)
-		}
-		value := &_Policy_5_map{m: &x.Attributes}
-		return protoreflect.ValueOfMap(value)
 	case "sourcenetwork.acp_core.Policy.resources":
 		if x.Resources == nil {
 			x.Resources = []*Resource{}
 		}
-		value := &_Policy_6_list{list: &x.Resources}
+		value := &_Policy_4_list{list: &x.Resources}
 		return protoreflect.ValueOfList(value)
 	case "sourcenetwork.acp_core.Policy.actor_resource":
 		if x.ActorResource == nil {
 			x.ActorResource = new(ActorResource)
 		}
 		return protoreflect.ValueOfMessage(x.ActorResource.ProtoReflect())
+	case "sourcenetwork.acp_core.Policy.attributes":
+		if x.Attributes == nil {
+			x.Attributes = make(map[string]string)
+		}
+		value := &_Policy_6_map{m: &x.Attributes}
+		return protoreflect.ValueOfMap(value)
 	case "sourcenetwork.acp_core.Policy.id":
 		panic(fmt.Errorf("field id of message sourcenetwork.acp_core.Policy is not mutable"))
 	case "sourcenetwork.acp_core.Policy.name":
@@ -484,18 +462,15 @@ func (x *fastReflection_Policy) NewField(fd protoreflect.FieldDescriptor) protor
 		return protoreflect.ValueOfString("")
 	case "sourcenetwork.acp_core.Policy.description":
 		return protoreflect.ValueOfString("")
-	case "sourcenetwork.acp_core.Policy.creation_time":
-		m := new(timestamppb.Timestamp)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "sourcenetwork.acp_core.Policy.attributes":
-		m := make(map[string]string)
-		return protoreflect.ValueOfMap(&_Policy_5_map{m: &m})
 	case "sourcenetwork.acp_core.Policy.resources":
 		list := []*Resource{}
-		return protoreflect.ValueOfList(&_Policy_6_list{list: &list})
+		return protoreflect.ValueOfList(&_Policy_4_list{list: &list})
 	case "sourcenetwork.acp_core.Policy.actor_resource":
 		m := new(ActorResource)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "sourcenetwork.acp_core.Policy.attributes":
+		m := make(map[string]string)
+		return protoreflect.ValueOfMap(&_Policy_6_map{m: &m})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Policy"))
@@ -577,8 +552,14 @@ func (x *fastReflection_Policy) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.CreationTime != nil {
-			l = options.Size(x.CreationTime)
+		if len(x.Resources) > 0 {
+			for _, e := range x.Resources {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if x.ActorResource != nil {
+			l = options.Size(x.ActorResource)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if len(x.Attributes) > 0 {
@@ -601,16 +582,6 @@ func (x *fastReflection_Policy) ProtoMethods() *protoiface.Methods {
 					SiZeMaP(k, v)
 				}
 			}
-		}
-		if len(x.Resources) > 0 {
-			for _, e := range x.Resources {
-				l = options.Size(e)
-				n += 1 + l + runtime.Sov(uint64(l))
-			}
-		}
-		if x.ActorResource != nil {
-			l = options.Size(x.ActorResource)
-			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -641,36 +612,6 @@ func (x *fastReflection_Policy) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if x.ActorResource != nil {
-			encoded, err := options.Marshal(x.ActorResource)
-			if err != nil {
-				return protoiface.MarshalOutput{
-					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-					Buf:               input.Buf,
-				}, err
-			}
-			i -= len(encoded)
-			copy(dAtA[i:], encoded)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-			i--
-			dAtA[i] = 0x3a
-		}
-		if len(x.Resources) > 0 {
-			for iNdEx := len(x.Resources) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.Resources[iNdEx])
-				if err != nil {
-					return protoiface.MarshalOutput{
-						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-						Buf:               input.Buf,
-					}, err
-				}
-				i -= len(encoded)
-				copy(dAtA[i:], encoded)
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-				i--
-				dAtA[i] = 0x32
-			}
-		}
 		if len(x.Attributes) > 0 {
 			MaRsHaLmAp := func(k string, v string) (protoiface.MarshalOutput, error) {
 				baseI := i
@@ -686,7 +627,7 @@ func (x *fastReflection_Policy) ProtoMethods() *protoiface.Methods {
 				dAtA[i] = 0xa
 				i = runtime.EncodeVarint(dAtA, i, uint64(baseI-i))
 				i--
-				dAtA[i] = 0x2a
+				dAtA[i] = 0x32
 				return protoiface.MarshalOutput{}, nil
 			}
 			if options.Deterministic {
@@ -714,8 +655,8 @@ func (x *fastReflection_Policy) ProtoMethods() *protoiface.Methods {
 				}
 			}
 		}
-		if x.CreationTime != nil {
-			encoded, err := options.Marshal(x.CreationTime)
+		if x.ActorResource != nil {
+			encoded, err := options.Marshal(x.ActorResource)
 			if err != nil {
 				return protoiface.MarshalOutput{
 					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -726,7 +667,23 @@ func (x *fastReflection_Policy) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x22
+			dAtA[i] = 0x2a
+		}
+		if len(x.Resources) > 0 {
+			for iNdEx := len(x.Resources) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.Resources[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x22
+			}
 		}
 		if len(x.Description) > 0 {
 			i -= len(x.Description)
@@ -896,7 +853,7 @@ func (x *fastReflection_Policy) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 4:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field CreationTime", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Resources", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -923,14 +880,48 @@ func (x *fastReflection_Policy) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				if x.CreationTime == nil {
-					x.CreationTime = &timestamppb.Timestamp{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.CreationTime); err != nil {
+				x.Resources = append(x.Resources, &Resource{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Resources[len(x.Resources)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
 			case 5:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ActorResource", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.ActorResource == nil {
+					x.ActorResource = &ActorResource{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.ActorResource); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 6:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Attributes", wireType)
 				}
@@ -1056,76 +1047,6 @@ func (x *fastReflection_Policy) ProtoMethods() *protoiface.Methods {
 					}
 				}
 				x.Attributes[mapkey] = mapvalue
-				iNdEx = postIndex
-			case 6:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Resources", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Resources = append(x.Resources, &Resource{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Resources[len(x.Resources)-1]); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			case 7:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ActorResource", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if x.ActorResource == nil {
-					x.ActorResource = &ActorResource{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.ActorResource); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -4343,13 +4264,12 @@ type Policy struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
-	CreationTime  *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=creation_time,json=creationTime,proto3" json:"creation_time,omitempty"`
-	Attributes    map[string]string      `protobuf:"bytes,5,rep,name=attributes,proto3" json:"attributes,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	Resources     []*Resource            `protobuf:"bytes,6,rep,name=resources,proto3" json:"resources,omitempty"`
-	ActorResource *ActorResource         `protobuf:"bytes,7,opt,name=actor_resource,json=actorResource,proto3" json:"actor_resource,omitempty"`
+	Id            string            `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name          string            `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Description   string            `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	Resources     []*Resource       `protobuf:"bytes,4,rep,name=resources,proto3" json:"resources,omitempty"`
+	ActorResource *ActorResource    `protobuf:"bytes,5,opt,name=actor_resource,json=actorResource,proto3" json:"actor_resource,omitempty"`
+	Attributes    map[string]string `protobuf:"bytes,6,rep,name=attributes,proto3" json:"attributes,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (x *Policy) Reset() {
@@ -4393,20 +4313,6 @@ func (x *Policy) GetDescription() string {
 	return ""
 }
 
-func (x *Policy) GetCreationTime() *timestamppb.Timestamp {
-	if x != nil {
-		return x.CreationTime
-	}
-	return nil
-}
-
-func (x *Policy) GetAttributes() map[string]string {
-	if x != nil {
-		return x.Attributes
-	}
-	return nil
-}
-
 func (x *Policy) GetResources() []*Resource {
 	if x != nil {
 		return x.Resources
@@ -4417,6 +4323,13 @@ func (x *Policy) GetResources() []*Resource {
 func (x *Policy) GetActorResource() *ActorResource {
 	if x != nil {
 		return x.ActorResource
+	}
+	return nil
+}
+
+func (x *Policy) GetAttributes() map[string]string {
+	if x != nil {
+		return x.Attributes
 	}
 	return nil
 }
@@ -4704,76 +4617,72 @@ var file_sourcenetwork_acp_core_policy_proto_rawDesc = []byte{
 	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x16, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
 	0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x1a, 0x1f, 0x67,
 	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74,
-	0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xac,
-	0x03, 0x0a, 0x06, 0x50, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
+	0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xeb,
+	0x02, 0x0a, 0x06, 0x50, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
 	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d,
 	0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x20, 0x0a,
 	0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01,
 	0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12,
-	0x3f, 0x0a, 0x0d, 0x63, 0x72, 0x65, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x69, 0x6d, 0x65,
-	0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61,
-	0x6d, 0x70, 0x52, 0x0c, 0x63, 0x72, 0x65, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x69, 0x6d, 0x65,
-	0x12, 0x4e, 0x0a, 0x0a, 0x61, 0x74, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x65, 0x73, 0x18, 0x05,
-	0x20, 0x03, 0x28, 0x0b, 0x32, 0x2e, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
-	0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x50, 0x6f,
-	0x6c, 0x69, 0x63, 0x79, 0x2e, 0x41, 0x74, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x65, 0x73, 0x45,
-	0x6e, 0x74, 0x72, 0x79, 0x52, 0x0a, 0x61, 0x74, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x65, 0x73,
-	0x12, 0x3e, 0x0a, 0x09, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x73, 0x18, 0x06, 0x20,
-	0x03, 0x28, 0x0b, 0x32, 0x20, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77,
-	0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65, 0x73,
-	0x6f, 0x75, 0x72, 0x63, 0x65, 0x52, 0x09, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x73,
-	0x12, 0x4c, 0x0a, 0x0e, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x5f, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72,
-	0x63, 0x65, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63,
+	0x3e, 0x0a, 0x09, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x73, 0x18, 0x04, 0x20, 0x03,
+	0x28, 0x0b, 0x32, 0x20, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f,
+	0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65, 0x73, 0x6f,
+	0x75, 0x72, 0x63, 0x65, 0x52, 0x09, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x73, 0x12,
+	0x4c, 0x0a, 0x0e, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x5f, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63,
+	0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
+	0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65,
+	0x2e, 0x41, 0x63, 0x74, 0x6f, 0x72, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x52, 0x0d,
+	0x61, 0x63, 0x74, 0x6f, 0x72, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x12, 0x4e, 0x0a,
+	0x0a, 0x61, 0x74, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x65, 0x73, 0x18, 0x06, 0x20, 0x03, 0x28,
+	0x0b, 0x32, 0x2e, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
+	0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x50, 0x6f, 0x6c, 0x69, 0x63,
+	0x79, 0x2e, 0x41, 0x74, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x65, 0x73, 0x45, 0x6e, 0x74, 0x72,
+	0x79, 0x52, 0x0a, 0x61, 0x74, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x65, 0x73, 0x1a, 0x3d, 0x0a,
+	0x0f, 0x41, 0x74, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x65, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79,
+	0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b,
+	0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0xb6, 0x01, 0x0a,
+	0x08, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d,
+	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x10, 0x0a,
+	0x03, 0x64, 0x6f, 0x63, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x64, 0x6f, 0x63, 0x12,
+	0x44, 0x0a, 0x0b, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x03,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
+	0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x50, 0x65,
+	0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x0b, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x3e, 0x0a, 0x09, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x20, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63,
 	0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72,
-	0x65, 0x2e, 0x41, 0x63, 0x74, 0x6f, 0x72, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x52,
-	0x0d, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x1a, 0x3d,
-	0x0a, 0x0f, 0x41, 0x74, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x65, 0x73, 0x45, 0x6e, 0x74, 0x72,
-	0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03,
-	0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0xb6, 0x01,
-	0x0a, 0x08, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61,
-	0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x10,
-	0x0a, 0x03, 0x64, 0x6f, 0x63, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x64, 0x6f, 0x63,
-	0x12, 0x44, 0x0a, 0x0b, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x18,
-	0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65,
-	0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x50,
-	0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x0b, 0x70, 0x65, 0x72, 0x6d, 0x69,
-	0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x3e, 0x0a, 0x09, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69,
-	0x6f, 0x6e, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x20, 0x2e, 0x73, 0x6f, 0x75, 0x72,
+	0x65, 0x2e, 0x52, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x09, 0x72, 0x65, 0x6c, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x73, 0x22, 0x8a, 0x01, 0x0a, 0x08, 0x52, 0x65, 0x6c, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x64, 0x6f, 0x63, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x03, 0x64, 0x6f, 0x63, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x61, 0x6e, 0x61,
+	0x67, 0x65, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x61, 0x6e, 0x61, 0x67,
+	0x65, 0x73, 0x12, 0x3e, 0x0a, 0x08, 0x76, 0x72, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x18, 0x04,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
+	0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65,
+	0x73, 0x74, 0x72, 0x69, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x07, 0x76, 0x72, 0x54, 0x79, 0x70,
+	0x65, 0x73, 0x22, 0x57, 0x0a, 0x0b, 0x52, 0x65, 0x73, 0x74, 0x72, 0x69, 0x63, 0x74, 0x69, 0x6f,
+	0x6e, 0x12, 0x23, 0x0a, 0x0d, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x5f, 0x6e, 0x61,
+	0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72,
+	0x63, 0x65, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x23, 0x0a, 0x0d, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x72,
+	0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4e, 0x61, 0x6d, 0x65, 0x22, 0x52, 0x0a, 0x0a, 0x50,
+	0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d,
+	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x10, 0x0a,
+	0x03, 0x64, 0x6f, 0x63, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x64, 0x6f, 0x63, 0x12,
+	0x1e, 0x0a, 0x0a, 0x65, 0x78, 0x70, 0x72, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x0a, 0x65, 0x78, 0x70, 0x72, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x22,
+	0x75, 0x0a, 0x0d, 0x41, 0x63, 0x74, 0x6f, 0x72, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
+	0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
+	0x6e, 0x61, 0x6d, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x64, 0x6f, 0x63, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x03, 0x64, 0x6f, 0x63, 0x12, 0x3e, 0x0a, 0x09, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x20, 0x2e, 0x73, 0x6f, 0x75, 0x72,
 	0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f,
 	0x72, 0x65, 0x2e, 0x52, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x09, 0x72, 0x65, 0x6c,
-	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x22, 0x8a, 0x01, 0x0a, 0x08, 0x52, 0x65, 0x6c, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x64, 0x6f, 0x63, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x64, 0x6f, 0x63, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x61, 0x6e,
-	0x61, 0x67, 0x65, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x61, 0x6e, 0x61,
-	0x67, 0x65, 0x73, 0x12, 0x3e, 0x0a, 0x08, 0x76, 0x72, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x18,
-	0x04, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65,
-	0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52,
-	0x65, 0x73, 0x74, 0x72, 0x69, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x07, 0x76, 0x72, 0x54, 0x79,
-	0x70, 0x65, 0x73, 0x22, 0x57, 0x0a, 0x0b, 0x52, 0x65, 0x73, 0x74, 0x72, 0x69, 0x63, 0x74, 0x69,
-	0x6f, 0x6e, 0x12, 0x23, 0x0a, 0x0d, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x5f, 0x6e,
-	0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x72, 0x65, 0x73, 0x6f, 0x75,
-	0x72, 0x63, 0x65, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x23, 0x0a, 0x0d, 0x72, 0x65, 0x6c, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c,
-	0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4e, 0x61, 0x6d, 0x65, 0x22, 0x52, 0x0a, 0x0a,
-	0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61,
-	0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x10,
-	0x0a, 0x03, 0x64, 0x6f, 0x63, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x64, 0x6f, 0x63,
-	0x12, 0x1e, 0x0a, 0x0a, 0x65, 0x78, 0x70, 0x72, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x03,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x65, 0x78, 0x70, 0x72, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e,
-	0x22, 0x75, 0x0a, 0x0d, 0x41, 0x63, 0x74, 0x6f, 0x72, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63,
-	0x65, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x64, 0x6f, 0x63, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x03, 0x64, 0x6f, 0x63, 0x12, 0x3e, 0x0a, 0x09, 0x72, 0x65, 0x6c, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x20, 0x2e, 0x73, 0x6f, 0x75,
-	0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63,
-	0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x09, 0x72, 0x65,
-	0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x42, 0x2d, 0x5a, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75,
-	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77,
-	0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x70, 0x6b, 0x67,
-	0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x42, 0x2d, 0x5a, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62,
+	0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f,
+	0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x70, 0x6b, 0x67, 0x2f,
+	0x74, 0x79, 0x70, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -4790,29 +4699,27 @@ func file_sourcenetwork_acp_core_policy_proto_rawDescGZIP() []byte {
 
 var file_sourcenetwork_acp_core_policy_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_sourcenetwork_acp_core_policy_proto_goTypes = []interface{}{
-	(*Policy)(nil),                // 0: sourcenetwork.acp_core.Policy
-	(*Resource)(nil),              // 1: sourcenetwork.acp_core.Resource
-	(*Relation)(nil),              // 2: sourcenetwork.acp_core.Relation
-	(*Restriction)(nil),           // 3: sourcenetwork.acp_core.Restriction
-	(*Permission)(nil),            // 4: sourcenetwork.acp_core.Permission
-	(*ActorResource)(nil),         // 5: sourcenetwork.acp_core.ActorResource
-	nil,                           // 6: sourcenetwork.acp_core.Policy.AttributesEntry
-	(*timestamppb.Timestamp)(nil), // 7: google.protobuf.Timestamp
+	(*Policy)(nil),        // 0: sourcenetwork.acp_core.Policy
+	(*Resource)(nil),      // 1: sourcenetwork.acp_core.Resource
+	(*Relation)(nil),      // 2: sourcenetwork.acp_core.Relation
+	(*Restriction)(nil),   // 3: sourcenetwork.acp_core.Restriction
+	(*Permission)(nil),    // 4: sourcenetwork.acp_core.Permission
+	(*ActorResource)(nil), // 5: sourcenetwork.acp_core.ActorResource
+	nil,                   // 6: sourcenetwork.acp_core.Policy.AttributesEntry
 }
 var file_sourcenetwork_acp_core_policy_proto_depIdxs = []int32{
-	7, // 0: sourcenetwork.acp_core.Policy.creation_time:type_name -> google.protobuf.Timestamp
-	6, // 1: sourcenetwork.acp_core.Policy.attributes:type_name -> sourcenetwork.acp_core.Policy.AttributesEntry
-	1, // 2: sourcenetwork.acp_core.Policy.resources:type_name -> sourcenetwork.acp_core.Resource
-	5, // 3: sourcenetwork.acp_core.Policy.actor_resource:type_name -> sourcenetwork.acp_core.ActorResource
-	4, // 4: sourcenetwork.acp_core.Resource.permissions:type_name -> sourcenetwork.acp_core.Permission
-	2, // 5: sourcenetwork.acp_core.Resource.relations:type_name -> sourcenetwork.acp_core.Relation
-	3, // 6: sourcenetwork.acp_core.Relation.vr_types:type_name -> sourcenetwork.acp_core.Restriction
-	2, // 7: sourcenetwork.acp_core.ActorResource.relations:type_name -> sourcenetwork.acp_core.Relation
-	8, // [8:8] is the sub-list for method output_type
-	8, // [8:8] is the sub-list for method input_type
-	8, // [8:8] is the sub-list for extension type_name
-	8, // [8:8] is the sub-list for extension extendee
-	0, // [0:8] is the sub-list for field type_name
+	1, // 0: sourcenetwork.acp_core.Policy.resources:type_name -> sourcenetwork.acp_core.Resource
+	5, // 1: sourcenetwork.acp_core.Policy.actor_resource:type_name -> sourcenetwork.acp_core.ActorResource
+	6, // 2: sourcenetwork.acp_core.Policy.attributes:type_name -> sourcenetwork.acp_core.Policy.AttributesEntry
+	4, // 3: sourcenetwork.acp_core.Resource.permissions:type_name -> sourcenetwork.acp_core.Permission
+	2, // 4: sourcenetwork.acp_core.Resource.relations:type_name -> sourcenetwork.acp_core.Relation
+	3, // 5: sourcenetwork.acp_core.Relation.vr_types:type_name -> sourcenetwork.acp_core.Restriction
+	2, // 6: sourcenetwork.acp_core.ActorResource.relations:type_name -> sourcenetwork.acp_core.Relation
+	7, // [7:7] is the sub-list for method output_type
+	7, // [7:7] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_sourcenetwork_acp_core_policy_proto_init() }

@@ -27,7 +27,7 @@ func (c *RegisterObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 		return nil, newRegisterObjectErr(err)
 	}
 
-	principal, err := auth.ExtractPrincipalWithType(ctx, auth.DID)
+	principal, err := auth.ExtractPrincipalWithType(ctx, types.PrincipalKind_DID)
 	if err != nil {
 		return nil, newRegisterObjectErr(err)
 	}
@@ -35,7 +35,7 @@ func (c *RegisterObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 	registration := &types.Registration{
 		Object: cmd.Object,
 		Actor: &types.Actor{
-			Id: principal.Identifier(),
+			Id: principal.Identifier,
 		},
 	}
 
@@ -81,11 +81,13 @@ func (c *RegisterObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 				},
 			},
 		},
-		OwnerDid:     registration.Actor.Id,
-		PolicyId:     pol.Id,
-		Archived:     false,
-		CreationTime: ts,
-		Metadata:     cmd.Attributes,
+		Metadata: &types.RecordMetadata{
+			Creator:    &principal,
+			CreationTs: ts,
+			Supplied:   cmd.Metadata,
+		},
+		PolicyId: pol.Id,
+		Archived: false,
 	}
 	_, err = engine.SetRelationship(ctx, pol, record)
 	if err != nil {
@@ -125,11 +127,11 @@ func (c *ArchiveObjectHandler) Execute(ctx context.Context, runtime runtime.Runt
 		return nil, newArchiveObjectErr(err)
 	}
 
-	principal, err := auth.ExtractPrincipalWithType(ctx, auth.DID)
+	principal, err := auth.ExtractPrincipalWithType(ctx, types.PrincipalKind_DID)
 	if err != nil {
 		return nil, newArchiveObjectErr(err)
 	}
-	did := principal.Identifier()
+	did := principal.Identifier
 
 	rec, err := engine.GetPolicy(ctx, cmd.PolicyId)
 	if err != nil {
@@ -244,11 +246,11 @@ func (h *TransferObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 		return nil, newTransferObjectErr(err)
 	}
 
-	principal, err := auth.ExtractPrincipalWithType(ctx, auth.DID)
+	principal, err := auth.ExtractPrincipalWithType(ctx, types.PrincipalKind_DID)
 	if err != nil {
 		return nil, newTransferObjectErr(err)
 	}
-	did := principal.Identifier()
+	did := principal.Identifier
 
 	rec, err := engine.GetPolicy(ctx, cmd.PolicyId)
 	if err != nil {
@@ -305,7 +307,7 @@ func (h *TransferObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 		return nil, newTransferObjectErr(err)
 	}
 
-	ownerRecord.OwnerDid = cmd.NewOwner.Id
+	ownerRecord.Metadata.Creator.Identifier = cmd.NewOwner.Id
 	ownerRecord.Relationship.Subject = &types.Subject{
 		Subject: &types.Subject_Actor{
 			Actor: cmd.NewOwner,
@@ -324,7 +326,7 @@ func (h *TransferObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 type AmendRegistrationHandler struct{}
 
 func (h *AmendRegistrationHandler) Handle(ctx context.Context, runtime runtime.RuntimeManager, req *types.AmendRegistrationRequest) (*types.AmendRegistrationResponse, error) {
-	_, err := auth.ExtractPrincipalWithType(ctx, auth.Root)
+	_, err := auth.ExtractPrincipalWithType(ctx, types.PrincipalKind_Root)
 	if err != nil {
 		return nil, newAmendRegistrationErr(err)
 	}
@@ -344,7 +346,7 @@ func (h *AmendRegistrationHandler) Handle(ctx context.Context, runtime runtime.R
 		return nil, newAmendRegistrationErr(errors.Wrap("removing old relationship", err))
 	}
 
-	relRec.OwnerDid = req.NewOwner.Id
+	relRec.Metadata.Creator.Identifier = req.NewOwner.Id
 	relRec.Relationship.Subject = &types.Subject{
 		Subject: &types.Subject_Actor{
 			Actor: req.NewOwner,
@@ -415,11 +417,11 @@ func (h *UnarchiveObjectHandler) Handle(ctx context.Context, runtime runtime.Run
 	}
 	pol := rec.Policy
 
-	principal, err := auth.ExtractPrincipalWithType(ctx, auth.DID)
+	principal, err := auth.ExtractPrincipalWithType(ctx, types.PrincipalKind_DID)
 	if err != nil {
 		return nil, newRegisterObjectErr(err)
 	}
-	did := principal.Identifier()
+	did := principal.Identifier
 
 	ownerRecord, err := queryOwnerRelationship(ctx, engine, pol, cmd.Object)
 	if err != nil {

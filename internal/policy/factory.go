@@ -3,7 +3,6 @@ package policy
 import (
 	"fmt"
 
-	gogotypes "github.com/cosmos/gogoproto/types"
 	"github.com/sourcenetwork/zanzi/pkg/domain"
 
 	"github.com/sourcenetwork/acp_core/pkg/types"
@@ -17,13 +16,12 @@ type factory struct{}
 
 // NewPolicy creates a new policy from a marshal policy string.
 // The policy is unmarshaled according to the given marshaling type and normalized.
-func (f *factory) Create(policyIR PolicyIR, metadata map[string]string, policyCounter uint64, creationTime *gogotypes.Timestamp) (*types.PolicyRecord, error) {
+func (f *factory) Create(policyIR PolicyIR, policyCounter uint64, metadata *types.RecordMetadata) (*types.PolicyRecord, error) {
 
 	policy := &types.Policy{
 		Id:            "",
 		Name:          policyIR.Name,
 		Description:   policyIR.Description,
-		CreationTime:  creationTime,
 		Attributes:    policyIR.Attributes,
 		Resources:     policyIR.Resources,
 		ActorResource: policyIR.ActorResource,
