@@ -171,6 +171,29 @@ func (s *TestSuite) TestSetAndGetPolicy(t *testing.T) {
 	require.Equal(t, record.Policy, policy)
 }
 
+func (s *TestSuite) TestListPolicyIds(t *testing.T) {
+	ctx, engine := s.setup(t)
+
+	rec, err := types.NewPolicyRecord(policy)
+	require.Nil(t, err)
+
+	err = engine.SetPolicy(ctx, rec)
+	require.Nil(t, err)
+
+	policyIds, err := engine.ListPolicyIds(ctx)
+	require.Nil(t, err)
+	require.Len(t, policyIds, 1)
+	require.Equal(t, policyIds[0], rec.Policy.Id)
+}
+
+func (s *TestSuite) TestListPolicyIdsWithNoPolicies(t *testing.T) {
+	ctx, engine := s.setup(t)
+
+	policyIds, err := engine.ListPolicyIds(ctx)
+	require.Nil(t, err)
+	require.Len(t, policyIds, 0)
+}
+
 // runSuite executes all Tests in TestSuite
 func runSuite(t *testing.T, suite *TestSuite) {
 	suiteVal := reflect.ValueOf(suite)

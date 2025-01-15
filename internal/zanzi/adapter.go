@@ -253,7 +253,8 @@ func (z *Adapter) ListPolicyIds(ctx context.Context) ([]string, error) {
 		return nil, fmt.Errorf("ListPolicyIds: %w", err)
 	}
 
-	return utils.MapSlice(resp.Records, func(rec *api.ListPolicyIdsResponse_Record) string {
+	// Use MapNullableSlice instead of MapSlice to filter out 'nil' policy ids.
+	return utils.MapNullableSlice(resp.Records, func(rec *api.ListPolicyIdsResponse_Record) string {
 		return rec.Id
 	}), nil
 }
