@@ -30,16 +30,16 @@ func TestAuthEngineImpl(t *testing.T, f SetupFunction) {
 var policy = &types.Policy{
 	Id: "1",
 	Resources: []*types.Resource{
-		&types.Resource{
+		{
 			Name: "test",
 			Relations: []*types.Relation{
-				&types.Relation{
+				{
 					Name: "owner",
 					VrTypes: []*types.Restriction{
-						&types.Restriction{
+						{
 							ResourceName: "actor",
 						},
-						&types.Restriction{
+						{
 							ResourceName: "group",
 							RelationName: "owner",
 						},
@@ -48,13 +48,13 @@ var policy = &types.Policy{
 			},
 			Permissions: nil,
 		},
-		&types.Resource{
+		{
 			Name: "group",
 			Relations: []*types.Relation{
-				&types.Relation{
+				{
 					Name: "owner",
 					VrTypes: []*types.Restriction{
-						&types.Restriction{
+						{
 							ResourceName: "actor",
 						},
 					},
