@@ -1,12 +1,18 @@
 package server
 
 import (
+	"context"
+	"fmt"
 	"net"
+	"net/http"
+
+	grpcruntime "github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/services"
 	"github.com/sourcenetwork/acp_core/pkg/types"
-	"google.golang.org/grpc"
 )
 
 type Server struct {
@@ -41,4 +47,35 @@ func (s *Server) Init(r runtime.RuntimeManager) error {
 
 func (s *Server) Run() {
 	s.server.Serve(s.listener)
+}
+
+func NewGRPCGatewayServer(ctx context.Context, grpcAddress, gatewayAddress string) (*http.Server, error) {
+	conn, err := grpc.DialContext(
+		ctx,
+		grpcAddress,
+		grpc.WithBlock(),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("dial to gRPC server for gateway: %w", err)
+	}
+
+	mux := grpcruntime.NewServeMux()
+	err = types.RegisterACPEngineHandler(ctx, mux, conn)
+	if err != nil {
+		return nil, err
+	}
+
+	opts := []grpc.DialOption{
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	}
+	err = types.RegisterACPEngineHandlerFromEndpoint(ctx, mux, grpcAddress, opts)
+	if err != nil {
+		return nil, err
+	}
+
+	return &http.Server{
+		Addr:    gatewayAddress,
+		Handler: mux,
+	}, nil
 }

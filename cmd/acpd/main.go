@@ -13,7 +13,8 @@ func main() {
 }
 
 var (
-	grpcAddress string
+	grpcAddress    string
+	gatewayAddress string
 )
 
 var rootCmd = &cobra.Command{
@@ -31,11 +32,21 @@ var rootCmd = &cobra.Command{
 			log.Fatal("Failed to initialize grpc server:", err)
 		}
 
-		log.Printf("Serving gRPC service on http://%s", grpcAddress)
-		svr.Run()
+		go func() {
+			log.Printf("Serving gRPC service on http://%s", grpcAddress)
+			svr.Run()
+		}()
+
+		gwServer, err := server.NewGRPCGatewayServer(cmd.Context(), grpcAddress, gatewayAddress)
+		if err != nil {
+			log.Fatalf("create gRPC gateway server: %v", err)
+		}
+		log.Printf("Serving gRPC-Gateway on http://%s", gatewayAddress)
+		gwServer.ListenAndServe()
 	},
 }
 
 func init() {
+	rootCmd.Flags().StringVarP(&gatewayAddress, "gateway", "g", "0.0.0.0:9091", "REST Gateway server listener address")
 	rootCmd.Flags().StringVarP(&grpcAddress, "address", "a", "0.0.0.0:9090", "GRPC server listener address")
 }
