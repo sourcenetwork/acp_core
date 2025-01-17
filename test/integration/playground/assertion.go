@@ -7,27 +7,27 @@ import (
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
-type Assertion func(*testing.T, *types.SandboxDataErrors)
+type Assertion func(testing.TB, *types.SandboxDataErrors)
 
 func HasPolicyError(msg string) Assertion {
-	return func(t *testing.T, errs *types.SandboxDataErrors) {
+	return func(t testing.TB, errs *types.SandboxDataErrors) {
 		AssertContainsErrWithMsg(t, msg, errs.PolicyErrors)
 	}
 }
 
 func HasRelationshipsError(msg string) Assertion {
-	return func(t *testing.T, errs *types.SandboxDataErrors) {
+	return func(t testing.TB, errs *types.SandboxDataErrors) {
 		AssertContainsErrWithMsg(t, msg, errs.RelationshipsErrors)
 	}
 }
 
 func HasTheoremError(msg string) Assertion {
-	return func(t *testing.T, errs *types.SandboxDataErrors) {
+	return func(t testing.TB, errs *types.SandboxDataErrors) {
 		AssertContainsErrWithMsg(t, msg, errs.TheoremsErrors)
 	}
 }
 
-func AssertContainsErrWithMsg(t *testing.T, want string, msgs []*types.LocatedMessage) {
+func AssertContainsErrWithMsg(t testing.TB, want string, msgs []*types.LocatedMessage) {
 	var had []string
 	for _, msg := range msgs {
 		had = append(had, msg.Message)
