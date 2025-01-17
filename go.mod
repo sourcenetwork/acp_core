@@ -1,15 +1,18 @@
 module github.com/sourcenetwork/acp_core
 
-go 1.21.3
+go 1.22
 
 require (
 	github.com/TBD54566975/ssi-sdk v0.0.4-alpha
 	github.com/antlr4-go/antlr/v4 v4.13.0
 	github.com/cosmos/cosmos-proto v1.0.0-beta.5
 	github.com/cosmos/gogoproto v1.4.12
+	github.com/golang/protobuf v1.5.4
 	github.com/google/go-cmp v0.6.0
+	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/sourcenetwork/raccoondb v0.2.1-0.20240722161350-d4a78b691ec8
 	github.com/sourcenetwork/zanzi v0.3.1-0.20240814180502-4f29069b6164
+	github.com/spf13/cobra v1.8.0
 	github.com/stretchr/testify v1.9.0
 	google.golang.org/grpc v1.63.2
 	google.golang.org/protobuf v1.33.0
@@ -83,7 +86,6 @@ require (
 	github.com/segmentio/asm v1.2.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/spf13/cast v1.6.0 // indirect
-	github.com/spf13/cobra v1.8.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/syndtr/goleveldb v1.0.1-0.20220721030215-126854af5e6d // indirect
 	go.uber.org/multierr v1.11.0 // indirect
@@ -93,6 +95,7 @@ require (
 	golang.org/x/net v0.23.0 // indirect
 	golang.org/x/sys v0.18.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
+	google.golang.org/genproto v0.0.0-20240227224415-6ceb2ff114de // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240415180920-8c6c420018be // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240415141817-7cd4c1c1f9ec // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
