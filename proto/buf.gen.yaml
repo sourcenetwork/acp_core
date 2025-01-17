@@ -17,3 +17,10 @@ plugins:
     opt: 
       - paths=import
       - module=github.com/sourcenetwork/acp_core/pkg
+  - name: grpc-gateway
+    out: ..
+    opt:
+      - logtostderr=true
+      - generate_unbound_methods=true
+      - paths=import
+      - module=github.com/sourcenetwork/acp_core

@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package sourcenetwork.acp_core;
 
+import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "sourcenetwork/acp_core/access_decision.proto";
 import "sourcenetwork/acp_core/catalogue.proto";
@@ -17,24 +18,46 @@ option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
 service ACPEngine {
   // CreatePolicy adds a new Policy to SourceHub.
   // The Policy models an aplication's high level access control rules.
-  rpc CreatePolicy(CreatePolicyRequest) returns (CreatePolicyResponse);
+  rpc CreatePolicy(CreatePolicyRequest) returns (CreatePolicyResponse) {
+    option (google.api.http) = {
+      post: "/v1alpha1/policy"
+      body: "*"
+    };
+  }
 
   // GetPolicy returns a Policy with the given ID
-  rpc GetPolicy(GetPolicyRequest) returns (GetPolicyResponse);
+  rpc GetPolicy(GetPolicyRequest) returns (GetPolicyResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/policy/{id}"
+    };
+  }
 
   // GetPolicyCatalogue builds and return a Policy's Catalogue
   rpc GetPolicyCatalogue(GetPolicyCatalogueRequest) returns (GetPolicyCatalogueResponse);
 
   // ListPolicies returns a set of Policies registered in the system
-  rpc ListPolicies(ListPoliciesRequest) returns (ListPoliciesResponse);
+  rpc ListPolicies(ListPoliciesRequest) returns (ListPoliciesResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/policy"
+    };
+  }
 
   // DeletePolicy removes a Policy and all relationships and objects registered within it.
-  rpc DeletePolicy(DeletePolicyRequest) returns (DeletePolicyResponse);
+  rpc DeletePolicy(DeletePolicyRequest) returns (DeletePolicyResponse) {
+    option (google.api.http) = {
+      delete: "/v1alpha1/policy/{id}"
+    };
+  }
 
   // SetRelationship creates or updates a Relationship within a Policy
   // A Relationship is a statement which ties together an object and a subject with a "relation",
   // which means the set of high level rules defined in the Policy will apply to these entities.
-  rpc SetRelationship(SetRelationshipRequest) returns (SetRelationshipResponse);
+  rpc SetRelationship(SetRelationshipRequest) returns (SetRelationshipResponse) {
+    option (google.api.http) = {
+      post: "/v1alpha1/relationship"
+      body: "*"
+    };
+  }
 
   // DelereRelationship removes a Relationship from a Policy.
   // If the Relationship was not found in a Policy, this Cmd is a no-op.
@@ -48,7 +71,12 @@ service ACPEngine {
   //
   // Attempting to register a previously registered Object - whether active or archived -
   // is an error, Object IDs are therefore assumed to be unique within a Policy.
-  rpc RegisterObject(RegisterObjectRequest) returns (RegisterObjectResponse);
+  rpc RegisterObject(RegisterObjectRequest) returns (RegisterObjectResponse) {
+    option (google.api.http) = {
+      post: "/v1alpha1/registerobject"
+      body: "*"
+    };
+  }
 
   // ArchiveObject sets an Object's state as "archived"
   //
