@@ -9,8 +9,9 @@ require (
 	github.com/cosmos/gogoproto v1.4.12
 	github.com/cyware/ssi-sdk v0.0.0-20231229164914-f93f3006379f
 	github.com/google/go-cmp v0.6.0
-	github.com/sourcenetwork/raccoondb v0.2.1-0.20240722161350-d4a78b691ec8
-	github.com/sourcenetwork/zanzi v0.3.1-0.20250117191617-40400ffac5e3
+	github.com/google/uuid v1.6.0
+	github.com/sourcenetwork/raccoondb v0.2.1-0.20240606193653-1e91e9be9234
+	github.com/sourcenetwork/zanzi v0.3.1-0.20250119215940-5b0336b71030
 	github.com/stretchr/testify v1.9.0
 	google.golang.org/grpc v1.63.2
 	google.golang.org/protobuf v1.33.0
@@ -26,7 +27,7 @@ require (
 	github.com/awalterschulze/gographviz v2.0.3+incompatible // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/btcsuite/btcd/btcec/v2 v2.3.2 // indirect
-	github.com/btcsuite/btcd/chaincfg/chainhash v1.0.2 // indirect
+	github.com/btcsuite/btcd/chaincfg/chainhash v1.1.0 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/cloudflare/circl v1.3.7 // indirect
 	github.com/cockroachdb/errors v1.11.1 // indirect
@@ -49,7 +50,6 @@ require (
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/btree v1.1.2 // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.18.1 // indirect
 	github.com/hashicorp/go-immutable-radix v1.3.1 // indirect
 	github.com/hashicorp/go-metrics v0.5.2 // indirect
