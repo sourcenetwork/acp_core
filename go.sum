@@ -310,8 +310,12 @@ github.com/sirupsen/logrus v1.9.3 h1:dueUQJ1C2q9oE3F7wvmSGAaVtTmUizReu6fjN8uqzbQ
 github.com/sirupsen/logrus v1.9.3/go.mod h1:naHLuLoDiP4jHNo9R0sCBMtWGeIprob74mVsIT4qYEQ=
 github.com/sourcenetwork/raccoondb v0.2.1-0.20240606193653-1e91e9be9234 h1:8dA9bVC1A0ChJygtsUfNsek3oR0GnwpLoYpmEo4t2mk=
 github.com/sourcenetwork/raccoondb v0.2.1-0.20240606193653-1e91e9be9234/go.mod h1:JvZ+G3QTmv7zto3tUBxnV0+fPoev0DkObSwczTm9VJE=
+github.com/sourcenetwork/raccoondb v0.2.1-0.20240722161350-d4a78b691ec8 h1:d0jNogSYqMt+dC05tnd+x7lmzEcBHpKoIU5woZSSHFM=
+github.com/sourcenetwork/raccoondb v0.2.1-0.20240722161350-d4a78b691ec8/go.mod h1:/WJdZWouiY199DypsN0xaP5PF0zy3rka3FxH5Y8o9Bc=
 github.com/sourcenetwork/zanzi v0.3.1-0.20240606201400-df5f801d0bd4 h1:lO0ZSZ75qdQPp+ZcHEDy+kyHQhnf6ZDB1V5TjQW422w=
 github.com/sourcenetwork/zanzi v0.3.1-0.20240606201400-df5f801d0bd4/go.mod h1:QdM0NfYxQd10WAPUTVAA1X10y5IgZ/CXs3gpD5YxdCE=
+github.com/sourcenetwork/zanzi v0.3.1-0.20250117191617-40400ffac5e3 h1:ZiNRmk7Kfylv6Hm/KgM1qMl517BRiNbUNjn+kZDeBIQ=
+github.com/sourcenetwork/zanzi v0.3.1-0.20250117191617-40400ffac5e3/go.mod h1:c4C+Vd6knqAHX6fl57gb3BROUNC1g3WGGlWROREpC8U=
 github.com/spf13/cast v1.6.0 h1:GEiTHELF+vaR5dhz3VqZfFSzZjYbgeKDpBxQVS4GYJ0=
 github.com/spf13/cast v1.6.0/go.mod h1:ancEpBxwJDODSW/UG4rDrAqiKolqNNh2DX3mk86cAdo=
 github.com/spf13/cobra v1.8.0 h1:7aJaZx1B85qltLMc546zn58BxxfZdR/W22ej9CFoEf0=
