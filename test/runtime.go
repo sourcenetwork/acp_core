@@ -11,7 +11,7 @@ import (
 )
 
 // NewTestRuntime returns a runtime for executing tests
-func NewTestRuntime(t *testing.T, timeServ runtime.TimeService) runtime.RuntimeManager {
+func NewTestRuntime(t testing.TB, timeServ runtime.TimeService) runtime.RuntimeManager {
 	manager, err := runtime.NewRuntimeManager(
 		runtime.WithMemKV(),
 		runtime.WithTimeService(timeServ),
