@@ -8,7 +8,7 @@ import (
 )
 
 // NewTestRuntime returns a runtime for executing tests
-func NewTestRuntime(t *testing.T) runtime.RuntimeManager {
+func NewTestRuntime(t testing.TB) runtime.RuntimeManager {
 	manager, err := runtime.NewRuntimeManager(runtime.WithMemKV())
 	require.Nil(t, err)
 	return manager

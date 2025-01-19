@@ -16,7 +16,7 @@ var _ context.Context = (*TestCtx)(nil)
 
 type TestCtx struct {
 	Ctx     context.Context
-	T       *testing.T
+	T       testing.TB
 	Runtime runtime.RuntimeManager
 	Engine  types.ACPEngineServer
 	Actors  ActorRegistrar
@@ -30,7 +30,7 @@ func (t *TestCtx) SetPrincipal(name string) {
 	t.Ctx = auth.InjectPrincipal(t.Ctx, principal)
 }
 
-func NewTestCtx(t *testing.T) *TestCtx {
+func NewTestCtx(t testing.TB) *TestCtx {
 	runtime := NewTestRuntime(t)
 	engine := engine.NewACPEngine(runtime)
 	return &TestCtx{
