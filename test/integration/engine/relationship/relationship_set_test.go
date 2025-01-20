@@ -34,7 +34,7 @@ func setRelationshipTestSetup(t *testing.T) *test.TestCtx {
 		Policy:        policy,
 		PolicyCreator: "root",
 		ObjectsPerActor: map[string][]*types.Object{
-			"alice": []*types.Object{
+			"alice": {
 				types.NewObject("file", "foo"),
 			},
 		},

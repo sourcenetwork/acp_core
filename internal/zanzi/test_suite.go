@@ -30,16 +30,16 @@ func TestAuthEngineImpl(t *testing.T, f SetupFunction) {
 var policy = &types.Policy{
 	Id: "1",
 	Resources: []*types.Resource{
-		&types.Resource{
+		{
 			Name: "test",
 			Relations: []*types.Relation{
-				&types.Relation{
+				{
 					Name: "owner",
 					VrTypes: []*types.Restriction{
-						&types.Restriction{
+						{
 							ResourceName: "actor",
 						},
-						&types.Restriction{
+						{
 							ResourceName: "group",
 							RelationName: "owner",
 						},
@@ -48,13 +48,13 @@ var policy = &types.Policy{
 			},
 			Permissions: nil,
 		},
-		&types.Resource{
+		{
 			Name: "group",
 			Relations: []*types.Relation{
-				&types.Relation{
+				{
 					Name: "owner",
 					VrTypes: []*types.Restriction{
-						&types.Restriction{
+						{
 							ResourceName: "actor",
 						},
 					},
@@ -169,6 +169,29 @@ func (s *TestSuite) TestSetAndGetPolicy(t *testing.T) {
 	record, err := engine.GetPolicy(ctx, policy.Id)
 	require.Nil(t, err)
 	require.Equal(t, record.Policy, policy)
+}
+
+func (s *TestSuite) TestListPolicyIds(t *testing.T) {
+	ctx, engine := s.setup(t)
+
+	rec, err := types.NewPolicyRecord(policy)
+	require.Nil(t, err)
+
+	err = engine.SetPolicy(ctx, rec)
+	require.Nil(t, err)
+
+	policyIds, err := engine.ListPolicyIds(ctx)
+	require.Nil(t, err)
+	require.Len(t, policyIds, 1)
+	require.Equal(t, policyIds[0], rec.Policy.Id)
+}
+
+func (s *TestSuite) TestListPolicyIdsWithNoPolicies(t *testing.T) {
+	ctx, engine := s.setup(t)
+
+	policyIds, err := engine.ListPolicyIds(ctx)
+	require.Nil(t, err)
+	require.Len(t, policyIds, 0)
 }
 
 // runSuite executes all Tests in TestSuite
