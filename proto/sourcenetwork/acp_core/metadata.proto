@@ -10,15 +10,15 @@ option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
 // RecorMetadata contains system defined data containing
 // data set during a record's creation
 message RecordMetadata {
-    Principal creator = 1;
-    google.protobuf.Timestamp creation_ts = 2;
-    google.protobuf.Timestamp last_modified = 3;
-    SuppliedMetadata supplied = 4;
+  Principal creator = 1;
+  google.protobuf.Timestamp creation_ts = 2;
+  google.protobuf.Timestamp last_modified = 3;
+  SuppliedMetadata supplied = 4;
 }
 
 // SuppliedMetadata models arbitrary satalite data supplied
 // by callers which contain metadata about a record
 message SuppliedMetadata {
-    map<string,string> attributes = 1; 
-    bytes blob = 2;
+  map<string, string> attributes = 1;
+  bytes blob = 2;
 }

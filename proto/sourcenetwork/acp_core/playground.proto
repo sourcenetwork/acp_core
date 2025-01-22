@@ -154,10 +154,9 @@ message GetSandboxResponse {
   sourcenetwork.acp_core.SandboxRecord record = 1;
 }
 
-message GetSampleSandboxesRequest{} 
+message GetSampleSandboxesRequest {}
 
-message GetSampleSandboxesResponse{
-}
+message GetSampleSandboxesResponse {}
 
 enum SerializationEncoding {
   UNKNOWN_ENCODING = 0;
@@ -170,9 +169,9 @@ message SetSerializedStateRequest {
   uint64 handle = 1;
   SerializationEncoding encoding = 2;
   bytes data = 3;
-} 
+}
 
-message SetSerializedStateResponse{
+message SetSerializedStateResponse {
   // ok indicates the state updated sucessfuly
   bool ok = 1;
   // errors represent all recoverable errors found while parsing and setting the sandbox state
@@ -181,8 +180,7 @@ message SetSerializedStateResponse{
   sourcenetwork.acp_core.SandboxRecord record = 3;
 }
 
-
-message GetSerializedStateRequest  {
+message GetSerializedStateRequest {
   // handle to an existing sandbox
   uint64 handle = 1;
   SerializationEncoding encoding = 2;

@@ -2,9 +2,9 @@ syntax = "proto3";
 package sourcenetwork.acp_core;
 
 import "google/protobuf/timestamp.proto";
+import "sourcenetwork/acp_core/metadata.proto";
 import "sourcenetwork/acp_core/policy.proto";
 import "sourcenetwork/acp_core/policy_short.proto";
-import "sourcenetwork/acp_core/metadata.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
 
