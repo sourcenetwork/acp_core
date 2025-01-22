@@ -39,18 +39,18 @@ func TestFullUnmarshal(t *testing.T) {
 		Name:        "policy",
 		Description: "ok",
 		Resources: []*types.Resource{
-			&types.Resource{
+			{
 				Name: "foo",
 				Relations: []*types.Relation{
-					&types.Relation{
+					{
 						Name: "owner",
 						Doc:  "owner owns",
 						VrTypes: []*types.Restriction{
-							&types.Restriction{
+							{
 								ResourceName: "blah",
 								RelationName: "",
 							},
-							&types.Restriction{
+							{
 								ResourceName: "ok",
 								RelationName: "that",
 							},
@@ -61,12 +61,12 @@ func TestFullUnmarshal(t *testing.T) {
 					},
 				},
 				Permissions: []*types.Permission{
-					&types.Permission{
+					{
 						Name:       "abc",
 						Doc:        "abc doc",
 						Expression: "owner",
 					},
-					&types.Permission{
+					{
 						Name:       "def",
 						Doc:        "",
 						Expression: "owner + abc",
@@ -94,7 +94,7 @@ func TestEmptyResourceMapsToResource(t *testing.T) {
 
 	want := PolicyIR{
 		Resources: []*types.Resource{
-			&types.Resource{
+			{
 				Name: "foo",
 			},
 		},
@@ -116,7 +116,7 @@ func TestResourceWithoutPermsOrRelsMapsToResource(t *testing.T) {
 
 	want := PolicyIR{
 		Resources: []*types.Resource{
-			&types.Resource{
+			{
 				Name:        "foo",
 				Permissions: []*types.Permission{},
 				Relations:   []*types.Relation{},
@@ -140,10 +140,10 @@ func TestEmptyRelationMapsToRelation(t *testing.T) {
 
 	want := PolicyIR{
 		Resources: []*types.Resource{
-			&types.Resource{
+			{
 				Name: "foo",
 				Relations: []*types.Relation{
-					&types.Relation{
+					{
 						Name: "blah",
 					},
 				},
@@ -174,10 +174,10 @@ func TestEmptyPermissionMapsToPermission(t *testing.T) {
 
 	want := PolicyIR{
 		Resources: []*types.Resource{
-			&types.Resource{
+			{
 				Name: "foo",
 				Permissions: []*types.Permission{
-					&types.Permission{
+					{
 						Name: "blah",
 					},
 				},
@@ -248,17 +248,17 @@ func TestRestrictionIdentifierMapsBothForms(t *testing.T) {
 
 	want := PolicyIR{
 		Resources: []*types.Resource{
-			&types.Resource{
+			{
 				Name: "foo",
 				Relations: []*types.Relation{
-					&types.Relation{
+					{
 						Name: "blah",
 						VrTypes: []*types.Restriction{
-							&types.Restriction{
+							{
 								ResourceName: "actor",
 								RelationName: "",
 							},
-							&types.Restriction{
+							{
 								ResourceName: "book",
 								RelationName: "owner",
 							},

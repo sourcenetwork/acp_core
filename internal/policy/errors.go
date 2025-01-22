@@ -10,7 +10,7 @@ var (
 
 	ErrInvalidShortPolicy           = errors.Wrap("invalid short policy", errors.ErrorType_BAD_INPUT)
 	ErrResourceMissingOwnerRelation = errors.Wrap("resource missing owner relation", errors.ErrInvalidPolicy)
-	ErrInvalidManagementRule        = errors.Wrap("invalid relation managamente definition: %w", errors.ErrInvalidPolicy)
+	ErrInvalidManagementRule        = errors.Wrap("invalid relation managament definition: %w", errors.ErrInvalidPolicy)
 )
 
 func newEvaluateTheoremErr(err error) error {

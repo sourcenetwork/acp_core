@@ -38,7 +38,7 @@ type MsgSpan struct {
 
 func NewSpan(ctx context.Context) *MsgSpan {
 	span := &MsgSpan{
-		start:      time.Now(),
+		start:      time.Now().UTC(),
 		attributes: make(map[string]string),
 	}
 	/*

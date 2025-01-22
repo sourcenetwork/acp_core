@@ -2,6 +2,11 @@
 test:
 	go test -coverpkg=./...  ./...
 
+.PHONY: test\:bench
+test\:bench:
+	go test ./... -bench .
+	# To profile use -cpuprofile cpu.out
+
 .PHONY: test\:js
 test\:js:
 	GOOS=js GOARCH=wasm go test -exec="$$(go env GOROOT)/misc/wasm/go_js_wasm_exec" ./...

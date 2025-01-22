@@ -40,12 +40,12 @@ func testDeleteRelationshipSetup(t *testing.T) *test.TestCtx {
 		Policy:        policy,
 		PolicyCreator: "creator",
 		ObjectsPerActor: map[string][]*types.Object{
-			"alice": []*types.Object{
+			"alice": {
 				types.NewObject("file", "foo"),
 			},
 		},
 		RelationshipsPerActor: map[string][]*types.Relationship{
-			"alice": []*types.Relationship{
+			"alice": {
 				types.NewActorRelationship("file", "foo", "reader", reader),
 				types.NewActorRelationship("file", "foo", "writer", writer),
 				types.NewActorRelationship("file", "foo", "admin", admin),
