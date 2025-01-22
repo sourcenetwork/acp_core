@@ -19,5 +19,5 @@ message RecordMetadata {
 // by callers which contain metadata about a record
 message SuppliedMetadata {
     map<string,string> attributes = 1; 
-    bytes misc = 2;
+    bytes blob = 2;
 }

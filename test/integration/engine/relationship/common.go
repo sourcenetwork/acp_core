@@ -6,5 +6,5 @@ var metadata *types.SuppliedMetadata = &types.SuppliedMetadata{
 	Attributes: map[string]string{
 		"test": "abc",
 	},
-	Misc: []byte("test"),
+	Blob: []byte("test"),
 }

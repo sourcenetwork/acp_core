@@ -89,7 +89,7 @@ func (m *RecordMetadata) GetSupplied() *SuppliedMetadata {
 // by callers which contain metadata about a record
 type SuppliedMetadata struct {
 	Attributes map[string]string `protobuf:"bytes,1,rep,name=attributes,proto3" json:"attributes,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	Misc       []byte            `protobuf:"bytes,2,opt,name=misc,proto3" json:"misc,omitempty"`
+	Blob       []byte            `protobuf:"bytes,2,opt,name=misc,proto3" json:"misc,omitempty"`
 }
 
 func (m *SuppliedMetadata) Reset()         { *m = SuppliedMetadata{} }
@@ -134,7 +134,7 @@ func (m *SuppliedMetadata) GetAttributes() map[string]string {
 
 func (m *SuppliedMetadata) GetMisc() []byte {
 	if m != nil {
-		return m.Misc
+		return m.Blob
 	}
 	return nil
 }
@@ -255,10 +255,10 @@ func (m *SuppliedMetadata) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Misc) > 0 {
-		i -= len(m.Misc)
-		copy(dAtA[i:], m.Misc)
-		i = encodeVarintMetadata(dAtA, i, uint64(len(m.Misc)))
+	if len(m.Blob) > 0 {
+		i -= len(m.Blob)
+		copy(dAtA[i:], m.Blob)
+		i = encodeVarintMetadata(dAtA, i, uint64(len(m.Blob)))
 		i--
 		dAtA[i] = 0x12
 	}
@@ -330,7 +330,7 @@ func (m *SuppliedMetadata) Size() (n int) {
 			n += mapEntrySize + 1 + sovMetadata(uint64(mapEntrySize))
 		}
 	}
-	l = len(m.Misc)
+	l = len(m.Blob)
 	if l > 0 {
 		n += 1 + l + sovMetadata(uint64(l))
 	}
@@ -686,9 +686,9 @@ func (m *SuppliedMetadata) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Misc = append(m.Misc[:0], dAtA[iNdEx:postIndex]...)
-			if m.Misc == nil {
-				m.Misc = []byte{}
+			m.Blob = append(m.Blob[:0], dAtA[iNdEx:postIndex]...)
+			if m.Blob == nil {
+				m.Blob = []byte{}
 			}
 			iNdEx = postIndex
 		default:
