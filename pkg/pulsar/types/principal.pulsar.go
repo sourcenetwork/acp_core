@@ -493,7 +493,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// PrincipalType enumerates possible types of system users
+// PrincipalType enumerates possible types of users
 type PrincipalKind int32
 
 const (

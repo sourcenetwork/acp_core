@@ -22,7 +22,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// PrincipalType enumerates possible types of system users
+// PrincipalType enumerates possible types of users
 type PrincipalKind int32
 
 const (

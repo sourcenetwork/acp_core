@@ -12,7 +12,8 @@ option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
 message RecordMetadata {
     Principal creator = 1;
     google.protobuf.Timestamp creation_ts = 2;
-    SuppliedMetadata supplied = 3;
+    google.protobuf.Timestamp last_modified = 3;
+    SuppliedMetadata supplied = 4;
 }
 
 // SuppliedMetadata models arbitrary satalite data supplied

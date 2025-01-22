@@ -15,10 +15,11 @@ import (
 )
 
 var (
-	md_RecordMetadata             protoreflect.MessageDescriptor
-	fd_RecordMetadata_creator     protoreflect.FieldDescriptor
-	fd_RecordMetadata_creation_ts protoreflect.FieldDescriptor
-	fd_RecordMetadata_supplied    protoreflect.FieldDescriptor
+	md_RecordMetadata               protoreflect.MessageDescriptor
+	fd_RecordMetadata_creator       protoreflect.FieldDescriptor
+	fd_RecordMetadata_creation_ts   protoreflect.FieldDescriptor
+	fd_RecordMetadata_last_modified protoreflect.FieldDescriptor
+	fd_RecordMetadata_supplied      protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -26,6 +27,7 @@ func init() {
 	md_RecordMetadata = File_sourcenetwork_acp_core_metadata_proto.Messages().ByName("RecordMetadata")
 	fd_RecordMetadata_creator = md_RecordMetadata.Fields().ByName("creator")
 	fd_RecordMetadata_creation_ts = md_RecordMetadata.Fields().ByName("creation_ts")
+	fd_RecordMetadata_last_modified = md_RecordMetadata.Fields().ByName("last_modified")
 	fd_RecordMetadata_supplied = md_RecordMetadata.Fields().ByName("supplied")
 }
 
@@ -106,6 +108,12 @@ func (x *fastReflection_RecordMetadata) Range(f func(protoreflect.FieldDescripto
 			return
 		}
 	}
+	if x.LastModified != nil {
+		value := protoreflect.ValueOfMessage(x.LastModified.ProtoReflect())
+		if !f(fd_RecordMetadata_last_modified, value) {
+			return
+		}
+	}
 	if x.Supplied != nil {
 		value := protoreflect.ValueOfMessage(x.Supplied.ProtoReflect())
 		if !f(fd_RecordMetadata_supplied, value) {
@@ -131,6 +139,8 @@ func (x *fastReflection_RecordMetadata) Has(fd protoreflect.FieldDescriptor) boo
 		return x.Creator != nil
 	case "sourcenetwork.acp_core.RecordMetadata.creation_ts":
 		return x.CreationTs != nil
+	case "sourcenetwork.acp_core.RecordMetadata.last_modified":
+		return x.LastModified != nil
 	case "sourcenetwork.acp_core.RecordMetadata.supplied":
 		return x.Supplied != nil
 	default:
@@ -153,6 +163,8 @@ func (x *fastReflection_RecordMetadata) Clear(fd protoreflect.FieldDescriptor) {
 		x.Creator = nil
 	case "sourcenetwork.acp_core.RecordMetadata.creation_ts":
 		x.CreationTs = nil
+	case "sourcenetwork.acp_core.RecordMetadata.last_modified":
+		x.LastModified = nil
 	case "sourcenetwork.acp_core.RecordMetadata.supplied":
 		x.Supplied = nil
 	default:
@@ -176,6 +188,9 @@ func (x *fastReflection_RecordMetadata) Get(descriptor protoreflect.FieldDescrip
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "sourcenetwork.acp_core.RecordMetadata.creation_ts":
 		value := x.CreationTs
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "sourcenetwork.acp_core.RecordMetadata.last_modified":
+		value := x.LastModified
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "sourcenetwork.acp_core.RecordMetadata.supplied":
 		value := x.Supplied
@@ -204,6 +219,8 @@ func (x *fastReflection_RecordMetadata) Set(fd protoreflect.FieldDescriptor, val
 		x.Creator = value.Message().Interface().(*Principal)
 	case "sourcenetwork.acp_core.RecordMetadata.creation_ts":
 		x.CreationTs = value.Message().Interface().(*timestamppb.Timestamp)
+	case "sourcenetwork.acp_core.RecordMetadata.last_modified":
+		x.LastModified = value.Message().Interface().(*timestamppb.Timestamp)
 	case "sourcenetwork.acp_core.RecordMetadata.supplied":
 		x.Supplied = value.Message().Interface().(*SuppliedMetadata)
 	default:
@@ -236,6 +253,11 @@ func (x *fastReflection_RecordMetadata) Mutable(fd protoreflect.FieldDescriptor)
 			x.CreationTs = new(timestamppb.Timestamp)
 		}
 		return protoreflect.ValueOfMessage(x.CreationTs.ProtoReflect())
+	case "sourcenetwork.acp_core.RecordMetadata.last_modified":
+		if x.LastModified == nil {
+			x.LastModified = new(timestamppb.Timestamp)
+		}
+		return protoreflect.ValueOfMessage(x.LastModified.ProtoReflect())
 	case "sourcenetwork.acp_core.RecordMetadata.supplied":
 		if x.Supplied == nil {
 			x.Supplied = new(SuppliedMetadata)
@@ -258,6 +280,9 @@ func (x *fastReflection_RecordMetadata) NewField(fd protoreflect.FieldDescriptor
 		m := new(Principal)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "sourcenetwork.acp_core.RecordMetadata.creation_ts":
+		m := new(timestamppb.Timestamp)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "sourcenetwork.acp_core.RecordMetadata.last_modified":
 		m := new(timestamppb.Timestamp)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "sourcenetwork.acp_core.RecordMetadata.supplied":
@@ -340,6 +365,10 @@ func (x *fastReflection_RecordMetadata) ProtoMethods() *protoiface.Methods {
 			l = options.Size(x.CreationTs)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
+		if x.LastModified != nil {
+			l = options.Size(x.LastModified)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		if x.Supplied != nil {
 			l = options.Size(x.Supplied)
 			n += 1 + l + runtime.Sov(uint64(l))
@@ -375,6 +404,20 @@ func (x *fastReflection_RecordMetadata) ProtoMethods() *protoiface.Methods {
 		}
 		if x.Supplied != nil {
 			encoded, err := options.Marshal(x.Supplied)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x22
+		}
+		if x.LastModified != nil {
+			encoded, err := options.Marshal(x.LastModified)
 			if err != nil {
 				return protoiface.MarshalOutput{
 					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -538,6 +581,42 @@ func (x *fastReflection_RecordMetadata) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 3:
 				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LastModified", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.LastModified == nil {
+					x.LastModified = &timestamppb.Timestamp{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.LastModified); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 4:
+				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Supplied", wireType)
 				}
 				var msglen int
@@ -692,14 +771,14 @@ func (x *_SuppliedMetadata_1_map) IsValid() bool {
 var (
 	md_SuppliedMetadata            protoreflect.MessageDescriptor
 	fd_SuppliedMetadata_attributes protoreflect.FieldDescriptor
-	fd_SuppliedMetadata_misc       protoreflect.FieldDescriptor
+	fd_SuppliedMetadata_blob       protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sourcenetwork_acp_core_metadata_proto_init()
 	md_SuppliedMetadata = File_sourcenetwork_acp_core_metadata_proto.Messages().ByName("SuppliedMetadata")
 	fd_SuppliedMetadata_attributes = md_SuppliedMetadata.Fields().ByName("attributes")
-	fd_SuppliedMetadata_misc = md_SuppliedMetadata.Fields().ByName("misc")
+	fd_SuppliedMetadata_blob = md_SuppliedMetadata.Fields().ByName("blob")
 }
 
 var _ protoreflect.Message = (*fastReflection_SuppliedMetadata)(nil)
@@ -773,9 +852,9 @@ func (x *fastReflection_SuppliedMetadata) Range(f func(protoreflect.FieldDescrip
 			return
 		}
 	}
-	if len(x.Misc) != 0 {
-		value := protoreflect.ValueOfBytes(x.Misc)
-		if !f(fd_SuppliedMetadata_misc, value) {
+	if len(x.Blob) != 0 {
+		value := protoreflect.ValueOfBytes(x.Blob)
+		if !f(fd_SuppliedMetadata_blob, value) {
 			return
 		}
 	}
@@ -796,8 +875,8 @@ func (x *fastReflection_SuppliedMetadata) Has(fd protoreflect.FieldDescriptor) b
 	switch fd.FullName() {
 	case "sourcenetwork.acp_core.SuppliedMetadata.attributes":
 		return len(x.Attributes) != 0
-	case "sourcenetwork.acp_core.SuppliedMetadata.misc":
-		return len(x.Misc) != 0
+	case "sourcenetwork.acp_core.SuppliedMetadata.blob":
+		return len(x.Blob) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SuppliedMetadata"))
@@ -816,8 +895,8 @@ func (x *fastReflection_SuppliedMetadata) Clear(fd protoreflect.FieldDescriptor)
 	switch fd.FullName() {
 	case "sourcenetwork.acp_core.SuppliedMetadata.attributes":
 		x.Attributes = nil
-	case "sourcenetwork.acp_core.SuppliedMetadata.misc":
-		x.Misc = nil
+	case "sourcenetwork.acp_core.SuppliedMetadata.blob":
+		x.Blob = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SuppliedMetadata"))
@@ -840,8 +919,8 @@ func (x *fastReflection_SuppliedMetadata) Get(descriptor protoreflect.FieldDescr
 		}
 		mapValue := &_SuppliedMetadata_1_map{m: &x.Attributes}
 		return protoreflect.ValueOfMap(mapValue)
-	case "sourcenetwork.acp_core.SuppliedMetadata.misc":
-		value := x.Misc
+	case "sourcenetwork.acp_core.SuppliedMetadata.blob":
+		value := x.Blob
 		return protoreflect.ValueOfBytes(value)
 	default:
 		if descriptor.IsExtension() {
@@ -867,8 +946,8 @@ func (x *fastReflection_SuppliedMetadata) Set(fd protoreflect.FieldDescriptor, v
 		mv := value.Map()
 		cmv := mv.(*_SuppliedMetadata_1_map)
 		x.Attributes = *cmv.m
-	case "sourcenetwork.acp_core.SuppliedMetadata.misc":
-		x.Misc = value.Bytes()
+	case "sourcenetwork.acp_core.SuppliedMetadata.blob":
+		x.Blob = value.Bytes()
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SuppliedMetadata"))
@@ -895,8 +974,8 @@ func (x *fastReflection_SuppliedMetadata) Mutable(fd protoreflect.FieldDescripto
 		}
 		value := &_SuppliedMetadata_1_map{m: &x.Attributes}
 		return protoreflect.ValueOfMap(value)
-	case "sourcenetwork.acp_core.SuppliedMetadata.misc":
-		panic(fmt.Errorf("field misc of message sourcenetwork.acp_core.SuppliedMetadata is not mutable"))
+	case "sourcenetwork.acp_core.SuppliedMetadata.blob":
+		panic(fmt.Errorf("field blob of message sourcenetwork.acp_core.SuppliedMetadata is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SuppliedMetadata"))
@@ -913,7 +992,7 @@ func (x *fastReflection_SuppliedMetadata) NewField(fd protoreflect.FieldDescript
 	case "sourcenetwork.acp_core.SuppliedMetadata.attributes":
 		m := make(map[string]string)
 		return protoreflect.ValueOfMap(&_SuppliedMetadata_1_map{m: &m})
-	case "sourcenetwork.acp_core.SuppliedMetadata.misc":
+	case "sourcenetwork.acp_core.SuppliedMetadata.blob":
 		return protoreflect.ValueOfBytes(nil)
 	default:
 		if fd.IsExtension() {
@@ -1005,7 +1084,7 @@ func (x *fastReflection_SuppliedMetadata) ProtoMethods() *protoiface.Methods {
 				}
 			}
 		}
-		l = len(x.Misc)
+		l = len(x.Blob)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -1038,10 +1117,10 @@ func (x *fastReflection_SuppliedMetadata) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.Misc) > 0 {
-			i -= len(x.Misc)
-			copy(dAtA[i:], x.Misc)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Misc)))
+		if len(x.Blob) > 0 {
+			i -= len(x.Blob)
+			copy(dAtA[i:], x.Blob)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Blob)))
 			i--
 			dAtA[i] = 0x12
 		}
@@ -1266,7 +1345,7 @@ func (x *fastReflection_SuppliedMetadata) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 2:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Misc", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Blob", wireType)
 				}
 				var byteLen int
 				for shift := uint(0); ; shift += 7 {
@@ -1293,9 +1372,9 @@ func (x *fastReflection_SuppliedMetadata) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Misc = append(x.Misc[:0], dAtA[iNdEx:postIndex]...)
-				if x.Misc == nil {
-					x.Misc = []byte{}
+				x.Blob = append(x.Blob[:0], dAtA[iNdEx:postIndex]...)
+				if x.Blob == nil {
+					x.Blob = []byte{}
 				}
 				iNdEx = postIndex
 			default:
@@ -1353,9 +1432,10 @@ type RecordMetadata struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Creator    *Principal             `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	CreationTs *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=creation_ts,json=creationTs,proto3" json:"creation_ts,omitempty"`
-	Supplied   *SuppliedMetadata      `protobuf:"bytes,3,opt,name=supplied,proto3" json:"supplied,omitempty"`
+	Creator      *Principal             `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	CreationTs   *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=creation_ts,json=creationTs,proto3" json:"creation_ts,omitempty"`
+	LastModified *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=last_modified,json=lastModified,proto3" json:"last_modified,omitempty"`
+	Supplied     *SuppliedMetadata      `protobuf:"bytes,4,opt,name=supplied,proto3" json:"supplied,omitempty"`
 }
 
 func (x *RecordMetadata) Reset() {
@@ -1392,6 +1472,13 @@ func (x *RecordMetadata) GetCreationTs() *timestamppb.Timestamp {
 	return nil
 }
 
+func (x *RecordMetadata) GetLastModified() *timestamppb.Timestamp {
+	if x != nil {
+		return x.LastModified
+	}
+	return nil
+}
+
 func (x *RecordMetadata) GetSupplied() *SuppliedMetadata {
 	if x != nil {
 		return x.Supplied
@@ -1407,7 +1494,7 @@ type SuppliedMetadata struct {
 	unknownFields protoimpl.UnknownFields
 
 	Attributes map[string]string `protobuf:"bytes,1,rep,name=attributes,proto3" json:"attributes,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	Misc       []byte            `protobuf:"bytes,2,opt,name=misc,proto3" json:"misc,omitempty"`
+	Blob       []byte            `protobuf:"bytes,2,opt,name=blob,proto3" json:"blob,omitempty"`
 }
 
 func (x *SuppliedMetadata) Reset() {
@@ -1437,9 +1524,9 @@ func (x *SuppliedMetadata) GetAttributes() map[string]string {
 	return nil
 }
 
-func (x *SuppliedMetadata) GetMisc() []byte {
+func (x *SuppliedMetadata) GetBlob() []byte {
 	if x != nil {
-		return x.Misc
+		return x.Blob
 	}
 	return nil
 }
@@ -1455,7 +1542,7 @@ var file_sourcenetwork_acp_core_metadata_proto_rawDesc = []byte{
 	0x2f, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x1a, 0x26, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f,
 	0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x70, 0x72, 0x69, 0x6e, 0x63, 0x69, 0x70,
-	0x61, 0x6c, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xd0, 0x01, 0x0a, 0x0e, 0x52, 0x65, 0x63,
+	0x61, 0x6c, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x91, 0x02, 0x0a, 0x0e, 0x52, 0x65, 0x63,
 	0x6f, 0x72, 0x64, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x12, 0x3b, 0x0a, 0x07, 0x63,
 	0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x73,
 	0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70,
@@ -1464,27 +1551,31 @@ var file_sourcenetwork_acp_core_metadata_proto_rawDesc = []byte{
 	0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e,
 	0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
 	0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x54, 0x73, 0x12, 0x44, 0x0a, 0x08, 0x73, 0x75, 0x70, 0x70, 0x6c, 0x69, 0x65,
-	0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x28, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
-	0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65,
-	0x2e, 0x53, 0x75, 0x70, 0x70, 0x6c, 0x69, 0x65, 0x64, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74,
-	0x61, 0x52, 0x08, 0x73, 0x75, 0x70, 0x70, 0x6c, 0x69, 0x65, 0x64, 0x22, 0xbf, 0x01, 0x0a, 0x10,
-	0x53, 0x75, 0x70, 0x70, 0x6c, 0x69, 0x65, 0x64, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61,
-	0x12, 0x58, 0x0a, 0x0a, 0x61, 0x74, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x65, 0x73, 0x18, 0x01,
-	0x20, 0x03, 0x28, 0x0b, 0x32, 0x38, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
-	0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x75,
-	0x70, 0x70, 0x6c, 0x69, 0x65, 0x64, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x2e, 0x41,
-	0x74, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x65, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x52, 0x0a,
-	0x61, 0x74, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x65, 0x73, 0x12, 0x12, 0x0a, 0x04, 0x6d, 0x69,
-	0x73, 0x63, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x6d, 0x69, 0x73, 0x63, 0x1a, 0x3d,
-	0x0a, 0x0f, 0x41, 0x74, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x65, 0x73, 0x45, 0x6e, 0x74, 0x72,
-	0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03,
-	0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x42, 0x2d, 0x5a,
-	0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6f, 0x75, 0x72,
-	0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f,
-	0x72, 0x65, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x69, 0x6f, 0x6e, 0x54, 0x73, 0x12, 0x3f, 0x0a, 0x0d, 0x6c, 0x61, 0x73, 0x74, 0x5f, 0x6d, 0x6f,
+	0x64, 0x69, 0x66, 0x69, 0x65, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67,
+	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54,
+	0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x0c, 0x6c, 0x61, 0x73, 0x74, 0x4d, 0x6f,
+	0x64, 0x69, 0x66, 0x69, 0x65, 0x64, 0x12, 0x44, 0x0a, 0x08, 0x73, 0x75, 0x70, 0x70, 0x6c, 0x69,
+	0x65, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x28, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63,
+	0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72,
+	0x65, 0x2e, 0x53, 0x75, 0x70, 0x70, 0x6c, 0x69, 0x65, 0x64, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61,
+	0x74, 0x61, 0x52, 0x08, 0x73, 0x75, 0x70, 0x70, 0x6c, 0x69, 0x65, 0x64, 0x22, 0xbf, 0x01, 0x0a,
+	0x10, 0x53, 0x75, 0x70, 0x70, 0x6c, 0x69, 0x65, 0x64, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74,
+	0x61, 0x12, 0x58, 0x0a, 0x0a, 0x61, 0x74, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x65, 0x73, 0x18,
+	0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x38, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65,
+	0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53,
+	0x75, 0x70, 0x70, 0x6c, 0x69, 0x65, 0x64, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x2e,
+	0x41, 0x74, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x65, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x52,
+	0x0a, 0x61, 0x74, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x65, 0x73, 0x12, 0x12, 0x0a, 0x04, 0x62,
+	0x6c, 0x6f, 0x62, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x62, 0x6c, 0x6f, 0x62, 0x1a,
+	0x3d, 0x0a, 0x0f, 0x41, 0x74, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x65, 0x73, 0x45, 0x6e, 0x74,
+	0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x42, 0x2d,
+	0x5a, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6f, 0x75,
+	0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63,
+	0x6f, 0x72, 0x65, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62, 0x06, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1510,13 +1601,14 @@ var file_sourcenetwork_acp_core_metadata_proto_goTypes = []interface{}{
 var file_sourcenetwork_acp_core_metadata_proto_depIdxs = []int32{
 	3, // 0: sourcenetwork.acp_core.RecordMetadata.creator:type_name -> sourcenetwork.acp_core.Principal
 	4, // 1: sourcenetwork.acp_core.RecordMetadata.creation_ts:type_name -> google.protobuf.Timestamp
-	1, // 2: sourcenetwork.acp_core.RecordMetadata.supplied:type_name -> sourcenetwork.acp_core.SuppliedMetadata
-	2, // 3: sourcenetwork.acp_core.SuppliedMetadata.attributes:type_name -> sourcenetwork.acp_core.SuppliedMetadata.AttributesEntry
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	4, // 2: sourcenetwork.acp_core.RecordMetadata.last_modified:type_name -> google.protobuf.Timestamp
+	1, // 3: sourcenetwork.acp_core.RecordMetadata.supplied:type_name -> sourcenetwork.acp_core.SuppliedMetadata
+	2, // 4: sourcenetwork.acp_core.SuppliedMetadata.attributes:type_name -> sourcenetwork.acp_core.SuppliedMetadata.AttributesEntry
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_sourcenetwork_acp_core_metadata_proto_init() }
