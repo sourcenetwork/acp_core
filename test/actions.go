@@ -3,6 +3,7 @@ package test
 import (
 	"github.com/stretchr/testify/require"
 
+	prototypes "github.com/cosmos/gogoproto/types"
 	"github.com/sourcenetwork/acp_core/pkg/auth"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
@@ -147,18 +148,20 @@ func (a *TransferObjectAction) Run(ctx *TestCtx) *types.TransferObjectResponse {
 }
 
 type AmendRegistrationAction struct {
-	PolicyId    string
-	Object      *types.Object
-	NewOwner    string
-	Expected    *types.AmendRegistrationResponse
-	ExpectedErr error
+	PolicyId     string
+	Object       *types.Object
+	NewOwner     string
+	NewTimestamp *prototypes.Timestamp
+	Expected     *types.AmendRegistrationResponse
+	ExpectedErr  error
 }
 
 func (a *AmendRegistrationAction) Run(ctx *TestCtx) *types.AmendRegistrationResponse {
 	req := types.AmendRegistrationRequest{
-		PolicyId: a.PolicyId,
-		Object:   a.Object,
-		NewOwner: types.NewActor(a.NewOwner),
+		PolicyId:      a.PolicyId,
+		Object:        a.Object,
+		NewOwner:      types.NewActor(a.NewOwner),
+		NewCreationTs: a.NewTimestamp,
 	}
 	resp, err := ctx.Engine.AmendRegistration(ctx, &req)
 

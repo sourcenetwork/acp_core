@@ -290,7 +290,7 @@ message AmendRegistrationRequest {
   Object object = 2;
   Actor new_owner = 3;
   google.protobuf.Timestamp new_creation_ts = 4;
-  SuppliedMetadata new_supplied = 4;
+  SuppliedMetadata metadata = 5;
 }
 
 message AmendRegistrationResponse {

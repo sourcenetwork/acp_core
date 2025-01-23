@@ -346,7 +346,21 @@ func (h *AmendRegistrationHandler) Handle(ctx context.Context, runtime runtime.R
 		return nil, newAmendRegistrationErr(errors.Wrap("removing old relationship", err))
 	}
 
-	relRec.Metadata.Creator.Identifier = req.NewOwner.Id
+	principal, err := types.NewDIDPrincipal(req.NewOwner.Id)
+	if err != nil {
+		return nil, newAmendRegistrationErr(errors.Wrap("invalid new actor id", err))
+	}
+	now, err := runtime.GetTimeService().GetNow(ctx)
+	if err != nil {
+		return nil, newAmendRegistrationErr(err)
+	}
+
+	relRec.Metadata = &types.RecordMetadata{
+		Creator:      &principal,
+		CreationTs:   req.NewCreationTs,
+		LastModified: now,
+		Supplied:     req.Metadata,
+	}
 	relRec.Relationship.Subject = &types.Subject{
 		Subject: &types.Subject_Actor{
 			Actor: req.NewOwner,
@@ -395,6 +409,10 @@ func (h *AmendRegistrationHandler) verifyPreconditions(ctx context.Context, engi
 			errors.Pair("object", req.Object.Id),
 		)
 
+	}
+
+	if req.NewCreationTs == nil {
+		return nil, nil, errors.Wrap("new timestamp required", errors.ErrorType_BAD_INPUT)
 	}
 
 	return polRec.Policy, relRec, nil
