@@ -44,7 +44,7 @@ func (c *RegisterObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 		return nil, err
 	}
 	if rec == nil {
-		return nil, newRegisterObjectErr(errors.NewPolicyNotFound(cmd.PolicyId))
+		return nil, newRegisterObjectErr(errors.ErrPolicyNotFound(cmd.PolicyId))
 	}
 	pol := rec.Policy
 
@@ -138,7 +138,7 @@ func (c *ArchiveObjectHandler) Execute(ctx context.Context, runtime runtime.Runt
 		return nil, newArchiveObjectErr(err)
 	}
 	if rec == nil {
-		return nil, newArchiveObjectErr(errors.NewPolicyNotFound(cmd.PolicyId))
+		return nil, newArchiveObjectErr(errors.ErrPolicyNotFound(cmd.PolicyId))
 	}
 	pol := rec.Policy
 
@@ -257,7 +257,7 @@ func (h *TransferObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 		return nil, newTransferObjectErr(err)
 	}
 	if rec == nil {
-		return nil, newTransferObjectErr(errors.NewPolicyNotFound(cmd.PolicyId))
+		return nil, newTransferObjectErr(errors.ErrPolicyNotFound(cmd.PolicyId))
 	}
 	pol := rec.Policy
 
@@ -369,7 +369,7 @@ func (h *AmendRegistrationHandler) verifyPreconditions(ctx context.Context, engi
 		return nil, nil, err
 	}
 	if polRec == nil {
-		return nil, nil, errors.NewPolicyNotFound(req.PolicyId)
+		return nil, nil, errors.ErrPolicyNotFound(req.PolicyId)
 	}
 
 	err = did.IsValidDID(req.NewOwner.Id)
@@ -413,7 +413,7 @@ func (h *UnarchiveObjectHandler) Handle(ctx context.Context, runtime runtime.Run
 		return nil, err
 	}
 	if rec == nil {
-		return nil, newRegisterObjectErr(errors.NewPolicyNotFound(cmd.PolicyId))
+		return nil, newRegisterObjectErr(errors.ErrPolicyNotFound(cmd.PolicyId))
 	}
 	pol := rec.Policy
 

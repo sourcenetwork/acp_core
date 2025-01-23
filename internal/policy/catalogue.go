@@ -19,7 +19,7 @@ func BuildCatalogue(ctx context.Context, engine *zanzi.Adapter, polId string) (*
 		return nil, errors.Wrap("fetching policy", err, errors.Pair("policy_id", polId))
 	}
 	if rec == nil {
-		return nil, errors.NewPolicyNotFound(polId)
+		return nil, errors.ErrPolicyNotFound(polId)
 	}
 
 	actorSet := make(map[string]struct{})

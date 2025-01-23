@@ -34,7 +34,7 @@ func (c *SetRelationshipHandler) Execute(ctx context.Context, runtime runtime.Ru
 		return nil, newSetRelationshipErr(err)
 	}
 	if rec == nil {
-		return nil, newSetRelationshipErr(errors.NewPolicyNotFound(cmd.PolicyId))
+		return nil, newSetRelationshipErr(errors.ErrPolicyNotFound(cmd.PolicyId))
 	}
 	policy := rec.Policy
 
@@ -152,7 +152,7 @@ func (c *DeleteRelationshipHandler) Execute(ctx context.Context, runtime runtime
 		return nil, newDeleteRelationshipErr(err)
 	}
 	if rec == nil {
-		return nil, newDeleteRelationshipErr(errors.NewPolicyNotFound(cmd.PolicyId))
+		return nil, newDeleteRelationshipErr(errors.ErrPolicyNotFound(cmd.PolicyId))
 	}
 	policy := rec.Policy
 

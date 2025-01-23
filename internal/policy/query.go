@@ -22,7 +22,7 @@ func HandleGetPolicy(ctx context.Context, runtime runtime.RuntimeManager, req *t
 		return nil, err
 	}
 	if rec == nil {
-		return nil, errors.NewPolicyNotFound(req.Id)
+		return nil, errors.ErrPolicyNotFound(req.Id)
 	}
 
 	return &types.GetPolicyResponse{

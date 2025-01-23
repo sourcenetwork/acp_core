@@ -16,7 +16,7 @@ var (
 	ErrInvalidRelationship = New("relationship", ErrorType_BAD_INPUT)
 )
 
-func NewPolicyNotFound(policyID string) error {
+func ErrPolicyNotFound(policyID string) error {
 	return New("policy not found", ErrorType_NOT_FOUND, Pair("policy", policyID))
 }
 
