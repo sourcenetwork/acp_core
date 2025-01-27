@@ -209,3 +209,32 @@ func (a *PolicySetupAction) Run(ctx *TestCtx) {
 		relsAction.Run(ctx)
 	}
 }
+
+type RevealRegistrationAction struct {
+	PolicyId    string
+	Object      *types.Object
+	Ts          *prototypes.Timestamp
+	Metadata    *types.SuppliedMetadata
+	Expected    *types.RelationshipRecord
+	ExpectedErr error
+}
+
+func (a *RevealRegistrationAction) Run(ctx *TestCtx) *types.RevealRegistrationResponse {
+	req := types.RevealRegistrationRequest{
+		PolicyId:   a.PolicyId,
+		Object:     a.Object,
+		CreationTs: a.Ts,
+		Metadata:   a.Metadata,
+	}
+	resp, err := ctx.Engine.RevealRegistration(ctx, &req)
+
+	if a.ExpectedErr != nil {
+		require.ErrorIs(ctx.T, err, a.ExpectedErr)
+	} else {
+		require.NoError(ctx.T, err)
+		if a.Expected != nil {
+			require.Equal(ctx.T, a.Expected, resp.Record)
+		}
+	}
+	return resp
+}

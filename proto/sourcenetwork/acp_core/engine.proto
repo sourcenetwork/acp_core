@@ -97,6 +97,11 @@ service ACPEngine {
   // Amending the registration of an archived or unregistered object is an error.
   rpc AmendRegistration(AmendRegistrationRequest) returns (AmendRegistrationResponse);
 
+  // RevealRegistration registers an object at a specific time stamp.
+  //
+  // This command can be paired with an external commitment protocol to reserve an object without exposing it.
+  rpc RevealRegistration(RevealRegistrationRequest) returns (RevealRegistrationResponse);
+
   // EvaluateTheorem executes the given theorem against a stored policy.
   //
   // Returns an error if the policy does not exist.
@@ -248,7 +253,9 @@ message SetParamsRequest {
   sourcenetwork.acp_core.Params params = 1;
 }
 
-message SetParamsResponse {}
+message SetParamsResponse {
+  sourcenetwork.acp_core.Params params = 1;
+}
 
 message GetParamsRequest {}
 
@@ -305,4 +312,15 @@ message UnarchiveObjectRequest {
 message UnarchiveObjectResponse {
   RelationshipRecord record = 1;
   bool record_modified = 2;
+}
+
+message RevealRegistrationRequest {
+  string policy_id = 1;
+  Object object = 2;
+  google.protobuf.Timestamp creation_ts = 4;
+  SuppliedMetadata metadata = 5;
+}
+
+message RevealRegistrationResponse {
+  RelationshipRecord record = 1;
 }

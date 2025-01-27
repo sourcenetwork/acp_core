@@ -53,8 +53,6 @@ func (c *RegisterObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 		return nil, newRegisterObjectErr(err)
 	}
 
-	err = nil
-
 	record, err := queryOwnerRelationship(ctx, engine, pol, registration.Object)
 	if err != nil {
 		return nil, newRegisterObjectErr(err)
@@ -494,4 +492,105 @@ func (h *UnarchiveObjectHandler) Handle(ctx context.Context, runtime runtime.Run
 		Record:         ownerRecord,
 		RecordModified: true,
 	}, nil
+}
+
+// RegisterObjectHandler creates an "owner" Relationship for the given object and subject,
+// if the object does not have a previous owner.
+// Uses the provided timestamp as the time of creation
+type RevealRegistrationHandler struct{}
+
+func (c *RevealRegistrationHandler) Execute(ctx context.Context, runtime runtime.RuntimeManager, cmd *types.RevealRegistrationRequest) (*types.RevealRegistrationResponse, error) {
+	err := c.validate(cmd)
+	if err != nil {
+		return nil, newRevealRegistrationErr(err)
+	}
+
+	engine, err := zanzi.NewZanzi(runtime.GetKVStore(), runtime.GetLogger())
+	if err != nil {
+		return nil, newRevealRegistrationErr(err)
+	}
+
+	principal, err := auth.ExtractPrincipalWithType(ctx, types.PrincipalKind_DID)
+	if err != nil {
+		return nil, newRevealRegistrationErr(err)
+	}
+
+	rec, err := engine.GetPolicy(ctx, cmd.PolicyId)
+	if err != nil {
+		return nil, err
+	}
+	if rec == nil {
+		return nil, newRevealRegistrationErr(errors.ErrPolicyNotFound(cmd.PolicyId))
+	}
+	pol := rec.Policy
+
+	registration := &types.Registration{
+		Object: cmd.Object,
+		Actor: &types.Actor{
+			Id: principal.Identifier,
+		},
+	}
+
+	registrationRecord, err := queryOwnerRelationship(ctx, engine, pol, registration.Object)
+	if err != nil {
+		return nil, newRevealRegistrationErr(err)
+	}
+	if registrationRecord != nil {
+		return nil, newRevealRegistrationErr(errors.Wrap("object already registered", errors.ErrorType_OPERATION_FORBIDDEN,
+			errors.Pair("policy", cmd.PolicyId),
+			errors.Pair("resource", cmd.Object.Resource),
+			errors.Pair("id", cmd.Object.Id),
+		))
+	}
+
+	now, err := runtime.GetTimeService().GetNow(ctx)
+	if err != nil {
+		return nil, newRegisterObjectErr(err)
+	}
+
+	record := &types.RelationshipRecord{
+		Relationship: &types.Relationship{
+			Object:   registration.Object,
+			Relation: policy.OwnerRelation,
+			Subject: &types.Subject{
+				Subject: &types.Subject_Actor{
+					Actor: registration.Actor,
+				},
+			},
+		},
+		Metadata: &types.RecordMetadata{
+			Creator:      &principal,
+			CreationTs:   cmd.CreationTs,
+			Supplied:     cmd.Metadata,
+			LastModified: now,
+		},
+		PolicyId: pol.Id,
+		Archived: false,
+	}
+	_, err = engine.SetRelationship(ctx, pol, record)
+	if err != nil {
+		return nil, newRevealRegistrationErr(err)
+	}
+
+	runtime.GetEventManager().EmitEvent(&types.EventObjectRegistered{
+		Actor:          registration.Actor.Id,
+		PolicyId:       pol.Id,
+		ObjectResource: registration.Object.Resource,
+		ObjectId:       registration.Object.Id,
+	})
+
+	return &types.RevealRegistrationResponse{
+		Record: record,
+	}, nil
+}
+
+// validates the command input params
+func (c *RevealRegistrationHandler) validate(cmd *types.RevealRegistrationRequest) error {
+	if err := ObjectSpec(cmd.Object); err != nil {
+		return err
+	}
+	if cmd.CreationTs == nil {
+		return errors.Wrap("creation ts required", errors.ErrorType_BAD_INPUT)
+	}
+	return nil
 }
