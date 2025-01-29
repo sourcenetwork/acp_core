@@ -9,7 +9,6 @@ import (
 	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/types"
-	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
 
 func HandleGetPolicy(ctx context.Context, runtime runtime.RuntimeManager, req *types.GetPolicyRequest) (*types.GetPolicyResponse, error) {
@@ -23,13 +22,11 @@ func HandleGetPolicy(ctx context.Context, runtime runtime.RuntimeManager, req *t
 		return nil, err
 	}
 	if rec == nil {
-		return nil, errors.NewPolicyNotFound(req.Id)
+		return nil, errors.ErrPolicyNotFound(req.Id)
 	}
 
 	return &types.GetPolicyResponse{
-		Policy:      rec.Policy,
-		PolicyRaw:   rec.PolicyDefinition,
-		MarshalType: rec.MarshalType,
+		Record: rec,
 	}, nil
 }
 
@@ -44,10 +41,8 @@ func ListPolicies(ctx context.Context, runtime runtime.RuntimeManager, req *type
 		return nil, err
 	}
 
-	policies := utils.MapSlice(records, func(rec *types.PolicyRecord) *types.Policy { return rec.Policy })
-
 	return &types.ListPoliciesResponse{
-		Policies: policies,
+		Records: records,
 	}, nil
 }
 
@@ -69,7 +64,7 @@ func ValidatePolicy(ctx context.Context, runtime runtime.RuntimeManager, req *ty
 	}
 
 	factory := factory{}
-	record, _ := factory.Create(ir, nil, 0, nil)
+	record, _ := factory.Create(ir, 0, nil)
 
 	spec := validPolicySpec{}
 	err = spec.Satisfies(record.Policy)

@@ -38,20 +38,25 @@ func TestRegisterObject_RegisteringNewObjectIsSucessful(t *testing.T) {
 	bob := ctx.Actors.DID("bob")
 
 	req := types.RegisterObjectRequest{
-		PolicyId:   ctx.State.PolicyId,
-		Object:     types.NewObject("resource", "foo"),
-		Attributes: attributes,
+		PolicyId: ctx.State.PolicyId,
+		Object:   types.NewObject("resource", "foo"),
+		Metadata: metadata,
 	}
 	resp, err := ctx.Engine.RegisterObject(ctx, &req)
 
 	want := &types.RegisterObjectResponse{
 		Record: &types.RelationshipRecord{
 			PolicyId:     ctx.State.PolicyId,
-			OwnerDid:     bob,
 			Relationship: types.NewActorRelationship("resource", "foo", "owner", bob),
 			Archived:     false,
-			CreationTime: ctx.Time,
-			Metadata:     attributes,
+			Metadata: &types.RecordMetadata{
+				Creator: &types.Principal{
+					Identifier: bob,
+					Kind:       types.PrincipalKind_DID,
+				},
+				CreationTs: ctx.Time,
+				Supplied:   metadata,
+			},
 		},
 	}
 	require.NoError(t, err)

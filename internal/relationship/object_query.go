@@ -20,7 +20,7 @@ func GetObjectRegistrationHandler(ctx context.Context, runtime runtime.RuntimeMa
 		return nil, newGetObjectRegistrationErr(err)
 	}
 	if rec == nil {
-		return nil, newGetObjectRegistrationErr(errors.NewPolicyNotFound(req.PolicyId))
+		return nil, newGetObjectRegistrationErr(errors.ErrPolicyNotFound(req.PolicyId))
 	}
 
 	record, err := queryOwnerRelationship(ctx, engine, rec.Policy, req.Object)

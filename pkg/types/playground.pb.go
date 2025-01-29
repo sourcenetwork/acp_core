@@ -27,6 +27,34 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+type SerializationEncoding int32
+
+const (
+	SerializationEncoding_UNKNOWN_ENCODING SerializationEncoding = 0
+	SerializationEncoding_BASE64           SerializationEncoding = 1
+	SerializationEncoding_BYTES            SerializationEncoding = 2
+)
+
+var SerializationEncoding_name = map[int32]string{
+	0: "UNKNOWN_ENCODING",
+	1: "BASE64",
+	2: "BYTES",
+}
+
+var SerializationEncoding_value = map[string]int32{
+	"UNKNOWN_ENCODING": 0,
+	"BASE64":           1,
+	"BYTES":            2,
+}
+
+func (x SerializationEncoding) String() string {
+	return proto.EnumName(SerializationEncoding_name, int32(x))
+}
+
+func (SerializationEncoding) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_066f4376ca35c9d5, []int{0}
+}
+
 type NewSandboxRequest struct {
 	// user defined name for the sandbox
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
@@ -801,7 +829,301 @@ func (m *GetSandboxResponse) GetRecord() *SandboxRecord {
 	return nil
 }
 
+type GetSampleSandboxesRequest struct {
+}
+
+func (m *GetSampleSandboxesRequest) Reset()         { *m = GetSampleSandboxesRequest{} }
+func (m *GetSampleSandboxesRequest) String() string { return proto.CompactTextString(m) }
+func (*GetSampleSandboxesRequest) ProtoMessage()    {}
+func (*GetSampleSandboxesRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_066f4376ca35c9d5, []int{16}
+}
+func (m *GetSampleSandboxesRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSampleSandboxesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetSampleSandboxesRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetSampleSandboxesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSampleSandboxesRequest.Merge(m, src)
+}
+func (m *GetSampleSandboxesRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSampleSandboxesRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSampleSandboxesRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSampleSandboxesRequest proto.InternalMessageInfo
+
+type GetSampleSandboxesResponse struct {
+}
+
+func (m *GetSampleSandboxesResponse) Reset()         { *m = GetSampleSandboxesResponse{} }
+func (m *GetSampleSandboxesResponse) String() string { return proto.CompactTextString(m) }
+func (*GetSampleSandboxesResponse) ProtoMessage()    {}
+func (*GetSampleSandboxesResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_066f4376ca35c9d5, []int{17}
+}
+func (m *GetSampleSandboxesResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSampleSandboxesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetSampleSandboxesResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetSampleSandboxesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSampleSandboxesResponse.Merge(m, src)
+}
+func (m *GetSampleSandboxesResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSampleSandboxesResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSampleSandboxesResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSampleSandboxesResponse proto.InternalMessageInfo
+
+type SetSerializedStateRequest struct {
+	// handle to an existing sandbox
+	Handle   uint64                `protobuf:"varint,1,opt,name=handle,proto3" json:"handle,omitempty"`
+	Encoding SerializationEncoding `protobuf:"varint,2,opt,name=encoding,proto3,enum=sourcenetwork.acp_core.SerializationEncoding" json:"encoding,omitempty"`
+	Data     []byte                `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+}
+
+func (m *SetSerializedStateRequest) Reset()         { *m = SetSerializedStateRequest{} }
+func (m *SetSerializedStateRequest) String() string { return proto.CompactTextString(m) }
+func (*SetSerializedStateRequest) ProtoMessage()    {}
+func (*SetSerializedStateRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_066f4376ca35c9d5, []int{18}
+}
+func (m *SetSerializedStateRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SetSerializedStateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_SetSerializedStateRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *SetSerializedStateRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetSerializedStateRequest.Merge(m, src)
+}
+func (m *SetSerializedStateRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *SetSerializedStateRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_SetSerializedStateRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SetSerializedStateRequest proto.InternalMessageInfo
+
+func (m *SetSerializedStateRequest) GetHandle() uint64 {
+	if m != nil {
+		return m.Handle
+	}
+	return 0
+}
+
+func (m *SetSerializedStateRequest) GetEncoding() SerializationEncoding {
+	if m != nil {
+		return m.Encoding
+	}
+	return SerializationEncoding_UNKNOWN_ENCODING
+}
+
+func (m *SetSerializedStateRequest) GetData() []byte {
+	if m != nil {
+		return m.Data
+	}
+	return nil
+}
+
+type SetSerializedStateResponse struct {
+	// ok indicates the state updated sucessfuly
+	Ok bool `protobuf:"varint,1,opt,name=ok,proto3" json:"ok,omitempty"`
+	// errors represent all recoverable errors found while parsing and setting the sandbox state
+	Errors *SandboxDataErrors `protobuf:"bytes,2,opt,name=errors,proto3" json:"errors,omitempty"`
+	// record contains a representation of the sandbox's new internal state
+	Record *SandboxRecord `protobuf:"bytes,3,opt,name=record,proto3" json:"record,omitempty"`
+}
+
+func (m *SetSerializedStateResponse) Reset()         { *m = SetSerializedStateResponse{} }
+func (m *SetSerializedStateResponse) String() string { return proto.CompactTextString(m) }
+func (*SetSerializedStateResponse) ProtoMessage()    {}
+func (*SetSerializedStateResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_066f4376ca35c9d5, []int{19}
+}
+func (m *SetSerializedStateResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SetSerializedStateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_SetSerializedStateResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *SetSerializedStateResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetSerializedStateResponse.Merge(m, src)
+}
+func (m *SetSerializedStateResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *SetSerializedStateResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_SetSerializedStateResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SetSerializedStateResponse proto.InternalMessageInfo
+
+func (m *SetSerializedStateResponse) GetOk() bool {
+	if m != nil {
+		return m.Ok
+	}
+	return false
+}
+
+func (m *SetSerializedStateResponse) GetErrors() *SandboxDataErrors {
+	if m != nil {
+		return m.Errors
+	}
+	return nil
+}
+
+func (m *SetSerializedStateResponse) GetRecord() *SandboxRecord {
+	if m != nil {
+		return m.Record
+	}
+	return nil
+}
+
+type GetSerializedStateRequest struct {
+	// handle to an existing sandbox
+	Handle   uint64                `protobuf:"varint,1,opt,name=handle,proto3" json:"handle,omitempty"`
+	Encoding SerializationEncoding `protobuf:"varint,2,opt,name=encoding,proto3,enum=sourcenetwork.acp_core.SerializationEncoding" json:"encoding,omitempty"`
+}
+
+func (m *GetSerializedStateRequest) Reset()         { *m = GetSerializedStateRequest{} }
+func (m *GetSerializedStateRequest) String() string { return proto.CompactTextString(m) }
+func (*GetSerializedStateRequest) ProtoMessage()    {}
+func (*GetSerializedStateRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_066f4376ca35c9d5, []int{20}
+}
+func (m *GetSerializedStateRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSerializedStateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetSerializedStateRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetSerializedStateRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSerializedStateRequest.Merge(m, src)
+}
+func (m *GetSerializedStateRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSerializedStateRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSerializedStateRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSerializedStateRequest proto.InternalMessageInfo
+
+func (m *GetSerializedStateRequest) GetHandle() uint64 {
+	if m != nil {
+		return m.Handle
+	}
+	return 0
+}
+
+func (m *GetSerializedStateRequest) GetEncoding() SerializationEncoding {
+	if m != nil {
+		return m.Encoding
+	}
+	return SerializationEncoding_UNKNOWN_ENCODING
+}
+
+type GetSerializedStateResponse struct {
+	Data []byte `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+}
+
+func (m *GetSerializedStateResponse) Reset()         { *m = GetSerializedStateResponse{} }
+func (m *GetSerializedStateResponse) String() string { return proto.CompactTextString(m) }
+func (*GetSerializedStateResponse) ProtoMessage()    {}
+func (*GetSerializedStateResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_066f4376ca35c9d5, []int{21}
+}
+func (m *GetSerializedStateResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSerializedStateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetSerializedStateResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetSerializedStateResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSerializedStateResponse.Merge(m, src)
+}
+func (m *GetSerializedStateResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSerializedStateResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSerializedStateResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSerializedStateResponse proto.InternalMessageInfo
+
+func (m *GetSerializedStateResponse) GetData() []byte {
+	if m != nil {
+		return m.Data
+	}
+	return nil
+}
+
 func init() {
+	proto.RegisterEnum("sourcenetwork.acp_core.SerializationEncoding", SerializationEncoding_name, SerializationEncoding_value)
 	proto.RegisterType((*NewSandboxRequest)(nil), "sourcenetwork.acp_core.NewSandboxRequest")
 	proto.RegisterType((*NewSandboxResponse)(nil), "sourcenetwork.acp_core.NewSandboxResponse")
 	proto.RegisterType((*SetStateRequest)(nil), "sourcenetwork.acp_core.SetStateRequest")
@@ -818,6 +1140,12 @@ func init() {
 	proto.RegisterType((*SimulateReponse)(nil), "sourcenetwork.acp_core.SimulateReponse")
 	proto.RegisterType((*GetSandboxRequest)(nil), "sourcenetwork.acp_core.GetSandboxRequest")
 	proto.RegisterType((*GetSandboxResponse)(nil), "sourcenetwork.acp_core.GetSandboxResponse")
+	proto.RegisterType((*GetSampleSandboxesRequest)(nil), "sourcenetwork.acp_core.GetSampleSandboxesRequest")
+	proto.RegisterType((*GetSampleSandboxesResponse)(nil), "sourcenetwork.acp_core.GetSampleSandboxesResponse")
+	proto.RegisterType((*SetSerializedStateRequest)(nil), "sourcenetwork.acp_core.SetSerializedStateRequest")
+	proto.RegisterType((*SetSerializedStateResponse)(nil), "sourcenetwork.acp_core.SetSerializedStateResponse")
+	proto.RegisterType((*GetSerializedStateRequest)(nil), "sourcenetwork.acp_core.GetSerializedStateRequest")
+	proto.RegisterType((*GetSerializedStateResponse)(nil), "sourcenetwork.acp_core.GetSerializedStateResponse")
 }
 
 func init() {
@@ -825,53 +1153,62 @@ func init() {
 }
 
 var fileDescriptor_066f4376ca35c9d5 = []byte{
-	// 727 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x56, 0x4d, 0x6f, 0xd3, 0x4a,
-	0x14, 0xad, 0xd3, 0x28, 0x2f, 0xbd, 0x7d, 0xaf, 0x7d, 0x99, 0xd7, 0x46, 0x79, 0x96, 0x88, 0x2a,
-	0xf3, 0xd1, 0x42, 0xdb, 0x04, 0x02, 0x12, 0x2b, 0x84, 0x4a, 0xa9, 0x2a, 0x50, 0x85, 0x2a, 0x1b,
-	0x21, 0x84, 0xa8, 0xca, 0xc4, 0x9e, 0x26, 0x56, 0x1c, 0x8f, 0x99, 0x19, 0xb7, 0xcd, 0x8e, 0x9f,
-	0xc0, 0x8f, 0xe0, 0xc7, 0xb0, 0xec, 0x92, 0x15, 0x42, 0xed, 0x1f, 0x41, 0xb1, 0xc7, 0x89, 0x93,
-	0x66, 0x88, 0x8b, 0x2a, 0xb1, 0x6b, 0x27, 0xe7, 0x9c, 0x7b, 0x7c, 0xe7, 0xdc, 0x6b, 0xc3, 0x2a,
-	0xa7, 0x21, 0xb3, 0x89, 0x4f, 0xc4, 0x09, 0x65, 0x9d, 0x3a, 0xb6, 0x83, 0x43, 0x9b, 0x32, 0x52,
-	0x0f, 0x3c, 0xdc, 0x6b, 0x31, 0x1a, 0xfa, 0x4e, 0x2d, 0x60, 0x54, 0x50, 0x54, 0x1e, 0x01, 0xd6,
-	0x12, 0xa0, 0x7e, 0x47, 0x21, 0x60, 0x63, 0x81, 0x3d, 0xda, 0x0a, 0x49, 0xcc, 0xd7, 0x6f, 0x29,
-	0x70, 0x1c, 0xfb, 0x4e, 0x93, 0x9e, 0x4e, 0x41, 0x89, 0x36, 0xa1, 0x8c, 0x74, 0x63, 0x94, 0xf1,
-	0x02, 0x4a, 0xaf, 0xc8, 0x89, 0x15, 0x33, 0x4d, 0xf2, 0x31, 0x24, 0x5c, 0x20, 0x04, 0x79, 0x1f,
-	0x77, 0x49, 0x45, 0x5b, 0xd1, 0xd6, 0xe6, 0xcc, 0xe8, 0x6f, 0xb4, 0x02, 0xf3, 0x0e, 0xe1, 0x36,
-	0x73, 0x03, 0xe1, 0x52, 0xbf, 0x92, 0x8b, 0x7e, 0x4a, 0x1f, 0x19, 0x16, 0xa0, 0xb4, 0x14, 0x0f,
-	0xa8, 0xcf, 0x09, 0x7a, 0x02, 0x05, 0x46, 0x6c, 0xca, 0x9c, 0x48, 0x6d, 0xbe, 0x71, 0xbb, 0x36,
-	0xf9, 0xe9, 0x6b, 0x03, 0x62, 0x1f, 0x6c, 0x4a, 0x92, 0xd1, 0x84, 0x45, 0x8b, 0x08, 0x4b, 0x60,
-	0x41, 0x12, 0x77, 0x65, 0x28, 0xb4, 0xb1, 0xef, 0x78, 0xb1, 0xbf, 0xbc, 0x29, 0xff, 0x43, 0x8f,
-	0x21, 0xef, 0x60, 0x81, 0x23, 0x6b, 0xf3, 0x8d, 0x9b, 0x53, 0xea, 0x3c, 0xc7, 0x02, 0x9b, 0x11,
-	0xc1, 0xf8, 0xa2, 0xc1, 0xbf, 0xc3, 0x22, 0xd2, 0xf7, 0x02, 0xe4, 0x68, 0x27, 0xaa, 0x50, 0x34,
-	0x73, 0xb4, 0x83, 0xb6, 0xa0, 0x40, 0x18, 0xa3, 0x8c, 0x4b, 0xfd, 0xbb, 0x19, 0xf4, 0x77, 0x22,
-	0x82, 0x29, 0x89, 0xa9, 0x56, 0xcc, 0xfe, 0x4e, 0x2b, 0x36, 0xe1, 0xbf, 0x5d, 0x22, 0xb6, 0x93,
-	0x30, 0x4c, 0x69, 0x87, 0x71, 0x00, 0x4b, 0xa3, 0x70, 0xf9, 0x60, 0x3b, 0x30, 0x37, 0x08, 0x94,
-	0xbc, 0x93, 0x55, 0x95, 0x91, 0x7d, 0xea, 0xb9, 0x76, 0x6f, 0xa8, 0x31, 0x64, 0x1a, 0x75, 0x58,
-	0x7e, 0x43, 0x98, 0x7b, 0xd4, 0x7b, 0x1d, 0xe7, 0x89, 0x4f, 0xf3, 0x73, 0x04, 0xe5, 0x71, 0x82,
-	0x74, 0xb4, 0xd7, 0xef, 0x0b, 0x0f, 0x3d, 0x21, 0xed, 0x3c, 0x52, 0xd9, 0xd9, 0xf2, 0x7d, 0xda,
-	0xbf, 0x24, 0x27, 0xf6, 0x25, 0x85, 0xcc, 0x88, 0x6b, 0x4a, 0x0d, 0xa3, 0x0c, 0x4b, 0x7b, 0x2e,
-	0x17, 0xb2, 0x87, 0x24, 0xf1, 0x65, 0xbc, 0x85, 0xe5, 0xb1, 0x73, 0x59, 0xfe, 0x29, 0xfc, 0x15,
-	0x77, 0x98, 0x57, 0xb4, 0x95, 0xd9, 0xec, 0xf7, 0x92, 0xb0, 0x8c, 0x06, 0x54, 0x4c, 0xc2, 0x05,
-	0x65, 0xc4, 0xb2, 0x19, 0x16, 0x76, 0x3b, 0xc0, 0xce, 0xb4, 0x6e, 0x7c, 0x80, 0xff, 0x27, 0x70,
-	0xa4, 0xa3, 0x6d, 0x00, 0x3e, 0x38, 0x95, 0x4d, 0xc9, 0x94, 0xe7, 0x14, 0xcd, 0x78, 0x09, 0x8b,
-	0x96, 0xdb, 0x0d, 0xbd, 0xd4, 0xe4, 0x24, 0x13, 0xa2, 0x5d, 0x75, 0x42, 0x3e, 0xe5, 0xd2, 0x62,
-	0xb1, 0xc9, 0x1b, 0x00, 0xc7, 0xd8, 0x73, 0x9d, 0xc3, 0x81, 0x64, 0xd1, 0x9c, 0x8b, 0x4e, 0xfa,
-	0xc4, 0x3f, 0x3f, 0x2f, 0xa9, 0x58, 0xe5, 0xaf, 0x21, 0x56, 0xeb, 0x50, 0xda, 0x25, 0x62, 0x6c,
-	0x51, 0xaa, 0x6e, 0xd7, 0x02, 0x94, 0x06, 0x5f, 0xcb, 0x2a, 0x6c, 0x7c, 0x2f, 0x40, 0x69, 0x7f,
-	0xf0, 0x2e, 0xb1, 0x08, 0x3b, 0x76, 0x6d, 0x82, 0x6c, 0x80, 0xe1, 0xd6, 0x45, 0xca, 0x2e, 0x5f,
-	0x5a, 0xf2, 0xfa, 0xbd, 0x2c, 0x50, 0xe9, 0xdc, 0x83, 0x7f, 0x46, 0x66, 0x07, 0x6d, 0xa8, 0xc8,
-	0x93, 0x46, 0x4f, 0xdf, 0xcc, 0x88, 0x96, 0xd5, 0x0e, 0xa0, 0x98, 0xac, 0x63, 0xa4, 0x5c, 0x4d,
-	0x63, 0x6f, 0x05, 0x7d, 0x6d, 0x3a, 0x50, 0xca, 0x9f, 0x42, 0xe9, 0xd2, 0xe8, 0xa1, 0xfb, 0x2a,
-	0xba, 0x6a, 0xb2, 0xf5, 0x07, 0x57, 0x60, 0xc8, 0xca, 0x2e, 0xfc, 0x9d, 0x5e, 0xc9, 0x68, 0x5d,
-	0x25, 0x31, 0x61, 0xcf, 0xeb, 0x1b, 0xd9, 0xc0, 0xb2, 0x94, 0x0d, 0x30, 0x4c, 0xa0, 0x3a, 0x16,
-	0x97, 0x22, 0xad, 0x8e, 0xc5, 0x84, 0x40, 0x53, 0x58, 0x18, 0x5d, 0xe9, 0x48, 0x79, 0xd3, 0x13,
-	0xdf, 0x15, 0x7a, 0x2d, 0x2b, 0x5c, 0x16, 0x7c, 0x0f, 0xc5, 0x64, 0x0d, 0xfd, 0x22, 0x19, 0xa3,
-	0x5b, 0x4f, 0xcf, 0x00, 0x8c, 0xd4, 0x9f, 0xed, 0x7c, 0x3d, 0xaf, 0x6a, 0x67, 0xe7, 0x55, 0xed,
-	0xc7, 0x79, 0x55, 0xfb, 0x7c, 0x51, 0x9d, 0x39, 0xbb, 0xa8, 0xce, 0x7c, 0xbb, 0xa8, 0xce, 0xbc,
-	0x5b, 0x6f, 0xb9, 0xa2, 0x1d, 0x36, 0x6b, 0x36, 0xed, 0xd6, 0x55, 0x5f, 0x79, 0x9d, 0x56, 0x5d,
-	0xf4, 0x02, 0xc2, 0x9b, 0x85, 0xe8, 0xcb, 0xea, 0xe1, 0xcf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x43,
-	0xd1, 0x14, 0xd6, 0x10, 0x0a, 0x00, 0x00,
+	// 880 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x57, 0xdd, 0x6e, 0xe3, 0x44,
+	0x14, 0x8e, 0xb3, 0x21, 0x24, 0xa7, 0x4b, 0x37, 0x19, 0xda, 0x28, 0x35, 0x10, 0x55, 0xe6, 0xa7,
+	0xcb, 0x76, 0x9b, 0x2c, 0x61, 0x05, 0x57, 0x08, 0xf5, 0x27, 0xaa, 0x0a, 0xab, 0xec, 0xca, 0x5e,
+	0x7e, 0xc5, 0xaa, 0x4c, 0xec, 0xd9, 0xc4, 0x8a, 0xe3, 0x31, 0xe3, 0x49, 0xdb, 0x70, 0x81, 0x78,
+	0x04, 0xc4, 0x33, 0x70, 0xcd, 0x73, 0x70, 0xd9, 0x4b, 0xae, 0x10, 0x6a, 0x5f, 0x04, 0xd9, 0x1e,
+	0x27, 0x4e, 0xe3, 0x21, 0x2e, 0xaa, 0x54, 0xee, 0x5a, 0xfb, 0xfb, 0xbe, 0xf3, 0xf9, 0x9c, 0x33,
+	0x67, 0x4e, 0x60, 0xcb, 0xa7, 0x63, 0x66, 0x12, 0x97, 0xf0, 0x53, 0xca, 0x86, 0x2d, 0x6c, 0x7a,
+	0xc7, 0x26, 0x65, 0xa4, 0xe5, 0x39, 0x78, 0xd2, 0x67, 0x74, 0xec, 0x5a, 0x4d, 0x8f, 0x51, 0x4e,
+	0x51, 0x6d, 0x0e, 0xd8, 0x8c, 0x81, 0xea, 0x7b, 0x12, 0x01, 0x13, 0x73, 0xec, 0xd0, 0xfe, 0x98,
+	0x44, 0x7c, 0xf5, 0x1d, 0x09, 0xce, 0xc7, 0xae, 0xd5, 0xa3, 0x67, 0x4b, 0x50, 0x7c, 0x40, 0x28,
+	0x23, 0xa3, 0x08, 0xa5, 0x1d, 0x41, 0xb5, 0x4b, 0x4e, 0x8d, 0x88, 0xa9, 0x93, 0x1f, 0xc6, 0xc4,
+	0xe7, 0x08, 0x41, 0xc1, 0xc5, 0x23, 0x52, 0x57, 0x36, 0x95, 0xfb, 0x65, 0x3d, 0xfc, 0x1b, 0x6d,
+	0xc2, 0x8a, 0x45, 0x7c, 0x93, 0xd9, 0x1e, 0xb7, 0xa9, 0x5b, 0xcf, 0x87, 0xaf, 0x92, 0x8f, 0x34,
+	0x03, 0x50, 0x52, 0xca, 0xf7, 0xa8, 0xeb, 0x13, 0xf4, 0x09, 0x14, 0x19, 0x31, 0x29, 0xb3, 0x42,
+	0xb5, 0x95, 0xf6, 0xbb, 0xcd, 0xf4, 0xaf, 0x6f, 0x4e, 0x89, 0x01, 0x58, 0x17, 0x24, 0xad, 0x07,
+	0xf7, 0x0c, 0xc2, 0x0d, 0x8e, 0x39, 0x89, 0xdd, 0xd5, 0xa0, 0x38, 0xc0, 0xae, 0xe5, 0x44, 0xfe,
+	0x0a, 0xba, 0xf8, 0x0f, 0x7d, 0x0c, 0x05, 0x0b, 0x73, 0x1c, 0x5a, 0x5b, 0x69, 0xbf, 0xbd, 0x24,
+	0xce, 0x01, 0xe6, 0x58, 0x0f, 0x09, 0xda, 0x6f, 0x0a, 0x54, 0x66, 0x41, 0x84, 0xef, 0x55, 0xc8,
+	0xd3, 0x61, 0x18, 0xa1, 0xa4, 0xe7, 0xe9, 0x10, 0xed, 0x42, 0x91, 0x30, 0x46, 0x99, 0x2f, 0xf4,
+	0xdf, 0xcf, 0xa0, 0xdf, 0x09, 0x09, 0xba, 0x20, 0x26, 0x52, 0x71, 0xe7, 0xbf, 0xa4, 0x62, 0x07,
+	0x5e, 0x3f, 0x24, 0x7c, 0x3f, 0x6e, 0x86, 0x25, 0xe9, 0xd0, 0x5e, 0xc0, 0xda, 0x3c, 0x5c, 0x7c,
+	0x58, 0x07, 0xca, 0xd3, 0x86, 0x12, 0x35, 0xd9, 0x92, 0x19, 0x79, 0x46, 0x1d, 0xdb, 0x9c, 0xcc,
+	0x34, 0x66, 0x4c, 0xad, 0x05, 0xeb, 0x5f, 0x12, 0x66, 0xbf, 0x9c, 0x3c, 0x8f, 0xfa, 0xc9, 0x5f,
+	0xe6, 0xe7, 0x25, 0xd4, 0xae, 0x12, 0x84, 0xa3, 0x27, 0x41, 0x5e, 0xfc, 0xb1, 0xc3, 0x85, 0x9d,
+	0xc7, 0x32, 0x3b, 0xbb, 0xae, 0x4b, 0x83, 0x22, 0x59, 0x91, 0x2f, 0x21, 0xa4, 0x87, 0x5c, 0x5d,
+	0x68, 0x68, 0x35, 0x58, 0x7b, 0x62, 0xfb, 0x5c, 0xe4, 0x90, 0xc4, 0xbe, 0xb4, 0xaf, 0x61, 0xfd,
+	0xca, 0x73, 0x11, 0xfe, 0x53, 0x78, 0x35, 0xca, 0xb0, 0x5f, 0x57, 0x36, 0xef, 0x64, 0xaf, 0x4b,
+	0xcc, 0xd2, 0xda, 0x50, 0xd7, 0x89, 0xcf, 0x29, 0x23, 0x86, 0xc9, 0x30, 0x37, 0x07, 0x1e, 0xb6,
+	0x96, 0x65, 0xe3, 0x7b, 0xd8, 0x48, 0xe1, 0x08, 0x47, 0xfb, 0x00, 0xfe, 0xf4, 0xa9, 0x48, 0x4a,
+	0xa6, 0x7e, 0x4e, 0xd0, 0xb4, 0xcf, 0xe0, 0x9e, 0x61, 0x8f, 0xc6, 0x4e, 0xe2, 0xe4, 0xc4, 0x27,
+	0x44, 0xb9, 0xee, 0x09, 0xf9, 0x39, 0x9f, 0x14, 0x8b, 0x4c, 0xbe, 0x05, 0x70, 0x82, 0x1d, 0xdb,
+	0x3a, 0x9e, 0x4a, 0x96, 0xf4, 0x72, 0xf8, 0x24, 0x20, 0xde, 0xfe, 0x79, 0x49, 0xb4, 0x55, 0xe1,
+	0x06, 0xda, 0x6a, 0x1b, 0xaa, 0x87, 0x84, 0x5f, 0x19, 0x94, 0xb2, 0xea, 0x1a, 0x80, 0x92, 0xe0,
+	0x9b, 0x19, 0x85, 0x6f, 0xc0, 0x46, 0x28, 0x3a, 0xf2, 0x1c, 0xb2, 0xd0, 0xdd, 0x6f, 0x82, 0x9a,
+	0xf6, 0x32, 0x8a, 0xac, 0xfd, 0xaa, 0xc0, 0x46, 0x30, 0xe1, 0x08, 0xb3, 0xb1, 0x63, 0xff, 0x48,
+	0xac, 0x4c, 0x03, 0xf5, 0x08, 0x4a, 0xc4, 0x35, 0xa9, 0x65, 0xbb, 0xfd, 0xb0, 0x88, 0xab, 0xed,
+	0x1d, 0xa9, 0x63, 0xa1, 0x8c, 0x83, 0x9b, 0xa0, 0x23, 0x48, 0xfa, 0x94, 0x1e, 0xdc, 0x28, 0x61,
+	0x9b, 0x04, 0x85, 0xbc, 0x2b, 0x9a, 0xea, 0x77, 0x05, 0xd4, 0x34, 0x53, 0xff, 0xdb, 0x01, 0xfc,
+	0x53, 0x54, 0x80, 0xdb, 0x4a, 0xa2, 0xf6, 0x28, 0xaa, 0xb1, 0x24, 0x5f, 0x28, 0x71, 0xb8, 0x45,
+	0x8a, 0x1f, 0x1c, 0xc0, 0x7a, 0xaa, 0x28, 0x5a, 0x83, 0xca, 0x17, 0xdd, 0xcf, 0xbb, 0x4f, 0xbf,
+	0xea, 0x1e, 0x77, 0xba, 0xfb, 0x4f, 0x0f, 0x8e, 0xba, 0x87, 0x95, 0x1c, 0x02, 0x28, 0xee, 0xed,
+	0x1a, 0x9d, 0x8f, 0x1e, 0x57, 0x14, 0x54, 0x86, 0x57, 0xf6, 0xbe, 0x79, 0xde, 0x31, 0x2a, 0xf9,
+	0xf6, 0x5f, 0x45, 0xa8, 0x3e, 0x9b, 0x2e, 0x31, 0x06, 0x61, 0x27, 0xb6, 0x49, 0x90, 0x09, 0x30,
+	0xbb, 0xee, 0x91, 0xb4, 0x1a, 0x0b, 0xdb, 0x85, 0xfa, 0x20, 0x0b, 0x54, 0x7c, 0x94, 0x03, 0xaf,
+	0xcd, 0x0d, 0x6d, 0xf4, 0x50, 0x46, 0x4e, 0x9b, 0xf9, 0xea, 0x4e, 0x46, 0xb4, 0x88, 0xf6, 0x02,
+	0x4a, 0xf1, 0x1e, 0x80, 0xb6, 0xe4, 0x55, 0x9a, 0x5b, 0x47, 0xd4, 0xfb, 0xcb, 0x81, 0x42, 0xfe,
+	0x0c, 0xaa, 0x0b, 0x33, 0x1f, 0x3d, 0x92, 0xd1, 0x65, 0x57, 0x8a, 0xfa, 0xc1, 0x35, 0x18, 0x22,
+	0xb2, 0x0d, 0x77, 0x93, 0xbb, 0x00, 0xda, 0x96, 0x49, 0xa4, 0x2c, 0x18, 0xea, 0xc3, 0x6c, 0x60,
+	0x11, 0xca, 0x04, 0x98, 0x8d, 0x3e, 0x79, 0x5b, 0x2c, 0xcc, 0x52, 0x79, 0x5b, 0xa4, 0x4c, 0x52,
+	0x0a, 0xab, 0xf3, 0xbb, 0x04, 0x92, 0x56, 0x3a, 0x75, 0x49, 0x51, 0x9b, 0x59, 0xe1, 0x22, 0xe0,
+	0x77, 0x50, 0x8a, 0xef, 0xbf, 0x7f, 0xe9, 0x8c, 0xf9, 0xeb, 0x56, 0xcd, 0x00, 0x0c, 0xd5, 0xf7,
+	0x3a, 0x7f, 0x5c, 0x34, 0x94, 0xf3, 0x8b, 0x86, 0xf2, 0xf7, 0x45, 0x43, 0xf9, 0xe5, 0xb2, 0x91,
+	0x3b, 0xbf, 0x6c, 0xe4, 0xfe, 0xbc, 0x6c, 0xe4, 0xbe, 0xdd, 0xee, 0xdb, 0x7c, 0x30, 0xee, 0x35,
+	0x4d, 0x3a, 0x6a, 0xc9, 0x7e, 0x5e, 0x0c, 0xfb, 0x2d, 0x3e, 0xf1, 0x88, 0xdf, 0x2b, 0x86, 0x2b,
+	0xfd, 0x87, 0xff, 0x04, 0x00, 0x00, 0xff, 0xff, 0xe2, 0x6f, 0x53, 0x10, 0x89, 0x0c, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1814,6 +2151,212 @@ func (m *GetSandboxResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *GetSampleSandboxesRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetSampleSandboxesRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSampleSandboxesRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *GetSampleSandboxesResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetSampleSandboxesResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSampleSandboxesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *SetSerializedStateRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SetSerializedStateRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SetSerializedStateRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Data) > 0 {
+		i -= len(m.Data)
+		copy(dAtA[i:], m.Data)
+		i = encodeVarintPlayground(dAtA, i, uint64(len(m.Data)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Encoding != 0 {
+		i = encodeVarintPlayground(dAtA, i, uint64(m.Encoding))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Handle != 0 {
+		i = encodeVarintPlayground(dAtA, i, uint64(m.Handle))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SetSerializedStateResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SetSerializedStateResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SetSerializedStateResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Record != nil {
+		{
+			size, err := m.Record.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPlayground(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Errors != nil {
+		{
+			size, err := m.Errors.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPlayground(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Ok {
+		i--
+		if m.Ok {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetSerializedStateRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetSerializedStateRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSerializedStateRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Encoding != 0 {
+		i = encodeVarintPlayground(dAtA, i, uint64(m.Encoding))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Handle != 0 {
+		i = encodeVarintPlayground(dAtA, i, uint64(m.Handle))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetSerializedStateResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetSerializedStateResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSerializedStateResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Data) > 0 {
+		i -= len(m.Data)
+		copy(dAtA[i:], m.Data)
+		i = encodeVarintPlayground(dAtA, i, uint64(len(m.Data)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintPlayground(dAtA []byte, offset int, v uint64) int {
 	offset -= sovPlayground(v)
 	base := offset
@@ -2047,6 +2590,91 @@ func (m *GetSandboxResponse) Size() (n int) {
 	_ = l
 	if m.Record != nil {
 		l = m.Record.Size()
+		n += 1 + l + sovPlayground(uint64(l))
+	}
+	return n
+}
+
+func (m *GetSampleSandboxesRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *GetSampleSandboxesResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *SetSerializedStateRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Handle != 0 {
+		n += 1 + sovPlayground(uint64(m.Handle))
+	}
+	if m.Encoding != 0 {
+		n += 1 + sovPlayground(uint64(m.Encoding))
+	}
+	l = len(m.Data)
+	if l > 0 {
+		n += 1 + l + sovPlayground(uint64(l))
+	}
+	return n
+}
+
+func (m *SetSerializedStateResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Ok {
+		n += 2
+	}
+	if m.Errors != nil {
+		l = m.Errors.Size()
+		n += 1 + l + sovPlayground(uint64(l))
+	}
+	if m.Record != nil {
+		l = m.Record.Size()
+		n += 1 + l + sovPlayground(uint64(l))
+	}
+	return n
+}
+
+func (m *GetSerializedStateRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Handle != 0 {
+		n += 1 + sovPlayground(uint64(m.Handle))
+	}
+	if m.Encoding != 0 {
+		n += 1 + sovPlayground(uint64(m.Encoding))
+	}
+	return n
+}
+
+func (m *GetSerializedStateResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Data)
+	if l > 0 {
 		n += 1 + l + sovPlayground(uint64(l))
 	}
 	return n
@@ -3500,6 +4128,542 @@ func (m *GetSandboxResponse) Unmarshal(dAtA []byte) error {
 			}
 			if err := m.Record.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPlayground(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetSampleSandboxesRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPlayground
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetSampleSandboxesRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetSampleSandboxesRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPlayground(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetSampleSandboxesResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPlayground
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetSampleSandboxesResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetSampleSandboxesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPlayground(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SetSerializedStateRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPlayground
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SetSerializedStateRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SetSerializedStateRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Handle", wireType)
+			}
+			m.Handle = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Handle |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Encoding", wireType)
+			}
+			m.Encoding = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Encoding |= SerializationEncoding(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Data = append(m.Data[:0], dAtA[iNdEx:postIndex]...)
+			if m.Data == nil {
+				m.Data = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPlayground(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SetSerializedStateResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPlayground
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SetSerializedStateResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SetSerializedStateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ok", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Ok = bool(v != 0)
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Errors", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Errors == nil {
+				m.Errors = &SandboxDataErrors{}
+			}
+			if err := m.Errors.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Record", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Record == nil {
+				m.Record = &SandboxRecord{}
+			}
+			if err := m.Record.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPlayground(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetSerializedStateRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPlayground
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetSerializedStateRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetSerializedStateRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Handle", wireType)
+			}
+			m.Handle = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Handle |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Encoding", wireType)
+			}
+			m.Encoding = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Encoding |= SerializationEncoding(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPlayground(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetSerializedStateResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPlayground
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetSerializedStateResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetSerializedStateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Data = append(m.Data[:0], dAtA[iNdEx:postIndex]...)
+			if m.Data == nil {
+				m.Data = []byte{}
 			}
 			iNdEx = postIndex
 		default:

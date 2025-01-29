@@ -30,14 +30,15 @@ type TestCtx struct {
 }
 
 func (t *TestCtx) SetRootPrincipal() {
-	t.Ctx = auth.InjectPrincipal(t.Ctx, auth.RootPrincipal())
+	t.Ctx = auth.InjectPrincipal(t.Ctx, types.RootPrincipal())
 }
 
-func (t *TestCtx) SetPrincipal(name string) {
+func (t *TestCtx) SetPrincipal(name string) types.Principal {
 	did := t.Actors.DID(name)
-	principal, err := auth.NewDIDPrincipal(did)
+	principal, err := types.NewDIDPrincipal(did)
 	require.Nil(t.T, err)
 	t.Ctx = auth.InjectPrincipal(t.Ctx, principal)
+	return principal
 }
 
 func NewTestCtx(t testing.TB) *TestCtx {

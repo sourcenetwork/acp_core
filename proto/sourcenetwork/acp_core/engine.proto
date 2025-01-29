@@ -5,7 +5,9 @@ package sourcenetwork.acp_core;
 import "google/protobuf/timestamp.proto";
 import "sourcenetwork/acp_core/access_decision.proto";
 import "sourcenetwork/acp_core/catalogue.proto";
+import "sourcenetwork/acp_core/metadata.proto";
 import "sourcenetwork/acp_core/policy.proto";
+import "sourcenetwork/acp_core/policy_record.proto";
 import "sourcenetwork/acp_core/policy_short.proto";
 import "sourcenetwork/acp_core/relationship.proto";
 import "sourcenetwork/acp_core/relationship_selector.proto";
@@ -95,6 +97,11 @@ service ACPEngine {
   // Amending the registration of an archived or unregistered object is an error.
   rpc AmendRegistration(AmendRegistrationRequest) returns (AmendRegistrationResponse);
 
+  // RevealRegistration registers an object at a specific time stamp.
+  //
+  // This command can be paired with an external commitment protocol to reserve an object without exposing it.
+  rpc RevealRegistration(RevealRegistrationRequest) returns (RevealRegistrationResponse);
+
   // EvaluateTheorem executes the given theorem against a stored policy.
   //
   // Returns an error if the policy does not exist.
@@ -131,22 +138,17 @@ service ACPEngine {
 message CreatePolicyRequest {
   string policy = 1;
   sourcenetwork.acp_core.PolicyMarshalingType marshal_type = 2;
-  // attributes is a map of attributes which can be used to store
-  // caller supplied satellite data
-  map<string, string> attributes = 3;
+  SuppliedMetadata metadata = 3;
 }
 
 message CreatePolicyResponse {
-  Policy policy = 1;
-  map<string, string> attributes = 2;
+  PolicyRecord record = 1;
 }
 
 message SetRelationshipRequest {
   string policy_id = 1;
   sourcenetwork.acp_core.Relationship relationship = 2;
-  // attributes is a map of attributes which can be used to store
-  // caller supplied satellite data
-  map<string, string> attributes = 3;
+  SuppliedMetadata metadata = 3;
 }
 
 message SetRelationshipResponse {
@@ -168,9 +170,7 @@ message DeleteRelationshipResponse {
 message RegisterObjectRequest {
   string policy_id = 1;
   sourcenetwork.acp_core.Object object = 2;
-  // attributes is a map of attributes which can be used to store
-  // caller supplied satellite data
-  map<string, string> attributes = 3;
+  SuppliedMetadata metadata = 3;
 }
 
 message RegisterObjectResponse {
@@ -213,18 +213,13 @@ message GetPolicyRequest {
 }
 
 message GetPolicyResponse {
-  sourcenetwork.acp_core.Policy policy = 1;
-  // policy_raw contains the raw policy document the user submitted to create
-  // the policy
-  string policy_raw = 2;
-  // marshal_type flags the format of policy_raw
-  sourcenetwork.acp_core.PolicyMarshalingType marshal_type = 3;
+  PolicyRecord record = 1;
 }
 
 message ListPoliciesRequest {}
 
 message ListPoliciesResponse {
-  repeated sourcenetwork.acp_core.Policy policies = 1;
+  repeated PolicyRecord records = 1;
 }
 
 message DeletePolicyRequest {
@@ -258,7 +253,9 @@ message SetParamsRequest {
   sourcenetwork.acp_core.Params params = 1;
 }
 
-message SetParamsResponse {}
+message SetParamsResponse {
+  sourcenetwork.acp_core.Params params = 1;
+}
 
 message GetParamsRequest {}
 
@@ -299,6 +296,8 @@ message AmendRegistrationRequest {
   string policy_id = 1;
   Object object = 2;
   Actor new_owner = 3;
+  google.protobuf.Timestamp new_creation_ts = 4;
+  SuppliedMetadata metadata = 5;
 }
 
 message AmendRegistrationResponse {
@@ -313,4 +312,15 @@ message UnarchiveObjectRequest {
 message UnarchiveObjectResponse {
   RelationshipRecord record = 1;
   bool record_modified = 2;
+}
+
+message RevealRegistrationRequest {
+  string policy_id = 1;
+  Object object = 2;
+  google.protobuf.Timestamp creation_ts = 4;
+  SuppliedMetadata metadata = 5;
+}
+
+message RevealRegistrationResponse {
+  RelationshipRecord record = 1;
 }

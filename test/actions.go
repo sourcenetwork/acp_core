@@ -3,6 +3,7 @@ package test
 import (
 	"github.com/stretchr/testify/require"
 
+	prototypes "github.com/cosmos/gogoproto/types"
 	"github.com/sourcenetwork/acp_core/pkg/auth"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
@@ -27,15 +28,15 @@ func (a *CreatePolicyAction) Run(ctx *TestCtx) *types.Policy {
 	require.NoError(ctx.T, err)
 
 	if a.Expected != nil {
-		require.Equal(ctx.T, resp.Policy, a.Expected)
+		require.Equal(ctx.T, resp.Record.Policy, a.Expected)
 	}
 
-	ctx.State.PolicyId = resp.Policy.Id
+	ctx.State.PolicyId = resp.Record.Policy.Id
 	principal, err := auth.ExtractPrincipal(ctx.Ctx)
 	require.NoError(ctx.T, err)
-	ctx.State.PolicyCreator = principal.Identifier()
+	ctx.State.PolicyCreator = principal.Identifier
 
-	return resp.Policy
+	return resp.Record.Policy
 }
 
 type RegisterObjectsAction struct {
@@ -147,18 +148,20 @@ func (a *TransferObjectAction) Run(ctx *TestCtx) *types.TransferObjectResponse {
 }
 
 type AmendRegistrationAction struct {
-	PolicyId    string
-	Object      *types.Object
-	NewOwner    string
-	Expected    *types.AmendRegistrationResponse
-	ExpectedErr error
+	PolicyId     string
+	Object       *types.Object
+	NewOwner     string
+	NewTimestamp *prototypes.Timestamp
+	Expected     *types.AmendRegistrationResponse
+	ExpectedErr  error
 }
 
 func (a *AmendRegistrationAction) Run(ctx *TestCtx) *types.AmendRegistrationResponse {
 	req := types.AmendRegistrationRequest{
-		PolicyId: a.PolicyId,
-		Object:   a.Object,
-		NewOwner: types.NewActor(a.NewOwner),
+		PolicyId:      a.PolicyId,
+		Object:        a.Object,
+		NewOwner:      types.NewActor(a.NewOwner),
+		NewCreationTs: a.NewTimestamp,
 	}
 	resp, err := ctx.Engine.AmendRegistration(ctx, &req)
 
@@ -205,4 +208,33 @@ func (a *PolicySetupAction) Run(ctx *TestCtx) {
 		}
 		relsAction.Run(ctx)
 	}
+}
+
+type RevealRegistrationAction struct {
+	PolicyId    string
+	Object      *types.Object
+	Ts          *prototypes.Timestamp
+	Metadata    *types.SuppliedMetadata
+	Expected    *types.RelationshipRecord
+	ExpectedErr error
+}
+
+func (a *RevealRegistrationAction) Run(ctx *TestCtx) *types.RevealRegistrationResponse {
+	req := types.RevealRegistrationRequest{
+		PolicyId:   a.PolicyId,
+		Object:     a.Object,
+		CreationTs: a.Ts,
+		Metadata:   a.Metadata,
+	}
+	resp, err := ctx.Engine.RevealRegistration(ctx, &req)
+
+	if a.ExpectedErr != nil {
+		require.ErrorIs(ctx.T, err, a.ExpectedErr)
+	} else {
+		require.NoError(ctx.T, err)
+		if a.Expected != nil {
+			require.Equal(ctx.T, a.Expected, resp.Record)
+		}
+	}
+	return resp
 }

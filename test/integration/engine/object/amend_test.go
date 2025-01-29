@@ -41,16 +41,23 @@ func TestAmend_RootCanAmendRegistration(t *testing.T) {
 	ctx.SetRootPrincipal()
 	alice := ctx.Actors.DID("alice")
 	a := test.AmendRegistrationAction{
-		PolicyId: ctx.State.PolicyId,
-		Object:   types.NewObject("resource", "a"),
-		NewOwner: alice,
+		PolicyId:     ctx.State.PolicyId,
+		Object:       types.NewObject("resource", "a"),
+		NewOwner:     alice,
+		NewTimestamp: test.DefaultTs,
 		Expected: &types.AmendRegistrationResponse{
 			Record: &types.RelationshipRecord{
 				PolicyId:     ctx.State.PolicyId,
-				OwnerDid:     alice,
 				Relationship: types.NewActorRelationship("resource", "a", "owner", alice),
 				Archived:     false,
-				CreationTime: ctx.Time,
+				Metadata: &types.RecordMetadata{
+					CreationTs: test.DefaultTs,
+					Creator: &types.Principal{
+						Identifier: alice,
+						Kind:       types.PrincipalKind_DID,
+					},
+					LastModified: ctx.Time,
+				},
 			},
 		},
 	}
@@ -63,10 +70,11 @@ func TestAmend_NonOwnerCannotAmendRegistration(t *testing.T) {
 	ctx.SetPrincipal("alice")
 	alice := ctx.Actors.DID("alice")
 	a := test.AmendRegistrationAction{
-		PolicyId:    ctx.State.PolicyId,
-		Object:      types.NewObject("resource", "a"),
-		NewOwner:    alice,
-		ExpectedErr: errors.ErrorType_UNAUTHORIZED,
+		PolicyId:     ctx.State.PolicyId,
+		Object:       types.NewObject("resource", "a"),
+		NewOwner:     alice,
+		NewTimestamp: test.DefaultTs,
+		ExpectedErr:  errors.ErrorType_UNAUTHORIZED,
 	}
 	a.Run(ctx)
 }
@@ -77,10 +85,11 @@ func TestAmend_OwnerCannotAmendRegistration(t *testing.T) {
 	ctx.SetPrincipal("bob")
 	alice := ctx.Actors.DID("alice")
 	a := test.AmendRegistrationAction{
-		PolicyId:    ctx.State.PolicyId,
-		Object:      types.NewObject("resource", "a"),
-		NewOwner:    alice,
-		ExpectedErr: errors.ErrorType_UNAUTHORIZED,
+		PolicyId:     ctx.State.PolicyId,
+		Object:       types.NewObject("resource", "a"),
+		NewOwner:     alice,
+		NewTimestamp: test.DefaultTs,
+		ExpectedErr:  errors.ErrorType_UNAUTHORIZED,
 	}
 	a.Run(ctx)
 }
@@ -98,10 +107,11 @@ func TestAmend_ArchivedObjectCannotBeAmended(t *testing.T) {
 	ctx.SetRootPrincipal()
 	alice := ctx.Actors.DID("alice")
 	a := test.AmendRegistrationAction{
-		PolicyId:    ctx.State.PolicyId,
-		Object:      types.NewObject("resource", "a"),
-		NewOwner:    alice,
-		ExpectedErr: errors.ErrorType_OPERATION_FORBIDDEN,
+		PolicyId:     ctx.State.PolicyId,
+		Object:       types.NewObject("resource", "a"),
+		NewOwner:     alice,
+		NewTimestamp: test.DefaultTs,
+		ExpectedErr:  errors.ErrorType_OPERATION_FORBIDDEN,
 	}
 	a.Run(ctx)
 }
@@ -112,10 +122,11 @@ func TestAmend_UnregisteredObjectCannotBeAmended(t *testing.T) {
 
 	alice := ctx.Actors.DID("alice")
 	a := test.AmendRegistrationAction{
-		PolicyId:    ctx.State.PolicyId,
-		Object:      types.NewObject("resource", "unregistered"),
-		NewOwner:    alice,
-		ExpectedErr: errors.ErrorType_BAD_INPUT,
+		PolicyId:     ctx.State.PolicyId,
+		Object:       types.NewObject("resource", "unregistered"),
+		NewOwner:     alice,
+		NewTimestamp: test.DefaultTs,
+		ExpectedErr:  errors.ErrorType_BAD_INPUT,
 	}
 	a.Run(ctx)
 }
@@ -126,10 +137,25 @@ func TestAmend_OwnerCannotAmendObjectToThemselves(t *testing.T) {
 	bob := ctx.Actors.DID("bob")
 
 	a := test.AmendRegistrationAction{
+		PolicyId:     ctx.State.PolicyId,
+		Object:       types.NewObject("resource", "a"),
+		NewOwner:     bob,
+		NewTimestamp: test.DefaultTs,
+		ExpectedErr:  errors.ErrorType_UNAUTHORIZED,
+	}
+	a.Run(ctx)
+}
+
+func TestAmend_ErrorsWithoutNewTimestamp(t *testing.T) {
+	ctx := amendSetup(t)
+	ctx.SetRootPrincipal()
+	bob := ctx.Actors.DID("bob")
+
+	a := test.AmendRegistrationAction{
 		PolicyId:    ctx.State.PolicyId,
 		Object:      types.NewObject("resource", "a"),
 		NewOwner:    bob,
-		ExpectedErr: errors.ErrorType_UNAUTHORIZED,
+		ExpectedErr: errors.ErrorType_BAD_INPUT,
 	}
 	a.Run(ctx)
 }

@@ -27,7 +27,7 @@ func (c *RegisterObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 		return nil, newRegisterObjectErr(err)
 	}
 
-	principal, err := auth.ExtractPrincipalWithType(ctx, auth.DID)
+	principal, err := auth.ExtractPrincipalWithType(ctx, types.PrincipalKind_DID)
 	if err != nil {
 		return nil, newRegisterObjectErr(err)
 	}
@@ -35,7 +35,7 @@ func (c *RegisterObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 	registration := &types.Registration{
 		Object: cmd.Object,
 		Actor: &types.Actor{
-			Id: principal.Identifier(),
+			Id: principal.Identifier,
 		},
 	}
 
@@ -44,7 +44,7 @@ func (c *RegisterObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 		return nil, err
 	}
 	if rec == nil {
-		return nil, newRegisterObjectErr(errors.NewPolicyNotFound(cmd.PolicyId))
+		return nil, newRegisterObjectErr(errors.ErrPolicyNotFound(cmd.PolicyId))
 	}
 	pol := rec.Policy
 
@@ -52,8 +52,6 @@ func (c *RegisterObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 	if err != nil {
 		return nil, newRegisterObjectErr(err)
 	}
-
-	err = nil
 
 	record, err := queryOwnerRelationship(ctx, engine, pol, registration.Object)
 	if err != nil {
@@ -81,11 +79,13 @@ func (c *RegisterObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 				},
 			},
 		},
-		OwnerDid:     registration.Actor.Id,
-		PolicyId:     pol.Id,
-		Archived:     false,
-		CreationTime: ts,
-		Metadata:     cmd.Attributes,
+		Metadata: &types.RecordMetadata{
+			Creator:    &principal,
+			CreationTs: ts,
+			Supplied:   cmd.Metadata,
+		},
+		PolicyId: pol.Id,
+		Archived: false,
 	}
 	_, err = engine.SetRelationship(ctx, pol, record)
 	if err != nil {
@@ -125,18 +125,18 @@ func (c *ArchiveObjectHandler) Execute(ctx context.Context, runtime runtime.Runt
 		return nil, newArchiveObjectErr(err)
 	}
 
-	principal, err := auth.ExtractPrincipalWithType(ctx, auth.DID)
+	principal, err := auth.ExtractPrincipalWithType(ctx, types.PrincipalKind_DID)
 	if err != nil {
 		return nil, newArchiveObjectErr(err)
 	}
-	did := principal.Identifier()
+	did := principal.Identifier
 
 	rec, err := engine.GetPolicy(ctx, cmd.PolicyId)
 	if err != nil {
 		return nil, newArchiveObjectErr(err)
 	}
 	if rec == nil {
-		return nil, newArchiveObjectErr(errors.NewPolicyNotFound(cmd.PolicyId))
+		return nil, newArchiveObjectErr(errors.ErrPolicyNotFound(cmd.PolicyId))
 	}
 	pol := rec.Policy
 
@@ -244,18 +244,18 @@ func (h *TransferObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 		return nil, newTransferObjectErr(err)
 	}
 
-	principal, err := auth.ExtractPrincipalWithType(ctx, auth.DID)
+	principal, err := auth.ExtractPrincipalWithType(ctx, types.PrincipalKind_DID)
 	if err != nil {
 		return nil, newTransferObjectErr(err)
 	}
-	did := principal.Identifier()
+	did := principal.Identifier
 
 	rec, err := engine.GetPolicy(ctx, cmd.PolicyId)
 	if err != nil {
 		return nil, newTransferObjectErr(err)
 	}
 	if rec == nil {
-		return nil, newTransferObjectErr(errors.NewPolicyNotFound(cmd.PolicyId))
+		return nil, newTransferObjectErr(errors.ErrPolicyNotFound(cmd.PolicyId))
 	}
 	pol := rec.Policy
 
@@ -305,7 +305,7 @@ func (h *TransferObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 		return nil, newTransferObjectErr(err)
 	}
 
-	ownerRecord.OwnerDid = cmd.NewOwner.Id
+	ownerRecord.Metadata.Creator.Identifier = cmd.NewOwner.Id
 	ownerRecord.Relationship.Subject = &types.Subject{
 		Subject: &types.Subject_Actor{
 			Actor: cmd.NewOwner,
@@ -324,7 +324,7 @@ func (h *TransferObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 type AmendRegistrationHandler struct{}
 
 func (h *AmendRegistrationHandler) Handle(ctx context.Context, runtime runtime.RuntimeManager, req *types.AmendRegistrationRequest) (*types.AmendRegistrationResponse, error) {
-	_, err := auth.ExtractPrincipalWithType(ctx, auth.Root)
+	_, err := auth.ExtractPrincipalWithType(ctx, types.PrincipalKind_Root)
 	if err != nil {
 		return nil, newAmendRegistrationErr(err)
 	}
@@ -344,7 +344,21 @@ func (h *AmendRegistrationHandler) Handle(ctx context.Context, runtime runtime.R
 		return nil, newAmendRegistrationErr(errors.Wrap("removing old relationship", err))
 	}
 
-	relRec.OwnerDid = req.NewOwner.Id
+	principal, err := types.NewDIDPrincipal(req.NewOwner.Id)
+	if err != nil {
+		return nil, newAmendRegistrationErr(errors.Wrap("invalid new actor id", err))
+	}
+	now, err := runtime.GetTimeService().GetNow(ctx)
+	if err != nil {
+		return nil, newAmendRegistrationErr(err)
+	}
+
+	relRec.Metadata = &types.RecordMetadata{
+		Creator:      &principal,
+		CreationTs:   req.NewCreationTs,
+		LastModified: now,
+		Supplied:     req.Metadata,
+	}
 	relRec.Relationship.Subject = &types.Subject{
 		Subject: &types.Subject_Actor{
 			Actor: req.NewOwner,
@@ -367,7 +381,7 @@ func (h *AmendRegistrationHandler) verifyPreconditions(ctx context.Context, engi
 		return nil, nil, err
 	}
 	if polRec == nil {
-		return nil, nil, errors.NewPolicyNotFound(req.PolicyId)
+		return nil, nil, errors.ErrPolicyNotFound(req.PolicyId)
 	}
 
 	err = did.IsValidDID(req.NewOwner.Id)
@@ -395,6 +409,10 @@ func (h *AmendRegistrationHandler) verifyPreconditions(ctx context.Context, engi
 
 	}
 
+	if req.NewCreationTs == nil {
+		return nil, nil, errors.Wrap("new timestamp required", errors.ErrorType_BAD_INPUT)
+	}
+
 	return polRec.Policy, relRec, nil
 }
 
@@ -411,15 +429,15 @@ func (h *UnarchiveObjectHandler) Handle(ctx context.Context, runtime runtime.Run
 		return nil, err
 	}
 	if rec == nil {
-		return nil, newRegisterObjectErr(errors.NewPolicyNotFound(cmd.PolicyId))
+		return nil, newRegisterObjectErr(errors.ErrPolicyNotFound(cmd.PolicyId))
 	}
 	pol := rec.Policy
 
-	principal, err := auth.ExtractPrincipalWithType(ctx, auth.DID)
+	principal, err := auth.ExtractPrincipalWithType(ctx, types.PrincipalKind_DID)
 	if err != nil {
 		return nil, newRegisterObjectErr(err)
 	}
-	did := principal.Identifier()
+	did := principal.Identifier
 
 	ownerRecord, err := queryOwnerRelationship(ctx, engine, pol, cmd.Object)
 	if err != nil {
@@ -474,4 +492,105 @@ func (h *UnarchiveObjectHandler) Handle(ctx context.Context, runtime runtime.Run
 		Record:         ownerRecord,
 		RecordModified: true,
 	}, nil
+}
+
+// RegisterObjectHandler creates an "owner" Relationship for the given object and subject,
+// if the object does not have a previous owner.
+// Uses the provided timestamp as the time of creation
+type RevealRegistrationHandler struct{}
+
+func (c *RevealRegistrationHandler) Execute(ctx context.Context, runtime runtime.RuntimeManager, cmd *types.RevealRegistrationRequest) (*types.RevealRegistrationResponse, error) {
+	err := c.validate(cmd)
+	if err != nil {
+		return nil, newRevealRegistrationErr(err)
+	}
+
+	engine, err := zanzi.NewZanzi(runtime.GetKVStore(), runtime.GetLogger())
+	if err != nil {
+		return nil, newRevealRegistrationErr(err)
+	}
+
+	principal, err := auth.ExtractPrincipalWithType(ctx, types.PrincipalKind_DID)
+	if err != nil {
+		return nil, newRevealRegistrationErr(err)
+	}
+
+	rec, err := engine.GetPolicy(ctx, cmd.PolicyId)
+	if err != nil {
+		return nil, err
+	}
+	if rec == nil {
+		return nil, newRevealRegistrationErr(errors.ErrPolicyNotFound(cmd.PolicyId))
+	}
+	pol := rec.Policy
+
+	registration := &types.Registration{
+		Object: cmd.Object,
+		Actor: &types.Actor{
+			Id: principal.Identifier,
+		},
+	}
+
+	registrationRecord, err := queryOwnerRelationship(ctx, engine, pol, registration.Object)
+	if err != nil {
+		return nil, newRevealRegistrationErr(err)
+	}
+	if registrationRecord != nil {
+		return nil, newRevealRegistrationErr(errors.Wrap("object already registered", errors.ErrorType_OPERATION_FORBIDDEN,
+			errors.Pair("policy", cmd.PolicyId),
+			errors.Pair("resource", cmd.Object.Resource),
+			errors.Pair("id", cmd.Object.Id),
+		))
+	}
+
+	now, err := runtime.GetTimeService().GetNow(ctx)
+	if err != nil {
+		return nil, newRegisterObjectErr(err)
+	}
+
+	record := &types.RelationshipRecord{
+		Relationship: &types.Relationship{
+			Object:   registration.Object,
+			Relation: policy.OwnerRelation,
+			Subject: &types.Subject{
+				Subject: &types.Subject_Actor{
+					Actor: registration.Actor,
+				},
+			},
+		},
+		Metadata: &types.RecordMetadata{
+			Creator:      &principal,
+			CreationTs:   cmd.CreationTs,
+			Supplied:     cmd.Metadata,
+			LastModified: now,
+		},
+		PolicyId: pol.Id,
+		Archived: false,
+	}
+	_, err = engine.SetRelationship(ctx, pol, record)
+	if err != nil {
+		return nil, newRevealRegistrationErr(err)
+	}
+
+	runtime.GetEventManager().EmitEvent(&types.EventObjectRegistered{
+		Actor:          registration.Actor.Id,
+		PolicyId:       pol.Id,
+		ObjectResource: registration.Object.Resource,
+		ObjectId:       registration.Object.Id,
+	})
+
+	return &types.RevealRegistrationResponse{
+		Record: record,
+	}, nil
+}
+
+// validates the command input params
+func (c *RevealRegistrationHandler) validate(cmd *types.RevealRegistrationRequest) error {
+	if err := ObjectSpec(cmd.Object); err != nil {
+		return err
+	}
+	if cmd.CreationTs == nil {
+		return errors.Wrap("creation ts required", errors.ErrorType_BAD_INPUT)
+	}
+	return nil
 }

@@ -20,7 +20,7 @@ func FilterRelationshipsHandler(ctx context.Context, runtime runtime.RuntimeMana
 		return nil, newFilterRelationshpErr(err)
 	}
 	if rec == nil {
-		return nil, newFilterRelationshpErr(errors.NewPolicyNotFound(req.PolicyId))
+		return nil, newFilterRelationshpErr(errors.ErrPolicyNotFound(req.PolicyId))
 	}
 
 	records, err := engine.FilterRelationships(ctx, rec.Policy, req.Selector)
@@ -44,7 +44,7 @@ func ValidateRelationship(ctx context.Context, manager runtime.RuntimeManager, p
 		return false, "", newValidateRelationshipErr(err)
 	}
 	if rec == nil {
-		return false, "", newValidateRelationshipErr(errors.NewPolicyNotFound(policyId))
+		return false, "", newValidateRelationshipErr(errors.ErrPolicyNotFound(policyId))
 	}
 
 	err = relationshipSpec(rec.Policy, relationship)
@@ -54,7 +54,7 @@ func ValidateRelationship(ctx context.Context, manager runtime.RuntimeManager, p
 
 	valid, errMsg, err := engine.ValidateRelationship(ctx, rec.Policy, relationship)
 	if err != nil {
-		return false, "", newValidateRelationshipErr(errors.NewPolicyNotFound(policyId))
+		return false, "", newValidateRelationshipErr(errors.ErrPolicyNotFound(policyId))
 	}
 
 	return valid, errMsg, nil

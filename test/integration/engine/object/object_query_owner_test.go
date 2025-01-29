@@ -69,10 +69,15 @@ func TestGetObjectRegistration_ReturnsObjectOwner(t *testing.T) {
 		OwnerId:      ctx.Actors.DID("alice"),
 		Record: &types.RelationshipRecord{
 			PolicyId:     ctx.State.PolicyId,
-			OwnerDid:     ctx.Actors.DID("alice"),
 			Relationship: types.NewActorRelationship("file", "1", "owner", ctx.Actors.DID("alice")),
 			Archived:     false,
-			CreationTime: test.DefaultTs,
+			Metadata: &types.RecordMetadata{
+				CreationTs: ctx.Time,
+				Creator: &types.Principal{
+					Identifier: ctx.Actors.DID("alice"),
+					Kind:       types.PrincipalKind_DID,
+				},
+			},
 		},
 	}
 	require.Equal(t, want, resp)

@@ -6,6 +6,7 @@ import (
 
 	"github.com/sourcenetwork/acp_core/internal/raccoon"
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
+	"github.com/sourcenetwork/acp_core/pkg/auth"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
@@ -42,8 +43,19 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 		return nil, err
 	}
 
+	principal, err := auth.ExtractPrincipal(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	metadata := &types.RecordMetadata{
+		Creator:    &principal,
+		CreationTs: now,
+		Supplied:   req.Metadata,
+	}
+
 	factory := factory{}
-	record, err := factory.Create(ir, req.Attributes, i, now)
+	record, err := factory.Create(ir, i, metadata)
 	if err != nil {
 		return nil, fmt.Errorf("CreatePolicy: %w", err)
 	}
@@ -72,8 +84,7 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 	}
 
 	return &types.CreatePolicyResponse{
-		Policy:     record.Policy,
-		Attributes: record.Metadata,
+		Record: record,
 	}, nil
 }
 

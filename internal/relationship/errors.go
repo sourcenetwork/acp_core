@@ -48,3 +48,7 @@ func newAmendRegistrationErr(err error) error {
 func newUnarchiveObjectErr(err error) error {
 	return errors.Wrap("unarchiving object failed", err)
 }
+
+func newRevealRegistrationErr(err error) error {
+	return errors.Wrap("reveal registration failed", err)
+}

@@ -227,20 +227,20 @@ func (h *SetStateHandler) setPolicy(ctx context.Context, manager runtime.Runtime
 		}
 	}
 
-	simCtx.Policy = polResp.Policy
+	simCtx.Policy = polResp.Record.Policy
 	return errs, nil
 }
 
-func (h *SetStateHandler) registerObjects(ctx context.Context, manager runtime.RuntimeManager, handle uint64, simCtx *parsedSandboxCtx) (map[string]auth.Principal, *types.SandboxDataErrors, error) {
+func (h *SetStateHandler) registerObjects(ctx context.Context, manager runtime.RuntimeManager, handle uint64, simCtx *parsedSandboxCtx) (map[string]types.Principal, *types.SandboxDataErrors, error) {
 	errs := &types.SandboxDataErrors{}
-	ownerLookup := make(map[string]auth.Principal)
+	ownerLookup := make(map[string]types.Principal)
 
 	ownerRels := utils.FilterSlice(simCtx.Relationships, func(obj parser.LocatedObject[*types.Relationship]) bool {
 		return obj.Obj.Relation == policy.OwnerRelation
 	})
 
 	for _, obj := range ownerRels {
-		principal, err := auth.NewDIDPrincipal(obj.Obj.Subject.GetActor().Id)
+		principal, err := types.NewDIDPrincipal(obj.Obj.Subject.GetActor().Id)
 		// creating a principal should only fail if the actor is invalid
 		// meaning the relationship is invalid
 		if err != nil {
@@ -279,7 +279,7 @@ func (h *SetStateHandler) registerObjects(ctx context.Context, manager runtime.R
 	return ownerLookup, errs, nil
 }
 
-func (h *SetStateHandler) setRelationships(ctx context.Context, manager runtime.RuntimeManager, simCtx *parsedSandboxCtx, ownerMap map[string]auth.Principal) (*types.SandboxDataErrors, error) {
+func (h *SetStateHandler) setRelationships(ctx context.Context, manager runtime.RuntimeManager, simCtx *parsedSandboxCtx, ownerMap map[string]types.Principal) (*types.SandboxDataErrors, error) {
 	errs := &types.SandboxDataErrors{}
 	rels := utils.FilterSlice(simCtx.Relationships, func(obj parser.LocatedObject[*types.Relationship]) bool {
 		return obj.Obj.Relation != policy.OwnerRelation

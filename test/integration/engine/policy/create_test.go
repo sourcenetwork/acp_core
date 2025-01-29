@@ -11,8 +11,11 @@ import (
 	"github.com/sourcenetwork/acp_core/test"
 )
 
-var attributes map[string]string = map[string]string{
-	"test": "abc",
+var metadata *types.SuppliedMetadata = &types.SuppliedMetadata{
+	Attributes: map[string]string{
+		"test": "abc",
+	},
+	Blob: []byte("test"),
 }
 
 func TestCreatePolicy_ValidPolicyIsCreated(t *testing.T) {
@@ -38,6 +41,11 @@ resources:
         doc: own doc
       read:
         expr: owner + reader
+
+meta:
+  a: b
+  key: value
+
 actor:
   name: actor-resource
   doc: my actor
@@ -45,17 +53,26 @@ actor:
 	msg := types.CreatePolicyRequest{
 		Policy:      policyStr,
 		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
-		Attributes:  attributes,
+		Metadata:    metadata,
 	}
 	resp, err := ctx.Engine.CreatePolicy(ctx, &msg)
 
 	require.Nil(t, err)
-	require.Equal(t, attributes, resp.Attributes)
-	require.Equal(t, resp.Policy, &types.Policy{
-		Id:           "d011372c7e2cd34fd63777c513bb5eb16713834b855f424158474b77c1800410",
-		Name:         "policy",
-		Description:  "ok",
-		CreationTime: ctx.Time,
+	p := types.AnonymousPrincipal()
+	wantMetadata := &types.RecordMetadata{
+		Creator:    &p,
+		CreationTs: ctx.Time,
+		Supplied:   metadata,
+	}
+	require.Equal(t, wantMetadata, resp.Record.Metadata)
+	require.Equal(t, resp.Record.Policy, &types.Policy{
+		Id:          "d011372c7e2cd34fd63777c513bb5eb16713834b855f424158474b77c1800410",
+		Name:        "policy",
+		Description: "ok",
+		Attributes: map[string]string{
+			"a":   "b",
+			"key": "value",
+		},
 		Resources: []*types.Resource{
 			{
 				Name: "file",
@@ -240,6 +257,6 @@ resources:
 	want2 := "94eb195c0e459aa79e02a1986c7e731c5015721c18a373f2b2a0ed140a04b454"
 	require.NoError(t, err1)
 	require.NoError(t, err2)
-	require.Equal(t, want1, resp1.Policy.Id)
-	require.Equal(t, want2, resp2.Policy.Id)
+	require.Equal(t, want1, resp1.Record.Policy.Id)
+	require.Equal(t, want2, resp2.Record.Policy.Id)
 }

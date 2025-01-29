@@ -20,7 +20,7 @@ func VerifyAccessRequest(ctx context.Context, runtime runtime.RuntimeManager, re
 		return nil, err
 	}
 	if rec == nil {
-		return nil, errors.Wrap("verifying access request", errors.NewPolicyNotFound(req.PolicyId))
+		return nil, errors.Wrap("verifying access request", errors.ErrPolicyNotFound(req.PolicyId))
 	}
 
 	for _, op := range req.AccessRequest.Operations {
