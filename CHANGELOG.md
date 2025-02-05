@@ -2,6 +2,14 @@
 
 Significant features added between versions will be contained in the changelog, as well as any breaking changes.
 
+## [0.4.0] - 2025-02-05
+Features:
+- Add RevealRegistrationCmd which allows registering an object at a specific timestamp
+
+Improvements and Fixes:
+- Improved Object Owner query lookup performance
+- Adds benchmark tests for Object and Relationship creation
+
 ## [0.3.0] - 2024-11-06
 
 Features:
