@@ -43,18 +43,18 @@ By further understanding the guarantees we desire out of the system and formaliz
 
 ## Unsafe Operations
 
-Some operations in policy mutation are inherently unsafe, policy writes have the ability to completely change the interpretation of a relation graph.
+Some operations in policy mutation are inherently unsafe, policy writers have the ability to completely change the interpretation of a relation graph.
 Since users only control their relationships but not the policy, a malicious policy writer could exploit these unsafe operations to gain unwaranted access to user data.
 
 The known unsafe operations are
 - mutating permission expression
-- mutating a relations management graph
-- mutation a relations allows types list
+- mutating a relation's management graph
+- mutation a relation's allowed types list
 - renaming relations and permissions
 
 The guiding philosophy for the initial mutation work is to enable developers to move fast, therefore no work will be done to restrict these unsafe operations, asside from not supporting renaming relations and permissions.
 
-With better defined requirements, it may be possible to restrict these mutations somewhat and increase user security.
+With better defined requirements, it may be possible to restrict these operations somewhat and increase user security.
 Another alternative would be to mark these operations as "breaking" in a policy, requiring users to accept to a new policy ID.
 This could be used in conjuction with the previously mentioned Multi-Policy Relation Graph
 
@@ -63,7 +63,7 @@ This could be used in conjuction with the previously mentioned Multi-Policy Rela
 There are some security goals are still being identified and refined for policy mutation.
 The goal is to make the system flexible for developers and secure for users, though that obviously requires some compromises.
 
-Some identified goals, stated informally are: 
+Some identified goals, stated informally, are: 
 1. Devs must not gain acces to private data after mutation a policy
 2. Collaborators should not lose access to previously shared docs
 3. Mutation must be defined if model check fails 
