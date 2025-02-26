@@ -50,3 +50,18 @@ name: policy
 	require.Equal(t, types.PolicyMarshalingType_SHORT_YAML, resp.Record.MarshalType)
 	require.NoError(t, err)
 }
+
+func TestListPolicy_NoPolicies(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+
+	req := types.ListPoliciesRequest{}
+
+	resp, err := ctx.Engine.ListPolicies(ctx, &req)
+
+	require.NoError(t, err)
+	want := &types.ListPoliciesResponse{
+		Records: []*types.PolicyRecord{},
+	}
+	require.NoError(t, err)
+	require.Equal(t, want, resp)
+}
