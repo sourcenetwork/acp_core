@@ -2,6 +2,10 @@
 
 Significant features added between versions will be contained in the changelog, as well as any breaking changes.
 
+## [0.4.1] - 2025-02-26
+Fixes:
+- Fixed a bug where sometimes List Policy would fail due to Zanzi returning a malformed record
+
 ## [0.4.0] - 2025-02-05
 Features:
 - Add RevealRegistrationCmd which allows registering an object at a specific timestamp
