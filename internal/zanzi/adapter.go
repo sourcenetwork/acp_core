@@ -265,7 +265,12 @@ func (z *Adapter) ListPolicies(ctx context.Context) ([]*types.PolicyRecord, erro
 		return nil, fmt.Errorf("ListPolicies: %v", err)
 	}
 
-	records, err := utils.MapFailableSlice(resp.Records, func(rec *domain.PolicyRecord) (*types.PolicyRecord, error) {
+	// This filter fixes a bug which, strangely, was only observable from SourceHub.
+	// Sometimes zanzi would return a PolicyRecord with Metadat but whose rec.Policy == nil.
+	// The root cause is unknown but for now that fixes the issue
+	zanziRecords := utils.FilterSlice(resp.Records, func(rec *domain.PolicyRecord) bool { return rec != nil && rec.Policy != nil })
+
+	records, err := utils.MapFailableSlice(zanziRecords, func(rec *domain.PolicyRecord) (*types.PolicyRecord, error) {
 		return z.policyMapper.FromZanzi(rec)
 	})
 	if err != nil {
