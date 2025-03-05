@@ -14,7 +14,7 @@ type errListener struct {
 	report *ParserReport
 }
 
-func newListener(productionRuleName string) *errListener {
+func NewErrLsitener(productionRuleName string) *errListener {
 	return &errListener{
 		report: &ParserReport{
 			msg:  fmt.Sprintf("%v parser report", productionRuleName),

@@ -1,8 +1,9 @@
-package parser
+package theorem_parser
 
 import (
 	"github.com/antlr4-go/antlr/v4"
 
+	"github.com/sourcenetwork/acp_core/internal/parser"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
@@ -15,8 +16,8 @@ type theoremVisitorImpl struct {
 }
 
 func (l *theoremVisitorImpl) VisitRelationship_set(ctx *Relationship_setContext) any {
-	return utils.MapSlice(ctx.AllRelationship(), func(ctx IRelationshipContext) LocatedObject[*types.Relationship] {
-		return l.Visit(ctx).(LocatedObject[*types.Relationship])
+	return utils.MapSlice(ctx.AllRelationship(), func(ctx IRelationshipContext) parser.LocatedObject[*types.Relationship] {
+		return l.Visit(ctx).(parser.LocatedObject[*types.Relationship])
 	})
 }
 
@@ -42,7 +43,7 @@ func (l *theoremVisitorImpl) VisitRelationship(ctx *RelationshipContext) any {
 		Relation: ctx.Relation().GetText(),
 		Subject:  l.Visit(ctx.Subject()).(*types.Subject),
 	}
-	return NewLocatedObjectFromCtx(rel, ctx)
+	return parser.NewLocatedObjectFromCtx(rel, ctx)
 }
 
 func (l *theoremVisitorImpl) VisitSubj_obj(ctx *Subj_objContext) any {
@@ -95,18 +96,18 @@ func (l *theoremVisitorImpl) VisitDelegation_theorem(ctx *Delegation_theoremCont
 		Operation:  operation,
 		AssertTrue: !negate,
 	}
-	return NewLocatedObjectFromCtx(theorem, ctx)
+	return parser.NewLocatedObjectFromCtx(theorem, ctx)
 }
 
 func (l *theoremVisitorImpl) VisitDelegation_theorems(ctx *Delegation_theoremsContext) any {
-	return utils.MapSlice(ctx.AllDelegation_theorem(), func(ctx IDelegation_theoremContext) LocatedObject[*types.DelegationTheorem] {
-		return l.Visit(ctx).(LocatedObject[*types.DelegationTheorem])
+	return utils.MapSlice(ctx.AllDelegation_theorem(), func(ctx IDelegation_theoremContext) parser.LocatedObject[*types.DelegationTheorem] {
+		return l.Visit(ctx).(parser.LocatedObject[*types.DelegationTheorem])
 	})
 }
 
 func (l *theoremVisitorImpl) VisitAuthorization_theorem(ctx *Authorization_theoremContext) any {
 	negate := ctx.NEGATION() != nil
-	relationship := l.Visit(ctx.Relationship()).(LocatedObject[*types.Relationship]).Obj
+	relationship := l.Visit(ctx.Relationship()).(parser.LocatedObject[*types.Relationship]).Obj
 	theorem := &types.AuthorizationTheorem{
 		Operation: &types.Operation{
 			Object:     relationship.Object,
@@ -115,19 +116,19 @@ func (l *theoremVisitorImpl) VisitAuthorization_theorem(ctx *Authorization_theor
 		Actor:      relationship.GetSubject().GetActor(),
 		AssertTrue: !negate,
 	}
-	return NewLocatedObjectFromCtx(theorem, ctx)
+	return parser.NewLocatedObjectFromCtx(theorem, ctx)
 }
 
 func (l *theoremVisitorImpl) VisitAuthorization_theorems(ctx *Authorization_theoremsContext) any {
-	return utils.MapSlice(ctx.AllAuthorization_theorem(), func(ctx IAuthorization_theoremContext) LocatedObject[*types.AuthorizationTheorem] {
-		return l.Visit(ctx).(LocatedObject[*types.AuthorizationTheorem])
+	return utils.MapSlice(ctx.AllAuthorization_theorem(), func(ctx IAuthorization_theoremContext) parser.LocatedObject[*types.AuthorizationTheorem] {
+		return l.Visit(ctx).(parser.LocatedObject[*types.AuthorizationTheorem])
 	})
 }
 
 func (l *theoremVisitorImpl) VisitPolicy_thorem(ctx *Policy_thoremContext) any {
-	authorizationThms := l.Visit(ctx.Authorization_theorems()).([]LocatedObject[*types.AuthorizationTheorem])
-	delegationThms := l.Visit(ctx.Delegation_theorems()).([]LocatedObject[*types.DelegationTheorem])
-	return &LocatedPolicyTheorem{
+	authorizationThms := l.Visit(ctx.Authorization_theorems()).([]parser.LocatedObject[*types.AuthorizationTheorem])
+	delegationThms := l.Visit(ctx.Delegation_theorems()).([]parser.LocatedObject[*types.DelegationTheorem])
+	return &parser.LocatedPolicyTheorem{
 		AuthorizationTheorems: authorizationThms,
 		DelegationTheorems:    delegationThms,
 	}
@@ -159,7 +160,7 @@ func (v *theoremVisitorImpl) VisitActorid(ctx *ActoridContext) interface{} {
 
 func (v *theoremVisitorImpl) VisitRelationship_document(ctx *Relationship_documentContext) any {
 	result := v.Visit(ctx.Relationship())
-	return result.(LocatedObject[*types.Relationship])
+	return result.(parser.LocatedObject[*types.Relationship])
 }
 
 func (v *theoremVisitorImpl) Visit(tree antlr.ParseTree) interface{}         { return tree.Accept(v) }
