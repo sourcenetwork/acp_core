@@ -31,7 +31,7 @@ func (f *factory) Create(policyIR PolicyIR, policyCounter uint64, metadata *type
 	ider := policyIder{}
 	policy.Id = ider.Id(policy, policyCounter)
 
-	graph := buildManagementGraph(policy)
+	graph := BuildManagementGraph(policy)
 	f.registerOwnerAsManager(policy, graph)
 	f.addManagementPermissions(policy, graph)
 

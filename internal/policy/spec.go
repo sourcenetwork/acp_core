@@ -35,7 +35,7 @@ type validPolicySpec struct{}
 // The ACP module can delegate most of the Policy validation to Zanzi itself.
 // The exception is the Manage Graph which is local to the acp system.
 func (v *validPolicySpec) Satisfies(pol *types.Policy) error {
-	g := buildManagementGraph(pol)
+	g := BuildManagementGraph(pol)
 	err := g.IsWellFormed()
 	if err != nil {
 		return fmt.Errorf("%w: %w", ErrInvalidManagementRule, err)

@@ -3,8 +3,6 @@ package permission_parser
 import (
 	"testing"
 
-	"github.com/sourcenetwork/acp_core/pkg/types"
-
 	"github.com/stretchr/testify/require"
 )
 
@@ -14,55 +12,7 @@ func TestPermissionParser(t *testing.T) {
 
 	tree, report := Parse(perm)
 
-	wantJson := `
-	{
-  "combNode": {
-    "left": {
-      "combNode": {
-        "left": {
-          "operation": {
-            "cu": {
-              "relation": "owner"
-            }
-          }
-        },
-        "combinator": "UNION",
-        "right": {
-          "combNode": {
-            "left": {
-              "operation": {
-                "cu": {
-                  "relation": "that"
-                }
-              }
-            },
-            "combinator": "UNION",
-            "right": {
-              "operation": {
-                "ttu": {
-                  "resource": "resource",
-                  "relation": "rel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "combinator": "DIFFERENCE",
-    "right": {
-      "operation": {
-        "cu": {
-          "relation": "bar"
-        }
-      }
-    }
-  }
-}
-	`
-	want := &types.PermissionFetchTree{}
-	err := want.UnmarshalJSON(wantJson)
-	require.NoError(t, err)
+	want := "((owner + (that + resource->rel)) - bar)"
 	require.False(t, report.HasError())
-	require.Equal(t, want, tree)
+	require.Equal(t, want, tree.IntoPermissionExpr())
 }
