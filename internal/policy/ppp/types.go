@@ -1,18 +1,20 @@
 package ppp
 
-import "github.com/sourcenetwork/acp_core/pkg/types"
+import (
+	"github.com/sourcenetwork/acp_core/pkg/errors"
+	"github.com/sourcenetwork/acp_core/pkg/types"
+)
 
 type PolicyProvider func() *types.Policy
 
 type Specification interface {
-	Name() string
-	Validate(policy *types.Policy) []error
+	Validate(policy *types.Policy) *errors.MultiError
 }
 
 type Transformer interface {
 	// extends specifier to guarantee the applied transformation wasn't undone / corrupted by some other transformer
 	Specification
-	Transform(provider PolicyProvider) (*types.Policy, error)
+	Transform(provider PolicyProvider) (*types.Policy, *errors.MultiError)
 }
 
 // Defra Pol Spec

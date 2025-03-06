@@ -3,7 +3,7 @@ package ppp
 import (
 	"fmt"
 
-	"github.com/sourcenetwork/acp_core/internal/policy"
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 	"k8s.io/apimachinery/pkg/util/sets"
@@ -20,29 +20,39 @@ func (t *DecentralizedAdminTransformer) Name() string {
 	return "Decentralized Administration"
 }
 
-func (t *DecentralizedAdminTransformer) Validate(policy *types.Policy) []error {
-	var violations []error
+func (t *DecentralizedAdminTransformer) Validate(policy *types.Policy) *errors.MultiError {
+	multiErr := errors.NewMultiError(ErrAdministrationTransformer)
 
 	for _, resource := range policy.Resources {
 		permissionNames := utils.MapSlice(resource.Permissions, func(p *types.Permission) string {
 			return p.Name
 		})
 		permissionSet := sets.New(permissionNames...)
-		for _, relation := range resource.Permissions {
+
+		for _, relation := range resource.Relations {
 			managementPermName := t.buildManagementPermissionName(relation.Name)
 			if !permissionSet.Has(managementPermName) {
 				err := fmt.Errorf("management permission not found: resource %v: relation %v", resource.Name, relation.Name)
-				violations = append(violations, err)
+				multiErr.Append(err)
 			}
 		}
 	}
 
-	return violations
+	if len(multiErr.GetErrors()) > 0 {
+		return multiErr
+	}
+
+	return nil
 }
 
-func (t *DecentralizedAdminTransformer) Transform(provider PolicyProvider) (*types.Policy, error) {
+func (t *DecentralizedAdminTransformer) Transform(provider PolicyProvider) (*types.Policy, *errors.MultiError) {
 	pol := provider()
-	graph := policy.BuildManagementGraph(pol)
+	graph := &types.ManagementGraph{}
+	graph.LoadFromPolicy(pol)
+	err := graph.IsWellFormed()
+	if err != nil {
+		return nil, errors.NewMultiError(ErrAdministrationTransformer, err)
+	}
 
 	for _, resource := range pol.Resources {
 		for _, relation := range resource.Relations {
@@ -80,34 +90,43 @@ func (t *DecentralizedAdminTransformer) addManagementPermissions(policy *types.P
 }
 
 func (t *DecentralizedAdminTransformer) buildRelationExpression(relations []string) *types.PermissionFetchTree {
-	rel := relations[0]
-	opNode := &types.PermissionFetchTree{
+	tree := &types.PermissionFetchTree{
 		Term: &types.PermissionFetchTree_Operation{
 			Operation: &types.FetchOperation{
 				Operation: &types.FetchOperation_Cu{
 					Cu: &types.ComputedUsersetNode{
-						Relation: rel,
+						Relation: OwnerRelationName,
 					},
 				},
 			},
 		},
 	}
 
-	relations = relations[1:]
-
-	if len(relations) == 0 {
-		return opNode
-	}
-
-	return &types.PermissionFetchTree{
-		Term: &types.PermissionFetchTree_CombNode{
-			CombNode: &types.CombinationNode{
-				Left:       opNode,
-				Combinator: types.Combinator_UNION,
-				Right:      t.buildRelationExpression(relations),
+	for _, relation := range relations {
+		node := &types.PermissionFetchTree{
+			Term: &types.PermissionFetchTree_Operation{
+				Operation: &types.FetchOperation{
+					Operation: &types.FetchOperation_Cu{
+						Cu: &types.ComputedUsersetNode{
+							Relation: relation,
+						},
+					},
+				},
 			},
-		},
+		}
+		tree = &types.PermissionFetchTree{
+			Term: &types.PermissionFetchTree_CombNode{
+				CombNode: &types.CombinationNode{
+					Left:       tree,
+					Combinator: types.Combinator_UNION,
+					Right:      node,
+				},
+			},
+		}
+
 	}
+
+	return tree
 }
 
 func (t *DecentralizedAdminTransformer) buildManagementPermissionName(relationName string) string {

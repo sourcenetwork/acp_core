@@ -57,20 +57,9 @@ func ValidatePolicy(ctx context.Context, runtime runtime.RuntimeManager, req *ty
 		return resp, nil
 	}
 
-	err = basicPolicyIRSpec(&ir)
+	pol, err := mapIRIntoPolicy(ir, 0)
 	if err != nil {
-		resp.ErrorMsg = err.Error()
-		return resp, nil
-	}
-
-	factory := factory{}
-	record, _ := factory.Create(ir, 0, nil)
-
-	spec := validPolicySpec{}
-	err = spec.Satisfies(record.Policy)
-	if err != nil {
-		resp.ErrorMsg = err.Error()
-		return resp, nil
+		return nil, fmt.Errorf("ValidatePolicy: %v", err)
 	}
 
 	engine, err := zanzi.NewZanzi(runtime.GetKVStore(), runtime.GetLogger())
@@ -78,7 +67,7 @@ func ValidatePolicy(ctx context.Context, runtime runtime.RuntimeManager, req *ty
 		return nil, fmt.Errorf("ValidatePolicy: %v", err)
 	}
 
-	valid, msg, err := engine.ValidatePolicy(ctx, record.Policy)
+	valid, msg, err := engine.ValidatePolicy(ctx, pol)
 	if err != nil {
 		return nil, fmt.Errorf("ValidatePolicy: %v", err)
 	}

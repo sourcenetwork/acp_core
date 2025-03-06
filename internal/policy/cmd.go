@@ -25,11 +25,6 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 		return nil, fmt.Errorf("CreatePolicy: %w", err)
 	}
 
-	err = basicPolicyIRSpec(&ir)
-	if err != nil {
-		return nil, fmt.Errorf("CreatePolicy: %w", err)
-	}
-
 	counter := raccoon.NewCounterStoreFromRuntimeManager(runtime, policyCounterPrefix)
 	releaser := counter.Acquire()
 	defer releaser.Release()
@@ -48,24 +43,20 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 		return nil, err
 	}
 
-	metadata := &types.RecordMetadata{
-		Creator:    &principal,
-		CreationTs: now,
-		Supplied:   req.Metadata,
+	policy, err := mapIRIntoPolicy(ir, i)
+	if err != nil {
+		return nil, err
 	}
 
-	factory := factory{}
-	record, err := factory.Create(ir, i, metadata)
-	if err != nil {
-		return nil, fmt.Errorf("CreatePolicy: %w", err)
-	}
-	record.PolicyDefinition = req.Policy
-	record.MarshalType = req.MarshalType
-
-	spec := validPolicySpec{}
-	err = spec.Satisfies(record.Policy)
-	if err != nil {
-		return nil, fmt.Errorf("CreatePolicy: %w", err)
+	record := &types.PolicyRecord{
+		Policy:           policy,
+		PolicyDefinition: req.Policy,
+		MarshalType:      req.MarshalType,
+		Metadata: &types.RecordMetadata{
+			Creator:    &principal,
+			CreationTs: now,
+			Supplied:   req.Metadata,
+		},
 	}
 
 	err = engine.SetPolicy(ctx, record)

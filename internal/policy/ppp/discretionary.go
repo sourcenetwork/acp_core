@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	parser "github.com/sourcenetwork/acp_core/internal/parser/permission_parser"
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
@@ -19,18 +20,18 @@ func (t *DiscretionaryTransformer) Name() string {
 	return "Discretionary Transformer"
 }
 
-func (t *DiscretionaryTransformer) Validate(policy *types.Policy) []error {
-	var violations []error
+func (t *DiscretionaryTransformer) Validate(policy *types.Policy) *errors.MultiError {
+	multiErr := errors.NewMultiError(ErrDiscretionaryTransformer)
 	for _, resource := range policy.Resources {
 		ownerRel := utils.FilterSlice(resource.Relations, func(r *types.Relation) bool { return r.Name == OwnerRelationName })
 		if len(ownerRel) > 1 {
 			err := fmt.Errorf("invalid policy: resource %v: multiple owner relations", resource.Name)
-			violations = append(violations, err)
+			multiErr.Append(err)
 		}
 
 		if len(ownerRel) == 0 {
-			err := fmt.Errorf("invalid policy: resource %v: no owner relation")
-			violations = append(violations, err)
+			err := fmt.Errorf("invalid policy: resource %v: no owner relation", resource.Name)
+			multiErr.Append(err)
 		}
 	}
 
@@ -38,30 +39,36 @@ func (t *DiscretionaryTransformer) Validate(policy *types.Policy) []error {
 		for _, permission := range resource.Permissions {
 			tree, report := parser.Parse(permission.Expression)
 			if report.HasError() {
-				err := fmt.Errorf("parsing permission: resource %v: permission %v: %w", resource.Name, permission.Name, report.Error())
-				violations = append(violations, err)
+				err := fmt.Errorf("parsing permission: resource %v: permission %v: %w", resource.Name, permission.Name, report)
+				multiErr.Append(err)
 				continue
 			}
 
 			if !t.checkOwnerIsAllowed(tree) {
 				err := fmt.Errorf("invalid permission: resource %v: permission %v: expression does not contain owner as topmost allowed relation", resource.Name, permission.Name)
-				violations = append(violations, err)
+				multiErr.Append(err)
 				continue
 			}
 		}
 	}
 
-	return violations
+	if len(multiErr.GetErrors()) > 0 {
+		return multiErr
+	}
+	return nil
 }
 
-func (t *DiscretionaryTransformer) Transform(provider PolicyProvider) (*types.Policy, error) {
+func (t *DiscretionaryTransformer) Transform(provider PolicyProvider) (*types.Policy, *errors.MultiError) {
 	policy := provider()
 
+	multiErr := errors.NewMultiError(ErrDiscretionaryTransformer)
 	// for all resources, add owner relation to it, if it doesn't exist
 	for _, resource := range policy.Resources {
 		ownerRel := utils.FilterSlice(resource.Relations, func(r *types.Relation) bool { return r.Name == OwnerRelationName })
 		if len(ownerRel) > 1 {
-			return nil, fmt.Errorf("invalid policy: resource %v: multiple owner relations", resource.Name)
+			err := fmt.Errorf("invalid policy: resource %v: multiple owner relations", resource.Name)
+			multiErr.Append(err)
+			return nil, multiErr
 		}
 		if len(ownerRel) == 0 {
 			rel := newOwnerRelation(policy)
@@ -75,7 +82,9 @@ func (t *DiscretionaryTransformer) Transform(provider PolicyProvider) (*types.Po
 		for _, permission := range resource.Permissions {
 			tree, report := parser.Parse(permission.Expression)
 			if report.HasError() {
-				return nil, fmt.Errorf("parsing permission: resource %v: permission %v: %w", resource.Name, permission.Name, report.Error())
+				err := fmt.Errorf("parsing permission: resource %v: permission %v: %w", resource.Name, permission.Name, report)
+				multiErr.Append(err)
+				return nil, multiErr
 			}
 			tree = t.transformFetchTree(tree)
 			expr := tree.IntoPermissionExpr()

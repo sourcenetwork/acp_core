@@ -1,13 +1,17 @@
 package ppp
 
 import (
-	"fmt"
-
 	"github.com/cosmos/gogoproto/proto"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
-	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
+
+func NewPipeline(specs []Specification, transformers []Transformer) Pipeline {
+	return Pipeline{
+		specs:        specs,
+		transformers: transformers,
+	}
+}
 
 type Pipeline struct {
 	specs        []Specification
@@ -35,32 +39,39 @@ func (p *Pipeline) Process(pol *types.Policy) (*types.Policy, error) {
 }
 
 func (p *Pipeline) applySpecs(pol *types.Policy) *errors.MultiError {
-	err := errors.NewMultiError("policy spec verfication", errors.ErrorType_BAD_INPUT)
-	specs := make([]Specification, 0, len(p.specs)+len(p.transformers))
-	specs = append(specs, p.specs...)
-	specs = append(specs, p.transformers...)
+	multiErr := errors.NewMultiError(ErrPolicyProcessing)
 
-	for _, spec := range specs {
+	for _, spec := range p.specs {
 		pol := proto.Clone(pol).(*types.Policy)
-		violations := spec.Validate(pol)
-		utils.MapSlice(violations, func(err error) error {
-			return fmt.Errorf("%v: %w", spec.Name(), err)
-		})
-		err.Append(violations...)
+		err := spec.Validate(pol)
+		if err != nil {
+			multiErr.Append(err)
+		}
 	}
-	return err
+
+	for _, transformer := range p.transformers {
+		pol := proto.Clone(pol).(*types.Policy)
+		err := transformer.Validate(pol)
+		if err != nil {
+			multiErr.Append(err)
+		}
+	}
+	if len(multiErr.GetErrors()) == 0 {
+		return nil
+	}
+
+	return multiErr
 }
 
 func (p *Pipeline) applyTransforms(policy *types.Policy) (*types.Policy, *errors.MultiError) {
-	var err error
+	var err *errors.MultiError
 	for _, transform := range p.transformers {
 		producer := func() *types.Policy {
 			return proto.Clone(policy).(*types.Policy)
 		}
 		policy, err = transform.Transform(producer)
 		if err != nil {
-			msg := "transform failed: " + transform.Name()
-			return nil, errors.NewMultiError(msg, errors.ErrorType_BAD_INPUT, err)
+			return nil, err
 		}
 	}
 	return policy, nil

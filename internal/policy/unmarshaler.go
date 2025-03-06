@@ -84,7 +84,7 @@ func (u *shortUnmarshaler) mapPolShort(pol *types.PolicyShort) PolicyIR {
 	}
 
 	// sort to ensure unmarshaling tests are not flaky
-	policy.sort()
+	policy.Sort()
 
 	return policy
 }
