@@ -3,7 +3,7 @@ package theorem_parser
 import (
 	"github.com/antlr4-go/antlr/v4"
 
-	"github.com/sourcenetwork/acp_core/internal/parser"
+	"github.com/sourcenetwork/acp_core/pkg/parser"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )

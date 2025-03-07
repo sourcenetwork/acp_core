@@ -1,6 +1,6 @@
 .PHONY: test
 test:
-	go test -coverpkg=./...  ./...
+	go test -coverpkg=./... ./...
 
 .PHONY: test\:bench
 test\:bench:

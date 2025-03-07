@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"github.com/sourcenetwork/acp_core/internal/authorizer"
-	"github.com/sourcenetwork/acp_core/internal/parser/theorem_parser"
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
+	"github.com/sourcenetwork/acp_core/pkg/parser/theorem_parser"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )

@@ -1,22 +1,22 @@
-package policy
+package ppp
 
 import (
+	"github.com/sourcenetwork/acp_core/pkg/errors"
+	"github.com/sourcenetwork/acp_core/pkg/transformer"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
 
-// PolicyIR is an intermediary representation of a Policy which marshaled representations
-// must unmarshall to.
-type PolicyIR struct {
-	Name          string
-	Description   string
-	Attributes    map[string]string
-	Resources     []*types.Resource
-	ActorResource *types.ActorResource
+var _ transformer.Transformer = (*SortTransformer)(nil)
+
+// SortTransformer performs a stable sorts over all resources, permissions and relations by their name.
+type SortTransformer struct{}
+
+func (t *SortTransformer) Validate(_ types.Policy) *errors.MultiError {
+	return nil
 }
 
-// sort performs an in place sorting of resources, relations and permissions in a policy
-func (pol *PolicyIR) Sort() {
+func (t *SortTransformer) Transform(pol types.Policy) (types.Policy, error) {
 	resourceExtractor := func(resource *types.Resource) string { return resource.Name }
 	relationExtractor := func(relation *types.Relation) string { return relation.Name }
 	permissionExtractor := func(permission *types.Permission) string { return permission.Name }
@@ -27,4 +27,7 @@ func (pol *PolicyIR) Sort() {
 		utils.FromExtractor(resource.Relations, relationExtractor).SortInPlace()
 		utils.FromExtractor(resource.Permissions, permissionExtractor).SortInPlace()
 	}
+	return pol, nil
 }
+
+func (t *SortTransformer) GetBaseError() error { return nil }

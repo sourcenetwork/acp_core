@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/sourcenetwork/acp_core/internal/policy/ppp"
 	"github.com/sourcenetwork/acp_core/internal/theorem"
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
@@ -51,13 +52,16 @@ func ValidatePolicy(ctx context.Context, runtime runtime.RuntimeManager, req *ty
 		Valid: false,
 	}
 
-	ir, err := Unmarshal(req.Policy, req.MarshalType)
+	pol, err := Unmarshal(req.Policy, req.MarshalType)
 	if err != nil {
 		resp.ErrorMsg = err.Error()
 		return resp, nil
 	}
 
-	pol, err := mapIRIntoPolicy(ir, 0)
+	// counter doesn't matter since policy is not going to be persisted
+	// so an ID clash is irrelevant
+	pipeline := ppp.NewPipeline(0, nil, nil)
+	pol, err = pipeline.Process(pol)
 	if err != nil {
 		return nil, fmt.Errorf("ValidatePolicy: %v", err)
 	}

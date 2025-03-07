@@ -7,6 +7,9 @@ import (
 
 var _ PermissionExprVisitor = (*visitor)(nil)
 
+// visitor implements antlr's visitor interface for the PermissionExpr grammar
+//
+// visitor returns an acp_core PermissionFetchTree if parsing is sucessful
 type visitor struct {
 	antlr.ParseTreeVisitor
 }

@@ -3,19 +3,43 @@ package ppp
 import (
 	"github.com/cosmos/gogoproto/proto"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
+	"github.com/sourcenetwork/acp_core/pkg/transformer"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
-func NewPipeline(specs []Specification, transformers []Transformer) Pipeline {
+var ErrPolicyProcessing = errors.New("policy processing", errors.ErrorType_BAD_INPUT)
+
+var baseSpecs = []transformer.Specification{
+	&BasicSpec{},
+}
+
+func NewPipeline(sequenceNumber uint64, specs []transformer.Specification, transformers []transformer.Transformer) Pipeline {
+	headTransformers := []transformer.Transformer{
+		&BasicTransformer{},
+		&DiscretionaryTransformer{},
+		&DecentralizedAdminTransformer{},
+	}
+
+	tailTransformers := []transformer.Transformer{
+		&SortTransformer{},
+		NewIdTransformer(sequenceNumber),
+	}
+
+	transformerPipeline := headTransformers
+	transformerPipeline = append(transformerPipeline, transformers...)
+	transformerPipeline = append(transformerPipeline, tailTransformers...)
+
+	specs = append(baseSpecs, specs...)
+
 	return Pipeline{
 		specs:        specs,
-		transformers: transformers,
+		transformers: transformerPipeline,
 	}
 }
 
 type Pipeline struct {
-	specs        []Specification
-	transformers []Transformer
+	specs        []transformer.Specification
+	transformers []transformer.Transformer
 }
 
 // Process executes the Policy Processing Pipeline by sequentially
@@ -25,37 +49,40 @@ type Pipeline struct {
 //
 // Return the processed policy and an error with the underlying type *errors.MultiError, in case further inspection is necessary.
 func (p *Pipeline) Process(pol *types.Policy) (*types.Policy, error) {
-	pol, err := p.applyTransforms(pol)
+	new, err := p.applyTransforms(*pol)
 	if err != nil {
 		return nil, err
 	}
 
-	err = p.applySpecs(pol)
-	if err != nil {
+	multiErr := p.applySpecs(&new)
+	if multiErr != nil {
 		return nil, err
 	}
 
-	return pol, nil
+	return &new, nil
 }
 
 func (p *Pipeline) applySpecs(pol *types.Policy) *errors.MultiError {
 	multiErr := errors.NewMultiError(ErrPolicyProcessing)
 
 	for _, spec := range p.specs {
-		pol := proto.Clone(pol).(*types.Policy)
-		err := spec.Validate(pol)
+		// clone each policy before sending to the spec to ensure it's
+		// a buggy Specification doesn't ruin the Policy
+		clone := proto.Clone(pol).(*types.Policy)
+		err := spec.Validate(*clone)
 		if err != nil {
 			multiErr.Append(err)
 		}
 	}
 
 	for _, transformer := range p.transformers {
-		pol := proto.Clone(pol).(*types.Policy)
-		err := transformer.Validate(pol)
+		cloned := proto.Clone(pol).(*types.Policy)
+		err := transformer.Validate(*cloned)
 		if err != nil {
 			multiErr.Append(err)
 		}
 	}
+
 	if len(multiErr.GetErrors()) == 0 {
 		return nil
 	}
@@ -63,15 +90,12 @@ func (p *Pipeline) applySpecs(pol *types.Policy) *errors.MultiError {
 	return multiErr
 }
 
-func (p *Pipeline) applyTransforms(policy *types.Policy) (*types.Policy, *errors.MultiError) {
-	var err *errors.MultiError
-	for _, transform := range p.transformers {
-		producer := func() *types.Policy {
-			return proto.Clone(policy).(*types.Policy)
-		}
-		policy, err = transform.Transform(producer)
+func (p *Pipeline) applyTransforms(policy types.Policy) (types.Policy, error) {
+	var err error
+	for _, trans := range p.transformers {
+		policy, err = trans.Transform(policy)
 		if err != nil {
-			return nil, err
+			return types.Policy{}, err
 		}
 	}
 	return policy, nil

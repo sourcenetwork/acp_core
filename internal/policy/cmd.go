@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/sourcenetwork/acp_core/internal/policy/ppp"
 	"github.com/sourcenetwork/acp_core/internal/raccoon"
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
 	"github.com/sourcenetwork/acp_core/pkg/auth"
@@ -18,11 +19,6 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 	engine, err := zanzi.NewZanzi(runtime.GetKVStore(), runtime.GetLogger())
 	if err != nil {
 		return nil, err
-	}
-
-	ir, err := Unmarshal(req.Policy, req.MarshalType)
-	if err != nil {
-		return nil, fmt.Errorf("CreatePolicy: %w", err)
 	}
 
 	counter := raccoon.NewCounterStoreFromRuntimeManager(runtime, policyCounterPrefix)
@@ -43,9 +39,15 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 		return nil, err
 	}
 
-	policy, err := mapIRIntoPolicy(ir, i)
+	policy, err := Unmarshal(req.Policy, req.MarshalType)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("CreatePolicy: %w", err)
+	}
+
+	pipeline := ppp.NewPipeline(i, nil, nil)
+	policy, err = pipeline.Process(policy)
+	if err != nil {
+		return nil, fmt.Errorf("CreatePolicy: %w", err)
 	}
 
 	record := &types.PolicyRecord{

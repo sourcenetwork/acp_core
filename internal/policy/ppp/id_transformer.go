@@ -6,57 +6,50 @@ import (
 	"fmt"
 
 	"github.com/sourcenetwork/acp_core/pkg/errors"
+	"github.com/sourcenetwork/acp_core/pkg/transformer"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
-var _ Transformer = (*IdTransformer)(nil)
+var _ transformer.Transformer = (*IdTransformer)(nil)
 
+// ErIdTransformer is the root error for IdTransformer
+var ErrIdTransformer = errors.New("id policy transformer", errors.ErrorType_BAD_INPUT)
+
+// IdTransformer transforms a Policy by generating its ID
+// The ID transformation is done deterministically by hashing a subset
+// of the Policy's fields and adding a sequence number
+// to ensure equal policies get different Ids.
 type IdTransformer struct {
 	counterVal uint64
 }
 
-func NewIdTransformer(policyCounterVal uint64) Transformer {
+// NewIdTransformer returns a new instance of IdTransformer
+func NewIdTransformer(policyCounterVal uint64) transformer.Transformer {
 	return &IdTransformer{
 		counterVal: policyCounterVal,
 	}
 }
 
-func (s *IdTransformer) Validate(pol *types.Policy) *errors.MultiError {
+// Validate asserts that the Policy Id has been generated
+func (t *IdTransformer) Validate(pol types.Policy) *errors.MultiError {
 	if pol.Id == "" {
 		return errors.NewMultiError(ErrIdTransformer, fmt.Errorf("id not specified"))
 	}
 	return nil
 }
 
-// normalize normalizes a policy by setting default values for optional fields.
-func (s *IdTransformer) Transform(producer PolicyProvider) (*types.Policy, *errors.MultiError) {
-	pol := producer()
-
-	if pol.ActorResource == nil {
-		pol.ActorResource = &types.ActorResource{
-			Name: defaultActorResourceName,
-		}
-	}
-
-	// policy is sorted before building id to ensure determinism
-	pol.Sort()
-	pol.Id = s.id(pol, s.counterVal)
-
-	return pol, nil
-}
-
-// buildId computes the unique id for a policy.
-//
-// the id is a hash of the policy hash and the policy counter number
-func (t *IdTransformer) id(pol *types.Policy, counter uint64) string {
+// Transform produces the policy Id and sets it in the struct
+func (t *IdTransformer) Transform(pol types.Policy) (types.Policy, error) {
 	hasher := sha256.New()
 
-	hasher.Write(t.hashPol(pol))
-	hasher.Write([]byte(fmt.Sprintf("%v", counter)))
+	hasher.Write(t.hashPol(&pol))
+	hasher.Write([]byte(fmt.Sprintf("%v", t.counterVal)))
 
 	hash := hasher.Sum(nil)
 	id := hex.EncodeToString(hash)
-	return id
+	pol.Id = id
+
+	return pol, nil
 }
 
 // hashPol computes a partial sha256 hash of a policy.
@@ -80,3 +73,5 @@ func (t *IdTransformer) hashPol(pol *types.Policy) []byte {
 
 	return hasher.Sum(nil)
 }
+
+func (t *IdTransformer) GetBaseError() error { return ErrIdTransformer }
