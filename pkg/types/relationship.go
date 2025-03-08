@@ -1,18 +1,5 @@
 package types
 
-func NewPolicyRecord(policy *Policy) (*PolicyRecord, error) {
-	graph := &ManagementGraph{}
-	graph.LoadFromPolicy(policy)
-	if err := graph.IsWellFormed(); err != nil {
-		return nil, err
-	}
-
-	return &PolicyRecord{
-		Policy:          policy,
-		ManagementGraph: graph,
-	}, nil
-}
-
 func NewRelationship(resource, objId, relation, subjResource, subjId string) *Relationship {
 	return &Relationship{
 		Object: &Object{

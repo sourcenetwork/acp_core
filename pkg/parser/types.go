@@ -79,7 +79,12 @@ func (r *ParserReport) HasError() bool {
 	return len(errs) != 0
 }
 
-func (r *ParserReport) GetErrors() []error {
+// ToMultiError collapses the located errors into flat messsages and collects the error into a multi error
+func (r *ParserReport) ToMultiError(baseErr *errors.Error) *errors.MultiError {
+	return errors.NewMultiError(baseErr, r.getErrors()...)
+}
+
+func (r *ParserReport) getErrors() []error {
 	return utils.MapFilterSlice(r.msgs,
 		func(msg *types.LocatedMessage) bool { return msg.IsError() },
 		func(msg *types.LocatedMessage) error { return msg.ToError() },
@@ -94,7 +99,7 @@ func (r *ParserReport) Error() string {
 	builder := strings.Builder{}
 	builder.WriteString(r.msg)
 	builder.WriteString("\n")
-	for _, err := range r.GetErrors() {
+	for _, err := range r.getErrors() {
 		builder.WriteString(err.Error())
 		builder.WriteString("\n")
 	}

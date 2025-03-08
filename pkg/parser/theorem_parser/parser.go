@@ -1,8 +1,9 @@
-package parser
+package theorem_parser
 
 import (
 	"github.com/antlr4-go/antlr/v4"
 
+	"github.com/sourcenetwork/acp_core/pkg/parser"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
@@ -11,7 +12,7 @@ import (
 type parserCaller func(parser *TheoremParser) antlr.ParseTree
 
 // ParseRelationship attempts to extract a single Relationship from input
-func ParseRelationship(input string) (*types.Relationship, *ParserReport) {
+func ParseRelationship(input string) (*types.Relationship, *parser.ParserReport) {
 	obj, report := ParseRelationshipWithLocation(input)
 	if report.HasError() {
 		return nil, report
@@ -21,40 +22,40 @@ func ParseRelationship(input string) (*types.Relationship, *ParserReport) {
 
 // ParseRelationship attempts to extract a single Relationship from input.
 // Returns location information about parsed Relationship.
-func ParseRelationshipWithLocation(input string) (LocatedObject[*types.Relationship], *ParserReport) {
+func ParseRelationshipWithLocation(input string) (parser.LocatedObject[*types.Relationship], *parser.ParserReport) {
 	result, report := parseAndVisit(input, "relationship document", func(p *TheoremParser) antlr.ParseTree {
 		return p.Relationship_document()
 	})
 	if report.HasError() {
-		return LocatedObject[*types.Relationship]{}, report
+		return parser.LocatedObject[*types.Relationship]{}, report
 	}
-	return result.(LocatedObject[*types.Relationship]), report
+	return result.(parser.LocatedObject[*types.Relationship]), report
 }
 
 // ParseRelationships greedly parses relationships in input.
 // Consumes all of the input stream
-func ParseRelationships(input string) ([]*types.Relationship, *ParserReport) {
+func ParseRelationships(input string) ([]*types.Relationship, *parser.ParserReport) {
 	rels, report := ParseRelationshipsWithLocation(input)
 	if report.HasError() {
 		return nil, report
 	}
-	return utils.MapSlice(rels, func(o LocatedObject[*types.Relationship]) *types.Relationship { return o.Obj }), report
+	return utils.MapSlice(rels, func(o parser.LocatedObject[*types.Relationship]) *types.Relationship { return o.Obj }), report
 }
 
 // ParseRelationshipsWithLocation greedily parses the input for all relationships it can find
 // and returns a located object for each.
-func ParseRelationshipsWithLocation(relationshipSet string) ([]LocatedObject[*types.Relationship], *ParserReport) {
+func ParseRelationshipsWithLocation(relationshipSet string) ([]parser.LocatedObject[*types.Relationship], *parser.ParserReport) {
 	result, report := parseAndVisit(relationshipSet, "relationship set", func(p *TheoremParser) antlr.ParseTree {
 		return p.Relationship_set()
 	})
 	if report.HasError() {
 		return nil, report
 	}
-	return result.([]LocatedObject[*types.Relationship]), report
+	return result.([]parser.LocatedObject[*types.Relationship]), report
 }
 
 // ParsePolicyTheorem greedily consumes the input and returns a PolicyTheorem
-func ParsePolicyTheorem(input string) (*LocatedPolicyTheorem, *ParserReport) {
+func ParsePolicyTheorem(input string) (*parser.LocatedPolicyTheorem, *parser.ParserReport) {
 	result, report := parseAndVisit(input, "policy theorem", func(p *TheoremParser) antlr.ParseTree {
 		return p.Policy_thorem()
 	})
@@ -62,7 +63,7 @@ func ParsePolicyTheorem(input string) (*LocatedPolicyTheorem, *ParserReport) {
 		return nil, report
 	}
 
-	return result.(*LocatedPolicyTheorem), report
+	return result.(*parser.LocatedPolicyTheorem), report
 }
 
 // parserAndVisit handles the boilerplate to parse an input stream,
@@ -70,12 +71,12 @@ func ParsePolicyTheorem(input string) (*LocatedPolicyTheorem, *ParserReport) {
 // using the custom visitor.
 //
 // Return visitor result or error
-func parseAndVisit(input string, productionName string, caller parserCaller) (any, *ParserReport) {
+func parseAndVisit(input string, productionName string, caller parserCaller) (any, *parser.ParserReport) {
 	inputStream := antlr.NewInputStream(input)
 	lexer := NewTheoremLexer(inputStream)
 	stream := antlr.NewCommonTokenStream(lexer, 0)
 
-	errListener := newListener(productionName)
+	errListener := parser.NewErrLsitener(productionName)
 
 	parser := NewTheoremParser(stream)
 	parser.RemoveErrorListeners()

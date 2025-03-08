@@ -1,6 +1,6 @@
-// Code generated from ./internal/parser/Theorem.g4 by ANTLR 4.13.2. DO NOT EDIT.
+// Code generated from ./internal/parser/theorem_parser/Theorem.g4 by ANTLR 4.13.2. DO NOT EDIT.
 
-package parser
+package theorem_parser
 
 import (
 	"fmt"

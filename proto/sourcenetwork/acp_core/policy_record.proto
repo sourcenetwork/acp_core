@@ -14,13 +14,11 @@ message PolicyRecord {
 
   RecordMetadata metadata = 2;
 
-  ManagementGraph management_graph = 3;
-
   // policy_definition contains the policy payload as the client
   // originally submitted
-  string policy_definition = 4;
+  string policy_definition = 3;
 
-  PolicyMarshalingType marshal_type = 5;
+  PolicyMarshalingType marshal_type = 4;
 }
 
 // ManagementGraph represents a Policy's Relation Management Graph.

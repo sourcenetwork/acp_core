@@ -7,6 +7,7 @@ import (
 
 	"sigs.k8s.io/yaml"
 
+	"github.com/sourcenetwork/acp_core/internal/policy/ppp"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
@@ -15,8 +16,8 @@ const (
 	V1_0 string = "1.0"
 )
 
-func Unmarshal(pol string, t types.PolicyMarshalingType) (PolicyIR, error) {
-	var policy PolicyIR
+func Unmarshal(pol string, t types.PolicyMarshalingType) (*types.Policy, error) {
+	var policy *types.Policy
 	var err error
 
 	switch t {
@@ -43,39 +44,39 @@ type shortUnmarshaler struct{}
 const typeDivider string = "->"
 
 // Unmarshal a YAML serialized PolicyShort definition
-func (u *shortUnmarshaler) UnmarshalYAML(pol string) (PolicyIR, error) {
+func (u *shortUnmarshaler) UnmarshalYAML(pol string) (*types.Policy, error) {
 	// remove trailing
 	pol = strings.ReplaceAll(pol, "\t", "    ")
 	pol = strings.Trim(pol, "\n")
 	// Strict returns error if any key is duplicated
 	polBytes, err := yaml.YAMLToJSONStrict([]byte(pol))
 	if err != nil {
-		return PolicyIR{}, fmt.Errorf("%w: %v", ErrInvalidShortPolicy, err)
+		return nil, fmt.Errorf("%w: %v", ErrInvalidShortPolicy, err)
 	}
 
 	return u.UnmarshalJSON(string(polBytes))
 }
 
 // Unmarshal a JSON serialized PolicyShort definition
-func (u *shortUnmarshaler) UnmarshalJSON(pol string) (PolicyIR, error) {
+func (u *shortUnmarshaler) UnmarshalJSON(pol string) (*types.Policy, error) {
 	polShort := types.PolicyShort{}
 
 	err := json.Unmarshal([]byte(pol), &polShort)
 	if err != nil {
-		return PolicyIR{}, fmt.Errorf("%w: %v", ErrInvalidShortPolicy, err)
+		return nil, fmt.Errorf("%w: %v", ErrInvalidShortPolicy, err)
 	}
 
 	return u.mapPolShort(&polShort), nil
 }
 
-func (u *shortUnmarshaler) mapPolShort(pol *types.PolicyShort) PolicyIR {
+func (u *shortUnmarshaler) mapPolShort(pol *types.PolicyShort) *types.Policy {
 	resources := make([]*types.Resource, 0, len(pol.Resources))
 	for name, resource := range pol.Resources {
 		mapped := u.mapResource(name, resource)
 		resources = append(resources, mapped)
 	}
 
-	policy := PolicyIR{
+	policy := &types.Policy{
 		Name:          pol.Name,
 		Description:   pol.Description,
 		Attributes:    pol.Meta,
@@ -84,9 +85,9 @@ func (u *shortUnmarshaler) mapPolShort(pol *types.PolicyShort) PolicyIR {
 	}
 
 	// sort to ensure unmarshaling tests are not flaky
-	policy.sort()
-
-	return policy
+	sorted := ppp.SortTransformer{}
+	sortedPol, _ := sorted.Transform(*policy) // SortTransformer does not error
+	return &sortedPol
 }
 
 func (u *shortUnmarshaler) mapResource(name string, resource *types.ResourceShort) *types.Resource {
