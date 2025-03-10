@@ -66,7 +66,7 @@ actor:
 	}
 	require.Equal(t, wantMetadata, resp.Record.Metadata)
 	require.Equal(t, &types.Policy{
-		Id:          "7c10ce44694f17560cf9f5b310f90ca3db722007bae4d82e484b7e1a9fc1294b",
+		Id:          "da7be65027664708551f97197ba5f5993aa99bc7b57055df9766426dc6da9605",
 		Name:        "policy",
 		Description: "ok",
 		Attributes: map[string]string{
@@ -111,7 +111,7 @@ actor:
 					},
 					{
 						Name:       "_can_manage_reader",
-						Expression: "(owner + admin)",
+						Expression: "(admin + owner)",
 						Doc:        "permission controls actors which are allowed to create relationships for the reader relation (permission was auto-generated).",
 					},
 					{
@@ -265,8 +265,8 @@ resources:
 	resp1, err1 := ctx.Engine.CreatePolicy(ctx, &req)
 	resp2, err2 := ctx.Engine.CreatePolicy(ctx, &req)
 
-	want1 := "60c328483733cf9607b7eca3c270784ebe25038f2c1cc0f3ae9beddeb6b1acb3"
-	want2 := "4e3ce429d500c85fb9b5439ab31d2276f014a689e3ee7055cecd6e510654f4f9"
+	want1 := "0aceb40e813c157152dd931f0f5e59228fce7c87ab3a40341ac1abce7ad7da3a"
+	want2 := "f3743fa4268b48462014e0b1b8a07d7a8bf615b3ddc276d91c7128aaad8a2eee"
 	require.NoError(t, err1)
 	require.NoError(t, err2)
 	require.Equal(t, want1, resp1.Record.Policy.Id)

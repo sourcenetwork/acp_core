@@ -56,7 +56,7 @@ func (p *Pipeline) Process(pol *types.Policy) (*types.Policy, error) {
 
 	multiErr := p.applySpecs(&new)
 	if multiErr != nil {
-		return nil, err
+		return nil, multiErr
 	}
 
 	return &new, nil

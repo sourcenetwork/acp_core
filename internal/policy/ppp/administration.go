@@ -84,7 +84,7 @@ func (t *DecentralizedAdminTransformer) buildManagementPermission(resourceName s
 
 func (t *DecentralizedAdminTransformer) buildRelationExpression(relations []string) *types.PermissionFetchTree {
 	if len(relations) == 0 {
-		return buildFetchOwnerTree()
+		return newFetchOwnerTree()
 	}
 
 	tree := &types.PermissionFetchTree{
@@ -126,7 +126,7 @@ func (t *DecentralizedAdminTransformer) buildRelationExpression(relations []stri
 			CombNode: &types.CombinationNode{
 				Left:       tree,
 				Combinator: types.Combinator_UNION,
-				Right:      buildFetchOwnerTree(),
+				Right:      newFetchOwnerTree(),
 			},
 		},
 	}

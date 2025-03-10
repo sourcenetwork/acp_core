@@ -84,7 +84,6 @@ func (t *DiscretionaryTransformer) Transform(policy types.Policy) (types.Policy,
 		}
 		if len(ownerRel) == 0 {
 			rel := newOwnerRelation(&policy)
-			ownerRel = append(ownerRel, rel)
 			resource.Relations = append(resource.Relations, rel)
 		}
 	}
@@ -111,6 +110,12 @@ func (t *DiscretionaryTransformer) Transform(policy types.Policy) (types.Policy,
 
 // transformFetchTree adds computed userset instruction for owner as leftmost node
 // if the tree already meets this criteria, this is a noop
+//
+// this transformation is very primitive, as there are several
+// relations which would still be valid which aren't accounted for (eg. owner + foo + barr),
+// however it is the simplest way to ensure owners have full access
+// as there are several subtle expressions which could remove owner access
+// eg. owner - (something & owner)
 func (t *DiscretionaryTransformer) transformFetchTree(tree *types.PermissionFetchTree) *types.PermissionFetchTree {
 	if checkOwnerIsTopNode(tree) {
 		return tree
@@ -119,7 +124,7 @@ func (t *DiscretionaryTransformer) transformFetchTree(tree *types.PermissionFetc
 	return &types.PermissionFetchTree{
 		Term: &types.PermissionFetchTree_CombNode{
 			CombNode: &types.CombinationNode{
-				Left:       buildFetchOwnerTree(),
+				Left:       newFetchOwnerTree(),
 				Combinator: types.Combinator_UNION,
 				Right:      tree,
 			},
@@ -127,8 +132,8 @@ func (t *DiscretionaryTransformer) transformFetchTree(tree *types.PermissionFetc
 	}
 }
 
-// buildFetchOwnerTree returns a PermissionFetchTree with ComputedUserset owner as the single node
-func buildFetchOwnerTree() *types.PermissionFetchTree {
+// newFetchOwnerTree returns a PermissionFetchTree with ComputedUserset owner as the single node
+func newFetchOwnerTree() *types.PermissionFetchTree {
 	return &types.PermissionFetchTree{
 		Term: &types.PermissionFetchTree_Operation{
 			Operation: &types.FetchOperation{
@@ -155,6 +160,8 @@ func newOwnerRelation(policy *types.Policy) *types.Relation {
 	}
 }
 
+// isComputedUsersetOwnerTree verifies whether the given fetch tree
+// is a single node tree for a computed userset operation for the owner relation
 func isComputedUsersetOwnerTree(tree *types.PermissionFetchTree) bool {
 	if tree.GetOperation() == nil {
 		return false
@@ -172,12 +179,6 @@ func isComputedUsersetOwnerTree(tree *types.PermissionFetchTree) bool {
 // whether got the given Fetch tree there is a computed userset rule
 // for the owner relation as either a standalone node or
 // as a top-level node for a union combination node.
-//
-// note this check is not comprehensive, as (owner + reader) + foo
-// is still a valid permission expression, which would be rejected.
-//
-// TODO - add more compherensive check - either smt or an ad hoc algorithm
-// which checks whether -owner exists at a higher level than an +owner
 func checkOwnerIsTopNode(tree *types.PermissionFetchTree) bool {
 	switch term := tree.Term.(type) {
 	case *types.PermissionFetchTree_Operation:
