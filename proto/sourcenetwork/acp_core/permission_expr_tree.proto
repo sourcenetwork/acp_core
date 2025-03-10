@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package sourcenetwork.acp_core;
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+
+// PermissionExpr models a permission fetch tree,
+// which controls how a permission is evaluated
+message PermissionFetchTree {
+    oneof term {
+        FetchOperation operation = 1;
+        CombinationNode comb_node = 2;
+    }
+}
+
+// CombinationNode models a term which has a left and right expr alongside a combinator
+message CombinationNode {
+    PermissionFetchTree left = 1;
+    Combinator combinator = 2;
+    PermissionFetchTree right = 3;
+}
+
+// Combinator expresses a set combinator which
+// merges the result of two fetch operatiosn
+enum Combinator {
+    COMB_UNKNOWN = 0;
+    UNION = 1;
+    DIFFERENCE = 2;
+    INTERSECTION = 3;
+}
+
+// FetchOperation models a terminal in the permission expr tree, meaning a single fetch operator
+message FetchOperation {
+    oneof operation {
+        ComputedUsersetNode cu = 1;
+        ThisNode this = 2;
+        TupleToUsersetNode ttu = 3;
+    }
+}
+
+// ComputedUsersetNode models a computed userset operation
+message ComputedUsersetNode {
+    string relation = 1;
+}
+
+// ThisNode models a fetch this operation
+message ThisNode {
+}
+
+// TupleToUsersetNode models a Tuple to Userset operation
+message TupleToUsersetNode {
+    string resource = 1;
+    string relation = 2;
+}

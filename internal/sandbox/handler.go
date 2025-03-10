@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/sourcenetwork/acp_core/internal/parser"
 	"github.com/sourcenetwork/acp_core/internal/policy"
 	"github.com/sourcenetwork/acp_core/internal/raccoon"
 	"github.com/sourcenetwork/acp_core/internal/relationship"
@@ -12,6 +11,8 @@ import (
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
 	"github.com/sourcenetwork/acp_core/pkg/auth"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
+	"github.com/sourcenetwork/acp_core/pkg/parser"
+	"github.com/sourcenetwork/acp_core/pkg/parser/theorem_parser"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
@@ -158,10 +159,10 @@ func (h *SetStateHandler) parseCtx(ctx context.Context, manager runtime.RuntimeM
 		errs.PolicyErrors = append(errs.PolicyErrors, err)
 	}
 
-	relationships, report := parser.ParseRelationshipsWithLocation(data.Relationships)
+	relationships, report := theorem_parser.ParseRelationshipsWithLocation(data.Relationships)
 	errs.RelationshipsErrors = append(errs.RelationshipsErrors, report.GetMessages()...)
 
-	theorem, report := parser.ParsePolicyTheorem(data.PolicyTheorem)
+	theorem, report := theorem_parser.ParsePolicyTheorem(data.PolicyTheorem)
 	errs.TheoremsErrors = append(errs.TheoremsErrors, report.GetMessages()...)
 
 	if errs.HasErrors() {

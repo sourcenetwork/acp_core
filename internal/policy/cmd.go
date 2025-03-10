@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/sourcenetwork/acp_core/internal/policy/ppp"
 	"github.com/sourcenetwork/acp_core/internal/raccoon"
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
 	"github.com/sourcenetwork/acp_core/pkg/auth"
@@ -18,16 +19,6 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 	engine, err := zanzi.NewZanzi(runtime.GetKVStore(), runtime.GetLogger())
 	if err != nil {
 		return nil, err
-	}
-
-	ir, err := Unmarshal(req.Policy, req.MarshalType)
-	if err != nil {
-		return nil, fmt.Errorf("CreatePolicy: %w", err)
-	}
-
-	err = basicPolicyIRSpec(&ir)
-	if err != nil {
-		return nil, fmt.Errorf("CreatePolicy: %w", err)
 	}
 
 	counter := raccoon.NewCounterStoreFromRuntimeManager(runtime, policyCounterPrefix)
@@ -48,24 +39,26 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 		return nil, err
 	}
 
-	metadata := &types.RecordMetadata{
-		Creator:    &principal,
-		CreationTs: now,
-		Supplied:   req.Metadata,
-	}
-
-	factory := factory{}
-	record, err := factory.Create(ir, i, metadata)
+	policy, err := Unmarshal(req.Policy, req.MarshalType)
 	if err != nil {
 		return nil, fmt.Errorf("CreatePolicy: %w", err)
 	}
-	record.PolicyDefinition = req.Policy
-	record.MarshalType = req.MarshalType
 
-	spec := validPolicySpec{}
-	err = spec.Satisfies(record.Policy)
+	pipeline := ppp.NewPipeline(i, nil, nil)
+	policy, err = pipeline.Process(policy)
 	if err != nil {
 		return nil, fmt.Errorf("CreatePolicy: %w", err)
+	}
+
+	record := &types.PolicyRecord{
+		Policy:           policy,
+		PolicyDefinition: req.Policy,
+		MarshalType:      req.MarshalType,
+		Metadata: &types.RecordMetadata{
+			Creator:    &principal,
+			CreationTs: now,
+			Supplied:   req.Metadata,
+		},
 	}
 
 	err = engine.SetPolicy(ctx, record)

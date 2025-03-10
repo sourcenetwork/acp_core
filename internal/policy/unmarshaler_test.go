@@ -35,7 +35,7 @@ func TestFullUnmarshal(t *testing.T) {
 	unmarshaler := shortUnmarshaler{}
 	out, err := unmarshaler.UnmarshalYAML(in)
 
-	want := PolicyIR{
+	want := &types.Policy{
 		Name:        "policy",
 		Description: "ok",
 		Resources: []*types.Resource{
@@ -92,7 +92,7 @@ func TestEmptyResourceMapsToResource(t *testing.T) {
 	unmarshaler := shortUnmarshaler{}
 	out, err := unmarshaler.UnmarshalYAML(in)
 
-	want := PolicyIR{
+	want := &types.Policy{
 		Resources: []*types.Resource{
 			{
 				Name: "foo",
@@ -114,7 +114,7 @@ func TestResourceWithoutPermsOrRelsMapsToResource(t *testing.T) {
 	unmarshaler := shortUnmarshaler{}
 	out, err := unmarshaler.UnmarshalYAML(in)
 
-	want := PolicyIR{
+	want := &types.Policy{
 		Resources: []*types.Resource{
 			{
 				Name:        "foo",
@@ -138,7 +138,7 @@ func TestEmptyRelationMapsToRelation(t *testing.T) {
 	unmarshaler := shortUnmarshaler{}
 	out, err := unmarshaler.UnmarshalYAML(in)
 
-	want := PolicyIR{
+	want := &types.Policy{
 		Resources: []*types.Resource{
 			{
 				Name: "foo",
@@ -172,7 +172,7 @@ func TestEmptyPermissionMapsToPermission(t *testing.T) {
 	unmarshaler := shortUnmarshaler{}
 	out, err := unmarshaler.UnmarshalYAML(in)
 
-	want := PolicyIR{
+	want := &types.Policy{
 		Resources: []*types.Resource{
 			{
 				Name: "foo",
@@ -246,7 +246,7 @@ func TestRestrictionIdentifierMapsBothForms(t *testing.T) {
 	unmarshaler := shortUnmarshaler{}
 	out, err := unmarshaler.UnmarshalYAML(in)
 
-	want := PolicyIR{
+	want := &types.Policy{
 		Resources: []*types.Resource{
 			{
 				Name: "foo",

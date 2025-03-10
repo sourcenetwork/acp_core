@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"github.com/sourcenetwork/acp_core/internal/authorizer"
-	"github.com/sourcenetwork/acp_core/internal/parser"
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
+	"github.com/sourcenetwork/acp_core/pkg/parser/theorem_parser"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
@@ -88,7 +88,7 @@ func (e *Evaluator) evalDelegationTheorem(ctx context.Context, polId *types.Poli
 // EvalutePolicyTheoremDSL evaluates a PolicyTheorem represented as a string,
 // and return a Report which references the text location of each theorem alongside its result
 func (e *Evaluator) EvaluatePolicyTheoremDSL(ctx context.Context, polId string, theoremDSL string) (*types.AnnotatedPolicyTheoremResult, error) {
-	indexedTheorem, report := parser.ParsePolicyTheorem(theoremDSL)
+	indexedTheorem, report := theorem_parser.ParsePolicyTheorem(theoremDSL)
 	if report.HasError() {
 		return nil, report
 	}

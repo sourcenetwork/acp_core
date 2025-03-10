@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/sourcenetwork/acp_core/internal/policy/ppp"
 	"github.com/sourcenetwork/acp_core/internal/theorem"
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
@@ -51,26 +52,18 @@ func ValidatePolicy(ctx context.Context, runtime runtime.RuntimeManager, req *ty
 		Valid: false,
 	}
 
-	ir, err := Unmarshal(req.Policy, req.MarshalType)
+	pol, err := Unmarshal(req.Policy, req.MarshalType)
 	if err != nil {
 		resp.ErrorMsg = err.Error()
 		return resp, nil
 	}
 
-	err = basicPolicyIRSpec(&ir)
+	// counter doesn't matter since policy is not going to be persisted
+	// so an ID clash is irrelevant
+	pipeline := ppp.NewPipeline(0, nil, nil)
+	pol, err = pipeline.Process(pol)
 	if err != nil {
-		resp.ErrorMsg = err.Error()
-		return resp, nil
-	}
-
-	factory := factory{}
-	record, _ := factory.Create(ir, 0, nil)
-
-	spec := validPolicySpec{}
-	err = spec.Satisfies(record.Policy)
-	if err != nil {
-		resp.ErrorMsg = err.Error()
-		return resp, nil
+		return nil, fmt.Errorf("ValidatePolicy: %v", err)
 	}
 
 	engine, err := zanzi.NewZanzi(runtime.GetKVStore(), runtime.GetLogger())
@@ -78,7 +71,7 @@ func ValidatePolicy(ctx context.Context, runtime runtime.RuntimeManager, req *ty
 		return nil, fmt.Errorf("ValidatePolicy: %v", err)
 	}
 
-	valid, msg, err := engine.ValidatePolicy(ctx, record.Policy)
+	valid, msg, err := engine.ValidatePolicy(ctx, pol)
 	if err != nil {
 		return nil, fmt.Errorf("ValidatePolicy: %v", err)
 	}

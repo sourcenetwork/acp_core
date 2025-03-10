@@ -1,4 +1,4 @@
-package parser
+package theorem_parser
 
 import (
 	"testing"
