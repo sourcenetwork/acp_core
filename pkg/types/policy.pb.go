@@ -115,7 +115,7 @@ func (m *Policy) GetSpecification() PolicySpecification {
 	if m != nil {
 		return m.Specification
 	}
-	return PolicySpecification_DEFRA_SPEC
+	return PolicySpecification_UNKNOWN_SPEC
 }
 
 // Resource models a namespace for objects in a Policy.

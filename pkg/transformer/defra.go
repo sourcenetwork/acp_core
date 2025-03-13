@@ -10,6 +10,7 @@ import (
 )
 
 var _ Specification = (*DefraSpec)(nil)
+var _ Transformer = (*DefraWriteImpliesReadTransform)(nil)
 
 const (
 	DefraReadPermissionName  = "read"
@@ -58,3 +59,17 @@ func (s *DefraSpec) Validate(pol types.Policy) *errors.MultiError {
 }
 
 func (s *DefraSpec) GetBaseError() error { return ErrDefraSpec }
+
+type DefraWriteImpliesReadTransform struct{}
+
+func (s *DefraWriteImpliesReadTransform) GetBaseError() error {
+	return ErrDefraSpec
+}
+
+func (s *DefraWriteImpliesReadTransform) Validate(pol types.Policy) *errors.MultiError {
+	return nil
+}
+
+func (s *DefraWriteImpliesReadTransform) Transform(pol types.Policy) (types.Policy, error) {
+	return types.Policy{}, nil
+}

@@ -13,7 +13,7 @@ var baseSpecs = []transformer.Specification{
 	&BasicSpec{},
 }
 
-func NewPipeline(sequenceNumber uint64, specs []transformer.Specification, transformers []transformer.Transformer) Pipeline {
+func newPipeline(sequenceNumber uint64, specs []transformer.Specification, transformers []transformer.Transformer) Pipeline {
 	headTransformers := []transformer.Transformer{
 		&BasicTransformer{},
 		&DiscretionaryTransformer{},
