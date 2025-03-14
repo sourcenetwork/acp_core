@@ -12,6 +12,7 @@ func TestFullUnmarshal(t *testing.T) {
 	in := `
         name: policy
         description: ok
+		spec: none
         resources:
           foo:
             relations: 
@@ -36,8 +37,9 @@ func TestFullUnmarshal(t *testing.T) {
 	out, err := unmarshaler.UnmarshalYAML(in)
 
 	want := &types.Policy{
-		Name:        "policy",
-		Description: "ok",
+		Name:              "policy",
+		Description:       "ok",
+		SpecificationType: types.PolicySpecificationType_NO_SPEC,
 		Resources: []*types.Resource{
 			{
 				Name: "foo",
@@ -83,6 +85,22 @@ func TestFullUnmarshal(t *testing.T) {
 	require.Equal(t, want, out)
 }
 
+func TestUnmarshalWithoutSpecDefaultsToUnkown(t *testing.T) {
+	in := `
+	name: policy
+`
+	unmarshaler := shortUnmarshaler{}
+	out, err := unmarshaler.UnmarshalYAML(in)
+
+	want := &types.Policy{
+		Name:              "policy",
+		SpecificationType: types.PolicySpecificationType_UNKNOWN_SPEC,
+		Resources:         []*types.Resource{},
+	}
+	require.Nil(t, err)
+	require.Equal(t, want, out)
+}
+
 func TestEmptyResourceMapsToResource(t *testing.T) {
 	in := `
     resources:
@@ -93,6 +111,7 @@ func TestEmptyResourceMapsToResource(t *testing.T) {
 	out, err := unmarshaler.UnmarshalYAML(in)
 
 	want := &types.Policy{
+		SpecificationType: types.PolicySpecificationType_UNKNOWN_SPEC,
 		Resources: []*types.Resource{
 			{
 				Name: "foo",
@@ -115,6 +134,7 @@ func TestResourceWithoutPermsOrRelsMapsToResource(t *testing.T) {
 	out, err := unmarshaler.UnmarshalYAML(in)
 
 	want := &types.Policy{
+		SpecificationType: types.PolicySpecificationType_UNKNOWN_SPEC,
 		Resources: []*types.Resource{
 			{
 				Name:        "foo",
@@ -139,6 +159,7 @@ func TestEmptyRelationMapsToRelation(t *testing.T) {
 	out, err := unmarshaler.UnmarshalYAML(in)
 
 	want := &types.Policy{
+		SpecificationType: types.PolicySpecificationType_UNKNOWN_SPEC,
 		Resources: []*types.Resource{
 			{
 				Name: "foo",
@@ -173,6 +194,7 @@ func TestEmptyPermissionMapsToPermission(t *testing.T) {
 	out, err := unmarshaler.UnmarshalYAML(in)
 
 	want := &types.Policy{
+		SpecificationType: types.PolicySpecificationType_UNKNOWN_SPEC,
 		Resources: []*types.Resource{
 			{
 				Name: "foo",
@@ -247,6 +269,7 @@ func TestRestrictionIdentifierMapsBothForms(t *testing.T) {
 	out, err := unmarshaler.UnmarshalYAML(in)
 
 	want := &types.Policy{
+		SpecificationType: types.PolicySpecificationType_UNKNOWN_SPEC,
 		Resources: []*types.Resource{
 			{
 				Name: "foo",
@@ -270,5 +293,72 @@ func TestRestrictionIdentifierMapsBothForms(t *testing.T) {
 		},
 	}
 	require.Nil(t, err)
+	require.Equal(t, want, out)
+}
+
+func Test_NoneSpecMapsToNoneSpecficationType(t *testing.T) {
+	in := `
+	name: test
+	spec: none
+	`
+
+	unmarshaler := shortUnmarshaler{}
+	out, err := unmarshaler.UnmarshalYAML(in)
+
+	require.NoError(t, err)
+	want := &types.Policy{
+		Name:              "test",
+		SpecificationType: types.PolicySpecificationType_NO_SPEC,
+		Resources:         []*types.Resource{},
+	}
+	require.Equal(t, want, out)
+}
+
+func Test_DefraSpecMapsToDefraSpecficationType(t *testing.T) {
+	in := `
+	name: test
+	spec: defra
+	`
+
+	unmarshaler := shortUnmarshaler{}
+	out, err := unmarshaler.UnmarshalYAML(in)
+
+	require.NoError(t, err)
+	want := &types.Policy{
+		Name:              "test",
+		SpecificationType: types.PolicySpecificationType_DEFRA_SPEC,
+		Resources:         []*types.Resource{},
+	}
+	require.Equal(t, want, out)
+}
+
+func Test_GibberingSpecMapsErrors(t *testing.T) {
+	in := `
+	name: test
+	spec: gibberish-1234
+	`
+
+	unmarshaler := shortUnmarshaler{}
+	out, err := unmarshaler.UnmarshalYAML(in)
+
+	require.Error(t, err)
+	require.Nil(t, out)
+}
+
+func Test_EmptySpecMapsToUnknown(t *testing.T) {
+	in := `
+	name: test
+	spec: ""
+	`
+
+	unmarshaler := shortUnmarshaler{}
+	out, err := unmarshaler.UnmarshalYAML(in)
+
+	require.NoError(t, err)
+	want := &types.Policy{
+		Name:              "test",
+		SpecificationType: types.PolicySpecificationType_UNKNOWN_SPEC,
+		Resources:         []*types.Resource{},
+	}
 	require.Equal(t, want, out)
 }

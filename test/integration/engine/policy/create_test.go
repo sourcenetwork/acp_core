@@ -11,19 +11,13 @@ import (
 	"github.com/sourcenetwork/acp_core/test"
 )
 
-var metadata *types.SuppliedMetadata = &types.SuppliedMetadata{
-	Attributes: map[string]string{
-		"test": "abc",
-	},
-	Blob: []byte("test"),
-}
-
 func TestCreatePolicy_ValidPolicyIsCreated(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
 	policyStr := `
 name: policy
 description: ok
+spec: none
 resources:
   file:
     relations:
@@ -66,9 +60,10 @@ actor:
 	}
 	require.Equal(t, wantMetadata, resp.Record.Metadata)
 	require.Equal(t, &types.Policy{
-		Id:          "da7be65027664708551f97197ba5f5993aa99bc7b57055df9766426dc6da9605",
-		Name:        "policy",
-		Description: "ok",
+		Id:                "da7be65027664708551f97197ba5f5993aa99bc7b57055df9766426dc6da9605",
+		Name:              "policy",
+		Description:       "ok",
+		SpecificationType: types.PolicySpecificationType_NO_SPEC,
 		Attributes: map[string]string{
 			"a":   "b",
 			"key": "value",
@@ -149,6 +144,7 @@ func TestCreatePolicy_ResourcesWithoutOwnerRelation_IsAutomaticallyAdded(t *test
 	pol := `
 name: policy
 description: ok
+spec: none
 resources:
   file:
     relations:
@@ -187,6 +183,7 @@ func TestCreatePolicy_ManagementReferencingUndefinedRelationReturnsError(t *test
 	pol := `
 name: policy
 description: ok
+spec: none
 resources:
   file:
     relations:
@@ -232,6 +229,7 @@ func TestCreatePolicy_CreatingMultipleEqualPoliciesProduceDifferentIDs(t *testin
 	pol := `
 name: test
 description: A Valid Defra Policy Interface (DPI)
+spec: none
 
 actor:
   name: actor

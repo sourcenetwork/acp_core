@@ -3,14 +3,14 @@ package ppp
 import (
 	"fmt"
 
+	"github.com/sourcenetwork/acp_core/internal/specification"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
 	parser "github.com/sourcenetwork/acp_core/pkg/parser/permission_parser"
-	"github.com/sourcenetwork/acp_core/pkg/transformer"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
 
-var _ transformer.Transformer = (*DiscretionaryTransformer)(nil)
+var _ specification.Transformer = (*DiscretionaryTransformer)(nil)
 
 const (
 	OwnerRelationName = "owner"

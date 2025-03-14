@@ -7,6 +7,7 @@ import "sourcenetwork/acp_core/request.proto";
 import "sourcenetwork/acp_core/catalogue.proto";
 import "sourcenetwork/acp_core/metadata.proto";
 import "sourcenetwork/acp_core/policy.proto";
+import "sourcenetwork/acp_core/specification.proto";
 import "sourcenetwork/acp_core/policy_record.proto";
 import "sourcenetwork/acp_core/policy_short.proto";
 import "sourcenetwork/acp_core/relationship.proto";
@@ -17,9 +18,13 @@ import "sourcenetwork/acp_core/theorem.proto";
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
 
 service ACPEngine {
-  // CreatePolicy adds a new Policy to SourceHub.
+  // CreatePolicy adds a new Policy to the engine.
   // The Policy models an aplication's high level access control rules.
   rpc CreatePolicy(CreatePolicyRequest) returns (CreatePolicyResponse);
+
+  // CreatePolicyWithSpecificatoin adds a new Policy to engine,
+  // which must satisfy the supplied specification.
+  rpc CreatePolicyWithSpecification(CreatePolicyWithSpecificationRequest) returns (CreatePolicyWithSpecificationResponse);
 
   // GetPolicy returns a Policy with the given ID
   rpc GetPolicy(GetPolicyRequest) returns (GetPolicyResponse);
@@ -137,11 +142,25 @@ service ACPEngine {
 
 message CreatePolicyRequest {
   string policy = 1;
-  sourcenetwork.acp_core.PolicyMarshalingType marshal_type = 2;
+  PolicyMarshalingType marshal_type = 2;
   SuppliedMetadata metadata = 3;
 }
 
 message CreatePolicyResponse {
+  PolicyRecord record = 1;
+}
+
+message CreatePolicyWithSpecificationRequest {
+  string policy = 1;
+  PolicyMarshalingType marshal_type = 2;
+  SuppliedMetadata metadata = 3;
+  // required_spec indicates the specification which the policy must satisfy
+  // if the policy does not satisfy it or informs a different
+  // spec, produces an error
+  PolicySpecificationType required_spec = 4;
+}
+
+message CreatePolicyWithSpecificationResponse {
   PolicyRecord record = 1;
 }
 

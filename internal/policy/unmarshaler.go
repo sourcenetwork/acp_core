@@ -83,12 +83,12 @@ func (u *shortUnmarshaler) mapPolShort(pol *types.PolicyShort) (*types.Policy, e
 	}
 
 	policy := &types.Policy{
-		Name:          pol.Name,
-		Description:   pol.Description,
-		Attributes:    pol.Meta,
-		Resources:     resources,
-		ActorResource: pol.Actor,
-		Specification: spec,
+		Name:              pol.Name,
+		Description:       pol.Description,
+		Attributes:        pol.Meta,
+		Resources:         resources,
+		ActorResource:     pol.Actor,
+		SpecificationType: spec,
 	}
 
 	// sort to ensure unmarshaling tests are not flaky
@@ -161,15 +161,15 @@ func (u *shortUnmarshaler) mapPermission(name string, entry *types.PermissionSho
 	return perm
 }
 
-func (u *shortUnmarshaler) mapSpec(spec string) (types.PolicySpecification, error) {
+func (u *shortUnmarshaler) mapSpec(spec string) (types.PolicySpecificationType, error) {
 	switch strings.ToLower(spec) {
 	case "defra":
-		return types.PolicySpecification_DEFRA_SPEC, nil
-	case "":
-		return types.PolicySpecification_DEFRA_SPEC, nil
+		return types.PolicySpecificationType_DEFRA_SPEC, nil
 	case "none":
-		return types.PolicySpecification_NO_SPEC, nil
+		return types.PolicySpecificationType_NO_SPEC, nil
+	case "":
+		return types.PolicySpecificationType_UNKNOWN_SPEC, nil
 	default:
-		return types.PolicySpecification_UNKNOWN_SPEC, errors.Wrap("invalid specification", errors.ErrorType_BAD_INPUT)
+		return types.PolicySpecificationType_UNKNOWN_SPEC, errors.Wrap("invalid specification", errors.ErrorType_BAD_INPUT)
 	}
 }

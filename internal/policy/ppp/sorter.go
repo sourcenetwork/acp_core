@@ -1,13 +1,13 @@
 package ppp
 
 import (
+	"github.com/sourcenetwork/acp_core/internal/specification"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
-	"github.com/sourcenetwork/acp_core/pkg/transformer"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
 
-var _ transformer.Transformer = (*SortTransformer)(nil)
+var _ specification.Transformer = (*SortTransformer)(nil)
 
 // SortTransformer performs a stable sorts over all resources, permissions and relations by their name.
 type SortTransformer struct{}

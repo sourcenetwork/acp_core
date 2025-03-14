@@ -60,7 +60,7 @@ func ValidatePolicy(ctx context.Context, runtime runtime.RuntimeManager, req *ty
 
 	// counter doesn't matter since policy is not going to be persisted
 	// so an ID clash is irrelevant
-	pipeline := ppp.PipelineFactory(0, pol.Specification)
+	pipeline := ppp.PipelineFactory(0, pol.SpecificationType)
 	pol, err = pipeline.Process(pol)
 	if err != nil {
 		return nil, fmt.Errorf("ValidatePolicy: %v", err)

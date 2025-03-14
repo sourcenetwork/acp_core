@@ -1,28 +1,28 @@
 package ppp
 
 import (
+	"github.com/sourcenetwork/acp_core/internal/specification"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
-	"github.com/sourcenetwork/acp_core/pkg/transformer"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
-var _ transformer.Transformer = (*BasicTransformer)(nil)
-var _ transformer.Specification = (*BasicSpec)(nil)
+var _ specification.Transformer = (*BasicTransformer)(nil)
+var _ specification.Requirement = (*BasicRequirement)(nil)
 
 const DefaultActorResourceName string = "actor"
 
 // ErrBasicTransformer is the base error for problems detected by the BasicTransformer
 var ErrBasicTransformer = errors.New("basic transformer", errors.ErrorType_BAD_INPUT)
-var ErrBasicSpec = errors.New("basic spec", errors.ErrorType_BAD_INPUT)
+var ErrBasicRequirement = errors.New("basic requirement", errors.ErrorType_BAD_INPUT)
 
-// BasicSpec applies basic Policy Validation
+// BasicRequirement applies basic Policy Validation
 // and performs basic Policy validation
-type BasicSpec struct{}
+type BasicRequirement struct{}
 
 // Validate ensures that at minimum, the policy has a name
-func (s *BasicSpec) Validate(pol types.Policy) *errors.MultiError {
+func (s *BasicRequirement) Validate(pol types.Policy) *errors.MultiError {
 	if pol.Name == "" {
-		return errors.NewMultiError(ErrBasicSpec,
+		return errors.NewMultiError(ErrBasicRequirement,
 			errors.Wrap("name required", errors.ErrInvalidPolicy),
 		)
 	}
@@ -30,8 +30,8 @@ func (s *BasicSpec) Validate(pol types.Policy) *errors.MultiError {
 	return nil
 }
 
-func (t *BasicSpec) GetBaseError() error {
-	return ErrBasicSpec
+func (t *BasicRequirement) GetBaseError() error {
+	return ErrBasicRequirement
 }
 
 // BasicTransforms normalizes a Policy by adding defaults
