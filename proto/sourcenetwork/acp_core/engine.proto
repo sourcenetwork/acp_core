@@ -22,6 +22,10 @@ service ACPEngine {
   // The Policy models an aplication's high level access control rules.
   rpc CreatePolicy(CreatePolicyRequest) returns (CreatePolicyResponse);
 
+  // CreatePolicyWithSpecificatoin adds a new Policy to engine,
+  // which must satisfy the supplied specification.
+  rpc CreatePolicyWithSpecification(CreatePolicyWithSpecificationRequest) returns (CreatePolicyWithSpecificationResponse);
+
   // GetPolicy returns a Policy with the given ID
   rpc GetPolicy(GetPolicyRequest) returns (GetPolicyResponse);
 
@@ -143,6 +147,20 @@ message CreatePolicyRequest {
 }
 
 message CreatePolicyResponse {
+  PolicyRecord record = 1;
+}
+
+message CreatePolicyWithSpecificationRequest {
+  string policy = 1;
+  PolicyMarshalingType marshal_type = 2;
+  SuppliedMetadata metadata = 3;
+  // required_spec indicates the specification which the policy must satisfy
+  // if the policy does not satisfy it or informs a different
+  // spec, produces an error
+  PolicySpecificationType required_spec = 4;
+}
+
+message CreatePolicyWithSpecificationResponse {
   PolicyRecord record = 1;
 }
 
