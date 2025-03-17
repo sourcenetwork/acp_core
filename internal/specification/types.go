@@ -15,7 +15,7 @@ type Requirement interface {
 	// Returns all returns found within Policy as a MultiError
 	Validate(policy types.Policy) *errors.MultiError
 
-	// GetBaseError returns the base error used to construct Specification errors
+	// GetBaseError returns the base error used to construct Requirement errors
 	GetBaseError() error
 }
 
@@ -24,7 +24,7 @@ type Requirement interface {
 // This abstraction allows callers to hook into the policy processing pipeline system
 // within ACP core and add custom validation to it
 //
-// Transformer extends the Specification interface in order to add redundancy validation to a transformation,
+// Transformer extends the Requirement interface in order to add redundancy validation to a transformation,
 // since it's possible that a subsequent transformation undoes the transformation done by a previous one
 type Transformer interface {
 	Requirement
@@ -79,6 +79,8 @@ func newSpecification(t types.PolicySpecificationType, requirements []Requiremen
 	}
 }
 
+// NoSpecification returns an empty Specifcation object,
+// which has no requirements or transformers.
 func NoSpecification() Specification {
 	return newSpecification(types.PolicySpecificationType_NO_SPEC, nil, nil)
 }

@@ -17,7 +17,6 @@ func TestCreatePolicy_ValidPolicyIsCreated(t *testing.T) {
 	policyStr := `
 name: policy
 description: ok
-spec: none
 resources:
   file:
     relations:
@@ -144,7 +143,6 @@ func TestCreatePolicy_ResourcesWithoutOwnerRelation_IsAutomaticallyAdded(t *test
 	pol := `
 name: policy
 description: ok
-spec: none
 resources:
   file:
     relations:
@@ -183,7 +181,6 @@ func TestCreatePolicy_ManagementReferencingUndefinedRelationReturnsError(t *test
 	pol := `
 name: policy
 description: ok
-spec: none
 resources:
   file:
     relations:
@@ -229,7 +226,6 @@ func TestCreatePolicy_CreatingMultipleEqualPoliciesProduceDifferentIDs(t *testin
 	pol := `
 name: test
 description: A Valid Defra Policy Interface (DPI)
-spec: none
 
 actor:
   name: actor
