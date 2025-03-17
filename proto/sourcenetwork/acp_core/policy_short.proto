@@ -25,6 +25,9 @@ message PolicyShort {
 
   string description = 2;
 
+  // spec models a known specification which this policy will fulfill
+  string spec = 3;
+
   // meta field stores arbitrary key-values from users
   map<string, string> meta = 4;
 
@@ -35,9 +38,6 @@ message PolicyShort {
   // actor resource defines the actor resource for the policy
   // optional.
   ActorResource actor = 6;
-
-  // specify the policy version
-  string version = 7;
 }
 
 message ResourceShort {

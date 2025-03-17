@@ -2,44 +2,44 @@ package ppp
 
 import (
 	"github.com/cosmos/gogoproto/proto"
+	"github.com/sourcenetwork/acp_core/internal/specification"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
-	"github.com/sourcenetwork/acp_core/pkg/transformer"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
 var ErrPolicyProcessing = errors.New("policy processing", errors.ErrorType_BAD_INPUT)
 
-var baseSpecs = []transformer.Specification{
-	&BasicSpec{},
+var baseRequiements = []specification.Requirement{
+	&BasicRequirement{},
 }
 
-func NewPipeline(sequenceNumber uint64, specs []transformer.Specification, transformers []transformer.Transformer) Pipeline {
-	headTransformers := []transformer.Transformer{
+func newPipeline(sequenceNumber uint64, spec specification.Specification) Pipeline {
+	headTransformers := []specification.Transformer{
 		&BasicTransformer{},
 		&DiscretionaryTransformer{},
 		&DecentralizedAdminTransformer{},
 	}
 
-	tailTransformers := []transformer.Transformer{
+	tailTransformers := []specification.Transformer{
 		&SortTransformer{},
 		NewIdTransformer(sequenceNumber),
 	}
 
 	transformerPipeline := headTransformers
-	transformerPipeline = append(transformerPipeline, transformers...)
+	transformerPipeline = append(transformerPipeline, spec.GetTransformers()...)
 	transformerPipeline = append(transformerPipeline, tailTransformers...)
 
-	specs = append(baseSpecs, specs...)
+	requirements := append(baseRequiements, spec.GetRequirements()...)
 
 	return Pipeline{
-		specs:        specs,
+		requirements: requirements,
 		transformers: transformerPipeline,
 	}
 }
 
 type Pipeline struct {
-	specs        []transformer.Specification
-	transformers []transformer.Transformer
+	requirements []specification.Requirement
+	transformers []specification.Transformer
 }
 
 // Process executes the Policy Processing Pipeline by sequentially
@@ -54,7 +54,7 @@ func (p *Pipeline) Process(pol *types.Policy) (*types.Policy, error) {
 		return nil, err
 	}
 
-	multiErr := p.applySpecs(&new)
+	multiErr := p.validateRequirements(&new)
 	if multiErr != nil {
 		return nil, multiErr
 	}
@@ -62,12 +62,12 @@ func (p *Pipeline) Process(pol *types.Policy) (*types.Policy, error) {
 	return &new, nil
 }
 
-func (p *Pipeline) applySpecs(pol *types.Policy) *errors.MultiError {
+func (p *Pipeline) validateRequirements(pol *types.Policy) *errors.MultiError {
 	multiErr := errors.NewMultiError(ErrPolicyProcessing)
 
-	for _, spec := range p.specs {
+	for _, spec := range p.requirements {
 		// clone each policy before sending to the spec to ensure it's
-		// a buggy Specification doesn't ruin the Policy
+		// a buggy Requirement doesn't ruin the Policy
 		clone := proto.Clone(pol).(*types.Policy)
 		err := spec.Validate(*clone)
 		if err != nil {

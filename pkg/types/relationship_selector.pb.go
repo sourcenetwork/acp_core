@@ -272,7 +272,6 @@ func (*RelationSelector) XXX_OneofWrappers() []interface{} {
 // SubjectSelector models a filter for Relationship Subjects
 type SubjectSelector struct {
 	// Types that are valid to be assigned to Selector:
-	//
 	//	*SubjectSelector_Subject
 	//	*SubjectSelector_Wildcard
 	Selector isSubjectSelector_Selector `protobuf_oneof:"selector"`

@@ -5,12 +5,12 @@ import (
 	"encoding/hex"
 	"fmt"
 
+	"github.com/sourcenetwork/acp_core/internal/specification"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
-	"github.com/sourcenetwork/acp_core/pkg/transformer"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
-var _ transformer.Transformer = (*IdTransformer)(nil)
+var _ specification.Transformer = (*IdTransformer)(nil)
 
 // ErIdTransformer is the root error for IdTransformer
 var ErrIdTransformer = errors.New("id policy transformer", errors.ErrorType_BAD_INPUT)
@@ -24,7 +24,7 @@ type IdTransformer struct {
 }
 
 // NewIdTransformer returns a new instance of IdTransformer
-func NewIdTransformer(policyCounterVal uint64) transformer.Transformer {
+func NewIdTransformer(policyCounterVal uint64) specification.Transformer {
 	return &IdTransformer{
 		counterVal: policyCounterVal,
 	}

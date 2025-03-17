@@ -3,14 +3,14 @@ package ppp
 import (
 	"fmt"
 
+	"github.com/sourcenetwork/acp_core/internal/specification"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
-	"github.com/sourcenetwork/acp_core/pkg/transformer"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 	"k8s.io/apimachinery/pkg/util/sets"
 )
 
-var _ transformer.Transformer = (*DecentralizedAdminTransformer)(nil)
+var _ specification.Transformer = (*DecentralizedAdminTransformer)(nil)
 
 const (
 	managementPermissionPrefix string = "_can_manage_"

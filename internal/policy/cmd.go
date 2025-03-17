@@ -44,7 +44,11 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 		return nil, fmt.Errorf("CreatePolicy: %w", err)
 	}
 
-	pipeline := ppp.NewPipeline(i, nil, nil)
+	if policy.SpecificationType == types.PolicySpecificationType_UNKNOWN_SPEC {
+		policy.SpecificationType = types.PolicySpecificationType_NO_SPEC
+	}
+
+	pipeline := ppp.PipelineFactory(i, policy.SpecificationType)
 	policy, err = pipeline.Process(policy)
 	if err != nil {
 		return nil, fmt.Errorf("CreatePolicy: %w", err)

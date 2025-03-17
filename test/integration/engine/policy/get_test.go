@@ -28,6 +28,7 @@ func TestGetPolicy_ReturnsAnExistingPolicy(t *testing.T) {
 
 	pol := `
 name: policy
+spec: none
 `
 	action := test.CreatePolicyAction{
 		Policy: pol,
@@ -40,8 +41,9 @@ name: policy
 	resp, err := ctx.Engine.GetPolicy(ctx, &req)
 
 	wantPolicy := &types.Policy{
-		Id:   "bc7eb5a8c500111b2459a92ae23f4848537e49599df1b8d70636b5aacb47bd5f",
-		Name: "policy",
+		Id:                "bc7eb5a8c500111b2459a92ae23f4848537e49599df1b8d70636b5aacb47bd5f",
+		Name:              "policy",
+		SpecificationType: types.PolicySpecificationType_NO_SPEC,
 		ActorResource: &types.ActorResource{
 			Name: "actor",
 		},

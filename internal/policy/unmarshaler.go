@@ -8,6 +8,7 @@ import (
 	"sigs.k8s.io/yaml"
 
 	"github.com/sourcenetwork/acp_core/internal/policy/ppp"
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
@@ -66,28 +67,34 @@ func (u *shortUnmarshaler) UnmarshalJSON(pol string) (*types.Policy, error) {
 		return nil, fmt.Errorf("%w: %v", ErrInvalidShortPolicy, err)
 	}
 
-	return u.mapPolShort(&polShort), nil
+	return u.mapPolShort(&polShort)
 }
 
-func (u *shortUnmarshaler) mapPolShort(pol *types.PolicyShort) *types.Policy {
+func (u *shortUnmarshaler) mapPolShort(pol *types.PolicyShort) (*types.Policy, error) {
 	resources := make([]*types.Resource, 0, len(pol.Resources))
 	for name, resource := range pol.Resources {
 		mapped := u.mapResource(name, resource)
 		resources = append(resources, mapped)
 	}
 
+	spec, err := u.mapSpec(pol.Spec)
+	if err != nil {
+		return nil, err
+	}
+
 	policy := &types.Policy{
-		Name:          pol.Name,
-		Description:   pol.Description,
-		Attributes:    pol.Meta,
-		Resources:     resources,
-		ActorResource: pol.Actor,
+		Name:              pol.Name,
+		Description:       pol.Description,
+		Attributes:        pol.Meta,
+		Resources:         resources,
+		ActorResource:     pol.Actor,
+		SpecificationType: spec,
 	}
 
 	// sort to ensure unmarshaling tests are not flaky
 	sorted := ppp.SortTransformer{}
 	sortedPol, _ := sorted.Transform(*policy) // SortTransformer does not error
-	return &sortedPol
+	return &sortedPol, nil
 }
 
 func (u *shortUnmarshaler) mapResource(name string, resource *types.ResourceShort) *types.Resource {
@@ -152,4 +159,17 @@ func (u *shortUnmarshaler) mapPermission(name string, entry *types.PermissionSho
 		perm.Expression = entry.Expr
 	}
 	return perm
+}
+
+func (u *shortUnmarshaler) mapSpec(spec string) (types.PolicySpecificationType, error) {
+	switch strings.ToLower(spec) {
+	case "defra":
+		return types.PolicySpecificationType_DEFRA_SPEC, nil
+	case "none":
+		return types.PolicySpecificationType_NO_SPEC, nil
+	case "":
+		return types.PolicySpecificationType_UNKNOWN_SPEC, nil
+	default:
+		return types.PolicySpecificationType_UNKNOWN_SPEC, errors.Wrap("invalid specification", errors.ErrorType_BAD_INPUT)
+	}
 }
