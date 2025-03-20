@@ -50,3 +50,14 @@ func ExtractPrincipalWithType(ctx context.Context, t types.PrincipalKind) (types
 func InjectPrincipal(ctx context.Context, principal types.Principal) context.Context {
 	return context.WithValue(ctx, principalCtxKey, principal)
 }
+
+func ExtractAuthenticatedPrincipal(ctx context.Context) (types.Principal, error) {
+	p, err := ExtractPrincipal(ctx)
+	if err != nil {
+		return types.Principal{}, err
+	}
+	if p.Kind == types.PrincipalKind_Anonymous {
+		return types.Principal{}, errors.ErrorType_UNAUTHENTICATED
+	}
+	return p, nil
+}

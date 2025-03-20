@@ -1,0 +1,459 @@
+package policy
+
+import (
+	"testing"
+
+	"github.com/sourcenetwork/acp_core/internal/policy/ppp"
+	"github.com/sourcenetwork/acp_core/internal/specification"
+	"github.com/sourcenetwork/acp_core/pkg/errors"
+	"github.com/sourcenetwork/acp_core/pkg/types"
+	"github.com/sourcenetwork/acp_core/test"
+	"github.com/stretchr/testify/require"
+)
+
+func TestEditPolicy_CannotRemoveResource(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("bob")
+
+	// Given Policy
+	oldPol := `
+name: policy
+resources:
+  file:
+    relations:
+      owner:
+        doc: owner owns
+        types:
+          - actor
+    permissions:
+`
+	a1 := test.CreatePolicyAction{
+		Policy: oldPol,
+	}
+	a1.Run(ctx)
+
+	// When I attempt to remove a resource
+	new := `
+name: policy
+resources:
+`
+	a := test.EditPolicyAction{
+		PolicyId:    ctx.State.PolicyId,
+		Policy:      new,
+		ExpectedErr: ppp.ErrPreserveResource,
+	}
+	a.Run(ctx)
+}
+
+func TestEditPolicy_CannotRemoveOwnerRelation(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("bob")
+
+	// Given Policy
+	oldPol := `
+name: policy
+resources:
+  file:
+    relations:
+      owner:
+        doc: owner owns
+        types:
+          - actor
+    permissions:
+`
+	a1 := test.CreatePolicyAction{
+		Policy: oldPol,
+	}
+	a1.Run(ctx)
+
+	// When I attempt to remove the owner relation
+	new := `
+name: policy
+resources:
+  file:
+    relations:
+    permissions:
+`
+	a := test.EditPolicyAction{
+		PolicyId:    ctx.State.PolicyId,
+		Policy:      new,
+		ExpectedErr: ppp.ErrDiscretionaryTransformer,
+	}
+	a.Run(ctx)
+}
+
+func TestEditPolicy_CannotRenameActorResource(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("bob")
+
+	oldPol := `
+name: policy
+resources:
+actor:
+  name: test
+`
+	a1 := test.CreatePolicyAction{
+		Policy: oldPol,
+	}
+	a1.Run(ctx)
+
+	// When I attempt to rename the actor resource
+	new := `
+name: policy
+actor:
+  name: new-actor-name
+`
+	a := test.EditPolicyAction{
+		PolicyId:    ctx.State.PolicyId,
+		Policy:      new,
+		ExpectedErr: ppp.ErrPreserveResource,
+	}
+	a.Run(ctx)
+}
+func TestEditPolicy_CannotChangeSpec(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("bob")
+
+	oldPol := `
+name: policy
+spec: defra
+resources:
+  file:
+    permissions:
+      read:
+        expr: owner
+      write:
+        expr: owner
+`
+	a1 := test.CreatePolicyAction{
+		Policy: oldPol,
+	}
+	a1.Run(ctx)
+
+	// When the I edit a policy with a new policy spec
+	new := `
+name: policy
+spec: none
+resources:
+  file:
+    permissions:
+      read:
+        expr: owner
+      write:
+        expr: owner
+`
+	a := test.EditPolicyAction{
+		PolicyId:    ctx.State.PolicyId,
+		Policy:      new,
+		ExpectedErr: ppp.ErrImmutableSpec,
+	}
+	a.Run(ctx)
+}
+
+func TestEditPolicy_LastModifiedIsUpdated(t *testing.T) {
+
+}
+
+func TestEditPolicy_CannotEditPolicyThatDoesntExist(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("bob")
+
+	new := `
+name: policy
+spec: none
+resources:
+  file:
+    permissions:
+      read:
+        expr: owner
+      write:
+        expr: owner
+`
+	a := test.EditPolicyAction{
+		PolicyId:    "some-policy-id",
+		Policy:      new,
+		ExpectedErr: errors.ErrorType_NOT_FOUND,
+	}
+	a.Run(ctx)
+}
+
+func TestEditPolicy_CanAddRelation(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("bob")
+
+	oldPol := `
+name: policy
+resources:
+  file:
+    relations:
+      reader:
+`
+	a1 := test.CreatePolicyAction{
+		Policy: oldPol,
+	}
+	a1.Run(ctx)
+
+	// When the I add a new relation to an existing resource
+	new := `
+name: policy
+resources:
+  file:
+    relations:
+      reader:
+      writer:
+`
+	a := test.EditPolicyAction{
+		PolicyId: ctx.State.PolicyId,
+		Policy:   new,
+	}
+	pol := a.Run(ctx)
+
+	// then the new relation exists in the policy
+	want := &types.Relation{
+		Name: "writer",
+	}
+	require.Equal(ctx.T, want, pol.GetResourceByName("file").GetRelationByName("writer"))
+}
+
+func TestEditPolicy_CanAddResource(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("bob")
+
+	oldPol := `
+name: policy
+resources:
+  file:
+    relations:
+      reader:
+`
+	a1 := test.CreatePolicyAction{
+		Policy: oldPol,
+	}
+	a1.Run(ctx)
+
+	// When the I add a new resource with a relation
+	new := `
+name: policy
+resources:
+  file:
+    relations:
+      reader:
+  group:
+    relations:
+      member:
+`
+	a := test.EditPolicyAction{
+		PolicyId: ctx.State.PolicyId,
+		Policy:   new,
+	}
+	pol := a.Run(ctx)
+
+	require.Equal(ctx.T, "group", pol.GetResourceByName("group").Name)
+	require.Equal(ctx.T, "member", pol.GetResourceByName("group").GetRelationByName("member").Name)
+}
+
+func TestEditPolicy_CanEditNameAndAttrs(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("bob")
+
+	oldPol := `
+name: policy
+doc: a test policy
+attrs:
+  key: val
+  key2: val2
+`
+	a1 := test.CreatePolicyAction{
+		Policy: oldPol,
+	}
+	a1.Run(ctx)
+
+	// When the I add a new resource with a relation
+	new := `
+name: new name
+doc: another test policy
+attrs:
+  key: val2
+  key2: val3
+  key3: val
+`
+	a := test.EditPolicyAction{
+		PolicyId: ctx.State.PolicyId,
+		Policy:   new,
+	}
+	pol := a.Run(ctx)
+
+	want := &types.Policy{
+		Name:        "new name",
+		Description: "another test policy",
+		ActorResource: &types.ActorResource{
+			Name: "actor",
+		},
+		Attributes: map[string]string{
+			"key":  "val2",
+			"key2": "val3",
+			"key3": "val",
+		},
+		SpecificationType: types.PolicySpecificationType_NO_SPEC,
+	}
+	require.Equal(ctx.T, want, pol)
+}
+
+func TestEditPolicy_CanEditPermissionExpr(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("bob")
+
+	oldPol := `
+name: policy
+resources:
+  file:
+    relations:
+      reader:
+      writer:
+    permissions:
+      read:
+        expr: owner + reader
+`
+	a1 := test.CreatePolicyAction{
+		Policy: oldPol,
+	}
+	a1.Run(ctx)
+
+	new := `
+name: policy
+resources:
+  file:
+    relations:
+      reader:
+      writer:
+    permissions:
+      read:
+        expr: owner + writer
+`
+	a := test.EditPolicyAction{
+		PolicyId: ctx.State.PolicyId,
+		Policy:   new,
+	}
+	pol := a.Run(ctx)
+
+	want := "owner + writer + owner"
+	require.Equal(ctx.T, want, pol.GetResourceByName("file").GetPermissionByName("read").Expression)
+}
+
+func TestEditPolicy_CannotRemoveDefraPermissionsFromDefraPolicy(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("bob")
+
+	oldPol := `
+name: policy
+spec: defra
+resources:
+  file:
+    relations:
+    permissions:
+      read:
+        expr: owner
+      write:
+        expr: owner
+`
+	a1 := test.CreatePolicyAction{
+		Policy: oldPol,
+	}
+	a1.Run(ctx)
+
+	new := `
+name: policy
+spec: defra
+resources:
+  file:
+    relations:
+    permissions:
+`
+	a := test.EditPolicyAction{
+		PolicyId:    ctx.State.PolicyId,
+		Policy:      new,
+		ExpectedErr: specification.ErrDefraSpec,
+	}
+	a.Run(ctx)
+}
+
+func TestEditPolicy_CanAddPermission(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("bob")
+
+	oldPol := `
+name: policy
+resources:
+  file:
+    relations:
+      reader:
+    permissions:
+      read:
+        expr: reader
+`
+	a1 := test.CreatePolicyAction{
+		Policy: oldPol,
+	}
+	a1.Run(ctx)
+
+	new := `
+name: policy
+resources:
+  file:
+    relations:
+      reader:
+    permissions:
+      read:
+        expr: reader
+      write:
+        expr: reader
+`
+	a := test.EditPolicyAction{
+		PolicyId: ctx.State.PolicyId,
+		Policy:   new,
+	}
+	pol := a.Run(ctx)
+
+	// then the new permission exists in the policy
+	want := &types.Permission{
+		Name:       "write",
+		Expression: "reader + owner",
+	}
+	require.Equal(ctx.T, want, pol.GetResourceByName("file").GetPermissionByName("write"))
+}
+
+func TestEditPolicy_CanRemovePermission(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("bob")
+
+	oldPol := `
+name: policy
+resources:
+  file:
+    relations:
+      reader:
+    permissions:
+      read:
+        expr: reader
+`
+	a1 := test.CreatePolicyAction{
+		Policy: oldPol,
+	}
+	a1.Run(ctx)
+
+	new := `
+name: policy
+resources:
+  file:
+    relations:
+      reader:
+    permissions:
+`
+	a := test.EditPolicyAction{
+		PolicyId: ctx.State.PolicyId,
+		Policy:   new,
+	}
+	pol := a.Run(ctx)
+
+	require.Nil(ctx.T, (pol.GetResourceByName("file").GetPermissionByName("read")))
+}

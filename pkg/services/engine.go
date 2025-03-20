@@ -45,6 +45,14 @@ func (s *EngineService) CreatePolicyWithSpecification(ctx context.Context, msg *
 	return applyMiddleware(ctx, h, s.hooks, msg)
 }
 
+func (s *EngineService) EditPolicy(ctx context.Context, msg *types.EditPolicyRequest) (*types.EditPolicyResponse, error) {
+	handler := policy.EditPolicyHandler{}
+	h := func(ctx context.Context, msg *types.EditPolicyRequest) (*types.EditPolicyResponse, error) {
+		return handler.Execute(ctx, s.runtime, msg)
+	}
+	return applyMiddleware(ctx, h, s.hooks, msg)
+}
+
 func (s *EngineService) SetRelationship(ctx context.Context, msg *types.SetRelationshipRequest) (*types.SetRelationshipResponse, error) {
 	handler := relationship.SetRelationshipHandler{}
 	h := func(ctx context.Context, msg *types.SetRelationshipRequest) (*types.SetRelationshipResponse, error) {

@@ -26,9 +26,13 @@ service ACPEngine {
   // which must satisfy the supplied specification.
   rpc CreatePolicyWithSpecification(CreatePolicyWithSpecificationRequest) returns (CreatePolicyWithSpecificationResponse);
 
-  // EditPolicy updates a Policy definition bound to some Id
+  // EditPolicy updates a Policy definition bound to some Id.
+  // The relations may be added and removed to resources (if they are not required),
+  // new resources may be added, but resources may not be removed.
   //
-  // Editing a policy must preserve some invariants of the system such as:
+  // Removing a relation removes all relationships that reference the removed relation
+  //
+  // A few other invariants are enforced such as:
   // - the name of the actor resource cannot be mutated
   // - resources cannot be removed
   // - the specification of a policy cannot be mutated
@@ -170,8 +174,9 @@ message CreatePolicyWithSpecificationRequest {
 
 message EditPolicyRequest {
   string policy_id = 1;
-  PolicyMarshalingType marshal_type = 2;
-  SuppliedMetadata metadata = 3;
+  string policy = 2;
+  PolicyMarshalingType marshal_type = 3;
+  SuppliedMetadata metadata = 4;
 }
 
 message EditPolicyResponse {

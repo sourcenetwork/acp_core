@@ -10,7 +10,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 )
 
-var _ specification.Requirement = (*ImmutableIdRequirement)(nil)
+var _ specification.Transformer = (*TransferIdTransformer)(nil)
 var _ specification.Requirement = (*ImmutableSpecRequirement)(nil)
 var _ specification.Requirement = (*PreservedResourcesRequirement)(nil)
 
@@ -18,28 +18,33 @@ var ErrPreserveResource = errors.New("cannot remove resources from policy", erro
 var ErrImmutableId = errors.New("editing policy must preserve id", errors.ErrorType_BAD_INPUT)
 var ErrImmutableSpec = errors.New("editing policy must preserve spec", errors.ErrorType_BAD_INPUT)
 
-// NewImmutableIdRequirement returns an instance of ImmutableIdRequirement
+// NewTransferIdTransformer returns an instance of ImmutableIdRequirement
 // bound to some id
-func NewImmutableIdRequirement(oldId string) specification.Requirement {
-	return &ImmutableIdRequirement{
+func NewTransferIdTransformer(oldId string) specification.Transformer {
+	return &TransferIdTransformer{
 		oldId: oldId,
 	}
 }
 
-// ImmutableIdRequirement validates that the new policy has the same Id as the old one
-type ImmutableIdRequirement struct {
+// TransferIdTransformer applies the supplied id to the new policy
+type TransferIdTransformer struct {
 	oldId string
 }
 
-func (r *ImmutableIdRequirement) Validate(policy types.Policy) *errors.MultiError {
+func (r *TransferIdTransformer) Validate(policy types.Policy) *errors.MultiError {
 	if policy.Id != r.oldId {
 		return errors.NewMultiError(ErrImmutableId)
 	}
 	return nil
 }
 
-func (r *ImmutableIdRequirement) GetBaseError() error {
+func (r *TransferIdTransformer) GetBaseError() error {
 	return ErrImmutableId
+}
+
+func (r *TransferIdTransformer) Transform(policy types.Policy) (types.Policy, error) {
+	policy.Id = r.oldId
+	return policy, nil
 }
 
 // NewImmutableSpecRequirement returns a new instance of ImmutableSpecRequirement
@@ -98,7 +103,7 @@ func (r *PreservedResourcesRequirement) Validate(policy types.Policy) *errors.Mu
 		errs = append(errs, err)
 	}
 
-	return errors.NewMultiError(nil, errs...)
+	return errors.NewMultiError(ErrPreserveResource, errs...)
 }
 
 func (r *PreservedResourcesRequirement) GetBaseError() error {

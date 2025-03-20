@@ -34,3 +34,7 @@ func NewDIDPrincipal(did string) (Principal, error) {
 		Identifier: did,
 	}, nil
 }
+
+func (p *Principal) Equals(other *Principal) bool {
+	return p.Identifier == other.Identifier && p.Kind == other.Kind
+}

@@ -41,13 +41,13 @@ func newCreatePolicyPipeline(sequenceNumber uint64, spec specification.Specifica
 func newEditPolicyPipeline(oldPolicy *types.Policy, spec specification.Specification) Pipeline {
 	requirements := []specification.Requirement{
 		&BasicRequirement{},
-		NewImmutableIdRequirement(oldPolicy.Id),
 		NewImmutableSpecRequirement(oldPolicy.SpecificationType),
 		NewPreservedResourcesRequirement(oldPolicy),
 	}
 
 	headTransformers := []specification.Transformer{
 		&BasicTransformer{},
+		NewTransferIdTransformer(oldPolicy.Id),
 		&DiscretionaryTransformer{},
 		&DecentralizedAdminTransformer{},
 	}

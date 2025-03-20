@@ -13,6 +13,7 @@ import (
 
 func TestCreatePolicy_ValidPolicyIsCreated(t *testing.T) {
 	ctx := test.NewTestCtx(t)
+	bob := ctx.SetPrincipal("bob")
 
 	policyStr := `
 name: policy
@@ -51,9 +52,8 @@ actor:
 	resp, err := ctx.Engine.CreatePolicy(ctx, &msg)
 
 	require.Nil(t, err)
-	p := types.AnonymousPrincipal()
 	wantMetadata := &types.RecordMetadata{
-		Creator:    &p,
+		Creator:    &bob,
 		CreationTs: ctx.Time,
 		Supplied:   metadata,
 	}

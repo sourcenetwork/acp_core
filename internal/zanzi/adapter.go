@@ -150,6 +150,30 @@ func (z *Adapter) SetPolicy(ctx context.Context, record *types.PolicyRecord) err
 	return nil
 }
 
+func (z *Adapter) EditPolicy(ctx context.Context, record *types.PolicyRecord) error {
+	serv := z.zanzi.GetPolicyService()
+
+	zanziRecord, err := z.policyMapper.ToZanziRecord(record)
+	if err != nil {
+		return err
+	}
+
+	req := api.EditPolicyRequest{
+		PolicyId: record.Policy.Id,
+		PolicyDefinition: &api.PolicyDefinition{
+			Definition: &api.PolicyDefinition_Policy{
+				Policy: zanziRecord.Policy,
+			},
+		},
+		AppData: zanziRecord.AppData,
+	}
+	_, err = serv.EditPolicy(ctx, &req)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // Returns all Relationships which matches selector
 func (z *Adapter) FilterRelationships(ctx context.Context, policy *types.Policy, selector *types.RelationshipSelector) ([]*types.RelationshipRecord, error) {
 	serv := z.zanzi.GetPolicyService()

@@ -29,7 +29,7 @@ func (m *MultiError) Append(errs ...error) {
 // Error implements Go's error interface
 func (m *MultiError) Error() string {
 	builder := strings.Builder{}
-	builder.WriteString(m.root.errType.String())
+	builder.WriteString(m.root.Error())
 	builder.WriteString(": ")
 	for _, err := range m.errs {
 		builder.WriteString(err.Error())

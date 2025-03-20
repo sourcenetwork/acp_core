@@ -1,6 +1,6 @@
 module github.com/sourcenetwork/acp_core
 
-go 1.23.0
+go 1.23.1
 
 toolchain go1.23.3
 
@@ -12,11 +12,11 @@ require (
 	github.com/google/go-cmp v0.6.0
 	github.com/google/uuid v1.6.0
 	github.com/sourcenetwork/raccoondb v0.2.1-0.20240722161350-d4a78b691ec8
-	github.com/sourcenetwork/zanzi v0.3.1-0.20250117191617-40400ffac5e3
+	github.com/sourcenetwork/zanzi v0.3.1-0.20250319174851-0d4970847403
 	github.com/stretchr/testify v1.9.0
 	google.golang.org/grpc v1.63.2
 	google.golang.org/protobuf v1.35.1
-	k8s.io/apimachinery v0.32.2
+	k8s.io/apimachinery v0.32.3
 	sigs.k8s.io/yaml v1.4.0
 )
 
@@ -84,6 +84,7 @@ require (
 	github.com/rogpeppe/go-internal v1.12.0 // indirect
 	github.com/segmentio/asm v1.2.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
+	github.com/sourcenetwork/raccoondb/v2 v2.0.0 // indirect
 	github.com/spf13/cast v1.6.0 // indirect
 	github.com/spf13/cobra v1.8.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect

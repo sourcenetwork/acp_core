@@ -238,3 +238,39 @@ func (a *RevealRegistrationAction) Run(ctx *TestCtx) *types.RevealRegistrationRe
 	}
 	return resp
 }
+
+type EditPolicyAction struct {
+	PolicyId         string
+	Policy           string
+	ExpectedErr      error
+	Expected         *types.Policy
+	ExpectedMetadata *types.RecordMetadata
+}
+
+func (a *EditPolicyAction) Run(ctx *TestCtx) *types.Policy {
+	req := types.EditPolicyRequest{
+		PolicyId:    a.PolicyId,
+		Policy:      a.Policy,
+		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+	}
+
+	resp, err := ctx.Engine.EditPolicy(ctx, &req)
+
+	if a.ExpectedErr != nil {
+		require.ErrorIs(ctx.T, err, a.ExpectedErr)
+	} else {
+		require.NoError(ctx.T, err)
+	}
+
+	if a.Expected != nil {
+		require.Equal(ctx.T, a.Expected, resp.Record.Policy)
+	}
+	if a.ExpectedMetadata != nil {
+		require.Equal(ctx.T, a.ExpectedMetadata, resp.Record.Metadata)
+	}
+
+	if resp != nil {
+		return resp.Record.Policy
+	}
+	return nil
+}
