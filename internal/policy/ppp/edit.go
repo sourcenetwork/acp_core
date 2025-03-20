@@ -93,6 +93,11 @@ func (r *PreservedResourcesRequirement) Validate(policy types.Policy) *errors.Mu
 		return fmt.Errorf("removed resource %v", name)
 	})
 
+	if r.oldPolicy.ActorResource.Name != policy.ActorResource.Name {
+		err := fmt.Errorf("cannot mutate name of actor resource")
+		errs = append(errs, err)
+	}
+
 	return errors.NewMultiError(nil, errs...)
 }
 
