@@ -9,11 +9,11 @@ import (
 
 var ErrPolicyProcessing = errors.New("policy processing", errors.ErrorType_BAD_INPUT)
 
-var baseRequiements = []specification.Requirement{
+var createPolicyRequirements = []specification.Requirement{
 	&BasicRequirement{},
 }
 
-func newPipeline(sequenceNumber uint64, spec specification.Specification) Pipeline {
+func newCreatePolicyPipeline(sequenceNumber uint64, spec specification.Specification) Pipeline {
 	headTransformers := []specification.Transformer{
 		&BasicTransformer{},
 		&DiscretionaryTransformer{},
@@ -29,7 +29,38 @@ func newPipeline(sequenceNumber uint64, spec specification.Specification) Pipeli
 	transformerPipeline = append(transformerPipeline, spec.GetTransformers()...)
 	transformerPipeline = append(transformerPipeline, tailTransformers...)
 
-	requirements := append(baseRequiements, spec.GetRequirements()...)
+	requirements := append(createPolicyRequirements, spec.GetRequirements()...)
+
+	return Pipeline{
+		requirements: requirements,
+		transformers: transformerPipeline,
+	}
+}
+
+// newEditPolicyPipeline returns a Pipeline which handles transforms while editing a Policy
+func newEditPolicyPipeline(oldPolicy *types.Policy, spec specification.Specification) Pipeline {
+	requirements := []specification.Requirement{
+		&BasicRequirement{},
+		NewImmutableIdRequirement(oldPolicy.Id),
+		NewImmutableSpecRequirement(oldPolicy.SpecificationType),
+		NewPreservedResourcesRequirement(oldPolicy),
+	}
+
+	headTransformers := []specification.Transformer{
+		&BasicTransformer{},
+		&DiscretionaryTransformer{},
+		&DecentralizedAdminTransformer{},
+	}
+
+	tailTransformers := []specification.Transformer{
+		&SortTransformer{},
+	}
+
+	transformerPipeline := headTransformers
+	transformerPipeline = append(transformerPipeline, spec.GetTransformers()...)
+	transformerPipeline = append(transformerPipeline, tailTransformers...)
+
+	requirements = append(requirements, spec.GetRequirements()...)
 
 	return Pipeline{
 		requirements: requirements,
