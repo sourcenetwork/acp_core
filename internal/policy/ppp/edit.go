@@ -90,9 +90,6 @@ func (r *PreservedResourcesRequirement) Validate(policy types.Policy) *errors.Mu
 	oldResources := sets.New(r.oldPolicy.ListResourcesNames()...)
 	newResources := sets.New(policy.ListResourcesNames()...)
 	missing := oldResources.Difference(newResources)
-	if missing.Len() == 0 {
-		return nil
-	}
 
 	errs := utils.MapSlice(missing.UnsortedList(), func(name string) error {
 		return fmt.Errorf("removed resource %v", name)
@@ -101,6 +98,10 @@ func (r *PreservedResourcesRequirement) Validate(policy types.Policy) *errors.Mu
 	if r.oldPolicy.ActorResource.Name != policy.ActorResource.Name {
 		err := fmt.Errorf("cannot mutate name of actor resource")
 		errs = append(errs, err)
+	}
+
+	if len(errs) == 0 {
+		return nil
 	}
 
 	return errors.NewMultiError(ErrPreserveResource, errs...)

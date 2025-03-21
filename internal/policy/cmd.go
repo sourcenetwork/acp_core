@@ -239,6 +239,6 @@ func (h *EditPolicyHandler) Execute(ctx context.Context, runtime runtime.Runtime
 	}
 
 	return &types.EditPolicyResponse{
-		Record: oldRecord,
+		Record: record,
 	}, nil
 }

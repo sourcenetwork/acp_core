@@ -45,7 +45,7 @@ resources:
 	a.Run(ctx)
 }
 
-func TestEditPolicy_CannotRemoveOwnerRelation(t *testing.T) {
+func TestEditPolicy_RemovingOwnerRelation_DiscretionaryTransformerRestoresIt(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
@@ -75,11 +75,21 @@ resources:
     permissions:
 `
 	a := test.EditPolicyAction{
-		PolicyId:    ctx.State.PolicyId,
-		Policy:      new,
-		ExpectedErr: ppp.ErrDiscretionaryTransformer,
+		PolicyId: ctx.State.PolicyId,
+		Policy:   new,
 	}
-	a.Run(ctx)
+	pol := a.Run(ctx)
+	t.Logf("pol: %v", pol)
+	want := &types.Relation{
+		Name: "owner",
+		Doc:  "owner relations represents the object owner",
+		VrTypes: []*types.Restriction{
+			{
+				ResourceName: "actor",
+			},
+		},
+	}
+	require.Equal(t, want, pol.GetResourceByName("file").GetRelationByName("owner"))
 }
 
 func TestEditPolicy_CannotRenameActorResource(t *testing.T) {
@@ -258,8 +268,8 @@ func TestEditPolicy_CanEditNameAndAttrs(t *testing.T) {
 
 	oldPol := `
 name: policy
-doc: a test policy
-attrs:
+description: a test policy
+meta:
   key: val
   key2: val2
 `
@@ -271,8 +281,8 @@ attrs:
 	// When the I add a new resource with a relation
 	new := `
 name: new name
-doc: another test policy
-attrs:
+description: another test policy
+meta:
   key: val2
   key2: val3
   key3: val
@@ -284,8 +294,10 @@ attrs:
 	pol := a.Run(ctx)
 
 	want := &types.Policy{
+		Id:          "bc7eb5a8c500111b2459a92ae23f4848537e49599df1b8d70636b5aacb47bd5f",
 		Name:        "new name",
 		Description: "another test policy",
+		Resources:   []*types.Resource{},
 		ActorResource: &types.ActorResource{
 			Name: "actor",
 		},
@@ -336,7 +348,7 @@ resources:
 	}
 	pol := a.Run(ctx)
 
-	want := "owner + writer + owner"
+	want := "(owner + writer)"
 	require.Equal(ctx.T, want, pol.GetResourceByName("file").GetPermissionByName("read").Expression)
 }
 
@@ -417,7 +429,7 @@ resources:
 	// then the new permission exists in the policy
 	want := &types.Permission{
 		Name:       "write",
-		Expression: "reader + owner",
+		Expression: "(owner + reader)",
 	}
 	require.Equal(ctx.T, want, pol.GetResourceByName("file").GetPermissionByName("write"))
 }
