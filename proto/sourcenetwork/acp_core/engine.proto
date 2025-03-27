@@ -38,6 +38,9 @@ service ACPEngine {
   // - the specification of a policy cannot be mutated
   rpc EditPolicy(EditPolicyRequest) returns (EditPolicyResponse);
 
+  // EditPolicyMetadata updates the supplied metadata attached to a Policy record
+  rpc EditPolicyMetadata(EditPolicyMetadataRequest) returns (EditPolicyMetadataResponse);
+
   // GetPolicy returns a Policy with the given ID
   rpc GetPolicy(GetPolicyRequest) returns (GetPolicyResponse);
 
@@ -176,10 +179,19 @@ message EditPolicyRequest {
   string policy_id = 1;
   string policy = 2;
   PolicyMarshalingType marshal_type = 3;
-  SuppliedMetadata metadata = 4;
 }
 
 message EditPolicyResponse {
+  PolicyRecord record = 1;
+  uint64 relatinships_removed = 2;
+}
+
+message EditPolicyMetadataRequest {
+  string policy_id = 1;
+  SuppliedMetadata metadata = 4;
+}
+
+message EditPolicyMetadataResponse {
   PolicyRecord record = 1;
 }
 

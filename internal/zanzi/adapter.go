@@ -150,12 +150,12 @@ func (z *Adapter) SetPolicy(ctx context.Context, record *types.PolicyRecord) err
 	return nil
 }
 
-func (z *Adapter) EditPolicy(ctx context.Context, record *types.PolicyRecord) error {
+func (z *Adapter) EditPolicy(ctx context.Context, record *types.PolicyRecord) (uint64, error) {
 	serv := z.zanzi.GetPolicyService()
 
 	zanziRecord, err := z.policyMapper.ToZanziRecord(record)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	req := api.EditPolicyRequest{
@@ -165,13 +165,21 @@ func (z *Adapter) EditPolicy(ctx context.Context, record *types.PolicyRecord) er
 				Policy: zanziRecord.Policy,
 			},
 		},
-		AppData: zanziRecord.AppData,
 	}
-	_, err = serv.EditPolicy(ctx, &req)
+	result, err := serv.EditPolicy(ctx, &req)
 	if err != nil {
-		return err
+		return 0, err
 	}
-	return nil
+
+	_, err = serv.EditPolicyAppData(ctx, &api.EditPolicyAppDataRequest{
+		PolicyId: record.Policy.Id,
+		AppData:  zanziRecord.AppData,
+	})
+	if err != nil {
+		return 0, err
+	}
+
+	return result.RemovedRelationshipsCount, nil
 }
 
 // Returns all Relationships which matches selector

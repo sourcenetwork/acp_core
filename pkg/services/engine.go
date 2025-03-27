@@ -53,6 +53,14 @@ func (s *EngineService) EditPolicy(ctx context.Context, msg *types.EditPolicyReq
 	return applyMiddleware(ctx, h, s.hooks, msg)
 }
 
+func (s *EngineService) EditPolicyMetadata(ctx context.Context, msg *types.EditPolicyMetadataRequest) (*types.EditPolicyMetadataResponse, error) {
+	handler := policy.EditPolicyMetadataHandler{}
+	h := func(ctx context.Context, msg *types.EditPolicyMetadataRequest) (*types.EditPolicyMetadataResponse, error) {
+		return handler.Execute(ctx, s.runtime, msg)
+	}
+	return applyMiddleware(ctx, h, s.hooks, msg)
+}
+
 func (s *EngineService) SetRelationship(ctx context.Context, msg *types.SetRelationshipRequest) (*types.SetRelationshipResponse, error) {
 	handler := relationship.SetRelationshipHandler{}
 	h := func(ctx context.Context, msg *types.SetRelationshipRequest) (*types.SetRelationshipResponse, error) {

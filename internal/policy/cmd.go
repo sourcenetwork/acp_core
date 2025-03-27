@@ -233,12 +233,53 @@ func (h *EditPolicyHandler) Execute(ctx context.Context, runtime runtime.Runtime
 	record.Metadata.LastModified = now
 	record.PolicyDefinition = req.Policy
 
-	err = engine.EditPolicy(ctx, record)
+	count, err := engine.EditPolicy(ctx, record)
 	if err != nil {
 		return nil, fmt.Errorf("EditPolicy: %w", err)
 	}
 
 	return &types.EditPolicyResponse{
+		RelatinshipsRemoved: count,
+		Record:              record,
+	}, nil
+}
+
+type EditPolicyMetadataHandler struct{}
+
+func (h *EditPolicyMetadataHandler) Execute(ctx context.Context, runtime runtime.RuntimeManager, req *types.EditPolicyMetadataRequest) (*types.EditPolicyMetadataResponse, error) {
+	engine, err := zanzi.NewZanzi(runtime.GetKVStore(), runtime.GetLogger())
+
+	oldRecord, err := engine.GetPolicy(ctx, req.PolicyId)
+	if err != nil {
+		return nil, fmt.Errorf("edit policy metadata: %w", err)
+	}
+	if oldRecord == nil {
+		return nil, errors.ErrPolicyNotFound(req.PolicyId)
+	}
+
+	principal, err := auth.ExtractAuthenticatedPrincipal(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if !principal.Equals(oldRecord.Metadata.Creator) {
+		return nil, errors.New("only the policy creator may edit it", errors.ErrorType_UNAUTHORIZED)
+	}
+
+	now, err := runtime.GetTimeService().GetNow(ctx)
+	if err != nil {
+		return nil, err
+	}
+	record := proto.Clone(oldRecord).(*types.PolicyRecord)
+	record.Metadata.LastModified = now
+	record.Metadata.Supplied = req.Metadata
+
+	_, err = engine.EditPolicy(ctx, record)
+	if err != nil {
+		return nil, fmt.Errorf("EditPolicyMetadata: %w", err)
+	}
+
+	return &types.EditPolicyMetadataResponse{
 		Record: record,
 	}, nil
 }

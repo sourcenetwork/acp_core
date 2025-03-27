@@ -469,3 +469,72 @@ resources:
 
 	require.Nil(ctx.T, (pol.GetResourceByName("file").GetPermissionByName("read")))
 }
+
+func TestEditPolicy_DoesNotChangeSuppliedMetadata(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("bob")
+
+	oldPol := `
+name: policy
+resources:
+  file:
+    relations:
+      reader:
+    permissions:
+      read:
+        expr: reader
+`
+	a1 := test.CreatePolicyAction{
+		Policy: oldPol,
+	}
+	a1.Run(ctx)
+
+	new := `
+name: policy
+resources:
+  file:
+    relations:
+      reader:
+    permissions:
+`
+	a := test.EditPolicyAction{
+		PolicyId: ctx.State.PolicyId,
+		Policy:   new,
+	}
+	pol := a.Run(ctx)
+
+	require.Nil(ctx.T, (pol.GetResourceByName("file").GetPermissionByName("read")))
+}
+
+func TestEditPolicyMetadata_CanEditMetadata(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("bob")
+
+	oldPol := `
+name: policy
+resources:
+  file:
+    relations:
+      reader:
+    permissions:
+      read:
+        expr: reader
+`
+	a1 := test.CreatePolicyAction{
+		Policy: oldPol,
+		Metadata: &types.SuppliedMetadata{
+			Blob: []byte{0, 1, 0},
+		},
+	}
+	a1.Run(ctx)
+
+	newMetadata := &types.SuppliedMetadata{
+		Blob: []byte{1, 2, 3},
+	}
+	resp, err := ctx.Engine.EditPolicyMetadata(ctx, &types.EditPolicyMetadataRequest{
+		PolicyId: ctx.State.PolicyId,
+		Metadata: newMetadata,
+	})
+	require.NoError(t, err)
+	require.Equal(t, newMetadata, resp.Record.Metadata.Supplied)
+}
