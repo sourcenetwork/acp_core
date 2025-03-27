@@ -269,9 +269,11 @@ func (a *EditPolicyAction) Run(ctx *TestCtx) *types.Policy {
 	}
 
 	if a.Expected != nil {
+		require.Equal(ctx.T, a.Expected, resp.Record.Policy)
 		require.Equal(ctx.T, a.Expected, getResp.Record.Policy)
 	}
 	if a.ExpectedMetadata != nil {
+		require.Equal(ctx.T, a.ExpectedMetadata, resp.Record.Metadata)
 		require.Equal(ctx.T, a.ExpectedMetadata, getResp.Record.Metadata)
 	}
 

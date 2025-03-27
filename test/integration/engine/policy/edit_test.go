@@ -160,10 +160,6 @@ resources:
 	a.Run(ctx)
 }
 
-func TestEditPolicy_LastModifiedIsUpdated(t *testing.T) {
-
-}
-
 func TestEditPolicy_CannotEditPolicyThatDoesntExist(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
@@ -537,4 +533,48 @@ resources:
 	})
 	require.NoError(t, err)
 	require.Equal(t, newMetadata, resp.Record.Metadata.Supplied)
+}
+
+func TestEditPolicyMetadata_NonOwnerCannotEditMetadata(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("bob")
+
+	oldPol := `
+name: policy
+`
+	a1 := test.CreatePolicyAction{
+		Policy: oldPol,
+	}
+	a1.Run(ctx)
+
+	ctx.SetRootPrincipal()
+	resp, err := ctx.Engine.EditPolicyMetadata(ctx, &types.EditPolicyMetadataRequest{
+		PolicyId: ctx.State.PolicyId,
+		Metadata: &types.SuppliedMetadata{
+			Blob: []byte{1, 2, 3},
+		},
+	})
+	require.ErrorIs(t, err, errors.ErrorType_UNAUTHORIZED)
+	require.Nil(t, resp)
+}
+
+func TestEditPolicy_NonOwnerCannotEditMetadata(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("bob")
+
+	oldPol := `
+name: policy
+`
+	a1 := test.CreatePolicyAction{
+		Policy: oldPol,
+	}
+	a1.Run(ctx)
+
+	ctx.SetRootPrincipal()
+	resp, err := ctx.Engine.EditPolicy(ctx, &types.EditPolicyRequest{
+		PolicyId: ctx.State.PolicyId,
+		Policy:   "",
+	})
+	require.ErrorIs(t, err, errors.ErrorType_UNAUTHORIZED)
+	require.Nil(t, resp)
 }
