@@ -2,6 +2,16 @@
 
 Significant features added between versions will be contained in the changelog, as well as any breaking changes.
 
+## [0.5.0] - 2025-03-27
+Features:
+- Added EditPolicy engine method
+- Added EditPolicy metadata engine method
+- Added the `spec` field to the policy dsl, which sets a the policy specification type
+- Add CreatePolicyWithSpecification method which constrains a Policy to only be created if the expected spec is satisfied 
+
+Breaking changes:
+- acp_core was updated to always include the `owner` relation as one of the authorized relations in a permission expressions
+
 ## [0.4.1] - 2025-02-26
 Fixes:
 - Fixed a bug where sometimes List Policy would fail due to Zanzi returning a malformed record
