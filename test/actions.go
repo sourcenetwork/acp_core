@@ -16,12 +16,14 @@ type ActionState struct {
 type CreatePolicyAction struct {
 	Policy   string
 	Expected *types.Policy
+	Metadata *types.SuppliedMetadata
 }
 
 func (a *CreatePolicyAction) Run(ctx *TestCtx) *types.Policy {
 	req := types.CreatePolicyRequest{
 		Policy:      a.Policy,
 		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		Metadata:    a.Metadata,
 	}
 
 	resp, err := ctx.Engine.CreatePolicy(ctx, &req)
@@ -237,4 +239,46 @@ func (a *RevealRegistrationAction) Run(ctx *TestCtx) *types.RevealRegistrationRe
 		}
 	}
 	return resp
+}
+
+type EditPolicyAction struct {
+	PolicyId         string
+	Policy           string
+	ExpectedErr      error
+	Expected         *types.Policy
+	ExpectedMetadata *types.RecordMetadata
+}
+
+func (a *EditPolicyAction) Run(ctx *TestCtx) *types.Policy {
+	req := types.EditPolicyRequest{
+		PolicyId:    a.PolicyId,
+		Policy:      a.Policy,
+		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+	}
+
+	resp, err := ctx.Engine.EditPolicy(ctx, &req)
+	getResp, getErr := ctx.Engine.GetPolicy(ctx, &types.GetPolicyRequest{
+		Id: a.PolicyId,
+	})
+
+	if a.ExpectedErr != nil {
+		require.ErrorIs(ctx.T, err, a.ExpectedErr)
+	} else {
+		require.NoError(ctx.T, err)
+		require.NoError(ctx.T, getErr)
+	}
+
+	if a.Expected != nil {
+		require.Equal(ctx.T, a.Expected, resp.Record.Policy)
+		require.Equal(ctx.T, a.Expected, getResp.Record.Policy)
+	}
+	if a.ExpectedMetadata != nil {
+		require.Equal(ctx.T, a.ExpectedMetadata, resp.Record.Metadata)
+		require.Equal(ctx.T, a.ExpectedMetadata, getResp.Record.Metadata)
+	}
+
+	if resp != nil {
+		return resp.Record.Policy
+	}
+	return nil
 }

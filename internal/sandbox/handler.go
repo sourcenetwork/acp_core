@@ -206,8 +206,9 @@ func (h *SetStateHandler) populateEngine(ctx context.Context, manager runtime.Ru
 func (h *SetStateHandler) setPolicy(ctx context.Context, manager runtime.RuntimeManager, handle uint64, simCtx *parsedSandboxCtx) (*types.SandboxDataErrors, error) {
 	errs := &types.SandboxDataErrors{}
 
+	authenticatedCtx := auth.InjectPrincipal(ctx, types.RootPrincipal())
 	polHandler := policy.CreatePolicyHandler{}
-	polResp, err := polHandler.Execute(ctx, manager, &types.CreatePolicyRequest{
+	polResp, err := polHandler.Execute(authenticatedCtx, manager, &types.CreatePolicyRequest{
 		Policy:      simCtx.PolicyDefinition,
 		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
 	})

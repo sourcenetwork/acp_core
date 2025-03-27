@@ -23,6 +23,11 @@ func (pol *Policy) GetResourceByName(resourceName string) *Resource {
 	return nil
 }
 
+// ListResourcesNames returns a slice with the name of all defined resources
+func (pol *Policy) ListResourcesNames() []string {
+	return utils.MapSlice(pol.Resources, func(r *Resource) string { return r.Name })
+}
+
 // GetPermissionByName returns a Permission with `name`.
 // If no Permission matches name, returns nil
 func (res *Resource) GetPermissionByName(name string) *Permission {

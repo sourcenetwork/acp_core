@@ -25,6 +25,7 @@ func TestQueryPolicy_UnknownPolicyReturnsPolicyNotFoundErr(t *testing.T) {
 
 func TestGetPolicy_ReturnsAnExistingPolicy(t *testing.T) {
 	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("bob")
 
 	pol := `
 name: policy

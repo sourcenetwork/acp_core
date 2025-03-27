@@ -5,15 +5,28 @@ import (
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
-func PipelineFactory(sequence uint64, specType types.PolicySpecificationType) Pipeline {
+func CreatePolicyPipelineFactory(sequence uint64, specType types.PolicySpecificationType) Pipeline {
 	switch specType {
 	case types.PolicySpecificationType_DEFRA_SPEC:
-		return newPipeline(sequence, specification.NewDefraSpecification())
+		return newCreatePolicyPipeline(sequence, specification.NewDefraSpecification())
 	case types.PolicySpecificationType_UNKNOWN_SPEC:
-		return newPipeline(sequence, specification.NoSpecification())
+		return newCreatePolicyPipeline(sequence, specification.NoSpecification())
 	case types.PolicySpecificationType_NO_SPEC:
-		return newPipeline(sequence, specification.NoSpecification())
+		return newCreatePolicyPipeline(sequence, specification.NoSpecification())
 	default:
-		return newPipeline(sequence, specification.NoSpecification())
+		return newCreatePolicyPipeline(sequence, specification.NoSpecification())
+	}
+}
+
+func EditPolicyPipelineFactory(oldPolicy *types.Policy) Pipeline {
+	switch oldPolicy.SpecificationType {
+	case types.PolicySpecificationType_DEFRA_SPEC:
+		return newEditPolicyPipeline(oldPolicy, specification.NewDefraSpecification())
+	case types.PolicySpecificationType_UNKNOWN_SPEC:
+		return newEditPolicyPipeline(oldPolicy, specification.NoSpecification())
+	case types.PolicySpecificationType_NO_SPEC:
+		return newEditPolicyPipeline(oldPolicy, specification.NoSpecification())
+	default:
+		return newEditPolicyPipeline(oldPolicy, specification.NoSpecification())
 	}
 }
