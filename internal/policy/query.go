@@ -63,7 +63,8 @@ func ValidatePolicy(ctx context.Context, runtime runtime.RuntimeManager, req *ty
 	pipeline := ppp.CreatePolicyPipelineFactory(0, pol.SpecificationType)
 	pol, err = pipeline.Process(pol)
 	if err != nil {
-		return nil, fmt.Errorf("ValidatePolicy: %v", err)
+		resp.ErrorMsg = err.Error()
+		return resp, nil
 	}
 
 	engine, err := zanzi.NewZanzi(runtime.GetKVStore(), runtime.GetLogger())
