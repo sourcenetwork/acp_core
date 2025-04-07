@@ -2,6 +2,10 @@
 
 Significant features added between versions will be contained in the changelog, as well as any breaking changes.
 
+## [0.5.2] - 2025-04-07
+Features:
+- Add EventPolicyEdited type
+
 ## [0.5.1] - 2025-03-28
 Fixes:
 - Fixed an issue where the ValidatePolicy method did not return validation errors as part of the response body
