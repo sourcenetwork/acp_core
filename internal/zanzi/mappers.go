@@ -1,8 +1,6 @@
 package zanzi
 
 import (
-	"fmt"
-
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 	"github.com/sourcenetwork/zanzi/pkg/domain"
 
@@ -71,7 +69,7 @@ func (m *relationshipMapper) MapSubject(subject *types.Subject) *domain.Subject 
 func (m *relationshipMapper) ToZanziRelationshipRecord(record *types.RelationshipRecord) (*domain.RelationshipRecord, error) {
 	bytes, err := record.Marshal()
 	if err != nil {
-		return nil, fmt.Errorf("mapping to zanzi relationship: %w", err)
+		return nil, errors.NewFromCause("marshal error while mapping zanzi relationship", err, errors.ErrorType_INTERNAL)
 	}
 
 	return &domain.RelationshipRecord{
@@ -89,7 +87,7 @@ func (m *relationshipMapper) FromZanziRelationship(zanziRecord *domain.Relations
 
 	err := record.Unmarshal(zanziRecord.AppData)
 	if err != nil {
-		return nil, fmt.Errorf("mapping from zanzi relationship: %w", err)
+		return nil, errors.NewFromCause("marshal error while mapping zanzi relationship", err, errors.ErrorType_INTERNAL)
 	}
 
 	return record, nil
