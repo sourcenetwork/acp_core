@@ -48,6 +48,7 @@ func (z *Adapter) GetRelationship(ctx context.Context, policy *types.Policy, rel
 	}
 
 	result, err := serv.GetRelationship(ctx, req)
+	err = mapErr(err)
 	if err != nil {
 		return nil, fmt.Errorf("GetRelationship: %w", err)
 	}
@@ -70,6 +71,7 @@ func (z *Adapter) ValidateRelationship(ctx context.Context, policy *types.Policy
 	}
 
 	result, err := serv.ValidateRelationship(ctx, req)
+	err = mapErr(err)
 	if err != nil {
 		return false, "", fmt.Errorf("ValidateRelationship: %w", err)
 	}
@@ -95,6 +97,7 @@ func (z *Adapter) SetRelationship(ctx context.Context, policy *types.Policy, rec
 	}
 
 	response, err := serv.SetRelationship(ctx, req)
+	err = mapErr(err)
 	if err != nil {
 		return false, fmt.Errorf("SetRelationship: %w", err)
 	}
@@ -110,6 +113,7 @@ func (z *Adapter) GetPolicy(ctx context.Context, policyId string) (*types.Policy
 		Id: policyId,
 	}
 	res, err := serv.GetPolicy(ctx, &req)
+	err = mapErr(err)
 	if err != nil {
 		return nil, err
 	}
@@ -143,6 +147,7 @@ func (z *Adapter) SetPolicy(ctx context.Context, record *types.PolicyRecord) err
 		AppData: zanziRecord.AppData,
 	}
 	_, err = serv.CreatePolicy(ctx, &req)
+	err = mapErr(err)
 	if err != nil {
 		return err
 	}
@@ -167,6 +172,7 @@ func (z *Adapter) EditPolicy(ctx context.Context, record *types.PolicyRecord) (u
 		},
 	}
 	result, err := serv.EditPolicy(ctx, &req)
+	err = mapErr(err)
 	if err != nil {
 		return 0, err
 	}
@@ -175,6 +181,7 @@ func (z *Adapter) EditPolicy(ctx context.Context, record *types.PolicyRecord) (u
 		PolicyId: record.Policy.Id,
 		AppData:  zanziRecord.AppData,
 	})
+	err = mapErr(err)
 	if err != nil {
 		return 0, err
 	}
@@ -199,6 +206,7 @@ func (z *Adapter) FilterRelationships(ctx context.Context, policy *types.Policy,
 	}
 
 	resp, err := serv.FindRelationshipRecords(ctx, &req)
+	err = mapErr(err)
 	if err != nil {
 		return nil, fmt.Errorf("FilterRelationships: %v", err)
 	}
@@ -228,6 +236,7 @@ func (z *Adapter) Check(ctx context.Context, policy *types.Policy, operation *ty
 		},
 	}
 	response, err := service.Check(ctx, req)
+	err = mapErr(err)
 	if err != nil {
 		return false, fmt.Errorf("Check: %w", err)
 	}
@@ -245,6 +254,7 @@ func (z *Adapter) DeleteRelationship(ctx context.Context, policy *types.Policy, 
 		Relationship: mapper.ToZanziRelationship(relationship),
 	}
 	response, err := service.DeleteRelationship(ctx, &req)
+	err = mapErr(err)
 	if err != nil {
 		return false, err
 	}
@@ -268,6 +278,7 @@ func (z *Adapter) DeleteRelationships(ctx context.Context, policy *types.Policy,
 		Selector: zanziSelector,
 	}
 	response, err := service.DeleteRelationships(ctx, &request)
+	err = mapErr(err)
 	if err != nil {
 		return 0, fmt.Errorf("DeleteRelationships: %w", err)
 	}
@@ -281,6 +292,7 @@ func (z *Adapter) ListPolicyIds(ctx context.Context) ([]string, error) {
 
 	req := api.ListPolicyIdsRequest{}
 	resp, err := service.ListPolicyIds(ctx, &req)
+	err = mapErr(err)
 	if err != nil {
 		return nil, fmt.Errorf("ListPolicyIds: %w", err)
 	}
@@ -293,6 +305,7 @@ func (z *Adapter) ListPolicyIds(ctx context.Context) ([]string, error) {
 
 func (z *Adapter) ListPolicies(ctx context.Context) ([]*types.PolicyRecord, error) {
 	resp, err := z.zanzi.GetPolicyService().ListPolicies(ctx, &api.ListPoliciesRequest{})
+	err = mapErr(err)
 	if err != nil {
 		return nil, fmt.Errorf("ListPolicies: %v", err)
 	}
@@ -323,6 +336,7 @@ func (z *Adapter) ValidatePolicy(ctx context.Context, policy *types.Policy) (val
 		},
 	}
 	response, err := z.zanzi.GetPolicyService().ValdiatePolicy(ctx, &req)
+	err = mapErr(err)
 	valid = response.Valid
 	msg = response.ErrorMsg
 
@@ -331,6 +345,7 @@ func (z *Adapter) ValidatePolicy(ctx context.Context, policy *types.Policy) (val
 
 func (z *Adapter) DeletePolicy(ctx context.Context, id string) (bool, error) {
 	resp, err := z.zanzi.GetPolicyService().DeletePolicy(ctx, &api.DeletePolicyRequest{Id: id})
+	err = mapErr(err)
 	if err != nil {
 		return false, err
 	}
