@@ -8,11 +8,12 @@ import (
 func mapErr(err error) error {
 	switch e := err.(type) {
 	case *zerrors.Error:
-		return errors.NewFromBaseError(e.Cause, mapKind(e.Kind), e.Message)
+		pairs := toAttrs(e.Metadata)
+		return errors.NewWithCause(e.Message, e.Cause, mapKind(e.Kind), pairs...)
 	case nil:
 		return nil
 	default:
-		return errors.NewFromBaseError(err, errors.ErrorType_UNKNOWN, "zanzi errors")
+		return errors.NewWithCause("zanzi error", err, errors.ErrorType_UNKNOWN)
 	}
 }
 
@@ -33,4 +34,12 @@ func mapKind(kind zerrors.ErrorKind) errors.ErrorType {
 	default:
 		return errors.ErrorType_UNKNOWN
 	}
+}
+
+func toAttrs(attrs map[string]string) []errors.ContextPair {
+	pairs := make([]errors.ContextPair, 0, len(attrs))
+	for key, val := range attrs {
+		pairs = append(pairs, errors.Pair(key, val))
+	}
+	return pairs
 }

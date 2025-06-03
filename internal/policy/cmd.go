@@ -142,8 +142,8 @@ func (c *CreatePolicyWithSpecHandler) Execute(ctx context.Context, runtime runti
 
 	if policy.SpecificationType != req.RequiredSpec {
 		return nil, errors.Wrap("CreatePolicy: invalid specification type", errors.ErrorType_BAD_INPUT,
-			errors.Pair("expected", req.RequiredSpec),
-			errors.Pair("got", policy.SpecificationType),
+			errors.Pair("expected", req.RequiredSpec.String()),
+			errors.Pair("got", policy.SpecificationType.String()),
 		)
 	}
 

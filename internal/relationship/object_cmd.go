@@ -386,7 +386,7 @@ func (h *AmendRegistrationHandler) verifyPreconditions(ctx context.Context, engi
 
 	err = did.IsValidDID(req.NewOwner.Id)
 	if err != nil {
-		return nil, nil, errors.NewFromBaseError(err, errors.ErrorType_BAD_INPUT, "invalid actor id", errors.Pair("id", req.NewOwner.Id))
+		return nil, nil, errors.NewWithCause("invalid actor id", err, errors.ErrorType_BAD_INPUT, errors.Pair("id", req.NewOwner.Id))
 	}
 
 	relRec, err := queryOwnerRelationship(ctx, engine, polRec.Policy, req.Object)
