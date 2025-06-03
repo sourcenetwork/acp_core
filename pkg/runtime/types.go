@@ -87,7 +87,7 @@ func NewRuntimeManager(opts ...Opt) (RuntimeManager, error) {
 	for _, o := range opts {
 		err := o(rt)
 		if err != nil {
-			return nil, errors.NewFromBaseError(err, errors.ErrorType_INTERNAL, "building runtime manager")
+			return nil, errors.NewWithCause("building runtime manager", err, errors.ErrorType_INTERNAL)
 		}
 	}
 
@@ -188,7 +188,8 @@ func (s *LocalTimeService) GetNow(ctx context.Context) (*prototypes.Timestamp, e
 	now := time.Now()
 	ts, err := prototypes.TimestampProto(now)
 	if err != nil {
-		return nil, errors.NewFromBaseError(err, errors.ErrorType_INTERNAL, "LocalTimeService failed: converting timestamp")
+		return nil, errors.NewWithCause("LocalTimeService failed: converting timestamp", err,
+			errors.ErrorType_INTERNAL)
 	}
 	return ts, nil
 }

@@ -11,7 +11,6 @@ import (
 )
 
 var _ error = (*ParserReport)(nil)
-var _ errors.TypedError = (*ParserReport)(nil)
 
 // LocatedObject models a parsed Object and a range
 // pointing to the span in the input stream from which the object was parsed

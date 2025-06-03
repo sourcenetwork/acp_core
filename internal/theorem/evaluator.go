@@ -66,7 +66,7 @@ func (e *Evaluator) evalDelegationTheorem(ctx context.Context, polId *types.Poli
 	if err != nil {
 		// if error is not internal, then user might've supplied invalid data
 		// which shouldn't cause the whole execution to fail
-		if acpErr, ok := err.(*errors.Error); ok && acpErr.Type() != errors.ErrorType_INTERNAL {
+		if acpErr, ok := err.(*errors.Error); ok && acpErr.Kind != errors.ErrorType_INTERNAL {
 			return &types.DelegationTheoremResult{
 				Result: &types.Result{
 					Status:  types.ResultStatus_Error,

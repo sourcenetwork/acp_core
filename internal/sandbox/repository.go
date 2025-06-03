@@ -46,8 +46,8 @@ type SandboxRepository struct {
 func (r *SandboxRepository) GetSandbox(ctx context.Context, handle uint64) (*types.SandboxRecord, error) {
 	opt, err := r.store.GetObject(r.ider.HandleToBytes(handle))
 	if err != nil {
-		return nil, errors.NewFromBaseError(err, errors.ErrorType_INTERNAL, "reading sandbox",
-			errors.Pair("handle", handle),
+		return nil, errors.NewWithCause("reading sandbox", err, errors.ErrorType_INTERNAL,
+			errors.Pair("handle", itoa(handle)),
 		)
 	}
 	if opt.IsEmpty() {
@@ -59,7 +59,7 @@ func (r *SandboxRepository) GetSandbox(ctx context.Context, handle uint64) (*typ
 func (r *SandboxRepository) ListSandboxes(ctx context.Context) ([]*types.SandboxRecord, error) {
 	records, err := r.store.List()
 	if err != nil {
-		return nil, errors.NewFromBaseError(err, errors.ErrorType_INTERNAL, "error loading sandboxes")
+		return nil, errors.NewWithCause("error loading sandboxes", err, errors.ErrorType_INTERNAL)
 	}
 
 	return records, nil
@@ -68,8 +68,8 @@ func (r *SandboxRepository) ListSandboxes(ctx context.Context) ([]*types.Sandbox
 func (r *SandboxRepository) SetRecord(ctx context.Context, record *types.SandboxRecord) error {
 	err := r.store.SetObject(record)
 	if err != nil {
-		return errors.NewFromBaseError(err, errors.ErrorType_INTERNAL, "error storing sandbox record",
-			errors.Pair("handle", record.Handle),
+		return errors.NewWithCause("error storing sandbox record", err, errors.ErrorType_INTERNAL,
+			errors.Pair("handle", itoa(record.Handle)),
 		)
 	}
 	return nil

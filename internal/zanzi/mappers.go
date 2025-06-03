@@ -69,7 +69,7 @@ func (m *relationshipMapper) MapSubject(subject *types.Subject) *domain.Subject 
 func (m *relationshipMapper) ToZanziRelationshipRecord(record *types.RelationshipRecord) (*domain.RelationshipRecord, error) {
 	bytes, err := record.Marshal()
 	if err != nil {
-		return nil, errors.NewFromCause("marshal error while mapping zanzi relationship", err, errors.ErrorType_INTERNAL)
+		return nil, errors.NewWithCause("marshal error while mapping zanzi relationship", err, errors.ErrorType_INTERNAL)
 	}
 
 	return &domain.RelationshipRecord{
@@ -87,7 +87,7 @@ func (m *relationshipMapper) FromZanziRelationship(zanziRecord *domain.Relations
 
 	err := record.Unmarshal(zanziRecord.AppData)
 	if err != nil {
-		return nil, errors.NewFromCause("marshal error while mapping zanzi relationship", err, errors.ErrorType_INTERNAL)
+		return nil, errors.NewWithCause("marshal error while mapping zanzi relationship", err, errors.ErrorType_INTERNAL)
 	}
 
 	return record, nil
@@ -294,7 +294,7 @@ func (m *selectorMapper) MapObjectSelector(selector *types.ObjectSelector) (*dom
 			ResourceSpec: selectorType.ResourcePredicate,
 		}
 	default:
-		return nil, errors.Wrap("relation selector", errors.ErrUnknownVariant, errors.Pair("variant", selectorType))
+		return nil, errors.Wrap("relation selector", errors.ErrUnknownVariant)
 	}
 
 	return zanziSelector, nil
@@ -313,7 +313,7 @@ func (m *selectorMapper) mapRelationSelector(selector *types.RelationSelector) (
 			Wildcard: &domain.WildcardSelector{},
 		}
 	default:
-		return nil, errors.Wrap("relation selector", errors.ErrUnknownVariant, errors.Pair("variant", selectorType))
+		return nil, errors.Wrap("relation selector", errors.ErrUnknownVariant)
 	}
 	return zanziSelector, nil
 }
@@ -331,7 +331,7 @@ func (m *selectorMapper) mapSubjectSelector(selector *types.SubjectSelector) (*d
 			Wildcard: &domain.WildcardSelector{},
 		}
 	default:
-		return nil, errors.Wrap("subject selector", errors.ErrUnknownVariant, errors.Pair("variant", selectorType))
+		return nil, errors.Wrap("subject selector", errors.ErrUnknownVariant)
 	}
 
 	return zanziSelector, nil
