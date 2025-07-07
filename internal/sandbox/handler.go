@@ -242,9 +242,22 @@ func (h *SetStateHandler) registerObjects(ctx context.Context, manager runtime.R
 	})
 
 	for _, obj := range ownerRels {
-		principal, err := types.NewDIDPrincipal(obj.Obj.Subject.GetActor().Id)
+		// direct owner relationships are only defined for
+		// actor subjects
+		if obj.Obj.Subject.GetActor() == nil {
+			err := &types.LocatedMessage{
+				Message:   "invalid relationship: invalid subject: owner relationship requires a `did` actor, make sure actor is a did",
+				Kind:      types.LocatedMessage_ERROR,
+				InputName: "relationships",
+				Interval:  obj.Interval,
+			}
+			errs.RelationshipsErrors = append(errs.RelationshipsErrors, err)
+			continue
+		}
+
 		// creating a principal should only fail if the actor is invalid
 		// meaning the relationship is invalid
+		principal, err := types.NewDIDPrincipal(obj.Obj.Subject.GetActor().Id)
 		if err != nil {
 			err := &types.LocatedMessage{
 				Message:   err.Error(),
