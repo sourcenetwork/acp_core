@@ -9,8 +9,11 @@ import "syscall/js"
 // matches err's ErrorType or ErrorType_UNKNOWN if not set.
 func NewJSError(err error) js.Value {
 	name := ErrorType_UNKNOWN.String()
-	if e, ok := err.(TypedError); ok {
-		name = e.GetType().String()
+	switch e := err.(type) {
+	case *Error:
+		name = e.Kind.Error()
+	case ErrorType:
+		name = e.Error()
 	}
 
 	jsErr := js.Global().Get("Error").New(err.Error())
