@@ -268,12 +268,12 @@ func Test_GetCatalogue_ReturnsSandboxCatalogue(t *testing.T) {
 			Catalogue: &types.PolicyCatalogue{
 				ActorResourceName: "actor",
 				ResourceCatalogue: map[string]*types.ResourceCatalogue{
-					"file": &types.ResourceCatalogue{
+					"file": {
 						Permissions: []string{
-							"read",
-							"write",
 							"_can_manage_owner",
 							"_can_manage_reader",
+							"read",
+							"write",
 						},
 						Relations: []string{
 							"owner",

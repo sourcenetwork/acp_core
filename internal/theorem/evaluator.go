@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"github.com/sourcenetwork/acp_core/internal/authorizer"
-	"github.com/sourcenetwork/acp_core/internal/parser"
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
+	"github.com/sourcenetwork/acp_core/pkg/parser/theorem_parser"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
@@ -69,7 +69,7 @@ func (e *Evaluator) evalDelegationTheorem(ctx context.Context, polId *types.Poli
 	if err != nil {
 		// if error is not internal, then user might've supplied invalid data
 		// which shouldn't cause the whole execution to fail
-		if acpErr, ok := err.(*errors.Error); ok && acpErr.Type() != errors.ErrorType_INTERNAL {
+		if acpErr, ok := err.(*errors.Error); ok && acpErr.Kind != errors.ErrorType_INTERNAL {
 			return &types.DelegationTheoremResult{
 				Result: &types.Result{
 					Status:  types.ResultStatus_Error,
@@ -93,7 +93,7 @@ func (e *Evaluator) evalDelegationTheorem(ctx context.Context, polId *types.Poli
 // EvalutePolicyTheoremDSL evaluates a PolicyTheorem represented as a string,
 // and return a Report which references the text location of each theorem alongside its result
 func (e *Evaluator) EvaluatePolicyTheoremDSL(ctx context.Context, polId string, theoremDSL string) (*types.AnnotatedPolicyTheoremResult, error) {
-	indexedTheorem, report := parser.ParsePolicyTheorem(theoremDSL)
+	indexedTheorem, report := theorem_parser.ParsePolicyTheorem(theoremDSL)
 	if report.HasError() {
 		return nil, report
 	}
@@ -141,7 +141,7 @@ func (e *Evaluator) EvaluatePolicyTheorem(ctx context.Context, polId string, the
 		return nil, newEvaluatorErr(err)
 	}
 	if rec == nil {
-		return nil, newEvaluatorErr(errors.NewPolicyNotFound(polId))
+		return nil, newEvaluatorErr(errors.ErrPolicyNotFound(polId))
 	}
 
 	authzResults, err := utils.MapFailableSlice(theorem.AuthorizationTheorems, func(thm *types.AuthorizationTheorem) (*types.AuthorizationTheoremResult, error) {

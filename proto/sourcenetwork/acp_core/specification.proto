@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sourcenetwork.acp_core;
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+
+// PolicySpecificationType models a named policy specification
+enum PolicySpecificationType {
+    // UNKNOWN_SPEC models an invalid specification
+    UNKNOWN_SPEC = 0;
+
+    // DEFRA_SPEC models a policy which matches the Defra policy specification
+    DEFRA_SPEC = 1;
+    
+    // NO_SPEC models a policy which has no additional contraints on it
+    NO_SPEC = 2;
+}

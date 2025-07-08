@@ -1,6 +1,11 @@
 .PHONY: test
 test:
-	go test -coverpkg=./...  ./...
+	go test -coverpkg=./... ./...
+
+.PHONY: test\:bench
+test\:bench:
+	go test ./... -bench .
+	# To profile use -cpuprofile cpu.out
 
 .PHONY: test\:js
 test\:js:

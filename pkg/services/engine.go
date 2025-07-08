@@ -12,24 +12,24 @@ import (
 )
 
 var _ Decorator = (*MsgSpanDecorator)(nil)
-var _ types.ACPEngineServer = (*acpEngine)(nil)
+var _ types.ACPEngineServer = (*EngineService)(nil)
 
-// acpEngine implements the ACP module MsgServer interface and accepts
+// EngineService implements the ACP module MsgServer interface and accepts
 // decorating functions which can wrap the execution of a Msg.
-type acpEngine struct {
+type EngineService struct {
 	hooks   []Decorator
 	runtime runtime.RuntimeManager
 }
 
 // NewCmdSrever creates a message server for Embedded ACP
-func NewACPEngine(runtime runtime.RuntimeManager, hooks ...Decorator) types.ACPEngineServer {
-	return &acpEngine{
+func NewACPEngine(runtime runtime.RuntimeManager, hooks ...Decorator) *EngineService {
+	return &EngineService{
 		hooks:   hooks,
 		runtime: runtime,
 	}
 }
 
-func (s *acpEngine) CreatePolicy(ctx context.Context, msg *types.CreatePolicyRequest) (*types.CreatePolicyResponse, error) {
+func (s *EngineService) CreatePolicy(ctx context.Context, msg *types.CreatePolicyRequest) (*types.CreatePolicyResponse, error) {
 	handler := policy.CreatePolicyHandler{}
 	h := func(ctx context.Context, msg *types.CreatePolicyRequest) (*types.CreatePolicyResponse, error) {
 		return handler.Execute(ctx, s.runtime, msg)
@@ -37,7 +37,31 @@ func (s *acpEngine) CreatePolicy(ctx context.Context, msg *types.CreatePolicyReq
 	return applyMiddleware(ctx, h, s.hooks, msg)
 }
 
-func (s *acpEngine) SetRelationship(ctx context.Context, msg *types.SetRelationshipRequest) (*types.SetRelationshipResponse, error) {
+func (s *EngineService) CreatePolicyWithSpecification(ctx context.Context, msg *types.CreatePolicyWithSpecificationRequest) (*types.CreatePolicyWithSpecificationResponse, error) {
+	handler := policy.CreatePolicyWithSpecHandler{}
+	h := func(ctx context.Context, msg *types.CreatePolicyWithSpecificationRequest) (*types.CreatePolicyWithSpecificationResponse, error) {
+		return handler.Execute(ctx, s.runtime, msg)
+	}
+	return applyMiddleware(ctx, h, s.hooks, msg)
+}
+
+func (s *EngineService) EditPolicy(ctx context.Context, msg *types.EditPolicyRequest) (*types.EditPolicyResponse, error) {
+	handler := policy.EditPolicyHandler{}
+	h := func(ctx context.Context, msg *types.EditPolicyRequest) (*types.EditPolicyResponse, error) {
+		return handler.Execute(ctx, s.runtime, msg)
+	}
+	return applyMiddleware(ctx, h, s.hooks, msg)
+}
+
+func (s *EngineService) EditPolicyMetadata(ctx context.Context, msg *types.EditPolicyMetadataRequest) (*types.EditPolicyMetadataResponse, error) {
+	handler := policy.EditPolicyMetadataHandler{}
+	h := func(ctx context.Context, msg *types.EditPolicyMetadataRequest) (*types.EditPolicyMetadataResponse, error) {
+		return handler.Execute(ctx, s.runtime, msg)
+	}
+	return applyMiddleware(ctx, h, s.hooks, msg)
+}
+
+func (s *EngineService) SetRelationship(ctx context.Context, msg *types.SetRelationshipRequest) (*types.SetRelationshipResponse, error) {
 	handler := relationship.SetRelationshipHandler{}
 	h := func(ctx context.Context, msg *types.SetRelationshipRequest) (*types.SetRelationshipResponse, error) {
 		return handler.Execute(ctx, s.runtime, msg)
@@ -45,7 +69,7 @@ func (s *acpEngine) SetRelationship(ctx context.Context, msg *types.SetRelations
 	return applyMiddleware(ctx, h, s.hooks, msg)
 }
 
-func (s *acpEngine) DeleteRelationship(ctx context.Context, msg *types.DeleteRelationshipRequest) (*types.DeleteRelationshipResponse, error) {
+func (s *EngineService) DeleteRelationship(ctx context.Context, msg *types.DeleteRelationshipRequest) (*types.DeleteRelationshipResponse, error) {
 	handler := relationship.DeleteRelationshipHandler{}
 	h := func(ctx context.Context, msg *types.DeleteRelationshipRequest) (*types.DeleteRelationshipResponse, error) {
 		return handler.Execute(ctx, s.runtime, msg)
@@ -53,7 +77,7 @@ func (s *acpEngine) DeleteRelationship(ctx context.Context, msg *types.DeleteRel
 	return applyMiddleware(ctx, h, s.hooks, msg)
 }
 
-func (s *acpEngine) RegisterObject(ctx context.Context, msg *types.RegisterObjectRequest) (*types.RegisterObjectResponse, error) {
+func (s *EngineService) RegisterObject(ctx context.Context, msg *types.RegisterObjectRequest) (*types.RegisterObjectResponse, error) {
 	handler := relationship.RegisterObjectHandler{}
 	h := func(ctx context.Context, msg *types.RegisterObjectRequest) (*types.RegisterObjectResponse, error) {
 		return handler.Execute(ctx, s.runtime, msg)
@@ -61,7 +85,7 @@ func (s *acpEngine) RegisterObject(ctx context.Context, msg *types.RegisterObjec
 	return applyMiddleware(ctx, h, s.hooks, msg)
 }
 
-func (s *acpEngine) ArchiveObject(ctx context.Context, msg *types.ArchiveObjectRequest) (*types.ArchiveObjectResponse, error) {
+func (s *EngineService) ArchiveObject(ctx context.Context, msg *types.ArchiveObjectRequest) (*types.ArchiveObjectResponse, error) {
 	handler := relationship.ArchiveObjectHandler{}
 	h := func(ctx context.Context, msg *types.ArchiveObjectRequest) (*types.ArchiveObjectResponse, error) {
 		return handler.Execute(ctx, s.runtime, msg)
@@ -69,56 +93,56 @@ func (s *acpEngine) ArchiveObject(ctx context.Context, msg *types.ArchiveObjectR
 	return applyMiddleware(ctx, h, s.hooks, msg)
 }
 
-func (s *acpEngine) GetObjectRegistration(ctx context.Context, req *types.GetObjectRegistrationRequest) (*types.GetObjectRegistrationResponse, error) {
+func (s *EngineService) GetObjectRegistration(ctx context.Context, req *types.GetObjectRegistrationRequest) (*types.GetObjectRegistrationResponse, error) {
 	h := func(ctx context.Context, msg *types.GetObjectRegistrationRequest) (*types.GetObjectRegistrationResponse, error) {
 		return relationship.GetObjectRegistrationHandler(ctx, s.runtime, msg)
 	}
 	return applyMiddleware(ctx, h, s.hooks, req)
 }
 
-func (s *acpEngine) FilterRelationships(ctx context.Context, req *types.FilterRelationshipsRequest) (*types.FilterRelationshipsResponse, error) {
+func (s *EngineService) FilterRelationships(ctx context.Context, req *types.FilterRelationshipsRequest) (*types.FilterRelationshipsResponse, error) {
 	h := func(ctx context.Context, msg *types.FilterRelationshipsRequest) (*types.FilterRelationshipsResponse, error) {
 		return relationship.FilterRelationshipsHandler(ctx, s.runtime, msg)
 	}
 	return applyMiddleware(ctx, h, s.hooks, req)
 }
 
-func (s *acpEngine) DeletePolicy(ctx context.Context, req *types.DeletePolicyRequest) (*types.DeletePolicyResponse, error) {
+func (s *EngineService) DeletePolicy(ctx context.Context, req *types.DeletePolicyRequest) (*types.DeletePolicyResponse, error) {
 	h := func(ctx context.Context, msg *types.DeletePolicyRequest) (*types.DeletePolicyResponse, error) {
 		return policy.HandleDeletePolicy(ctx, s.runtime, msg)
 	}
 	return applyMiddleware(ctx, h, s.hooks, req)
 }
 
-func (s *acpEngine) ValidatePolicy(ctx context.Context, req *types.ValidatePolicyRequest) (*types.ValidatePolicyResponse, error) {
+func (s *EngineService) ValidatePolicy(ctx context.Context, req *types.ValidatePolicyRequest) (*types.ValidatePolicyResponse, error) {
 	h := func(ctx context.Context, msg *types.ValidatePolicyRequest) (*types.ValidatePolicyResponse, error) {
 		return policy.ValidatePolicy(ctx, s.runtime, msg)
 	}
 	return applyMiddleware(ctx, h, s.hooks, req)
 }
 
-func (s *acpEngine) VerifyAccessRequest(ctx context.Context, req *types.VerifyAccessRequestRequest) (*types.VerifyAccessRequestResponse, error) {
+func (s *EngineService) VerifyAccessRequest(ctx context.Context, req *types.VerifyAccessRequestRequest) (*types.VerifyAccessRequestResponse, error) {
 	h := func(ctx context.Context, msg *types.VerifyAccessRequestRequest) (*types.VerifyAccessRequestResponse, error) {
 		return authz_db.VerifyAccessRequest(ctx, s.runtime, msg)
 	}
 	return applyMiddleware(ctx, h, s.hooks, req)
 }
 
-func (s *acpEngine) GetPolicy(ctx context.Context, req *types.GetPolicyRequest) (*types.GetPolicyResponse, error) {
+func (s *EngineService) GetPolicy(ctx context.Context, req *types.GetPolicyRequest) (*types.GetPolicyResponse, error) {
 	h := func(ctx context.Context, msg *types.GetPolicyRequest) (*types.GetPolicyResponse, error) {
 		return policy.HandleGetPolicy(ctx, s.runtime, msg)
 	}
 	return applyMiddleware(ctx, h, s.hooks, req)
 }
 
-func (s *acpEngine) ListPolicies(ctx context.Context, req *types.ListPoliciesRequest) (*types.ListPoliciesResponse, error) {
+func (s *EngineService) ListPolicies(ctx context.Context, req *types.ListPoliciesRequest) (*types.ListPoliciesResponse, error) {
 	h := func(ctx context.Context, msg *types.ListPoliciesRequest) (*types.ListPoliciesResponse, error) {
 		return policy.ListPolicies(ctx, s.runtime, msg)
 	}
 	return applyMiddleware(ctx, h, s.hooks, req)
 }
 
-func (s *acpEngine) TransferObject(ctx context.Context, req *types.TransferObjectRequest) (*types.TransferObjectResponse, error) {
+func (s *EngineService) TransferObject(ctx context.Context, req *types.TransferObjectRequest) (*types.TransferObjectResponse, error) {
 	h := func(ctx context.Context, msg *types.TransferObjectRequest) (*types.TransferObjectResponse, error) {
 		handler := relationship.TransferObjectHandler{}
 		return handler.Execute(ctx, s.runtime, msg)
@@ -126,35 +150,35 @@ func (s *acpEngine) TransferObject(ctx context.Context, req *types.TransferObjec
 	return applyMiddleware(ctx, h, s.hooks, req)
 }
 
-func (s *acpEngine) SetParams(ctx context.Context, req *types.SetParamsRequest) (*types.SetParamsResponse, error) {
+func (s *EngineService) SetParams(ctx context.Context, req *types.SetParamsRequest) (*types.SetParamsResponse, error) {
 	h := func(ctx context.Context, msg *types.SetParamsRequest) (*types.SetParamsResponse, error) {
 		return system.HandleSetParams(ctx, s.runtime, msg)
 	}
 	return applyMiddleware(ctx, h, s.hooks, req)
 }
 
-func (s *acpEngine) GetParams(ctx context.Context, req *types.GetParamsRequest) (*types.GetParamsResponse, error) {
+func (s *EngineService) GetParams(ctx context.Context, req *types.GetParamsRequest) (*types.GetParamsResponse, error) {
 	h := func(ctx context.Context, msg *types.GetParamsRequest) (*types.GetParamsResponse, error) {
 		return system.HandleGetParams(ctx, s.runtime, msg)
 	}
 	return applyMiddleware(ctx, h, s.hooks, req)
 }
 
-func (s *acpEngine) EvaluateTheorem(ctx context.Context, req *types.EvaluateTheoremRequest) (*types.EvaluateTheoremResponse, error) {
+func (s *EngineService) EvaluateTheorem(ctx context.Context, req *types.EvaluateTheoremRequest) (*types.EvaluateTheoremResponse, error) {
 	h := func(ctx context.Context, msg *types.EvaluateTheoremRequest) (*types.EvaluateTheoremResponse, error) {
 		return policy.EvaluateTheorem(ctx, s.runtime, msg)
 	}
 	return applyMiddleware(ctx, h, s.hooks, req)
 }
 
-func (s *acpEngine) GetPolicyCatalogue(ctx context.Context, req *types.GetPolicyCatalogueRequest) (*types.GetPolicyCatalogueResponse, error) {
+func (s *EngineService) GetPolicyCatalogue(ctx context.Context, req *types.GetPolicyCatalogueRequest) (*types.GetPolicyCatalogueResponse, error) {
 	h := func(ctx context.Context, msg *types.GetPolicyCatalogueRequest) (*types.GetPolicyCatalogueResponse, error) {
 		return policy.GetPolicyCatalogue(ctx, s.runtime, msg)
 	}
 	return applyMiddleware(ctx, h, s.hooks, req)
 }
 
-func (s *acpEngine) AmendRegistration(ctx context.Context, req *types.AmendRegistrationRequest) (*types.AmendRegistrationResponse, error) {
+func (s *EngineService) AmendRegistration(ctx context.Context, req *types.AmendRegistrationRequest) (*types.AmendRegistrationResponse, error) {
 	h := func(ctx context.Context, req *types.AmendRegistrationRequest) (*types.AmendRegistrationResponse, error) {
 		h := relationship.AmendRegistrationHandler{}
 		return h.Handle(ctx, s.runtime, req)
@@ -162,10 +186,22 @@ func (s *acpEngine) AmendRegistration(ctx context.Context, req *types.AmendRegis
 	return applyMiddleware(ctx, h, s.hooks, req)
 }
 
-func (s *acpEngine) UnarchiveObject(ctx context.Context, req *types.UnarchiveObjectRequest) (*types.UnarchiveObjectResponse, error) {
+func (s *EngineService) UnarchiveObject(ctx context.Context, req *types.UnarchiveObjectRequest) (*types.UnarchiveObjectResponse, error) {
 	h := func(ctx context.Context, req *types.UnarchiveObjectRequest) (*types.UnarchiveObjectResponse, error) {
 		h := relationship.UnarchiveObjectHandler{}
 		return h.Handle(ctx, s.runtime, req)
 	}
 	return applyMiddleware(ctx, h, s.hooks, req)
+}
+
+func (s *EngineService) RevealRegistration(ctx context.Context, req *types.RevealRegistrationRequest) (*types.RevealRegistrationResponse, error) {
+	h := func(ctx context.Context, req *types.RevealRegistrationRequest) (*types.RevealRegistrationResponse, error) {
+		h := relationship.RevealRegistrationHandler{}
+		return h.Execute(ctx, s.runtime, req)
+	}
+	return applyMiddleware(ctx, h, s.hooks, req)
+}
+
+func (s *EngineService) GetRuntimeManager() runtime.RuntimeManager {
+	return s.runtime
 }

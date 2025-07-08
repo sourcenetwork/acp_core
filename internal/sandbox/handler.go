@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/sourcenetwork/acp_core/internal/parser"
 	"github.com/sourcenetwork/acp_core/internal/policy"
 	"github.com/sourcenetwork/acp_core/internal/raccoon"
 	"github.com/sourcenetwork/acp_core/internal/relationship"
@@ -13,6 +12,8 @@ import (
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
 	"github.com/sourcenetwork/acp_core/pkg/auth"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
+	"github.com/sourcenetwork/acp_core/pkg/parser"
+	"github.com/sourcenetwork/acp_core/pkg/parser/theorem_parser"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
@@ -166,10 +167,10 @@ func (h *SetStateHandler) parseCtx(ctx context.Context, manager runtime.RuntimeM
 		errs.PolicyErrors = append(errs.PolicyErrors, err)
 	}
 
-	relationships, report := parser.ParseRelationshipsWithLocation(data.Relationships)
+	relationships, report := theorem_parser.ParseRelationshipsWithLocation(data.Relationships)
 	errs.RelationshipsErrors = append(errs.RelationshipsErrors, report.GetMessages()...)
 
-	theorem, report := parser.ParsePolicyTheorem(data.PolicyTheorem)
+	theorem, report := theorem_parser.ParsePolicyTheorem(data.PolicyTheorem)
 	errs.TheoremsErrors = append(errs.TheoremsErrors, report.GetMessages()...)
 
 	if errs.HasErrors() {
@@ -213,8 +214,9 @@ func (h *SetStateHandler) populateEngine(ctx context.Context, manager runtime.Ru
 func (h *SetStateHandler) setPolicy(ctx context.Context, manager runtime.RuntimeManager, handle uint64, simCtx *parsedSandboxCtx) (*types.SandboxDataErrors, error) {
 	errs := &types.SandboxDataErrors{}
 
+	authenticatedCtx := auth.InjectPrincipal(ctx, types.RootPrincipal())
 	polHandler := policy.CreatePolicyHandler{}
-	polResp, err := polHandler.Execute(ctx, manager, &types.CreatePolicyRequest{
+	polResp, err := polHandler.Execute(authenticatedCtx, manager, &types.CreatePolicyRequest{
 		Policy:      simCtx.PolicyDefinition,
 		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
 	})
@@ -242,22 +244,35 @@ func (h *SetStateHandler) setPolicy(ctx context.Context, manager runtime.Runtime
 		}
 	}
 
-	simCtx.Policy = polResp.Policy
+	simCtx.Policy = polResp.Record.Policy
 	return errs, nil
 }
 
-func (h *SetStateHandler) registerObjects(ctx context.Context, manager runtime.RuntimeManager, handle uint64, simCtx *parsedSandboxCtx) (map[string]auth.Principal, *types.SandboxDataErrors, error) {
+func (h *SetStateHandler) registerObjects(ctx context.Context, manager runtime.RuntimeManager, handle uint64, simCtx *parsedSandboxCtx) (map[string]types.Principal, *types.SandboxDataErrors, error) {
 	errs := &types.SandboxDataErrors{}
-	ownerLookup := make(map[string]auth.Principal)
+	ownerLookup := make(map[string]types.Principal)
 
 	ownerRels := utils.FilterSlice(simCtx.Relationships, func(obj parser.LocatedObject[*types.Relationship]) bool {
 		return obj.Obj.Relation == policy.OwnerRelation
 	})
 
 	for _, obj := range ownerRels {
-		principal, err := auth.NewDIDPrincipal(obj.Obj.Subject.GetActor().Id)
+		// direct owner relationships are only defined for
+		// actor subjects
+		if obj.Obj.Subject.GetActor() == nil {
+			err := &types.LocatedMessage{
+				Message:   "invalid relationship: invalid subject: owner relationship requires a `did` actor, make sure actor is a did",
+				Kind:      types.LocatedMessage_ERROR,
+				InputName: "relationships",
+				Interval:  obj.Interval,
+			}
+			errs.RelationshipsErrors = append(errs.RelationshipsErrors, err)
+			continue
+		}
+
 		// creating a principal should only fail if the actor is invalid
 		// meaning the relationship is invalid
+		principal, err := types.NewDIDPrincipal(obj.Obj.Subject.GetActor().Id)
 		if err != nil {
 			err := &types.LocatedMessage{
 				Message:   err.Error(),
@@ -294,7 +309,7 @@ func (h *SetStateHandler) registerObjects(ctx context.Context, manager runtime.R
 	return ownerLookup, errs, nil
 }
 
-func (h *SetStateHandler) setRelationships(ctx context.Context, manager runtime.RuntimeManager, simCtx *parsedSandboxCtx, ownerMap map[string]auth.Principal) (*types.SandboxDataErrors, error) {
+func (h *SetStateHandler) setRelationships(ctx context.Context, manager runtime.RuntimeManager, simCtx *parsedSandboxCtx, ownerMap map[string]types.Principal) (*types.SandboxDataErrors, error) {
 	errs := &types.SandboxDataErrors{}
 	rels := utils.FilterSlice(simCtx.Relationships, func(obj parser.LocatedObject[*types.Relationship]) bool {
 		return obj.Obj.Relation != policy.OwnerRelation

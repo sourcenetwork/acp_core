@@ -4,6 +4,8 @@ package sourcenetwork.acp_core;
 
 import "google/protobuf/timestamp.proto";
 
+import "sourcenetwork/acp_core/specification.proto";
+
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
 
 // Policy represents an ACP module Policy definition.
@@ -13,10 +15,10 @@ message Policy {
   string id = 1;
   string name = 2;
   string description = 3;
-  google.protobuf.Timestamp creation_time = 4;
-  map<string, string> attributes = 5;
-  repeated Resource resources = 6;
-  ActorResource actor_resource = 7;
+  repeated Resource resources = 4;
+  ActorResource actor_resource = 5;
+  map<string, string> attributes = 6;
+  PolicySpecificationType specification_type = 7;
 }
 
 // Resource models a namespace for objects in a Policy.

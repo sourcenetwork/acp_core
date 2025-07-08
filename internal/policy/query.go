@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/sourcenetwork/acp_core/internal/policy/ppp"
 	"github.com/sourcenetwork/acp_core/internal/theorem"
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/types"
-	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
 
 func HandleGetPolicy(ctx context.Context, runtime runtime.RuntimeManager, req *types.GetPolicyRequest) (*types.GetPolicyResponse, error) {
@@ -23,13 +23,11 @@ func HandleGetPolicy(ctx context.Context, runtime runtime.RuntimeManager, req *t
 		return nil, err
 	}
 	if rec == nil {
-		return nil, errors.NewPolicyNotFound(req.Id)
+		return nil, errors.ErrPolicyNotFound(req.Id)
 	}
 
 	return &types.GetPolicyResponse{
-		Policy:      rec.Policy,
-		PolicyRaw:   rec.PolicyDefinition,
-		MarshalType: rec.MarshalType,
+		Record: rec,
 	}, nil
 }
 
@@ -44,10 +42,8 @@ func ListPolicies(ctx context.Context, runtime runtime.RuntimeManager, req *type
 		return nil, err
 	}
 
-	policies := utils.MapSlice(records, func(rec *types.PolicyRecord) *types.Policy { return rec.Policy })
-
 	return &types.ListPoliciesResponse{
-		Policies: policies,
+		Records: records,
 	}, nil
 }
 
@@ -56,23 +52,16 @@ func ValidatePolicy(ctx context.Context, runtime runtime.RuntimeManager, req *ty
 		Valid: false,
 	}
 
-	ir, err := Unmarshal(req.Policy, req.MarshalType)
+	pol, err := Unmarshal(req.Policy, req.MarshalType)
 	if err != nil {
 		resp.ErrorMsg = err.Error()
 		return resp, nil
 	}
 
-	err = basicPolicyIRSpec(&ir)
-	if err != nil {
-		resp.ErrorMsg = err.Error()
-		return resp, nil
-	}
-
-	factory := factory{}
-	record, _ := factory.Create(ir, nil, 0, nil)
-
-	spec := validPolicySpec{}
-	err = spec.Satisfies(record.Policy)
+	// counter doesn't matter since policy is not going to be persisted
+	// so an ID clash is irrelevant
+	pipeline := ppp.CreatePolicyPipelineFactory(0, pol.SpecificationType)
+	pol, err = pipeline.Process(pol)
 	if err != nil {
 		resp.ErrorMsg = err.Error()
 		return resp, nil
@@ -83,7 +72,7 @@ func ValidatePolicy(ctx context.Context, runtime runtime.RuntimeManager, req *ty
 		return nil, fmt.Errorf("ValidatePolicy: %v", err)
 	}
 
-	valid, msg, err := engine.ValidatePolicy(ctx, record.Policy)
+	valid, msg, err := engine.ValidatePolicy(ctx, pol)
 	if err != nil {
 		return nil, fmt.Errorf("ValidatePolicy: %v", err)
 	}

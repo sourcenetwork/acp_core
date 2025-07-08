@@ -1,5 +1,9 @@
 package object
 
-var attributes map[string]string = map[string]string{
-	"test": "1234",
+import "github.com/sourcenetwork/acp_core/pkg/types"
+
+var metadata = &types.SuppliedMetadata{
+	Attributes: map[string]string{
+		"test": "1234",
+	},
 }

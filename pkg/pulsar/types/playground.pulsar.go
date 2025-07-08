@@ -8120,6 +8120,1966 @@ func (x *fastReflection_GetSampleSandboxesResponse) ProtoMethods() *protoiface.M
 	}
 }
 
+var (
+	md_SetSerializedStateRequest          protoreflect.MessageDescriptor
+	fd_SetSerializedStateRequest_handle   protoreflect.FieldDescriptor
+	fd_SetSerializedStateRequest_encoding protoreflect.FieldDescriptor
+	fd_SetSerializedStateRequest_data     protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_sourcenetwork_acp_core_playground_proto_init()
+	md_SetSerializedStateRequest = File_sourcenetwork_acp_core_playground_proto.Messages().ByName("SetSerializedStateRequest")
+	fd_SetSerializedStateRequest_handle = md_SetSerializedStateRequest.Fields().ByName("handle")
+	fd_SetSerializedStateRequest_encoding = md_SetSerializedStateRequest.Fields().ByName("encoding")
+	fd_SetSerializedStateRequest_data = md_SetSerializedStateRequest.Fields().ByName("data")
+}
+
+var _ protoreflect.Message = (*fastReflection_SetSerializedStateRequest)(nil)
+
+type fastReflection_SetSerializedStateRequest SetSerializedStateRequest
+
+func (x *SetSerializedStateRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_SetSerializedStateRequest)(x)
+}
+
+func (x *SetSerializedStateRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[18]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_SetSerializedStateRequest_messageType fastReflection_SetSerializedStateRequest_messageType
+var _ protoreflect.MessageType = fastReflection_SetSerializedStateRequest_messageType{}
+
+type fastReflection_SetSerializedStateRequest_messageType struct{}
+
+func (x fastReflection_SetSerializedStateRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_SetSerializedStateRequest)(nil)
+}
+func (x fastReflection_SetSerializedStateRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_SetSerializedStateRequest)
+}
+func (x fastReflection_SetSerializedStateRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_SetSerializedStateRequest
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_SetSerializedStateRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_SetSerializedStateRequest
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_SetSerializedStateRequest) Type() protoreflect.MessageType {
+	return _fastReflection_SetSerializedStateRequest_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_SetSerializedStateRequest) New() protoreflect.Message {
+	return new(fastReflection_SetSerializedStateRequest)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_SetSerializedStateRequest) Interface() protoreflect.ProtoMessage {
+	return (*SetSerializedStateRequest)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_SetSerializedStateRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Handle != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Handle)
+		if !f(fd_SetSerializedStateRequest_handle, value) {
+			return
+		}
+	}
+	if x.Encoding != 0 {
+		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.Encoding))
+		if !f(fd_SetSerializedStateRequest_encoding, value) {
+			return
+		}
+	}
+	if len(x.Data) != 0 {
+		value := protoreflect.ValueOfBytes(x.Data)
+		if !f(fd_SetSerializedStateRequest_data, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_SetSerializedStateRequest) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.SetSerializedStateRequest.handle":
+		return x.Handle != uint64(0)
+	case "sourcenetwork.acp_core.SetSerializedStateRequest.encoding":
+		return x.Encoding != 0
+	case "sourcenetwork.acp_core.SetSerializedStateRequest.data":
+		return len(x.Data) != 0
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SetSerializedStateRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SetSerializedStateRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_SetSerializedStateRequest) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.SetSerializedStateRequest.handle":
+		x.Handle = uint64(0)
+	case "sourcenetwork.acp_core.SetSerializedStateRequest.encoding":
+		x.Encoding = 0
+	case "sourcenetwork.acp_core.SetSerializedStateRequest.data":
+		x.Data = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SetSerializedStateRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SetSerializedStateRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_SetSerializedStateRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "sourcenetwork.acp_core.SetSerializedStateRequest.handle":
+		value := x.Handle
+		return protoreflect.ValueOfUint64(value)
+	case "sourcenetwork.acp_core.SetSerializedStateRequest.encoding":
+		value := x.Encoding
+		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
+	case "sourcenetwork.acp_core.SetSerializedStateRequest.data":
+		value := x.Data
+		return protoreflect.ValueOfBytes(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SetSerializedStateRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SetSerializedStateRequest does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_SetSerializedStateRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.SetSerializedStateRequest.handle":
+		x.Handle = value.Uint()
+	case "sourcenetwork.acp_core.SetSerializedStateRequest.encoding":
+		x.Encoding = (SerializationEncoding)(value.Enum())
+	case "sourcenetwork.acp_core.SetSerializedStateRequest.data":
+		x.Data = value.Bytes()
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SetSerializedStateRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SetSerializedStateRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_SetSerializedStateRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.SetSerializedStateRequest.handle":
+		panic(fmt.Errorf("field handle of message sourcenetwork.acp_core.SetSerializedStateRequest is not mutable"))
+	case "sourcenetwork.acp_core.SetSerializedStateRequest.encoding":
+		panic(fmt.Errorf("field encoding of message sourcenetwork.acp_core.SetSerializedStateRequest is not mutable"))
+	case "sourcenetwork.acp_core.SetSerializedStateRequest.data":
+		panic(fmt.Errorf("field data of message sourcenetwork.acp_core.SetSerializedStateRequest is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SetSerializedStateRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SetSerializedStateRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_SetSerializedStateRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.SetSerializedStateRequest.handle":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "sourcenetwork.acp_core.SetSerializedStateRequest.encoding":
+		return protoreflect.ValueOfEnum(0)
+	case "sourcenetwork.acp_core.SetSerializedStateRequest.data":
+		return protoreflect.ValueOfBytes(nil)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SetSerializedStateRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SetSerializedStateRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_SetSerializedStateRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.SetSerializedStateRequest", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_SetSerializedStateRequest) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_SetSerializedStateRequest) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_SetSerializedStateRequest) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_SetSerializedStateRequest) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*SetSerializedStateRequest)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.Handle != 0 {
+			n += 1 + runtime.Sov(uint64(x.Handle))
+		}
+		if x.Encoding != 0 {
+			n += 1 + runtime.Sov(uint64(x.Encoding))
+		}
+		l = len(x.Data)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*SetSerializedStateRequest)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.Data) > 0 {
+			i -= len(x.Data)
+			copy(dAtA[i:], x.Data)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Data)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if x.Encoding != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Encoding))
+			i--
+			dAtA[i] = 0x10
+		}
+		if x.Handle != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Handle))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*SetSerializedStateRequest)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: SetSerializedStateRequest: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: SetSerializedStateRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Handle", wireType)
+				}
+				x.Handle = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Handle |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Encoding", wireType)
+				}
+				x.Encoding = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Encoding |= SerializationEncoding(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+				}
+				var byteLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					byteLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if byteLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + byteLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Data = append(x.Data[:0], dAtA[iNdEx:postIndex]...)
+				if x.Data == nil {
+					x.Data = []byte{}
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_SetSerializedStateResponse        protoreflect.MessageDescriptor
+	fd_SetSerializedStateResponse_ok     protoreflect.FieldDescriptor
+	fd_SetSerializedStateResponse_errors protoreflect.FieldDescriptor
+	fd_SetSerializedStateResponse_record protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_sourcenetwork_acp_core_playground_proto_init()
+	md_SetSerializedStateResponse = File_sourcenetwork_acp_core_playground_proto.Messages().ByName("SetSerializedStateResponse")
+	fd_SetSerializedStateResponse_ok = md_SetSerializedStateResponse.Fields().ByName("ok")
+	fd_SetSerializedStateResponse_errors = md_SetSerializedStateResponse.Fields().ByName("errors")
+	fd_SetSerializedStateResponse_record = md_SetSerializedStateResponse.Fields().ByName("record")
+}
+
+var _ protoreflect.Message = (*fastReflection_SetSerializedStateResponse)(nil)
+
+type fastReflection_SetSerializedStateResponse SetSerializedStateResponse
+
+func (x *SetSerializedStateResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_SetSerializedStateResponse)(x)
+}
+
+func (x *SetSerializedStateResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[19]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_SetSerializedStateResponse_messageType fastReflection_SetSerializedStateResponse_messageType
+var _ protoreflect.MessageType = fastReflection_SetSerializedStateResponse_messageType{}
+
+type fastReflection_SetSerializedStateResponse_messageType struct{}
+
+func (x fastReflection_SetSerializedStateResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_SetSerializedStateResponse)(nil)
+}
+func (x fastReflection_SetSerializedStateResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_SetSerializedStateResponse)
+}
+func (x fastReflection_SetSerializedStateResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_SetSerializedStateResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_SetSerializedStateResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_SetSerializedStateResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_SetSerializedStateResponse) Type() protoreflect.MessageType {
+	return _fastReflection_SetSerializedStateResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_SetSerializedStateResponse) New() protoreflect.Message {
+	return new(fastReflection_SetSerializedStateResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_SetSerializedStateResponse) Interface() protoreflect.ProtoMessage {
+	return (*SetSerializedStateResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_SetSerializedStateResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Ok != false {
+		value := protoreflect.ValueOfBool(x.Ok)
+		if !f(fd_SetSerializedStateResponse_ok, value) {
+			return
+		}
+	}
+	if x.Errors != nil {
+		value := protoreflect.ValueOfMessage(x.Errors.ProtoReflect())
+		if !f(fd_SetSerializedStateResponse_errors, value) {
+			return
+		}
+	}
+	if x.Record != nil {
+		value := protoreflect.ValueOfMessage(x.Record.ProtoReflect())
+		if !f(fd_SetSerializedStateResponse_record, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_SetSerializedStateResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.SetSerializedStateResponse.ok":
+		return x.Ok != false
+	case "sourcenetwork.acp_core.SetSerializedStateResponse.errors":
+		return x.Errors != nil
+	case "sourcenetwork.acp_core.SetSerializedStateResponse.record":
+		return x.Record != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SetSerializedStateResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SetSerializedStateResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_SetSerializedStateResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.SetSerializedStateResponse.ok":
+		x.Ok = false
+	case "sourcenetwork.acp_core.SetSerializedStateResponse.errors":
+		x.Errors = nil
+	case "sourcenetwork.acp_core.SetSerializedStateResponse.record":
+		x.Record = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SetSerializedStateResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SetSerializedStateResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_SetSerializedStateResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "sourcenetwork.acp_core.SetSerializedStateResponse.ok":
+		value := x.Ok
+		return protoreflect.ValueOfBool(value)
+	case "sourcenetwork.acp_core.SetSerializedStateResponse.errors":
+		value := x.Errors
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "sourcenetwork.acp_core.SetSerializedStateResponse.record":
+		value := x.Record
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SetSerializedStateResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SetSerializedStateResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_SetSerializedStateResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.SetSerializedStateResponse.ok":
+		x.Ok = value.Bool()
+	case "sourcenetwork.acp_core.SetSerializedStateResponse.errors":
+		x.Errors = value.Message().Interface().(*SandboxDataErrors)
+	case "sourcenetwork.acp_core.SetSerializedStateResponse.record":
+		x.Record = value.Message().Interface().(*SandboxRecord)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SetSerializedStateResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SetSerializedStateResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_SetSerializedStateResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.SetSerializedStateResponse.errors":
+		if x.Errors == nil {
+			x.Errors = new(SandboxDataErrors)
+		}
+		return protoreflect.ValueOfMessage(x.Errors.ProtoReflect())
+	case "sourcenetwork.acp_core.SetSerializedStateResponse.record":
+		if x.Record == nil {
+			x.Record = new(SandboxRecord)
+		}
+		return protoreflect.ValueOfMessage(x.Record.ProtoReflect())
+	case "sourcenetwork.acp_core.SetSerializedStateResponse.ok":
+		panic(fmt.Errorf("field ok of message sourcenetwork.acp_core.SetSerializedStateResponse is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SetSerializedStateResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SetSerializedStateResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_SetSerializedStateResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.SetSerializedStateResponse.ok":
+		return protoreflect.ValueOfBool(false)
+	case "sourcenetwork.acp_core.SetSerializedStateResponse.errors":
+		m := new(SandboxDataErrors)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "sourcenetwork.acp_core.SetSerializedStateResponse.record":
+		m := new(SandboxRecord)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SetSerializedStateResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SetSerializedStateResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_SetSerializedStateResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.SetSerializedStateResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_SetSerializedStateResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_SetSerializedStateResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_SetSerializedStateResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_SetSerializedStateResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*SetSerializedStateResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.Ok {
+			n += 2
+		}
+		if x.Errors != nil {
+			l = options.Size(x.Errors)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.Record != nil {
+			l = options.Size(x.Record)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*SetSerializedStateResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Record != nil {
+			encoded, err := options.Marshal(x.Record)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if x.Errors != nil {
+			encoded, err := options.Marshal(x.Errors)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if x.Ok {
+			i--
+			if x.Ok {
+				dAtA[i] = 1
+			} else {
+				dAtA[i] = 0
+			}
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*SetSerializedStateResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: SetSerializedStateResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: SetSerializedStateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Ok", wireType)
+				}
+				var v int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				x.Ok = bool(v != 0)
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Errors", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Errors == nil {
+					x.Errors = &SandboxDataErrors{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Errors); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Record", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Record == nil {
+					x.Record = &SandboxRecord{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Record); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_GetSerializedStateRequest          protoreflect.MessageDescriptor
+	fd_GetSerializedStateRequest_handle   protoreflect.FieldDescriptor
+	fd_GetSerializedStateRequest_encoding protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_sourcenetwork_acp_core_playground_proto_init()
+	md_GetSerializedStateRequest = File_sourcenetwork_acp_core_playground_proto.Messages().ByName("GetSerializedStateRequest")
+	fd_GetSerializedStateRequest_handle = md_GetSerializedStateRequest.Fields().ByName("handle")
+	fd_GetSerializedStateRequest_encoding = md_GetSerializedStateRequest.Fields().ByName("encoding")
+}
+
+var _ protoreflect.Message = (*fastReflection_GetSerializedStateRequest)(nil)
+
+type fastReflection_GetSerializedStateRequest GetSerializedStateRequest
+
+func (x *GetSerializedStateRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_GetSerializedStateRequest)(x)
+}
+
+func (x *GetSerializedStateRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[20]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_GetSerializedStateRequest_messageType fastReflection_GetSerializedStateRequest_messageType
+var _ protoreflect.MessageType = fastReflection_GetSerializedStateRequest_messageType{}
+
+type fastReflection_GetSerializedStateRequest_messageType struct{}
+
+func (x fastReflection_GetSerializedStateRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_GetSerializedStateRequest)(nil)
+}
+func (x fastReflection_GetSerializedStateRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_GetSerializedStateRequest)
+}
+func (x fastReflection_GetSerializedStateRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_GetSerializedStateRequest
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_GetSerializedStateRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_GetSerializedStateRequest
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_GetSerializedStateRequest) Type() protoreflect.MessageType {
+	return _fastReflection_GetSerializedStateRequest_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_GetSerializedStateRequest) New() protoreflect.Message {
+	return new(fastReflection_GetSerializedStateRequest)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_GetSerializedStateRequest) Interface() protoreflect.ProtoMessage {
+	return (*GetSerializedStateRequest)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_GetSerializedStateRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Handle != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Handle)
+		if !f(fd_GetSerializedStateRequest_handle, value) {
+			return
+		}
+	}
+	if x.Encoding != 0 {
+		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.Encoding))
+		if !f(fd_GetSerializedStateRequest_encoding, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_GetSerializedStateRequest) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.GetSerializedStateRequest.handle":
+		return x.Handle != uint64(0)
+	case "sourcenetwork.acp_core.GetSerializedStateRequest.encoding":
+		return x.Encoding != 0
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSerializedStateRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSerializedStateRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_GetSerializedStateRequest) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.GetSerializedStateRequest.handle":
+		x.Handle = uint64(0)
+	case "sourcenetwork.acp_core.GetSerializedStateRequest.encoding":
+		x.Encoding = 0
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSerializedStateRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSerializedStateRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_GetSerializedStateRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "sourcenetwork.acp_core.GetSerializedStateRequest.handle":
+		value := x.Handle
+		return protoreflect.ValueOfUint64(value)
+	case "sourcenetwork.acp_core.GetSerializedStateRequest.encoding":
+		value := x.Encoding
+		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSerializedStateRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSerializedStateRequest does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_GetSerializedStateRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.GetSerializedStateRequest.handle":
+		x.Handle = value.Uint()
+	case "sourcenetwork.acp_core.GetSerializedStateRequest.encoding":
+		x.Encoding = (SerializationEncoding)(value.Enum())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSerializedStateRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSerializedStateRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_GetSerializedStateRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.GetSerializedStateRequest.handle":
+		panic(fmt.Errorf("field handle of message sourcenetwork.acp_core.GetSerializedStateRequest is not mutable"))
+	case "sourcenetwork.acp_core.GetSerializedStateRequest.encoding":
+		panic(fmt.Errorf("field encoding of message sourcenetwork.acp_core.GetSerializedStateRequest is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSerializedStateRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSerializedStateRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_GetSerializedStateRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.GetSerializedStateRequest.handle":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "sourcenetwork.acp_core.GetSerializedStateRequest.encoding":
+		return protoreflect.ValueOfEnum(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSerializedStateRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSerializedStateRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_GetSerializedStateRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.GetSerializedStateRequest", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_GetSerializedStateRequest) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_GetSerializedStateRequest) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_GetSerializedStateRequest) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_GetSerializedStateRequest) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*GetSerializedStateRequest)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.Handle != 0 {
+			n += 1 + runtime.Sov(uint64(x.Handle))
+		}
+		if x.Encoding != 0 {
+			n += 1 + runtime.Sov(uint64(x.Encoding))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*GetSerializedStateRequest)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Encoding != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Encoding))
+			i--
+			dAtA[i] = 0x10
+		}
+		if x.Handle != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Handle))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*GetSerializedStateRequest)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: GetSerializedStateRequest: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: GetSerializedStateRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Handle", wireType)
+				}
+				x.Handle = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Handle |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Encoding", wireType)
+				}
+				x.Encoding = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Encoding |= SerializationEncoding(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_GetSerializedStateResponse      protoreflect.MessageDescriptor
+	fd_GetSerializedStateResponse_data protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_sourcenetwork_acp_core_playground_proto_init()
+	md_GetSerializedStateResponse = File_sourcenetwork_acp_core_playground_proto.Messages().ByName("GetSerializedStateResponse")
+	fd_GetSerializedStateResponse_data = md_GetSerializedStateResponse.Fields().ByName("data")
+}
+
+var _ protoreflect.Message = (*fastReflection_GetSerializedStateResponse)(nil)
+
+type fastReflection_GetSerializedStateResponse GetSerializedStateResponse
+
+func (x *GetSerializedStateResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_GetSerializedStateResponse)(x)
+}
+
+func (x *GetSerializedStateResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[21]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_GetSerializedStateResponse_messageType fastReflection_GetSerializedStateResponse_messageType
+var _ protoreflect.MessageType = fastReflection_GetSerializedStateResponse_messageType{}
+
+type fastReflection_GetSerializedStateResponse_messageType struct{}
+
+func (x fastReflection_GetSerializedStateResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_GetSerializedStateResponse)(nil)
+}
+func (x fastReflection_GetSerializedStateResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_GetSerializedStateResponse)
+}
+func (x fastReflection_GetSerializedStateResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_GetSerializedStateResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_GetSerializedStateResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_GetSerializedStateResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_GetSerializedStateResponse) Type() protoreflect.MessageType {
+	return _fastReflection_GetSerializedStateResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_GetSerializedStateResponse) New() protoreflect.Message {
+	return new(fastReflection_GetSerializedStateResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_GetSerializedStateResponse) Interface() protoreflect.ProtoMessage {
+	return (*GetSerializedStateResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_GetSerializedStateResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if len(x.Data) != 0 {
+		value := protoreflect.ValueOfBytes(x.Data)
+		if !f(fd_GetSerializedStateResponse_data, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_GetSerializedStateResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.GetSerializedStateResponse.data":
+		return len(x.Data) != 0
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSerializedStateResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSerializedStateResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_GetSerializedStateResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.GetSerializedStateResponse.data":
+		x.Data = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSerializedStateResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSerializedStateResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_GetSerializedStateResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "sourcenetwork.acp_core.GetSerializedStateResponse.data":
+		value := x.Data
+		return protoreflect.ValueOfBytes(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSerializedStateResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSerializedStateResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_GetSerializedStateResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.GetSerializedStateResponse.data":
+		x.Data = value.Bytes()
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSerializedStateResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSerializedStateResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_GetSerializedStateResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.GetSerializedStateResponse.data":
+		panic(fmt.Errorf("field data of message sourcenetwork.acp_core.GetSerializedStateResponse is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSerializedStateResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSerializedStateResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_GetSerializedStateResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.GetSerializedStateResponse.data":
+		return protoreflect.ValueOfBytes(nil)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSerializedStateResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.GetSerializedStateResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_GetSerializedStateResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.GetSerializedStateResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_GetSerializedStateResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_GetSerializedStateResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_GetSerializedStateResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_GetSerializedStateResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*GetSerializedStateResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.Data)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*GetSerializedStateResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.Data) > 0 {
+			i -= len(x.Data)
+			copy(dAtA[i:], x.Data)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Data)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*GetSerializedStateResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: GetSerializedStateResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: GetSerializedStateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+				}
+				var byteLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					byteLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if byteLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + byteLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Data = append(x.Data[:0], dAtA[iNdEx:postIndex]...)
+				if x.Data == nil {
+					x.Data = []byte{}
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
 // Code generated by protoc-gen-go. DO NOT EDIT.
 // versions:
 // 	protoc-gen-go v1.27.0
@@ -8132,6 +10092,55 @@ const (
 	// Verify that runtime/protoimpl is sufficiently up-to-date.
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
+
+type SerializationEncoding int32
+
+const (
+	SerializationEncoding_UNKNOWN_ENCODING SerializationEncoding = 0
+	SerializationEncoding_BASE64           SerializationEncoding = 1
+	SerializationEncoding_BYTES            SerializationEncoding = 2
+)
+
+// Enum value maps for SerializationEncoding.
+var (
+	SerializationEncoding_name = map[int32]string{
+		0: "UNKNOWN_ENCODING",
+		1: "BASE64",
+		2: "BYTES",
+	}
+	SerializationEncoding_value = map[string]int32{
+		"UNKNOWN_ENCODING": 0,
+		"BASE64":           1,
+		"BYTES":            2,
+	}
+)
+
+func (x SerializationEncoding) Enum() *SerializationEncoding {
+	p := new(SerializationEncoding)
+	*p = x
+	return p
+}
+
+func (x SerializationEncoding) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (SerializationEncoding) Descriptor() protoreflect.EnumDescriptor {
+	return file_sourcenetwork_acp_core_playground_proto_enumTypes[0].Descriptor()
+}
+
+func (SerializationEncoding) Type() protoreflect.EnumType {
+	return &file_sourcenetwork_acp_core_playground_proto_enumTypes[0]
+}
+
+func (x SerializationEncoding) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use SerializationEncoding.Descriptor instead.
+func (SerializationEncoding) EnumDescriptor() ([]byte, []int) {
+	return file_sourcenetwork_acp_core_playground_proto_rawDescGZIP(), []int{0}
+}
 
 type NewSandboxRequest struct {
 	state         protoimpl.MessageState
@@ -8823,6 +10832,191 @@ func (x *GetSampleSandboxesResponse) GetSamples() []*SandboxTemplate {
 	return nil
 }
 
+type SetSerializedStateRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// handle to an existing sandbox
+	Handle   uint64                `protobuf:"varint,1,opt,name=handle,proto3" json:"handle,omitempty"`
+	Encoding SerializationEncoding `protobuf:"varint,2,opt,name=encoding,proto3,enum=sourcenetwork.acp_core.SerializationEncoding" json:"encoding,omitempty"`
+	Data     []byte                `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+}
+
+func (x *SetSerializedStateRequest) Reset() {
+	*x = SetSerializedStateRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[18]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SetSerializedStateRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetSerializedStateRequest) ProtoMessage() {}
+
+// Deprecated: Use SetSerializedStateRequest.ProtoReflect.Descriptor instead.
+func (*SetSerializedStateRequest) Descriptor() ([]byte, []int) {
+	return file_sourcenetwork_acp_core_playground_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *SetSerializedStateRequest) GetHandle() uint64 {
+	if x != nil {
+		return x.Handle
+	}
+	return 0
+}
+
+func (x *SetSerializedStateRequest) GetEncoding() SerializationEncoding {
+	if x != nil {
+		return x.Encoding
+	}
+	return SerializationEncoding_UNKNOWN_ENCODING
+}
+
+func (x *SetSerializedStateRequest) GetData() []byte {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type SetSerializedStateResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// ok indicates the state updated sucessfuly
+	Ok bool `protobuf:"varint,1,opt,name=ok,proto3" json:"ok,omitempty"`
+	// errors represent all recoverable errors found while parsing and setting the sandbox state
+	Errors *SandboxDataErrors `protobuf:"bytes,2,opt,name=errors,proto3" json:"errors,omitempty"`
+	// record contains a representation of the sandbox's new internal state
+	Record *SandboxRecord `protobuf:"bytes,3,opt,name=record,proto3" json:"record,omitempty"`
+}
+
+func (x *SetSerializedStateResponse) Reset() {
+	*x = SetSerializedStateResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[19]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SetSerializedStateResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetSerializedStateResponse) ProtoMessage() {}
+
+// Deprecated: Use SetSerializedStateResponse.ProtoReflect.Descriptor instead.
+func (*SetSerializedStateResponse) Descriptor() ([]byte, []int) {
+	return file_sourcenetwork_acp_core_playground_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *SetSerializedStateResponse) GetOk() bool {
+	if x != nil {
+		return x.Ok
+	}
+	return false
+}
+
+func (x *SetSerializedStateResponse) GetErrors() *SandboxDataErrors {
+	if x != nil {
+		return x.Errors
+	}
+	return nil
+}
+
+func (x *SetSerializedStateResponse) GetRecord() *SandboxRecord {
+	if x != nil {
+		return x.Record
+	}
+	return nil
+}
+
+type GetSerializedStateRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// handle to an existing sandbox
+	Handle   uint64                `protobuf:"varint,1,opt,name=handle,proto3" json:"handle,omitempty"`
+	Encoding SerializationEncoding `protobuf:"varint,2,opt,name=encoding,proto3,enum=sourcenetwork.acp_core.SerializationEncoding" json:"encoding,omitempty"`
+}
+
+func (x *GetSerializedStateRequest) Reset() {
+	*x = GetSerializedStateRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[20]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetSerializedStateRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSerializedStateRequest) ProtoMessage() {}
+
+// Deprecated: Use GetSerializedStateRequest.ProtoReflect.Descriptor instead.
+func (*GetSerializedStateRequest) Descriptor() ([]byte, []int) {
+	return file_sourcenetwork_acp_core_playground_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *GetSerializedStateRequest) GetHandle() uint64 {
+	if x != nil {
+		return x.Handle
+	}
+	return 0
+}
+
+func (x *GetSerializedStateRequest) GetEncoding() SerializationEncoding {
+	if x != nil {
+		return x.Encoding
+	}
+	return SerializationEncoding_UNKNOWN_ENCODING
+}
+
+type GetSerializedStateResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Data []byte `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+}
+
+func (x *GetSerializedStateResponse) Reset() {
+	*x = GetSerializedStateResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[21]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetSerializedStateResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSerializedStateResponse) ProtoMessage() {}
+
+// Deprecated: Use GetSerializedStateResponse.ProtoReflect.Descriptor instead.
+func (*GetSerializedStateResponse) Descriptor() ([]byte, []int) {
+	return file_sourcenetwork_acp_core_playground_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *GetSerializedStateResponse) GetData() []byte {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
 var File_sourcenetwork_acp_core_playground_proto protoreflect.FileDescriptor
 
 var file_sourcenetwork_acp_core_playground_proto_rawDesc = []byte{
@@ -8935,73 +11129,109 @@ var file_sourcenetwork_acp_core_playground_proto_rawDesc = []byte{
 	0x61, 0x6d, 0x70, 0x6c, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x73,
 	0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70,
 	0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x54, 0x65, 0x6d,
-	0x70, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x07, 0x73, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x73, 0x32, 0xdb,
-	0x07, 0x0a, 0x11, 0x50, 0x6c, 0x61, 0x79, 0x67, 0x72, 0x6f, 0x75, 0x6e, 0x64, 0x53, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x12, 0x63, 0x0a, 0x0a, 0x4e, 0x65, 0x77, 0x53, 0x61, 0x6e, 0x64, 0x62,
-	0x6f, 0x78, 0x12, 0x29, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f,
-	0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4e, 0x65, 0x77, 0x53,
-	0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2a, 0x2e,
-	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63,
-	0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4e, 0x65, 0x77, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f,
-	0x78, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6c, 0x0a, 0x0d, 0x4c, 0x69, 0x73,
-	0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x12, 0x2c, 0x2e, 0x73, 0x6f, 0x75,
-	0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63,
-	0x6f, 0x72, 0x65, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65,
-	0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2d, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63,
+	0x70, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x07, 0x73, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x73, 0x22, 0x92,
+	0x01, 0x0a, 0x19, 0x53, 0x65, 0x74, 0x53, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x64,
+	0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06,
+	0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x68, 0x61,
+	0x6e, 0x64, 0x6c, 0x65, 0x12, 0x49, 0x0a, 0x08, 0x65, 0x6e, 0x63, 0x6f, 0x64, 0x69, 0x6e, 0x67,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x2d, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e,
+	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e,
+	0x53, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x45, 0x6e, 0x63,
+	0x6f, 0x64, 0x69, 0x6e, 0x67, 0x52, 0x08, 0x65, 0x6e, 0x63, 0x6f, 0x64, 0x69, 0x6e, 0x67, 0x12,
+	0x12, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x64,
+	0x61, 0x74, 0x61, 0x22, 0xae, 0x01, 0x0a, 0x1a, 0x53, 0x65, 0x74, 0x53, 0x65, 0x72, 0x69, 0x61,
+	0x6c, 0x69, 0x7a, 0x65, 0x64, 0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x6f, 0x6b, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x02,
+	0x6f, 0x6b, 0x12, 0x41, 0x0a, 0x06, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x73, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x29, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f,
+	0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x61, 0x6e, 0x64,
+	0x62, 0x6f, 0x78, 0x44, 0x61, 0x74, 0x61, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x73, 0x52, 0x06, 0x65,
+	0x72, 0x72, 0x6f, 0x72, 0x73, 0x12, 0x3d, 0x0a, 0x06, 0x72, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65,
+	0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53,
+	0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x52, 0x06, 0x72, 0x65,
+	0x63, 0x6f, 0x72, 0x64, 0x22, 0x7e, 0x0a, 0x19, 0x47, 0x65, 0x74, 0x53, 0x65, 0x72, 0x69, 0x61,
+	0x6c, 0x69, 0x7a, 0x65, 0x64, 0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x12, 0x16, 0x0a, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x04, 0x52, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x12, 0x49, 0x0a, 0x08, 0x65, 0x6e, 0x63,
+	0x6f, 0x64, 0x69, 0x6e, 0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x2d, 0x2e, 0x73, 0x6f,
+	0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f,
+	0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x69, 0x7a, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x45, 0x6e, 0x63, 0x6f, 0x64, 0x69, 0x6e, 0x67, 0x52, 0x08, 0x65, 0x6e, 0x63, 0x6f,
+	0x64, 0x69, 0x6e, 0x67, 0x22, 0x30, 0x0a, 0x1a, 0x47, 0x65, 0x74, 0x53, 0x65, 0x72, 0x69, 0x61,
+	0x6c, 0x69, 0x7a, 0x65, 0x64, 0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c,
+	0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x2a, 0x44, 0x0a, 0x15, 0x53, 0x65, 0x72, 0x69, 0x61, 0x6c,
+	0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x45, 0x6e, 0x63, 0x6f, 0x64, 0x69, 0x6e, 0x67, 0x12,
+	0x14, 0x0a, 0x10, 0x55, 0x4e, 0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x5f, 0x45, 0x4e, 0x43, 0x4f, 0x44,
+	0x49, 0x4e, 0x47, 0x10, 0x00, 0x12, 0x0a, 0x0a, 0x06, 0x42, 0x41, 0x53, 0x45, 0x36, 0x34, 0x10,
+	0x01, 0x12, 0x09, 0x0a, 0x05, 0x42, 0x59, 0x54, 0x45, 0x53, 0x10, 0x02, 0x32, 0xdb, 0x07, 0x0a,
+	0x11, 0x50, 0x6c, 0x61, 0x79, 0x67, 0x72, 0x6f, 0x75, 0x6e, 0x64, 0x53, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x12, 0x63, 0x0a, 0x0a, 0x4e, 0x65, 0x77, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78,
+	0x12, 0x29, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b,
+	0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4e, 0x65, 0x77, 0x53, 0x61, 0x6e,
+	0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2a, 0x2e, 0x73, 0x6f,
+	0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f,
+	0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4e, 0x65, 0x77, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6c, 0x0a, 0x0d, 0x4c, 0x69, 0x73, 0x74, 0x53,
+	0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x12, 0x2c, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63,
 	0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72,
 	0x65, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x5d, 0x0a, 0x08, 0x53, 0x65, 0x74, 0x53, 0x74,
-	0x61, 0x74, 0x65, 0x12, 0x27, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77,
-	0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x65, 0x74,
-	0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x28, 0x2e, 0x73,
-	0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70,
-	0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x65, 0x74, 0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x78, 0x0a, 0x11, 0x52, 0x65, 0x73, 0x74, 0x6f, 0x72,
-	0x65, 0x53, 0x63, 0x72, 0x61, 0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x12, 0x30, 0x2e, 0x73, 0x6f,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2d, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e,
+	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e,
+	0x4c, 0x69, 0x73, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x5d, 0x0a, 0x08, 0x53, 0x65, 0x74, 0x53, 0x74, 0x61, 0x74,
+	0x65, 0x12, 0x27, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
+	0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x65, 0x74, 0x53, 0x74,
+	0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x28, 0x2e, 0x73, 0x6f, 0x75,
+	0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63,
+	0x6f, 0x72, 0x65, 0x2e, 0x53, 0x65, 0x74, 0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x78, 0x0a, 0x11, 0x52, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x53,
+	0x63, 0x72, 0x61, 0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x12, 0x30, 0x2e, 0x73, 0x6f, 0x75, 0x72,
+	0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f,
+	0x72, 0x65, 0x2e, 0x52, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x53, 0x63, 0x72, 0x61, 0x74, 0x63,
+	0x68, 0x70, 0x61, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x31, 0x2e, 0x73, 0x6f,
 	0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f,
 	0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x53, 0x63, 0x72, 0x61,
-	0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x31, 0x2e,
-	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63,
-	0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x53, 0x63,
-	0x72, 0x61, 0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x12, 0x69, 0x0a, 0x0c, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x75, 0x65,
-	0x12, 0x2b, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b,
-	0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74,
-	0x61, 0x6c, 0x6f, 0x67, 0x75, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2c, 0x2e,
-	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63,
-	0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f,
-	0x67, 0x75, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x63, 0x0a, 0x0a, 0x47,
-	0x65, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x12, 0x29, 0x2e, 0x73, 0x6f, 0x75, 0x72,
-	0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f,
-	0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x1a, 0x2a, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
-	0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65,
-	0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x12, 0x6f, 0x0a, 0x0e, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65,
-	0x6d, 0x73, 0x12, 0x2d, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f,
-	0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x56, 0x65, 0x72, 0x69,
-	0x66, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x1a, 0x2e, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
-	0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x56, 0x65, 0x72, 0x69, 0x66,
-	0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x12, 0x5c, 0x0a, 0x08, 0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x12, 0x27, 0x2e,
-	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63,
-	0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x27, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e,
+	0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x69,
+	0x0a, 0x0c, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x75, 0x65, 0x12, 0x2b,
+	0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61,
+	0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c,
+	0x6f, 0x67, 0x75, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2c, 0x2e, 0x73, 0x6f,
+	0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f,
+	0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x75,
+	0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x63, 0x0a, 0x0a, 0x47, 0x65, 0x74,
+	0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x12, 0x29, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
+	0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65,
+	0x2e, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x2a, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f,
+	0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x53,
+	0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6f,
+	0x0a, 0x0e, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73,
+	0x12, 0x2d, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b,
+	0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79,
+	0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x2e, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e,
+	0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x54,
+	0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x5c, 0x0a, 0x08, 0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x12, 0x27, 0x2e, 0x73, 0x6f,
+	0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f,
+	0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x27, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
+	0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x69,
+	0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x7b, 0x0a,
+	0x12, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f,
+	0x78, 0x65, 0x73, 0x12, 0x31, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77,
+	0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74,
+	0x53, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x32, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e,
 	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e,
-	0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
-	0x7b, 0x0a, 0x12, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x53, 0x61, 0x6e, 0x64,
-	0x62, 0x6f, 0x78, 0x65, 0x73, 0x12, 0x31, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65,
-	0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47,
-	0x65, 0x74, 0x53, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65,
-	0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x32, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63,
-	0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72,
-	0x65, 0x2e, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x53, 0x61, 0x6e, 0x64, 0x62,
-	0x6f, 0x78, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x2d, 0x5a, 0x2b,
-	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6f, 0x75, 0x72, 0x63,
-	0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72,
-	0x65, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x47, 0x65, 0x74, 0x53, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78,
+	0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x2d, 0x5a, 0x2b, 0x67, 0x69,
+	0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e,
+	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f,
+	0x70, 0x6b, 0x67, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x33,
 }
 
 var (
@@ -9016,71 +11246,81 @@ func file_sourcenetwork_acp_core_playground_proto_rawDescGZIP() []byte {
 	return file_sourcenetwork_acp_core_playground_proto_rawDescData
 }
 
-var file_sourcenetwork_acp_core_playground_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
+var file_sourcenetwork_acp_core_playground_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_sourcenetwork_acp_core_playground_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
 var file_sourcenetwork_acp_core_playground_proto_goTypes = []interface{}{
-	(*NewSandboxRequest)(nil),            // 0: sourcenetwork.acp_core.NewSandboxRequest
-	(*NewSandboxResponse)(nil),           // 1: sourcenetwork.acp_core.NewSandboxResponse
-	(*SetStateRequest)(nil),              // 2: sourcenetwork.acp_core.SetStateRequest
-	(*SetStateResponse)(nil),             // 3: sourcenetwork.acp_core.SetStateResponse
-	(*GetCatalogueRequest)(nil),          // 4: sourcenetwork.acp_core.GetCatalogueRequest
-	(*GetCatalogueResponse)(nil),         // 5: sourcenetwork.acp_core.GetCatalogueResponse
-	(*VerifyTheoremsRequest)(nil),        // 6: sourcenetwork.acp_core.VerifyTheoremsRequest
-	(*VerifyTheoremsResponse)(nil),       // 7: sourcenetwork.acp_core.VerifyTheoremsResponse
-	(*ListSandboxesRequest)(nil),         // 8: sourcenetwork.acp_core.ListSandboxesRequest
-	(*ListSandboxesResponse)(nil),        // 9: sourcenetwork.acp_core.ListSandboxesResponse
-	(*RestoreScratchpadRequest)(nil),     // 10: sourcenetwork.acp_core.RestoreScratchpadRequest
-	(*RestoreScratchpadResponse)(nil),    // 11: sourcenetwork.acp_core.RestoreScratchpadResponse
-	(*SimulateRequest)(nil),              // 12: sourcenetwork.acp_core.SimulateRequest
-	(*SimulateReponse)(nil),              // 13: sourcenetwork.acp_core.SimulateReponse
-	(*GetSandboxRequest)(nil),            // 14: sourcenetwork.acp_core.GetSandboxRequest
-	(*GetSandboxResponse)(nil),           // 15: sourcenetwork.acp_core.GetSandboxResponse
-	(*GetSampleSandboxesRequest)(nil),    // 16: sourcenetwork.acp_core.GetSampleSandboxesRequest
-	(*GetSampleSandboxesResponse)(nil),   // 17: sourcenetwork.acp_core.GetSampleSandboxesResponse
-	(*SandboxRecord)(nil),                // 18: sourcenetwork.acp_core.SandboxRecord
-	(*SandboxData)(nil),                  // 19: sourcenetwork.acp_core.SandboxData
-	(*SandboxDataErrors)(nil),            // 20: sourcenetwork.acp_core.SandboxDataErrors
-	(*PolicyCatalogue)(nil),              // 21: sourcenetwork.acp_core.PolicyCatalogue
-	(*AnnotatedPolicyTheoremResult)(nil), // 22: sourcenetwork.acp_core.AnnotatedPolicyTheoremResult
-	(*SandboxTemplate)(nil),              // 23: sourcenetwork.acp_core.SandboxTemplate
+	(SerializationEncoding)(0),           // 0: sourcenetwork.acp_core.SerializationEncoding
+	(*NewSandboxRequest)(nil),            // 1: sourcenetwork.acp_core.NewSandboxRequest
+	(*NewSandboxResponse)(nil),           // 2: sourcenetwork.acp_core.NewSandboxResponse
+	(*SetStateRequest)(nil),              // 3: sourcenetwork.acp_core.SetStateRequest
+	(*SetStateResponse)(nil),             // 4: sourcenetwork.acp_core.SetStateResponse
+	(*GetCatalogueRequest)(nil),          // 5: sourcenetwork.acp_core.GetCatalogueRequest
+	(*GetCatalogueResponse)(nil),         // 6: sourcenetwork.acp_core.GetCatalogueResponse
+	(*VerifyTheoremsRequest)(nil),        // 7: sourcenetwork.acp_core.VerifyTheoremsRequest
+	(*VerifyTheoremsResponse)(nil),       // 8: sourcenetwork.acp_core.VerifyTheoremsResponse
+	(*ListSandboxesRequest)(nil),         // 9: sourcenetwork.acp_core.ListSandboxesRequest
+	(*ListSandboxesResponse)(nil),        // 10: sourcenetwork.acp_core.ListSandboxesResponse
+	(*RestoreScratchpadRequest)(nil),     // 11: sourcenetwork.acp_core.RestoreScratchpadRequest
+	(*RestoreScratchpadResponse)(nil),    // 12: sourcenetwork.acp_core.RestoreScratchpadResponse
+	(*SimulateRequest)(nil),              // 13: sourcenetwork.acp_core.SimulateRequest
+	(*SimulateReponse)(nil),              // 14: sourcenetwork.acp_core.SimulateReponse
+	(*GetSandboxRequest)(nil),            // 15: sourcenetwork.acp_core.GetSandboxRequest
+	(*GetSandboxResponse)(nil),           // 16: sourcenetwork.acp_core.GetSandboxResponse
+	(*GetSampleSandboxesRequest)(nil),    // 17: sourcenetwork.acp_core.GetSampleSandboxesRequest
+	(*GetSampleSandboxesResponse)(nil),   // 18: sourcenetwork.acp_core.GetSampleSandboxesResponse
+	(*SetSerializedStateRequest)(nil),    // 19: sourcenetwork.acp_core.SetSerializedStateRequest
+	(*SetSerializedStateResponse)(nil),   // 20: sourcenetwork.acp_core.SetSerializedStateResponse
+	(*GetSerializedStateRequest)(nil),    // 21: sourcenetwork.acp_core.GetSerializedStateRequest
+	(*GetSerializedStateResponse)(nil),   // 22: sourcenetwork.acp_core.GetSerializedStateResponse
+	(*SandboxRecord)(nil),                // 23: sourcenetwork.acp_core.SandboxRecord
+	(*SandboxData)(nil),                  // 24: sourcenetwork.acp_core.SandboxData
+	(*SandboxDataErrors)(nil),            // 25: sourcenetwork.acp_core.SandboxDataErrors
+	(*PolicyCatalogue)(nil),              // 26: sourcenetwork.acp_core.PolicyCatalogue
+	(*AnnotatedPolicyTheoremResult)(nil), // 27: sourcenetwork.acp_core.AnnotatedPolicyTheoremResult
+	(*SandboxTemplate)(nil),              // 28: sourcenetwork.acp_core.SandboxTemplate
 }
 var file_sourcenetwork_acp_core_playground_proto_depIdxs = []int32{
-	18, // 0: sourcenetwork.acp_core.NewSandboxResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
-	19, // 1: sourcenetwork.acp_core.SetStateRequest.data:type_name -> sourcenetwork.acp_core.SandboxData
-	20, // 2: sourcenetwork.acp_core.SetStateResponse.errors:type_name -> sourcenetwork.acp_core.SandboxDataErrors
-	18, // 3: sourcenetwork.acp_core.SetStateResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
-	21, // 4: sourcenetwork.acp_core.GetCatalogueResponse.catalogue:type_name -> sourcenetwork.acp_core.PolicyCatalogue
-	22, // 5: sourcenetwork.acp_core.VerifyTheoremsResponse.result:type_name -> sourcenetwork.acp_core.AnnotatedPolicyTheoremResult
-	18, // 6: sourcenetwork.acp_core.ListSandboxesResponse.records:type_name -> sourcenetwork.acp_core.SandboxRecord
-	19, // 7: sourcenetwork.acp_core.RestoreScratchpadResponse.scratchpad:type_name -> sourcenetwork.acp_core.SandboxData
-	19, // 8: sourcenetwork.acp_core.SimulateRequest.data:type_name -> sourcenetwork.acp_core.SandboxData
-	20, // 9: sourcenetwork.acp_core.SimulateReponse.errors:type_name -> sourcenetwork.acp_core.SandboxDataErrors
-	18, // 10: sourcenetwork.acp_core.SimulateReponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
-	22, // 11: sourcenetwork.acp_core.SimulateReponse.result:type_name -> sourcenetwork.acp_core.AnnotatedPolicyTheoremResult
-	18, // 12: sourcenetwork.acp_core.GetSandboxResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
-	23, // 13: sourcenetwork.acp_core.GetSampleSandboxesResponse.samples:type_name -> sourcenetwork.acp_core.SandboxTemplate
-	0,  // 14: sourcenetwork.acp_core.PlaygroundService.NewSandbox:input_type -> sourcenetwork.acp_core.NewSandboxRequest
-	8,  // 15: sourcenetwork.acp_core.PlaygroundService.ListSandboxes:input_type -> sourcenetwork.acp_core.ListSandboxesRequest
-	2,  // 16: sourcenetwork.acp_core.PlaygroundService.SetState:input_type -> sourcenetwork.acp_core.SetStateRequest
-	10, // 17: sourcenetwork.acp_core.PlaygroundService.RestoreScratchpad:input_type -> sourcenetwork.acp_core.RestoreScratchpadRequest
-	4,  // 18: sourcenetwork.acp_core.PlaygroundService.GetCatalogue:input_type -> sourcenetwork.acp_core.GetCatalogueRequest
-	14, // 19: sourcenetwork.acp_core.PlaygroundService.GetSandbox:input_type -> sourcenetwork.acp_core.GetSandboxRequest
-	6,  // 20: sourcenetwork.acp_core.PlaygroundService.VerifyTheorems:input_type -> sourcenetwork.acp_core.VerifyTheoremsRequest
-	12, // 21: sourcenetwork.acp_core.PlaygroundService.Simulate:input_type -> sourcenetwork.acp_core.SimulateRequest
-	16, // 22: sourcenetwork.acp_core.PlaygroundService.GetSampleSandboxes:input_type -> sourcenetwork.acp_core.GetSampleSandboxesRequest
-	1,  // 23: sourcenetwork.acp_core.PlaygroundService.NewSandbox:output_type -> sourcenetwork.acp_core.NewSandboxResponse
-	9,  // 24: sourcenetwork.acp_core.PlaygroundService.ListSandboxes:output_type -> sourcenetwork.acp_core.ListSandboxesResponse
-	3,  // 25: sourcenetwork.acp_core.PlaygroundService.SetState:output_type -> sourcenetwork.acp_core.SetStateResponse
-	11, // 26: sourcenetwork.acp_core.PlaygroundService.RestoreScratchpad:output_type -> sourcenetwork.acp_core.RestoreScratchpadResponse
-	5,  // 27: sourcenetwork.acp_core.PlaygroundService.GetCatalogue:output_type -> sourcenetwork.acp_core.GetCatalogueResponse
-	15, // 28: sourcenetwork.acp_core.PlaygroundService.GetSandbox:output_type -> sourcenetwork.acp_core.GetSandboxResponse
-	7,  // 29: sourcenetwork.acp_core.PlaygroundService.VerifyTheorems:output_type -> sourcenetwork.acp_core.VerifyTheoremsResponse
-	13, // 30: sourcenetwork.acp_core.PlaygroundService.Simulate:output_type -> sourcenetwork.acp_core.SimulateReponse
-	17, // 31: sourcenetwork.acp_core.PlaygroundService.GetSampleSandboxes:output_type -> sourcenetwork.acp_core.GetSampleSandboxesResponse
-	23, // [23:32] is the sub-list for method output_type
-	14, // [14:23] is the sub-list for method input_type
-	14, // [14:14] is the sub-list for extension type_name
-	14, // [14:14] is the sub-list for extension extendee
-	0,  // [0:14] is the sub-list for field type_name
+	23, // 0: sourcenetwork.acp_core.NewSandboxResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
+	24, // 1: sourcenetwork.acp_core.SetStateRequest.data:type_name -> sourcenetwork.acp_core.SandboxData
+	25, // 2: sourcenetwork.acp_core.SetStateResponse.errors:type_name -> sourcenetwork.acp_core.SandboxDataErrors
+	23, // 3: sourcenetwork.acp_core.SetStateResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
+	26, // 4: sourcenetwork.acp_core.GetCatalogueResponse.catalogue:type_name -> sourcenetwork.acp_core.PolicyCatalogue
+	27, // 5: sourcenetwork.acp_core.VerifyTheoremsResponse.result:type_name -> sourcenetwork.acp_core.AnnotatedPolicyTheoremResult
+	23, // 6: sourcenetwork.acp_core.ListSandboxesResponse.records:type_name -> sourcenetwork.acp_core.SandboxRecord
+	24, // 7: sourcenetwork.acp_core.RestoreScratchpadResponse.scratchpad:type_name -> sourcenetwork.acp_core.SandboxData
+	24, // 8: sourcenetwork.acp_core.SimulateRequest.data:type_name -> sourcenetwork.acp_core.SandboxData
+	25, // 9: sourcenetwork.acp_core.SimulateReponse.errors:type_name -> sourcenetwork.acp_core.SandboxDataErrors
+	23, // 10: sourcenetwork.acp_core.SimulateReponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
+	27, // 11: sourcenetwork.acp_core.SimulateReponse.result:type_name -> sourcenetwork.acp_core.AnnotatedPolicyTheoremResult
+	23, // 12: sourcenetwork.acp_core.GetSandboxResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
+	28, // 13: sourcenetwork.acp_core.GetSampleSandboxesResponse.samples:type_name -> sourcenetwork.acp_core.SandboxTemplate
+	0,  // 14: sourcenetwork.acp_core.SetSerializedStateRequest.encoding:type_name -> sourcenetwork.acp_core.SerializationEncoding
+	25, // 15: sourcenetwork.acp_core.SetSerializedStateResponse.errors:type_name -> sourcenetwork.acp_core.SandboxDataErrors
+	23, // 16: sourcenetwork.acp_core.SetSerializedStateResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
+	0,  // 17: sourcenetwork.acp_core.GetSerializedStateRequest.encoding:type_name -> sourcenetwork.acp_core.SerializationEncoding
+	1,  // 18: sourcenetwork.acp_core.PlaygroundService.NewSandbox:input_type -> sourcenetwork.acp_core.NewSandboxRequest
+	9,  // 19: sourcenetwork.acp_core.PlaygroundService.ListSandboxes:input_type -> sourcenetwork.acp_core.ListSandboxesRequest
+	3,  // 20: sourcenetwork.acp_core.PlaygroundService.SetState:input_type -> sourcenetwork.acp_core.SetStateRequest
+	11, // 21: sourcenetwork.acp_core.PlaygroundService.RestoreScratchpad:input_type -> sourcenetwork.acp_core.RestoreScratchpadRequest
+	5,  // 22: sourcenetwork.acp_core.PlaygroundService.GetCatalogue:input_type -> sourcenetwork.acp_core.GetCatalogueRequest
+	15, // 23: sourcenetwork.acp_core.PlaygroundService.GetSandbox:input_type -> sourcenetwork.acp_core.GetSandboxRequest
+	7,  // 24: sourcenetwork.acp_core.PlaygroundService.VerifyTheorems:input_type -> sourcenetwork.acp_core.VerifyTheoremsRequest
+	13, // 25: sourcenetwork.acp_core.PlaygroundService.Simulate:input_type -> sourcenetwork.acp_core.SimulateRequest
+	17, // 26: sourcenetwork.acp_core.PlaygroundService.GetSampleSandboxes:input_type -> sourcenetwork.acp_core.GetSampleSandboxesRequest
+	2,  // 27: sourcenetwork.acp_core.PlaygroundService.NewSandbox:output_type -> sourcenetwork.acp_core.NewSandboxResponse
+	10, // 28: sourcenetwork.acp_core.PlaygroundService.ListSandboxes:output_type -> sourcenetwork.acp_core.ListSandboxesResponse
+	4,  // 29: sourcenetwork.acp_core.PlaygroundService.SetState:output_type -> sourcenetwork.acp_core.SetStateResponse
+	12, // 30: sourcenetwork.acp_core.PlaygroundService.RestoreScratchpad:output_type -> sourcenetwork.acp_core.RestoreScratchpadResponse
+	6,  // 31: sourcenetwork.acp_core.PlaygroundService.GetCatalogue:output_type -> sourcenetwork.acp_core.GetCatalogueResponse
+	16, // 32: sourcenetwork.acp_core.PlaygroundService.GetSandbox:output_type -> sourcenetwork.acp_core.GetSandboxResponse
+	8,  // 33: sourcenetwork.acp_core.PlaygroundService.VerifyTheorems:output_type -> sourcenetwork.acp_core.VerifyTheoremsResponse
+	14, // 34: sourcenetwork.acp_core.PlaygroundService.Simulate:output_type -> sourcenetwork.acp_core.SimulateReponse
+	18, // 35: sourcenetwork.acp_core.PlaygroundService.GetSampleSandboxes:output_type -> sourcenetwork.acp_core.GetSampleSandboxesResponse
+	27, // [27:36] is the sub-list for method output_type
+	18, // [18:27] is the sub-list for method input_type
+	18, // [18:18] is the sub-list for extension type_name
+	18, // [18:18] is the sub-list for extension extendee
+	0,  // [0:18] is the sub-list for field type_name
 }
 
 func init() { file_sourcenetwork_acp_core_playground_proto_init() }
@@ -9308,19 +11548,68 @@ func file_sourcenetwork_acp_core_playground_proto_init() {
 				return nil
 			}
 		}
+		file_sourcenetwork_acp_core_playground_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*SetSerializedStateRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_sourcenetwork_acp_core_playground_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*SetSerializedStateResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_sourcenetwork_acp_core_playground_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetSerializedStateRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_sourcenetwork_acp_core_playground_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetSerializedStateResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_sourcenetwork_acp_core_playground_proto_rawDesc,
-			NumEnums:      0,
-			NumMessages:   18,
+			NumEnums:      1,
+			NumMessages:   22,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_sourcenetwork_acp_core_playground_proto_goTypes,
 		DependencyIndexes: file_sourcenetwork_acp_core_playground_proto_depIdxs,
+		EnumInfos:         file_sourcenetwork_acp_core_playground_proto_enumTypes,
 		MessageInfos:      file_sourcenetwork_acp_core_playground_proto_msgTypes,
 	}.Build()
 	File_sourcenetwork_acp_core_playground_proto = out.File

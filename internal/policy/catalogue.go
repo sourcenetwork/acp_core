@@ -19,7 +19,7 @@ func BuildCatalogue(ctx context.Context, engine *zanzi.Adapter, polId string) (*
 		return nil, errors.Wrap("fetching policy", err, errors.Pair("policy_id", polId))
 	}
 	if rec == nil {
-		return nil, errors.NewPolicyNotFound(polId)
+		return nil, errors.ErrPolicyNotFound(polId)
 	}
 
 	actorSet := make(map[string]struct{})
@@ -45,7 +45,7 @@ func BuildCatalogue(ctx context.Context, engine *zanzi.Adapter, polId string) (*
 	for _, rec := range ownerRelationships {
 		resCat := catalogue.ResourceCatalogue[rec.Relationship.Object.Resource]
 		resCat.ObjectIds = append(resCat.ObjectIds, rec.Relationship.Object.Id)
-		actorSet[rec.OwnerDid] = struct{}{}
+		actorSet[rec.Metadata.Creator.Identifier] = struct{}{}
 	}
 
 	for actor := range actorSet {

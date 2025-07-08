@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package sourcenetwork.acp_core.errors;
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/errors";
+
+// ErrorType represent families of errors which acp_core can throw.
+// Concrete errors are refined with additional context data and explanatory messages
+enum ErrorType {
+  // UNKNOWN is a catch all bucket for unspecified errors (represents an internal error)
+  UNKNOWN = 0;
+  // INTERNAL is a general base error for IO or unexpected system errors
+  INTERNAL = 1;
+  // UNAUTHENTICATED signals caller was not authenticated while it was required
+  UNAUTHENTICATED = 2;
+  // UNAUTHORIZED is a general error for operations that were
+  // rejected due to insufficient permission unauthorized
+  UNAUTHORIZED = 3;
+  // BAD_INPUT is a general base error for input errors
+  BAD_INPUT = 4;
+  // OPERATION_FORBIDDEN signals that the operation was not executed
+  // as that would violate part of the Access Control system
+  OPERATION_FORBIDDEN = 5;
+  // NOT_FOUND signals that the requested entity was not found in the system
+  NOT_FOUND = 6;
+}

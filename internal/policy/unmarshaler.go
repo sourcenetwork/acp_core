@@ -7,6 +7,8 @@ import (
 
 	"sigs.k8s.io/yaml"
 
+	"github.com/sourcenetwork/acp_core/internal/policy/ppp"
+	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
@@ -15,8 +17,8 @@ const (
 	V1_0 string = "1.0"
 )
 
-func Unmarshal(pol string, t types.PolicyMarshalingType) (PolicyIR, error) {
-	var policy PolicyIR
+func Unmarshal(pol string, t types.PolicyMarshalingType) (*types.Policy, error) {
+	var policy *types.Policy
 	var err error
 
 	switch t {
@@ -43,50 +45,56 @@ type shortUnmarshaler struct{}
 const typeDivider string = "->"
 
 // Unmarshal a YAML serialized PolicyShort definition
-func (u *shortUnmarshaler) UnmarshalYAML(pol string) (PolicyIR, error) {
+func (u *shortUnmarshaler) UnmarshalYAML(pol string) (*types.Policy, error) {
 	// remove trailing
 	pol = strings.ReplaceAll(pol, "\t", "    ")
 	pol = strings.Trim(pol, "\n")
 	// Strict returns error if any key is duplicated
 	polBytes, err := yaml.YAMLToJSONStrict([]byte(pol))
 	if err != nil {
-		return PolicyIR{}, fmt.Errorf("%w: %v", ErrInvalidShortPolicy, err)
+		return nil, fmt.Errorf("%w: %v", ErrInvalidShortPolicy, err)
 	}
 
 	return u.UnmarshalJSON(string(polBytes))
 }
 
 // Unmarshal a JSON serialized PolicyShort definition
-func (u *shortUnmarshaler) UnmarshalJSON(pol string) (PolicyIR, error) {
+func (u *shortUnmarshaler) UnmarshalJSON(pol string) (*types.Policy, error) {
 	polShort := types.PolicyShort{}
 
 	err := json.Unmarshal([]byte(pol), &polShort)
 	if err != nil {
-		return PolicyIR{}, fmt.Errorf("%w: %v", ErrInvalidShortPolicy, err)
+		return nil, fmt.Errorf("%w: %v", ErrInvalidShortPolicy, err)
 	}
 
-	return u.mapPolShort(&polShort), nil
+	return u.mapPolShort(&polShort)
 }
 
-func (u *shortUnmarshaler) mapPolShort(pol *types.PolicyShort) PolicyIR {
+func (u *shortUnmarshaler) mapPolShort(pol *types.PolicyShort) (*types.Policy, error) {
 	resources := make([]*types.Resource, 0, len(pol.Resources))
 	for name, resource := range pol.Resources {
 		mapped := u.mapResource(name, resource)
 		resources = append(resources, mapped)
 	}
 
-	policy := PolicyIR{
-		Name:          pol.Name,
-		Description:   pol.Description,
-		Attributes:    pol.Meta,
-		Resources:     resources,
-		ActorResource: pol.Actor,
+	spec, err := u.mapSpec(pol.Spec)
+	if err != nil {
+		return nil, err
+	}
+
+	policy := &types.Policy{
+		Name:              pol.Name,
+		Description:       pol.Description,
+		Attributes:        pol.Meta,
+		Resources:         resources,
+		ActorResource:     pol.Actor,
+		SpecificationType: spec,
 	}
 
 	// sort to ensure unmarshaling tests are not flaky
-	policy.sort()
-
-	return policy
+	sorted := ppp.SortTransformer{}
+	sortedPol, _ := sorted.Transform(*policy) // SortTransformer does not error
+	return &sortedPol, nil
 }
 
 func (u *shortUnmarshaler) mapResource(name string, resource *types.ResourceShort) *types.Resource {
@@ -151,4 +159,17 @@ func (u *shortUnmarshaler) mapPermission(name string, entry *types.PermissionSho
 		perm.Expression = entry.Expr
 	}
 	return perm
+}
+
+func (u *shortUnmarshaler) mapSpec(spec string) (types.PolicySpecificationType, error) {
+	switch strings.ToLower(spec) {
+	case "defra":
+		return types.PolicySpecificationType_DEFRA_SPEC, nil
+	case "none":
+		return types.PolicySpecificationType_NO_SPEC, nil
+	case "":
+		return types.PolicySpecificationType_UNKNOWN_SPEC, nil
+	default:
+		return types.PolicySpecificationType_UNKNOWN_SPEC, errors.Wrap("invalid specification", errors.ErrorType_BAD_INPUT)
+	}
 }

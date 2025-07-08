@@ -87,7 +87,7 @@ func NewRuntimeManager(opts ...Opt) (RuntimeManager, error) {
 	for _, o := range opts {
 		err := o(rt)
 		if err != nil {
-			return nil, errors.NewFromBaseError(err, errors.ErrorType_INTERNAL, "building runtime manager")
+			return nil, errors.NewWithCause("building runtime manager", err, errors.ErrorType_INTERNAL)
 		}
 	}
 
@@ -106,7 +106,7 @@ type runtimeManager struct {
 }
 
 func (m *runtimeManager) GetKVStore() KVStore {
-	return m.kvStore
+	return rcdb.NewWrapperKV(m.kvStore, []byte(mainKVPrefix))
 }
 
 func (m *runtimeManager) GetEventManager() EventManager {
@@ -129,6 +129,10 @@ func (m *runtimeManager) GetTimeService() TimeService {
 	return m.timeServ
 }
 
+func (m *runtimeManager) GetInternalKVStore() KVStore {
+	return rcdb.NewWrapperKV(m.kvStore, []byte(internalKVPrefix))
+}
+
 func (m *runtimeManager) Terminate() error {
 	m.terminated = true
 	for _, f := range m.cleanupFns {
@@ -142,6 +146,7 @@ func (m *runtimeManager) Terminate() error {
 
 type RuntimeManager interface {
 	GetKVStore() KVStore
+	GetInternalKVStore() KVStore
 	GetEventManager() EventManager
 	GetLogger() Logger
 	GetMetricService() MetricService
@@ -183,7 +188,8 @@ func (s *LocalTimeService) GetNow(ctx context.Context) (*prototypes.Timestamp, e
 	now := time.Now()
 	ts, err := prototypes.TimestampProto(now)
 	if err != nil {
-		return nil, errors.NewFromBaseError(err, errors.ErrorType_INTERNAL, "LocalTimeService failed: converting timestamp")
+		return nil, errors.NewWithCause("LocalTimeService failed: converting timestamp", err,
+			errors.ErrorType_INTERNAL)
 	}
 	return ts, nil
 }

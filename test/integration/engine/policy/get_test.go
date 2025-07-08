@@ -25,9 +25,11 @@ func TestQueryPolicy_UnknownPolicyReturnsPolicyNotFoundErr(t *testing.T) {
 
 func TestGetPolicy_ReturnsAnExistingPolicy(t *testing.T) {
 	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("bob")
 
 	pol := `
 name: policy
+spec: none
 `
 	action := test.CreatePolicyAction{
 		Policy: pol,
@@ -39,18 +41,30 @@ name: policy
 	}
 	resp, err := ctx.Engine.GetPolicy(ctx, &req)
 
-	want := &types.GetPolicyResponse{
-		Policy: &types.Policy{
-			Id:           "bc7eb5a8c500111b2459a92ae23f4848537e49599df1b8d70636b5aacb47bd5f",
-			Name:         "policy",
-			CreationTime: test.DefaultTs,
-			ActorResource: &types.ActorResource{
-				Name: "actor",
-			},
+	wantPolicy := &types.Policy{
+		Id:                "bc7eb5a8c500111b2459a92ae23f4848537e49599df1b8d70636b5aacb47bd5f",
+		Name:              "policy",
+		SpecificationType: types.PolicySpecificationType_NO_SPEC,
+		ActorResource: &types.ActorResource{
+			Name: "actor",
 		},
-		PolicyRaw:   pol,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
 	}
-	require.Equal(t, want, resp)
+	require.Equal(t, wantPolicy, resp.Record.Policy)
+	require.Equal(t, types.PolicyMarshalingType_SHORT_YAML, resp.Record.MarshalType)
 	require.NoError(t, err)
+}
+
+func TestListPolicy_NoPolicies(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+
+	req := types.ListPoliciesRequest{}
+
+	resp, err := ctx.Engine.ListPolicies(ctx, &req)
+
+	require.NoError(t, err)
+	want := &types.ListPoliciesResponse{
+		Records: []*types.PolicyRecord{},
+	}
+	require.NoError(t, err)
+	require.Equal(t, want, resp)
 }

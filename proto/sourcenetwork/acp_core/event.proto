@@ -9,6 +9,12 @@ message EventPolicyCreated {
   string policy_name = 3;
 }
 
+message EventPolicyEdited {
+  string policy_id = 2;
+  string policy_name = 3;
+  uint64 relationships_removed = 4;
+}
+
 message EventAccessDecisionCreated {
   string creator = 1;
   string policy_id = 2;

@@ -21,11 +21,11 @@ func (c *SetRelationshipHandler) Execute(ctx context.Context, runtime runtime.Ru
 		return nil, newSetRelationshipErr(err)
 	}
 
-	principal, err := auth.ExtractPrincipalWithType(ctx, auth.DID)
+	principal, err := auth.ExtractPrincipalWithType(ctx, types.PrincipalKind_DID)
 	if err != nil {
 		return nil, newSetRelationshipErr(err)
 	}
-	did := principal.Identifier()
+	did := principal.Identifier
 
 	authz := authorizer.NewOperationAuthorizer(engine)
 
@@ -34,7 +34,7 @@ func (c *SetRelationshipHandler) Execute(ctx context.Context, runtime runtime.Ru
 		return nil, newSetRelationshipErr(err)
 	}
 	if rec == nil {
-		return nil, newSetRelationshipErr(errors.NewPolicyNotFound(cmd.PolicyId))
+		return nil, newSetRelationshipErr(errors.ErrPolicyNotFound(cmd.PolicyId))
 	}
 	policy := rec.Policy
 
@@ -96,10 +96,12 @@ func (c *SetRelationshipHandler) Execute(ctx context.Context, runtime runtime.Ru
 	record = &types.RelationshipRecord{
 		PolicyId:     policy.Id,
 		Relationship: cmd.Relationship,
-		CreationTime: ts,
-		OwnerDid:     did,
 		Archived:     false,
-		Metadata:     cmd.Attributes,
+		Metadata: &types.RecordMetadata{
+			Creator:    &principal,
+			CreationTs: ts,
+			Supplied:   cmd.Metadata,
+		},
 	}
 	_, err = engine.SetRelationship(ctx, policy, record)
 	if err != nil {
@@ -132,11 +134,11 @@ func (c *DeleteRelationshipHandler) Execute(ctx context.Context, runtime runtime
 		return nil, newDeleteRelationshipErr(err)
 	}
 
-	principal, err := auth.ExtractPrincipalWithType(ctx, auth.DID)
+	principal, err := auth.ExtractPrincipalWithType(ctx, types.PrincipalKind_DID)
 	if err != nil {
 		return nil, newDeleteRelationshipErr(err)
 	}
-	did := principal.Identifier()
+	did := principal.Identifier
 
 	authorizer := authorizer.NewOperationAuthorizer(engine)
 
@@ -150,7 +152,7 @@ func (c *DeleteRelationshipHandler) Execute(ctx context.Context, runtime runtime
 		return nil, newDeleteRelationshipErr(err)
 	}
 	if rec == nil {
-		return nil, newDeleteRelationshipErr(errors.NewPolicyNotFound(cmd.PolicyId))
+		return nil, newDeleteRelationshipErr(errors.ErrPolicyNotFound(cmd.PolicyId))
 	}
 	policy := rec.Policy
 

@@ -1,126 +1,87 @@
 package errors
 
-import "fmt"
+import (
+	"encoding/json"
+	"errors"
+	"fmt"
+	"strings"
+)
 
-// TypedError models an acp_core compatible error, which contains a type
-type TypedError interface {
-	error
-	GetType() ErrorType
-}
-
-// ContextPair is a key value pair used to annotate the context under which the error was found
+// ContextPair model a key value attribute pair
 type ContextPair struct {
-	key string
-	val any
+	Key   string
+	Value string
 }
 
-// Pair returns a new ContextPair
-func Pair(key string, val any) ContextPair {
+// Pair returns a new AttrPair with the given key value
+func Pair(key, value string) ContextPair {
 	return ContextPair{
-		key: key,
-		val: val,
+		Key:   key,
+		Value: value,
 	}
 }
 
-// Error is the general error type for acp_core.
-// It wraps base errors and contains context data
-// in form of key value pairs.
+var _ error = (*Error)(nil)
+
+// NewWithCause returns a new zanzi error which wraps an ErrorType and an underlying cause error
+func NewWithCause(msg string, cause error, kind ErrorType, pairs ...ContextPair) error {
+	return &Error{
+		Kind:     kind,
+		Message:  msg,
+		Cause:    cause,
+		Metadata: appendPairs(nil, pairs),
+	}
+}
+
+// New returns a new Zanzi base error type with the given kind
+func New(message string, kind ErrorType, pairs ...ContextPair) *Error {
+	return &Error{
+		Kind:     kind,
+		Message:  message,
+		Cause:    nil,
+		Metadata: appendPairs(nil, pairs),
+	}
+}
+
+// Error models a Zanzi error object, which may wrap an underlaying cause error
+// and contains a set of string key-value pairs which contain request specific metadata
+// which caused the error
 type Error struct {
-	errType ErrorType
-	base    error
-	message string
-	pairs   []ContextPair
-}
-
-func (e *Error) Type() ErrorType {
-	return e.errType
-}
-
-func (e *Error) Unwrap() []error {
-	return []error{e.base, e.errType}
-}
-
-func (e *Error) getMsgChain() string {
-	if e.base == nil {
-		return e.message
-	}
-	switch err := e.base.(type) {
-	case nil:
-		return e.message
-	case *Error:
-		return fmt.Sprintf("%v: %v", e.message, err.getMsgChain())
-	default:
-		return fmt.Sprintf("%v: %v", e.message, e.base.Error())
-	}
+	Kind     ErrorType
+	Message  string
+	Cause    error
+	Metadata map[string]string
 }
 
 func (e *Error) Error() string {
-	return fmt.Sprintf("%v: code %v: type %v: ctx={%v}", e.getMsgChain(), e.errType.Code(), e.errType.String(), e.pairs)
-}
-
-// AppendPairs returns a new Error with the extra information contained in pairs
-// Sets the current error as the base error for the new error
-func (e *Error) AppendPairs(pairs ...ContextPair) *Error {
-	return &Error{
-		errType: e.errType,
-		base:    e,
-		message: e.message,
-		pairs:   append(e.pairs, pairs...),
+	metadata, _ := json.Marshal(e.Metadata)
+	str := fmt.Sprintf("%v; attrs=%v; kind=%v", e.Message, metadata, e.Kind.Error())
+	if e.Cause != nil {
+		str += "; cause: " + e.Cause.Error()
 	}
+	return str
 }
 
-// Refine returns a new error with the additional context data.
-// Preserves the underlying base error
-func (e *Error) Refine(message string, pairs ...ContextPair) *Error {
-	return &Error{
-		errType: e.errType,
-		base:    e,
-		message: message,
-		pairs:   append(e.pairs, pairs...),
-	}
-}
-
-// NewFromCause creates a new error with the aditional context given and formats the message to include
-// the cause error. It does not add cause to the error chain.
-func NewFromCause(msg string, cause error, errType ErrorType, pairs ...ContextPair) *Error {
-	return &Error{
-		errType: errType,
-		message: fmt.Sprintf("%v: %v", msg, cause),
-		pairs:   pairs,
-	}
-}
-
-// NewFromBaseError returns a new Error which wraps the given error, including
-// the additional context data given.
-// Includes base as part of the error chain
-func NewFromBaseError(base error, errType ErrorType, msg string, pairs ...ContextPair) *Error {
-	return &Error{
-		errType: errType,
-		base:    base,
-		message: msg,
-		pairs:   pairs,
-	}
-}
-
-// New creates a new error from a message, an ErrorType and an optional set of context pairs
-func New(message string, errType ErrorType, pairs ...ContextPair) *Error {
-	return &Error{
-		errType: errType,
-		base:    nil,
-		message: message,
-		pairs:   pairs,
-	}
-}
-
-// Wrap refines a given error with the additional message and context mesages,
-// includes err as part of the error chain.
-func Wrap(message string, err error, pairs ...ContextPair) error {
-	switch e := err.(type) {
+// Is return true if target is of type ErrorType and e.Kind is the same as ErrorType
+// or if target is also an Error instance and e's message contains target's message.
+func (e *Error) Is(target error) bool {
+	switch other := target.(type) {
 	case *Error:
-		return e.Refine(message, pairs...)
+		return strings.Contains(e.Message, other.Message) && e.Kind == other.Kind
 	case ErrorType:
-		return New(message, e, pairs...)
+		return e.Kind.Is(other)
 	default:
-		return NewFromBaseError(err, ErrorType_UNKNOWN, message, pairs...)
+		return errors.Is(e.Cause, target) //not sure this is right
 	}
+}
+
+func appendPairs(m map[string]string, pairs []ContextPair) map[string]string {
+	attrs := make(map[string]string, len(m)+len(pairs))
+	for k, v := range m {
+		attrs[k] = v
+	}
+	for _, p := range pairs {
+		attrs[p.Key] = p.Value
+	}
+	return attrs
 }

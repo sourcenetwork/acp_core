@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package sourcenetwork.acp_core;
+
+import "sourcenetwork/acp_core/relationship.proto";
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+
+// AccessRequest represents the wish to perform a set of operations by an actor
+message AccessRequest {
+  repeated Operation operations = 1;
+
+  // actor requesting operations
+  Actor actor = 2;
+}
+
+// Operation represents an action over an object.
+message Operation {
+  // target object for operation
+  Object object = 1;
+
+  // permission required to perform operation
+  string permission = 2;
+}

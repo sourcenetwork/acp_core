@@ -163,3 +163,35 @@ message GetSampleSandboxesRequest{}
 message GetSampleSandboxesResponse{
   repeated SandboxTemplate samples = 1;
 }
+
+enum SerializationEncoding {
+  UNKNOWN_ENCODING = 0;
+  BASE64 = 1;
+  BYTES = 2;
+}
+
+message SetSerializedStateRequest {
+  // handle to an existing sandbox
+  uint64 handle = 1;
+  SerializationEncoding encoding = 2;
+  bytes data = 3;
+}
+
+message SetSerializedStateResponse {
+  // ok indicates the state updated sucessfuly
+  bool ok = 1;
+  // errors represent all recoverable errors found while parsing and setting the sandbox state
+  sourcenetwork.acp_core.SandboxDataErrors errors = 2;
+  // record contains a representation of the sandbox's new internal state
+  sourcenetwork.acp_core.SandboxRecord record = 3;
+}
+
+message GetSerializedStateRequest {
+  // handle to an existing sandbox
+  uint64 handle = 1;
+  SerializationEncoding encoding = 2;
+}
+
+message GetSerializedStateResponse {
+  bytes data = 1;
+}

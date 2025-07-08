@@ -28,7 +28,7 @@ func unmarsahlArgs(container proto.Message, args []js.Value) error {
 
 	err := jsonpb.UnmarshalString(reqJson.String(), container)
 	if err != nil {
-		return errors.NewFromCause("could not unmarshal serialized req obj", err, errors.ErrorType_BAD_INPUT)
+		return errors.NewWithCause("could not unmarshal serialized req obj", err, errors.ErrorType_BAD_INPUT)
 	}
 
 	return nil
