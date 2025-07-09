@@ -5,7 +5,12 @@ import { CircleCheck, CircleX, LoaderCircle } from "lucide-react";
 import BaseEditor from "../components/Editor";
 
 const Tests = () => {
-    const [verifyTheoremsStatus, verifyTheorems, sandboxErrorCount] = usePlaygroundStore((state) => [state.verifyTheoremsStatus, state.verifyTheorems, state.setStateDataErrorCount]);
+
+    const { verifyTheoremsStatus, verifyTheorems, sandboxErrorCount } = usePlaygroundStore((state) => ({
+        verifyTheoremsStatus: state.verifyTheoremsStatus,
+        verifyTheorems: state.verifyTheorems,
+        sandboxErrorCount: state.setStateDataErrorCount,
+    }));
 
     const isDisabled = sandboxErrorCount > 0;
     const status = isDisabled ? 'disabled' : verifyTheoremsStatus;

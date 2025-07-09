@@ -1,5 +1,5 @@
 import { PersistedSandboxData, usePlaygroundStore } from "@/lib/playgroundStore";
-import { SHARE_URL } from "@/utils/constants";
+import { SHARE_URL } from "@/constants";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
@@ -21,18 +21,22 @@ const fetchShare = async (shareId: string) => {
 }
 
 const DialogLoadShare = ({ shareId, open, setOpen }: DialogLoadShareProps) => {
-    const [error, setError] = useState<string>();
+    const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [shareJson, setShareJson] = useState<PersistedSandboxData | null>(null);
-    const [playgroundStatus, updateActiveSandbox, newSandbox] = usePlaygroundStore((state) => [state.playgroundStatus, state.updateActiveSandbox, state.newSandbox]);
+
+    const { playgroundStatus, updateActiveSandbox, newSandbox } = usePlaygroundStore((state) => ({
+        playgroundStatus: state.playgroundStatus,
+        updateActiveSandbox: state.updateActiveStoredSandbox,
+        newSandbox: state.newSandbox
+    }));
 
     const isLoading = loading === true || playgroundStatus === 'loading';
 
     useEffect(() => {
         if (!shareId) return;
-        if (loading === true) return;
-
         setLoading(true);
+        setError(null);
 
         fetchShare(shareId)
             .then((sandbox) => setShareJson(sandbox))

@@ -1,7 +1,7 @@
 import { useSandbox } from "@/hooks/useSandbox";
 import { PersistedSandboxData } from "@/lib/playgroundStore";
 import { cn } from "@/utils/classnames";
-import { SHARE_URL } from "@/utils/constants";
+import { SHARE_URL } from "@/constants";
 import { CheckIcon, ClipboardIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
@@ -38,7 +38,7 @@ const DialogCopyShare = ({ open, setOpen }: DialogCopyShareProps) => {
     const activeSandbox = useSandbox();
     const [shareLink, setShareLink] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string>();
+    const [error, setError] = useState<string | null>(null);
     const [hasCopied, setHasCopied] = useState(false);
 
     const link = `${baseUrl}?share=${shareLink}`;
@@ -48,8 +48,11 @@ const DialogCopyShare = ({ open, setOpen }: DialogCopyShareProps) => {
     }, [hasCopied])
 
     useEffect(() => {
-        if (open === false || loading === true || !activeSandbox) return;
+        if (!open || !activeSandbox) return;
+
+        setShareLink(null);
         setLoading(true);
+        setError(null);
 
         postShare(activeSandbox)
             .then(result => setShareLink(result?.id ?? null))
@@ -59,7 +62,7 @@ const DialogCopyShare = ({ open, setOpen }: DialogCopyShareProps) => {
     }, [open, activeSandbox]);
 
     const onOpenChange = (open: boolean) => {
-        setError(undefined);
+        setError(null);
         setOpen(open);
     }
 

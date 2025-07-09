@@ -82,6 +82,22 @@
   }
 }
 
+@layer utilities {
+  .failing-glyph {
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="%23ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>')
+      no-repeat center center / 70% 70%;
+  }
+
+  .passing-glyph {
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%2322c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-icon lucide-check"><path d="M20 6 9 17l-5-5"/></svg>')
+      no-repeat center center / 70% 70%;
+  }
+
+  .failing-line-bg {
+    @apply bg-red-500/10;
+  }
+}
+
 @layer components {
   .sidemenu-button {
     @apply flex mb-2 p-2 items-center border border-transparent rounded-md opacity-60 transition-all hover:opacity-80 hover:border-border;

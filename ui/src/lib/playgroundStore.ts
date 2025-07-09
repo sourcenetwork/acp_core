@@ -1,4 +1,4 @@
-import { STORE_KEY, STORE_VERSION, WASM_PATH } from "@/utils/constants";
+import { STORE_KEY, STORE_VERSION, WASM_PATH } from "@/constants";
 import { countErrors } from "@/utils/errorUtils";
 import { loadPlaygroundWasm } from "@/utils/loadWasm";
 import { theoremResultPassing } from "@/utils/mapTheoremResultMarkers";
@@ -58,6 +58,7 @@ export interface PlaygroundState {
   verifyTheoremsResult?: AnnotatedPolicyTheoremResult;
   verifyTheoremsError?: string;
   sandboxTemplates: SandboxTemplate[] | null;
+  sandboxStateStatus: "unset" | "set" | "error";
 
   /* Playground Actions */
   initPlayground: () => Promise<void>;
@@ -81,7 +82,7 @@ export interface PlaygroundState {
     data: Partial<PersistedSandboxData>,
     id?: string | null
   ) => void;
-  updateActiveSandbox: (data: Partial<PersistedSandboxData>) => void;
+  updateActiveStoredSandbox: (data: Partial<PersistedSandboxData>) => void;
   mapIdToHandle: (id: string, handle: number) => void;
 }
 
@@ -95,6 +96,7 @@ export const usePlaygroundStore = create<PlaygroundState>()(
       (set, get) => {
         return {
           playgroundStatus: "uninitialized",
+          sandboxStateStatus: "unset",
           sandboxTemplates: null,
           idHandleMap: {},
 
@@ -157,7 +159,7 @@ export const usePlaygroundStore = create<PlaygroundState>()(
 
           setPlaygroundState: async (updates) => {
             try {
-              const { updateActiveSandbox } = get();
+              const { updateActiveStoredSandbox } = get();
               const { playground, handle } = getActiveSandboxHandle();
               const { active } = getLastActiveSandbox();
 
@@ -169,12 +171,13 @@ export const usePlaygroundStore = create<PlaygroundState>()(
                 ...updates,
               };
 
-              updateActiveSandbox({ data: newState });
+              updateActiveStoredSandbox({ data: newState });
 
               const setStateInput = { handle, data: newState };
               const stateResult = await playground?.SetState(setStateInput);
 
               set({
+                sandboxStateStatus: stateResult.ok ? "set" : "error",
                 setStateDataErrors: stateResult?.errors,
                 setStateDataErrorCount: countErrors(stateResult?.errors),
               });
@@ -183,7 +186,10 @@ export const usePlaygroundStore = create<PlaygroundState>()(
 
               // Persist state data into storage
             } catch (error) {
-              set({ setStateError: (error as Error)?.message });
+              set({
+                sandboxStateStatus: "error",
+                setStateError: (error as Error)?.message,
+              });
             }
           },
 
@@ -285,7 +291,7 @@ export const usePlaygroundStore = create<PlaygroundState>()(
             });
           },
 
-          updateActiveSandbox: (data) => {
+          updateActiveStoredSandbox: (data) => {
             const { lastActiveId, updateStoredSandbox } = get();
             updateStoredSandbox(data, lastActiveId);
           },

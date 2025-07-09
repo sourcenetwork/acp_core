@@ -1,5 +1,5 @@
+import { useTheme } from "@/providers/ThemeProvider/useTheme";
 import { LucideIcon, LucideProps, MoonIcon, SunIcon } from "lucide-react";
-import { useTheme } from "../../ThemeProvider";
 import { Button, ButtonProps } from "../ui/button";
 
 interface ThemeToggleProps {

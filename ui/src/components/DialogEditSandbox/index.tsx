@@ -1,7 +1,7 @@
 import { useSandbox } from "@/hooks/useSandbox";
 import { usePlaygroundStore } from "@/lib/playgroundStore";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { FormInputField } from "../FormInput";
@@ -26,6 +26,7 @@ const DialogEditSandbox = ({ sandboxId, open, setOpen }: DialogEditSandboxProps)
 
     const sandbox = useSandbox(sandboxId);
     const [updateStoredSandbox] = usePlaygroundStore((state) => [state.updateStoredSandbox]);
+    const sandboxData = useMemo(() => ({ name: sandbox?.name ?? "", description: sandbox?.description ?? "", }), [sandbox?.name, sandbox?.description]);
 
     const form = useForm<EditSandboxFormData>({
         resolver: zodResolver(EditSandboxFormSchema),
@@ -36,11 +37,8 @@ const DialogEditSandbox = ({ sandboxId, open, setOpen }: DialogEditSandboxProps)
     })
 
     useEffect(() => {
-        form.reset({
-            name: sandbox?.name ?? "",
-            description: sandbox?.description ?? "",
-        });
-    }, [sandboxId, sandbox]);
+        form.reset(sandboxData);
+    }, [sandboxId, sandboxData, form]);
 
     const onSubmit = (data: EditSandboxFormData) => {
         if (sandboxId) updateStoredSandbox(data, sandboxId);
