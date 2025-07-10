@@ -13,29 +13,40 @@ export function registerPolicyTheoremLanguage(monaco: Monaco) {
         // Comments
         [/\/\/.*$/, "comment"],
 
-        // Section headers
-        [/\b(Authorizations|Delegations)\b/, "keyword"],
+        // Section headers (keywords)
+        [/\b(Authorizations|Delegations|ImpliedRelations)\b/, "keyword"],
 
-        // Braces
-        [/[{}]/, "delimiter.bracket"],
+        // Built-in operations
+        [/\b(delete|create)\b/, "keyword.operation"],
 
-        // Negation operator at start of line
-        [/^\s*!/, "keyword.operator"],
+        // Quoted strings (UTF-8 IDs)
+        [/"[^"]*"/, "string"],
 
-        // Identifiers
-        [/did:[a-zA-Z0-9_]+:[a-zA-Z0-9_]+/, "string.key"],
+        // DID identifiers (more precise pattern matching grammar)
+        [/did:[a-z0-9]+:[a-z0-9A-Z._-]+/, "string.key"],
 
-        // Resource type (e.g., "file:readme")
+        // Negation operator
+        [/!/, "keyword.operator"],
+
+        // Multi-character operators
+        [/=>/, "operator.arrow"], // Implied relations
+        [/->/, "operator.arrow"], // TTU relations
+        [/>/, "operator.delegation"], // Delegations
+
+        // Permission expression operators
+        [/[+\-&]/, "operator.permission"],
+
+        // Braces and parentheses
+        [/[{}()]/, "delimiter.bracket"],
+
+        // Single character operators
+        [/[#@]/, "operator"],
+
+        // Resource type patterns (e.g., "file:readme")
         [/\b[a-zA-Z][a-zA-Z0-9_]*:[a-zA-Z0-9_]+/, "entity.name.type"],
 
-        // Hash separator
-        [/#/, "operator"],
-
-        // At separator
-        [/@/, "operator"],
-
-        // Action names (words that come after # and before @)
-        [/\b[a-zA-Z][a-zA-Z0-9_]*(?=@)/, "entity.name.function"],
+        // Relation names (after # and before @ or other operators)
+        [/(?<=#)[a-zA-Z][a-zA-Z0-9_]*(?=[@>]|$)/, "entity.name.function"],
 
         // Regular identifiers
         [/\b[a-zA-Z][a-zA-Z0-9_]*/, "identifier"],
@@ -51,9 +62,20 @@ export function registerPolicyTheoremLanguage(monaco: Monaco) {
     comments: {
       lineComment: "//",
     },
-    brackets: [["{", "}"]],
-    autoClosingPairs: [{ open: "{", close: "}" }],
-    surroundingPairs: [{ open: "{", close: "}" }],
+    brackets: [
+      ["{", "}"],
+      ["(", ")"],
+    ],
+    autoClosingPairs: [
+      { open: "{", close: "}" },
+      { open: "(", close: ")" },
+      { open: '"', close: '"' },
+    ],
+    surroundingPairs: [
+      { open: "{", close: "}" },
+      { open: "(", close: ")" },
+      { open: '"', close: '"' },
+    ],
   });
 }
 
@@ -65,14 +87,19 @@ export function definePolicyTheoremTheme(monaco: Monaco) {
     inherit: true,
     rules: [
       { token: "comment", foreground: "6A9955" },
-      { token: "keyword", foreground: "0000FF" },
+      { token: "keyword", foreground: "008080" },
+      { token: "keyword.operation", foreground: "0451a5" },
       { token: "delimiter.bracket", foreground: "000000" },
-      { token: "entity.name.type", foreground: "267F99" }, // Resource (file:readme)
-      { token: "operator", foreground: "267F99" }, // # and @
-      { token: "entity.name.function", foreground: "267F99" }, // Action (read, write)
-      { token: "string.key", foreground: "267F99" }, // DID (did:user:bob)
-      { token: "keyword.operator", foreground: "D73A49" }, // !
-      { token: "identifier", foreground: "000000" }, // Default identifiers
+      { token: "entity.name.type", foreground: "0451a5" }, // Resource (file:readme)
+      { token: "operator", foreground: "0451a5" }, // # and @
+      { token: "operator.arrow", foreground: "D73A49" }, // => and ->
+      { token: "operator.delegation", foreground: "FF6F00" }, // >
+      { token: "operator.permission", foreground: "8E24AA" }, // +, -, &
+      { token: "entity.name.function", foreground: "795548" }, // Relations
+      { token: "string.key", foreground: "0451a5" }, // DID
+      { token: "string", foreground: "0451a5" }, // Quoted strings
+      { token: "keyword.operator", foreground: "D73A49", fontStyle: "bold" }, // !
+      { token: "identifier", foreground: "0451a5" }, // Default identifiers
     ],
     colors: {},
   });
@@ -83,14 +110,19 @@ export function definePolicyTheoremTheme(monaco: Monaco) {
     inherit: true,
     rules: [
       { token: "comment", foreground: "6A9955" },
-      { token: "keyword", foreground: "10CBFF" },
+      { token: "keyword", foreground: "3dc9b0" },
+      { token: "keyword.operation", foreground: "ce9178" },
       { token: "delimiter.bracket", foreground: "D4D4D4" },
-      { token: "entity.name.type", foreground: "0DE09E" }, // Resource (file:readme)
-      { token: "operator", foreground: "0DE09E" }, // # and @
-      { token: "entity.name.function", foreground: "0DE09E" }, // Action (read, write)
-      { token: "string.key", foreground: "0DE09E" }, // DID (did:user:bob)
-      { token: "keyword.operator", foreground: "F92672" }, // !
-      { token: "identifier", foreground: "D4D4D4" }, // Default identifiers
+      { token: "entity.name.type", foreground: "ce9178" }, // Resource (file:readme)
+      { token: "operator", foreground: "ce9178" }, // # and @
+      { token: "operator.arrow", foreground: "F92672" }, // => and ->
+      { token: "operator.delegation", foreground: "FF9800" }, // >
+      { token: "operator.permission", foreground: "AB47BC" }, // +, -, &
+      { token: "entity.name.function", foreground: "DCDCAA" }, // Relations
+      { token: "string.key", foreground: "ce9178" }, // DID
+      { token: "string", foreground: "ce9178" }, // Quoted strings
+      { token: "keyword.operator", foreground: "F92672", fontStyle: "bold" }, // !
+      { token: "identifier", foreground: "ce9178" }, // Default identifiers (permissions)
     ],
     colors: {},
   });
