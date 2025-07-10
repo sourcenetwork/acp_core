@@ -100,3 +100,8 @@ func (b *RelationshipSelectorBuilder) Build() RelationshipSelector {
 		SubjectSelector:  b.subjSelector,
 	}
 }
+
+func AllRelationshipsSelector() RelationshipSelector {
+	builder := RelationshipSelectorBuilder{}
+	return builder.AnyObject().AnyRelation().AnySubject().Build()
+}

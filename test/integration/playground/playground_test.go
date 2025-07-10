@@ -403,6 +403,7 @@ func Test_GetPlaygroundSamples_ReturnSamples(t *testing.T) {
 			Handle: handle,
 		}
 		response := a2.Run(ctx)
+		t.Logf("%v", test.MustProtoToJson(response))
 		require.True(t, response.Result.Ok)
 	}
 }

@@ -3,6 +3,7 @@ package zanzi
 import (
 	"context"
 	"fmt"
+	"log"
 
 	rcdb "github.com/sourcenetwork/raccoondb"
 	"github.com/sourcenetwork/zanzi"
@@ -102,6 +103,7 @@ func (z *Adapter) SetRelationship(ctx context.Context, policy *types.Policy, rec
 		return false, fmt.Errorf("SetRelationship: %w", err)
 	}
 
+	log.Printf("Registered relationship: policyId=%v; relationship=%v", policy.Id, rec.Relationship.String())
 	return RecordFound(response.RecordOverwritten), nil
 }
 

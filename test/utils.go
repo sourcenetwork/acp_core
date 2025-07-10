@@ -1,9 +1,11 @@
 package test
 
 import (
+	"encoding/json"
 	"errors"
 	"reflect"
 
+	"github.com/cosmos/gogoproto/proto"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -61,4 +63,12 @@ func containsKind(kinds []reflect.Kind, kind reflect.Kind) bool {
 	}
 
 	return false
+}
+
+func MustProtoToJson(msg proto.Message) string {
+	bytes, err := json.MarshalIndent(msg, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+	return string(bytes)
 }
