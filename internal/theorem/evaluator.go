@@ -78,6 +78,7 @@ func (e *Evaluator) evalDelegationTheorem(ctx context.Context, polId *types.Poli
 				Theorem: theorem,
 			}, nil
 		}
+		return nil, err
 	}
 	thmOk := nxor(authorized, theorem.AssertTrue)
 	return &types.DelegationTheoremResult{
