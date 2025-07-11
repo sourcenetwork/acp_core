@@ -55,7 +55,7 @@ type Error struct {
 
 func (e *Error) Error() string {
 	metadata, _ := json.Marshal(e.Metadata)
-	str := fmt.Sprintf("%v; attrs=%v; kind=%v", e.Message, metadata, e.Kind.Error())
+	str := fmt.Sprintf("%v; attrs=%v; kind=%v", e.Message, string(metadata), e.Kind.Error())
 	if e.Cause != nil {
 		str += "; cause: " + e.Cause.Error()
 	}

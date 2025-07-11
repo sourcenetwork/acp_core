@@ -75,6 +75,7 @@ func (e *Evaluator) evalDelegationTheorem(ctx context.Context, polId *types.Poli
 				Theorem: theorem,
 			}, nil
 		}
+		return nil, err
 	}
 	return &types.DelegationTheoremResult{
 		Result: &types.Result{
