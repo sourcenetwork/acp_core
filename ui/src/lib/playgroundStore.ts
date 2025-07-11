@@ -84,6 +84,9 @@ export interface PlaygroundState {
   ) => void;
   updateActiveStoredSandbox: (data: Partial<PersistedSandboxData>) => void;
   mapIdToHandle: (id: string, handle: number) => void;
+  handleSandboxSyncChangeReceived: (
+    sandbox: PersistedSandboxData[]
+  ) => Promise<void>;
 }
 
 /**
@@ -343,6 +346,16 @@ export const usePlaygroundStore = create<PlaygroundState>()(
             set((state) => ({
               idHandleMap: { ...state.idHandleMap, [id]: handle },
             }));
+          },
+
+          handleSandboxSyncChangeReceived: async (
+            sandbox: PersistedSandboxData[]
+          ) => {
+            const { setPlaygroundState, verifyTheorems, lastActiveId } = get();
+            const activeSandbox = sandbox.find((s) => s.id === lastActiveId);
+            if (!activeSandbox) return;
+            await setPlaygroundState(activeSandbox.data);
+            await verifyTheorems();
           },
         };
       },

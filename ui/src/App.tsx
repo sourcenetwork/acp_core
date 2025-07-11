@@ -1,10 +1,14 @@
 
 import { useEffect } from 'react';
 import RootLayout from './components/RootLayout';
+import { useBrowserSandboxSync } from './hooks/useBrowserStateSync';
 import { usePlaygroundStore } from './lib/playgroundStore';
+import { BROADCAST_CHANNEL_NAME } from './constants';
 
 function App() {
     const [initPlayground] = usePlaygroundStore((state) => [state.initPlayground]);
+
+    useBrowserSandboxSync({ channelName: BROADCAST_CHANNEL_NAME });
 
     useEffect(() => {
         void initPlayground();
