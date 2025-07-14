@@ -32,5 +32,4 @@ jobs:
           context: .
           push: true
           file: ./playground.dockerfile
-          tags: 
-            - ghcr.io/sourcenetwork/acp_playground:${{ github.sha }}
+          tags: ghcr.io/sourcenetwork/acp_playground:${{ github.sha }}
