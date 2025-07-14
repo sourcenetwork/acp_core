@@ -144,6 +144,7 @@ export const usePlaygroundStore = create<PlaygroundState>()(
                 data: firstTemplate?.data ?? blankSandboxData,
               });
             } catch (error) {
+              console.error(error);
               set({
                 playgroundStatus: "error",
                 playgroundError: (error as Error)?.message,
