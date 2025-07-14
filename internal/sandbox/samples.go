@@ -11,33 +11,54 @@ var Samples []*types.SandboxTemplate = []*types.SandboxTemplate{
 resources:
   file:
     relations:
-	  owner:
-	    types:
-		  - actor
-	  reader:
-	    types:
-		  - actor
-		  - group->participant
-	  writer:
-	    types:
-		  - actor
-		  - group->participant
-	permissions:
-	  read:
-	    expr: owner + reader + writer
-	  write:
-	    expr: owner + writer
+      owner:
+        types:
+          - actor
+      reader:
+        types:
+          - actor
+          - group->participant
+      writer:
+        types:
+          - actor
+          - group->participant
+      parent:
+        types:
+          - directory
+    permissions:
+      read:
+        expr: owner + reader + writer + parent->read
+      write:
+        expr: owner + writer + parent->write
+  directory:
+    relations:
+      owner:
+        types:
+          - actor
+      reader:
+        types:
+          - actor
+          - group->participant
+      writer:
+        types:
+          - actor
+          - group->participant
+    permissions:
+      read:
+        expr: owner + reader + writer
+      write:
+        expr: owner + writer
   group:
     relations:
-	  owner:
-	    types:
-		  - actor
-	  guest:
-	    types:
-		  - actor
-	permissions:
-	  participant:
-	    expr: owner + guest
+      owner:
+        types:
+          - actor
+      guest:
+        types:
+          - actor
+    permissions:
+      participant:
+        expr: owner + guest
 `,
 			Relationships: `file:readme#owner@did:user:bob // bob owns file readme
 file:readme#writer@did:user:alice // alice can read file readme
@@ -45,7 +66,16 @@ file:readme#reader@group:engineering#participant // participants of the engineer
 
 group:engineering#owner@did:user:steve // steve owns the engineering group
 group:engineering#guest@did:user:eve // eve is a guest in the engineering group
-			`,
+
+
+file:abc#owner@did:user:alice
+file:abc#parent@directory:home
+file:def#owner@did:user:alice
+file:def#parent@directory:home
+directory:home#owner@did:user:steve
+directory:home#reader@group:engineering#participant
+`,
+
 			PolicyTheorem: `Authorizations {
   // bob can read and write to readme
   file:readme#read@did:user:bob
@@ -64,6 +94,10 @@ group:engineering#guest@did:user:eve // eve is a guest in the engineering group
   file:readme#read@did:user:eve
   !file:readme#write@did:user:steve
   !file:readme#write@did:user:eve
+
+  // assert acces to files in directory
+  file:abc#read@did:user:eve
+  file:def#read@did:user:eve
 }
 
 Delegations {
