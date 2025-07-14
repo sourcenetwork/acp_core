@@ -5,6 +5,7 @@ import { theoremResultPassing } from "@/utils/mapTheoremResultMarkers";
 import { NewSandboxRequest, PlaygroundService } from "@acp/playground";
 import { SandboxData, SandboxDataErrors, SandboxTemplate } from "@acp/sandbox";
 import { AnnotatedPolicyTheoremResult } from "@acp/theorem";
+import { v4 as uuidv4 } from "uuid";
 import { create } from "zustand";
 import {
   createJSONStorage,
@@ -231,7 +232,7 @@ export const usePlaygroundStore = create<PlaygroundState>()(
 
           newSandbox: async (input, setActive = true) => {
             const { setActiveSandbox } = get();
-            const sandboxId = self.crypto.randomUUID();
+            const sandboxId = uuidv4();
             const newSandbox: PersistedSandboxData = {
               id: sandboxId,
               ...blankSandboxTemplate,
