@@ -23,7 +23,7 @@ const HeaderActions = () => {
 
     const handleExportButtonClick = async () => {
         try {
-            await exportSandboxData(activeSandbox?.data);
+            await exportSandboxData(activeSandbox?.name, activeSandbox?.data);
         } catch (error) {
             console.error(error);
             toast({ description: "Something went wrong exporting" })

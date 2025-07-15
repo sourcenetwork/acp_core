@@ -1,26 +1,34 @@
 import { SandboxData } from "@/types/proto-js/sourcenetwork/acp_core/sandbox";
 
-export const computeShortHash = async (data: string) => {
-  const encodedData = new TextEncoder().encode(data);
-  const buffer = await crypto.subtle.digest("SHA-256", encodedData);
-  return Array.from(new Uint8Array(buffer))
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("")
-    .substring(0, 8);
+const formatFilename = (name: string) => {
+  return name
+    .replace(/\s+/g, "_") // Replace all whitespace with underscores
+    .replace(/[^a-z0-9_\-\.]/gi, "") // Remove any remaining invalid characters
+    .replace(/_+/g, "_") // Collapse multiple underscores
+    .replace(/^_+|_+$/g, "") // Trim leading/trailing underscores
+    .substring(0, 255);
 };
 
-export const exportSandboxData = async (activeStateData?: SandboxData) => {
+export const exportSandboxData = async (
+  name?: string,
+  activeStateData?: SandboxData
+) => {
   if (!activeStateData) return;
-
   const jsonBlob = new Blob([JSON.stringify(activeStateData, null, 2)], {
     type: "application/json",
   });
 
   const url = URL.createObjectURL(jsonBlob);
   const link = document.createElement("a");
-  const filename = await computeShortHash(JSON.stringify(activeStateData));
+
+  const prefix = "acp_export";
+  const safeName = name ? formatFilename(name) : null;
+  const date = new Date().toISOString().replace(/[-:.]/g, "");
+  const segments = [prefix, safeName, date].filter(Boolean);
+  const filename = `${segments.join("_")}.json`;
+
   link.href = url;
-  link.download = `acp-playground-export-${filename}.json`;
+  link.download = filename;
   link.click();
   URL.revokeObjectURL(url);
 };
