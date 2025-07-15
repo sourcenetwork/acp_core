@@ -56,3 +56,7 @@ func (s *playgroundService) GetSandbox(ctx context.Context, req *types.GetSandbo
 func (s *playgroundService) GetSampleSandboxes(ctx context.Context, req *types.GetSampleSandboxesRequest) (*types.GetSampleSandboxesResponse, error) {
 	return sandbox.HandleGetSandboxSamples(ctx, s.runtime, req)
 }
+
+func (s *playgroundService) Expand(ctx context.Context, req *types.ExpandRequest) (*types.ExpandResponse, error) {
+	return sandbox.HandleExpand(ctx, s.runtime, req)
+}

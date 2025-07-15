@@ -5,6 +5,7 @@ package sourcenetwork.acp_core;
 import "sourcenetwork/acp_core/catalogue.proto";
 import "sourcenetwork/acp_core/sandbox.proto";
 import "sourcenetwork/acp_core/theorem.proto";
+import "sourcenetwork/acp_core/relationship.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
 
@@ -40,6 +41,12 @@ service PlaygroundService {
   // which are used to demo different ACP Features
   rpc GetSampleSandboxes(GetSampleSandboxesRequest) returns (GetSampleSandboxesResponse);
 
+  // Expand runs an expand operation in a sandbox.
+  //
+  // Expand is used to walk through the Object graph, starting at an Object Relation node
+  // and generate the tree of every actor which can perform the specified operation.
+  rpc Expand(ExpandRequest) returns (ExpandResponse);
+
   // Check runs a Check operation with the provided data for the context of a sandbox.
   // A Check call is used to verify whether some actor is authorized to act on a some object
   //rpc Check (CheckRequest) returns (CheckResponse);
@@ -55,11 +62,6 @@ service PlaygroundService {
   // such as creating or deleting relationships.
   //rpc AuthorizeCommand (AuthorizeCommandRequest) returns (AuthorizeCommandResponse);
 
-  // Expand runs an expand operation in a sandbox.
-  //
-  // Expand is used to walk through the Object graph, starting at an Object Relation node
-  // and generate the tree of every actor which can perform the specified operation.
-  //rpc Expand(ExpandRequest) returns (ExpandResponse);
 }
 
 message NewSandboxRequest {
@@ -194,4 +196,14 @@ message GetSerializedStateRequest {
 
 message GetSerializedStateResponse {
   bytes data = 1;
+}
+
+message ExpandRequest {
+  uint64 handle = 1;
+  Object object = 2;
+  string relation = 3;
+}
+
+message ExpandResponse{
+  string expand_tree_json = 1;
 }

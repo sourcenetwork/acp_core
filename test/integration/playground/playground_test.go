@@ -1,6 +1,7 @@
 package playground
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -406,4 +407,23 @@ func Test_GetPlaygroundSamples_ReturnSamples(t *testing.T) {
 		t.Logf("%v", test.MustProtoToJson(response))
 		require.True(t, response.Result.Ok)
 	}
+}
+
+func Test_Expand_Simple(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+	a := NewAndSet{
+		Data: sandbox.Samples[0].Data,
+	}
+	handle := a.Run(ctx)
+
+	result, err := ctx.Playground.Expand(ctx, &types.ExpandRequest{
+		Handle:   handle,
+		Object:   types.NewObject("file", "def"),
+		Relation: "read",
+	})
+	require.NoError(t, err)
+
+	m := make(map[string]any)
+	err = json.Unmarshal([]byte(result.ExpandTreeJson), &m)
+	require.NoError(t, err)
 }

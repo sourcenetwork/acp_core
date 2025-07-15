@@ -3,7 +3,6 @@ package zanzi
 import (
 	"context"
 	"fmt"
-	"log"
 
 	rcdb "github.com/sourcenetwork/raccoondb"
 	"github.com/sourcenetwork/zanzi"
@@ -103,7 +102,6 @@ func (z *Adapter) SetRelationship(ctx context.Context, policy *types.Policy, rec
 		return false, fmt.Errorf("SetRelationship: %w", err)
 	}
 
-	log.Printf("Registered relationship: policyId=%v; relationship=%v", policy.Id, rec.Relationship.String())
 	return RecordFound(response.RecordOverwritten), nil
 }
 
@@ -353,4 +351,31 @@ func (z *Adapter) DeletePolicy(ctx context.Context, id string) (bool, error) {
 	}
 
 	return resp.Found, nil
+}
+
+func (z *Adapter) Expand(ctx context.Context, policy *types.Policy, object *types.Object, relation string) (string, error) {
+	service := z.zanzi.GetRelationGraphService()
+
+	req := &api.ExpandRequest{
+		PolicyId: policy.Id,
+		Root: &domain.RelationNode{
+			Node: &domain.RelationNode_EntitySet{
+				EntitySet: &domain.EntitySetNode{
+					Object: &domain.Entity{
+						Resource: object.Resource,
+						Id:       object.Id,
+					},
+					Relation: relation,
+				},
+			},
+		},
+		Format: api.ExplainFormat_JSON,
+	}
+	response, err := service.Expand(ctx, req)
+	err = mapErr(err)
+	if err != nil {
+		return "", fmt.Errorf("Expand: %w", err)
+	}
+
+	return response.GoalTree, nil
 }

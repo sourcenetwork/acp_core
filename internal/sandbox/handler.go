@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/sourcenetwork/acp_core/internal/authz_db"
 	"github.com/sourcenetwork/acp_core/internal/policy"
 	"github.com/sourcenetwork/acp_core/internal/raccoon"
 	"github.com/sourcenetwork/acp_core/internal/relationship"
@@ -487,5 +488,40 @@ func getPolicyEndPosition(pol string) types.BufferPosition {
 func HandleGetSandboxSamples(ctx context.Context, _ runtime.RuntimeManager, req *types.GetSampleSandboxesRequest) (*types.GetSampleSandboxesResponse, error) {
 	return &types.GetSampleSandboxesResponse{
 		Samples: Samples,
+	}, nil
+}
+
+func HandleExpand(ctx context.Context, manager runtime.RuntimeManager, req *types.ExpandRequest) (*types.ExpandResponse, error) {
+	repository := NewSandboxRepository(manager.GetKVStore())
+
+	record, err := repository.GetSandbox(ctx, req.Handle)
+	if err != nil {
+		return nil, newExpandError(err, req.Handle)
+	}
+	if record == nil {
+		return nil, newExpandError(errors.Wrap("sandbox not found", errors.ErrorType_NOT_FOUND), req.Handle)
+	}
+	if !record.Initialized {
+		err := errors.Wrap("uninitialized sandbox cannot execute theorems",
+			errors.ErrorType_OPERATION_FORBIDDEN)
+		return nil, newExpandError(err, req.Handle)
+	}
+
+	manager, err = GetManagerForSandbox(manager, req.Handle)
+	if err != nil {
+		return nil, newExpandError(err, req.Handle)
+	}
+
+	op := &types.Operation{
+		Object:     req.Object,
+		Permission: req.Relation,
+	}
+	result, err := authz_db.Expand(ctx, manager, record.Ctx.Policy.Id, op)
+	if err != nil {
+		return nil, newExpandError(err, req.Handle)
+	}
+
+	return &types.ExpandResponse{
+		ExpandTreeJson: result,
 	}, nil
 }

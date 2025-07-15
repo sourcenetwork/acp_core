@@ -37,3 +37,7 @@ func newRestoreScratchpadErr(err error, handle uint64) error {
 func newGetSandboxErr(err error, handle uint64) error {
 	return errors.Wrap("GetSandbox failed", err, errors.Pair("handle", itoa(handle)))
 }
+
+func newExpandError(err error, handle uint64) error {
+	return errors.Wrap("Expand failed", err, errors.Pair("handle", itoa(handle)))
+}
