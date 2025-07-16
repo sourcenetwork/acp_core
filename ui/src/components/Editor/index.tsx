@@ -56,13 +56,17 @@ const BaseEditor = (props: EditorProps & BaseEditorProps) => {
         annotatedPolicyTheoremResult,
         updateSandboxState,
         verifyTheorems,
-        sandboxStateStatus
+        sandboxStateStatus,
+        setEditorSelection,
+        editorSelection
     } = usePlaygroundStore((state) => ({
         dataErrors: state.setStateDataErrors?.[dataType.errorKey],
         annotatedPolicyTheoremResult: state.verifyTheoremsResult,
         updateSandboxState: state.setPlaygroundState,
         verifyTheorems: state.verifyTheorems,
-        sandboxStateStatus: state.sandboxStateStatus
+        sandboxStateStatus: state.sandboxStateStatus,
+        setEditorSelection: state.setEditorSelection,
+        editorSelection: state.editorSelections[sandboxDataType]
     }));
 
     const editorData = activeSandbox?.data?.[sandboxDataType];
@@ -132,6 +136,12 @@ const BaseEditor = (props: EditorProps & BaseEditorProps) => {
     const handleEditorMounted: OnMount = (editor) => {
         editorRef.current = editor;
         setIsEditorMounted(true);
+
+        // Restore selection
+        if (editorSelection) {
+            editor.setSelection(editorSelection);
+            editor.focus();
+        }
     }
 
     const handleBeforeMount = (monaco: Monaco) => {
@@ -149,6 +159,18 @@ const BaseEditor = (props: EditorProps & BaseEditorProps) => {
         if (sandboxStateStatus !== "set") return;
         if (isTheorumEditor) void verifyTheorems();
     }, [sandboxStateStatus, isTheorumEditor, verifyTheorems, activeSandbox?.id]);
+
+
+    // Track cursor position and selection 
+    useEffect(() => {
+        const editor = editorRef.current;
+        if (!isEditorMounted || !editor) return;
+
+        const selectionEvent = editor.onDidChangeCursorSelection((e) => setEditorSelection(sandboxDataType, e.selection))
+        return () => {
+            selectionEvent.dispose();
+        };
+    }, [isEditorMounted, setEditorSelection, sandboxDataType]);
 
     const editorLanguage = dataType.language || 'yaml';
     const editorTheme = dataType.theme[theme === 'dark' ? 'dark' : 'light'] || 'vs-dark';

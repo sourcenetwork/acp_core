@@ -5,6 +5,7 @@ import { theoremResultPassing } from "@/utils/mapTheoremResultMarkers";
 import { NewSandboxRequest, PlaygroundService } from "@acp/playground";
 import { SandboxData, SandboxDataErrors, SandboxTemplate } from "@acp/sandbox";
 import { AnnotatedPolicyTheoremResult } from "@acp/theorem";
+import type { IRange } from "monaco-editor";
 import { v4 as uuidv4 } from "uuid";
 import { create } from "zustand";
 import {
@@ -60,6 +61,7 @@ export interface PlaygroundState {
   verifyTheoremsError?: string;
   sandboxTemplates: SandboxTemplate[] | null;
   sandboxStateStatus: "unset" | "set" | "error";
+  editorSelections: Record<string, IRange | null>;
 
   /* Playground Actions */
   initPlayground: () => Promise<void>;
@@ -88,6 +90,7 @@ export interface PlaygroundState {
   handleSandboxSyncChangeReceived: (
     sandbox: PersistedSandboxData[]
   ) => Promise<void>;
+  setEditorSelection: (id: string, selection: IRange | null) => void;
 }
 
 /**
@@ -103,6 +106,7 @@ export const usePlaygroundStore = create<PlaygroundState>()(
           sandboxStateStatus: "unset",
           sandboxTemplates: null,
           idHandleMap: {},
+          editorSelections: {},
 
           // Inital state
           ...initialStates.persistedPlaygroundData,
@@ -358,6 +362,11 @@ export const usePlaygroundStore = create<PlaygroundState>()(
             if (!activeSandbox) return;
             await setPlaygroundState(activeSandbox.data);
             await verifyTheorems();
+          },
+          setEditorSelection: (id, selection) => {
+            set((state) => ({
+              editorSelections: { ...state.editorSelections, [id]: selection },
+            }));
           },
         };
       },
