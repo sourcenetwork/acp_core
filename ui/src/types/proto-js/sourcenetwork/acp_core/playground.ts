@@ -6,7 +6,7 @@
 
 /* eslint-disable */
 import { type PolicyCatalogue } from "./catalogue";
-import { type Object } from "./relationship";
+import { type Actor, type Object } from "./relationship";
 import { type SandboxData, type SandboxDataErrors, type SandboxRecord, type SandboxTemplate } from "./sandbox";
 import { type AnnotatedPolicyTheoremResult } from "./theorem";
 
@@ -152,14 +152,16 @@ export interface GetSerializedStateResponse {
   data: Uint8Array;
 }
 
-export interface ExpandRequest {
+export interface ExplainCheckRequest {
   handle: number;
   object: Object | undefined;
-  relation: string;
+  permission: string;
+  actor: Actor | undefined;
 }
 
-export interface ExpandResponse {
-  expandTreeJson: string;
+export interface ExplainCheckResponse {
+  authorized: boolean;
+  explainTree: string;
 }
 
 export interface PlaygroundService {
@@ -191,11 +193,5 @@ export interface PlaygroundService {
    * which are used to demo different ACP Features
    */
   GetSampleSandboxes(request: GetSampleSandboxesRequest): Promise<GetSampleSandboxesResponse>;
-  /**
-   * Expand runs an expand operation in a sandbox.
-   *
-   * Expand is used to walk through the Object graph, starting at an Object Relation node
-   * and generate the tree of every actor which can perform the specified operation.
-   */
-  Expand(request: ExpandRequest): Promise<ExpandResponse>;
+  ExplainCheck(request: ExplainCheckRequest): Promise<ExplainCheckResponse>;
 }

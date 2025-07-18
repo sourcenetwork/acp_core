@@ -10081,29 +10081,31 @@ func (x *fastReflection_GetSerializedStateResponse) ProtoMethods() *protoiface.M
 }
 
 var (
-	md_ExpandRequest          protoreflect.MessageDescriptor
-	fd_ExpandRequest_handle   protoreflect.FieldDescriptor
-	fd_ExpandRequest_object   protoreflect.FieldDescriptor
-	fd_ExpandRequest_relation protoreflect.FieldDescriptor
+	md_ExplainCheckRequest            protoreflect.MessageDescriptor
+	fd_ExplainCheckRequest_handle     protoreflect.FieldDescriptor
+	fd_ExplainCheckRequest_object     protoreflect.FieldDescriptor
+	fd_ExplainCheckRequest_permission protoreflect.FieldDescriptor
+	fd_ExplainCheckRequest_actor      protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sourcenetwork_acp_core_playground_proto_init()
-	md_ExpandRequest = File_sourcenetwork_acp_core_playground_proto.Messages().ByName("ExpandRequest")
-	fd_ExpandRequest_handle = md_ExpandRequest.Fields().ByName("handle")
-	fd_ExpandRequest_object = md_ExpandRequest.Fields().ByName("object")
-	fd_ExpandRequest_relation = md_ExpandRequest.Fields().ByName("relation")
+	md_ExplainCheckRequest = File_sourcenetwork_acp_core_playground_proto.Messages().ByName("ExplainCheckRequest")
+	fd_ExplainCheckRequest_handle = md_ExplainCheckRequest.Fields().ByName("handle")
+	fd_ExplainCheckRequest_object = md_ExplainCheckRequest.Fields().ByName("object")
+	fd_ExplainCheckRequest_permission = md_ExplainCheckRequest.Fields().ByName("permission")
+	fd_ExplainCheckRequest_actor = md_ExplainCheckRequest.Fields().ByName("actor")
 }
 
-var _ protoreflect.Message = (*fastReflection_ExpandRequest)(nil)
+var _ protoreflect.Message = (*fastReflection_ExplainCheckRequest)(nil)
 
-type fastReflection_ExpandRequest ExpandRequest
+type fastReflection_ExplainCheckRequest ExplainCheckRequest
 
-func (x *ExpandRequest) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_ExpandRequest)(x)
+func (x *ExplainCheckRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_ExplainCheckRequest)(x)
 }
 
-func (x *ExpandRequest) slowProtoReflect() protoreflect.Message {
+func (x *ExplainCheckRequest) slowProtoReflect() protoreflect.Message {
 	mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[22]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -10115,43 +10117,43 @@ func (x *ExpandRequest) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_ExpandRequest_messageType fastReflection_ExpandRequest_messageType
-var _ protoreflect.MessageType = fastReflection_ExpandRequest_messageType{}
+var _fastReflection_ExplainCheckRequest_messageType fastReflection_ExplainCheckRequest_messageType
+var _ protoreflect.MessageType = fastReflection_ExplainCheckRequest_messageType{}
 
-type fastReflection_ExpandRequest_messageType struct{}
+type fastReflection_ExplainCheckRequest_messageType struct{}
 
-func (x fastReflection_ExpandRequest_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_ExpandRequest)(nil)
+func (x fastReflection_ExplainCheckRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_ExplainCheckRequest)(nil)
 }
-func (x fastReflection_ExpandRequest_messageType) New() protoreflect.Message {
-	return new(fastReflection_ExpandRequest)
+func (x fastReflection_ExplainCheckRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_ExplainCheckRequest)
 }
-func (x fastReflection_ExpandRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_ExpandRequest
+func (x fastReflection_ExplainCheckRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_ExplainCheckRequest
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_ExpandRequest) Descriptor() protoreflect.MessageDescriptor {
-	return md_ExpandRequest
+func (x *fastReflection_ExplainCheckRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_ExplainCheckRequest
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_ExpandRequest) Type() protoreflect.MessageType {
-	return _fastReflection_ExpandRequest_messageType
+func (x *fastReflection_ExplainCheckRequest) Type() protoreflect.MessageType {
+	return _fastReflection_ExplainCheckRequest_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_ExpandRequest) New() protoreflect.Message {
-	return new(fastReflection_ExpandRequest)
+func (x *fastReflection_ExplainCheckRequest) New() protoreflect.Message {
+	return new(fastReflection_ExplainCheckRequest)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_ExpandRequest) Interface() protoreflect.ProtoMessage {
-	return (*ExpandRequest)(x)
+func (x *fastReflection_ExplainCheckRequest) Interface() protoreflect.ProtoMessage {
+	return (*ExplainCheckRequest)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -10159,22 +10161,28 @@ func (x *fastReflection_ExpandRequest) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_ExpandRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_ExplainCheckRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Handle != uint64(0) {
 		value := protoreflect.ValueOfUint64(x.Handle)
-		if !f(fd_ExpandRequest_handle, value) {
+		if !f(fd_ExplainCheckRequest_handle, value) {
 			return
 		}
 	}
 	if x.Object != nil {
 		value := protoreflect.ValueOfMessage(x.Object.ProtoReflect())
-		if !f(fd_ExpandRequest_object, value) {
+		if !f(fd_ExplainCheckRequest_object, value) {
 			return
 		}
 	}
-	if x.Relation != "" {
-		value := protoreflect.ValueOfString(x.Relation)
-		if !f(fd_ExpandRequest_relation, value) {
+	if x.Permission != "" {
+		value := protoreflect.ValueOfString(x.Permission)
+		if !f(fd_ExplainCheckRequest_permission, value) {
+			return
+		}
+	}
+	if x.Actor != nil {
+		value := protoreflect.ValueOfMessage(x.Actor.ProtoReflect())
+		if !f(fd_ExplainCheckRequest_actor, value) {
 			return
 		}
 	}
@@ -10191,19 +10199,21 @@ func (x *fastReflection_ExpandRequest) Range(f func(protoreflect.FieldDescriptor
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_ExpandRequest) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_ExplainCheckRequest) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.ExpandRequest.handle":
+	case "sourcenetwork.acp_core.ExplainCheckRequest.handle":
 		return x.Handle != uint64(0)
-	case "sourcenetwork.acp_core.ExpandRequest.object":
+	case "sourcenetwork.acp_core.ExplainCheckRequest.object":
 		return x.Object != nil
-	case "sourcenetwork.acp_core.ExpandRequest.relation":
-		return x.Relation != ""
+	case "sourcenetwork.acp_core.ExplainCheckRequest.permission":
+		return x.Permission != ""
+	case "sourcenetwork.acp_core.ExplainCheckRequest.actor":
+		return x.Actor != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExpandRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckRequest"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.ExpandRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -10213,19 +10223,21 @@ func (x *fastReflection_ExpandRequest) Has(fd protoreflect.FieldDescriptor) bool
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ExpandRequest) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_ExplainCheckRequest) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.ExpandRequest.handle":
+	case "sourcenetwork.acp_core.ExplainCheckRequest.handle":
 		x.Handle = uint64(0)
-	case "sourcenetwork.acp_core.ExpandRequest.object":
+	case "sourcenetwork.acp_core.ExplainCheckRequest.object":
 		x.Object = nil
-	case "sourcenetwork.acp_core.ExpandRequest.relation":
-		x.Relation = ""
+	case "sourcenetwork.acp_core.ExplainCheckRequest.permission":
+		x.Permission = ""
+	case "sourcenetwork.acp_core.ExplainCheckRequest.actor":
+		x.Actor = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExpandRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckRequest"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.ExpandRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -10235,22 +10247,25 @@ func (x *fastReflection_ExpandRequest) Clear(fd protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_ExpandRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_ExplainCheckRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sourcenetwork.acp_core.ExpandRequest.handle":
+	case "sourcenetwork.acp_core.ExplainCheckRequest.handle":
 		value := x.Handle
 		return protoreflect.ValueOfUint64(value)
-	case "sourcenetwork.acp_core.ExpandRequest.object":
+	case "sourcenetwork.acp_core.ExplainCheckRequest.object":
 		value := x.Object
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "sourcenetwork.acp_core.ExpandRequest.relation":
-		value := x.Relation
+	case "sourcenetwork.acp_core.ExplainCheckRequest.permission":
+		value := x.Permission
 		return protoreflect.ValueOfString(value)
+	case "sourcenetwork.acp_core.ExplainCheckRequest.actor":
+		value := x.Actor
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExpandRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckRequest"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.ExpandRequest does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckRequest does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -10264,19 +10279,21 @@ func (x *fastReflection_ExpandRequest) Get(descriptor protoreflect.FieldDescript
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ExpandRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_ExplainCheckRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.ExpandRequest.handle":
+	case "sourcenetwork.acp_core.ExplainCheckRequest.handle":
 		x.Handle = value.Uint()
-	case "sourcenetwork.acp_core.ExpandRequest.object":
+	case "sourcenetwork.acp_core.ExplainCheckRequest.object":
 		x.Object = value.Message().Interface().(*Object)
-	case "sourcenetwork.acp_core.ExpandRequest.relation":
-		x.Relation = value.Interface().(string)
+	case "sourcenetwork.acp_core.ExplainCheckRequest.permission":
+		x.Permission = value.Interface().(string)
+	case "sourcenetwork.acp_core.ExplainCheckRequest.actor":
+		x.Actor = value.Message().Interface().(*Actor)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExpandRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckRequest"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.ExpandRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -10290,52 +10307,60 @@ func (x *fastReflection_ExpandRequest) Set(fd protoreflect.FieldDescriptor, valu
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ExpandRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_ExplainCheckRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.ExpandRequest.object":
+	case "sourcenetwork.acp_core.ExplainCheckRequest.object":
 		if x.Object == nil {
 			x.Object = new(Object)
 		}
 		return protoreflect.ValueOfMessage(x.Object.ProtoReflect())
-	case "sourcenetwork.acp_core.ExpandRequest.handle":
-		panic(fmt.Errorf("field handle of message sourcenetwork.acp_core.ExpandRequest is not mutable"))
-	case "sourcenetwork.acp_core.ExpandRequest.relation":
-		panic(fmt.Errorf("field relation of message sourcenetwork.acp_core.ExpandRequest is not mutable"))
+	case "sourcenetwork.acp_core.ExplainCheckRequest.actor":
+		if x.Actor == nil {
+			x.Actor = new(Actor)
+		}
+		return protoreflect.ValueOfMessage(x.Actor.ProtoReflect())
+	case "sourcenetwork.acp_core.ExplainCheckRequest.handle":
+		panic(fmt.Errorf("field handle of message sourcenetwork.acp_core.ExplainCheckRequest is not mutable"))
+	case "sourcenetwork.acp_core.ExplainCheckRequest.permission":
+		panic(fmt.Errorf("field permission of message sourcenetwork.acp_core.ExplainCheckRequest is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExpandRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckRequest"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.ExpandRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_ExpandRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_ExplainCheckRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.ExpandRequest.handle":
+	case "sourcenetwork.acp_core.ExplainCheckRequest.handle":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "sourcenetwork.acp_core.ExpandRequest.object":
+	case "sourcenetwork.acp_core.ExplainCheckRequest.object":
 		m := new(Object)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "sourcenetwork.acp_core.ExpandRequest.relation":
+	case "sourcenetwork.acp_core.ExplainCheckRequest.permission":
 		return protoreflect.ValueOfString("")
+	case "sourcenetwork.acp_core.ExplainCheckRequest.actor":
+		m := new(Actor)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExpandRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckRequest"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.ExpandRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_ExpandRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_ExplainCheckRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.ExpandRequest", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.ExplainCheckRequest", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -10343,7 +10368,7 @@ func (x *fastReflection_ExpandRequest) WhichOneof(d protoreflect.OneofDescriptor
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_ExpandRequest) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_ExplainCheckRequest) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -10354,7 +10379,7 @@ func (x *fastReflection_ExpandRequest) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ExpandRequest) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_ExplainCheckRequest) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -10366,7 +10391,7 @@ func (x *fastReflection_ExpandRequest) SetUnknown(fields protoreflect.RawFields)
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_ExpandRequest) IsValid() bool {
+func (x *fastReflection_ExplainCheckRequest) IsValid() bool {
 	return x != nil
 }
 
@@ -10376,9 +10401,9 @@ func (x *fastReflection_ExpandRequest) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_ExpandRequest) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_ExplainCheckRequest) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*ExpandRequest)
+		x := input.Message.Interface().(*ExplainCheckRequest)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -10397,8 +10422,12 @@ func (x *fastReflection_ExpandRequest) ProtoMethods() *protoiface.Methods {
 			l = options.Size(x.Object)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.Relation)
+		l = len(x.Permission)
 		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.Actor != nil {
+			l = options.Size(x.Actor)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
@@ -10411,7 +10440,7 @@ func (x *fastReflection_ExpandRequest) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*ExpandRequest)
+		x := input.Message.Interface().(*ExplainCheckRequest)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -10430,10 +10459,24 @@ func (x *fastReflection_ExpandRequest) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.Relation) > 0 {
-			i -= len(x.Relation)
-			copy(dAtA[i:], x.Relation)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Relation)))
+		if x.Actor != nil {
+			encoded, err := options.Marshal(x.Actor)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x22
+		}
+		if len(x.Permission) > 0 {
+			i -= len(x.Permission)
+			copy(dAtA[i:], x.Permission)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Permission)))
 			i--
 			dAtA[i] = 0x1a
 		}
@@ -10467,7 +10510,7 @@ func (x *fastReflection_ExpandRequest) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*ExpandRequest)
+		x := input.Message.Interface().(*ExplainCheckRequest)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -10499,10 +10542,10 @@ func (x *fastReflection_ExpandRequest) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ExpandRequest: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ExplainCheckRequest: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ExpandRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ExplainCheckRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -10562,7 +10605,7 @@ func (x *fastReflection_ExpandRequest) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 3:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Relation", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Permission", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -10590,7 +10633,43 @@ func (x *fastReflection_ExpandRequest) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Relation = string(dAtA[iNdEx:postIndex])
+				x.Permission = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Actor", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Actor == nil {
+					x.Actor = &Actor{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Actor); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -10628,25 +10707,27 @@ func (x *fastReflection_ExpandRequest) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_ExpandResponse                  protoreflect.MessageDescriptor
-	fd_ExpandResponse_expand_tree_json protoreflect.FieldDescriptor
+	md_ExplainCheckResponse              protoreflect.MessageDescriptor
+	fd_ExplainCheckResponse_authorized   protoreflect.FieldDescriptor
+	fd_ExplainCheckResponse_explain_tree protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sourcenetwork_acp_core_playground_proto_init()
-	md_ExpandResponse = File_sourcenetwork_acp_core_playground_proto.Messages().ByName("ExpandResponse")
-	fd_ExpandResponse_expand_tree_json = md_ExpandResponse.Fields().ByName("expand_tree_json")
+	md_ExplainCheckResponse = File_sourcenetwork_acp_core_playground_proto.Messages().ByName("ExplainCheckResponse")
+	fd_ExplainCheckResponse_authorized = md_ExplainCheckResponse.Fields().ByName("authorized")
+	fd_ExplainCheckResponse_explain_tree = md_ExplainCheckResponse.Fields().ByName("explain_tree")
 }
 
-var _ protoreflect.Message = (*fastReflection_ExpandResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_ExplainCheckResponse)(nil)
 
-type fastReflection_ExpandResponse ExpandResponse
+type fastReflection_ExplainCheckResponse ExplainCheckResponse
 
-func (x *ExpandResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_ExpandResponse)(x)
+func (x *ExplainCheckResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_ExplainCheckResponse)(x)
 }
 
-func (x *ExpandResponse) slowProtoReflect() protoreflect.Message {
+func (x *ExplainCheckResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[23]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -10658,43 +10739,43 @@ func (x *ExpandResponse) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_ExpandResponse_messageType fastReflection_ExpandResponse_messageType
-var _ protoreflect.MessageType = fastReflection_ExpandResponse_messageType{}
+var _fastReflection_ExplainCheckResponse_messageType fastReflection_ExplainCheckResponse_messageType
+var _ protoreflect.MessageType = fastReflection_ExplainCheckResponse_messageType{}
 
-type fastReflection_ExpandResponse_messageType struct{}
+type fastReflection_ExplainCheckResponse_messageType struct{}
 
-func (x fastReflection_ExpandResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_ExpandResponse)(nil)
+func (x fastReflection_ExplainCheckResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_ExplainCheckResponse)(nil)
 }
-func (x fastReflection_ExpandResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_ExpandResponse)
+func (x fastReflection_ExplainCheckResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_ExplainCheckResponse)
 }
-func (x fastReflection_ExpandResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_ExpandResponse
+func (x fastReflection_ExplainCheckResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_ExplainCheckResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_ExpandResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_ExpandResponse
+func (x *fastReflection_ExplainCheckResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_ExplainCheckResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_ExpandResponse) Type() protoreflect.MessageType {
-	return _fastReflection_ExpandResponse_messageType
+func (x *fastReflection_ExplainCheckResponse) Type() protoreflect.MessageType {
+	return _fastReflection_ExplainCheckResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_ExpandResponse) New() protoreflect.Message {
-	return new(fastReflection_ExpandResponse)
+func (x *fastReflection_ExplainCheckResponse) New() protoreflect.Message {
+	return new(fastReflection_ExplainCheckResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_ExpandResponse) Interface() protoreflect.ProtoMessage {
-	return (*ExpandResponse)(x)
+func (x *fastReflection_ExplainCheckResponse) Interface() protoreflect.ProtoMessage {
+	return (*ExplainCheckResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -10702,10 +10783,16 @@ func (x *fastReflection_ExpandResponse) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_ExpandResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.ExpandTreeJson != "" {
-		value := protoreflect.ValueOfString(x.ExpandTreeJson)
-		if !f(fd_ExpandResponse_expand_tree_json, value) {
+func (x *fastReflection_ExplainCheckResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Authorized != false {
+		value := protoreflect.ValueOfBool(x.Authorized)
+		if !f(fd_ExplainCheckResponse_authorized, value) {
+			return
+		}
+	}
+	if x.ExplainTree != "" {
+		value := protoreflect.ValueOfString(x.ExplainTree)
+		if !f(fd_ExplainCheckResponse_explain_tree, value) {
 			return
 		}
 	}
@@ -10722,15 +10809,17 @@ func (x *fastReflection_ExpandResponse) Range(f func(protoreflect.FieldDescripto
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_ExpandResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_ExplainCheckResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.ExpandResponse.expand_tree_json":
-		return x.ExpandTreeJson != ""
+	case "sourcenetwork.acp_core.ExplainCheckResponse.authorized":
+		return x.Authorized != false
+	case "sourcenetwork.acp_core.ExplainCheckResponse.explain_tree":
+		return x.ExplainTree != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExpandResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckResponse"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.ExpandResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -10740,15 +10829,17 @@ func (x *fastReflection_ExpandResponse) Has(fd protoreflect.FieldDescriptor) boo
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ExpandResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_ExplainCheckResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.ExpandResponse.expand_tree_json":
-		x.ExpandTreeJson = ""
+	case "sourcenetwork.acp_core.ExplainCheckResponse.authorized":
+		x.Authorized = false
+	case "sourcenetwork.acp_core.ExplainCheckResponse.explain_tree":
+		x.ExplainTree = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExpandResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckResponse"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.ExpandResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -10758,16 +10849,19 @@ func (x *fastReflection_ExpandResponse) Clear(fd protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_ExpandResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_ExplainCheckResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sourcenetwork.acp_core.ExpandResponse.expand_tree_json":
-		value := x.ExpandTreeJson
+	case "sourcenetwork.acp_core.ExplainCheckResponse.authorized":
+		value := x.Authorized
+		return protoreflect.ValueOfBool(value)
+	case "sourcenetwork.acp_core.ExplainCheckResponse.explain_tree":
+		value := x.ExplainTree
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExpandResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckResponse"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.ExpandResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -10781,15 +10875,17 @@ func (x *fastReflection_ExpandResponse) Get(descriptor protoreflect.FieldDescrip
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ExpandResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_ExplainCheckResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.ExpandResponse.expand_tree_json":
-		x.ExpandTreeJson = value.Interface().(string)
+	case "sourcenetwork.acp_core.ExplainCheckResponse.authorized":
+		x.Authorized = value.Bool()
+	case "sourcenetwork.acp_core.ExplainCheckResponse.explain_tree":
+		x.ExplainTree = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExpandResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckResponse"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.ExpandResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -10803,40 +10899,44 @@ func (x *fastReflection_ExpandResponse) Set(fd protoreflect.FieldDescriptor, val
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ExpandResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_ExplainCheckResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.ExpandResponse.expand_tree_json":
-		panic(fmt.Errorf("field expand_tree_json of message sourcenetwork.acp_core.ExpandResponse is not mutable"))
+	case "sourcenetwork.acp_core.ExplainCheckResponse.authorized":
+		panic(fmt.Errorf("field authorized of message sourcenetwork.acp_core.ExplainCheckResponse is not mutable"))
+	case "sourcenetwork.acp_core.ExplainCheckResponse.explain_tree":
+		panic(fmt.Errorf("field explain_tree of message sourcenetwork.acp_core.ExplainCheckResponse is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExpandResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckResponse"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.ExpandResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_ExpandResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_ExplainCheckResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.ExpandResponse.expand_tree_json":
+	case "sourcenetwork.acp_core.ExplainCheckResponse.authorized":
+		return protoreflect.ValueOfBool(false)
+	case "sourcenetwork.acp_core.ExplainCheckResponse.explain_tree":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExpandResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckResponse"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.ExpandResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_ExpandResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_ExplainCheckResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.ExpandResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.ExplainCheckResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -10844,7 +10944,7 @@ func (x *fastReflection_ExpandResponse) WhichOneof(d protoreflect.OneofDescripto
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_ExpandResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_ExplainCheckResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -10855,7 +10955,7 @@ func (x *fastReflection_ExpandResponse) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ExpandResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_ExplainCheckResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -10867,7 +10967,7 @@ func (x *fastReflection_ExpandResponse) SetUnknown(fields protoreflect.RawFields
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_ExpandResponse) IsValid() bool {
+func (x *fastReflection_ExplainCheckResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -10877,9 +10977,9 @@ func (x *fastReflection_ExpandResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_ExpandResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_ExplainCheckResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*ExpandResponse)
+		x := input.Message.Interface().(*ExplainCheckResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -10891,7 +10991,10 @@ func (x *fastReflection_ExpandResponse) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
-		l = len(x.ExpandTreeJson)
+		if x.Authorized {
+			n += 2
+		}
+		l = len(x.ExplainTree)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -10905,7 +11008,7 @@ func (x *fastReflection_ExpandResponse) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*ExpandResponse)
+		x := input.Message.Interface().(*ExplainCheckResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -10924,12 +11027,22 @@ func (x *fastReflection_ExpandResponse) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.ExpandTreeJson) > 0 {
-			i -= len(x.ExpandTreeJson)
-			copy(dAtA[i:], x.ExpandTreeJson)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ExpandTreeJson)))
+		if len(x.ExplainTree) > 0 {
+			i -= len(x.ExplainTree)
+			copy(dAtA[i:], x.ExplainTree)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ExplainTree)))
 			i--
-			dAtA[i] = 0xa
+			dAtA[i] = 0x12
+		}
+		if x.Authorized {
+			i--
+			if x.Authorized {
+				dAtA[i] = 1
+			} else {
+				dAtA[i] = 0
+			}
+			i--
+			dAtA[i] = 0x8
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -10942,7 +11055,7 @@ func (x *fastReflection_ExpandResponse) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*ExpandResponse)
+		x := input.Message.Interface().(*ExplainCheckResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -10974,15 +11087,35 @@ func (x *fastReflection_ExpandResponse) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ExpandResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ExplainCheckResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ExpandResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ExplainCheckResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Authorized", wireType)
+				}
+				var v int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				x.Authorized = bool(v != 0)
+			case 2:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ExpandTreeJson", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ExplainTree", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -11010,7 +11143,7 @@ func (x *fastReflection_ExpandResponse) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.ExpandTreeJson = string(dAtA[iNdEx:postIndex])
+				x.ExplainTree = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -11984,18 +12117,19 @@ func (x *GetSerializedStateResponse) GetData() []byte {
 	return nil
 }
 
-type ExpandRequest struct {
+type ExplainCheckRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Handle   uint64  `protobuf:"varint,1,opt,name=handle,proto3" json:"handle,omitempty"`
-	Object   *Object `protobuf:"bytes,2,opt,name=object,proto3" json:"object,omitempty"`
-	Relation string  `protobuf:"bytes,3,opt,name=relation,proto3" json:"relation,omitempty"`
+	Handle     uint64  `protobuf:"varint,1,opt,name=handle,proto3" json:"handle,omitempty"`
+	Object     *Object `protobuf:"bytes,2,opt,name=object,proto3" json:"object,omitempty"`
+	Permission string  `protobuf:"bytes,3,opt,name=permission,proto3" json:"permission,omitempty"`
+	Actor      *Actor  `protobuf:"bytes,4,opt,name=actor,proto3" json:"actor,omitempty"`
 }
 
-func (x *ExpandRequest) Reset() {
-	*x = ExpandRequest{}
+func (x *ExplainCheckRequest) Reset() {
+	*x = ExplainCheckRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[22]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -12003,48 +12137,56 @@ func (x *ExpandRequest) Reset() {
 	}
 }
 
-func (x *ExpandRequest) String() string {
+func (x *ExplainCheckRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ExpandRequest) ProtoMessage() {}
+func (*ExplainCheckRequest) ProtoMessage() {}
 
-// Deprecated: Use ExpandRequest.ProtoReflect.Descriptor instead.
-func (*ExpandRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use ExplainCheckRequest.ProtoReflect.Descriptor instead.
+func (*ExplainCheckRequest) Descriptor() ([]byte, []int) {
 	return file_sourcenetwork_acp_core_playground_proto_rawDescGZIP(), []int{22}
 }
 
-func (x *ExpandRequest) GetHandle() uint64 {
+func (x *ExplainCheckRequest) GetHandle() uint64 {
 	if x != nil {
 		return x.Handle
 	}
 	return 0
 }
 
-func (x *ExpandRequest) GetObject() *Object {
+func (x *ExplainCheckRequest) GetObject() *Object {
 	if x != nil {
 		return x.Object
 	}
 	return nil
 }
 
-func (x *ExpandRequest) GetRelation() string {
+func (x *ExplainCheckRequest) GetPermission() string {
 	if x != nil {
-		return x.Relation
+		return x.Permission
 	}
 	return ""
 }
 
-type ExpandResponse struct {
+func (x *ExplainCheckRequest) GetActor() *Actor {
+	if x != nil {
+		return x.Actor
+	}
+	return nil
+}
+
+type ExplainCheckResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ExpandTreeJson string `protobuf:"bytes,1,opt,name=expand_tree_json,json=expandTreeJson,proto3" json:"expand_tree_json,omitempty"`
+	Authorized  bool   `protobuf:"varint,1,opt,name=authorized,proto3" json:"authorized,omitempty"`
+	ExplainTree string `protobuf:"bytes,2,opt,name=explain_tree,json=explainTree,proto3" json:"explain_tree,omitempty"`
 }
 
-func (x *ExpandResponse) Reset() {
-	*x = ExpandResponse{}
+func (x *ExplainCheckResponse) Reset() {
+	*x = ExplainCheckResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[23]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -12052,20 +12194,27 @@ func (x *ExpandResponse) Reset() {
 	}
 }
 
-func (x *ExpandResponse) String() string {
+func (x *ExplainCheckResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ExpandResponse) ProtoMessage() {}
+func (*ExplainCheckResponse) ProtoMessage() {}
 
-// Deprecated: Use ExpandResponse.ProtoReflect.Descriptor instead.
-func (*ExpandResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use ExplainCheckResponse.ProtoReflect.Descriptor instead.
+func (*ExplainCheckResponse) Descriptor() ([]byte, []int) {
 	return file_sourcenetwork_acp_core_playground_proto_rawDescGZIP(), []int{23}
 }
 
-func (x *ExpandResponse) GetExpandTreeJson() string {
+func (x *ExplainCheckResponse) GetAuthorized() bool {
 	if x != nil {
-		return x.ExpandTreeJson
+		return x.Authorized
+	}
+	return false
+}
+
+func (x *ExplainCheckResponse) GetExplainTree() string {
+	if x != nil {
+		return x.ExplainTree
 	}
 	return ""
 }
@@ -12217,93 +12366,100 @@ var file_sourcenetwork_acp_core_playground_proto_rawDesc = []byte{
 	0x30, 0x0a, 0x1a, 0x47, 0x65, 0x74, 0x53, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x64,
 	0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x12, 0x0a,
 	0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x64, 0x61, 0x74,
-	0x61, 0x22, 0x7b, 0x0a, 0x0d, 0x45, 0x78, 0x70, 0x61, 0x6e, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x04, 0x52, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x12, 0x36, 0x0a, 0x06, 0x6f, 0x62,
-	0x6a, 0x65, 0x63, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1e, 0x2e, 0x73, 0x6f, 0x75,
-	0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63,
-	0x6f, 0x72, 0x65, 0x2e, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x52, 0x06, 0x6f, 0x62, 0x6a, 0x65,
-	0x63, 0x74, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x03,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x3a,
-	0x0a, 0x0e, 0x45, 0x78, 0x70, 0x61, 0x6e, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x12, 0x28, 0x0a, 0x10, 0x65, 0x78, 0x70, 0x61, 0x6e, 0x64, 0x5f, 0x74, 0x72, 0x65, 0x65, 0x5f,
-	0x6a, 0x73, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x65, 0x78, 0x70, 0x61,
-	0x6e, 0x64, 0x54, 0x72, 0x65, 0x65, 0x4a, 0x73, 0x6f, 0x6e, 0x2a, 0x44, 0x0a, 0x15, 0x53, 0x65,
-	0x72, 0x69, 0x61, 0x6c, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x45, 0x6e, 0x63, 0x6f, 0x64,
-	0x69, 0x6e, 0x67, 0x12, 0x14, 0x0a, 0x10, 0x55, 0x4e, 0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x5f, 0x45,
-	0x4e, 0x43, 0x4f, 0x44, 0x49, 0x4e, 0x47, 0x10, 0x00, 0x12, 0x0a, 0x0a, 0x06, 0x42, 0x41, 0x53,
-	0x45, 0x36, 0x34, 0x10, 0x01, 0x12, 0x09, 0x0a, 0x05, 0x42, 0x59, 0x54, 0x45, 0x53, 0x10, 0x02,
-	0x32, 0xb4, 0x08, 0x0a, 0x11, 0x50, 0x6c, 0x61, 0x79, 0x67, 0x72, 0x6f, 0x75, 0x6e, 0x64, 0x53,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x63, 0x0a, 0x0a, 0x4e, 0x65, 0x77, 0x53, 0x61, 0x6e,
-	0x64, 0x62, 0x6f, 0x78, 0x12, 0x29, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
-	0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4e, 0x65,
-	0x77, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x2a, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e,
-	0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4e, 0x65, 0x77, 0x53, 0x61, 0x6e, 0x64,
-	0x62, 0x6f, 0x78, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6c, 0x0a, 0x0d, 0x4c,
-	0x69, 0x73, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x12, 0x2c, 0x2e, 0x73,
-	0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70,
-	0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f,
-	0x78, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2d, 0x2e, 0x73, 0x6f, 0x75,
-	0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63,
-	0x6f, 0x72, 0x65, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65,
-	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x5d, 0x0a, 0x08, 0x53, 0x65, 0x74,
-	0x53, 0x74, 0x61, 0x74, 0x65, 0x12, 0x27, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65,
-	0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53,
-	0x65, 0x74, 0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x28,
+	0x61, 0x22, 0xba, 0x01, 0x0a, 0x13, 0x45, 0x78, 0x70, 0x6c, 0x61, 0x69, 0x6e, 0x43, 0x68, 0x65,
+	0x63, 0x6b, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x68, 0x61, 0x6e,
+	0x64, 0x6c, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c,
+	0x65, 0x12, 0x36, 0x0a, 0x06, 0x6f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x1e, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
+	0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4f, 0x62, 0x6a, 0x65, 0x63,
+	0x74, 0x52, 0x06, 0x6f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x12, 0x1e, 0x0a, 0x0a, 0x70, 0x65, 0x72,
+	0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x70,
+	0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x33, 0x0a, 0x05, 0x61, 0x63, 0x74,
+	0x6f, 0x72, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63,
+	0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72,
+	0x65, 0x2e, 0x41, 0x63, 0x74, 0x6f, 0x72, 0x52, 0x05, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x22, 0x59,
+	0x0a, 0x14, 0x45, 0x78, 0x70, 0x6c, 0x61, 0x69, 0x6e, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1e, 0x0a, 0x0a, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72,
+	0x69, 0x7a, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0a, 0x61, 0x75, 0x74, 0x68,
+	0x6f, 0x72, 0x69, 0x7a, 0x65, 0x64, 0x12, 0x21, 0x0a, 0x0c, 0x65, 0x78, 0x70, 0x6c, 0x61, 0x69,
+	0x6e, 0x5f, 0x74, 0x72, 0x65, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x65, 0x78,
+	0x70, 0x6c, 0x61, 0x69, 0x6e, 0x54, 0x72, 0x65, 0x65, 0x2a, 0x44, 0x0a, 0x15, 0x53, 0x65, 0x72,
+	0x69, 0x61, 0x6c, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x45, 0x6e, 0x63, 0x6f, 0x64, 0x69,
+	0x6e, 0x67, 0x12, 0x14, 0x0a, 0x10, 0x55, 0x4e, 0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x5f, 0x45, 0x4e,
+	0x43, 0x4f, 0x44, 0x49, 0x4e, 0x47, 0x10, 0x00, 0x12, 0x0a, 0x0a, 0x06, 0x42, 0x41, 0x53, 0x45,
+	0x36, 0x34, 0x10, 0x01, 0x12, 0x09, 0x0a, 0x05, 0x42, 0x59, 0x54, 0x45, 0x53, 0x10, 0x02, 0x32,
+	0xc6, 0x08, 0x0a, 0x11, 0x50, 0x6c, 0x61, 0x79, 0x67, 0x72, 0x6f, 0x75, 0x6e, 0x64, 0x53, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x63, 0x0a, 0x0a, 0x4e, 0x65, 0x77, 0x53, 0x61, 0x6e, 0x64,
+	0x62, 0x6f, 0x78, 0x12, 0x29, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77,
+	0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4e, 0x65, 0x77,
+	0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2a,
 	0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61,
-	0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x65, 0x74, 0x53, 0x74, 0x61, 0x74, 0x65,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x78, 0x0a, 0x11, 0x52, 0x65, 0x73, 0x74,
-	0x6f, 0x72, 0x65, 0x53, 0x63, 0x72, 0x61, 0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x12, 0x30, 0x2e,
-	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63,
-	0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x53, 0x63,
-	0x72, 0x61, 0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x31, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e,
-	0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65,
-	0x53, 0x63, 0x72, 0x61, 0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x12, 0x69, 0x0a, 0x0c, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67,
-	0x75, 0x65, 0x12, 0x2b, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f,
-	0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x43,
-	0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x75, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x2c, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e,
-	0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x61,
-	0x6c, 0x6f, 0x67, 0x75, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x63, 0x0a,
-	0x0a, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x12, 0x29, 0x2e, 0x73, 0x6f,
+	0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4e, 0x65, 0x77, 0x53, 0x61, 0x6e, 0x64, 0x62,
+	0x6f, 0x78, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6c, 0x0a, 0x0d, 0x4c, 0x69,
+	0x73, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x12, 0x2c, 0x2e, 0x73, 0x6f,
 	0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f,
-	0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2a, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e,
-	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e,
-	0x47, 0x65, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x12, 0x6f, 0x0a, 0x0e, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x54, 0x68, 0x65, 0x6f,
-	0x72, 0x65, 0x6d, 0x73, 0x12, 0x2d, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
-	0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x56, 0x65,
-	0x72, 0x69, 0x66, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x1a, 0x2e, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77,
-	0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x56, 0x65, 0x72,
-	0x69, 0x66, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x12, 0x5c, 0x0a, 0x08, 0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x12,
-	0x27, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e,
-	0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74,
-	0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x27, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63,
-	0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72,
-	0x65, 0x2e, 0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x12, 0x7b, 0x0a, 0x12, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x53, 0x61,
-	0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x12, 0x31, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
-	0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65,
-	0x2e, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f,
-	0x78, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x32, 0x2e, 0x73, 0x6f, 0x75,
+	0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78,
+	0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2d, 0x2e, 0x73, 0x6f, 0x75, 0x72,
+	0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f,
+	0x72, 0x65, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65, 0x73,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x5d, 0x0a, 0x08, 0x53, 0x65, 0x74, 0x53,
+	0x74, 0x61, 0x74, 0x65, 0x12, 0x27, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
+	0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x65,
+	0x74, 0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x28, 0x2e,
+	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63,
+	0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x65, 0x74, 0x53, 0x74, 0x61, 0x74, 0x65, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x78, 0x0a, 0x11, 0x52, 0x65, 0x73, 0x74, 0x6f,
+	0x72, 0x65, 0x53, 0x63, 0x72, 0x61, 0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x12, 0x30, 0x2e, 0x73,
+	0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70,
+	0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x53, 0x63, 0x72,
+	0x61, 0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x31,
+	0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61,
+	0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x53,
+	0x63, 0x72, 0x61, 0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x12, 0x69, 0x0a, 0x0c, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x75,
+	0x65, 0x12, 0x2b, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
+	0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x61,
+	0x74, 0x61, 0x6c, 0x6f, 0x67, 0x75, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2c,
+	0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61,
+	0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c,
+	0x6f, 0x67, 0x75, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x63, 0x0a, 0x0a,
+	0x47, 0x65, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x12, 0x29, 0x2e, 0x73, 0x6f, 0x75,
 	0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63,
-	0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x53, 0x61, 0x6e,
-	0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x57,
-	0x0a, 0x06, 0x45, 0x78, 0x70, 0x61, 0x6e, 0x64, 0x12, 0x25, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63,
-	0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72,
-	0x65, 0x2e, 0x45, 0x78, 0x70, 0x61, 0x6e, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x26, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e,
-	0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x45, 0x78, 0x70, 0x61, 0x6e, 0x64, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x2d, 0x5a, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75,
-	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77,
-	0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x70, 0x6b, 0x67,
-	0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2a, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65,
+	0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47,
+	0x65, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x12, 0x6f, 0x0a, 0x0e, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72,
+	0x65, 0x6d, 0x73, 0x12, 0x2d, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77,
+	0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x56, 0x65, 0x72,
+	0x69, 0x66, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x2e, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f,
+	0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x56, 0x65, 0x72, 0x69,
+	0x66, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x12, 0x5c, 0x0a, 0x08, 0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x12, 0x27,
+	0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61,
+	0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x27, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
+	0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65,
+	0x2e, 0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x7b, 0x0a, 0x12, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x53, 0x61, 0x6e,
+	0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x12, 0x31, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e,
+	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e,
+	0x47, 0x65, 0x74, 0x53, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78,
+	0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x32, 0x2e, 0x73, 0x6f, 0x75, 0x72,
+	0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f,
+	0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x53, 0x61, 0x6e, 0x64,
+	0x62, 0x6f, 0x78, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x69, 0x0a,
+	0x0c, 0x45, 0x78, 0x70, 0x6c, 0x61, 0x69, 0x6e, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x12, 0x2b, 0x2e,
+	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63,
+	0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x45, 0x78, 0x70, 0x6c, 0x61, 0x69, 0x6e, 0x43, 0x68,
+	0x65, 0x63, 0x6b, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2c, 0x2e, 0x73, 0x6f, 0x75,
+	0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63,
+	0x6f, 0x72, 0x65, 0x2e, 0x45, 0x78, 0x70, 0x6c, 0x61, 0x69, 0x6e, 0x43, 0x68, 0x65, 0x63, 0x6b,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x2d, 0x5a, 0x2b, 0x67, 0x69, 0x74, 0x68,
+	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
+	0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x70, 0x6b,
+	0x67, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -12344,8 +12500,8 @@ var file_sourcenetwork_acp_core_playground_proto_goTypes = []interface{}{
 	(*SetSerializedStateResponse)(nil),   // 20: sourcenetwork.acp_core.SetSerializedStateResponse
 	(*GetSerializedStateRequest)(nil),    // 21: sourcenetwork.acp_core.GetSerializedStateRequest
 	(*GetSerializedStateResponse)(nil),   // 22: sourcenetwork.acp_core.GetSerializedStateResponse
-	(*ExpandRequest)(nil),                // 23: sourcenetwork.acp_core.ExpandRequest
-	(*ExpandResponse)(nil),               // 24: sourcenetwork.acp_core.ExpandResponse
+	(*ExplainCheckRequest)(nil),          // 23: sourcenetwork.acp_core.ExplainCheckRequest
+	(*ExplainCheckResponse)(nil),         // 24: sourcenetwork.acp_core.ExplainCheckResponse
 	(*SandboxRecord)(nil),                // 25: sourcenetwork.acp_core.SandboxRecord
 	(*SandboxData)(nil),                  // 26: sourcenetwork.acp_core.SandboxData
 	(*SandboxDataErrors)(nil),            // 27: sourcenetwork.acp_core.SandboxDataErrors
@@ -12353,6 +12509,7 @@ var file_sourcenetwork_acp_core_playground_proto_goTypes = []interface{}{
 	(*AnnotatedPolicyTheoremResult)(nil), // 29: sourcenetwork.acp_core.AnnotatedPolicyTheoremResult
 	(*SandboxTemplate)(nil),              // 30: sourcenetwork.acp_core.SandboxTemplate
 	(*Object)(nil),                       // 31: sourcenetwork.acp_core.Object
+	(*Actor)(nil),                        // 32: sourcenetwork.acp_core.Actor
 }
 var file_sourcenetwork_acp_core_playground_proto_depIdxs = []int32{
 	25, // 0: sourcenetwork.acp_core.NewSandboxResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
@@ -12373,32 +12530,33 @@ var file_sourcenetwork_acp_core_playground_proto_depIdxs = []int32{
 	27, // 15: sourcenetwork.acp_core.SetSerializedStateResponse.errors:type_name -> sourcenetwork.acp_core.SandboxDataErrors
 	25, // 16: sourcenetwork.acp_core.SetSerializedStateResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
 	0,  // 17: sourcenetwork.acp_core.GetSerializedStateRequest.encoding:type_name -> sourcenetwork.acp_core.SerializationEncoding
-	31, // 18: sourcenetwork.acp_core.ExpandRequest.object:type_name -> sourcenetwork.acp_core.Object
-	1,  // 19: sourcenetwork.acp_core.PlaygroundService.NewSandbox:input_type -> sourcenetwork.acp_core.NewSandboxRequest
-	9,  // 20: sourcenetwork.acp_core.PlaygroundService.ListSandboxes:input_type -> sourcenetwork.acp_core.ListSandboxesRequest
-	3,  // 21: sourcenetwork.acp_core.PlaygroundService.SetState:input_type -> sourcenetwork.acp_core.SetStateRequest
-	11, // 22: sourcenetwork.acp_core.PlaygroundService.RestoreScratchpad:input_type -> sourcenetwork.acp_core.RestoreScratchpadRequest
-	5,  // 23: sourcenetwork.acp_core.PlaygroundService.GetCatalogue:input_type -> sourcenetwork.acp_core.GetCatalogueRequest
-	15, // 24: sourcenetwork.acp_core.PlaygroundService.GetSandbox:input_type -> sourcenetwork.acp_core.GetSandboxRequest
-	7,  // 25: sourcenetwork.acp_core.PlaygroundService.VerifyTheorems:input_type -> sourcenetwork.acp_core.VerifyTheoremsRequest
-	13, // 26: sourcenetwork.acp_core.PlaygroundService.Simulate:input_type -> sourcenetwork.acp_core.SimulateRequest
-	17, // 27: sourcenetwork.acp_core.PlaygroundService.GetSampleSandboxes:input_type -> sourcenetwork.acp_core.GetSampleSandboxesRequest
-	23, // 28: sourcenetwork.acp_core.PlaygroundService.Expand:input_type -> sourcenetwork.acp_core.ExpandRequest
-	2,  // 29: sourcenetwork.acp_core.PlaygroundService.NewSandbox:output_type -> sourcenetwork.acp_core.NewSandboxResponse
-	10, // 30: sourcenetwork.acp_core.PlaygroundService.ListSandboxes:output_type -> sourcenetwork.acp_core.ListSandboxesResponse
-	4,  // 31: sourcenetwork.acp_core.PlaygroundService.SetState:output_type -> sourcenetwork.acp_core.SetStateResponse
-	12, // 32: sourcenetwork.acp_core.PlaygroundService.RestoreScratchpad:output_type -> sourcenetwork.acp_core.RestoreScratchpadResponse
-	6,  // 33: sourcenetwork.acp_core.PlaygroundService.GetCatalogue:output_type -> sourcenetwork.acp_core.GetCatalogueResponse
-	16, // 34: sourcenetwork.acp_core.PlaygroundService.GetSandbox:output_type -> sourcenetwork.acp_core.GetSandboxResponse
-	8,  // 35: sourcenetwork.acp_core.PlaygroundService.VerifyTheorems:output_type -> sourcenetwork.acp_core.VerifyTheoremsResponse
-	14, // 36: sourcenetwork.acp_core.PlaygroundService.Simulate:output_type -> sourcenetwork.acp_core.SimulateReponse
-	18, // 37: sourcenetwork.acp_core.PlaygroundService.GetSampleSandboxes:output_type -> sourcenetwork.acp_core.GetSampleSandboxesResponse
-	24, // 38: sourcenetwork.acp_core.PlaygroundService.Expand:output_type -> sourcenetwork.acp_core.ExpandResponse
-	29, // [29:39] is the sub-list for method output_type
-	19, // [19:29] is the sub-list for method input_type
-	19, // [19:19] is the sub-list for extension type_name
-	19, // [19:19] is the sub-list for extension extendee
-	0,  // [0:19] is the sub-list for field type_name
+	31, // 18: sourcenetwork.acp_core.ExplainCheckRequest.object:type_name -> sourcenetwork.acp_core.Object
+	32, // 19: sourcenetwork.acp_core.ExplainCheckRequest.actor:type_name -> sourcenetwork.acp_core.Actor
+	1,  // 20: sourcenetwork.acp_core.PlaygroundService.NewSandbox:input_type -> sourcenetwork.acp_core.NewSandboxRequest
+	9,  // 21: sourcenetwork.acp_core.PlaygroundService.ListSandboxes:input_type -> sourcenetwork.acp_core.ListSandboxesRequest
+	3,  // 22: sourcenetwork.acp_core.PlaygroundService.SetState:input_type -> sourcenetwork.acp_core.SetStateRequest
+	11, // 23: sourcenetwork.acp_core.PlaygroundService.RestoreScratchpad:input_type -> sourcenetwork.acp_core.RestoreScratchpadRequest
+	5,  // 24: sourcenetwork.acp_core.PlaygroundService.GetCatalogue:input_type -> sourcenetwork.acp_core.GetCatalogueRequest
+	15, // 25: sourcenetwork.acp_core.PlaygroundService.GetSandbox:input_type -> sourcenetwork.acp_core.GetSandboxRequest
+	7,  // 26: sourcenetwork.acp_core.PlaygroundService.VerifyTheorems:input_type -> sourcenetwork.acp_core.VerifyTheoremsRequest
+	13, // 27: sourcenetwork.acp_core.PlaygroundService.Simulate:input_type -> sourcenetwork.acp_core.SimulateRequest
+	17, // 28: sourcenetwork.acp_core.PlaygroundService.GetSampleSandboxes:input_type -> sourcenetwork.acp_core.GetSampleSandboxesRequest
+	23, // 29: sourcenetwork.acp_core.PlaygroundService.ExplainCheck:input_type -> sourcenetwork.acp_core.ExplainCheckRequest
+	2,  // 30: sourcenetwork.acp_core.PlaygroundService.NewSandbox:output_type -> sourcenetwork.acp_core.NewSandboxResponse
+	10, // 31: sourcenetwork.acp_core.PlaygroundService.ListSandboxes:output_type -> sourcenetwork.acp_core.ListSandboxesResponse
+	4,  // 32: sourcenetwork.acp_core.PlaygroundService.SetState:output_type -> sourcenetwork.acp_core.SetStateResponse
+	12, // 33: sourcenetwork.acp_core.PlaygroundService.RestoreScratchpad:output_type -> sourcenetwork.acp_core.RestoreScratchpadResponse
+	6,  // 34: sourcenetwork.acp_core.PlaygroundService.GetCatalogue:output_type -> sourcenetwork.acp_core.GetCatalogueResponse
+	16, // 35: sourcenetwork.acp_core.PlaygroundService.GetSandbox:output_type -> sourcenetwork.acp_core.GetSandboxResponse
+	8,  // 36: sourcenetwork.acp_core.PlaygroundService.VerifyTheorems:output_type -> sourcenetwork.acp_core.VerifyTheoremsResponse
+	14, // 37: sourcenetwork.acp_core.PlaygroundService.Simulate:output_type -> sourcenetwork.acp_core.SimulateReponse
+	18, // 38: sourcenetwork.acp_core.PlaygroundService.GetSampleSandboxes:output_type -> sourcenetwork.acp_core.GetSampleSandboxesResponse
+	24, // 39: sourcenetwork.acp_core.PlaygroundService.ExplainCheck:output_type -> sourcenetwork.acp_core.ExplainCheckResponse
+	30, // [30:40] is the sub-list for method output_type
+	20, // [20:30] is the sub-list for method input_type
+	20, // [20:20] is the sub-list for extension type_name
+	20, // [20:20] is the sub-list for extension extendee
+	0,  // [0:20] is the sub-list for field type_name
 }
 
 func init() { file_sourcenetwork_acp_core_playground_proto_init() }
@@ -12676,7 +12834,7 @@ func file_sourcenetwork_acp_core_playground_proto_init() {
 			}
 		}
 		file_sourcenetwork_acp_core_playground_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ExpandRequest); i {
+			switch v := v.(*ExplainCheckRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -12688,7 +12846,7 @@ func file_sourcenetwork_acp_core_playground_proto_init() {
 			}
 		}
 		file_sourcenetwork_acp_core_playground_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ExpandResponse); i {
+			switch v := v.(*ExplainCheckResponse); i {
 			case 0:
 				return &v.state
 			case 1:

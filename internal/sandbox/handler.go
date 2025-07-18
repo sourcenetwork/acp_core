@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/sourcenetwork/acp_core/internal/authz_db"
 	"github.com/sourcenetwork/acp_core/internal/policy"
 	"github.com/sourcenetwork/acp_core/internal/raccoon"
 	"github.com/sourcenetwork/acp_core/internal/relationship"
@@ -491,37 +490,43 @@ func HandleGetSandboxSamples(ctx context.Context, _ runtime.RuntimeManager, req 
 	}, nil
 }
 
-func HandleExpand(ctx context.Context, manager runtime.RuntimeManager, req *types.ExpandRequest) (*types.ExpandResponse, error) {
+func HandleExplainCheck(ctx context.Context, manager runtime.RuntimeManager, req *types.ExplainCheckRequest) (*types.ExplainCheckResponse, error) {
 	repository := NewSandboxRepository(manager.GetKVStore())
 
 	record, err := repository.GetSandbox(ctx, req.Handle)
 	if err != nil {
-		return nil, newExpandError(err, req.Handle)
+		return nil, newExplainCheckError(err, req.Handle)
 	}
 	if record == nil {
-		return nil, newExpandError(errors.Wrap("sandbox not found", errors.ErrorType_NOT_FOUND), req.Handle)
+		return nil, newExplainCheckError(errors.Wrap("sandbox not found", errors.ErrorType_NOT_FOUND), req.Handle)
 	}
 	if !record.Initialized {
 		err := errors.Wrap("uninitialized sandbox cannot execute theorems",
 			errors.ErrorType_OPERATION_FORBIDDEN)
-		return nil, newExpandError(err, req.Handle)
+		return nil, newExplainCheckError(err, req.Handle)
 	}
 
 	manager, err = GetManagerForSandbox(manager, req.Handle)
 	if err != nil {
-		return nil, newExpandError(err, req.Handle)
+		return nil, newExplainCheckError(err, req.Handle)
 	}
 
 	op := &types.Operation{
 		Object:     req.Object,
-		Permission: req.Relation,
-	}
-	result, err := authz_db.Expand(ctx, manager, record.Ctx.Policy.Id, op)
-	if err != nil {
-		return nil, newExpandError(err, req.Handle)
+		Permission: req.Permission,
 	}
 
-	return &types.ExpandResponse{
-		ExpandTreeJson: result,
+	engine, err := zanzi.NewZanzi(manager.GetKVStore(), manager.GetLogger())
+	if err != nil {
+		return nil, newExplainCheckError(err, req.Handle)
+	}
+	authorized, tree, err := engine.ExplainCheck(ctx, record.Ctx.Policy, op, req.Actor)
+	if err != nil {
+		return nil, newExplainCheckError(err, req.Handle)
+	}
+
+	return &types.ExplainCheckResponse{
+		Authorized:  authorized,
+		ExplainTree: tree,
 	}, nil
 }

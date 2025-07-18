@@ -57,6 +57,6 @@ func (s *playgroundService) GetSampleSandboxes(ctx context.Context, req *types.G
 	return sandbox.HandleGetSandboxSamples(ctx, s.runtime, req)
 }
 
-func (s *playgroundService) Expand(ctx context.Context, req *types.ExpandRequest) (*types.ExpandResponse, error) {
-	return sandbox.HandleExpand(ctx, s.runtime, req)
+func (s *playgroundService) ExplainCheck(ctx context.Context, req *types.ExplainCheckRequest) (*types.ExplainCheckResponse, error) {
+	return sandbox.HandleExplainCheck(ctx, s.runtime, req)
 }

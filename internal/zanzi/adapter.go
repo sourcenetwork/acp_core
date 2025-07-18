@@ -369,7 +369,7 @@ func (z *Adapter) Expand(ctx context.Context, policy *types.Policy, object *type
 				},
 			},
 		},
-		Format: api.ExplainFormat_JSON,
+		Format: api.ExplainFormat_DOT,
 	}
 	response, err := service.Expand(ctx, req)
 	err = mapErr(err)
@@ -378,4 +378,30 @@ func (z *Adapter) Expand(ctx context.Context, policy *types.Policy, object *type
 	}
 
 	return response.GoalTree, nil
+}
+
+// ExplainCheck verifies whether an Acccess Request is allowed within a certain Policy
+func (z *Adapter) ExplainCheck(ctx context.Context, policy *types.Policy, operation *types.Operation, actor *types.Actor) (bool, string, error) {
+	service := z.zanzi.GetRelationGraphService()
+	mapper := newRelationshipMapper(policy.ActorResource.Name)
+
+	req := &api.ExplainCheckRequest{
+		PolicyId: policy.Id,
+		AccessRequest: &domain.AccessRequest{
+			Object:   mapper.MapObject(operation.Object),
+			Relation: operation.Permission,
+			Subject: &domain.Entity{
+				Resource: policy.ActorResource.Name,
+				Id:       actor.Id,
+			},
+		},
+		Format: api.ExplainFormat_DOT,
+	}
+	response, err := service.ExplainCheck(ctx, req)
+	err = mapErr(err)
+	if err != nil {
+		return false, "", fmt.Errorf("ExplainCheck: %w", err)
+	}
+
+	return response.Authorized, response.GoalTree, nil
 }
