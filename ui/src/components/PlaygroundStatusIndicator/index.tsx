@@ -1,19 +1,19 @@
 // import { WasmStatus } from "@/lib/wasm";
 
-import { PlaygroundState } from "@/lib/playgroundStore";
+import { PlaygroundState } from "@/stores/playgroundStore";
 import { cn } from "@/utils/classnames";
 import { CircleCheck, CircleX, LoaderCircle } from "lucide-react";
 import { ReactNode } from "react";
 
-interface StatusIndicatorProps {
+interface PlaygroundStatusIndicatorProps {
     status: PlaygroundState['playgroundStatus']
 }
 
-const StatusIndicator = ({ status }: StatusIndicatorProps) => {
+const PlaygroundStatusIndicator = ({ status }: PlaygroundStatusIndicatorProps) => {
 
     const statuses: Record<PlaygroundState['playgroundStatus'], { label: string, color: string, icon: ReactNode } | null> = {
         'ready': {
-            color: "text-green-500",
+            color: "text-src-primary",
             label: "Loaded",
             icon: <CircleCheck className="ml-1 inline-block w-4" />
         },
@@ -42,5 +42,5 @@ const StatusIndicator = ({ status }: StatusIndicatorProps) => {
     </div>
 }
 
-export default StatusIndicator;
+export default PlaygroundStatusIndicator;
 

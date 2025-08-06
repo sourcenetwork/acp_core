@@ -1,18 +1,23 @@
-import { usePlaygroundStore } from "@/lib/playgroundStore";
+import { useSandbox } from "@/hooks/useSandbox";
+import { useUIActions } from "@/stores/layoutStore";
+import { usePlaygroundStore } from "@/stores/playgroundStore";
 import { SandboxTemplate } from "@acp/sandbox";
+import { Box } from "lucide-react";
 import { useState } from "react";
 import DialogLoadTemplate from "../DialogLoadTemplate";
 import HeaderActions from "../HeaderActions";
-import StatusIndicator from "../StatusIndicator";
+import PlaygroundStatusIndicator from "../PlaygroundStatusIndicator";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuList, NavigationMenuTrigger } from "../ui/navigation-menu";
 
 const Header = () => {
-    const [playgroundStatus, samples, loadTemplate, newSandbox] = usePlaygroundStore((state) => [
-        state.playgroundStatus,
-        state.sandboxTemplates,
-        state.loadTemplate,
-        state.newSandbox
-    ]);
+    const playgroundStatus = usePlaygroundStore((state) => state.playgroundStatus);
+    const samples = usePlaygroundStore((state) => state.sandboxTemplates);
+    const loadTemplate = usePlaygroundStore((state) => state.loadTemplate);
+    const newSandbox = usePlaygroundStore((state) => state.newSandbox);
+
+    const sandbox = useSandbox();
+
+    const { setSandboxMenuOpen } = useUIActions();
 
     const [selectedSample, setSelectedSample] = useState<SandboxTemplate | null>(null);
     const [showConfirmation, setShowConfirmation] = useState(false);
@@ -22,7 +27,11 @@ const Header = () => {
         setShowConfirmation(true);
     }
 
-    return <div className="flex items-center justify-between px-4 py-2 border-b md:border-b-0">
+    const handleSandboxClick = () => {
+        setSandboxMenuOpen(true);
+    }
+
+    return <div className="flex items-center justify-between px-4 py-2 border-b border-divider relative">
 
         <DialogLoadTemplate
             title={`Load Policy - ${selectedSample?.name ?? ""}`}
@@ -36,14 +45,21 @@ const Header = () => {
             }} />
 
         <div className="flex items-center">
-            <span className="opacity-40 mr-3">ACP Playground</span>
-            <span className="hidden md:inline-block w-[30px] h-[1px] bg-border align-middle mx-4"></span>
-            <div>
+            <span className="opacity-60 mr-3 text-sm">ACP Playground</span>
+            <span className="hidden md:inline-block w-[30px] h-px bg-border align-middle mx-4"></span>
+            <div className="flex items-center gap-x-2">
+                {sandbox &&
+                    <div className="text-xs text-muted-foreground hover:text-accent-foreground items-center gap-x-2 hidden md:flex border-r border-divider pr-6 cursor-pointer" onClick={handleSandboxClick}>
+                        <Box size={16} />
+                        <span>{sandbox?.name}</span>
+                    </div>
+                }
+
                 <NavigationMenu className="inline-block" delayDuration={0} >
                     <NavigationMenuList>
                         <NavigationMenuItem>
                             <NavigationMenuTrigger disabled={playgroundStatus !== 'ready'} className="text-xs">Samples</NavigationMenuTrigger>
-                            <NavigationMenuContent>
+                            <NavigationMenuContent >
                                 <ul className="p-3 w-[300px] md:w-[400px]">
                                     {samples?.map((sample) => (
                                         <button key={sample.name} className="p-3 rounded-md text-left hover:bg-accent hover:text-accent-foreground w-full" onClick={handleSampleClick(sample)}>
@@ -60,7 +76,7 @@ const Header = () => {
         </div>
 
         <div className="self-start items-center gap-x-1 flex">
-            <StatusIndicator status={playgroundStatus} />
+            <PlaygroundStatusIndicator status={playgroundStatus} />
             <HeaderActions />
         </div>
     </div>

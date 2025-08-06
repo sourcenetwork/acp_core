@@ -1,4 +1,4 @@
-import { usePlaygroundStore } from "./playgroundStore";
+import { usePlaygroundStore } from "../stores/playgroundStore";
 
 export const getLastActiveSandbox = () => {
   const { findSandboxById, lastActiveId } = usePlaygroundStore.getState();

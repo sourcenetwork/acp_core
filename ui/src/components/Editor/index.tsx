@@ -1,8 +1,9 @@
 import { useDebounce } from "@/hooks/useDebounce";
 import { useSandbox } from "@/hooks/useSandbox";
 import { definePolicyTheoremTheme, POLICY_THEOREM_LANGUAGE_ID, registerPolicyTheoremLanguage } from "@/lib/languagePolicyTheorem";
-import { usePlaygroundStore } from "@/lib/playgroundStore";
 import { useTheme } from "@/providers/ThemeProvider/useTheme";
+import { useUIActions } from "@/stores/layoutStore";
+import { usePlaygroundStore } from "@/stores/playgroundStore";
 import { mapLocatedMessageMarkers } from "@/utils/mapLocatedMessageMarkers";
 import { mapTheoremResultMarkers } from "@/utils/mapTheoremResultMarkers";
 import { SandboxData, SandboxDataErrors } from "@acp/sandbox";
@@ -14,7 +15,7 @@ interface BaseEditorProps {
     sandboxDataType: keyof SandboxData,
 }
 
-enum SandboxType {
+export enum SandboxType {
     POLICY_DEFINITION = "policyDefinition",
     RELATIONSHIPS = "relationships",
     POLICY_THEOREM = "policyTheorem"
@@ -51,23 +52,15 @@ const BaseEditor = (props: EditorProps & BaseEditorProps) => {
     const { theme } = useTheme();
     const activeSandbox = useSandbox();
 
-    const {
-        dataErrors,
-        annotatedPolicyTheoremResult,
-        updateSandboxState,
-        verifyTheorems,
-        sandboxStateStatus,
-        setEditorSelection,
-        editorSelection
-    } = usePlaygroundStore((state) => ({
-        dataErrors: state.setStateDataErrors?.[dataType.errorKey],
-        annotatedPolicyTheoremResult: state.verifyTheoremsResult,
-        updateSandboxState: state.setPlaygroundState,
-        verifyTheorems: state.verifyTheorems,
-        sandboxStateStatus: state.sandboxStateStatus,
-        setEditorSelection: state.setEditorSelection,
-        editorSelection: state.editorSelections[sandboxDataType]
-    }));
+    const dataErrors = usePlaygroundStore((state) => state.setStateDataErrors?.[dataType.errorKey]);
+    const annotatedPolicyTheoremResult = usePlaygroundStore((state) => state.verifyTheoremsResult);
+    const updateSandboxState = usePlaygroundStore((state) => state.setPlaygroundState);
+    const verifyTheorems = usePlaygroundStore((state) => state.verifyTheorems);
+    const sandboxStateStatus = usePlaygroundStore((state) => state.sandboxStateStatus);
+    const setEditorSelection = usePlaygroundStore((state) => state.setEditorSelection);
+    const editorSelection = usePlaygroundStore((state) => state.editorSelections[sandboxDataType]);
+
+    const { setFocusedEditor } = useUIActions();
 
     const editorData = activeSandbox?.data?.[sandboxDataType];
     const isTheorumEditor = sandboxDataType === SandboxType.POLICY_THEOREM;
@@ -130,7 +123,7 @@ const BaseEditor = (props: EditorProps & BaseEditorProps) => {
 
     const handleEditorChange: OnChange = useDebounce((value) => {
         void updateSandboxState({ [sandboxDataType]: value });
-        if (isTheorumEditor) void verifyTheorems();
+        void verifyTheorems();
     }, 500);
 
     const handleEditorMounted: OnMount = (editor) => {
@@ -141,7 +134,23 @@ const BaseEditor = (props: EditorProps & BaseEditorProps) => {
         if (editorSelection) {
             editor.setSelection(editorSelection);
             editor.focus();
+            setFocusedEditor(sandboxDataType);
         }
+
+        // Track focus events
+        const onFocusDisposable = editor.onDidFocusEditorWidget(() => {
+            setFocusedEditor(sandboxDataType);
+        });
+
+        const onBlurDisposable = editor.onDidBlurEditorWidget(() => {
+            // setFocusedEditor(null);
+        });
+
+        // Store disposables for cleanup
+        editorRef.current.onDidDispose(() => {
+            onFocusDisposable.dispose();
+            onBlurDisposable.dispose();
+        });
     }
 
     const handleBeforeMount = (monaco: Monaco) => {
@@ -173,28 +182,28 @@ const BaseEditor = (props: EditorProps & BaseEditorProps) => {
     }, [isEditorMounted, setEditorSelection, sandboxDataType]);
 
     const editorLanguage = dataType.language || 'yaml';
+
+
     const editorTheme = dataType.theme[theme === 'dark' ? 'dark' : 'light'] || 'vs-dark';
 
-    return <div className='h-full'>
-        <div className='py-5 h-full rounded-md overflow-hidden bg-editor border'>
-            <Editor
-                height="100%"
-                defaultLanguage={editorLanguage}
-                defaultValue={editorData}
-                value={editorData}
-                onChange={handleEditorChange}
-                beforeMount={handleBeforeMount}
-                onMount={handleEditorMounted}
-                theme={editorTheme}
-                options={{
-                    automaticLayout: true,
-                    fixedOverflowWidgets: true,
-                    glyphMargin: isTheorumEditor,
-                    tabSize: 2,
-                    ...props?.options
-                }}
-                {...props} />
-        </div>
+    return <div className='h-full py-5 rounded-md overflow-hidden bg-editor border'>
+        <Editor
+            height="100%"
+            defaultLanguage={editorLanguage}
+            defaultValue={editorData}
+            value={editorData}
+            onChange={handleEditorChange}
+            beforeMount={handleBeforeMount}
+            onMount={handleEditorMounted}
+            theme={editorTheme}
+            options={{
+                automaticLayout: true,
+                fixedOverflowWidgets: true,
+                glyphMargin: isTheorumEditor,
+                tabSize: 2,
+                ...props?.options
+            }}
+            {...props} />
     </div>
 }
 

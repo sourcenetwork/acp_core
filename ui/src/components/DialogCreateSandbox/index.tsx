@@ -1,7 +1,6 @@
-import { useSandbox } from "@/hooks/useSandbox";
+
 import { usePlaygroundStore } from "@/stores/playgroundStore";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { FormInputField } from "../FormInput";
@@ -9,48 +8,41 @@ import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Form } from "../ui/form";
 
-interface DialogEditSandboxProps {
-    sandboxId: string | null,
+interface DialogCreateSandboxProps {
     open: boolean,
     setOpen: (state: boolean) => unknown
 }
 
-const EditSandboxFormSchema = z.object({
+const CreateSandboxFormSchema = z.object({
     name: z.string().min(1),
     description: z.string()
 });
 
-type EditSandboxFormData = z.infer<typeof EditSandboxFormSchema>;
+type CreateSandboxFormData = z.infer<typeof CreateSandboxFormSchema>;
 
-const DialogEditSandbox = ({ sandboxId, open, setOpen }: DialogEditSandboxProps) => {
+const DialogCreateSandbox = ({ open, setOpen }: DialogCreateSandboxProps) => {
 
-    const sandbox = useSandbox(sandboxId);
-    const [updateStoredSandbox] = usePlaygroundStore((state) => [state.updateStoredSandbox]);
-    const sandboxData = useMemo(() => ({ name: sandbox?.name ?? "", description: sandbox?.description ?? "", }), [sandbox?.name, sandbox?.description]);
+    const newSandbox = usePlaygroundStore((state) => state.newSandbox);
 
-    const form = useForm<EditSandboxFormData>({
-        resolver: zodResolver(EditSandboxFormSchema),
+    const form = useForm<CreateSandboxFormData>({
+        resolver: zodResolver(CreateSandboxFormSchema),
         defaultValues: {
-            name: sandbox?.name,
-            description: sandbox?.description,
+            name: "New Sandbox",
+            description: "",
         },
     })
 
-    useEffect(() => {
-        form.reset(sandboxData);
-    }, [sandboxId, sandboxData, form]);
-
-    const onSubmit = (data: EditSandboxFormData) => {
-        if (sandboxId) updateStoredSandbox(data, sandboxId);
-        setOpen(false);
+    const onSubmit = (data: CreateSandboxFormData) => {
+        void newSandbox(data);
         form.reset();
+        setOpen(false);
     };
 
-    return <Dialog open={open} defaultOpen={true} onOpenChange={(state) => state === false && setOpen(false)}>
+    return <Dialog open={open} defaultOpen={false} onOpenChange={(state) => state === false && setOpen(false)}>
         <DialogContent className="sm:max-w-md">
             <DialogHeader>
-                <DialogTitle>Edit Sandbox</DialogTitle>
-                <DialogDescription>Update sandbox details</DialogDescription>
+                <DialogTitle>Create Sandbox</DialogTitle>
+                <DialogDescription>Create a new sandbox</DialogDescription>
             </DialogHeader>
             <Form {...form}>
                 <form onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}>
@@ -59,7 +51,7 @@ const DialogEditSandbox = ({ sandboxId, open, setOpen }: DialogEditSandboxProps)
                         <FormInputField name="description" placeholder="Enter Description" control={form.control} />
                     </div>
                     <DialogFooter className="sm:justify-end ">
-                        <Button type="submit" variant="default">Save</Button>
+                        <Button type="submit" variant="default">Create</Button>
                         <Button type="button" variant="secondary" onClick={() => setOpen(false)}>Close</Button>
                     </DialogFooter>
                 </form>
@@ -68,4 +60,4 @@ const DialogEditSandbox = ({ sandboxId, open, setOpen }: DialogEditSandboxProps)
     </Dialog>
 }
 
-export default DialogEditSandbox;
+export default DialogCreateSandbox;

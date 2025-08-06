@@ -1,5 +1,5 @@
-import { PersistedSandboxData, usePlaygroundStore } from "@/lib/playgroundStore";
 import { SHARE_URL } from "@/constants";
+import { PersistedSandboxData, usePlaygroundStore } from "@/stores/playgroundStore";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
@@ -25,11 +25,9 @@ const DialogLoadShare = ({ shareId, open, setOpen }: DialogLoadShareProps) => {
     const [loading, setLoading] = useState(false);
     const [shareJson, setShareJson] = useState<PersistedSandboxData | null>(null);
 
-    const { playgroundStatus, updateActiveSandbox, newSandbox } = usePlaygroundStore((state) => ({
-        playgroundStatus: state.playgroundStatus,
-        updateActiveSandbox: state.updateActiveStoredSandbox,
-        newSandbox: state.newSandbox
-    }));
+    const playgroundStatus = usePlaygroundStore((state) => state.playgroundStatus);
+    const updateActiveSandbox = usePlaygroundStore((state) => state.updateActiveStoredSandbox);
+    const newSandbox = usePlaygroundStore((state) => state.newSandbox);
 
     const isLoading = loading === true || playgroundStatus === 'loading';
 

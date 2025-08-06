@@ -1,11 +1,14 @@
-import { usePlaygroundStore } from "@/lib/playgroundStore";
+import { usePlaygroundStore } from "@/stores/playgroundStore";
 import { SandboxDataErrors } from "@acp/sandbox";
 import OutputMessage from "../OutputMessage";
 import { Badge } from "../ui/badge";
 import { ScrollArea } from "../ui/scroll-area";
 
 const Output = () => {
-    const [dataErrors, setStateError, verifyTheoremsError, playgroundStatus] = usePlaygroundStore((state) => [state.setStateDataErrors, state.setStateError, state.verifyTheoremsError, state.playgroundStatus]);
+    const dataErrors = usePlaygroundStore((state) => state.setStateDataErrors);
+    const setStateError = usePlaygroundStore((state) => state.setStateError);
+    const verifyTheoremsError = usePlaygroundStore((state) => state.verifyTheoremsError);
+    const playgroundStatus = usePlaygroundStore((state) => state.playgroundStatus);
 
     const messageInfo: Record<keyof SandboxDataErrors, { prefix: string, path: string }> = {
         "policyErrors": {
@@ -38,7 +41,7 @@ const Output = () => {
         (setStateError ? 1 : 0) +
         (verifyTheoremsError ? 1 : 0);
 
-    return <div className="py-4 pr-4 h-full flex flex-col">
+    return <div className="py-2 h-full flex flex-col">
         <div className="pb-2 text-sm leading-none font-light items-center flex min-h-8">
             Problems
             {problemCount ? <Badge className="ml-2" variant="outline">{problemCount}</Badge> : null}

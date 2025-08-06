@@ -13,22 +13,68 @@ import {
   persist,
   subscribeWithSelector,
 } from "zustand/middleware";
-import { initialStates } from "./initialStoreState";
 import {
   getActiveSandboxHandle,
   getLastActiveSandbox,
-} from "./playgroundUtils";
+} from "../lib/playgroundStoreUtils";
 
-export const blankSandboxData: SandboxData = {
-  policyDefinition: `name: new-sandbox \n`,
-  policyTheorem: `Authorizations {\n\n}\n\nDelegations {\n}`,
-  relationships: "",
+const initialVerifyTheoremsState: Pick<
+  PlaygroundState,
+  "verifyTheoremsError" | "verifyTheoremsResult" | "verifyTheoremsStatus"
+> = {
+  verifyTheoremsError: undefined,
+  verifyTheoremsResult: undefined,
+  verifyTheoremsStatus: "pending",
 };
 
-export const blankSandboxTemplate = {
-  name: "New Sandbox",
-  description: "",
-  data: blankSandboxData,
+const initalSetStateState: Pick<
+  PlaygroundState,
+  "setStateDataErrors" | "setStateError" | "setStateDataErrorCount"
+> = {
+  setStateDataErrorCount: 0,
+  setStateDataErrors: undefined,
+  setStateError: undefined,
+};
+
+const initialPersistedPlaygroundData: Pick<
+  PlaygroundState,
+  "sandboxes" | "lastActiveId"
+> = {
+  lastActiveId: null,
+  sandboxes: [],
+};
+
+export const initialStates = {
+  persistedPlaygroundData: initialPersistedPlaygroundData,
+  setStateState: initalSetStateState,
+  verifyTheoremsState: initialVerifyTheoremsState,
+};
+
+const formatSandboxName = (text: string): string => {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-") // Replace spaces with hyphens
+    .replace(/[^\w\-]+/g, "") // Remove all non-word chars except hyphens
+    .replace(/\-\-+/g, "-") // Replace multiple hyphens with single hyphen
+    .replace(/^-+/, "") // Trim hyphens from start
+    .replace(/-+$/, ""); // Trim hyphens from end
+};
+
+export const blankSandboxData = (name: string = "new-sandbox"): SandboxData => {
+  return {
+    policyDefinition: `name: ${formatSandboxName(name)} \n`,
+    policyTheorem: `Authorizations {\n\n}\n\nDelegations {\n}`,
+    relationships: "",
+  };
+};
+
+export const blankSandboxTemplate = (name = "New Sandbox") => {
+  return {
+    name,
+    description: "",
+    data: blankSandboxData(name),
+  };
 };
 
 export interface PersistedSandboxData {
@@ -146,7 +192,7 @@ export const usePlaygroundStore = create<PlaygroundState>()(
               await newSandbox({
                 name: firstTemplate?.name ?? "New Sandbox",
                 description: firstTemplate?.description ?? "",
-                data: firstTemplate?.data ?? blankSandboxData,
+                data: firstTemplate?.data ?? blankSandboxData(),
               });
             } catch (error) {
               console.error(error);
@@ -176,7 +222,7 @@ export const usePlaygroundStore = create<PlaygroundState>()(
               set(initialStates.setStateState);
 
               const newState = {
-                ...(active?.data ?? blankSandboxData),
+                ...(active?.data ?? blankSandboxData()),
                 ...updates,
               };
 
@@ -237,9 +283,10 @@ export const usePlaygroundStore = create<PlaygroundState>()(
           newSandbox: async (input, setActive = true) => {
             const { setActiveSandbox } = get();
             const sandboxId = uuidv4();
+
             const newSandbox: PersistedSandboxData = {
               id: sandboxId,
-              ...blankSandboxTemplate,
+              ...blankSandboxTemplate(input.name),
               ...input,
             };
 
@@ -257,7 +304,7 @@ export const usePlaygroundStore = create<PlaygroundState>()(
           },
 
           newEmptySandbox: async () => {
-            return await get().newSandbox(blankSandboxTemplate);
+            return await get().newSandbox(blankSandboxTemplate());
           },
 
           deleteStoredSandbox: (id) => {

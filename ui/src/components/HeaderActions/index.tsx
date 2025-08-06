@@ -1,7 +1,7 @@
-import { useToast } from "@/hooks/use-toast";
 import { useSandbox } from "@/hooks/useSandbox";
-import { usePlaygroundStore } from "@/lib/playgroundStore";
+import { useToast } from "@/hooks/useToast";
 import { useTheme } from "@/providers/ThemeProvider/useTheme";
+import { usePlaygroundStore } from "@/stores/playgroundStore";
 import { exportSandboxData, importSandboxData } from "@/utils/sandboxFileUtils";
 import { EllipsisVertical } from "lucide-react";
 import { ComponentProps, ComponentType, useState } from "react";
@@ -13,7 +13,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 const HeaderActions = () => {
     const { theme, setTheme } = useTheme();
     const activeSandbox = useSandbox();
-    const [setState] = usePlaygroundStore((state) => [state.setPlaygroundState]);
+    const setState = usePlaygroundStore((state) => state.setPlaygroundState);
     const [showShareDialog, setShowShareDialog] = useState<boolean>(false);
     const { toast } = useToast()
 

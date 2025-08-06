@@ -1,5 +1,5 @@
 import { useSandbox } from "@/hooks/useSandbox";
-import { PersistedSandboxData } from "@/lib/playgroundStore";
+import { PersistedSandboxData } from "@/stores/playgroundStore";
 import { cn } from "@/utils/classnames";
 import { SHARE_URL } from "@/constants";
 import { CheckIcon, ClipboardIcon } from "lucide-react";

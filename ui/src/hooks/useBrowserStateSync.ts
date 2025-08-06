@@ -1,7 +1,7 @@
 import {
   PersistedSandboxData,
   usePlaygroundStore,
-} from "@/lib/playgroundStore";
+} from "@/stores/playgroundStore";
 import { useEffect, useRef } from "react";
 
 interface useBrowserSandboxSyncOptions {

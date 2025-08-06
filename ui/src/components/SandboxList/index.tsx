@@ -1,4 +1,4 @@
-import { usePlaygroundStore } from "@/lib/playgroundStore";
+import { usePlaygroundStore } from "@/stores/playgroundStore";
 import { cn } from "@/utils/classnames";
 import { Edit2, MoreHorizontal, Trash } from "lucide-react";
 import { MouseEvent, useState } from "react";
@@ -18,12 +18,10 @@ const SandboxList = (props: SandboxListProps) => {
     const [showEditSandbox, setShowEditSandbox] = useState(false);
     const [selectedSandboxId, setSelectedSandboxId] = useState<string | null>(null);
 
-    const [sandboxes, lastActiveId, setActiveSandbox, deleteStoredSandbox] = usePlaygroundStore((state) => [
-        state.sandboxes,
-        state.lastActiveId,
-        state.setActiveSandbox,
-        state.deleteStoredSandbox
-    ]);
+    const sandboxes = usePlaygroundStore((state) => state.sandboxes);
+    const lastActiveId = usePlaygroundStore((state) => state.lastActiveId);
+    const setActiveSandbox = usePlaygroundStore((state) => state.setActiveSandbox);
+    const deleteStoredSandbox = usePlaygroundStore((state) => state.deleteStoredSandbox);
 
     const handleEditSandbox = (sandboxId: string) => (event: MouseEvent) => {
         event.preventDefault();
@@ -54,10 +52,10 @@ const SandboxList = (props: SandboxListProps) => {
             {sandboxes?.map((sandbox) => (
                 <div key={sandbox.id}
                     className={cn(`flex px-2 py-1 group 
-                    border-l-2 border-transparent rounded text-left 
+                    border-l-2 border-transparent text-left 
                     hover:bg-accent hover:text-accent-foreground text-xs transition-colors`,
                         {
-                            "border-green-500 bg-secondary": lastActiveId === sandbox.id,
+                            "border-src-secondary bg-secondary/50": lastActiveId === sandbox.id,
                             "py-3": format === 'expanded'
                         }
                     )}
