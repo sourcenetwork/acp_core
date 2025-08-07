@@ -1,7 +1,7 @@
 import { SecondaryPaneTypes, useDragActions, usePaneActions, usePanes, useUIActions, useUIState } from "@/stores/layoutStore";
 import { cn } from "@/utils/classnames";
 import { DragDropProvider } from "@dnd-kit/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ImperativePanelHandle } from "react-resizable-panels";
 import { useLocation, useNavigate } from "react-router-dom";
 import DialogCreateSandbox from "../DialogCreateSandbox";
@@ -27,7 +27,7 @@ const RootLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
-  const queryParams = new URLSearchParams(location.search);
+  const queryParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const shareId = queryParams.get("share");
 
   // Store states

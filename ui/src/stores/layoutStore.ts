@@ -562,29 +562,24 @@ export const useLayoutStore = create<LayoutStore>()(
 export const usePanes = () => useLayoutStore((state) => state.panes);
 
 export const usePaneActions = () =>
-  useLayoutStore((state) => ({
-    setActiveTab: state.setActiveTab,
-    moveTabToPane: state.moveTabToPane,
-    moveTab: state.moveTab,
-    sortTab: state.sortTab,
-    splitActivePane: state.splitActivePane,
-  }));
-
-export const useDragState = () =>
   useLayoutStore(
     useShallow((state) => ({
-      dropTarget: state.dropTarget,
-      dropPosition: state.dropPosition,
-      dropTargetIndex: state.dropTargetIndex,
+      setActiveTab: state.setActiveTab,
+      moveTabToPane: state.moveTabToPane,
+      moveTab: state.moveTab,
+      sortTab: state.sortTab,
+      splitActivePane: state.splitActivePane,
     }))
   );
 
 export const useDragActions = () =>
-  useLayoutStore((state) => ({
-    handleDragMove: state.handleDragMove,
-    handleDragOver: state.handleDragOver,
-    handleDragEnd: state.handleDragEnd,
-  }));
+  useLayoutStore(
+    useShallow((state) => ({
+      handleDragMove: state.handleDragMove,
+      handleDragOver: state.handleDragOver,
+      handleDragEnd: state.handleDragEnd,
+    }))
+  );
 
 export const useUIState = () =>
   useLayoutStore(
@@ -598,11 +593,13 @@ export const useUIState = () =>
   );
 
 export const useUIActions = () =>
-  useLayoutStore((state) => ({
-    toggleSecondaryPane: state.toggleSecondaryPane,
-    setSecondaryPaneOpen: state.setSecondaryPaneOpen,
-    setSecondaryPaneType: state.setSecondaryPaneType,
-    setSandboxMenuOpen: state.setSandboxMenuOpen,
-    setCreateSandboxDialogOpen: state.setCreateSandboxDialogOpen,
-    setFocusedEditor: state.setFocusedEditor,
-  }));
+  useLayoutStore(
+    useShallow((state) => ({
+      toggleSecondaryPane: state.toggleSecondaryPane,
+      setSecondaryPaneOpen: state.setSecondaryPaneOpen,
+      setSecondaryPaneType: state.setSecondaryPaneType,
+      setSandboxMenuOpen: state.setSandboxMenuOpen,
+      setCreateSandboxDialogOpen: state.setCreateSandboxDialogOpen,
+      setFocusedEditor: state.setFocusedEditor,
+    }))
+  );

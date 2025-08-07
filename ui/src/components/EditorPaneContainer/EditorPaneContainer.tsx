@@ -1,10 +1,11 @@
 import PanePolicy from "@/components/PanePolicy";
 import PaneRelationship from "@/components/PaneRelationship";
 import PaneTests from "@/components/PaneTests";
-import { Pane, useDragState, useUIState } from "@/stores/layoutStore";
+import { Pane, useLayoutStore, useUIState } from "@/stores/layoutStore";
 import { cn } from "@/utils/classnames";
 import { Columns2, icons, LucideIcon } from "lucide-react";
 import { ComponentType, Fragment } from "react";
+import { useShallow } from "zustand/react/shallow";
 import { DraggableTab, DroppablePane, DroppableTabGroup, DropTabInsertionIndicator } from "../DragDropComponents/DragDropComponents";
 import { SandboxType } from "../Editor";
 import TextTooltip from "../TextTooltip";
@@ -49,7 +50,10 @@ export function EditorPaneContainer({
     onSetActiveTab,
     onSplitPane
 }: EditorPaneContainerProps) {
-    const { dropTarget, dropPosition, dropTargetIndex } = useDragState();
+    const dropTarget = useLayoutStore((state) => state.dropTarget);
+    const dropPosition = useLayoutStore((state) => state.dropPosition);
+    const dropTargetIndex = useLayoutStore(useShallow((state) => state.dropTargetIndex));
+
     const { focusedEditor } = useUIState();
     const activePaneTab = pane.activeTabKey;
     const paneTabs = pane.tabs;
@@ -59,6 +63,7 @@ export function EditorPaneContainer({
     return (
         <Fragment>
             <ResizablePanel
+                id={pane.id}
                 order={index}
                 minSize={20}
                 className="flex flex-col"

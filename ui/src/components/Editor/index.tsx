@@ -21,19 +21,16 @@ export enum SandboxType {
     POLICY_THEOREM = "policyTheorem"
 }
 
-const SandboxDataType: Record<SandboxType, { theme: { dark: string, light: string }, language: string, errorKey: keyof SandboxDataErrors }> = {
+const SandboxDataType: Record<SandboxType, { language: string, errorKey: keyof SandboxDataErrors }> = {
     [SandboxType.POLICY_DEFINITION]: {
-        theme: { dark: 'vs-dark', light: 'vs-light' },
         language: 'yaml',
         errorKey: "policyErrors"
     },
     [SandboxType.RELATIONSHIPS]: {
-        theme: { dark: 'vs-dark', light: 'vs-light' },
         language: "yaml",
         errorKey: "relationshipsErrors"
     },
     [SandboxType.POLICY_THEOREM]: {
-        theme: { dark: 'policyTheoremDark', light: 'policyTheoremLight' },
         language: POLICY_THEOREM_LANGUAGE_ID,
         errorKey: "theoremsErrors"
     }
@@ -182,9 +179,7 @@ const BaseEditor = (props: EditorProps & BaseEditorProps) => {
     }, [isEditorMounted, setEditorSelection, sandboxDataType]);
 
     const editorLanguage = dataType.language || 'yaml';
-
-
-    const editorTheme = dataType.theme[theme === 'dark' ? 'dark' : 'light'] || 'vs-dark';
+    const editorTheme = theme === 'dark' ? 'playgroundThemeDark' : 'playgroundThemeLight';
 
     return <div className='h-full py-5 rounded-md overflow-hidden bg-editor border'>
         <Editor

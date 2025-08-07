@@ -13,9 +13,9 @@ export function useBrowserSandboxSync(options: useBrowserSandboxSyncOptions) {
   const channelRef = useRef<BroadcastChannel | null>(null);
   const isReceiver = useRef(false);
 
-  const { handleSandboxSyncChangeReceived } = usePlaygroundStore((state) => ({
-    handleSandboxSyncChangeReceived: state.handleSandboxSyncChangeReceived,
-  }));
+  const handleSandboxSyncChangeReceived = usePlaygroundStore(
+    (state) => state.handleSandboxSyncChangeReceived
+  );
 
   useEffect(() => {
     // Don't run if BroadcastChannel is not supported
