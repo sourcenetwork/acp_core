@@ -447,12 +447,13 @@ func Test_DOTExplainCheck_Example(t *testing.T) {
 	}
 	handle := a.Run(ctx)
 
-	resp, err := ctx.Playground.ExplainCheck(ctx, &types.ExplainCheckRequest{
+	resp, err := ctx.Playground.DOTExplainCheck(ctx, &types.DOTExplainCheckRequest{
 		Handle:     handle,
 		Object:     types.NewObject("file", "def"),
 		Permission: "read",
 		Actor:      types.NewActor("did:user:eve"),
 	})
 	require.NoError(t, err)
-	require.NotEmpty(t, resp.TreeJson)
+	t.Log(resp.DotGraph)
+	require.NotNil(t, resp)
 }

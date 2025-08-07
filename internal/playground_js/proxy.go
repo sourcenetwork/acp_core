@@ -69,6 +69,8 @@ func NewPlaygroundServiceProxy(ctx context.Context, manager runtime.RuntimeManag
 		"VerifyTheorems":     asyncFn(wrapHandler(proxy.VerifyTheorems)),
 		"Simulate":           asyncFn(wrapHandler(proxy.Simulate)),
 		"GetSampleSandboxes": asyncFn(wrapHandler(proxy.GetSampleSandboxes)),
+		"DOTExplainCheck":    asyncFn(wrapHandler(proxy.DOTExplainCheck)),
+		"ExplainCheck":       asyncFn(wrapHandler(proxy.ExplainCheck)),
 		"Close":              closeWrapper,
 	}
 	proxy.proxyMap = proxyMap
@@ -211,6 +213,34 @@ func (s *PlaygroundServiceProxy) GetSampleSandboxes(this js.Value, args []js.Val
 	}
 
 	resp, err := s.service.GetSampleSandboxes(s.ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (s *PlaygroundServiceProxy) DOTExplainCheck(this js.Value, args []js.Value) (*types.DOTExplainCheckResponse, error) {
+	req := &types.DOTExplainCheckRequest{}
+	err := unmarsahlArgs(req, args)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.service.DOTExplainCheck(s.ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (s *PlaygroundServiceProxy) ExplainCheck(this js.Value, args []js.Value) (*types.ExplainCheckResponse, error) {
+	req := &types.ExplainCheckRequest{}
+	err := unmarsahlArgs(req, args)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.service.ExplainCheck(s.ctx, req)
 	if err != nil {
 		return nil, err
 	}
