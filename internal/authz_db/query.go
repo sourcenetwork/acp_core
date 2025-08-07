@@ -39,34 +39,3 @@ func VerifyAccessRequest(ctx context.Context, runtime runtime.RuntimeManager, re
 		Valid: true,
 	}, nil
 }
-
-func Expand(ctx context.Context, runtime runtime.RuntimeManager, policyId string, op *types.Operation) (string, error) {
-	zanzi, err := zanzi.NewZanzi(runtime.GetKVStore(), runtime.GetLogger())
-	if err != nil {
-		return "", err
-	}
-
-	rec, err := zanzi.GetPolicy(ctx, policyId)
-	if err != nil {
-		return "", err
-	}
-	if rec == nil {
-		return "", errors.Wrap("expand", errors.ErrPolicyNotFound(policyId))
-	}
-
-	if op == nil {
-		return "", errors.Wrap("expand: invalid operation", errors.ErrorType_BAD_INPUT)
-	}
-	if op.Permission == "" {
-		return "", errors.Wrap("expand: invalid operation permission", errors.ErrorType_BAD_INPUT)
-	}
-	if op.Object == nil || op.Object.Id == "" || op.Object.Resource == "" {
-		return "", errors.Wrap("expand: invalid object", errors.ErrorType_BAD_INPUT)
-	}
-
-	tree, err := zanzi.Expand(ctx, rec.Policy, op.Object, op.Permission)
-	if err != nil {
-		return "", errors.Wrap("expand failed", err)
-	}
-	return tree, nil
-}

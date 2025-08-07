@@ -438,3 +438,21 @@ func Test_ShinzoPolicy_Ok(t *testing.T) {
 	require.True(t, result.Result.Ok)
 	require.Zero(t, result.Result.Failures)
 }
+
+func Test_DOTExplainCheck_Example(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+
+	a := NewAndSet{
+		Data: sandbox.Samples[0].Data,
+	}
+	handle := a.Run(ctx)
+
+	resp, err := ctx.Playground.ExplainCheck(ctx, &types.ExplainCheckRequest{
+		Handle:     handle,
+		Object:     types.NewObject("file", "def"),
+		Permission: "read",
+		Actor:      types.NewActor("did:user:eve"),
+	})
+	require.NoError(t, err)
+	require.NotEmpty(t, resp.TreeJson)
+}

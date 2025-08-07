@@ -60,3 +60,7 @@ func (s *playgroundService) GetSampleSandboxes(ctx context.Context, req *types.G
 func (s *playgroundService) ExplainCheck(ctx context.Context, req *types.ExplainCheckRequest) (*types.ExplainCheckResponse, error) {
 	return sandbox.HandleExplainCheck(ctx, s.runtime, req)
 }
+
+func (s *playgroundService) DOTExplainCheck(ctx context.Context, req *types.DOTExplainCheckRequest) (*types.DOTExplainCheckResponse, error) {
+	return sandbox.HandleDOTExplainCheck(ctx, s.runtime, req)
+}

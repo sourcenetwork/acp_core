@@ -8,6 +8,7 @@ import (
 	"github.com/sourcenetwork/zanzi"
 	"github.com/sourcenetwork/zanzi/pkg/api"
 	"github.com/sourcenetwork/zanzi/pkg/domain"
+	zanzitypes "github.com/sourcenetwork/zanzi/pkg/types"
 
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
@@ -353,35 +354,7 @@ func (z *Adapter) DeletePolicy(ctx context.Context, id string) (bool, error) {
 	return resp.Found, nil
 }
 
-func (z *Adapter) Expand(ctx context.Context, policy *types.Policy, object *types.Object, relation string) (string, error) {
-	service := z.zanzi.GetRelationGraphService()
-
-	req := &api.ExpandRequest{
-		PolicyId: policy.Id,
-		Root: &domain.RelationNode{
-			Node: &domain.RelationNode_EntitySet{
-				EntitySet: &domain.EntitySetNode{
-					Object: &domain.Entity{
-						Resource: object.Resource,
-						Id:       object.Id,
-					},
-					Relation: relation,
-				},
-			},
-		},
-		Format: api.ExplainFormat_DOT,
-	}
-	response, err := service.Expand(ctx, req)
-	err = mapErr(err)
-	if err != nil {
-		return "", fmt.Errorf("Expand: %w", err)
-	}
-
-	return response.GoalTree, nil
-}
-
-// ExplainCheck verifies whether an Acccess Request is allowed within a certain Policy
-func (z *Adapter) ExplainCheck(ctx context.Context, policy *types.Policy, operation *types.Operation, actor *types.Actor) (bool, string, error) {
+func (z *Adapter) ExplainCheck(ctx context.Context, policy *types.Policy, operation *types.Operation, actor *types.Actor) (bool, *zanzitypes.CheckExplainTree, error) {
 	service := z.zanzi.GetRelationGraphService()
 	mapper := newRelationshipMapper(policy.ActorResource.Name)
 
@@ -395,13 +368,36 @@ func (z *Adapter) ExplainCheck(ctx context.Context, policy *types.Policy, operat
 				Id:       actor.Id,
 			},
 		},
-		Format: api.ExplainFormat_DOT,
 	}
 	response, err := service.ExplainCheck(ctx, req)
 	err = mapErr(err)
 	if err != nil {
-		return false, "", fmt.Errorf("ExplainCheck: %w", err)
+		return false, nil, fmt.Errorf("ExplainCheck: %w", err)
 	}
 
-	return response.Authorized, response.GoalTree, nil
+	return response.Authorized, response.Tree, nil
+}
+
+func (z *Adapter) DOTExplainCheck(ctx context.Context, policy *types.Policy, operation *types.Operation, actor *types.Actor) (bool, string, error) {
+	service := z.zanzi.GetRelationGraphService()
+	mapper := newRelationshipMapper(policy.ActorResource.Name)
+
+	req := &api.DOTExplainCheckRequest{
+		PolicyId: policy.Id,
+		AccessRequest: &domain.AccessRequest{
+			Object:   mapper.MapObject(operation.Object),
+			Relation: operation.Permission,
+			Subject: &domain.Entity{
+				Resource: policy.ActorResource.Name,
+				Id:       actor.Id,
+			},
+		},
+	}
+	response, err := service.DOTExplainCheck(ctx, req)
+	err = mapErr(err)
+	if err != nil {
+		return false, "", fmt.Errorf("DOTExplainCheck: %w", err)
+	}
+
+	return response.Authorized, response.Tree, nil
 }

@@ -2,6 +2,7 @@ package sandbox
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"strings"
 
@@ -525,8 +526,54 @@ func HandleExplainCheck(ctx context.Context, manager runtime.RuntimeManager, req
 		return nil, newExplainCheckError(err, req.Handle)
 	}
 
+	bytes, err := json.Marshal(tree)
+	if err != nil {
+		return nil, newExplainCheckError(err, req.Handle)
+	}
+
 	return &types.ExplainCheckResponse{
-		Authorized:  authorized,
-		ExplainTree: tree,
+		Authorized: authorized,
+		TreeJson:   bytes,
+	}, nil
+}
+
+func HandleDOTExplainCheck(ctx context.Context, manager runtime.RuntimeManager, req *types.DOTExplainCheckRequest) (*types.DOTExplainCheckResponse, error) {
+	repository := NewSandboxRepository(manager.GetKVStore())
+
+	record, err := repository.GetSandbox(ctx, req.Handle)
+	if err != nil {
+		return nil, newExplainCheckError(err, req.Handle)
+	}
+	if record == nil {
+		return nil, newExplainCheckError(errors.Wrap("sandbox not found", errors.ErrorType_NOT_FOUND), req.Handle)
+	}
+	if !record.Initialized {
+		err := errors.Wrap("uninitialized sandbox cannot execute theorems",
+			errors.ErrorType_OPERATION_FORBIDDEN)
+		return nil, newExplainCheckError(err, req.Handle)
+	}
+
+	manager, err = GetManagerForSandbox(manager, req.Handle)
+	if err != nil {
+		return nil, newExplainCheckError(err, req.Handle)
+	}
+
+	op := &types.Operation{
+		Object:     req.Object,
+		Permission: req.Permission,
+	}
+
+	engine, err := zanzi.NewZanzi(manager.GetKVStore(), manager.GetLogger())
+	if err != nil {
+		return nil, newExplainCheckError(err, req.Handle)
+	}
+	authorized, tree, err := engine.DOTExplainCheck(ctx, record.Ctx.Policy, op, req.Actor)
+	if err != nil {
+		return nil, newExplainCheckError(err, req.Handle)
+	}
+
+	return &types.DOTExplainCheckResponse{
+		Authorized: authorized,
+		DotGraph:   tree,
 	}, nil
 }

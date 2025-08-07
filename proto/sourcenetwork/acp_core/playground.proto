@@ -41,6 +41,8 @@ service PlaygroundService {
   // which are used to demo different ACP Features
   rpc GetSampleSandboxes(GetSampleSandboxesRequest) returns (GetSampleSandboxesResponse);
 
+  rpc DOTExplainCheck(DOTExplainCheckRequest) returns (DOTExplainCheckResponse);
+
   rpc ExplainCheck(ExplainCheckRequest) returns (ExplainCheckResponse);
 
   // Check runs a Check operation with the provided data for the context of a sandbox.
@@ -203,5 +205,17 @@ message ExplainCheckRequest{
 
 message ExplainCheckResponse{
   bool authorized = 1;
-  string explain_tree = 2;
+  bytes tree_json = 2;
+}
+
+message DOTExplainCheckRequest{
+  uint64 handle = 1;
+  Object object = 2;
+  string permission = 3;
+  Actor actor = 4;
+}
+
+message DOTExplainCheckResponse{
+  bool authorized = 1;
+  string dot_graph = 2;
 }

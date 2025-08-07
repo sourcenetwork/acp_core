@@ -161,7 +161,19 @@ export interface ExplainCheckRequest {
 
 export interface ExplainCheckResponse {
   authorized: boolean;
-  explainTree: string;
+  treeJson: Uint8Array;
+}
+
+export interface DOTExplainCheckRequest {
+  handle: number;
+  object: Object | undefined;
+  permission: string;
+  actor: Actor | undefined;
+}
+
+export interface DOTExplainCheckResponse {
+  authorized: boolean;
+  dotGraph: string;
 }
 
 export interface PlaygroundService {
@@ -193,5 +205,6 @@ export interface PlaygroundService {
    * which are used to demo different ACP Features
    */
   GetSampleSandboxes(request: GetSampleSandboxesRequest): Promise<GetSampleSandboxesResponse>;
+  DOTExplainCheck(request: DOTExplainCheckRequest): Promise<DOTExplainCheckResponse>;
   ExplainCheck(request: ExplainCheckRequest): Promise<ExplainCheckResponse>;
 }
