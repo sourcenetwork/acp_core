@@ -76,6 +76,10 @@ func ValidatePolicy(ctx context.Context, runtime runtime.RuntimeManager, req *ty
 	if err != nil {
 		return nil, fmt.Errorf("ValidatePolicy: %v", err)
 	}
+	// wipe ID since the generate ID is meaningless and not guaranteed
+	pol.Id = ""
+	resp.Policy = pol
+
 	resp.Valid = valid
 	resp.ErrorMsg = msg
 

@@ -301,6 +301,9 @@ message ValidatePolicyRequest {
 message ValidatePolicyResponse {
   bool valid = 1;
   string error_msg = 2;
+  // returns the parsed Policy object if the validation was
+  // successful
+  Policy policy = 3;
 }
 
 message SetParamsRequest {
