@@ -12,7 +12,7 @@ require (
 	github.com/google/go-cmp v0.6.0
 	github.com/google/uuid v1.6.0
 	github.com/sourcenetwork/raccoondb v0.2.1-0.20240722161350-d4a78b691ec8
-	github.com/sourcenetwork/zanzi v0.3.1-0.20250520192824-03101a013e24
+	github.com/sourcenetwork/zanzi v0.3.1-0.20250807201848-ff8322455b4b
 	github.com/stretchr/testify v1.9.0
 	google.golang.org/grpc v1.63.2
 	google.golang.org/protobuf v1.35.1
