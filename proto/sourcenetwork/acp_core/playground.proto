@@ -5,6 +5,7 @@ package sourcenetwork.acp_core;
 import "sourcenetwork/acp_core/catalogue.proto";
 import "sourcenetwork/acp_core/sandbox.proto";
 import "sourcenetwork/acp_core/theorem.proto";
+import "sourcenetwork/acp_core/check_explain.proto";
 import "sourcenetwork/acp_core/relationship.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
@@ -205,7 +206,7 @@ message ExplainCheckRequest{
 
 message ExplainCheckResponse{
   bool authorized = 1;
-  bytes tree_json = 2;
+  CheckExplainGraph graph = 2;
 }
 
 message DOTExplainCheckRequest{

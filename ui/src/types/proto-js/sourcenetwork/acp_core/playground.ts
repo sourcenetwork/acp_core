@@ -6,6 +6,7 @@
 
 /* eslint-disable */
 import { type PolicyCatalogue } from "./catalogue";
+import { type CheckExplainGraph } from "./check_explain";
 import { type Actor, type Object } from "./relationship";
 import { type SandboxData, type SandboxDataErrors, type SandboxRecord, type SandboxTemplate } from "./sandbox";
 import { type AnnotatedPolicyTheoremResult } from "./theorem";
@@ -161,7 +162,7 @@ export interface ExplainCheckRequest {
 
 export interface ExplainCheckResponse {
   authorized: boolean;
-  treeJson: Uint8Array;
+  graph: CheckExplainGraph | undefined;
 }
 
 export interface DOTExplainCheckRequest {

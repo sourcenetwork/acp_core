@@ -457,3 +457,22 @@ func Test_DOTExplainCheck_Example(t *testing.T) {
 	t.Log(resp.DotGraph)
 	require.NotNil(t, resp)
 }
+
+func Test_ExplainCheck_Example(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+
+	a := NewAndSet{
+		Data: sandbox.Samples[0].Data,
+	}
+	handle := a.Run(ctx)
+
+	resp, err := ctx.Playground.ExplainCheck(ctx, &types.ExplainCheckRequest{
+		Handle:     handle,
+		Object:     types.NewObject("file", "def"),
+		Permission: "read",
+		Actor:      types.NewActor("did:user:eve"),
+	})
+	require.NoError(t, err)
+	t.Log(resp.Graph.String())
+	require.NotNil(t, resp.Graph)
+}

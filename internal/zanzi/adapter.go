@@ -2,13 +2,13 @@ package zanzi
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	rcdb "github.com/sourcenetwork/raccoondb"
 	"github.com/sourcenetwork/zanzi"
 	"github.com/sourcenetwork/zanzi/pkg/api"
 	"github.com/sourcenetwork/zanzi/pkg/domain"
-	zanzitypes "github.com/sourcenetwork/zanzi/pkg/types"
 
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
@@ -354,7 +354,7 @@ func (z *Adapter) DeletePolicy(ctx context.Context, id string) (bool, error) {
 	return resp.Found, nil
 }
 
-func (z *Adapter) ExplainCheck(ctx context.Context, policy *types.Policy, operation *types.Operation, actor *types.Actor) (bool, *zanzitypes.CheckExplainTree, error) {
+func (z *Adapter) ExplainCheck(ctx context.Context, policy *types.Policy, operation *types.Operation, actor *types.Actor) (bool, *types.CheckExplainGraph, error) {
 	service := z.zanzi.GetRelationGraphService()
 	mapper := newRelationshipMapper(policy.ActorResource.Name)
 
@@ -375,7 +375,17 @@ func (z *Adapter) ExplainCheck(ctx context.Context, policy *types.Policy, operat
 		return false, nil, fmt.Errorf("ExplainCheck: %w", err)
 	}
 
-	return response.Authorized, response.Tree, nil
+	bytes, err := json.Marshal(response.Graph)
+	if err != nil {
+		return false, nil, fmt.Errorf("mapping explain graph: %v", err)
+	}
+	graph := &types.CheckExplainGraph{}
+	err = json.Unmarshal(bytes, graph)
+	if err != nil {
+		return false, nil, fmt.Errorf("mapping explain graph: %v", err)
+	}
+
+	return response.Authorized, graph, nil
 }
 
 func (z *Adapter) DOTExplainCheck(ctx context.Context, policy *types.Policy, operation *types.Operation, actor *types.Actor) (bool, string, error) {

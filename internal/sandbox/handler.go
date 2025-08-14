@@ -2,7 +2,6 @@ package sandbox
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"strings"
 
@@ -521,19 +520,14 @@ func HandleExplainCheck(ctx context.Context, manager runtime.RuntimeManager, req
 	if err != nil {
 		return nil, newExplainCheckError(err, req.Handle)
 	}
-	authorized, tree, err := engine.ExplainCheck(ctx, record.Ctx.Policy, op, req.Actor)
-	if err != nil {
-		return nil, newExplainCheckError(err, req.Handle)
-	}
-
-	bytes, err := json.Marshal(tree)
+	authorized, graph, err := engine.ExplainCheck(ctx, record.Ctx.Policy, op, req.Actor)
 	if err != nil {
 		return nil, newExplainCheckError(err, req.Handle)
 	}
 
 	return &types.ExplainCheckResponse{
 		Authorized: authorized,
-		TreeJson:   bytes,
+		Graph:      graph,
 	}, nil
 }
 
