@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Form } from "../ui/form";
 
 interface DialogEditSandboxProps {
-    sandboxId: string | null,
+    sandboxId?: string,
     open: boolean,
     setOpen: (state: boolean) => unknown
 }
@@ -25,7 +25,7 @@ type EditSandboxFormData = z.infer<typeof EditSandboxFormSchema>;
 const DialogEditSandbox = ({ sandboxId, open, setOpen }: DialogEditSandboxProps) => {
 
     const sandbox = useSandbox(sandboxId);
-    const [updateStoredSandbox] = usePlaygroundStore((state) => [state.updateStoredSandbox]);
+    const updateStoredSandbox = usePlaygroundStore((state) => state.updateStoredSandbox);
     const sandboxData = useMemo(() => ({ name: sandbox?.name ?? "", description: sandbox?.description ?? "", }), [sandbox?.name, sandbox?.description]);
 
     const form = useForm<EditSandboxFormData>({

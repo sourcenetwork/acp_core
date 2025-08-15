@@ -56,7 +56,7 @@ export function DraggableTab({
             style={{ order: tabIndex }}
             className={cn("text-sm border-b border-divider whitespace-nowrap inline-block relative",
                 {
-                    "bg-primary-foreground border-src-secondary text-primary": active,
+                    "bg-muted border-src-secondary text-foreground": active,
                 }
             )}
         >

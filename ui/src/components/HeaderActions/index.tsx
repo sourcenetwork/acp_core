@@ -4,7 +4,7 @@ import { useTheme } from "@/providers/ThemeProvider/useTheme";
 import { usePlaygroundStore } from "@/stores/playgroundStore";
 import { exportSandboxData, importSandboxData } from "@/utils/sandboxFileUtils";
 import { EllipsisVertical } from "lucide-react";
-import { ComponentProps, ComponentType, useState } from "react";
+import { ComponentProps, ComponentType, useCallback, useState } from "react";
 import DialogCopyShare from "../DialogCopyShare";
 import ThemeToggle from "../ThemeToggle";
 import { Button } from "../ui/button";
@@ -17,20 +17,20 @@ const HeaderActions = () => {
     const [showShareDialog, setShowShareDialog] = useState<boolean>(false);
     const { toast } = useToast()
 
-    const handleShareButtonClick = () => {
+    const handleShareButtonClick = useCallback(() => {
         setShowShareDialog(true);
-    };
+    }, []);
 
-    const handleExportButtonClick = async () => {
+    const handleExportButtonClick = useCallback(async () => {
         try {
             await exportSandboxData(activeSandbox?.name, activeSandbox?.data);
         } catch (error) {
             console.error(error);
             toast({ description: "Something went wrong exporting" })
         }
-    };
+    }, [activeSandbox]);
 
-    const handleImportButtonClick = async () => {
+    const handleImportButtonClick = useCallback(async () => {
         try {
             const data = await importSandboxData();
             if (!data) return;
@@ -39,11 +39,11 @@ const HeaderActions = () => {
             console.error(error);
             toast({ description: "Something went wrong importing" })
         }
-    };
+    }, [setState]);
 
-    const handeThemeToggleClick = () => {
+    const handeThemeToggleClick = useCallback(() => {
         setTheme(theme === 'dark' ? 'light' : 'dark');
-    }
+    }, [theme, setTheme]);
 
     const menuItems: {
         component: ComponentType<ComponentProps<typeof Button | typeof ThemeToggle>>;
@@ -58,12 +58,12 @@ const HeaderActions = () => {
             {
                 label: "Import",
                 component: Button,
-                props: { className: "text-xs", variant: "outline", size: "xs", onClick: () => void handleImportButtonClick() },
+                props: { className: "text-xs", variant: "outline", size: "xs", onClick: handleImportButtonClick },
             },
             {
                 label: "Export",
                 component: Button,
-                props: { className: "text-xs", variant: "default", size: "xs", onClick: () => void handleExportButtonClick(), },
+                props: { className: "text-xs", variant: "default", size: "xs", onClick: handleExportButtonClick },
             },
             {
                 label: "Theme",

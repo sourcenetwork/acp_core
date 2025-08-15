@@ -1,10 +1,10 @@
 import PanePolicy from "@/components/PanePolicy";
 import PaneRelationship from "@/components/PaneRelationship";
 import PaneTests from "@/components/PaneTests";
-import { Pane, useLayoutStore, useUIState } from "@/stores/layoutStore";
+import { Pane, useLayoutStore, usePaneActions } from "@/stores/layoutStore";
 import { cn } from "@/utils/classnames";
 import { Columns2, icons, LucideIcon } from "lucide-react";
-import { ComponentType, Fragment } from "react";
+import { ComponentType, Fragment, useMemo } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { DraggableTab, DroppablePane, DroppableTabGroup, DropTabInsertionIndicator } from "../DragDropComponents/DragDropComponents";
 import { SandboxType } from "../Editor";
@@ -39,26 +39,33 @@ interface EditorPaneContainerProps {
     pane: Pane;
     index: number;
     isLast: boolean;
-    onSetActiveTab: (paneId: string, tabKey: string) => void;
-    onSplitPane: (paneId: string) => void;
 }
 
 export function EditorPaneContainer({
     pane,
     index,
     isLast,
-    onSetActiveTab,
-    onSplitPane
 }: EditorPaneContainerProps) {
     const dropTarget = useLayoutStore((state) => state.dropTarget);
     const dropPosition = useLayoutStore((state) => state.dropPosition);
     const dropTargetIndex = useLayoutStore(useShallow((state) => state.dropTargetIndex));
+    const focusedEditor = useLayoutStore((state) => state.focusedEditor);
 
-    const { focusedEditor } = useUIState();
+    const { splitActivePane, setActiveTab } = usePaneActions();
+
     const activePaneTab = pane.activeTabKey;
     const paneTabs = pane.tabs;
     const canSplitPane = paneTabs.length > 1;
-    const { component: Component } = tabComponentMap[activePaneTab];
+
+    const { component: Component } = useMemo(() => tabComponentMap[activePaneTab], [activePaneTab]);
+
+    const handleTabClick = (tabKey: string) => {
+        setActiveTab(pane.id, tabKey);
+    }
+
+    const handleSplitPane = () => {
+        splitActivePane(pane.id);
+    }
 
     return (
         <Fragment>
@@ -83,7 +90,7 @@ export function EditorPaneContainer({
                                         tabId={key}
                                         tabIndex={tabIndex}
                                         active={isActive}
-                                        onClick={() => onSetActiveTab(pane.id, key)}
+                                        onClick={() => handleTabClick(key)}
                                         dropPosition={dropPosition}
                                         dropTarget={dropTarget}
                                         isFocused={isFocused}
@@ -110,7 +117,7 @@ export function EditorPaneContainer({
                                     <Button
                                         variant="muted"
                                         size="iconSm"
-                                        onClick={() => onSplitPane(pane.id)}
+                                        onClick={handleSplitPane}
                                         className=" hover:text-primary text-muted-foreground hover:bg-transparent"
                                     >
                                         <Columns2 size={16} />

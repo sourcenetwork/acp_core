@@ -170,6 +170,10 @@ export const useLayoutStore = create<LayoutStore>()(
         ...initialState,
 
         setActiveTab: (paneId: string, tabKey: string) => {
+          const { panes } = get();
+          const activePane = panes.find((p) => p.id === paneId);
+          if (activePane?.activeTabKey === tabKey) return;
+
           set((state) => ({
             panes: state.panes.map((pane) =>
               pane.id === paneId ? { ...pane, activeTabKey: tabKey } : pane
@@ -182,34 +186,34 @@ export const useLayoutStore = create<LayoutStore>()(
           fromPaneId: string,
           toPaneId: string
         ) => {
-          // No-op if the tab is already in the pane
+          // No-op if the tab is already in the target pane
           if (fromPaneId === toPaneId) return;
 
           set((state) => {
-            const tabToMove = state.panes
-              .find((p) => p.id === fromPaneId)
-              ?.tabs.find((t) => t.key === tabKey);
+            const fromPane = state.panes.find((p) => p.id === fromPaneId);
+            const tabToMove = fromPane?.tabs.find((t) => t.key === tabKey);
 
             if (!tabToMove) return state;
 
             return {
               panes: state.panes
                 .map((pane) => {
-                  // If the tab is in the source pane, remove it
+                  // If this is the pane the tab is being moved from... remove it and set a new active tab
                   if (pane.id === fromPaneId) {
                     const newTabs = pane.tabs.filter((t) => t.key !== tabKey);
+                    const newActiveTabKey =
+                      pane.activeTabKey === tabKey
+                        ? newTabs[0]?.key || "policy"
+                        : pane.activeTabKey;
 
                     return {
                       ...pane,
                       tabs: newTabs,
-                      activeTabKey:
-                        pane.activeTabKey === tabKey
-                          ? newTabs[0]?.key || "policy"
-                          : pane.activeTabKey,
+                      activeTabKey: newActiveTabKey,
                     };
                   }
 
-                  // If the tab is in the target pane, add it
+                  // If the pane the tab is being moved to... add it and set it active
                   if (pane.id === toPaneId) {
                     return {
                       ...pane,
@@ -218,6 +222,7 @@ export const useLayoutStore = create<LayoutStore>()(
                     };
                   }
 
+                  // Return pane unchanged
                   return pane;
                 })
                 .filter((pane) => pane.tabs.length > 0),
@@ -296,74 +301,74 @@ export const useLayoutStore = create<LayoutStore>()(
 
             if (!tabToMove || !sourcePane) return state;
 
-            let insertIndex = targetIndex;
-            if (targetPosition === "right") {
-              insertIndex = targetIndex + 1;
-            }
+            const insertIndex =
+              targetPosition === "right" ? targetIndex + 1 : targetIndex;
 
-            if (paneId === targetPaneId) {
-              return {
-                panes: state.panes.map((pane) => {
-                  if (pane.id !== paneId) return pane;
-
-                  const tabs = [...pane.tabs];
-                  const currentIndex = tabs.findIndex((t) => t.key === tabKey);
-
-                  if (currentIndex === -1) return pane;
-
-                  const [movedTab] = tabs.splice(currentIndex, 1);
-
-                  let finalInsertIndex = insertIndex;
-                  if (currentIndex < insertIndex) {
-                    finalInsertIndex = insertIndex - 1;
-                  }
-
-                  finalInsertIndex = Math.max(
-                    0,
-                    Math.min(finalInsertIndex, tabs.length)
-                  );
-                  tabs.splice(finalInsertIndex, 0, movedTab);
-
-                  return {
-                    ...pane,
-                    tabs,
-                    activeTabKey: tabKey,
-                  };
-                }),
-              };
-            }
+            // Find a suitable insert index for tab
+            const newInsertIndex = (
+              tabs: any[],
+              targetIndex: number,
+              sameTabGroup = false,
+              currentIndex = -1
+            ) => {
+              let finalIndex = targetIndex;
+              if (sameTabGroup && currentIndex < targetIndex) {
+                finalIndex = targetIndex - 1;
+              }
+              return Math.max(0, Math.min(finalIndex, tabs.length));
+            };
 
             return {
               panes: state.panes
                 .map((pane) => {
+                  // Tab is being moved in the same pane to a new index
+                  if (pane.id === paneId && paneId === targetPaneId) {
+                    const tabs = [...pane.tabs];
+                    const currentIndex = tabs.findIndex(
+                      (t) => t.key === tabKey
+                    );
+
+                    if (currentIndex === -1) return pane;
+
+                    const [movedTab] = tabs.splice(currentIndex, 1);
+
+                    const finalInsertIndex = newInsertIndex(
+                      tabs,
+                      insertIndex,
+                      true,
+                      currentIndex
+                    );
+
+                    tabs.splice(finalInsertIndex, 0, movedTab);
+
+                    return { ...pane, tabs, activeTabKey: tabKey };
+                  }
+
+                  // Remove the tab from the source pane
                   if (pane.id === paneId) {
                     const newTabs = pane.tabs.filter((t) => t.key !== tabKey);
+                    const newActiveTabKey =
+                      pane.activeTabKey === tabKey
+                        ? newTabs[0]?.key || "policy"
+                        : pane.activeTabKey;
 
                     return {
                       ...pane,
                       tabs: newTabs,
-                      activeTabKey:
-                        pane.activeTabKey === tabKey
-                          ? newTabs[0]?.key || "policy"
-                          : pane.activeTabKey,
+                      activeTabKey: newActiveTabKey,
                     };
                   }
 
+                  // Add the tab to the target pane at the target index
                   if (pane.id === targetPaneId) {
                     const tabs = [...pane.tabs];
-                    const finalInsertIndex = Math.max(
-                      0,
-                      Math.min(insertIndex, tabs.length)
-                    );
+                    const finalInsertIndex = newInsertIndex(tabs, insertIndex);
                     tabs.splice(finalInsertIndex, 0, tabToMove);
 
-                    return {
-                      ...pane,
-                      tabs,
-                      activeTabKey: tabKey,
-                    };
+                    return { ...pane, tabs, activeTabKey: tabKey };
                   }
 
+                  // Return pane unchanged
                   return pane;
                 })
                 .filter((pane) => pane.tabs.length > 0),
@@ -450,7 +455,6 @@ export const useLayoutStore = create<LayoutStore>()(
               break;
             case DragType.TabGroupDrop:
               setDropTargetIndex(targetData);
-
               break;
           }
         },
@@ -559,15 +563,13 @@ export const useLayoutStore = create<LayoutStore>()(
   )
 );
 
-export const usePanes = () => useLayoutStore((state) => state.panes);
+export const usePanes = () =>
+  useLayoutStore(useShallow((state) => state.panes));
 
 export const usePaneActions = () =>
   useLayoutStore(
     useShallow((state) => ({
       setActiveTab: state.setActiveTab,
-      moveTabToPane: state.moveTabToPane,
-      moveTab: state.moveTab,
-      sortTab: state.sortTab,
       splitActivePane: state.splitActivePane,
     }))
   );
@@ -578,17 +580,6 @@ export const useDragActions = () =>
       handleDragMove: state.handleDragMove,
       handleDragOver: state.handleDragOver,
       handleDragEnd: state.handleDragEnd,
-    }))
-  );
-
-export const useUIState = () =>
-  useLayoutStore(
-    useShallow((state) => ({
-      secondaryPaneOpen: state.secondaryPaneOpen,
-      secondaryPaneType: state.secondaryPaneType,
-      sandboxMenuOpen: state.sandboxMenuOpen,
-      createSandboxDialogOpen: state.createSandboxDialogOpen,
-      focusedEditor: state.focusedEditor,
     }))
   );
 

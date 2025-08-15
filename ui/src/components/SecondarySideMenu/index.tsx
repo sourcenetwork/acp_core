@@ -1,13 +1,14 @@
-import { SecondaryPaneTypes, useUIActions, useUIState } from '@/stores/layoutStore';
+import { SecondaryPaneTypes, useLayoutStore, useUIActions } from '@/stores/layoutStore';
 import { cn } from '@/utils/classnames';
-import { Check, GanttChart } from 'lucide-react';
+import { SquareCheckBig } from 'lucide-react';
 import TextTooltip from '../TextTooltip';
 import { Button } from '../ui/button';
 import { ScrollArea } from '../ui/scroll-area';
 
 const SecondarySideMenu = () => {
     const { setSecondaryPaneType, setSecondaryPaneOpen } = useUIActions();
-    const { secondaryPaneOpen, secondaryPaneType } = useUIState();
+    const secondaryPaneOpen = useLayoutStore((state) => state.secondaryPaneOpen);
+    const secondaryPaneType = useLayoutStore((state) => state.secondaryPaneType);
 
     const onHandleClick = (type: SecondaryPaneTypes) => {
         const isActivePane = secondaryPaneType === type;
@@ -25,11 +26,11 @@ const SecondarySideMenu = () => {
                     variant="muted"
                     onClick={() => onHandleClick(SecondaryPaneTypes.Check)}
                     className={cn({ 'opacity-100 text-src-primary': secondaryPaneOpen && secondaryPaneType === SecondaryPaneTypes.Check })}>
-                    <Check size={20} />
+                    <SquareCheckBig size={20} />
                 </Button>
             </TextTooltip>
 
-            <TextTooltip content="Expand" side="left" align="center" >
+            {/* <TextTooltip content="Expand" side="left" align="center" >
                 <Button
                     size="icon"
                     variant="muted"
@@ -37,7 +38,7 @@ const SecondarySideMenu = () => {
                     className={cn({ 'opacity-100 text-src-primary': secondaryPaneOpen && secondaryPaneType === SecondaryPaneTypes.Expand })}>
                     <GanttChart size={20} />
                 </Button>
-            </TextTooltip>
+            </TextTooltip> */}
         </div>
     </ScrollArea >
 }

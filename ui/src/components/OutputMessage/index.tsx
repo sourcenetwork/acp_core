@@ -1,4 +1,4 @@
-// import { Link } from "react-router-dom";
+// TODO: Add back a button to focus the editor tab for the output message
 
 interface OutputMessageProps {
     prefix?: string;

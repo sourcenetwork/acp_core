@@ -4,7 +4,7 @@ import {
   AnnotatedPolicyTheoremResult,
   AnnotatedReachabilityTheoremResult,
 } from "@acp/theorem";
-import * as monaco from "monaco-editor";
+import type { editor } from "monaco-editor";
 
 type TheoremResultType =
   | AnnotatedDelegationTheoremResult
@@ -12,17 +12,17 @@ type TheoremResultType =
   | AnnotatedReachabilityTheoremResult;
 
 interface CategorizedTheoremMarkers {
-  accepted: monaco.editor.IMarkerData[];
-  rejected: monaco.editor.IMarkerData[];
-  errors: monaco.editor.IMarkerData[];
+  accepted: editor.IMarkerData[];
+  rejected: editor.IMarkerData[];
+  errors: editor.IMarkerData[];
 }
 
 function categorizeTheoremMarkers(
   theoremResult: TheoremResultType[] = []
 ): CategorizedTheoremMarkers {
-  const accepted: monaco.editor.IMarkerData[] = [];
-  const rejected: monaco.editor.IMarkerData[] = [];
-  const errors: monaco.editor.IMarkerData[] = [];
+  const accepted: editor.IMarkerData[] = [];
+  const rejected: editor.IMarkerData[] = [];
+  const errors: editor.IMarkerData[] = [];
 
   theoremResult.forEach((result) => {
     const marker = {
@@ -31,20 +31,20 @@ function categorizeTheoremMarkers(
       endLineNumber: Number(result.interval?.end?.line ?? 0),
       startColumn: Number(result.interval?.start?.column ?? 0),
       endColumn: Number.MAX_SAFE_INTEGER,
-      severity: monaco.MarkerSeverity.Info,
+      severity: 2, //monaco.MarkerSeverity.Info
     };
 
     const status = String(result.result?.result?.status);
 
     switch (status) {
       case "Accept":
-        accepted.push({ ...marker, severity: monaco.MarkerSeverity.Info });
+        accepted.push({ ...marker, severity: 2 });
         break;
       case "Reject":
-        rejected.push({ ...marker, severity: monaco.MarkerSeverity.Error });
+        rejected.push({ ...marker, severity: 8 });
         break;
       default:
-        errors.push({ ...marker, severity: monaco.MarkerSeverity.Error });
+        errors.push({ ...marker, severity: 8 });
         break;
     }
   });

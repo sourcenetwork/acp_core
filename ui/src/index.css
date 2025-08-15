@@ -6,6 +6,8 @@
 @theme {
   --color-src-primary: var(--src-primary);
   --color-src-secondary: var(--src-secondary);
+  --color-src-error: var(--src-error);
+
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -25,6 +27,11 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-editor: var(--editor);
   --color-divider: var(--divider);
+
+  --color-graph-bg: var(--graph-bg);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
 
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
@@ -55,6 +62,10 @@
   :root {
     --background: #ffffff;
     --foreground: #020817;
+    --card: #ffffff;
+    --card-foreground: #020817;
+    --popover: #ffffff;
+    --popover-foreground: #020817;
     --primary: #0f1729;
     --primary-foreground: #f8fafc;
     --secondary: #f1f5f9;
@@ -68,20 +79,27 @@
     --border: #e1e7ef;
     --input: #e1e7ef;
     --ring: #020817;
-    --card: #ffffff;
-    --card-foreground: #020817;
-    --popover: #ffffff;
-    --popover-foreground: #020817;
+
     --radius: 0.5rem;
     --editor: #fffffe;
     --divider: #e1e7ef;
-    --src-primary: #25a046;
-    --src-secondary: #088d42;
+    --src-primary: #39e265;
+    --src-secondary: #06b250;
+    --src-error: #c35858;
+
+    --graph-bg: #ffffff;
+
+    --card: #ffffff;
+    --card-foreground: #020817;
   }
 
   .dark {
     --background: #0a0a0a;
     --foreground: #f8fafc;
+    --card: #020817;
+    --card-foreground: #f8fafc;
+    --popover: #1d1d1d;
+    --popover-foreground: #f8fafc;
     --primary: #f8fafc;
     --primary-foreground: #252525;
     --secondary: #343434;
@@ -95,14 +113,16 @@
     --border: #414141;
     --input: #303030;
     --ring: #cbd5e1;
-    --card: #020817;
-    --card-foreground: #f8fafc;
-    --popover: #1d1d1d;
-    --popover-foreground: #f8fafc;
+
     --editor: #1e1e1e;
     --divider: #232323;
     --src-primary: #39e265;
     --src-secondary: #06b250;
+    --src-error: #c35858;
+    --graph-bg: #111111;
+
+    --card: #111111;
+    --card-foreground: #f8fafc;
   }
 }
 
@@ -115,6 +135,13 @@
   }
   #root {
     @apply min-h-dvh flex flex-col;
+  }
+
+  .react-flow__panel {
+    @apply !m-0;
+  }
+  .react-flow__handle {
+    @apply !opacity-0;
   }
 }
 

@@ -1,5 +1,5 @@
 import { useSandbox } from "@/hooks/useSandbox";
-import { useUIActions } from "@/stores/layoutStore";
+import { useLayoutStore } from "@/stores/layoutStore";
 import { usePlaygroundStore } from "@/stores/playgroundStore";
 import { SandboxTemplate } from "@acp/sandbox";
 import { Box } from "lucide-react";
@@ -10,14 +10,16 @@ import PlaygroundStatusIndicator from "../PlaygroundStatusIndicator";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuList, NavigationMenuTrigger } from "../ui/navigation-menu";
 
 const Header = () => {
+
+    const activeSandbox = useSandbox();
     const playgroundStatus = usePlaygroundStore((state) => state.playgroundStatus);
     const samples = usePlaygroundStore((state) => state.sandboxTemplates);
     const loadTemplate = usePlaygroundStore((state) => state.loadTemplate);
     const newSandbox = usePlaygroundStore((state) => state.newSandbox);
+    const playgroundSyncing = usePlaygroundStore((state) => state.playgroundSyncing);
+    const setSandboxMenuOpen = useLayoutStore((state) => state.setSandboxMenuOpen);
 
-    const sandbox = useSandbox();
 
-    const { setSandboxMenuOpen } = useUIActions();
 
     const [selectedSample, setSelectedSample] = useState<SandboxTemplate | null>(null);
     const [showConfirmation, setShowConfirmation] = useState(false);
@@ -31,7 +33,7 @@ const Header = () => {
         setSandboxMenuOpen(true);
     }
 
-    return <div className="flex items-center justify-between px-4 py-2 border-b border-divider relative">
+    return <div className="flex items-center justify-between px-4 py-2 border-b border-divider relative bg-background z-1">
 
         <DialogLoadTemplate
             title={`Load Policy - ${selectedSample?.name ?? ""}`}
@@ -48,10 +50,10 @@ const Header = () => {
             <span className="opacity-60 mr-3 text-sm">ACP Playground</span>
             <span className="hidden md:inline-block w-[30px] h-px bg-border align-middle mx-4"></span>
             <div className="flex items-center gap-x-2">
-                {sandbox &&
+                {activeSandbox &&
                     <div className="text-xs text-muted-foreground hover:text-accent-foreground items-center gap-x-2 hidden md:flex border-r border-divider pr-6 cursor-pointer" onClick={handleSandboxClick}>
                         <Box size={16} />
-                        <span>{sandbox?.name}</span>
+                        <span>{activeSandbox?.name}</span>
                     </div>
                 }
 
@@ -76,7 +78,7 @@ const Header = () => {
         </div>
 
         <div className="self-start items-center gap-x-1 flex">
-            <PlaygroundStatusIndicator status={playgroundStatus} />
+            <PlaygroundStatusIndicator status={playgroundStatus} syncing={playgroundSyncing} />
             <HeaderActions />
         </div>
     </div>

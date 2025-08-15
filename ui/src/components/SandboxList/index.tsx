@@ -1,7 +1,8 @@
-import { usePlaygroundStore } from "@/stores/playgroundStore";
+import { PersistedSandboxData, usePlaygroundStore } from "@/stores/playgroundStore";
 import { cn } from "@/utils/classnames";
 import { Edit2, MoreHorizontal, Trash } from "lucide-react";
 import { MouseEvent, useState } from "react";
+import DialogConfirm from "../DialogConfirm";
 import DialogEditSandbox from "../DialogEditSandbox";
 import { Button } from "../ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
@@ -16,24 +17,28 @@ interface SandboxListProps {
 const SandboxList = (props: SandboxListProps) => {
     const { className, format, onSandboxClick } = props;
     const [showEditSandbox, setShowEditSandbox] = useState(false);
-    const [selectedSandboxId, setSelectedSandboxId] = useState<string | null>(null);
+    const [selectedSandbox, setSelectedSandbox] = useState<PersistedSandboxData | null>(null);
+    const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
     const sandboxes = usePlaygroundStore((state) => state.sandboxes);
     const lastActiveId = usePlaygroundStore((state) => state.lastActiveId);
     const setActiveSandbox = usePlaygroundStore((state) => state.setActiveSandbox);
     const deleteStoredSandbox = usePlaygroundStore((state) => state.deleteStoredSandbox);
 
-    const handleEditSandbox = (sandboxId: string) => (event: MouseEvent) => {
+    const handleEditSandbox = (sandbox: PersistedSandboxData) => (event: MouseEvent) => {
         event.preventDefault();
         event.stopPropagation();
-        setSelectedSandboxId(sandboxId);
+
+        setSelectedSandbox(sandbox);
         setShowEditSandbox(true);
     };
 
-    const handleDeleteSandbox = (id: string) => (event: MouseEvent) => {
+    const handleDeleteSandbox = (sandbox: PersistedSandboxData) => (event: MouseEvent) => {
         event.preventDefault();
         event.stopPropagation();
-        void deleteStoredSandbox(id);
+
+        setSelectedSandbox(sandbox);
+        setShowConfirmDelete(true);
     }
 
     const handleSandboxClick = (id: string) => () => {
@@ -41,10 +46,16 @@ const SandboxList = (props: SandboxListProps) => {
         if (onSandboxClick != null) onSandboxClick(id);
     }
 
+    const handleConfirmDelete = (confirmed: boolean) => {
+        if (confirmed && selectedSandbox) void deleteStoredSandbox(selectedSandbox.id);
+        setShowConfirmDelete(false);
+        setSelectedSandbox(null);
+    }
+
     return <>
         <DialogEditSandbox
             open={showEditSandbox}
-            sandboxId={selectedSandboxId}
+            sandboxId={selectedSandbox?.id}
             setOpen={(state) => setShowEditSandbox(state)} />
 
         <ul className={cn("space-y-1 w-full", className)}>
@@ -79,13 +90,21 @@ const SandboxList = (props: SandboxListProps) => {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
-                            <DropdownMenuItem onClick={handleEditSandbox(sandbox.id)}><Edit2 size={15} /> Edit</DropdownMenuItem>
-                            <DropdownMenuItem onClick={handleDeleteSandbox(sandbox.id)}><Trash size={15} /> Delete</DropdownMenuItem>
+                            <DropdownMenuItem onClick={handleEditSandbox(sandbox)}><Edit2 size={15} /> Edit</DropdownMenuItem>
+                            <DropdownMenuItem onClick={handleDeleteSandbox(sandbox)}><Trash size={15} /> Delete</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
             ))}
         </ul>
+
+        <DialogConfirm
+            title={`Delete Sandbox`}
+            description={`Are you sure you want to delete sandbox: (${selectedSandbox?.name})? This action cannot be undone.`}
+            open={showConfirmDelete}
+            setOpen={setShowConfirmDelete}
+            onConfirm={handleConfirmDelete}
+        />
     </>
 }
 

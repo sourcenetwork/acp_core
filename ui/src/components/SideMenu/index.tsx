@@ -1,4 +1,4 @@
-import { useUIActions, useUIState } from '@/stores/layoutStore';
+import { useLayoutStore, useUIActions } from '@/stores/layoutStore';
 import { cn } from '@/utils/classnames';
 import { Box, Plus } from 'lucide-react';
 import PaneHeader from '../PaneHeader';
@@ -9,7 +9,7 @@ import { ScrollArea } from '../ui/scroll-area';
 import { Separator } from '../ui/separator';
 
 const SideMenu = () => {
-    const { sandboxMenuOpen } = useUIState();
+    const sandboxMenuOpen = useLayoutStore((state) => state.sandboxMenuOpen);
     const { setSandboxMenuOpen, setCreateSandboxDialogOpen } = useUIActions();
 
     const handleNewSandboxButtonClick = () => setCreateSandboxDialogOpen(true);
@@ -31,15 +31,15 @@ const SideMenu = () => {
         </div>
 
         {sandboxMenuOpen &&
-            <div className='fixed md:static md:flex flex-col inset-0 shrink-0 z-50 md:z-auto '>
+            <div className='fixed md:static md:flex flex-col inset-0 shrink-0 z-11 md:z-auto '>
                 <ScrollArea type='always' className={cn("h-full min-w-0 p-2 bg-background border-r border-divider w-[240px] relative z-2")}>
                     <PaneHeader title="Sandboxes" showCollapse onCollapseClick={handleMenuToggleClick} />
-                    <Button variant={"ghost"} size={"sm"} className="border-2 text-xs w-full opacity-80 hover:opacity-100" onClick={handleNewSandboxButtonClick}>
-                        <Plus size={20} className="mr-1" /> New Sandbox
+                    <Button variant="default" size={"sm"} className="border-2 text-xs w-full opacity-80 hover:opacity-100" onClick={handleNewSandboxButtonClick}>
+                        <Plus size={16} className="mr-1" /> New Sandbox
                     </Button>
                     <SandboxList format='small' className='py-3' />
                 </ScrollArea>
-                <div className='fixed inset-0 bg-background opacity-50 z-1 md:hidden' onClick={handleMenuToggleClick} />
+                <div className='fixed inset-0 bg-background opacity-50 md:hidden' onClick={handleMenuToggleClick} />
             </div>
         }
     </div>

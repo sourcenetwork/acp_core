@@ -1,4 +1,4 @@
-import { Monaco } from "@monaco-editor/react";
+import type { Monaco } from "@monaco-editor/react";
 
 export const POLICY_THEOREM_LANGUAGE_ID = "policyTheorem";
 

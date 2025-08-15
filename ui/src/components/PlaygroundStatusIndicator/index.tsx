@@ -1,44 +1,50 @@
-// import { WasmStatus } from "@/lib/wasm";
-
 import { PlaygroundState } from "@/stores/playgroundStore";
 import { cn } from "@/utils/classnames";
 import { CircleCheck, CircleX, LoaderCircle } from "lucide-react";
-import { ReactNode } from "react";
+import { ReactNode, useMemo } from "react";
 
 interface PlaygroundStatusIndicatorProps {
     status: PlaygroundState['playgroundStatus']
+    syncing: boolean;
 }
 
-const PlaygroundStatusIndicator = ({ status }: PlaygroundStatusIndicatorProps) => {
+const PlaygroundStatusIndicator = ({ status, syncing }: PlaygroundStatusIndicatorProps) => {
 
-    const statuses: Record<PlaygroundState['playgroundStatus'], { label: string, color: string, icon: ReactNode } | null> = {
-        'ready': {
-            color: "text-src-primary",
-            label: "Loaded",
-            icon: <CircleCheck className="ml-1 inline-block w-4" />
-        },
-        'loading': {
-            color: "",
-            label: "Loading",
-            icon: <LoaderCircle className="ml-1 inline-block animate-spin w-4" />
-        },
-        'error': {
-            color: "text-red-500",
-            label: "Error Loading",
-            icon: <CircleX className="ml-1 inline-block w-4" />
-        },
-        'uninitialized': null,
-    }
-
-    const currentStatus = statuses[status];
-
-    return <div className="flex justify-between p-3">
-        {currentStatus &&
-            <span className={cn('inline-block text-[12px] leading-none ', currentStatus.color)}>
-                {currentStatus.label}
-                {currentStatus.icon}
-            </span>
+    const currentStatus: { label: string, color: string, icon: ReactNode } | null = useMemo(() => {
+        const statuses = {
+            'ready': {
+                color: "text-src-secondary",
+                label: "Loaded",
+                icon: <CircleCheck className="ml-1 inline-block w-4" />
+            },
+            'loading': {
+                color: "",
+                label: "Loading",
+                icon: <LoaderCircle className="ml-1 inline-block animate-spin w-4" />
+            },
+            'error': {
+                color: "text-red-500",
+                label: "Error Loading",
+                icon: <CircleX className="ml-1 inline-block w-4" />
+            },
+            'syncing': {
+                color: "text-src-secondary",
+                label: "Loaded",
+                icon: <LoaderCircle className="ml-1 inline-block animate-spin w-4" />
+            },
+            'uninitialized': null,
         }
+
+        return statuses[syncing ? 'syncing' : status];
+    }, [status, syncing]);
+
+    if (!currentStatus) return null;
+
+    return <div className={cn("flex items-center justify-between p-3", currentStatus.color)}>
+        <span className={cn('text-[12px] leading-none')}>
+            {currentStatus.label}
+        </span>
+        {currentStatus.icon}
     </div>
 }
 

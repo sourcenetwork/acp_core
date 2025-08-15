@@ -8,7 +8,7 @@ import { mapLocatedMessageMarkers } from "@/utils/mapLocatedMessageMarkers";
 import { mapTheoremResultMarkers } from "@/utils/mapTheoremResultMarkers";
 import { SandboxData, SandboxDataErrors } from "@acp/sandbox";
 import { Editor, EditorProps, Monaco, OnChange, OnMount, useMonaco } from "@monaco-editor/react";
-import * as monaco from 'monaco-editor';
+import type { editor } from "monaco-editor";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 interface BaseEditorProps {
@@ -41,21 +41,18 @@ const BaseEditor = (props: EditorProps & BaseEditorProps) => {
     const dataType = SandboxDataType[sandboxDataType];
 
     const monacoRef = useMonaco();
-
-    const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-    const decorationsRef = useRef<monaco.editor.IEditorDecorationsCollection | null>(null);
+    const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+    const decorationsRef = useRef<editor.IEditorDecorationsCollection | null>(null);
     const [isEditorMounted, setIsEditorMounted] = useState(false);
 
     const { theme } = useTheme();
     const activeSandbox = useSandbox();
-
     const dataErrors = usePlaygroundStore((state) => state.setStateDataErrors?.[dataType.errorKey]);
     const annotatedPolicyTheoremResult = usePlaygroundStore((state) => state.verifyTheoremsResult);
     const updateSandboxState = usePlaygroundStore((state) => state.setPlaygroundState);
-    const verifyTheorems = usePlaygroundStore((state) => state.verifyTheorems);
-    const sandboxStateStatus = usePlaygroundStore((state) => state.sandboxStateStatus);
     const setEditorSelection = usePlaygroundStore((state) => state.setEditorSelection);
-    const editorSelection = usePlaygroundStore((state) => state.editorSelections[sandboxDataType]);
+    const verifyTheoremsStatus = usePlaygroundStore((state) => state.verifyTheoremsStatus);
+    const sandboxErrorCount = usePlaygroundStore((state) => state.setStateDataErrorCount);
 
     const { setFocusedEditor } = useUIActions();
 
@@ -107,9 +104,11 @@ const BaseEditor = (props: EditorProps & BaseEditorProps) => {
         decorationsRef.current?.clear();
     };
 
-    const createGlyphDecorations = (markers: monaco.editor.IMarkerData[] = [], type: 'failing' | 'passing'): monaco.editor.IModelDeltaDecoration[] => {
+    const createGlyphDecorations = (markers: editor.IMarkerData[] = [], type: 'failing' | 'passing'): editor.IModelDeltaDecoration[] => {
+        if (!monacoRef) return [];
+
         return markers.map(marker => ({
-            range: new monaco.Range(marker.startLineNumber, 1, marker.startLineNumber, 1),
+            range: new monacoRef.Range(marker.startLineNumber, 1, marker.startLineNumber, 1),
             options: {
                 isWholeLine: true,
                 glyphMarginClassName: type === 'failing' ? 'failing-glyph' : 'passing-glyph',
@@ -120,34 +119,25 @@ const BaseEditor = (props: EditorProps & BaseEditorProps) => {
 
     const handleEditorChange: OnChange = useDebounce((value) => {
         void updateSandboxState({ [sandboxDataType]: value });
-        void verifyTheorems();
+
+        if (sandboxDataType === SandboxType.POLICY_THEOREM) {
+            clearGlyphDecorations();
+        }
     }, 500);
+
 
     const handleEditorMounted: OnMount = (editor) => {
         editorRef.current = editor;
         setIsEditorMounted(true);
 
-        // Restore selection
+        const editorSelection = usePlaygroundStore.getState().editorSelections[sandboxDataType];
+
+        // Restore any saved selection and focus the editor
         if (editorSelection) {
             editor.setSelection(editorSelection);
             editor.focus();
             setFocusedEditor(sandboxDataType);
         }
-
-        // Track focus events
-        const onFocusDisposable = editor.onDidFocusEditorWidget(() => {
-            setFocusedEditor(sandboxDataType);
-        });
-
-        const onBlurDisposable = editor.onDidBlurEditorWidget(() => {
-            // setFocusedEditor(null);
-        });
-
-        // Store disposables for cleanup
-        editorRef.current.onDidDispose(() => {
-            onFocusDisposable.dispose();
-            onBlurDisposable.dispose();
-        });
     }
 
     const handleBeforeMount = (monaco: Monaco) => {
@@ -155,16 +145,20 @@ const BaseEditor = (props: EditorProps & BaseEditorProps) => {
         definePolicyTheoremTheme(monaco);
     }
 
+    // Clear decorations after changes or errors as the markers could be stale or misaligned
+    useEffect(() => {
+        const hasErrors = sandboxErrorCount > 0;
+        const wasRun = verifyTheoremsStatus === 'passed' || verifyTheoremsStatus === 'error';
+
+        if (hasErrors || wasRun)
+            clearGlyphDecorations();
+    }, [verifyTheoremsStatus, sandboxErrorCount]);
+
     useEffect(() => {
         if (!isEditorMounted) return;
 
         updateMarkers();
     }, [dataErrors, annotatedPolicyTheoremResult, updateMarkers, isEditorMounted]);
-
-    useEffect(() => {
-        if (sandboxStateStatus !== "set") return;
-        if (isTheorumEditor) void verifyTheorems();
-    }, [sandboxStateStatus, isTheorumEditor, verifyTheorems, activeSandbox?.id]);
 
 
     // Track cursor position and selection 
@@ -172,16 +166,21 @@ const BaseEditor = (props: EditorProps & BaseEditorProps) => {
         const editor = editorRef.current;
         if (!isEditorMounted || !editor) return;
 
-        const selectionEvent = editor.onDidChangeCursorSelection((e) => setEditorSelection(sandboxDataType, e.selection))
+        const selectionEvent = editor.onDidChangeCursorSelection((e) => setEditorSelection(sandboxDataType, e.selection));
+        const focusEvent = editor.onDidFocusEditorWidget(() => setFocusedEditor(sandboxDataType));
+        const blurEvent = editor.onDidBlurEditorWidget(() => setFocusedEditor(null));
+
         return () => {
             selectionEvent.dispose();
+            focusEvent.dispose();
+            blurEvent.dispose();
         };
     }, [isEditorMounted, setEditorSelection, sandboxDataType]);
 
     const editorLanguage = dataType.language || 'yaml';
     const editorTheme = theme === 'dark' ? 'playgroundThemeDark' : 'playgroundThemeLight';
 
-    return <div className='h-full py-5 rounded-md overflow-hidden bg-editor border'>
+    return <div className='h-full py-5 rounded-md overflow-hidden bg-editor border isolate'>
         <Editor
             height="100%"
             defaultLanguage={editorLanguage}

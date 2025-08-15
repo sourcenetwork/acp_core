@@ -14,7 +14,7 @@ interface PaneTitleProps {
 const PaneHeader = ({ title, showCollapse, direction = 'left', onCollapseClick, className }: PaneTitleProps) => {
     const Icon = direction === 'left' ? PanelRightOpen : PanelLeftOpen;
 
-    return <div className={cn('text-xs text-muted-foreground mb-4 flex justify-between items-center border-b border-divider', className)}>
+    return <div className={cn('text-xs text-muted-foreground mb-2 flex justify-between items-center', className)}>
         {title}
 
         {showCollapse &&

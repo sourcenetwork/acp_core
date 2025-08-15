@@ -1,4 +1,4 @@
-import { SecondaryPaneTypes, useDragActions, usePaneActions, usePanes, useUIActions, useUIState } from "@/stores/layoutStore";
+import { useDragActions, useLayoutStore, usePanes, useUIActions } from "@/stores/layoutStore";
 import { cn } from "@/utils/classnames";
 import { DragDropProvider } from "@dnd-kit/react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -8,8 +8,8 @@ import DialogCreateSandbox from "../DialogCreateSandbox";
 import DialogLoadShare from "../DialogLoadShare";
 import { EditorPaneContainer } from "../EditorPaneContainer/EditorPaneContainer";
 import Header from "../Header";
-import PaneHeader from "../PaneHeader";
 import Output from "../PaneOutput";
+import SecondaryPaneContainer from "../SecondaryPaneContainer";
 import SecondarySideMenu from "../SecondarySideMenu";
 import SideMenu from "../SideMenu";
 import {
@@ -20,7 +20,7 @@ import {
 import { Toaster } from "../ui/toaster";
 
 const RootLayout = () => {
-  const showSecondaryMenu = false;
+  const showSecondaryMenu = true;
 
   const primaryPanelRef = useRef<ImperativePanelHandle>(null);
   const secondaryPanelRef = useRef<ImperativePanelHandle>(null);
@@ -30,13 +30,17 @@ const RootLayout = () => {
   const queryParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const shareId = queryParams.get("share");
 
-  // Store states
+
+  const createSandboxDialogOpen = useLayoutStore((state) => state.createSandboxDialogOpen);
+  const secondaryPaneOpen = useLayoutStore((state) => state.secondaryPaneOpen);
   const { handleDragMove, handleDragOver, handleDragEnd } = useDragActions();
-  const { secondaryPaneOpen, secondaryPaneType } = useUIState();
   const { setSecondaryPaneOpen, setCreateSandboxDialogOpen } = useUIActions();
-  const { createSandboxDialogOpen } = useUIState();
-  const { setActiveTab, splitActivePane } = usePaneActions();
+
   const panes = usePanes();
+
+  const toggleSecondaryPane = (state: boolean) => {
+    setSecondaryPaneOpen(state);
+  };
 
   const clearShareParam = () => {
     const params = new URLSearchParams(window.location.search);
@@ -55,37 +59,47 @@ const RootLayout = () => {
     secondaryPaneOpen ? pane.expand() : pane.collapse();
   }, [secondaryPaneOpen]);
 
+
+  const handleShareDialogOpen = (state: boolean) => {
+    setShareDialogOpen(state);
+    clearShareParam();
+  };
+
+  const handleCreateSandboxDialogOpen = (state: boolean) => {
+    setCreateSandboxDialogOpen(state);
+  };
+
   return (
     <div className="flex h-dvh flex-col">
       <Header />
       <div className="flex grow overflow-y-auto">
         <SideMenu />
 
-        <DragDropProvider
-          onDragMove={handleDragMove}
-          onDragOver={handleDragOver}
-          onDragEnd={handleDragEnd}
-        >
-          <div className="w-full min-w-0 ">
+        <div className="w-full min-w-0 ">
 
-            {/* Primary Panel */}
-            <ResizablePanelGroup
-              direction="horizontal"
-              autoSaveId={"primary-panel-layout"}
-            >
-              <ResizablePanel defaultSize={75} minSize={10} >
-                <ResizablePanelGroup
-                  direction="vertical"
-                  autoSaveId={"primary-panel-layout"}
+          {/* Primary Panel */}
+          <ResizablePanelGroup
+            direction="horizontal"
+            autoSaveId={"primary-panel-layout"}
+          >
+            <ResizablePanel defaultSize={75} minSize={10} >
+              <ResizablePanelGroup
+                direction="vertical"
+                autoSaveId={"primary-panel-layout"}
+              >
+                <ResizablePanel
+                  ref={primaryPanelRef}
+                  defaultSize={75}
+                  minSize={10}
                 >
-                  <ResizablePanel
-                    ref={primaryPanelRef}
-                    defaultSize={75}
-                    minSize={10}
+                  <ResizablePanelGroup
+                    direction="horizontal"
+                    autoSaveId={"primary-editors"}
                   >
-                    <ResizablePanelGroup
-                      direction="horizontal"
-                      autoSaveId={"primary-editors"}
+                    <DragDropProvider
+                      onDragMove={handleDragMove}
+                      onDragOver={handleDragOver}
+                      onDragEnd={handleDragEnd}
                     >
                       {panes.map((pane, index) => (
                         <EditorPaneContainer
@@ -93,77 +107,67 @@ const RootLayout = () => {
                           pane={pane}
                           index={index}
                           isLast={index === panes.length - 1}
-                          onSetActiveTab={setActiveTab}
-                          onSplitPane={splitActivePane}
                         />
                       ))}
-                    </ResizablePanelGroup>
-                  </ResizablePanel>
-                  <ResizableHandle />
-                  <ResizablePanel defaultSize={25} minSize={10} className="px-2">
-                    <Output />
-                  </ResizablePanel>
-                </ResizablePanelGroup>
-              </ResizablePanel>
+                    </DragDropProvider>
+                  </ResizablePanelGroup>
+                </ResizablePanel>
+                <ResizableHandle />
+                <ResizablePanel defaultSize={25} minSize={10} className="px-2">
+                  <Output />
+                </ResizablePanel>
+              </ResizablePanelGroup>
+            </ResizablePanel>
 
-              {/* Secondary Panel */}
-              {showSecondaryMenu &&
-                <>
-                  <ResizableHandle className="hidden md:flex" />
-                  <ResizablePanel defaultSize={40} minSize={10}
-                    ref={secondaryPanelRef}
-                    collapsible
-                    collapsedSize={0}
-                    onCollapse={() => setSecondaryPaneOpen(false)}
-                    onExpand={() => setSecondaryPaneOpen(true)}
-                    className={cn(
-                      "md:block",
-                      "md:relative md:transform-none md:shadow-none md:z-auto",
-                      secondaryPaneOpen && "fixed top-0 right-0 h-full w-10/12 border-l border-divider bg-background shadow-xl z-50"
-                    )}>
+            {/* Secondary Panel */}
+            {showSecondaryMenu &&
+              <>
+                <ResizableHandle className="hidden md:flex" />
+                <ResizablePanel defaultSize={40} minSize={10}
+                  ref={secondaryPanelRef}
+                  collapsible
+                  collapsedSize={0}
+                  onCollapse={() => toggleSecondaryPane(false)}
+                  onExpand={() => toggleSecondaryPane(true)}
+                  className={cn(
+                    "md:flex flex-col h-full overflow-hidden",
+                    "md:relative md:transform-none md:shadow-none md:z-auto",
+                    secondaryPaneOpen && "fixed top-0 right-0 h-full w-10/12 border-l border-divider bg-background shadow-xl z-50"
+                  )}>
 
-                    <div className="p-4 relative z-2 h-full">
-                      {secondaryPaneType === SecondaryPaneTypes.Check &&
-                        <PaneHeader showCollapse title="Check" direction="right" onCollapseClick={() => setSecondaryPaneOpen(false)} />
-                      }
-                      {secondaryPaneType === SecondaryPaneTypes.Expand &&
-                        <PaneHeader showCollapse title="Expand" direction="right" onCollapseClick={() => setSecondaryPaneOpen(false)} />}
-                    </div>
+                  <div className='relative z-10 h-full'>
+                    <SecondaryPaneContainer />
+                  </div>
 
-                    <div
-                      className={cn("fixed inset-0 bg-background opacity-50 z-1 md:hidden",
-                        { "hidden": secondaryPaneOpen })}
-                      onClick={() => setSecondaryPaneOpen(false)}
-                    />
-                  </ResizablePanel>
-                </>
-              }
+                  <div
+                    className={cn("fixed inset-0 bg-background opacity-50 z-1 md:hidden",
+                      { "hidden": !secondaryPaneOpen })}
+                    onClick={() => toggleSecondaryPane(false)}
+                  />
+                </ResizablePanel>
+              </>
+            }
 
-            </ResizablePanelGroup>
+          </ResizablePanelGroup>
 
-          </div>
-
-        </DragDropProvider>
+        </div>
 
         {showSecondaryMenu && <SecondarySideMenu />}
-      </div>
+      </div >
 
       <DialogLoadShare
         shareId={shareId}
         open={shareDialogOpen}
-        setOpen={(state) => {
-          setShareDialogOpen(state);
-          clearShareParam();
-        }}
+        setOpen={handleShareDialogOpen}
       />
 
       <DialogCreateSandbox
         open={createSandboxDialogOpen}
-        setOpen={(state) => setCreateSandboxDialogOpen(state)}
+        setOpen={handleCreateSandboxDialogOpen}
       />
 
       <Toaster />
-    </div>
+    </div >
   );
 };
 

@@ -1,8 +1,14 @@
-import { STORE_KEY, STORE_VERSION, WASM_PATH } from "@/constants";
+import { STORE_KEY, STORE_VERSION } from "@/constants";
+import { getPlaygroundWorkerProxy } from "@/playgroundWorkerProxy";
+import { PolicyCatalogue } from "@/types/proto-js/sourcenetwork/acp_core/catalogue";
 import { countErrors } from "@/utils/errorUtils";
-import { loadPlaygroundWasm } from "@/utils/loadWasm";
 import { theoremResultPassing } from "@/utils/mapTheoremResultMarkers";
-import { NewSandboxRequest, PlaygroundService } from "@acp/playground";
+import {
+  ExplainCheckRequest,
+  ExplainCheckResponse,
+  NewSandboxRequest,
+  PlaygroundService,
+} from "@acp/playground";
 import { SandboxData, SandboxDataErrors, SandboxTemplate } from "@acp/sandbox";
 import { AnnotatedPolicyTheoremResult } from "@acp/theorem";
 import type { IRange } from "monaco-editor";
@@ -17,6 +23,13 @@ import {
   getActiveSandboxHandle,
   getLastActiveSandbox,
 } from "../lib/playgroundStoreUtils";
+
+type ExplainCheckFormData = {
+  resourceId: string;
+  resourceType: string;
+  permission: string;
+  actorId: string;
+};
 
 const initialVerifyTheoremsState: Pick<
   PlaygroundState,
@@ -36,6 +49,24 @@ const initalSetStateState: Pick<
   setStateError: undefined,
 };
 
+const initialExplainCheckState: Pick<
+  PlaygroundState,
+  "explainCheckResult" | "explainCheckStatus" | "explainCheckError"
+> = {
+  explainCheckResult: undefined,
+  explainCheckStatus: "pending",
+  explainCheckError: undefined,
+};
+
+const initialCatalogueState: Pick<
+  PlaygroundState,
+  "catalogue" | "catalogueStatus" | "catalogueError"
+> = {
+  catalogue: undefined,
+  catalogueStatus: "pending",
+  catalogueError: undefined,
+};
+
 const initialPersistedPlaygroundData: Pick<
   PlaygroundState,
   "sandboxes" | "lastActiveId"
@@ -48,22 +79,13 @@ export const initialStates = {
   persistedPlaygroundData: initialPersistedPlaygroundData,
   setStateState: initalSetStateState,
   verifyTheoremsState: initialVerifyTheoremsState,
-};
-
-const formatSandboxName = (text: string): string => {
-  return text
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "-") // Replace spaces with hyphens
-    .replace(/[^\w\-]+/g, "") // Remove all non-word chars except hyphens
-    .replace(/\-\-+/g, "-") // Replace multiple hyphens with single hyphen
-    .replace(/^-+/, "") // Trim hyphens from start
-    .replace(/-+$/, ""); // Trim hyphens from end
+  explainCheckState: initialExplainCheckState,
+  catalogueState: initialCatalogueState,
 };
 
 export const blankSandboxData = (name: string = "new-sandbox"): SandboxData => {
   return {
-    policyDefinition: `name: ${formatSandboxName(name)} \n`,
+    policyDefinition: `name: '${name}' \n`,
     policyTheorem: `Authorizations {\n\n}\n\nDelegations {\n}`,
     relationships: "",
   };
@@ -96,18 +118,26 @@ export interface PlaygroundState {
   activeHandle?: number;
 
   /* Playground Data */
+  playgroundSyncing: boolean; // Whether the playground is syncing with the server
   playgroundStatus: "uninitialized" | "loading" | "ready" | "error";
   playgroundError?: string;
   playground?: PlaygroundService | null;
   setStateDataErrors?: SandboxDataErrors;
   setStateDataErrorCount: number;
   setStateError?: string;
-  verifyTheoremsStatus: "pending" | "loading" | "passed" | "error";
+  verifyTheoremsStatus: "pending" | "loading" | "passed" | "failed" | "error";
   verifyTheoremsResult?: AnnotatedPolicyTheoremResult;
   verifyTheoremsError?: string;
   sandboxTemplates: SandboxTemplate[] | null;
   sandboxStateStatus: "unset" | "set" | "error";
   editorSelections: Record<string, IRange | null>;
+  explainCheckResult?: ExplainCheckResponse;
+  explainCheckStatus: "pending" | "loading" | "passed" | "error";
+  explainCheckError?: string | null;
+  catalogue?: PolicyCatalogue;
+  catalogueStatus: "pending" | "loading" | "passed" | "error";
+  catalogueError?: string;
+  explainCheckFormData?: Partial<ExplainCheckFormData> | null;
 
   /* Playground Actions */
   initPlayground: () => Promise<void>;
@@ -117,6 +147,9 @@ export interface PlaygroundState {
   setPlaygroundState: (args: Partial<SandboxData>) => Promise<void>;
   verifyTheorems: () => Promise<void>;
   loadTemplate: (template: SandboxTemplate) => Promise<void>;
+  explainCheck: (input: ExplainCheckRequest) => Promise<void>;
+  getCatalogue: (handle: number) => Promise<void>;
+  setExplainCheckFormData: (data: Partial<ExplainCheckFormData>) => void;
 
   /* Pesisted State Actions */
   findSandboxById: (id?: string | null) => {
@@ -149,6 +182,7 @@ export const usePlaygroundStore = create<PlaygroundState>()(
       (set, get) => {
         return {
           playgroundStatus: "uninitialized",
+          playgroundSyncing: false,
           sandboxStateStatus: "unset",
           sandboxTemplates: null,
           idHandleMap: {},
@@ -158,6 +192,11 @@ export const usePlaygroundStore = create<PlaygroundState>()(
           ...initialStates.persistedPlaygroundData,
           ...initialStates.setStateState,
           ...initialStates.verifyTheoremsState,
+          ...initialStates.explainCheckState,
+          ...initialStates.catalogueState,
+
+          // Form State
+          explainCheckFormData: null,
 
           initPlayground: async () => {
             try {
@@ -171,9 +210,11 @@ export const usePlaygroundStore = create<PlaygroundState>()(
               set({ playgroundStatus: "loading" });
 
               // Start Loading the playground wasm module
-              await loadPlaygroundWasm(WASM_PATH);
+              // await loadPlaygroundWasm(WASM_PATH);
+              // const playground = await window.AcpPlayground.new();
 
-              const playground = await window.AcpPlayground.new();
+              const playgroundWorker = await getPlaygroundWorkerProxy();
+              const playground = await playgroundWorker.getPlaygroundProxy();
               const sampleResult = await playground.GetSampleSandboxes({});
               const firstTemplate = sampleResult?.samples[0];
 
@@ -195,7 +236,7 @@ export const usePlaygroundStore = create<PlaygroundState>()(
                 data: firstTemplate?.data ?? blankSandboxData(),
               });
             } catch (error) {
-              console.error(error);
+              console.error(error, "Failed to initialize playground");
               set({
                 playgroundStatus: "error",
                 playgroundError: (error as Error)?.message,
@@ -214,12 +255,14 @@ export const usePlaygroundStore = create<PlaygroundState>()(
 
           setPlaygroundState: async (updates) => {
             try {
-              const { updateActiveStoredSandbox } = get();
+              const { updateActiveStoredSandbox, getCatalogue } = get();
               const { playground, handle } = getActiveSandboxHandle();
               const { active } = getLastActiveSandbox();
 
               // Reset playground state data
               set(initialStates.setStateState);
+
+              set({ playgroundSyncing: true });
 
               const newState = {
                 ...(active?.data ?? blankSandboxData()),
@@ -235,16 +278,19 @@ export const usePlaygroundStore = create<PlaygroundState>()(
                 sandboxStateStatus: stateResult.ok ? "set" : "error",
                 setStateDataErrors: stateResult?.errors,
                 setStateDataErrorCount: countErrors(stateResult?.errors),
+                // Reset theorems state as invalidated by the new state
+                ...initialStates.verifyTheoremsState,
               });
 
-              set(initialStates.verifyTheoremsState);
-
-              // Persist state data into storage
+              // Get the catalogue for the sandbox
+              void getCatalogue(handle);
             } catch (error) {
               set({
                 sandboxStateStatus: "error",
                 setStateError: (error as Error)?.message,
               });
+            } finally {
+              set({ playgroundSyncing: false });
             }
           },
 
@@ -254,17 +300,21 @@ export const usePlaygroundStore = create<PlaygroundState>()(
 
               // Reset state for theorems
               set(initialStates.verifyTheoremsState);
+              set({ verifyTheoremsStatus: "loading" });
 
               const { result } = await playground.VerifyTheorems({ handle });
 
               set({
                 verifyTheoremsStatus: theoremResultPassing(result)
                   ? "passed"
-                  : "error",
+                  : "failed",
                 verifyTheoremsResult: result,
               });
             } catch (error) {
-              set({ verifyTheoremsError: (error as Error)?.message });
+              set({
+                verifyTheoremsStatus: "error",
+                verifyTheoremsError: (error as Error)?.message,
+              });
             }
           },
 
@@ -404,16 +454,66 @@ export const usePlaygroundStore = create<PlaygroundState>()(
           handleSandboxSyncChangeReceived: async (
             sandbox: PersistedSandboxData[]
           ) => {
-            const { setPlaygroundState, verifyTheorems, lastActiveId } = get();
+            const { setPlaygroundState, lastActiveId } = get();
             const activeSandbox = sandbox.find((s) => s.id === lastActiveId);
             if (!activeSandbox) return;
             await setPlaygroundState(activeSandbox.data);
-            await verifyTheorems();
           },
           setEditorSelection: (id, selection) => {
             set((state) => ({
               editorSelections: { ...state.editorSelections, [id]: selection },
             }));
+          },
+
+          explainCheck: async (input) => {
+            const { playground } = get();
+            if (!playground) throw new Error("Playground is not initialized");
+
+            try {
+              set({ explainCheckStatus: "loading" });
+
+              const result = await playground.ExplainCheck(input);
+
+              set({
+                explainCheckStatus: "passed",
+                explainCheckResult: result,
+                explainCheckError: null,
+              });
+            } catch (error) {
+              console.error(error, "Failed to explain check");
+              set({
+                explainCheckStatus: "error",
+                explainCheckError: (error as Error)?.message,
+              });
+            }
+          },
+
+          setExplainCheckFormData: (data) => {
+            const { explainCheckFormData } = get();
+            set({ explainCheckFormData: { ...explainCheckFormData, ...data } });
+          },
+
+          getCatalogue: async (handle) => {
+            const { playground, activeHandle } = get();
+            if (!playground) throw new Error("Playground is not initialized");
+
+            try {
+              set({ catalogueStatus: "loading" });
+
+              const targetHandle = handle ?? activeHandle ?? 0;
+
+              const { catalogue } = await playground.GetCatalogue({
+                handle: targetHandle,
+              });
+
+              set({ catalogue, catalogueStatus: "passed" });
+            } catch (error) {
+              console.error(error, "Failed to get catalogue");
+              set({
+                catalogueStatus: "error",
+                catalogueError: (error as Error)?.message,
+              });
+            }
           },
         };
       },
@@ -423,6 +523,7 @@ export const usePlaygroundStore = create<PlaygroundState>()(
         partialize: (state) => ({
           sandboxes: state.sandboxes,
           lastActiveId: state.lastActiveId,
+          explainCheckFormData: state.explainCheckFormData,
         }),
       }
     )
