@@ -1,7 +1,7 @@
+import { SHARE_URL } from "@/constants";
 import { useSandbox } from "@/hooks/useSandbox";
 import { PersistedSandboxData } from "@/stores/playgroundStore";
 import { cn } from "@/utils/classnames";
-import { SHARE_URL } from "@/constants";
 import { CheckIcon, ClipboardIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
@@ -13,19 +13,29 @@ interface DialogCopyShareProps {
     setOpen: (state: boolean) => unknown
 }
 
-const postShare = async (data?: PersistedSandboxData) => {
-    if (!data) return;
+type ShareResponse = {
+    id: string;
+}
+
+const postShare = async (sandbox?: PersistedSandboxData) => {
+    if (!sandbox) return;
+
+    const { policyDefinition, relationships, policyTheorem } = sandbox.data;
+
+    const body = new URLSearchParams({
+        "state.policyDefinition": policyDefinition,
+        "state.relationships": relationships,
+        "state.policyTheorem": policyTheorem,
+    }).toString();
+
     const response = await fetch(SHARE_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            name: data?.name,
-            description: data?.description,
-            data: data?.data,
-        })
+        headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+        body,
     })
 
-    const result = await response.json() as Partial<PersistedSandboxData>;
+    const result = await response.json() as ShareResponse;
+
     return result;
 }
 
@@ -44,7 +54,7 @@ const DialogCopyShare = ({ open, setOpen }: DialogCopyShareProps) => {
     const link = `${baseUrl}?share=${shareLink}`;
 
     useEffect(() => {
-        setTimeout(() => setHasCopied(false), 2000)
+        window.setTimeout(() => setHasCopied(false), 2000)
     }, [hasCopied])
 
     useEffect(() => {

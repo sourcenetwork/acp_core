@@ -1,5 +1,6 @@
 import { SHARE_URL } from "@/constants";
-import { PersistedSandboxData, usePlaygroundStore } from "@/stores/playgroundStore";
+import { usePlaygroundStore } from "@/stores/playgroundStore";
+import { SandboxData } from "@/types/proto-js/sourcenetwork/acp_core/sandbox";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
@@ -10,20 +11,25 @@ interface DialogLoadShareProps {
     setOpen: (state: boolean) => unknown
 }
 
+type ShareResponse = {
+    state: SandboxData;
+}
+
 const fetchShare = async (shareId: string) => {
-    const response = await fetch(`${SHARE_URL}?id=${shareId}`, {
+    const response = await fetch(`${SHARE_URL}/${shareId}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
     });
 
-    const result = await response.json() as PersistedSandboxData;
+    const result = await response.json() as ShareResponse;
+
     return result;
 }
 
 const DialogLoadShare = ({ shareId, open, setOpen }: DialogLoadShareProps) => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
-    const [shareJson, setShareJson] = useState<PersistedSandboxData | null>(null);
+    const [shareJson, setShareJson] = useState<ShareResponse | null>(null);
 
     const playgroundStatus = usePlaygroundStore((state) => state.playgroundStatus);
     const updateActiveSandbox = usePlaygroundStore((state) => state.updateActiveStoredSandbox);
@@ -43,19 +49,19 @@ const DialogLoadShare = ({ shareId, open, setOpen }: DialogLoadShareProps) => {
 
     }, [shareId]);
 
-    const onActionClick = (action: 'new' | 'replace' | false, data?: PersistedSandboxData | null) => {
+    const onActionClick = (action: 'new' | 'replace' | false, data?: ShareResponse | null) => {
         setOpen(false);
 
         if (!data) return;
 
         if (action === 'replace') void updateActiveSandbox({
-            data: data.data
+            data: data.state
         });
 
         if (action === 'new') void newSandbox({
-            name: data.name,
-            description: data.description,
-            data: data.data
+            name: `Share: ${shareId}`,
+            description: ``,
+            data: data.state
         });
     }
 
@@ -70,8 +76,6 @@ const DialogLoadShare = ({ shareId, open, setOpen }: DialogLoadShareProps) => {
             {shareJson &&
                 <div className="mb-3">
                     <div className="text-xs opacity-50 mb-1">Share: {shareId}</div>
-                    <div className="mb-1">{shareJson?.name}</div>
-                    <div className="text-xs">{shareJson?.description}</div>
                 </div>
             }
 
@@ -85,7 +89,7 @@ const DialogLoadShare = ({ shareId, open, setOpen }: DialogLoadShareProps) => {
                 {isLoading === false &&
                     <>
                         <Button type="button" variant="secondary" disabled={!shareJson} onClick={() => onActionClick('replace', shareJson)}>Override</Button>
-                        <Button className="" type="button" variant="default" disabled={!shareJson} onClick={() => onActionClick('new', shareJson)}>Load</Button>
+                        <Button className="" type="button" variant="default" disabled={!shareJson} onClick={() => onActionClick('new', shareJson)}>Load New</Button>
                     </>
                 }
             </DialogFooter>
