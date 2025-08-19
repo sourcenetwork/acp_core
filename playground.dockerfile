@@ -27,7 +27,7 @@ RUN npm ci
 
 COPY --chown=node:node --from=playground-builder /app/build/playground.wasm ./public/
 COPY --chown=node:node ./ui/ ./
-
+ENV VITE_SHARE_URL="/api/sandboxes"
 # Override wasm_exec.js with the correct version for the build
 COPY --chown=node:node --from=playground-builder /app/build/wasm_exec.js ./src/lib/wasm_exec.js
 RUN  npm run build
