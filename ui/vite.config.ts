@@ -14,7 +14,6 @@ export default defineConfig(({ mode }) => {
         "/api": {
           target: env.VITE_BACKEND_API || "http://localhost:8081",
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, ""),
         },
       },
     },

@@ -12,14 +12,19 @@ interface DialogLoadShareProps {
 }
 
 type ShareResponse = {
-    state: SandboxData;
+    state: SandboxData & { name: string };
 }
 
-const fetchShare = async (shareId: string) => {
+const fetchShare = async (shareId: string, signal?: AbortSignal) => {
     const response = await fetch(`${SHARE_URL}/${shareId}`, {
         method: "GET",
+        signal,
         headers: { "Content-Type": "application/json" },
     });
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch share (${response.status} ${response.statusText})`);
+    }
 
     const result = await response.json() as ShareResponse;
 
@@ -38,30 +43,46 @@ const DialogLoadShare = ({ shareId, open, setOpen }: DialogLoadShareProps) => {
     const isLoading = loading === true || playgroundStatus === 'loading';
 
     useEffect(() => {
-        if (!shareId) return;
+        if (!shareId || !open) {
+            setLoading(false);
+            return;
+        };
+
+        const ac = new AbortController();
+
         setLoading(true);
         setError(null);
+        setShareJson(null);
 
-        fetchShare(shareId)
+        fetchShare(shareId, ac.signal)
             .then((sandbox) => setShareJson(sandbox))
-            .catch(error => setError((error as Error)?.message)).
-            finally(() => setLoading(false));
+            .catch(error => {
+                console.error(error);
+                if ((error as any)?.name === "AbortError") return;
+                setError((error as Error)?.message);
+            }).
+            finally(() => {
+                if (!ac.signal.aborted) setLoading(false);
+            });
 
-    }, [shareId]);
+        return () => ac.abort();
+    }, [shareId, open]);
 
     const onActionClick = (action: 'new' | 'replace' | false, data?: ShareResponse | null) => {
         setOpen(false);
 
         if (!data) return;
 
+        const { policyDefinition, relationships, policyTheorem } = data.state;
+
         if (action === 'replace') void updateActiveSandbox({
-            data: data.state
+            data: { policyDefinition, relationships, policyTheorem }
         });
 
         if (action === 'new') void newSandbox({
-            name: `Share: ${shareId}`,
+            name: data.state.name || `Share: ${shareId}`,
             description: ``,
-            data: data.state
+            data: { policyDefinition, relationships, policyTheorem }
         });
     }
 
@@ -76,6 +97,7 @@ const DialogLoadShare = ({ shareId, open, setOpen }: DialogLoadShareProps) => {
             {shareJson &&
                 <div className="mb-3">
                     <div className="text-xs opacity-50 mb-1">Share: {shareId}</div>
+                    <div className="mb-1">{shareJson.state?.name}</div>
                 </div>
             }
 

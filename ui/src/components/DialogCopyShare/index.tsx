@@ -23,6 +23,7 @@ const postShare = async (sandbox?: PersistedSandboxData) => {
     const { policyDefinition, relationships, policyTheorem } = sandbox.data;
 
     const body = new URLSearchParams({
+        "state.name": sandbox.name,
         "state.policyDefinition": policyDefinition,
         "state.relationships": relationships,
         "state.policyTheorem": policyTheorem,
@@ -33,6 +34,10 @@ const postShare = async (sandbox?: PersistedSandboxData) => {
         headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
         body,
     })
+
+    if (!response.ok) {
+        throw new Error(`Failed to create share (${response.status} ${response.statusText})`);
+    }
 
     const result = await response.json() as ShareResponse;
 
@@ -66,7 +71,10 @@ const DialogCopyShare = ({ open, setOpen }: DialogCopyShareProps) => {
 
         postShare(activeSandbox)
             .then(result => setShareLink(result?.id ?? null))
-            .catch(error => setError((error as Error)?.message))
+            .catch(error => {
+                console.error(error);
+                setError((error as Error)?.message);
+            })
             .finally(() => setLoading(false));
 
     }, [open, activeSandbox]);
