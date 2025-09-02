@@ -201,7 +201,7 @@ func (s *PlaygroundServiceProxy) VerifyTheorems(this js.Value, args []js.Value) 
 	return resp, nil
 }
 
-func (s *PlaygroundServiceProxy) Simulate(this js.Value, args []js.Value) (*types.SimulateReponse, error) {
+func (s *PlaygroundServiceProxy) Simulate(this js.Value, args []js.Value) (*types.SimulateResponse, error) {
 	req := &types.SimulateRequest{}
 	err := unmarsahlArgs(req, args)
 	if err != nil {

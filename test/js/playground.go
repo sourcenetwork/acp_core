@@ -60,7 +60,7 @@ func (s *PlaygroundJS) RestoreScratchpad(ctx context.Context, req *types.Restore
 	return s.proxy.RestoreScratchpad(s.this, mustMapArgument(req))
 }
 
-func (s *PlaygroundJS) Simulate(ctx context.Context, req *types.SimulateRequest) (*types.SimulateReponse, error) {
+func (s *PlaygroundJS) Simulate(ctx context.Context, req *types.SimulateRequest) (*types.SimulateResponse, error) {
 	return s.proxy.Simulate(s.this, mustMapArgument(req))
 }
 
