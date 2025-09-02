@@ -93,7 +93,7 @@ export interface SimulateRequest {
   data: SandboxData | undefined;
 }
 
-export interface SimulateReponse {
+export interface SimulateResponse {
   /** validate_data flags whether the input SandboxData was sucessfuly loaded */
   validData: boolean;
   /** errors represent all recoverable errors found while parsing and setting the sandbox state */
@@ -200,7 +200,7 @@ export interface PlaygroundService {
    * evaluates the given theorem against the sandbox's policy and returns the result
    * Simulate is a oneshot operation and persists no state in the process.
    */
-  Simulate(request: SimulateRequest): Promise<SimulateReponse>;
+  Simulate(request: SimulateRequest): Promise<SimulateResponse>;
   /**
    * GetSampleSandboxes returns a set of preloaded SandboxData objects
    * which are used to demo different ACP Features
