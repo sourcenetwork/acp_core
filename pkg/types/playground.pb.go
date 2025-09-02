@@ -6,14 +6,15 @@ package types
 import (
 	context "context"
 	fmt "fmt"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+
 	grpc1 "github.com/cosmos/gogoproto/grpc"
 	proto "github.com/cosmos/gogoproto/proto"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -667,7 +668,7 @@ func (m *SimulateRequest) GetData() *SandboxData {
 	return nil
 }
 
-type SimulateReponse struct {
+type SimulateResponse struct {
 	// validate_data flags whether the input SandboxData was sucessfuly loaded
 	ValidData bool `protobuf:"varint,1,opt,name=valid_data,json=validData,proto3" json:"valid_data,omitempty"`
 	// errors represent all recoverable errors found while parsing and setting the sandbox state
@@ -678,16 +679,16 @@ type SimulateReponse struct {
 	Result *AnnotatedPolicyTheoremResult `protobuf:"bytes,4,opt,name=result,proto3" json:"result,omitempty"`
 }
 
-func (m *SimulateReponse) Reset()         { *m = SimulateReponse{} }
-func (m *SimulateReponse) String() string { return proto.CompactTextString(m) }
-func (*SimulateReponse) ProtoMessage()    {}
-func (*SimulateReponse) Descriptor() ([]byte, []int) {
+func (m *SimulateResponse) Reset()         { *m = SimulateResponse{} }
+func (m *SimulateResponse) String() string { return proto.CompactTextString(m) }
+func (*SimulateResponse) ProtoMessage()    {}
+func (*SimulateResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_066f4376ca35c9d5, []int{13}
 }
-func (m *SimulateReponse) XXX_Unmarshal(b []byte) error {
+func (m *SimulateResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *SimulateReponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *SimulateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
 		return xxx_messageInfo_SimulateReponse.Marshal(b, m, deterministic)
 	} else {
@@ -699,40 +700,40 @@ func (m *SimulateReponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, err
 		return b[:n], nil
 	}
 }
-func (m *SimulateReponse) XXX_Merge(src proto.Message) {
+func (m *SimulateResponse) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_SimulateReponse.Merge(m, src)
 }
-func (m *SimulateReponse) XXX_Size() int {
+func (m *SimulateResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *SimulateReponse) XXX_DiscardUnknown() {
+func (m *SimulateResponse) XXX_DiscardUnknown() {
 	xxx_messageInfo_SimulateReponse.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_SimulateReponse proto.InternalMessageInfo
 
-func (m *SimulateReponse) GetValidData() bool {
+func (m *SimulateResponse) GetValidData() bool {
 	if m != nil {
 		return m.ValidData
 	}
 	return false
 }
 
-func (m *SimulateReponse) GetErrors() *SandboxDataErrors {
+func (m *SimulateResponse) GetErrors() *SandboxDataErrors {
 	if m != nil {
 		return m.Errors
 	}
 	return nil
 }
 
-func (m *SimulateReponse) GetRecord() *SandboxRecord {
+func (m *SimulateResponse) GetRecord() *SandboxRecord {
 	if m != nil {
 		return m.Record
 	}
 	return nil
 }
 
-func (m *SimulateReponse) GetResult() *AnnotatedPolicyTheoremResult {
+func (m *SimulateResponse) GetResult() *AnnotatedPolicyTheoremResult {
 	if m != nil {
 		return m.Result
 	}
@@ -1385,7 +1386,7 @@ func init() {
 	proto.RegisterType((*RestoreScratchpadRequest)(nil), "sourcenetwork.acp_core.RestoreScratchpadRequest")
 	proto.RegisterType((*RestoreScratchpadResponse)(nil), "sourcenetwork.acp_core.RestoreScratchpadResponse")
 	proto.RegisterType((*SimulateRequest)(nil), "sourcenetwork.acp_core.SimulateRequest")
-	proto.RegisterType((*SimulateReponse)(nil), "sourcenetwork.acp_core.SimulateReponse")
+	proto.RegisterType((*SimulateResponse)(nil), "sourcenetwork.acp_core.SimulateReponse")
 	proto.RegisterType((*GetSandboxRequest)(nil), "sourcenetwork.acp_core.GetSandboxRequest")
 	proto.RegisterType((*GetSandboxResponse)(nil), "sourcenetwork.acp_core.GetSandboxResponse")
 	proto.RegisterType((*GetSampleSandboxesRequest)(nil), "sourcenetwork.acp_core.GetSampleSandboxesRequest")
@@ -1508,7 +1509,7 @@ type PlaygroundServiceClient interface {
 	// Simulate receives Sandbox state data and a theorem, creates an ephemeral sandbox
 	// evaluates the given theorem against the sandbox's policy and returns the result
 	// Simulate is a oneshot operation and persists no state in the process.
-	Simulate(ctx context.Context, in *SimulateRequest, opts ...grpc.CallOption) (*SimulateReponse, error)
+	Simulate(ctx context.Context, in *SimulateRequest, opts ...grpc.CallOption) (*SimulateResponse, error)
 	// GetSampleSandboxes returns a set of preloaded SandboxData objects
 	// which are used to demo different ACP Features
 	GetSampleSandboxes(ctx context.Context, in *GetSampleSandboxesRequest, opts ...grpc.CallOption) (*GetSampleSandboxesResponse, error)
@@ -1587,8 +1588,8 @@ func (c *playgroundServiceClient) VerifyTheorems(ctx context.Context, in *Verify
 	return out, nil
 }
 
-func (c *playgroundServiceClient) Simulate(ctx context.Context, in *SimulateRequest, opts ...grpc.CallOption) (*SimulateReponse, error) {
-	out := new(SimulateReponse)
+func (c *playgroundServiceClient) Simulate(ctx context.Context, in *SimulateRequest, opts ...grpc.CallOption) (*SimulateResponse, error) {
+	out := new(SimulateResponse)
 	err := c.cc.Invoke(ctx, "/sourcenetwork.acp_core.PlaygroundService/Simulate", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -1643,7 +1644,7 @@ type PlaygroundServiceServer interface {
 	// Simulate receives Sandbox state data and a theorem, creates an ephemeral sandbox
 	// evaluates the given theorem against the sandbox's policy and returns the result
 	// Simulate is a oneshot operation and persists no state in the process.
-	Simulate(context.Context, *SimulateRequest) (*SimulateReponse, error)
+	Simulate(context.Context, *SimulateRequest) (*SimulateResponse, error)
 	// GetSampleSandboxes returns a set of preloaded SandboxData objects
 	// which are used to demo different ACP Features
 	GetSampleSandboxes(context.Context, *GetSampleSandboxesRequest) (*GetSampleSandboxesResponse, error)
@@ -1676,7 +1677,7 @@ func (*UnimplementedPlaygroundServiceServer) GetSandbox(ctx context.Context, req
 func (*UnimplementedPlaygroundServiceServer) VerifyTheorems(ctx context.Context, req *VerifyTheoremsRequest) (*VerifyTheoremsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method VerifyTheorems not implemented")
 }
-func (*UnimplementedPlaygroundServiceServer) Simulate(ctx context.Context, req *SimulateRequest) (*SimulateReponse, error) {
+func (*UnimplementedPlaygroundServiceServer) Simulate(ctx context.Context, req *SimulateRequest) (*SimulateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Simulate not implemented")
 }
 func (*UnimplementedPlaygroundServiceServer) GetSampleSandboxes(ctx context.Context, req *GetSampleSandboxesRequest) (*GetSampleSandboxesResponse, error) {
@@ -2398,7 +2399,7 @@ func (m *SimulateRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *SimulateReponse) Marshal() (dAtA []byte, err error) {
+func (m *SimulateResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -2408,12 +2409,12 @@ func (m *SimulateReponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *SimulateReponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *SimulateResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *SimulateReponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *SimulateResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -3142,7 +3143,7 @@ func (m *SimulateRequest) Size() (n int) {
 	return n
 }
 
-func (m *SimulateReponse) Size() (n int) {
+func (m *SimulateResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -4500,7 +4501,7 @@ func (m *SimulateRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *SimulateReponse) Unmarshal(dAtA []byte) error {
+func (m *SimulateResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {

@@ -8,7 +8,7 @@ import (
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
-func HandleSimulate(ctx context.Context, manager runtime.RuntimeManager, req *types.SimulateRequest) (*types.SimulateReponse, error) {
+func HandleSimulate(ctx context.Context, manager runtime.RuntimeManager, req *types.SimulateRequest) (*types.SimulateResponse, error) {
 	manager, err := runtime.NewRuntimeManager(
 		runtime.WithLogger(manager.GetLogger()),
 	)
@@ -30,7 +30,7 @@ func HandleSimulate(ctx context.Context, manager runtime.RuntimeManager, req *ty
 		return nil, newSimulateError(err)
 	}
 	if setResp.Errors.HasErrors() {
-		return &types.SimulateReponse{
+		return &types.SimulateResponse{
 			ValidData: false,
 			Errors:    setResp.Errors,
 		}, nil
@@ -41,7 +41,7 @@ func HandleSimulate(ctx context.Context, manager runtime.RuntimeManager, req *ty
 		return nil, newSimulateError(err)
 	}
 
-	return &types.SimulateReponse{
+	return &types.SimulateResponse{
 		ValidData: true,
 		Errors:    nil,
 		Record:    setResp.Record,

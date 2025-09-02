@@ -86,6 +86,7 @@ type SetStateHandler struct{}
 
 func (h *SetStateHandler) Handle(ctx context.Context, manager runtime.RuntimeManager, req *types.SetStateRequest) (*types.SetStateResponse, error) {
 	repository := NewSandboxRepository(manager.GetKVStore())
+	InjectSandboxData(ctx, req.Data)
 
 	record, err := repository.GetSandbox(ctx, req.Handle)
 	if err != nil {
@@ -365,6 +366,7 @@ func HandleVerifyTheorem(ctx context.Context, manager runtime.RuntimeManager, re
 	if !record.Initialized {
 		return nil, newVerifyTheoremsErr(errors.Wrap("uninitialized sandbox cannot execute theorems", errors.ErrorType_OPERATION_FORBIDDEN), req.Handle)
 	}
+	InjectSandboxData(ctx, record.Data)
 
 	manager, err = GetManagerForSandbox(manager, req.Handle)
 	if err != nil {
@@ -402,6 +404,7 @@ func HandleGetCatalogue(ctx context.Context, manager runtime.RuntimeManager, req
 			errors.ErrorType_OPERATION_FORBIDDEN)
 		return nil, newGetCatalogueErr(err, req.Handle)
 	}
+	InjectSandboxData(ctx, record.Data)
 
 	manager, err = GetManagerForSandbox(manager, req.Handle)
 	if err != nil {
@@ -505,6 +508,7 @@ func HandleExplainCheck(ctx context.Context, manager runtime.RuntimeManager, req
 			errors.ErrorType_OPERATION_FORBIDDEN)
 		return nil, newExplainCheckError(err, req.Handle)
 	}
+	InjectSandboxData(ctx, record.Data)
 
 	manager, err = GetManagerForSandbox(manager, req.Handle)
 	if err != nil {
@@ -546,6 +550,7 @@ func HandleDOTExplainCheck(ctx context.Context, manager runtime.RuntimeManager, 
 			errors.ErrorType_OPERATION_FORBIDDEN)
 		return nil, newExplainCheckError(err, req.Handle)
 	}
+	InjectSandboxData(ctx, record.Data)
 
 	manager, err = GetManagerForSandbox(manager, req.Handle)
 	if err != nil {

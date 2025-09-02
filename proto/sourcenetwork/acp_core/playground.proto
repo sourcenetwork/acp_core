@@ -36,7 +36,7 @@ service PlaygroundService {
   // Simulate receives Sandbox state data and a theorem, creates an ephemeral sandbox
   // evaluates the given theorem against the sandbox's policy and returns the result
   // Simulate is a oneshot operation and persists no state in the process.
-  rpc Simulate(SimulateRequest) returns (SimulateReponse);
+  rpc Simulate(SimulateRequest) returns (SimulateResponse);
 
   // GetSampleSandboxes returns a set of preloaded SandboxData objects
   // which are used to demo different ACP Features
@@ -135,7 +135,7 @@ message SimulateRequest {
   sourcenetwork.acp_core.SandboxData data = 1;
 }
 
-message SimulateReponse {
+message SimulateResponse {
   // validate_data flags whether the input SandboxData was sucessfuly loaded
   bool valid_data = 1;
 

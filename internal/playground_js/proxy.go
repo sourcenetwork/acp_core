@@ -13,6 +13,12 @@ import (
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
+// DefaultErrorEndpoint is the global PublishError endpoint for the playground.
+// Currently the system was designed to work under the same domain through a proxy
+//
+// FIXME this should probably be paramatrized and initialized by the WASM Host / JS code
+var DefaultErrorEndpoint = "/api/errors"
+
 // PlaygroundConstructor returns a JS function which acts as a contructor for Playground Services.
 // In JS land, the return of this constructor function is a JS object whose attributes implement
 // the Playground protobuff definition.
@@ -46,7 +52,11 @@ type PlaygroundServiceProxy struct {
 
 // NewPlaygroundServiceProxy creates a new PlaygroundService from a default context
 func NewPlaygroundServiceProxy(ctx context.Context, manager runtime.RuntimeManager) *PlaygroundServiceProxy {
-	service := services.NewPlaygroundService(manager)
+	// by convetion, we
+	cfg := services.PlaygroundConfig{
+		PublishErrorEndpoint: DefaultErrorEndpoint,
+	}
+	service := services.NewPlaygroundService(manager, &cfg)
 
 	proxy := &PlaygroundServiceProxy{
 		ctx:     ctx,
