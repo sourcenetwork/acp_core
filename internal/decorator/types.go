@@ -16,14 +16,17 @@ type Decorator func(Handler) Handler
 func ToTypedHandler[Req, Resp any](h Handler) TypedHandler[Req, Resp] {
 	return func(ctx context.Context, req Req) (Resp, error) {
 		resp, err := h(ctx, req)
-		return resp.(Resp), err
+		cast, _ := resp.(Resp)
+		return cast, err
 	}
 }
 
 // ToAnyHandler removes the strong typed guarantees of a TypedHandler
 func ToAnyHandler[Req, Resp any](h TypedHandler[Req, Resp]) Handler {
 	return func(ctx context.Context, req any) (any, error) {
-		resp, err := h(ctx, req.(Req))
+		// if cast fails, ignore it to avoid the panic
+		cast, _ := req.(Req)
+		resp, err := h(ctx, cast)
 		return resp, err
 	}
 }

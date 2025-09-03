@@ -52,7 +52,6 @@ type PlaygroundServiceProxy struct {
 
 // NewPlaygroundServiceProxy creates a new PlaygroundService from a default context
 func NewPlaygroundServiceProxy(ctx context.Context, manager runtime.RuntimeManager) *PlaygroundServiceProxy {
-	// by convetion, we
 	cfg := services.PlaygroundConfig{
 		PublishErrorEndpoint: DefaultErrorEndpoint,
 	}
