@@ -3,6 +3,7 @@ package decorator
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
@@ -17,10 +18,13 @@ func GetRequestContextData(ctx context.Context) *RequestData {
 
 // RequestData models request specific processing data
 type RequestData struct {
+	UUID        string
 	SandboxData *types.SandboxData
 }
 
 // InitRequestContext initializes the request specific data
 func InitRequestContext(ctx context.Context) context.Context {
-	return context.WithValue(ctx, requestCtxValue, &RequestData{})
+	return context.WithValue(ctx, requestCtxValue, &RequestData{
+		UUID: uuid.NewString(),
+	})
 }

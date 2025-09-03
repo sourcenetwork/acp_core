@@ -30,12 +30,17 @@ type playgroundService struct {
 
 // NewCmdSrever creates a message server for Embedded ACP
 func NewPlaygroundService(runtime runtime.RuntimeManager, config *PlaygroundConfig) types.PlaygroundServiceServer {
-	var decorators []decorator.Decorator
+	decorators := []decorator.Decorator{
+		decorator.RecoverDecorator,
+	}
+
 	if config != nil && config.PublishErrorEndpoint != "" {
 		client := telemetry.NewPlaygroundBackendErrorClient(config.PublishErrorEndpoint)
 		decorators = append(decorators, sandbox.InternalErrorPublisherDecorator(client))
 	}
-	decorators = append(decorators, decorator.RecoverDecorator, decorator.RequestDataInitializerDecorator)
+
+	// last decorator means it will start off by initializing the request data
+	decorators = append(decorators, decorator.RequestDataInitializerDecorator)
 	return &playgroundService{
 		dec:     decorator.Chain(decorators...),
 		runtime: runtime,
