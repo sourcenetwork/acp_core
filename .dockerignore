@@ -1,3 +1,4 @@
 build
 ui/public/playground.wasm
 ui/node_modules
+ui/dist

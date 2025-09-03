@@ -14,8 +14,7 @@ RUN go mod download &&\
 
 COPY . /app
 
-RUN GOOS=js GOARCH=wasm go build -ldflags "-X 'github.com/sourcenetwork/acp_core/version.Commit=$(BUILD_COMMIT)'"
--o build/playground.wasm cmd/playground_js/main.go
+RUN GOOS=js GOARCH=wasm go build -ldflags "-X 'github.com/sourcenetwork/acp_core/version.Commit=$(BUILD_COMMIT)'" -o build/playground.wasm cmd/playground_js/main.go
 
 FROM node:20-alpine AS ui-builder
 
