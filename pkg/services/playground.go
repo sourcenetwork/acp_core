@@ -61,8 +61,9 @@ func (s *playgroundService) ListSandboxes(ctx context.Context, req *types.ListSa
 }
 func (s *playgroundService) SetState(ctx context.Context, req *types.SetStateRequest) (*types.SetStateResponse, error) {
 	h := func(ctx context.Context, req *types.SetStateRequest) (*types.SetStateResponse, error) {
-		handler := sandbox.SetStateHandler{}
-		return handler.Handle(ctx, s.runtime, req)
+		//handler := sandbox.SetStateHandler{}
+		//return handler.Handle(ctx, s.runtime, req)
+		panic("test")
 	}
 	return decorator.DecorateTypedHandler(h, s.dec)(ctx, req)
 }
