@@ -33,3 +33,5 @@ jobs:
           push: true
           file: ./playground.dockerfile
           tags: ghcr.io/sourcenetwork/acp_playground:${{ github.sha }}
+          build-args:
+            - BUILD_COMMIT=${{ github.sha }}

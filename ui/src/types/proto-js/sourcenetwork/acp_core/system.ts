@@ -11,3 +11,10 @@ export const protobufPackage = "sourcenetwork.acp_core";
 /** Params models the dynamic system parameters that callers can set */
 export interface Params {
 }
+
+export interface BuildInfo {
+  /** commit is the commit from which this build was generated */
+  commit: string;
+  /** version */
+  version: string;
+}

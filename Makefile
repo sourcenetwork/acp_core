@@ -1,3 +1,6 @@
+GIT_HEAD_COMMIT=$(shell git rev-parse HEAD)
+BUILD_FLAGS=-ldflags "-X 'github.com/sourcenetwork/acp_core/version.Commit=$(GIT_HEAD_COMMIT)'"
+
 .PHONY: test
 test:
 	go test -coverpkg=./... ./...
@@ -26,7 +29,7 @@ fmt:
 
 .PHONY: playground\:wasm_js
 playground\:wasm_js:
-	GOOS=js GOARCH=wasm go build -o build/playground.wasm cmd/playground_js/main.go
+	GOOS=js GOARCH=wasm go build $(BUILD_FLAGS) -o build/playground.wasm cmd/playground_js/main.go
 
 .PHONY: playground
 playground: playground\:wasm_js

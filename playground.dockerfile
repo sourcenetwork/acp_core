@@ -1,5 +1,8 @@
 FROM golang:1.23-bookworm AS playground-builder
 
+# BUILD_COMMIT arg represents the acp_core commit from which the image was built
+ARG BUILD_COMMIT=""
+
 WORKDIR /app
 
 COPY go.* /app
@@ -11,7 +14,8 @@ RUN go mod download &&\
 
 COPY . /app
 
-RUN GOOS=js GOARCH=wasm go build -o build/playground.wasm cmd/playground_js/main.go
+RUN GOOS=js GOARCH=wasm go build -ldflags "-X 'github.com/sourcenetwork/acp_core/version.Commit=$(BUILD_COMMIT)'"
+-o build/playground.wasm cmd/playground_js/main.go
 
 FROM node:20-alpine AS ui-builder
 
