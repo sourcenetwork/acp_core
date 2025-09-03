@@ -25,10 +25,15 @@ func InternalErrorPublisherDecorator(client *telemetry.PlaygroundBackendErrorCli
 			if err != nil && errors.Is(err, errors.ErrorType_INTERNAL) {
 				data := decorator.GetRequestContextData(ctx)
 				if data != nil && data.SandboxData != nil {
-					httpErr := client.PushError(ctx, data.SandboxData, err)
-					if httpErr != nil {
-						// TODO log error
-					}
+					// perform the http.POST in a new go routine,
+					// to prevent a deadlock with JS
+					// https://pkg.go.dev/syscall/js#FuncOf
+					go func() {
+						httpErr := client.PushError(ctx, data.SandboxData, err)
+						if httpErr != nil {
+							// TODO log error
+						}
+					}()
 				}
 			}
 			return resp, err
