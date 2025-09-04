@@ -2,12 +2,17 @@ package sandbox
 
 import (
 	"context"
+	"time"
 
 	"github.com/sourcenetwork/acp_core/internal/decorator"
 	"github.com/sourcenetwork/acp_core/internal/telemetry"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
+
+const maxPublishRetry = 3
+
+var retryTime = time.Millisecond * 500
 
 // InjectSandboxData injects data into the context's RequestContext, if it was preivously initialized
 func InjectSandboxData(ctx context.Context, data *types.SandboxData) {
@@ -27,19 +32,28 @@ func InternalErrorPublisherDecorator(client telemetry.ErrorPublshingClient, asyn
 		return func(ctx context.Context, req any) (any, error) {
 			resp, err := h(ctx, req)
 			if err != nil && errors.Is(err, errors.ErrorType_INTERNAL) {
-				data := telemetry.GetRequestContextData(ctx)
-				if data != nil && data.SandboxData != nil {
-					worker := func() {
-						httpErr := client.PushError(context.Background(), data.SandboxData, err)
-						if httpErr != nil {
-							// TODO log error
+				state := &types.SandboxData{}
+				if data := telemetry.GetRequestContextData(ctx); data != nil && data.SandboxData != nil {
+					state = data.SandboxData
+				}
+				worker := func() {
+					var httpErr error
+					for i := 0; i < maxPublishRetry; i++ {
+						httpErr := client.PushError(context.Background(), state, err)
+						if httpErr == nil {
+							break
 						}
+						// exponential backoff
+						time.Sleep(retryTime * time.Duration(i))
 					}
-					if async {
-						go worker()
-					} else {
-						worker()
+					if httpErr != nil {
+						// TODO log error
 					}
+				}
+				if async {
+					go worker()
+				} else {
+					worker()
 				}
 			}
 			return resp, err
