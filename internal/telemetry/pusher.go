@@ -14,6 +14,10 @@ import (
 
 const jsonContentType = "application/json"
 
+type ErrorPublshingClient interface {
+	PushError(ctx context.Context, data *types.SandboxData, err error) error
+}
+
 // ErrorPayload is a copy of backend `PublishErrorRequest“ message
 type ErrorPayload struct {
 	Message           string             `json:"message"`
@@ -23,7 +27,7 @@ type ErrorPayload struct {
 }
 
 // NetPlaygroundBackendErrorClient returns a client to publish errors
-func NewPlaygroundBackendErrorClient(url string) *PlaygroundBackendErrorClient {
+func NewPlaygroundBackendErrorClient(url string) ErrorPublshingClient {
 	return &PlaygroundBackendErrorClient{
 		url: url,
 	}

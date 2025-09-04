@@ -1,9 +1,10 @@
-package decorator
+package telemetry
 
 import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/sourcenetwork/acp_core/internal/decorator"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
@@ -27,4 +28,12 @@ func InitRequestContext(ctx context.Context) context.Context {
 	return context.WithValue(ctx, requestCtxValue, &RequestData{
 		UUID: uuid.NewString(),
 	})
+}
+
+// RequestDataInitializerDecorator adds an instance of RequestData to the ctx
+func RequestDataInitializerDecorator(h decorator.Handler) decorator.Handler {
+	return func(ctx context.Context, req any) (any, error) {
+		ctx = InitRequestContext(ctx)
+		return h(ctx, req)
+	}
 }

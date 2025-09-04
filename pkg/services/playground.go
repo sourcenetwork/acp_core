@@ -21,6 +21,20 @@ type PlaygroundConfig struct {
 	PublishErrorEndpoint string
 }
 
+func newPlaygroundDecorator(client telemetry.ErrorPublshingClient, async bool) decorator.Decorator {
+	decorators := []decorator.Decorator{
+		decorator.RecoverDecorator,
+	}
+
+	if client != nil {
+		decorators = append(decorators, sandbox.InternalErrorPublisherDecorator(client, async))
+	}
+
+	// last decorator means it will start off by initializing the request data
+	decorators = append(decorators, telemetry.RequestDataInitializerDecorator)
+	return decorator.Chain(decorators...)
+}
+
 // playgroundService implements the ACP module MsgServer interface and accepts
 // decorating functions which can wrap the execution of a Msg.
 type playgroundService struct {
@@ -30,19 +44,13 @@ type playgroundService struct {
 
 // NewCmdSrever creates a message server for Embedded ACP
 func NewPlaygroundService(runtime runtime.RuntimeManager, config *PlaygroundConfig) types.PlaygroundServiceServer {
-	decorators := []decorator.Decorator{
-		decorator.RecoverDecorator,
-	}
-
+	var client telemetry.ErrorPublshingClient
 	if config != nil && config.PublishErrorEndpoint != "" {
-		client := telemetry.NewPlaygroundBackendErrorClient(config.PublishErrorEndpoint)
-		decorators = append(decorators, sandbox.InternalErrorPublisherDecorator(client))
+		client = telemetry.NewPlaygroundBackendErrorClient(config.PublishErrorEndpoint)
 	}
 
-	// last decorator means it will start off by initializing the request data
-	decorators = append(decorators, decorator.RequestDataInitializerDecorator)
 	return &playgroundService{
-		dec:     decorator.Chain(decorators...),
+		dec:     newPlaygroundDecorator(client, true),
 		runtime: runtime,
 	}
 }

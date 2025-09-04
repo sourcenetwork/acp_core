@@ -8,6 +8,7 @@ import (
 	"github.com/sourcenetwork/acp_core/internal/policy"
 	"github.com/sourcenetwork/acp_core/internal/relationship"
 	"github.com/sourcenetwork/acp_core/internal/system"
+	"github.com/sourcenetwork/acp_core/internal/telemetry"
 	"github.com/sourcenetwork/acp_core/pkg/runtime"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
@@ -24,7 +25,7 @@ type EngineService struct {
 // NewCmdSrever creates a message server for Embedded ACP
 func NewACPEngine(runtime runtime.RuntimeManager) *EngineService {
 	return &EngineService{
-		decorator: decorator.Chain(decorator.RequestDataInitializerDecorator, decorator.RecoverDecorator),
+		decorator: decorator.Chain(telemetry.RequestDataInitializerDecorator, decorator.RecoverDecorator),
 		runtime:   runtime,
 	}
 }

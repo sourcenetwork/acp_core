@@ -11,29 +11,35 @@ import (
 
 // InjectSandboxData injects data into the context's RequestContext, if it was preivously initialized
 func InjectSandboxData(ctx context.Context, data *types.SandboxData) {
-	d := decorator.GetRequestContextData(ctx)
+	d := telemetry.GetRequestContextData(ctx)
 	if d != nil {
 		d.SandboxData = data
 	}
 }
 
 // InternalErrorPublisherDecorator publishes internal errors to the playground backend service
-func InternalErrorPublisherDecorator(client *telemetry.PlaygroundBackendErrorClient) decorator.Decorator {
+//
+// Setting async to true will dispatch the create publshing of the error in a new goroutine.
+// This should be the default, specially for WASM builds as it can deadlock the wasm module
+// See: https://pkg.go.dev/syscall/js#FuncOf
+func InternalErrorPublisherDecorator(client telemetry.ErrorPublshingClient, async bool) decorator.Decorator {
 	return func(h decorator.Handler) decorator.Handler {
 		return func(ctx context.Context, req any) (any, error) {
 			resp, err := h(ctx, req)
 			if err != nil && errors.Is(err, errors.ErrorType_INTERNAL) {
-				data := decorator.GetRequestContextData(ctx)
+				data := telemetry.GetRequestContextData(ctx)
 				if data != nil && data.SandboxData != nil {
-					// perform the http.POST in a new go routine,
-					// to prevent a deadlock with JS
-					// https://pkg.go.dev/syscall/js#FuncOf
-					go func() {
-						httpErr := client.PushError(ctx, data.SandboxData, err)
+					worker := func() {
+						httpErr := client.PushError(context.Background(), data.SandboxData, err)
 						if httpErr != nil {
 							// TODO log error
 						}
-					}()
+					}
+					if async {
+						go worker()
+					} else {
+						worker()
+					}
 				}
 			}
 			return resp, err
