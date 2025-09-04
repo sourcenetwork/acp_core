@@ -367,7 +367,6 @@ func HandleVerifyTheorem(ctx context.Context, manager runtime.RuntimeManager, re
 		return nil, newVerifyTheoremsErr(errors.Wrap("uninitialized sandbox cannot execute theorems", errors.ErrorType_OPERATION_FORBIDDEN), req.Handle)
 	}
 	InjectSandboxData(ctx, record.Data)
-	panic("test")
 
 	manager, err = GetManagerForSandbox(manager, req.Handle)
 	if err != nil {
