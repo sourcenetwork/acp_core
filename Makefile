@@ -1,5 +1,5 @@
 GIT_HEAD_COMMIT=$(shell git rev-parse HEAD)
-BUILD_FLAGS=-ldflags "-X 'github.com/sourcenetwork/acp_core/version.Commit=$(GIT_HEAD_COMMIT)'"
+BUILD_FLAGS=-ldflags "-X 'github.com/sourcenetwork/acp_core/pkg/version.Commit=$(GIT_HEAD_COMMIT)'"
 
 .PHONY: test
 test:
@@ -34,5 +34,5 @@ playground\:wasm_js:
 .PHONY: playground
 playground: playground\:wasm_js
 	cp build/playground.wasm cmd/playground/content/playground.wasm
-	cp "$$(go env GOROOT)/misc/wasm/wasm_exec.js" cmd/playground/content/wasm_exec.js
+	cp "$$(go env GOROOT)/lib/wasm/wasm_exec.js" cmd/playground/content/wasm_exec.js
 	go build -o build/playground cmd/playground/main.go
