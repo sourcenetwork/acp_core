@@ -8,6 +8,18 @@ import "sourcenetwork/acp_core/specification.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
 
+// PolicyEncodingType enumerates supported marshaling types for policies.
+enum PolicyMarshalingType {
+  // Fallback value for a missing Marshaling Type
+  UNKNOWN = 0;
+
+  // YAML Marshaled Policy
+  YAML = 1;
+
+  // Policy Marshaled as a YAML Short Policy definition
+  SHORT_YAML = 2;
+}
+
 // Policy represents an ACP module Policy definition.
 // Each Policy defines a set of high level rules over how the acces control system
 // should behave.

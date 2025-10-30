@@ -3507,59 +3507,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// PolicyEncodingType enumerates supported marshaling types for policies.
-type PolicyMarshalingType int32
-
-const (
-	// Fallback value for a missing Marshaling Type
-	PolicyMarshalingType_UNKNOWN PolicyMarshalingType = 0
-	// Policy Marshaled as a YAML Short Policy definition
-	PolicyMarshalingType_SHORT_YAML PolicyMarshalingType = 1
-	// Policy Marshaled as a JSON Short Policy definition
-	PolicyMarshalingType_SHORT_JSON PolicyMarshalingType = 2
-)
-
-// Enum value maps for PolicyMarshalingType.
-var (
-	PolicyMarshalingType_name = map[int32]string{
-		0: "UNKNOWN",
-		1: "SHORT_YAML",
-		2: "SHORT_JSON",
-	}
-	PolicyMarshalingType_value = map[string]int32{
-		"UNKNOWN":    0,
-		"SHORT_YAML": 1,
-		"SHORT_JSON": 2,
-	}
-)
-
-func (x PolicyMarshalingType) Enum() *PolicyMarshalingType {
-	p := new(PolicyMarshalingType)
-	*p = x
-	return p
-}
-
-func (x PolicyMarshalingType) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (PolicyMarshalingType) Descriptor() protoreflect.EnumDescriptor {
-	return file_sourcenetwork_acp_core_policy_short_proto_enumTypes[0].Descriptor()
-}
-
-func (PolicyMarshalingType) Type() protoreflect.EnumType {
-	return &file_sourcenetwork_acp_core_policy_short_proto_enumTypes[0]
-}
-
-func (x PolicyMarshalingType) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Use PolicyMarshalingType.Descriptor instead.
-func (PolicyMarshalingType) EnumDescriptor() ([]byte, []int) {
-	return file_sourcenetwork_acp_core_policy_short_proto_rawDescGZIP(), []int{0}
-}
-
 // PolicyShort is a compact Policy definition which is conveniently expressed
 // as JSON or YAML. The shorthand format is used created a Policy.
 type PolicyShort struct {
@@ -3865,15 +3812,11 @@ var file_sourcenetwork_acp_core_policy_short_proto_rawDesc = []byte{
 	0x74, 0x79, 0x70, 0x65, 0x73, 0x22, 0x37, 0x0a, 0x0f, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73,
 	0x69, 0x6f, 0x6e, 0x53, 0x68, 0x6f, 0x72, 0x74, 0x12, 0x10, 0x0a, 0x03, 0x64, 0x6f, 0x63, 0x18,
 	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x64, 0x6f, 0x63, 0x12, 0x12, 0x0a, 0x04, 0x65, 0x78,
-	0x70, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x65, 0x78, 0x70, 0x72, 0x2a, 0x43,
-	0x0a, 0x14, 0x50, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x4d, 0x61, 0x72, 0x73, 0x68, 0x61, 0x6c, 0x69,
-	0x6e, 0x67, 0x54, 0x79, 0x70, 0x65, 0x12, 0x0b, 0x0a, 0x07, 0x55, 0x4e, 0x4b, 0x4e, 0x4f, 0x57,
-	0x4e, 0x10, 0x00, 0x12, 0x0e, 0x0a, 0x0a, 0x53, 0x48, 0x4f, 0x52, 0x54, 0x5f, 0x59, 0x41, 0x4d,
-	0x4c, 0x10, 0x01, 0x12, 0x0e, 0x0a, 0x0a, 0x53, 0x48, 0x4f, 0x52, 0x54, 0x5f, 0x4a, 0x53, 0x4f,
-	0x4e, 0x10, 0x02, 0x42, 0x2d, 0x5a, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f,
-	0x6d, 0x2f, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f,
-	0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x74, 0x79, 0x70,
-	0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x70, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x65, 0x78, 0x70, 0x72, 0x42, 0x2d,
+	0x5a, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6f, 0x75,
+	0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63,
+	0x6f, 0x72, 0x65, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62, 0x06, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -3888,29 +3831,27 @@ func file_sourcenetwork_acp_core_policy_short_proto_rawDescGZIP() []byte {
 	return file_sourcenetwork_acp_core_policy_short_proto_rawDescData
 }
 
-var file_sourcenetwork_acp_core_policy_short_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_sourcenetwork_acp_core_policy_short_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_sourcenetwork_acp_core_policy_short_proto_goTypes = []interface{}{
-	(PolicyMarshalingType)(0), // 0: sourcenetwork.acp_core.PolicyMarshalingType
-	(*PolicyShort)(nil),       // 1: sourcenetwork.acp_core.PolicyShort
-	(*ResourceShort)(nil),     // 2: sourcenetwork.acp_core.ResourceShort
-	(*RelationShort)(nil),     // 3: sourcenetwork.acp_core.RelationShort
-	(*PermissionShort)(nil),   // 4: sourcenetwork.acp_core.PermissionShort
-	nil,                       // 5: sourcenetwork.acp_core.PolicyShort.MetaEntry
-	nil,                       // 6: sourcenetwork.acp_core.PolicyShort.ResourcesEntry
-	nil,                       // 7: sourcenetwork.acp_core.ResourceShort.PermissionsEntry
-	nil,                       // 8: sourcenetwork.acp_core.ResourceShort.RelationsEntry
-	(*ActorResource)(nil),     // 9: sourcenetwork.acp_core.ActorResource
+	(*PolicyShort)(nil),     // 0: sourcenetwork.acp_core.PolicyShort
+	(*ResourceShort)(nil),   // 1: sourcenetwork.acp_core.ResourceShort
+	(*RelationShort)(nil),   // 2: sourcenetwork.acp_core.RelationShort
+	(*PermissionShort)(nil), // 3: sourcenetwork.acp_core.PermissionShort
+	nil,                     // 4: sourcenetwork.acp_core.PolicyShort.MetaEntry
+	nil,                     // 5: sourcenetwork.acp_core.PolicyShort.ResourcesEntry
+	nil,                     // 6: sourcenetwork.acp_core.ResourceShort.PermissionsEntry
+	nil,                     // 7: sourcenetwork.acp_core.ResourceShort.RelationsEntry
+	(*ActorResource)(nil),   // 8: sourcenetwork.acp_core.ActorResource
 }
 var file_sourcenetwork_acp_core_policy_short_proto_depIdxs = []int32{
-	5, // 0: sourcenetwork.acp_core.PolicyShort.meta:type_name -> sourcenetwork.acp_core.PolicyShort.MetaEntry
-	6, // 1: sourcenetwork.acp_core.PolicyShort.resources:type_name -> sourcenetwork.acp_core.PolicyShort.ResourcesEntry
-	9, // 2: sourcenetwork.acp_core.PolicyShort.actor:type_name -> sourcenetwork.acp_core.ActorResource
-	7, // 3: sourcenetwork.acp_core.ResourceShort.permissions:type_name -> sourcenetwork.acp_core.ResourceShort.PermissionsEntry
-	8, // 4: sourcenetwork.acp_core.ResourceShort.relations:type_name -> sourcenetwork.acp_core.ResourceShort.RelationsEntry
-	2, // 5: sourcenetwork.acp_core.PolicyShort.ResourcesEntry.value:type_name -> sourcenetwork.acp_core.ResourceShort
-	4, // 6: sourcenetwork.acp_core.ResourceShort.PermissionsEntry.value:type_name -> sourcenetwork.acp_core.PermissionShort
-	3, // 7: sourcenetwork.acp_core.ResourceShort.RelationsEntry.value:type_name -> sourcenetwork.acp_core.RelationShort
+	4, // 0: sourcenetwork.acp_core.PolicyShort.meta:type_name -> sourcenetwork.acp_core.PolicyShort.MetaEntry
+	5, // 1: sourcenetwork.acp_core.PolicyShort.resources:type_name -> sourcenetwork.acp_core.PolicyShort.ResourcesEntry
+	8, // 2: sourcenetwork.acp_core.PolicyShort.actor:type_name -> sourcenetwork.acp_core.ActorResource
+	6, // 3: sourcenetwork.acp_core.ResourceShort.permissions:type_name -> sourcenetwork.acp_core.ResourceShort.PermissionsEntry
+	7, // 4: sourcenetwork.acp_core.ResourceShort.relations:type_name -> sourcenetwork.acp_core.ResourceShort.RelationsEntry
+	1, // 5: sourcenetwork.acp_core.PolicyShort.ResourcesEntry.value:type_name -> sourcenetwork.acp_core.ResourceShort
+	3, // 6: sourcenetwork.acp_core.ResourceShort.PermissionsEntry.value:type_name -> sourcenetwork.acp_core.PermissionShort
+	2, // 7: sourcenetwork.acp_core.ResourceShort.RelationsEntry.value:type_name -> sourcenetwork.acp_core.RelationShort
 	8, // [8:8] is the sub-list for method output_type
 	8, // [8:8] is the sub-list for method input_type
 	8, // [8:8] is the sub-list for extension type_name
@@ -3979,14 +3920,13 @@ func file_sourcenetwork_acp_core_policy_short_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_sourcenetwork_acp_core_policy_short_proto_rawDesc,
-			NumEnums:      1,
+			NumEnums:      0,
 			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_sourcenetwork_acp_core_policy_short_proto_goTypes,
 		DependencyIndexes: file_sourcenetwork_acp_core_policy_short_proto_depIdxs,
-		EnumInfos:         file_sourcenetwork_acp_core_policy_short_proto_enumTypes,
 		MessageInfos:      file_sourcenetwork_acp_core_policy_short_proto_msgTypes,
 	}.Build()
 	File_sourcenetwork_acp_core_policy_short_proto = out.File

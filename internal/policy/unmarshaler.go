@@ -25,9 +25,9 @@ func Unmarshal(pol string, t types.PolicyMarshalingType) (*types.Policy, error) 
 	case types.PolicyMarshalingType_SHORT_YAML:
 		unmarshaler := shortUnmarshaler{}
 		policy, err = unmarshaler.UnmarshalYAML(pol)
-	case types.PolicyMarshalingType_SHORT_JSON:
-		unmarshaler := shortUnmarshaler{}
-		policy, err = unmarshaler.UnmarshalJSON(pol)
+	case types.PolicyMarshalingType_YAML:
+		u := yamlUnmarshaler{}
+		policy, err = u.Unmarshal(pol)
 	default:
 		err = ErrUnknownMarshalingType
 	}
@@ -55,11 +55,11 @@ func (u *shortUnmarshaler) UnmarshalYAML(pol string) (*types.Policy, error) {
 		return nil, fmt.Errorf("%w: %v", ErrInvalidShortPolicy, err)
 	}
 
-	return u.UnmarshalJSON(string(polBytes))
+	return u.unmarshalJSON(string(polBytes))
 }
 
 // Unmarshal a JSON serialized PolicyShort definition
-func (u *shortUnmarshaler) UnmarshalJSON(pol string) (*types.Policy, error) {
+func (u *shortUnmarshaler) unmarshalJSON(pol string) (*types.Policy, error) {
 	polShort := types.PolicyShort{}
 
 	err := json.Unmarshal([]byte(pol), &polShort)
@@ -171,5 +171,106 @@ func (u *shortUnmarshaler) mapSpec(spec string) (types.PolicySpecificationType, 
 		return types.PolicySpecificationType_UNKNOWN_SPEC, nil
 	default:
 		return types.PolicySpecificationType_UNKNOWN_SPEC, errors.Wrap("invalid specification", errors.ErrorType_BAD_INPUT)
+	}
+}
+
+type yamlUnmarshaler struct{}
+
+func (u *yamlUnmarshaler) Unmarshal(pol string) (*types.Policy, error) {
+	// Strict returns error if any key is duplicated
+	bytes, err := yaml.YAMLToJSONStrict([]byte(pol))
+	if err != nil {
+		return nil, fmt.Errorf("%w: %v", ErrInvalidYamlPolicy, err)
+	}
+
+	yaml := types.PolicyYaml{}
+
+	err = json.Unmarshal(bytes, &yaml)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %v", ErrInvalidYamlPolicy, err)
+	}
+
+	policy := u.mapPolicy(&yaml)
+	sorted := ppp.SortTransformer{}
+	sortedPol, _ := sorted.Transform(*policy) // SortTransformer does not error
+	return &sortedPol, nil
+}
+
+func (u *yamlUnmarshaler) mapPolicy(in *types.PolicyYaml) *types.Policy {
+	if in == nil {
+		return nil
+	}
+
+	out := &types.Policy{
+		Name:              in.Name,
+		Description:       in.Description,
+		Attributes:        in.Meta,
+		SpecificationType: u.mapSpecType(in.Spec),
+		Resources:         utils.MapSlice(in.Resources, u.mapResource),
+		ActorResource:     u.mapActorResource(in.Actor),
+	}
+
+	return out
+}
+
+func (u *yamlUnmarshaler) mapResource(r *types.ResourceYaml) *types.Resource {
+	return &types.Resource{
+		Name:        r.Name,
+		Doc:         r.Description,
+		Permissions: utils.MapSlice(r.Permissions, u.mapPermission),
+		Relations:   utils.MapSlice(r.Relations, u.mapRelation),
+	}
+}
+
+// mapRelations maps RelationYaml -> Relation.
+func (u *yamlUnmarshaler) mapRelation(rel *types.RelationYaml) *types.Relation {
+	return &types.Relation{
+		Name:    rel.Name,
+		Doc:     rel.Doc,
+		Manages: rel.Manages,
+		VrTypes: utils.MapSlice(rel.Types, u.mapRestriction),
+	}
+}
+
+// mapPermissions maps PermissionYaml -> Permission.
+func (u *yamlUnmarshaler) mapPermission(p *types.PermissionYaml) *types.Permission {
+	return &types.Permission{
+		Name:       p.Name,
+		Doc:        p.Doc,
+		Expression: p.Expr,
+	}
+}
+
+// mapActorResource maps ActorResourceYaml -> ActorResource.
+func (u *yamlUnmarshaler) mapActorResource(in *types.ActorResourceYaml) *types.ActorResource {
+	if in == nil {
+		return nil
+	}
+
+	return &types.ActorResource{
+		Name:      in.Name,
+		Doc:       in.Doc,
+		Relations: utils.MapSlice(in.Relations, u.mapRelation),
+	}
+}
+
+// mapRestrictions parses "{resource}->{relation}" syntax into Restriction list.
+func (u *yamlUnmarshaler) mapRestriction(in string) *types.Restriction {
+	resource, rel, _ := strings.Cut(in, typeDivider)
+	return &types.Restriction{
+		ResourceName: resource,
+		RelationName: rel,
+	}
+}
+
+// mapSpecType maps the YAML spec string to the PolicySpecificationType enum.
+func (u *yamlUnmarshaler) mapSpecType(spec string) types.PolicySpecificationType {
+	switch strings.ToLower(spec) {
+	case "defra":
+		return types.PolicySpecificationType_DEFRA_SPEC
+	case "none":
+		return types.PolicySpecificationType_NO_SPEC
+	default:
+		return types.PolicySpecificationType_UNKNOWN_SPEC
 	}
 }
