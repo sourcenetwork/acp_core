@@ -15,9 +15,6 @@ enum PolicyMarshalingType {
 
   // YAML Marshaled Policy
   YAML = 1;
-
-  // Policy Marshaled as a YAML Short Policy definition
-  SHORT_YAML = 2;
 }
 
 // Policy represents an ACP module Policy definition.

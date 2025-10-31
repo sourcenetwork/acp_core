@@ -46,7 +46,7 @@ actor:
 `
 	msg := types.CreatePolicyRequest{
 		Policy:      policyStr,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 		Metadata:    metadata,
 	}
 	resp, err := ctx.Engine.CreatePolicy(ctx, &msg)
@@ -156,7 +156,7 @@ resources:
 
 	req := types.CreatePolicyRequest{
 		Policy:      pol,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 	}
 	resp, err := ctx.Engine.CreatePolicy(ctx, &req)
 
@@ -166,7 +166,7 @@ resources:
 		Doc:     "owner relations represents the object owner",
 		Manages: nil,
 		VrTypes: []*types.Restriction{
-			&types.Restriction{
+			{
 				ResourceName: resp.Record.Policy.ActorResource.Name,
 			},
 		},
@@ -193,7 +193,7 @@ resources:
 
 	req := types.CreatePolicyRequest{
 		Policy:      pol,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 	}
 	resp, err := ctx.Engine.CreatePolicy(ctx, &req)
 
@@ -211,7 +211,7 @@ resources:
 
 	req := types.CreatePolicyRequest{
 		Policy:      pol,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 	}
 	resp, err := ctx.Engine.CreatePolicy(ctx, &req)
 
@@ -254,7 +254,7 @@ resources:
 
 	req := types.CreatePolicyRequest{
 		Policy:      pol,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 	}
 	resp1, err1 := ctx.Engine.CreatePolicy(ctx, &req)
 	resp2, err2 := ctx.Engine.CreatePolicy(ctx, &req)

@@ -45,7 +45,7 @@ actor:
 `
 	msg := types.CreatePolicyWithSpecificationRequest{
 		Policy:       policyStr,
-		MarshalType:  types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType:  types.PolicyMarshalingType_YAML,
 		Metadata:     metadata,
 		RequiredSpec: types.PolicySpecificationType_NO_SPEC,
 	}
@@ -139,7 +139,7 @@ spec: none
 `
 	msg := types.CreatePolicyWithSpecificationRequest{
 		Policy:       policyStr,
-		MarshalType:  types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType:  types.PolicyMarshalingType_YAML,
 		RequiredSpec: types.PolicySpecificationType_DEFRA_SPEC,
 	}
 	resp, err := ctx.Engine.CreatePolicyWithSpecification(ctx, &msg)

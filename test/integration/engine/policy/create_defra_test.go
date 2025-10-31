@@ -25,7 +25,7 @@ func TestCreatePolicy_DefraSpec_RequiresRead(t *testing.T) {
 
 	req := types.CreatePolicyRequest{
 		Policy:      pol,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 	}
 	resp, err := ctx.Engine.CreatePolicy(ctx, &req)
 
@@ -49,7 +49,7 @@ func TestCreatePolicy_DefraSpec_RequiresWrite(t *testing.T) {
 
 	req := types.CreatePolicyRequest{
 		Policy:      pol,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 	}
 	resp, err := ctx.Engine.CreatePolicy(ctx, &req)
 
@@ -75,7 +75,7 @@ func TestCreatePolicy_DefraSpec_OkWithReadAndWrite(t *testing.T) {
 
 	req := types.CreatePolicyRequest{
 		Policy:      pol,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 	}
 	resp, err := ctx.Engine.CreatePolicy(ctx, &req)
 

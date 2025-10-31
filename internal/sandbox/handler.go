@@ -148,7 +148,7 @@ func (h *SetStateHandler) parseCtx(ctx context.Context, manager runtime.RuntimeM
 	var errs = &types.SandboxDataErrors{}
 
 	// FIXME do full parsing once independent parsing is implemented
-	_, err := policy.Unmarshal(data.PolicyDefinition, types.PolicyMarshalingType_SHORT_YAML)
+	_, err := policy.Unmarshal(data.PolicyDefinition, types.PolicyMarshalingType_YAML)
 	if err != nil {
 		err := &types.LocatedMessage{
 			Message:   err.Error(),
@@ -210,7 +210,7 @@ func (h *SetStateHandler) setPolicy(ctx context.Context, manager runtime.Runtime
 	polHandler := policy.CreatePolicyHandler{}
 	polResp, err := polHandler.Execute(authenticatedCtx, manager, &types.CreatePolicyRequest{
 		Policy:      simCtx.PolicyDefinition,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 	})
 
 	if err != nil {

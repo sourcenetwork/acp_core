@@ -1,6 +1,7 @@
 package policy
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -22,9 +23,6 @@ func Unmarshal(pol string, t types.PolicyMarshalingType) (*types.Policy, error) 
 	var err error
 
 	switch t {
-	case types.PolicyMarshalingType_SHORT_YAML:
-		unmarshaler := shortUnmarshaler{}
-		policy, err = unmarshaler.UnmarshalYAML(pol)
 	case types.PolicyMarshalingType_YAML:
 		u := yamlUnmarshaler{}
 		policy, err = u.Unmarshal(pol)
@@ -38,6 +36,11 @@ func Unmarshal(pol string, t types.PolicyMarshalingType) (*types.Policy, error) 
 	return policy, nil
 }
 
+func UnmarshalShort(pol string) (*types.Policy, error) {
+	u := shortUnmarshaler{}
+	return u.UnmarshalYAML(pol)
+}
+
 // shortUnmarshaler is a container type for unmarshaling
 // short policy definitions into acp's Policy type.
 type shortUnmarshaler struct{}
@@ -46,6 +49,9 @@ const typeDivider string = "->"
 
 // Unmarshal a YAML serialized PolicyShort definition
 func (u *shortUnmarshaler) UnmarshalYAML(pol string) (*types.Policy, error) {
+	if pol == "" {
+		return nil, errors.Wrap("empty policy", errors.ErrorType_BAD_INPUT)
+	}
 	// remove trailing
 	pol = strings.ReplaceAll(pol, "\t", "    ")
 	pol = strings.Trim(pol, "\n")
@@ -62,7 +68,9 @@ func (u *shortUnmarshaler) UnmarshalYAML(pol string) (*types.Policy, error) {
 func (u *shortUnmarshaler) unmarshalJSON(pol string) (*types.Policy, error) {
 	polShort := types.PolicyShort{}
 
-	err := json.Unmarshal([]byte(pol), &polShort)
+	dec := json.NewDecoder(bytes.NewReader([]byte(pol)))
+	dec.DisallowUnknownFields()
+	err := dec.Decode(&polShort)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %v", ErrInvalidShortPolicy, err)
 	}

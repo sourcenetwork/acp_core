@@ -23,7 +23,7 @@ resources:
 `
 	resp, err := ctx.Engine.ValidatePolicy(ctx, &types.ValidatePolicyRequest{
 		Policy:      pol,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 	})
 	require.NoError(t, err)
 	want := &types.ValidatePolicyResponse{
@@ -49,7 +49,7 @@ resources:
 `
 	resp, err := ctx.Engine.ValidatePolicy(ctx, &types.ValidatePolicyRequest{
 		Policy:      pol,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 	})
 	require.NoError(t, err)
 	require.False(t, resp.Valid)
@@ -90,7 +90,7 @@ actor:
 `
 	msg := types.ValidatePolicyRequest{
 		Policy:      policyStr,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 	}
 	resp, err := ctx.Engine.ValidatePolicy(ctx, &msg)
 

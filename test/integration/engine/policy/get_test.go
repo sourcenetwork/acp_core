@@ -50,7 +50,7 @@ spec: none
 		},
 	}
 	require.Equal(t, wantPolicy, resp.Record.Policy)
-	require.Equal(t, types.PolicyMarshalingType_SHORT_YAML, resp.Record.MarshalType)
+	require.Equal(t, types.PolicyMarshalingType_YAML, resp.Record.MarshalType)
 	require.NoError(t, err)
 }
 
