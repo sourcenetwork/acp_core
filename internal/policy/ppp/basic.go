@@ -55,6 +55,15 @@ func (t *BasicTransformer) Transform(pol types.Policy) (types.Policy, error) {
 			Name: DefaultActorResourceName,
 		}
 	}
+
+	// normalize all empty permissions to "owner"
+	for _, res := range pol.Resources {
+		for _, perm := range res.Permissions {
+			if perm.Expression == "" {
+				perm.Expression = "owner"
+			}
+		}
+	}
 	return pol, nil
 }
 

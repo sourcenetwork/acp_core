@@ -266,3 +266,48 @@ resources:
 	require.Equal(t, want1, resp1.Record.Policy.Id)
 	require.Equal(t, want2, resp2.Record.Policy.Id)
 }
+
+func TestCreatePolicy_WithEmptyPermission_OwnerIsPermitted(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("bob")
+
+	pol := `
+name: policy
+resources:
+- name: foo
+  relations:
+  - name: owner
+    types:
+    - actor
+  permissions:
+  - name: test
+`
+
+	req := types.CreatePolicyRequest{
+		Policy:      pol,
+		MarshalType: types.PolicyMarshalingType_YAML,
+	}
+	resp, err := ctx.Engine.CreatePolicy(ctx, &req)
+	require.NoError(t, err)
+
+	_, err = ctx.Engine.RegisterObject(ctx, &types.RegisterObjectRequest{
+		PolicyId: resp.Record.Policy.Id,
+		Object:   types.NewObject("foo", "obj"),
+	})
+	require.NoError(t, err)
+
+	checkResult, err := ctx.Engine.VerifyAccessRequest(ctx, &types.VerifyAccessRequestRequest{
+		PolicyId: resp.Record.Policy.Id,
+		AccessRequest: &types.AccessRequest{
+			Operations: []*types.Operation{
+				{
+					Object:     types.NewObject("foo", "obj"),
+					Permission: "test",
+				},
+			},
+			Actor: types.NewActor(ctx.Actors.DID("bob")),
+		},
+	})
+	require.NoError(t, err)
+	require.True(t, checkResult.Valid)
+}

@@ -438,3 +438,34 @@ actor:
 	require.Nil(t, err)
 	require.Equal(t, want, out)
 }
+
+func TestYaml_UnmarshalWithEmptyPermExpression(t *testing.T) {
+	in := `name: policy
+description: ok
+spec: none
+resources:
+- name: foo
+  permissions: 
+  - name: abc
+`
+	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
+
+	want := &types.Policy{
+		Name:              "policy",
+		Description:       "ok",
+		SpecificationType: types.PolicySpecificationType_NO_SPEC,
+		Resources: []*types.Resource{
+			{
+				Name:      "foo",
+				Relations: []*types.Relation{},
+				Permissions: []*types.Permission{
+					{
+						Name: "abc",
+					},
+				},
+			},
+		},
+	}
+	require.Nil(t, err)
+	require.Equal(t, want, out)
+}
