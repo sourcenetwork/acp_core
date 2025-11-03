@@ -33,7 +33,7 @@ func main() {
 
 		outFile, err := os.Create(file)
 		if err != nil {
-			log.Fatalf("writing file: %v: %v, file, err")
+			log.Fatalf("writing file: %v: %v", file, err)
 		}
 		defer outFile.Close()
 
