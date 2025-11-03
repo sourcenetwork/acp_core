@@ -27,10 +27,10 @@ func TestGetPolicy_ReturnsAnExistingPolicy(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	pol := `
-name: policy
+	pol := `name: policy
 spec: none
 `
+
 	action := test.CreatePolicyAction{
 		Policy: pol,
 	}

@@ -15,35 +15,34 @@ func TestCreatePolicy_ValidPolicyIsCreated(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	bob := ctx.SetPrincipal("bob")
 
-	policyStr := `
-name: policy
+	policyStr := `actor:
+  doc: my actor
+  name: actor-resource
 description: ok
-resources:
-  file:
-    relations:
-      owner:
-        doc: owner owns
-        types:
-          - actor-resource
-      reader:
-      admin:
-        manages:
-          - reader
-    permissions:
-      own:
-        expr: owner
-        doc: own doc
-      read:
-        expr: owner + reader
-
 meta:
   a: b
   key: value
-
-actor:
-  name: actor-resource
-  doc: my actor
+name: policy
+resources:
+- name: file
+  permissions:
+  - doc: own doc
+    expr: owner
+    name: own
+  - expr: owner + reader
+    name: read
+  relations:
+  - manages:
+    - reader
+    name: admin
+  - doc: owner owns
+    name: owner
+    types:
+    - actor-resource
+  - name: reader
+spec: none
 `
+
 	msg := types.CreatePolicyRequest{
 		Policy:      policyStr,
 		MarshalType: types.PolicyMarshalingType_YAML,
@@ -89,7 +88,8 @@ actor:
 						},
 					},
 					{
-						Name: "reader",
+						Name:    "reader",
+						VrTypes: []*types.Restriction{},
 					},
 				},
 				Permissions: []*types.Permission{
@@ -121,8 +121,9 @@ actor:
 			},
 		},
 		ActorResource: &types.ActorResource{
-			Name: "actor-resource",
-			Doc:  "my actor",
+			Name:      "actor-resource",
+			Doc:       "my actor",
+			Relations: []*types.Relation{},
 		},
 	},
 		resp.Record.Policy,
@@ -140,18 +141,16 @@ func TestCreatePolicy_ResourcesWithoutOwnerRelation_IsAutomaticallyAdded(t *test
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	pol := `
+	pol := `description: ok
 name: policy
-description: ok
 resources:
-  file:
-    relations:
-      reader:
-    permissions:
-  foo:
-    relations:
-      owner:
-    permissions:
+- name: file
+  relations:
+  - name: reader
+- name: foo
+  relations:
+  - name: owner
+spec: none
 `
 
 	req := types.CreatePolicyRequest{
@@ -178,17 +177,16 @@ func TestCreatePolicy_ManagementReferencingUndefinedRelationReturnsError(t *test
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	pol := `
+	pol := `description: ok
 name: policy
-description: ok
 resources:
-  file:
-    relations:
-      owner:
-      admin:
-        manages:
-          - deleter
-    permissions:
+- name: file
+  relations:
+  - manages:
+    - deleter
+    name: admin
+  - name: owner
+spec: none
 `
 
 	req := types.CreatePolicyRequest{
@@ -205,8 +203,7 @@ func TestCreatePolicy_UnamedPolicyCausesError(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	pol := `
-resources:
+	pol := `spec: none
 `
 
 	req := types.CreatePolicyRequest{
@@ -223,33 +220,30 @@ func TestCreatePolicy_CreatingMultipleEqualPoliciesProduceDifferentIDs(t *testin
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("creator")
 
-	pol := `
-name: test
-description: A Valid Defra Policy Interface (DPI)
-
-actor:
+	pol := `actor:
   name: actor
-
+description: A Valid Defra Policy Interface (DPI)
+name: test
 resources:
-  users:
-    permissions:
-      read:
-        expr: owner + reader
-      write:
-        expr: owner
-
-    relations:
-      owner:
-        types:
-          - actor
-      reader:
-        types:
-          - actor
-      admin:
-        manages:
-          - reader
-        types:
-          - actor
+- name: users
+  permissions:
+  - expr: owner + reader
+    name: read
+  - expr: owner
+    name: write
+  relations:
+  - manages:
+    - reader
+    name: admin
+    types:
+    - actor
+  - name: owner
+    types:
+    - actor
+  - name: reader
+    types:
+    - actor
+spec: none
 `
 
 	req := types.CreatePolicyRequest{
