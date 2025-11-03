@@ -143,7 +143,7 @@ func (m *Policy) GetSpecificationType() PolicySpecificationType {
 	if m != nil {
 		return m.SpecificationType
 	}
-	return PolicySpecificationType_UNKNOWN_SPEC
+	return PolicySpecificationType_NO_SPEC
 }
 
 // Resource models a namespace for objects in a Policy.

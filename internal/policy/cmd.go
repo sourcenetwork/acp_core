@@ -46,10 +46,6 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 		return nil, fmt.Errorf("CreatePolicy: %w", err)
 	}
 
-	if policy.SpecificationType == types.PolicySpecificationType_UNKNOWN_SPEC {
-		policy.SpecificationType = types.PolicySpecificationType_NO_SPEC
-	}
-
 	pipeline := ppp.CreatePolicyPipelineFactory(i, policy.SpecificationType)
 	policy, err = pipeline.Process(policy)
 	if err != nil {
@@ -135,8 +131,8 @@ func (c *CreatePolicyWithSpecHandler) Execute(ctx context.Context, runtime runti
 		return nil, fmt.Errorf("CreatePolicy: %w", err)
 	}
 
-	// if no spec was provided, assign the required spec
-	if policy.SpecificationType == types.PolicySpecificationType_UNKNOWN_SPEC {
+	// TODO if create strategy is reject then error
+	if policy.SpecificationType == types.PolicySpecificationType_NO_SPEC {
 		policy.SpecificationType = req.RequiredSpec
 	}
 
@@ -213,7 +209,8 @@ func (h *EditPolicyHandler) Execute(ctx context.Context, runtime runtime.Runtime
 	if err != nil {
 		return nil, fmt.Errorf("EditPolicy: %w", err)
 	}
-	if policy.SpecificationType == types.PolicySpecificationType_UNKNOWN_SPEC {
+	// TODO if create strategy is reject then error
+	if policy.SpecificationType == types.PolicySpecificationType_NO_SPEC {
 		policy.SpecificationType = types.PolicySpecificationType_NO_SPEC
 	}
 

@@ -200,7 +200,7 @@ func (m *CreatePolicyWithSpecificationRequest) GetRequiredSpec() PolicySpecifica
 	if m != nil {
 		return m.RequiredSpec
 	}
-	return PolicySpecificationType_UNKNOWN_SPEC
+	return PolicySpecificationType_NO_SPEC
 }
 
 type EditPolicyRequest struct {

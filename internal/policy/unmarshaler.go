@@ -176,9 +176,9 @@ func (u *shortUnmarshaler) mapSpec(spec string) (types.PolicySpecificationType, 
 	case "none":
 		return types.PolicySpecificationType_NO_SPEC, nil
 	case "":
-		return types.PolicySpecificationType_UNKNOWN_SPEC, nil
+		return types.PolicySpecificationType_NO_SPEC, nil
 	default:
-		return types.PolicySpecificationType_UNKNOWN_SPEC, errors.Wrap("invalid specification", errors.ErrorType_BAD_INPUT)
+		return types.PolicySpecificationType_NO_SPEC, errors.Wrap("invalid specification", errors.ErrorType_BAD_INPUT)
 	}
 }
 
@@ -279,6 +279,6 @@ func (u *yamlUnmarshaler) mapSpecType(spec string) types.PolicySpecificationType
 	case "none":
 		return types.PolicySpecificationType_NO_SPEC
 	default:
-		return types.PolicySpecificationType_UNKNOWN_SPEC
+		return types.PolicySpecificationType_NO_SPEC
 	}
 }
