@@ -36,6 +36,9 @@ func Unmarshal(pol string, t types.PolicyMarshalingType) (*types.Policy, error) 
 	return policy, nil
 }
 
+// UnmarshalShort unmarshals a short yaml policy
+//
+// Deprecated: short policy is a deprecated format and is no longer supported.
 func UnmarshalShort(pol string) (*types.Policy, error) {
 	u := shortUnmarshaler{}
 	return u.UnmarshalYAML(pol)
