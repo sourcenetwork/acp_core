@@ -16,7 +16,7 @@ func (t *SortTransformer) Validate(_ types.Policy) *errors.MultiError {
 	return nil
 }
 
-func (t *SortTransformer) Transform(pol types.Policy) (types.Policy, error) {
+func (t *SortTransformer) Transform(pol types.Policy) (specification.TransformerResult, error) {
 	resourceExtractor := func(resource *types.Resource) string { return resource.Name }
 	relationExtractor := func(relation *types.Relation) string { return relation.Name }
 	permissionExtractor := func(permission *types.Permission) string { return permission.Name }
@@ -27,7 +27,9 @@ func (t *SortTransformer) Transform(pol types.Policy) (types.Policy, error) {
 		utils.FromExtractor(resource.Relations, relationExtractor).SortInPlace()
 		utils.FromExtractor(resource.Permissions, permissionExtractor).SortInPlace()
 	}
-	return pol, nil
+	return specification.TransformerResult{
+		Policy: pol,
+	}, nil
 }
 
-func (t *SortTransformer) GetBaseError() error { return nil }
+func (t *SortTransformer) GetName() string { return "Sort Transformer" }

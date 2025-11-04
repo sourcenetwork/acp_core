@@ -227,10 +227,9 @@ name: test
 resources:
 - name: users
   permissions:
-  - expr: owner + reader
-    name: read
-  - expr: owner
-    name: write
+  - name: read
+    expr: reader
+  - name: write
   relations:
   - manages:
     - reader

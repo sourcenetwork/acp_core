@@ -61,11 +61,12 @@ func ValidatePolicy(ctx context.Context, runtime runtime.RuntimeManager, req *ty
 	// counter doesn't matter since policy is not going to be persisted
 	// so an ID clash is irrelevant
 	pipeline := ppp.CreatePolicyPipelineFactory(0, pol.SpecificationType)
-	pol, err = pipeline.Process(pol)
+	result, err := pipeline.Process(pol)
 	if err != nil {
 		resp.ErrorMsg = err.Error()
 		return resp, nil
 	}
+	pol = &result.Policy
 
 	engine, err := zanzi.NewZanzi(runtime.GetKVStore(), runtime.GetLogger())
 	if err != nil {

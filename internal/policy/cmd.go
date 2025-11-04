@@ -47,10 +47,11 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 	}
 
 	pipeline := ppp.CreatePolicyPipelineFactory(i, policy.SpecificationType)
-	policy, err = pipeline.Process(policy)
+	result, err := pipeline.Process(policy)
 	if err != nil {
 		return nil, fmt.Errorf("CreatePolicy: %w", err)
 	}
+	policy = &result.Policy
 
 	record := &types.PolicyRecord{
 		Policy:           policy,
@@ -80,6 +81,7 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 
 	return &types.CreatePolicyResponse{
 		Record: record,
+		Log:    result.Messages,
 	}, nil
 }
 
@@ -144,10 +146,11 @@ func (c *CreatePolicyWithSpecHandler) Execute(ctx context.Context, runtime runti
 	}
 
 	pipeline := ppp.CreatePolicyPipelineFactory(i, req.RequiredSpec)
-	policy, err = pipeline.Process(policy)
+	result, err := pipeline.Process(policy)
 	if err != nil {
 		return nil, fmt.Errorf("CreatePolicy: %w", err)
 	}
+	policy = &result.Policy
 
 	record := &types.PolicyRecord{
 		Policy:           policy,
@@ -215,10 +218,11 @@ func (h *EditPolicyHandler) Execute(ctx context.Context, runtime runtime.Runtime
 	}
 
 	pipeline := ppp.EditPolicyPipelineFactory(oldRecord.Policy)
-	policy, err = pipeline.Process(policy)
+	result, err := pipeline.Process(policy)
 	if err != nil {
 		return nil, fmt.Errorf("EditPolicy: %w", err)
 	}
+	policy = &result.Policy
 
 	now, err := runtime.GetTimeService().GetNow(ctx)
 	if err != nil {

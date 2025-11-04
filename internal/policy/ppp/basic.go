@@ -1,6 +1,8 @@
 package ppp
 
 import (
+	"fmt"
+
 	"github.com/sourcenetwork/acp_core/internal/specification"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
@@ -30,8 +32,8 @@ func (s *BasicRequirement) Validate(pol types.Policy) *errors.MultiError {
 	return nil
 }
 
-func (t *BasicRequirement) GetBaseError() error {
-	return ErrBasicRequirement
+func (t *BasicRequirement) GetName() string {
+	return "Basic Requirement"
 }
 
 // BasicTransforms normalizes a Policy by adding defaults
@@ -49,7 +51,8 @@ func (s *BasicTransformer) Validate(pol types.Policy) *errors.MultiError {
 }
 
 // Transform sets and creates the default ActorResource if ommitted
-func (t *BasicTransformer) Transform(pol types.Policy) (types.Policy, error) {
+func (t *BasicTransformer) Transform(pol types.Policy) (specification.TransformerResult, error) {
+	result := specification.TransformerResult{}
 	if pol.ActorResource == nil {
 		pol.ActorResource = &types.ActorResource{
 			Name: DefaultActorResourceName,
@@ -61,12 +64,16 @@ func (t *BasicTransformer) Transform(pol types.Policy) (types.Policy, error) {
 		for _, perm := range res.Permissions {
 			if perm.Expression == "" {
 				perm.Expression = "owner"
+				msg := fmt.Sprintf("defaulting permission to owner: resource %v: relation %v",
+					res.Name, perm.Name)
+				result.Messages = append(result.Messages, msg)
 			}
 		}
 	}
-	return pol, nil
+	result.Policy = pol
+	return result, nil
 }
 
-func (t *BasicTransformer) GetBaseError() error {
-	return ErrBasicTransformer
+func (t *BasicTransformer) GetName() string {
+	return "Basic Transformer"
 }

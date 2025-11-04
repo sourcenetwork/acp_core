@@ -52,12 +52,13 @@ func (t *DecentralizedAdminTransformer) Validate(policy types.Policy) *errors.Mu
 
 // Transform processes the `manages` directives in a Policy
 // and creates the required management permissions for it
-func (t *DecentralizedAdminTransformer) Transform(pol types.Policy) (types.Policy, error) {
+func (t *DecentralizedAdminTransformer) Transform(pol types.Policy) (specification.TransformerResult, error) {
+	res := specification.TransformerResult{}
 	graph := &types.ManagementGraph{}
 	graph.LoadFromPolicy(&pol)
 	err := graph.IsWellFormed()
 	if err != nil {
-		return types.Policy{}, errors.Wrap("invalid manages definition: "+err.Error(), ErrAdministrationTransformer)
+		return res, errors.Wrap("invalid manages definition: "+err.Error(), ErrAdministrationTransformer)
 	}
 
 	for _, resource := range pol.Resources {
@@ -67,7 +68,8 @@ func (t *DecentralizedAdminTransformer) Transform(pol types.Policy) (types.Polic
 		}
 	}
 
-	return pol, nil
+	res.Policy = pol
+	return res, nil
 }
 
 func (t *DecentralizedAdminTransformer) buildManagementPermission(resourceName string, relation *types.Relation, graph *types.ManagementGraph) *types.Permission {
@@ -136,4 +138,4 @@ func (t *DecentralizedAdminTransformer) buildManagementPermissionName(relationNa
 	return managementPermissionPrefix + relationName
 }
 
-func (t *DecentralizedAdminTransformer) GetBaseError() error { return ErrAdministrationTransformer }
+func (t *DecentralizedAdminTransformer) GetName() string { return "Decentralized Administrator" }

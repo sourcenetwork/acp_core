@@ -38,13 +38,15 @@ func (r *TransferIdTransformer) Validate(policy types.Policy) *errors.MultiError
 	return nil
 }
 
-func (r *TransferIdTransformer) GetBaseError() error {
-	return ErrImmutableId
+func (r *TransferIdTransformer) GetName() string {
+	return "transfer id"
 }
 
-func (r *TransferIdTransformer) Transform(policy types.Policy) (types.Policy, error) {
+func (r *TransferIdTransformer) Transform(policy types.Policy) (specification.TransformerResult, error) {
 	policy.Id = r.oldId
-	return policy, nil
+	return specification.TransformerResult{
+		Policy: policy,
+	}, nil
 }
 
 // NewImmutableSpecRequirement returns a new instance of ImmutableSpecRequirement
@@ -68,8 +70,8 @@ func (r *ImmutableSpecRequirement) Validate(policy types.Policy) *errors.MultiEr
 	return nil
 }
 
-func (r *ImmutableSpecRequirement) GetBaseError() error {
-	return ErrImmutableSpec
+func (r *ImmutableSpecRequirement) GetName() string {
+	return "immutable spec"
 }
 
 // NewPreservedResourcesRequirement returns an instance of PreservedResourcesRequirement
@@ -107,6 +109,6 @@ func (r *PreservedResourcesRequirement) Validate(policy types.Policy) *errors.Mu
 	return errors.NewMultiError(ErrPreserveResource, errs...)
 }
 
-func (r *PreservedResourcesRequirement) GetBaseError() error {
-	return ErrPreserveResource
+func (r *PreservedResourcesRequirement) GetName() string {
+	return "preserved resources requirement"
 }

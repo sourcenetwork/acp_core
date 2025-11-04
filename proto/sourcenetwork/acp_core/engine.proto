@@ -170,6 +170,9 @@ message CreatePolicyRequest {
 
 message CreatePolicyResponse {
   PolicyRecord record = 1;
+  // log is a set of messages generated while
+  // creating the policy
+  repeated string log = 2;
 }
 
 message CreatePolicyWithSpecificationRequest {

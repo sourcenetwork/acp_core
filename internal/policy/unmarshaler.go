@@ -104,8 +104,8 @@ func (u *shortUnmarshaler) mapPolShort(pol *types.PolicyShort) (*types.Policy, e
 
 	// sort to ensure unmarshaling tests are not flaky
 	sorted := ppp.SortTransformer{}
-	sortedPol, _ := sorted.Transform(*policy) // SortTransformer does not error
-	return &sortedPol, nil
+	result, _ := sorted.Transform(*policy) // SortTransformer does not error
+	return &result.Policy, nil
 }
 
 func (u *shortUnmarshaler) mapResource(name string, resource *types.ResourceShort) *types.Resource {
@@ -203,8 +203,8 @@ func (u *yamlUnmarshaler) Unmarshal(pol string) (*types.Policy, error) {
 
 	policy := u.mapPolicy(&yaml)
 	sorted := ppp.SortTransformer{}
-	sortedPol, _ := sorted.Transform(*policy) // SortTransformer does not error
-	return &sortedPol, nil
+	result, _ := sorted.Transform(*policy) // SortTransformer does not error
+	return &result.Policy, nil
 }
 
 func (u *yamlUnmarshaler) mapPolicy(in *types.PolicyYaml) *types.Policy {
