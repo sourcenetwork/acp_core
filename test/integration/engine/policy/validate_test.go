@@ -26,11 +26,7 @@ spec: none
 		MarshalType: types.PolicyMarshalingType_YAML,
 	})
 	require.NoError(t, err)
-	want := &types.ValidatePolicyResponse{
-		ErrorMsg: "",
-		Valid:    true,
-	}
-	require.Equal(t, want, resp)
+	require.True(t, resp.Valid)
 }
 
 func TestValidatePolicy_InvalidPolicyReturnsErrorMsg(t *testing.T) {
@@ -46,7 +42,6 @@ resources:
   - name: reader
 spec: defra
 `
-
 	resp, err := ctx.Engine.ValidatePolicy(ctx, &types.ValidatePolicyRequest{
 		Policy:      pol,
 		MarshalType: types.PolicyMarshalingType_YAML,
@@ -94,8 +89,9 @@ spec: none
 	resp, err := ctx.Engine.ValidatePolicy(ctx, &msg)
 
 	require.Nil(t, err)
+	require.Empty(t, resp.ErrorMsg)
 	require.Equal(t, &types.Policy{
-		Id:                "da7be65027664708551f97197ba5f5993aa99bc7b57055df9766426dc6da9605",
+		Id:                "",
 		Name:              "policy",
 		Description:       "ok",
 		SpecificationType: types.PolicySpecificationType_NO_SPEC,
@@ -125,25 +121,11 @@ spec: none
 						},
 					},
 					{
-						Name: "reader",
+						Name:    "reader",
+						VrTypes: []*types.Restriction{},
 					},
 				},
 				Permissions: []*types.Permission{
-					{
-						Name:       "_can_manage_admin",
-						Expression: "owner",
-						Doc:        "permission controls actors which are allowed to create relationships for the admin relation (permission was auto-generated).",
-					},
-					{
-						Name:       "_can_manage_owner",
-						Expression: "owner",
-						Doc:        "permission controls actors which are allowed to create relationships for the owner relation (permission was auto-generated).",
-					},
-					{
-						Name:       "_can_manage_reader",
-						Expression: "(admin + owner)",
-						Doc:        "permission controls actors which are allowed to create relationships for the reader relation (permission was auto-generated).",
-					},
 					{
 						Name:       "own",
 						Expression: "owner",
@@ -154,11 +136,26 @@ spec: none
 						Expression: "(owner + reader)",
 					},
 				},
+				ManagementPermissions: []*types.ManagementPermission{
+					{
+						Name:       "admin",
+						Expression: "owner",
+					},
+					{
+						Name:       "owner",
+						Expression: "owner",
+					},
+					{
+						Name:       "reader",
+						Expression: "(admin + owner)",
+					},
+				},
 			},
 		},
 		ActorResource: &types.ActorResource{
-			Name: "actor-resource",
-			Doc:  "my actor",
+			Name:      "actor-resource",
+			Doc:       "my actor",
+			Relations: []*types.Relation{},
 		},
 	},
 		resp.Policy,
