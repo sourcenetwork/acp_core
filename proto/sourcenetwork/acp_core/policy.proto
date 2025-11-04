@@ -38,6 +38,7 @@ message Resource {
   string doc = 2;
   repeated Permission permissions = 3;
   repeated Relation relations = 4;
+  repeated ManagementPermission management_permissions = 5;
 }
 
 message Relation {
@@ -74,4 +75,11 @@ message ActorResource {
   string name = 1;
   string doc = 2;
   repeated Relation relations = 3;
+}
+
+message ManagementPermission {
+  // name matches the name of the underlying relation the management permission manages
+  string name = 1;
+  // expr is the permission expression derived from the manages directives from the policy definition
+  string expr = 2;
 }
