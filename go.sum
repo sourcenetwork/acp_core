@@ -211,6 +211,8 @@ github.com/sourcenetwork/zanzi v0.3.1-0.20250520192824-03101a013e24 h1:7HmRJVTc3
 github.com/sourcenetwork/zanzi v0.3.1-0.20250520192824-03101a013e24/go.mod h1:XzPxq660MYb5q5EAHvvfqkyZtfJ8jzdmn/5OW5ha89A=
 github.com/sourcenetwork/zanzi v0.3.1-0.20250807201848-ff8322455b4b h1:H0tLqqXqXr7nRDIeYUXoFVsN3CYXqr+oGJ8ltDAXCAk=
 github.com/sourcenetwork/zanzi v0.3.1-0.20250807201848-ff8322455b4b/go.mod h1:XzPxq660MYb5q5EAHvvfqkyZtfJ8jzdmn/5OW5ha89A=
+github.com/sourcenetwork/zanzi v0.3.1-0.20251104182341-4b1bd0f7be5a h1:TlnRmk1v4+nIKGUdzMht4qnrf8AxCUAvpxSIqJ2CX94=
+github.com/sourcenetwork/zanzi v0.3.1-0.20251104182341-4b1bd0f7be5a/go.mod h1:j7QmuHK+zfA0JO6FliJzQHijVNSXDuQy8hUzFC5pucA=
 github.com/spf13/cast v1.6.0 h1:GEiTHELF+vaR5dhz3VqZfFSzZjYbgeKDpBxQVS4GYJ0=
 github.com/spf13/cast v1.6.0/go.mod h1:ancEpBxwJDODSW/UG4rDrAqiKolqNNh2DX3mk86cAdo=
 github.com/spf13/cobra v1.8.0 h1:7aJaZx1B85qltLMc546zn58BxxfZdR/W22ej9CFoEf0=
