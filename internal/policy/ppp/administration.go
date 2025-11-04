@@ -6,16 +6,9 @@ import (
 	"github.com/sourcenetwork/acp_core/internal/specification"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
-	"github.com/sourcenetwork/acp_core/pkg/utils"
-	"k8s.io/apimachinery/pkg/util/sets"
 )
 
 var _ specification.Transformer = (*DecentralizedAdminTransformer)(nil)
-
-const (
-	managementPermissionPrefix string = "_can_manage_"
-	managementPermissionDoc    string = "permission controls actors which are allowed to create relationships for the %v relation (permission was auto-generated)."
-)
 
 var ErrAdministrationTransformer = errors.New("decentralized administration transformer", errors.ErrorType_BAD_INPUT)
 
@@ -29,15 +22,15 @@ func (t *DecentralizedAdminTransformer) Validate(policy types.Policy) *errors.Mu
 	multiErr := errors.NewMultiError(ErrAdministrationTransformer)
 
 	for _, resource := range policy.Resources {
-		permissionNames := utils.MapSlice(resource.Permissions, func(p *types.Permission) string {
-			return p.Name
-		})
-		permissionSet := sets.New(permissionNames...)
+		mgmtPermissions := make(map[string]struct{})
+		for _, perm := range resource.ManagementPermissions {
+			mgmtPermissions[perm.Name] = struct{}{}
+		}
 
-		for _, relation := range resource.Relations {
-			managementPermName := t.buildManagementPermissionName(relation.Name)
-			if !permissionSet.Has(managementPermName) {
-				err := fmt.Errorf("management permission not found: resource %v: relation %v", resource.Name, relation.Name)
+		for _, rel := range resource.Relations {
+			_, ok := mgmtPermissions[rel.Name]
+			if !ok {
+				err := fmt.Errorf("management permission not found: resource %v: relation %v", resource.Name, rel.Name)
 				multiErr.Append(err)
 			}
 		}
@@ -62,24 +55,25 @@ func (t *DecentralizedAdminTransformer) Transform(pol types.Policy) (specificati
 	}
 
 	for _, resource := range pol.Resources {
+		perms := make([]*types.ManagementPermission, 0, len(resource.Relations))
 		for _, relation := range resource.Relations {
-			managementPermission := t.buildManagementPermission(resource.Name, relation, graph)
-			resource.Permissions = append(resource.Permissions, managementPermission)
+			perm := t.buildManagementPermission(resource.Name, relation, graph)
+			perms = append(perms, perm)
 		}
+		resource.ManagementPermissions = perms
 	}
 
 	res.Policy = pol
 	return res, nil
 }
 
-func (t *DecentralizedAdminTransformer) buildManagementPermission(resourceName string, relation *types.Relation, graph *types.ManagementGraph) *types.Permission {
+func (t *DecentralizedAdminTransformer) buildManagementPermission(resourceName string, relation *types.Relation, graph *types.ManagementGraph) *types.ManagementPermission {
 	managerRelations := graph.GetManagers(resourceName, relation.Name)
 
 	exprTree := t.buildRelationExpression(managerRelations)
 
-	return &types.Permission{
-		Name:       t.buildManagementPermissionName(relation.Name),
-		Doc:        fmt.Sprintf(managementPermissionDoc, relation.Name),
+	return &types.ManagementPermission{
+		Name:       relation.Name,
 		Expression: exprTree.IntoPermissionExpr(),
 	}
 }
@@ -132,10 +126,6 @@ func (t *DecentralizedAdminTransformer) buildRelationExpression(relations []stri
 			},
 		},
 	}
-}
-
-func (t *DecentralizedAdminTransformer) buildManagementPermissionName(relationName string) string {
-	return managementPermissionPrefix + relationName
 }
 
 func (t *DecentralizedAdminTransformer) GetName() string { return "Decentralized Administrator" }

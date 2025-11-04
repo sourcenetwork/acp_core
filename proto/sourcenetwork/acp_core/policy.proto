@@ -80,6 +80,6 @@ message ActorResource {
 message ManagementPermission {
   // name matches the name of the underlying relation the management permission manages
   string name = 1;
-  // expr is the permission expression derived from the manages directives from the policy definition
-  string expr = 2;
+  // expression is the permission expression derived from the manages directives from the policy definition
+  string expression = 2;
 }
