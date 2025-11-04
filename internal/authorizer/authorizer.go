@@ -48,19 +48,14 @@ func (a *OperationAuthorizer) IsAuthorized(ctx context.Context, request *Managem
 			errors.Pair("resource", request.Object.Resource),
 		)
 	}
-	relation := resource.GetRelationByName(request.Relation)
-	if relation == nil {
-		return false, errors.New("relation not found in resource", errors.ErrorType_NOT_FOUND,
+	perm := resource.GetManagementPermissionByName(request.Relation)
+	if perm == nil {
+		return false, errors.New("management permission not found for relation in resource", errors.ErrorType_NOT_FOUND,
 			errors.Pair("policy", request.Policy.Id),
 			errors.Pair("resource", request.Object.Resource),
 			errors.Pair("relation", request.Relation),
 		)
 	}
 
-	authRequest := &types.Operation{
-		Object:     request.Object,
-		Permission: request.Policy.GetManagementPermissionName(request.Relation),
-	}
-
-	return a.engine.Check(ctx, request.Policy, authRequest, request.Actor)
+	return a.engine.CheckExpression(ctx, request.Policy, request.Object, perm.Expression, request.Actor)
 }

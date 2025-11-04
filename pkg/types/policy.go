@@ -4,14 +4,6 @@ import (
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
 
-const ManagementPermissionPrefix string = "_can_manage_"
-
-// GetManagementPermissionName returns the name of the Management Permission
-// built for the given Relation
-func (pol *Policy) GetManagementPermissionName(relation string) string {
-	return ManagementPermissionPrefix + relation
-}
-
 // GetResourceByName returns a Resource with the given Name.
 // If no resource is found with resourceName, return nil
 func (pol *Policy) GetResourceByName(resourceName string) *Resource {
@@ -45,6 +37,17 @@ func (res *Resource) GetRelationByName(name string) *Relation {
 	for _, relation := range res.Relations {
 		if relation.Name == name {
 			return relation
+		}
+	}
+	return nil
+}
+
+// GetManagementPermissionByName returns a ManagementPermission with `name`.
+// If no ManagementPermission matches name, returns nil
+func (res *Resource) GetManagementPermissionByName(name string) *ManagementPermission {
+	for _, perm := range res.ManagementPermissions {
+		if perm.Name == name {
+			return perm
 		}
 	}
 	return nil

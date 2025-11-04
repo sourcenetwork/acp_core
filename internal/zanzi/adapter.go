@@ -352,3 +352,25 @@ func (z *Adapter) DeletePolicy(ctx context.Context, id string) (bool, error) {
 
 	return resp.Found, nil
 }
+
+func (z *Adapter) CheckExpression(ctx context.Context, policy *types.Policy, obj *types.Object, expression string, actor *types.Actor) (bool, error) {
+	service := z.zanzi.GetRelationGraphService()
+	mapper := newRelationshipMapper(policy.ActorResource.Name)
+
+	req := &api.CheckExpressionRequest{
+		PolicyId: policy.Id,
+		Object:   mapper.MapObject(obj),
+		Subject: &domain.Entity{
+			Resource: policy.ActorResource.Name,
+			Id:       actor.Id,
+		},
+		RelationExpression: expression,
+	}
+	response, err := service.CheckExpression(ctx, req)
+	err = mapErr(err)
+	if err != nil {
+		return false, fmt.Errorf("CheckExpression: %w", err)
+	}
+
+	return response.Authorized, nil
+}

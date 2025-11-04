@@ -274,8 +274,6 @@ func Test_GetCatalogue_ReturnsSandboxCatalogue(t *testing.T) {
 				ResourceCatalogue: map[string]*types.ResourceCatalogue{
 					"file": {
 						Permissions: []string{
-							"_can_manage_owner",
-							"_can_manage_reader",
 							"read",
 							"write",
 						},
