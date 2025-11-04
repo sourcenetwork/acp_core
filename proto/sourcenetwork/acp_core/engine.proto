@@ -152,6 +152,12 @@ service ACPEngine {
   // the verification is often done by someone else
   rpc VerifyAccessRequest(VerifyAccessRequestRequest) returns (VerifyAccessRequestResponse);
 
+  // CheckManagementAuthority verifies whether the given actor is authorized to manage the given relation for the given object.
+  //
+  // Eg. if a policy sets an `admin` relation as a manager of a `reader` relation, and `did:user:bob` is an `admin` for object `file:foo`,
+  // then Checking `did:user:bob`'s authority for `reader` on `file:foo` will return true.
+  rpc CheckManagementAuthority(CheckManagementAuthorityRequest) returns (CheckManagementAuthorityResponse);
+
   // TODO: Expand and Reverse lookup
 }
 
@@ -390,4 +396,18 @@ message RevealRegistrationRequest {
 
 message RevealRegistrationResponse {
   RelationshipRecord record = 1;
+}
+
+message CheckManagementAuthorityRequest {
+  string policy_id = 1;
+  // object which actor wants to manage
+  Object object = 2;
+  // relation which actor wants to manage
+  string relation = 3;
+  // actor which whose authority we want to verify
+  Actor actor = 4;
+}
+
+message CheckManagementAuthorityResponse{
+  bool authorized = 1;
 }
