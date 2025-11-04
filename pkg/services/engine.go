@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 
+	"github.com/sourcenetwork/acp_core/internal/authorizer"
 	"github.com/sourcenetwork/acp_core/internal/authz_db"
 	"github.com/sourcenetwork/acp_core/internal/policy"
 	"github.com/sourcenetwork/acp_core/internal/relationship"
@@ -198,6 +199,13 @@ func (s *EngineService) RevealRegistration(ctx context.Context, req *types.Revea
 	h := func(ctx context.Context, req *types.RevealRegistrationRequest) (*types.RevealRegistrationResponse, error) {
 		h := relationship.RevealRegistrationHandler{}
 		return h.Execute(ctx, s.runtime, req)
+	}
+	return applyMiddleware(ctx, h, s.hooks, req)
+}
+
+func (s *EngineService) CheckManagementAuthority(ctx context.Context, req *types.CheckManagementAuthorityRequest) (*types.CheckManagementAuthorityResponse, error) {
+	h := func(ctx context.Context, req *types.CheckManagementAuthorityRequest) (*types.CheckManagementAuthorityResponse, error) {
+		return authorizer.CheckManagementAuthority(ctx, s.runtime, req)
 	}
 	return applyMiddleware(ctx, h, s.hooks, req)
 }

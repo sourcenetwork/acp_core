@@ -27,8 +27,6 @@ func (c *SetRelationshipHandler) Execute(ctx context.Context, runtime runtime.Ru
 	}
 	did := principal.Identifier
 
-	authz := authorizer.NewOperationAuthorizer(engine)
-
 	rec, err := engine.GetPolicy(ctx, cmd.PolicyId)
 	if err != nil {
 		return nil, newSetRelationshipErr(err)
@@ -60,13 +58,8 @@ func (c *SetRelationshipHandler) Execute(ctx context.Context, runtime runtime.Ru
 		))
 	}
 
-	req := authorizer.ManagementRequest{
-		Policy:   policy,
-		Object:   cmd.Relationship.Object,
-		Relation: cmd.Relationship.Relation,
-		Actor:    &creatorActor,
-	}
-	authorized, err := authz.IsAuthorized(ctx, &req)
+	authorized, err := authorizer.VerifyManagementPermission(ctx, engine, policy,
+		cmd.Relationship.Object, cmd.Relationship.Relation, &creatorActor)
 	if err != nil {
 		return nil, newSetRelationshipErr(err)
 	}
@@ -140,8 +133,6 @@ func (c *DeleteRelationshipHandler) Execute(ctx context.Context, runtime runtime
 	}
 	did := principal.Identifier
 
-	authorizer := authorizer.NewOperationAuthorizer(engine)
-
 	err = c.validate(cmd)
 	if err != nil {
 		return nil, newDeleteRelationshipErr(err)
@@ -156,7 +147,8 @@ func (c *DeleteRelationshipHandler) Execute(ctx context.Context, runtime runtime
 	}
 	policy := rec.Policy
 
-	isAuthorized, err := c.isActorAuthorized(ctx, authorizer, policy, cmd, did)
+	isAuthorized, err := authorizer.VerifyManagementPermission(ctx, engine, policy,
+		cmd.Relationship.Object, cmd.Relationship.Relation, types.NewActor(did))
 	if err != nil {
 		return nil, newDeleteRelationshipErr(err)
 	}
@@ -184,15 +176,4 @@ func (c *DeleteRelationshipHandler) validate(cmd *types.DeleteRelationshipReques
 		return ErrDeleteOwnerRel
 	}
 	return nil
-}
-
-// verifies whether actor is authorized to remove the specified Relationship
-func (c *DeleteRelationshipHandler) isActorAuthorized(ctx context.Context, authz *authorizer.OperationAuthorizer, policy *types.Policy, cmd *types.DeleteRelationshipRequest, initiator string) (bool, error) {
-	req := authorizer.ManagementRequest{
-		Policy:   policy,
-		Object:   cmd.Relationship.Object,
-		Relation: cmd.Relationship.Relation,
-		Actor:    types.NewActor(initiator),
-	}
-	return authz.IsAuthorized(ctx, &req)
 }
