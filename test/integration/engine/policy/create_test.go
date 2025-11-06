@@ -15,38 +15,37 @@ func TestCreatePolicy_ValidPolicyIsCreated(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	bob := ctx.SetPrincipal("bob")
 
-	policyStr := `
-name: policy
+	policyStr := `actor:
+  doc: my actor
+  name: actor-resource
 description: ok
-resources:
-  file:
-    relations:
-      owner:
-        doc: owner owns
-        types:
-          - actor-resource
-      reader:
-      admin:
-        manages:
-          - reader
-    permissions:
-      own:
-        expr: owner
-        doc: own doc
-      read:
-        expr: owner + reader
-
 meta:
   a: b
   key: value
-
-actor:
-  name: actor-resource
-  doc: my actor
+name: policy
+resources:
+- name: file
+  permissions:
+  - doc: own doc
+    expr: owner
+    name: own
+  - expr: owner + reader
+    name: read
+  relations:
+  - manages:
+    - reader
+    name: admin
+  - doc: owner owns
+    name: owner
+    types:
+    - actor-resource
+  - name: reader
+spec: none
 `
+
 	msg := types.CreatePolicyRequest{
 		Policy:      policyStr,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 		Metadata:    metadata,
 	}
 	resp, err := ctx.Engine.CreatePolicy(ctx, &msg)
@@ -89,7 +88,8 @@ actor:
 						},
 					},
 					{
-						Name: "reader",
+						Name:    "reader",
+						VrTypes: []*types.Restriction{},
 					},
 				},
 				Permissions: []*types.Permission{
@@ -121,8 +121,9 @@ actor:
 			},
 		},
 		ActorResource: &types.ActorResource{
-			Name: "actor-resource",
-			Doc:  "my actor",
+			Name:      "actor-resource",
+			Doc:       "my actor",
+			Relations: []*types.Relation{},
 		},
 	},
 		resp.Record.Policy,
@@ -140,23 +141,21 @@ func TestCreatePolicy_ResourcesWithoutOwnerRelation_IsAutomaticallyAdded(t *test
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	pol := `
+	pol := `description: ok
 name: policy
-description: ok
 resources:
-  file:
-    relations:
-      reader:
-    permissions:
-  foo:
-    relations:
-      owner:
-    permissions:
+- name: file
+  relations:
+  - name: reader
+- name: foo
+  relations:
+  - name: owner
+spec: none
 `
 
 	req := types.CreatePolicyRequest{
 		Policy:      pol,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 	}
 	resp, err := ctx.Engine.CreatePolicy(ctx, &req)
 
@@ -166,7 +165,7 @@ resources:
 		Doc:     "owner relations represents the object owner",
 		Manages: nil,
 		VrTypes: []*types.Restriction{
-			&types.Restriction{
+			{
 				ResourceName: resp.Record.Policy.ActorResource.Name,
 			},
 		},
@@ -178,22 +177,21 @@ func TestCreatePolicy_ManagementReferencingUndefinedRelationReturnsError(t *test
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	pol := `
+	pol := `description: ok
 name: policy
-description: ok
 resources:
-  file:
-    relations:
-      owner:
-      admin:
-        manages:
-          - deleter
-    permissions:
+- name: file
+  relations:
+  - manages:
+    - deleter
+    name: admin
+  - name: owner
+spec: none
 `
 
 	req := types.CreatePolicyRequest{
 		Policy:      pol,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 	}
 	resp, err := ctx.Engine.CreatePolicy(ctx, &req)
 
@@ -205,13 +203,12 @@ func TestCreatePolicy_UnamedPolicyCausesError(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	pol := `
-resources:
+	pol := `spec: none
 `
 
 	req := types.CreatePolicyRequest{
 		Policy:      pol,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 	}
 	resp, err := ctx.Engine.CreatePolicy(ctx, &req)
 
@@ -223,38 +220,34 @@ func TestCreatePolicy_CreatingMultipleEqualPoliciesProduceDifferentIDs(t *testin
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("creator")
 
-	pol := `
-name: test
-description: A Valid Defra Policy Interface (DPI)
-
-actor:
+	pol := `actor:
   name: actor
-
+description: A Valid Defra Policy Interface (DPI)
+name: test
 resources:
-  users:
-    permissions:
-      read:
-        expr: owner + reader
-      write:
-        expr: owner
-
-    relations:
-      owner:
-        types:
-          - actor
-      reader:
-        types:
-          - actor
-      admin:
-        manages:
-          - reader
-        types:
-          - actor
+- name: users
+  permissions:
+  - name: read
+    expr: reader
+  - name: write
+  relations:
+  - manages:
+    - reader
+    name: admin
+    types:
+    - actor
+  - name: owner
+    types:
+    - actor
+  - name: reader
+    types:
+    - actor
+spec: none
 `
 
 	req := types.CreatePolicyRequest{
 		Policy:      pol,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 	}
 	resp1, err1 := ctx.Engine.CreatePolicy(ctx, &req)
 	resp2, err2 := ctx.Engine.CreatePolicy(ctx, &req)
@@ -265,4 +258,49 @@ resources:
 	require.NoError(t, err2)
 	require.Equal(t, want1, resp1.Record.Policy.Id)
 	require.Equal(t, want2, resp2.Record.Policy.Id)
+}
+
+func TestCreatePolicy_WithEmptyPermission_OwnerIsPermitted(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("bob")
+
+	pol := `
+name: policy
+resources:
+- name: foo
+  relations:
+  - name: owner
+    types:
+    - actor
+  permissions:
+  - name: test
+`
+
+	req := types.CreatePolicyRequest{
+		Policy:      pol,
+		MarshalType: types.PolicyMarshalingType_YAML,
+	}
+	resp, err := ctx.Engine.CreatePolicy(ctx, &req)
+	require.NoError(t, err)
+
+	_, err = ctx.Engine.RegisterObject(ctx, &types.RegisterObjectRequest{
+		PolicyId: resp.Record.Policy.Id,
+		Object:   types.NewObject("foo", "obj"),
+	})
+	require.NoError(t, err)
+
+	checkResult, err := ctx.Engine.VerifyAccessRequest(ctx, &types.VerifyAccessRequestRequest{
+		PolicyId: resp.Record.Policy.Id,
+		AccessRequest: &types.AccessRequest{
+			Operations: []*types.Operation{
+				{
+					Object:     types.NewObject("foo", "obj"),
+					Permission: "test",
+				},
+			},
+			Actor: types.NewActor(ctx.Actors.DID("bob")),
+		},
+	})
+	require.NoError(t, err)
+	require.True(t, checkResult.Valid)
 }

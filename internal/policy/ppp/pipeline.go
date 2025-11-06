@@ -79,18 +79,18 @@ type Pipeline struct {
 // After the transforming step is finished, we iteratte over all transformers and specifcations once again applying the Validate method.
 //
 // Return the processed policy and an error with the underlying type *errors.MultiError, in case further inspection is necessary.
-func (p *Pipeline) Process(pol *types.Policy) (*types.Policy, error) {
-	new, err := p.applyTransforms(*pol)
+func (p *Pipeline) Process(pol *types.Policy) (specification.TransformerResult, error) {
+	result, err := p.applyTransforms(*pol)
 	if err != nil {
-		return nil, err
+		return specification.TransformerResult{}, err
 	}
 
-	multiErr := p.validateRequirements(&new)
+	multiErr := p.validateRequirements(&result.Policy)
 	if multiErr != nil {
-		return nil, multiErr
+		return specification.TransformerResult{}, multiErr
 	}
 
-	return &new, nil
+	return result, nil
 }
 
 func (p *Pipeline) validateRequirements(pol *types.Policy) *errors.MultiError {
@@ -121,13 +121,16 @@ func (p *Pipeline) validateRequirements(pol *types.Policy) *errors.MultiError {
 	return multiErr
 }
 
-func (p *Pipeline) applyTransforms(policy types.Policy) (types.Policy, error) {
-	var err error
+func (p *Pipeline) applyTransforms(policy types.Policy) (specification.TransformerResult, error) {
+	result := specification.TransformerResult{}
+	result.Policy = policy
 	for _, trans := range p.transformers {
-		policy, err = trans.Transform(policy)
+		tmp, err := trans.Transform(result.Policy)
+		result.Policy = tmp.Policy
+		result.Messages = append(result.Messages, tmp.Messages...)
 		if err != nil {
-			return types.Policy{}, err
+			return result, err
 		}
 	}
-	return policy, nil
+	return result, nil
 }

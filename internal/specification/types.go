@@ -6,17 +6,25 @@ import (
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
+type Report struct {
+	Results []TransformerResult
+}
+
+type TransformerResult struct {
+	Policy   types.Policy
+	Messages []string
+}
+
 // Requirement models a component which can validate that a Policy meets some arbitrary specification.
 //
 // The Requirement can be caller implemented, which effectively constrains the Policies that acp_core
 // understands as valid.
 type Requirement interface {
+	GetName() string
+
 	// Validate executes arbitary validation code against the given Policy
 	// Returns all returns found within Policy as a MultiError
 	Validate(policy types.Policy) *errors.MultiError
-
-	// GetBaseError returns the base error used to construct Requirement errors
-	GetBaseError() error
 }
 
 // Transformer models a component which transforms the given policy into another one
@@ -30,7 +38,7 @@ type Transformer interface {
 	Requirement
 
 	// Transforms takes as input a Policy and maps into another Policy
-	Transform(policy types.Policy) (types.Policy, error)
+	Transform(policy types.Policy) (TransformerResult, error)
 }
 
 // Specification models a set of criteria a Policy must match

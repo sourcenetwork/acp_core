@@ -39,7 +39,7 @@ func (t *IdTransformer) Validate(pol types.Policy) *errors.MultiError {
 }
 
 // Transform produces the policy Id and sets it in the struct
-func (t *IdTransformer) Transform(pol types.Policy) (types.Policy, error) {
+func (t *IdTransformer) Transform(pol types.Policy) (specification.TransformerResult, error) {
 	hasher := sha256.New()
 
 	hasher.Write(t.hashPol(&pol))
@@ -49,7 +49,12 @@ func (t *IdTransformer) Transform(pol types.Policy) (types.Policy, error) {
 	id := hex.EncodeToString(hash)
 	pol.Id = id
 
-	return pol, nil
+	return specification.TransformerResult{
+		Policy: pol,
+		Messages: []string{
+			"set policy id: " + id,
+		},
+	}, nil
 }
 
 // hashPol computes a partial sha256 hash of a policy.
@@ -74,4 +79,4 @@ func (t *IdTransformer) hashPol(pol *types.Policy) []byte {
 	return hasher.Sum(nil)
 }
 
-func (t *IdTransformer) GetBaseError() error { return ErrIdTransformer }
+func (t *IdTransformer) GetName() string { return "ID Transformer" }

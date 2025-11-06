@@ -68,20 +68,22 @@ func (s *defaultPermissionsRequirement) Validate(pol types.Policy) *errors.Multi
 	return nil
 }
 
-func (s *defaultPermissionsRequirement) GetBaseError() error { return ErrDefraSpec }
+func (s *defaultPermissionsRequirement) GetName() string { return "Defra Spec" }
 
 type writeImpliesReadTransform struct {
+	result TransformerResult
 }
 
-func (s *writeImpliesReadTransform) GetBaseError() error {
-	return ErrDefraSpec
+func (s *writeImpliesReadTransform) GetName() string {
+	return "Defra Spec"
 }
 
 func (s *writeImpliesReadTransform) Validate(pol types.Policy) *errors.MultiError {
 	return nil
 }
 
-func (s *writeImpliesReadTransform) Transform(pol types.Policy) (types.Policy, error) {
+func (s *writeImpliesReadTransform) Transform(pol types.Policy) (TransformerResult, error) {
+	result := TransformerResult{}
 	for _, resource := range pol.Resources {
 		for _, permission := range resource.Permissions {
 			if permission.Name != DefraReadPermissionName {
@@ -89,7 +91,7 @@ func (s *writeImpliesReadTransform) Transform(pol types.Policy) (types.Policy, e
 			}
 			tree, err := parser.Parse(permission.Expression)
 			if err != nil {
-				return types.Policy{}, errors.Wrap("parsing permission", ErrDefraSpec,
+				return result, errors.Wrap("parsing permission", ErrDefraSpec,
 					errors.Pair("resource", resource.Name),
 					errors.Pair("permission", permission.Name),
 				)
@@ -98,7 +100,8 @@ func (s *writeImpliesReadTransform) Transform(pol types.Policy) (types.Policy, e
 			permission.Expression = tree.IntoPermissionExpr()
 		}
 	}
-	return pol, nil
+	result.Policy = pol
+	return result, nil
 }
 
 func (s *writeImpliesReadTransform) transformTree(tree *types.PermissionFetchTree) *types.PermissionFetchTree {

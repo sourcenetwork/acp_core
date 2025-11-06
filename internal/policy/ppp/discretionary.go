@@ -28,8 +28,8 @@ var ErrDiscretionaryTransformer = errors.New("discretionary policy transformer",
 // for the owner at some point in the expression tree, adding it if necessary
 type DiscretionaryTransformer struct{}
 
-func (t *DiscretionaryTransformer) GetBaseError() error {
-	return ErrDiscretionaryTransformer
+func (t *DiscretionaryTransformer) GetName() string {
+	return "Discretionary transformer"
 }
 
 func (t *DiscretionaryTransformer) Validate(policy types.Policy) *errors.MultiError {
@@ -73,12 +73,13 @@ func (t *DiscretionaryTransformer) Validate(policy types.Policy) *errors.MultiEr
 // Transform mutates all resources in a policy by asserting the owner relation exists, adding it otherwise.
 // Futheremore, it modifies all permissions (if necessary),
 // by adding the owner relation as one of the allowed relations.
-func (t *DiscretionaryTransformer) Transform(policy types.Policy) (types.Policy, error) {
+func (t *DiscretionaryTransformer) Transform(policy types.Policy) (specification.TransformerResult, error) {
+	res := specification.TransformerResult{}
 	// for all resources, add owner relation to it, if it doesn't exist
 	for _, resource := range policy.Resources {
 		ownerRel := utils.FilterSlice(resource.Relations, func(r *types.Relation) bool { return r.Name == OwnerRelationName })
 		if len(ownerRel) > 1 {
-			return types.Policy{}, errors.Wrap("invalid resource: multiple owner relations",
+			return res, errors.Wrap("invalid resource: multiple owner relations",
 				ErrDiscretionaryTransformer,
 				errors.Pair("resource", resource.Name))
 		}
@@ -94,18 +95,24 @@ func (t *DiscretionaryTransformer) Transform(policy types.Policy) (types.Policy,
 		for _, permission := range resource.Permissions {
 			tree, err := parser.Parse(permission.Expression)
 			if err != nil {
-				return types.Policy{}, errors.Wrap("parsing permission", ErrDiscretionaryTransformer,
+				return res, errors.Wrap("parsing permission", ErrDiscretionaryTransformer,
 					errors.Pair("resource", resource.Name),
 					errors.Pair("permission", permission.Name),
 				)
 			}
-			tree = t.transformFetchTree(tree)
+			tree, modified := t.transformFetchTree(tree)
 			expr := tree.IntoPermissionExpr()
 			permission.Expression = expr
+			if modified {
+				msg := fmt.Sprintf("added owner relation to permission: resource %v: permission %v",
+					resource.Name, permission.Name)
+				res.Messages = append(res.Messages, msg)
+			}
 		}
 	}
 
-	return policy, nil
+	res.Policy = policy
+	return res, nil
 }
 
 // transformFetchTree adds computed userset instruction for owner as leftmost node
@@ -116,9 +123,9 @@ func (t *DiscretionaryTransformer) Transform(policy types.Policy) (types.Policy,
 // however it is the simplest way to ensure owners have full access
 // as there are several subtle expressions which could remove owner access
 // eg. owner - (something & owner)
-func (t *DiscretionaryTransformer) transformFetchTree(tree *types.PermissionFetchTree) *types.PermissionFetchTree {
+func (t *DiscretionaryTransformer) transformFetchTree(tree *types.PermissionFetchTree) (_ *types.PermissionFetchTree, modified bool) {
 	if checkOwnerIsTopNode(tree) {
-		return tree
+		return tree, false
 	}
 
 	return &types.PermissionFetchTree{
@@ -129,7 +136,7 @@ func (t *DiscretionaryTransformer) transformFetchTree(tree *types.PermissionFetc
 				Right:      tree,
 			},
 		},
-	}
+	}, true
 }
 
 // newFetchOwnerTree returns a PermissionFetchTree with ComputedUserset owner as the single node

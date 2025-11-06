@@ -11,19 +11,19 @@ import (
 func TestValidatePolicy_ValidPolicyOk(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
-	pol := `
-name: test
+	pol := `name: test
 resources:
-  foo:
-    relations:
-      reader:
-    permissions:
-      read:
-        expr: reader
+- name: foo
+  permissions:
+  - expr: reader
+    name: read
+  relations:
+  - name: reader
+spec: none
 `
 	resp, err := ctx.Engine.ValidatePolicy(ctx, &types.ValidatePolicyRequest{
 		Policy:      pol,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 	})
 	require.NoError(t, err)
 	want := &types.ValidatePolicyResponse{
@@ -36,20 +36,20 @@ resources:
 func TestValidatePolicy_InvalidPolicyReturnsErrorMsg(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
-	pol := `
-name: test
-spec: defra
+	pol := `name: test
 resources:
-  foo:
-    relations:
-      reader:
-    permissions:
-      read:
-        expr: reader
+- name: foo
+  permissions:
+  - expr: reader
+    name: read
+  relations:
+  - name: reader
+spec: defra
 `
+
 	resp, err := ctx.Engine.ValidatePolicy(ctx, &types.ValidatePolicyRequest{
 		Policy:      pol,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 	})
 	require.NoError(t, err)
 	require.False(t, resp.Valid)
@@ -59,38 +59,37 @@ resources:
 func TestValidatePolicy_ReturnsParsedPolicy(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
-	policyStr := `
-name: policy
+	policyStr := `actor:
+  doc: my actor
+  name: actor-resource
 description: ok
-resources:
-  file:
-    relations:
-      owner:
-        doc: owner owns
-        types:
-          - actor-resource
-      reader:
-      admin:
-        manages:
-          - reader
-    permissions:
-      own:
-        expr: owner
-        doc: own doc
-      read:
-        expr: owner + reader
-
 meta:
   a: b
   key: value
-
-actor:
-  name: actor-resource
-  doc: my actor
+name: policy
+resources:
+- name: file
+  permissions:
+  - doc: own doc
+    expr: owner
+    name: own
+  - expr: owner + reader
+    name: read
+  relations:
+  - manages:
+    - reader
+    name: admin
+  - doc: owner owns
+    name: owner
+    types:
+    - actor-resource
+  - name: reader
+spec: none
 `
+
 	msg := types.ValidatePolicyRequest{
 		Policy:      policyStr,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 	}
 	resp, err := ctx.Engine.ValidatePolicy(ctx, &msg)
 

@@ -9,8 +9,6 @@ func CreatePolicyPipelineFactory(sequence uint64, specType types.PolicySpecifica
 	switch specType {
 	case types.PolicySpecificationType_DEFRA_SPEC:
 		return newCreatePolicyPipeline(sequence, specification.NewDefraSpecification())
-	case types.PolicySpecificationType_UNKNOWN_SPEC:
-		return newCreatePolicyPipeline(sequence, specification.NoSpecification())
 	case types.PolicySpecificationType_NO_SPEC:
 		return newCreatePolicyPipeline(sequence, specification.NoSpecification())
 	default:
@@ -22,8 +20,6 @@ func EditPolicyPipelineFactory(oldPolicy *types.Policy) Pipeline {
 	switch oldPolicy.SpecificationType {
 	case types.PolicySpecificationType_DEFRA_SPEC:
 		return newEditPolicyPipeline(oldPolicy, specification.NewDefraSpecification())
-	case types.PolicySpecificationType_UNKNOWN_SPEC:
-		return newEditPolicyPipeline(oldPolicy, specification.NoSpecification())
 	case types.PolicySpecificationType_NO_SPEC:
 		return newEditPolicyPipeline(oldPolicy, specification.NoSpecification())
 	default:
