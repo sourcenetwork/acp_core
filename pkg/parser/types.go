@@ -97,10 +97,10 @@ func (r *ParserReport) Error() string {
 
 	builder := strings.Builder{}
 	builder.WriteString(r.msg)
-	builder.WriteString("spec: none\n")
+	builder.WriteString("\n")
 	for _, err := range r.getErrors() {
 		builder.WriteString(err.Error())
-		builder.WriteString("spec: none\n")
+		builder.WriteString("\n")
 	}
 	return builder.String()
 }
