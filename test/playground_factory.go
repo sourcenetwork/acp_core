@@ -12,5 +12,5 @@ import (
 
 // playgroundFactory returns the default PlaygroundService implementation for non-js tests
 func playgroundFactory(t testing.TB, manager runtime.RuntimeManager) types.PlaygroundServiceServer {
-	return services.NewPlaygroundService(manager)
+	return services.NewPlaygroundService(manager, nil)
 }

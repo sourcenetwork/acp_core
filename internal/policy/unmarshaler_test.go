@@ -9,32 +9,31 @@ import (
 )
 
 func TestFullUnmarshal(t *testing.T) {
-	in := `
-        name: policy
-        description: ok
-		spec: none
-        resources:
-          foo:
-            relations: 
-              owner:
-                doc: owner owns
-                types:
-                  - blah
-                  - ok->that
-                manages: 
-                  - whatever
-            permissions: 
-              abc:
-                expr: owner
-                doc: abc doc
-              def: 
-                expr: owner + abc
-        actor:
-          name: actor-resource
-          doc: my actor
-          `
-	unmarshaler := shortUnmarshaler{}
-	out, err := unmarshaler.UnmarshalYAML(in)
+	in := `actor:
+  doc: my actor
+  name: actor-resource
+description: ok
+name: policy
+resources:
+- name: foo
+  permissions:
+  - doc: abc doc
+    expr: owner
+    name: abc
+  - expr: owner + abc
+    name: def
+  relations:
+  - doc: owner owns
+    manages:
+    - whatever
+    name: owner
+    types:
+    - blah
+    - ok->that
+spec: none
+`
+
+	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
 
 	want := &types.Policy{
 		Name:              "policy",
@@ -77,8 +76,9 @@ func TestFullUnmarshal(t *testing.T) {
 			},
 		},
 		ActorResource: &types.ActorResource{
-			Name: "actor-resource",
-			Doc:  "my actor",
+			Name:      "actor-resource",
+			Doc:       "my actor",
+			Relations: []*types.Relation{},
 		},
 	}
 	require.Nil(t, err)
@@ -86,9 +86,9 @@ func TestFullUnmarshal(t *testing.T) {
 }
 
 func TestUnmarshalWithoutSpecDefaultsToNone(t *testing.T) {
-	in := `name: policy`
-	unmarshaler := shortUnmarshaler{}
-	out, err := unmarshaler.UnmarshalYAML(in)
+	in := `name: policy
+`
+	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
 
 	want := &types.Policy{
 		Name:              "policy",
@@ -100,19 +100,20 @@ func TestUnmarshalWithoutSpecDefaultsToNone(t *testing.T) {
 }
 
 func TestEmptyResourceMapsToResource(t *testing.T) {
-	in := `
-    resources:
-      foo:
-    `
+	in := `resources:
+- name: foo
+spec: none
+`
 
-	unmarshaler := shortUnmarshaler{}
-	out, err := unmarshaler.UnmarshalYAML(in)
+	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
 
 	want := &types.Policy{
 		SpecificationType: types.PolicySpecificationType_NO_SPEC,
 		Resources: []*types.Resource{
 			{
-				Name: "foo",
+				Name:        "foo",
+				Relations:   []*types.Relation{},
+				Permissions: []*types.Permission{},
 			},
 		},
 	}
@@ -121,15 +122,12 @@ func TestEmptyResourceMapsToResource(t *testing.T) {
 }
 
 func TestResourceWithoutPermsOrRelsMapsToResource(t *testing.T) {
-	in := `
-    resources:
-      foo:
-        relations:
-        permissions:
-    `
+	in := `resources:
+- name: foo
+spec: none
+`
 
-	unmarshaler := shortUnmarshaler{}
-	out, err := unmarshaler.UnmarshalYAML(in)
+	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
 
 	want := &types.Policy{
 		SpecificationType: types.PolicySpecificationType_NO_SPEC,
@@ -146,15 +144,14 @@ func TestResourceWithoutPermsOrRelsMapsToResource(t *testing.T) {
 }
 
 func TestEmptyRelationMapsToRelation(t *testing.T) {
-	in := `
-    resources:
-      foo:
-        relations:
-          blah:
-    `
+	in := `resources:
+- name: foo
+  relations:
+  - name: blah
+spec: none
+`
 
-	unmarshaler := shortUnmarshaler{}
-	out, err := unmarshaler.UnmarshalYAML(in)
+	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
 
 	want := &types.Policy{
 		SpecificationType: types.PolicySpecificationType_NO_SPEC,
@@ -163,7 +160,8 @@ func TestEmptyRelationMapsToRelation(t *testing.T) {
 				Name: "foo",
 				Relations: []*types.Relation{
 					{
-						Name: "blah",
+						Name:    "blah",
+						VrTypes: []*types.Restriction{},
 					},
 				},
 				Permissions: []*types.Permission{},
@@ -181,15 +179,14 @@ func TestEmptyPermissionMapsToPermission(t *testing.T) {
 	// it's ok because the validation will happen elsewhere.
 	// Asserting the type unmarhsals correctly means that the validator -
 	// as opposed to the unmarshaler - will error out leading to better error msgs.
-	in := `
-    resources:
-      foo:
-        permissions:
-          blah:
-    `
+	in := `resources:
+- name: foo
+  permissions:
+  - name: blah
+spec: none
+`
 
-	unmarshaler := shortUnmarshaler{}
-	out, err := unmarshaler.UnmarshalYAML(in)
+	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
 
 	want := &types.Policy{
 		SpecificationType: types.PolicySpecificationType_NO_SPEC,
@@ -216,8 +213,7 @@ func TestDuplicatedResourceErrors(t *testing.T) {
       foo:
     `
 
-	unmarshaler := shortUnmarshaler{}
-	_, err := unmarshaler.UnmarshalYAML(in)
+	_, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
 
 	require.NotNil(t, err)
 }
@@ -231,8 +227,7 @@ func TestDuplicatedPermissionErrors(t *testing.T) {
           read:
     `
 
-	unmarshaler := shortUnmarshaler{}
-	_, err := unmarshaler.UnmarshalYAML(in)
+	_, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
 
 	require.NotNil(t, err)
 }
@@ -246,25 +241,23 @@ func TestDuplicatedRelationErrors(t *testing.T) {
           reader:
     `
 
-	unmarshaler := shortUnmarshaler{}
-	_, err := unmarshaler.UnmarshalYAML(in)
+	_, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
 
 	require.NotNil(t, err)
 }
 
 func TestRestrictionIdentifierMapsBothForms(t *testing.T) {
-	in := `
-    resources:
-      foo:
-        relations:
-          blah:
-            types:
-              - actor
-              - book->owner
-    `
+	in := `resources:
+- name: foo
+  relations:
+  - name: blah
+    types:
+    - actor
+    - book->owner
+spec: none
+`
 
-	unmarshaler := shortUnmarshaler{}
-	out, err := unmarshaler.UnmarshalYAML(in)
+	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
 
 	want := &types.Policy{
 		SpecificationType: types.PolicySpecificationType_NO_SPEC,
@@ -295,13 +288,11 @@ func TestRestrictionIdentifierMapsBothForms(t *testing.T) {
 }
 
 func Test_NoneSpecMapsToNoneSpecficationType(t *testing.T) {
-	in := `
-	name: test
-	spec: none
-	`
+	in := `name: test
+spec: none
+`
 
-	unmarshaler := shortUnmarshaler{}
-	out, err := unmarshaler.UnmarshalYAML(in)
+	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
 
 	require.NoError(t, err)
 	want := &types.Policy{
@@ -313,13 +304,11 @@ func Test_NoneSpecMapsToNoneSpecficationType(t *testing.T) {
 }
 
 func Test_DefraSpecMapsToDefraSpecficationType(t *testing.T) {
-	in := `
-	name: test
-	spec: defra
-	`
+	in := `name: test
+spec: defra
+`
 
-	unmarshaler := shortUnmarshaler{}
-	out, err := unmarshaler.UnmarshalYAML(in)
+	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
 
 	require.NoError(t, err)
 	want := &types.Policy{
@@ -336,21 +325,18 @@ func Test_GibberingSpecMapsErrors(t *testing.T) {
 	spec: gibberish-1234
 	`
 
-	unmarshaler := shortUnmarshaler{}
-	out, err := unmarshaler.UnmarshalYAML(in)
+	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
 
 	require.Error(t, err)
 	require.Nil(t, out)
 }
 
 func Test_EmptySpecMapsToNone(t *testing.T) {
-	in := `
-	name: test
-	spec: ""
-	`
+	in := `name: test
+spec: ""
+`
 
-	unmarshaler := shortUnmarshaler{}
-	out, err := unmarshaler.UnmarshalYAML(in)
+	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
 
 	require.NoError(t, err)
 	want := &types.Policy{

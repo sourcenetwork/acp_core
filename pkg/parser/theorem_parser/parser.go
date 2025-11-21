@@ -1,6 +1,8 @@
 package theorem_parser
 
 import (
+	"strings"
+
 	"github.com/antlr4-go/antlr/v4"
 
 	"github.com/sourcenetwork/acp_core/pkg/parser"
@@ -72,11 +74,23 @@ func ParsePolicyTheorem(input string) (*parser.LocatedPolicyTheorem, *parser.Par
 //
 // Return visitor result or error
 func parseAndVisit(input string, productionName string, caller parserCaller) (any, *parser.ParserReport) {
+	endPosition := types.BufferPosition{
+		Line:   1,
+		Column: 1,
+	}
+	lines := strings.Split(input, "\n")
+	if len(lines) > 0 {
+		lineCount := uint64(len(lines))
+		endPosition.Line = lineCount
+		lastLine := lines[lineCount-1]
+		endPosition.Column = uint64(len(lastLine))
+	}
+
 	inputStream := antlr.NewInputStream(input)
 	lexer := NewTheoremLexer(inputStream)
 	stream := antlr.NewCommonTokenStream(lexer, 0)
 
-	errListener := parser.NewErrLsitener(productionName)
+	errListener := parser.NewErrLsitener(productionName, endPosition)
 
 	parser := NewTheoremParser(stream)
 	parser.RemoveErrorListeners()

@@ -63,3 +63,11 @@ message SandboxDataErrors {
   // parsing the theorems
   repeated LocatedMessage theorems_errors = 3;
 }
+
+// SandboxTemplate models a template sandbox
+// containing its data, a name and description
+message SandboxTemplate {
+  string name =1;
+  string description =  2;
+  SandboxData data = 3;
+}

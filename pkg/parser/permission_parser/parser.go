@@ -1,6 +1,8 @@
 package permission_parser
 
 import (
+	"strings"
+
 	"github.com/antlr4-go/antlr/v4"
 	"github.com/sourcenetwork/acp_core/pkg/parser"
 	"github.com/sourcenetwork/acp_core/pkg/types"
@@ -21,11 +23,23 @@ func Parse(expr string) (*types.PermissionFetchTree, error) {
 //
 // Invalid expressiosn fail to parse and the report will contain errros
 func ParseWithReport(expr string) (*types.PermissionFetchTree, *parser.ParserReport) {
+	endPosition := types.BufferPosition{
+		Line:   1,
+		Column: 1,
+	}
+	lines := strings.Split(expr, "\n")
+	if len(lines) > 0 {
+		lineCount := uint64(len(lines))
+		endPosition.Line = lineCount
+		lastLine := lines[lineCount-1]
+		endPosition.Column = uint64(len(lastLine))
+	}
+
 	inputStream := antlr.NewInputStream(expr)
 	lexer := NewPermissionExprLexer(inputStream)
 	stream := antlr.NewCommonTokenStream(lexer, 0)
 
-	errListener := parser.NewErrLsitener("Permission Expression")
+	errListener := parser.NewErrLsitener("Permission Expression", endPosition)
 
 	parser := NewPermissionExprParser(stream)
 	parser.RemoveErrorListeners()

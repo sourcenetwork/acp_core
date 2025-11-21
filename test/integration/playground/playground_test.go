@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	_ "github.com/stretchr/testify/require"
 
+	"github.com/sourcenetwork/acp_core/internal/sandbox"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
 	_ "github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
@@ -142,15 +143,16 @@ spec: none
 	handle := a1.Run(ctx)
 
 	a := VerifyTheorems{
-		Req: &types.VerifyTheoremsRequest{
-			Handle: handle,
-		},
+		Handle: handle,
 		Expected: &types.VerifyTheoremsResponse{
 			Result: &types.AnnotatedPolicyTheoremResult{
 				Theorem: &types.PolicyTheorem{
 					AuthorizationTheorems: make([]*types.AuthorizationTheorem, 0),
 					DelegationTheorems:    make([]*types.DelegationTheorem, 0),
 				},
+				Ok:           true,
+				TheoremCount: 0,
+				Failures:     0,
 			},
 		},
 	}
@@ -166,9 +168,7 @@ func Test_Evaluate_UninitializedSandboxCannotBeEvaluated(t *testing.T) {
 	handle := a1.Run(ctx)
 
 	a := VerifyTheorems{
-		Req: &types.VerifyTheoremsRequest{
-			Handle: handle.Record.Handle,
-		},
+		Handle:      handle.Record.Handle,
 		ExpectedErr: errors.ErrorType_OPERATION_FORBIDDEN,
 	}
 	a.Run(ctx)
@@ -287,6 +287,7 @@ func Test_GetCatalogue_ReturnsSandboxCatalogue(t *testing.T) {
 					},
 				},
 				Actors: []string{
+					"did:example:alice",
 					"did:example:bob",
 				},
 			},
@@ -382,4 +383,509 @@ func Test_GetSandbox_ReturnsSandbox(t *testing.T) {
 	}
 	require.NoError(t, err)
 	require.Equal(t, want, resp.Record)
+}
+
+func Test_GetPlaygroundSamples_ReturnSamples(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+
+	resp, err := ctx.Playground.GetSampleSandboxes(ctx, &types.GetSampleSandboxesRequest{})
+	require.NoError(t, err)
+
+	want := &types.GetSampleSandboxesResponse{
+		Samples: sandbox.Samples,
+	}
+	require.Equal(t, want, resp)
+
+	for _, data := range want.Samples {
+		action := NewAndSet{
+			Data: data.Data,
+		}
+		handle := action.Run(ctx)
+
+		a2 := VerifyTheorems{
+			Handle: handle,
+		}
+		response := a2.Run(ctx)
+		t.Logf("%v", test.MustProtoToJson(response))
+		require.True(t, response.Result.Ok)
+	}
+}
+
+func Test_ShinzoPolicy_Ok(t *testing.T) {
+	pol := `
+name: shinzo
+resources:
+- name: primitive
+  relations:
+  - name: admin
+    manages:
+    - writer
+    - reader
+    - banned
+    types:
+    - actor
+    - group->administrator
+  - name: writer
+    types:
+    - actor
+    - group->member
+  - name: reader
+    types:
+    - actor
+    - group->member
+  - name: subscriber
+    types:
+    - actor
+  - name: banned
+    types:
+    - actor
+  permissions:
+  - name: read
+    expr: (writer + reader) - banned
+  - name: update
+    expr: writer - banned
+  - name: delete
+    expr: owner
+  - name: query
+    expr: (subscriber) - banned
+
+- name: view
+  relations:
+  - name: admin
+    manages:
+    - writer
+    - reader
+    - subscriber
+    - banned
+    types:
+    - actor
+    - group->administrator
+  - name: creator
+    types:
+    - actor
+  - name: writer
+    types:
+    - actor
+    - group->member
+  - name: reader
+    types:
+    - actor
+    - group->member
+  - name: banned
+    types:
+    - actor
+  - name: subscriber
+    types:
+    - actor
+  - name: parent
+    types:
+    - primitive
+    - view
+  permissions:
+  - name: read
+    expr: writer + reader + parent->read + subscriber - banned
+  - name: update
+    expr: ((writer + parent->update) & parent->read) - banned
+  - name: query
+    expr: (subscriber) - banned
+  - name: delete
+
+- name: group
+  relations:
+  - name: owner
+    manages:
+    - admin
+    - guest
+    - blocked
+    types:
+    - actor
+  - name: admin
+    manages:
+    - guest
+    - blocked
+    types:
+    - actor
+    - group->administrator
+  - name: guest
+    types:
+    - actor
+  - name: blocked
+    types:
+    - actor
+  permissions:
+  - name: member
+    expr: guest - blocked
+  - name: administrator
+    expr: (owner + admin) - blocked
+`
+
+	relationships := `primitive:blocks#owner@did:user:sourcehub
+        primitive:blocks#admin@did:user:shinzohub
+        primitive:blocks#writer@group:indexer#member
+        primitive:blocks#reader@group:host#member
+        primitive:blocks#reader@did:user:randomUser
+        primitive:blocks#banned@did:user:aBannedIndexer
+        primitive:blocks#subscriber@did:user:subscriber
+        
+        view:datafeedA#owner@did:user:sourcehub
+        view:datafeedA#admin@did:user:shinzohub
+        view:datafeedA#admin@group:shinzoteam#administrator
+        view:datafeedA#creator@did:user:creator
+        view:datafeedA#subscriber@did:user:subscriber
+        view:datafeedA#writer@group:host#member
+        view:datafeedA#banned@did:user:aBannedHost
+        view:datafeedA#parent@primitive:blocks
+        
+        view:datafeedB#owner@did:user:sourcehub
+        view:datafeedB#admin@did:user:shinzohub
+        view:datafeedB#admin@group:shinzoteam#administrator
+        view:datafeedB#creator@did:user:creatorOfB
+        view:datafeedB#subscriber@did:user:subscriberToB
+        view:datafeedB#parent@view:datafeedA
+        
+        group:shinzoteam#owner@did:user:addo 
+        group:shinzoteam#admin@did:user:duncan
+        group:shinzoteam#guest@did:user:quinn
+        group:shinzoteam#guest@did:user:daniel
+        
+        group:indexer#owner@did:user:sourcehub
+        group:indexer#admin@did:user:shinzohub
+        group:indexer#admin@group:shinzoteam#administrator
+        group:indexer#guest@did:user:anIndexer
+        group:indexer#guest@did:user:aBlockedIndexer
+        group:indexer#blocked@did:user:aBlockedIndexer
+        group:indexer#guest@did:user:aBannedIndexer
+        
+        group:host#owner@did:user:sourcehub
+        group:host#admin@did:user:shinzohub
+        group:host#admin@group:shinzoteam#administrator
+        group:host#guest@did:user:aHost
+        group:host#guest@did:user:aBlockedHost
+        group:host#blocked@did:user:aBlockedHost
+		`
+	theorems := `Authorizations {
+          // @@@ blocks tests
+          primitive:blocks#read@did:user:randomUser
+          !primitive:blocks#update@did:user:randomUser
+          !primitive:blocks#query@did:user:randomUser
+        
+          primitive:blocks#read@did:user:aHost
+          !primitive:blocks#update@did:user:aHost
+          !primitive:blocks#query@did:user:aHost
+        
+          primitive:blocks#read@did:user:anIndexer
+          primitive:blocks#update@did:user:anIndexer
+          !primitive:blocks#query@did:user:anIndexer
+        
+          !primitive:blocks#read@did:user:duncan 
+          !primitive:blocks#update@did:user:duncan
+          !primitive:blocks#query@did:user:duncan
+          !primitive:blocks#read@did:user:addo
+          !primitive:blocks#update@did:user:addo
+          !primitive:blocks#query@did:user:addo
+          !primitive:blocks#read@did:user:quinn
+          !primitive:blocks#update@did:user:quinn
+          !primitive:blocks#query@did:user:quinn
+          !primitive:blocks#read@did:user:daniel
+          !primitive:blocks#update@did:user:daniel
+          !primitive:blocks#query@did:user:daniel
+        
+          !primitive:blocks#read@did:user:shinzohub
+          !primitive:blocks#update@did:user:shinzohub
+          !primitive:blocks#query@did:user:shinzohub
+        
+          !primitive:blocks#read@did:user:unregisteredUser
+          !primitive:blocks#update@did:user:unregisteredUser
+          !primitive:blocks#query@did:user:unregisteredUser
+        
+          !primitive:blocks#read@did:user:aBlockedIndexer
+          !primitive:blocks#update@did:user:aBlockedIndexer
+          !primitive:blocks#query@did:user:aBlockedIndexer
+        
+          !primitive:blocks#read@did:user:aBannedIndexer
+          !primitive:blocks#update@did:user:aBannedIndexer
+          !primitive:blocks#query@did:user:aBannedIndexer
+        
+          !primitive:blocks#read@did:user:aBlockedHost
+          !primitive:blocks#update@did:user:aBlockedHost
+          !primitive:blocks#query@did:user:aBlockedHost
+        
+          // @@@ Secondary data feed (a data feed derived directly from primitives) tests
+          view:datafeedA#read@did:user:subscriber
+          !view:datafeedA#update@did:user:subscriber
+          view:datafeedA#query@did:user:subscriber
+          !view:datafeedA#creator@did:user:subscriber
+        
+          !view:datafeedA#read@did:user:subscriberToB
+          !view:datafeedA#update@did:user:subscriberToB
+          !view:datafeedA#query@did:user:subscriberToB
+          !view:datafeedA#creator@did:user:subscriberToB
+        
+          !view:datafeedA#read@did:user:anonsubscriber
+          !view:datafeedA#update@did:user:anonsubscriber
+          !view:datafeedA#query@did:user:anonsubscriber
+          !view:datafeedA#creator@did:user:anonsubscriber
+        
+          view:datafeedA#read@did:user:aHost
+          view:datafeedA#update@did:user:aHost
+          !view:datafeedA#query@did:user:aHost
+          !view:datafeedA#creator@did:user:aHost
+        
+          !view:datafeedA#read@did:user:creator
+          !view:datafeedA#update@did:user:creator
+          !view:datafeedA#query@did:user:creator
+          view:datafeedA#creator@did:user:creator
+        
+          !view:datafeedA#read@did:user:creatorOfB
+          !view:datafeedA#update@did:user:creatorOfB
+          !view:datafeedA#query@did:user:creatorOfB
+          !view:datafeedA#creator@did:user:creatorOfB
+        
+          !view:datafeedA#read@did:user:addo
+          !view:datafeedA#update@did:user:addo
+          !view:datafeedA#query@did:user:addo
+          !view:datafeedA#creator@did:user:addo
+        
+          !view:datafeedA#read@did:user:shinzohub
+          !view:datafeedA#update@did:user:shinzohub
+          !view:datafeedA#query@did:user:shinzohub
+          !view:datafeedA#creator@did:user:shinzohub
+        
+          !view:datafeedA#read@did:user:aBannedHost
+          !view:datafeedA#update@did:user:aBannedHost
+          !view:datafeedA#query@did:user:aBannedHost
+          !view:datafeedA#creator@did:user:aBannedHost
+        
+          !view:datafeedA#read@did:user:aBlockedHost
+          !view:datafeedA#update@did:user:aBlockedHost
+          !view:datafeedA#query@did:user:aBlockedHost
+          !view:datafeedA#creator@did:user:aBlockedHost
+        
+          view:datafeedA#read@did:user:anIndexer
+          view:datafeedA#update@did:user:anIndexer
+          !view:datafeedA#query@did:user:anIndexer
+          !view:datafeedA#creator@did:user:anIndexer
+        
+          // @@@ Tertiary data feed (a datafeed derived directly from another data feed) tests
+          view:datafeedB#read@did:user:subscriber
+          !view:datafeedB#update@did:user:subscriber
+          !view:datafeedB#query@did:user:subscriber
+          !view:datafeedB#creator@did:user:subscriber
+        
+          view:datafeedB#read@did:user:subscriberToB
+          !view:datafeedB#update@did:user:subscriberToB
+          view:datafeedB#query@did:user:subscriberToB
+          !view:datadeefB#creator@did:user:subscriberToB
+        
+          !view:datafeedB#read@did:user:anonsubscriber
+          !view:datafeedB#update@did:user:anonsubscriber
+          !view:datafeedB#query@did:user:anonsubscriber
+          !view:datafeedB#creator@did:user:anonsubscriber
+        
+          // Members of the host group inherit write permissions on datafeedB as they have it for datafeedA and datafeedA is datafeedB's parent
+          view:datafeedB#read@did:user:aHost
+          view:datafeedB#update@did:user:aHost
+          !view:datafeedB#query@did:user:aHost
+          !view:datafeedB#creator@did:user:aHost
+        
+          !view:datafeedB#read@did:user:creator
+          !view:datafeedB#update@did:user:creator
+          !view:datafeedB#query@did:user:creator
+          !view:datafeedB#creator@did:user:creator
+        
+          !view:datafeedB#read@did:user:creatorOfB
+          !view:datafeedB#update@did:user:creatorOfB
+          !view:datafeedB#query@did:user:creatorOfB
+          view:datafeedB#creator@did:user:creatorOfB
+        
+          !view:datafeedB#read@did:user:addo
+          !view:datafeedB#update@did:user:addo
+          !view:datafeedB#query@did:user:addo
+          !view:datafeedB#creator@did:user:addo
+        
+          !view:datafeedB#read@did:user:shinzohub
+          !view:datafeedB#update@did:user:shinzohub
+          !view:datafeedB#query@did:user:shinzohub
+          !view:datafeedB#creator@did:user:shinzohub
+        
+          !view:datafeedB#read@did:user:aBannedHost
+          !view:datafeedB#update@did:user:aBannedHost
+          !view:datafeedB#query@did:user:aBannedHost
+          !view:datafeedB#creator@did:user:aBannedHost
+        
+          !view:datafeedB#read@did:user:aBlockedHost
+          !view:datafeedB#update@did:user:aBlockedHost
+          !view:datafeedB#query@did:user:aBlockedHost
+          !view:datafeedB#creator@did:user:aBlockedHost
+        
+          view:datafeedB#read@did:user:anIndexer
+          view:datafeedB#update@did:user:anIndexer
+          !view:datafeedB#query@did:user:anIndexer
+          !view:datafeedB#creator@did:user:anIndexer
+        
+        }
+        
+        Delegations {
+          // Shinzo Team group administration tests
+          !did:user:quinn > group:indexer#guest
+          !did:user:quinn > group:indexer#admin
+          !did:user:quinn > group:indexer#owner
+          did:user:duncan > group:indexer#guest
+          !did:user:duncan > group:indexer#admin
+          !did:user:duncan > group:indexer#owner
+          did:user:addo > group:indexer#guest
+          !did:user:addo > group:indexer#admin
+          !did:user:addo > group:indexer#owner
+        
+          !did:user:quinn > group:host#guest
+          !did:user:quinn > group:host#admin
+          !did:user:quinn > group:host#owner
+          did:user:duncan > group:host#guest
+          !did:user:duncan > group:host#admin
+          !did:user:duncan > group:host#owner
+          did:user:addo > group:host#guest
+          !did:user:addo > group:host#admin
+          !did:user:addo > group:host#owner
+        
+          !did:user:quinn > group:shinzoteam#guest
+          !did:user:quinn > group:shinzoteam#admin
+          !did:user:quinn > group:shinzoteam#owner
+          did:user:duncan > group:shinzoteam#guest
+          !did:user:duncan > group:shinzoteam#admin
+          !did:user:duncan > group:shinzoteam#owner
+          did:user:addo > group:shinzoteam#guest
+          did:user:addo > group:shinzoteam#admin
+          did:user:addo > group:shinzoteam#owner 
+        
+          // Shinzo team file administration 
+          !did:user:addo > primitive:blocks#reader
+          !did:user:addo > primitive:blocks#writer
+          !did:user:addo > primitive:blocks#admin
+          !did:user:addo > primitive:blocks#owner
+        
+          did:user:addo > view:datafeedA#reader
+          did:user:addo > view:datafeedA#writer
+          !did:user:addo > view:datafeedA#creator
+          !did:user:addo > view:datafeedA#admin
+          !did:user:addo > view:datafeedA#owner
+        
+          did:user:addo > view:datafeedB#reader
+          did:user:addo > view:datafeedB#writer
+          !did:user:addo > view:datafeedB#creator
+          !did:user:addo > view:datafeedB#admin
+          !did:user:addo > view:datafeedB#owner
+        
+          !did:user:duncan > primitive:blocks#reader
+          !did:user:duncan > primitive:blocks#writer
+          !did:user:duncan > primitive:blocks#admin
+          !did:user:duncan > primitive:blocks#owner
+        
+          did:user:duncan > view:datafeedA#reader
+          did:user:duncan > view:datafeedA#writer
+          !did:user:duncan > view:datafeedA#creator
+          !did:user:duncan > view:datafeedA#admin
+          !did:user:duncan > view:datafeedA#owner
+        
+          did:user:duncan > view:datafeedB#reader
+          did:user:duncan > view:datafeedB#writer
+          !did:user:duncan > view:datafeedB#creator
+          !did:user:duncan > view:datafeedB#admin
+          !did:user:duncan > view:datafeedB#owner
+        
+          !did:user:quinn > primitive:blocks#reader
+          !did:user:quinn > primitive:blocks#writer
+          !did:user:quinn > primitive:blocks#admin
+          !did:user:quinn > primitive:blocks#owner
+        
+          !did:user:quinn > view:datafeedA#reader
+          !did:user:quinn > view:datafeedA#writer
+          !did:user:quinn > view:datafeedA#creator
+          !did:user:quinn > view:datafeedA#admin
+          !did:user:quinn > view:datafeedA#owner
+        
+          // Shinzo hub access administration tests
+          did:user:shinzohub > group:indexer#guest
+          !did:user:shinzohub > group:indexer#admin
+          !did:user:shinzohub > group:indexer#owner
+        
+          did:user:shinzohub > group:host#guest
+          !did:user:shinzohub > group:host#admin
+          !did:user:shinzohub > group:host#owner
+        
+          did:user:shinzohub > primitive:blocks#reader
+          did:user:shinzohub > primitive:blocks#writer
+          !did:user:shinzohub > primitive:blocks#admin
+          !did:user:shinzohub > primitive:blocks#owner
+        
+          did:user:shinzohub > view:datafeedA#reader
+          did:user:shinzohub > view:datafeedA#writer
+          did:user:shinzohub > view:datafeedA#subscriber
+          !did:user:shinzohub > view:datafeedA#creator
+          !did:user:shinzohub > view:datafeedA#admin
+          !did:user:shinzohub > view:datafeedA#owner
+        
+          did:user:shinzohub > view:datafeedB#reader
+          did:user:shinzohub > view:datafeedB#writer
+          did:user:shinzohub > view:datafeedB#subscriber
+          !did:user:shinzohub > view:datafeedB#creator
+          !did:user:shinzohub > view:datafeedB#admin
+          !did:user:shinzohub > view:datafeedB#owner
+        }
+`
+	ctx := test.NewTestCtx(t)
+	action := NewAndSet{
+		Data: &types.SandboxData{
+			PolicyDefinition: pol,
+			PolicyTheorem:    theorems,
+			Relationships:    relationships,
+		},
+	}
+	handle := action.Run(ctx)
+
+	result, err := ctx.Playground.VerifyTheorems(ctx, &types.VerifyTheoremsRequest{
+		Handle: handle,
+	})
+	require.NoError(t, err)
+	_ = result
+
+	require.True(t, result.Result.Ok)
+	require.Zero(t, result.Result.Failures)
+}
+
+func Test_DOTExplainCheck_Example(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+
+	a := NewAndSet{
+		Data: sandbox.Samples[0].Data,
+	}
+	handle := a.Run(ctx)
+
+	resp, err := ctx.Playground.DOTExplainCheck(ctx, &types.DOTExplainCheckRequest{
+		Handle:     handle,
+		Object:     types.NewObject("file", "def"),
+		Permission: "read",
+		Actor:      types.NewActor("did:user:eve"),
+	})
+	require.NoError(t, err)
+	t.Log(resp.DotGraph)
+	require.NotNil(t, resp)
+}
+
+func Test_ExplainCheck_Example(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+
+	a := NewAndSet{
+		Data: sandbox.Samples[0].Data,
+	}
+	handle := a.Run(ctx)
+
+	resp, err := ctx.Playground.ExplainCheck(ctx, &types.ExplainCheckRequest{
+		Handle:     handle,
+		Object:     types.NewObject("file", "def"),
+		Permission: "read",
+		Actor:      types.NewActor("did:user:eve"),
+	})
+	require.NoError(t, err)
+	t.Log(resp.Graph.String())
+	require.NotNil(t, resp.Graph)
 }

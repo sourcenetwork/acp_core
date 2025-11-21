@@ -12,10 +12,12 @@ var _ antlr.ErrorListener = (*errListener)(nil)
 
 type errListener struct {
 	report *ParserReport
+	endPos types.BufferPosition
 }
 
-func NewErrLsitener(productionRuleName string) *errListener {
+func NewErrLsitener(productionRuleName string, endPos types.BufferPosition) *errListener {
 	return &errListener{
+		endPos: endPos,
 		report: &ParserReport{
 			msg:  fmt.Sprintf("%v parser report", productionRuleName),
 			msgs: nil,
@@ -37,13 +39,7 @@ func (l *errListener) SyntaxError(recognizer antlr.Recognizer, offendingSymbol i
 				Line:   uint64(line),
 				Column: uint64(column),
 			},
-			// Antlr doesn't provide the end position for the error,
-			// default to 0,0 position
-			// which can understood as EOF
-			End: &types.BufferPosition{
-				Line:   0,
-				Column: 0,
-			},
+			End: &l.endPos,
 		},
 	}
 	l.report.msgs = append(l.report.msgs, err)

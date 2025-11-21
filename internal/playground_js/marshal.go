@@ -28,7 +28,7 @@ func unmarsahlArgs(container proto.Message, args []js.Value) error {
 
 	err := jsonpb.UnmarshalString(reqJson.String(), container)
 	if err != nil {
-		return errors.NewFromCause("could not unmarshal serialized req obj", err, errors.ErrorType_BAD_INPUT)
+		return errors.NewWithCause("could not unmarshal serialized req obj", err, errors.ErrorType_BAD_INPUT)
 	}
 
 	return nil
@@ -38,7 +38,9 @@ func unmarsahlArgs(container proto.Message, args []js.Value) error {
 // The proto value is dumped as a JSON string and loaded in the JS runtime
 // using the JSON.parse method.
 func toJSObject[T proto.Message](val T) (js.Value, error) {
-	marshaler := jsonpb.Marshaler{}
+	marshaler := jsonpb.Marshaler{
+		EmitDefaults: true,
+	}
 	valStr, err := marshaler.MarshalToString(val)
 	if err != nil {
 		return js.Value{}, err

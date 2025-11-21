@@ -1,0 +1,204 @@
+import { useDebounce } from "@/hooks/useDebounce";
+import { useSandbox } from "@/hooks/useSandbox";
+import { definePolicyTheoremTheme, POLICY_THEOREM_LANGUAGE_ID, registerPolicyTheoremLanguage } from "@/lib/languagePolicyTheorem";
+import { useTheme } from "@/providers/ThemeProvider/useTheme";
+import { useUIActions } from "@/stores/layoutStore";
+import { usePlaygroundStore } from "@/stores/playgroundStore";
+import { mapLocatedMessageMarkers } from "@/utils/mapLocatedMessageMarkers";
+import { mapTheoremResultMarkers } from "@/utils/mapTheoremResultMarkers";
+import { SandboxData, SandboxDataErrors } from "@acp/sandbox";
+import { Editor, EditorProps, Monaco, OnChange, OnMount, useMonaco } from "@monaco-editor/react";
+import type { editor } from "monaco-editor";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+interface BaseEditorProps {
+    sandboxDataType: keyof SandboxData,
+}
+
+export enum SandboxType {
+    POLICY_DEFINITION = "policyDefinition",
+    RELATIONSHIPS = "relationships",
+    POLICY_THEOREM = "policyTheorem"
+}
+
+const SandboxDataType: Record<SandboxType, { language: string, errorKey: keyof SandboxDataErrors }> = {
+    [SandboxType.POLICY_DEFINITION]: {
+        language: 'yaml',
+        errorKey: "policyErrors"
+    },
+    [SandboxType.RELATIONSHIPS]: {
+        language: "yaml",
+        errorKey: "relationshipsErrors"
+    },
+    [SandboxType.POLICY_THEOREM]: {
+        language: POLICY_THEOREM_LANGUAGE_ID,
+        errorKey: "theoremsErrors"
+    }
+};
+
+const BaseEditor = (props: EditorProps & BaseEditorProps) => {
+    const { sandboxDataType } = props;
+    const dataType = SandboxDataType[sandboxDataType];
+
+    const monacoRef = useMonaco();
+    const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+    const decorationsRef = useRef<editor.IEditorDecorationsCollection | null>(null);
+    const [isEditorMounted, setIsEditorMounted] = useState(false);
+
+    const { theme } = useTheme();
+    const activeSandbox = useSandbox();
+    const dataErrors = usePlaygroundStore((state) => state.setStateDataErrors?.[dataType.errorKey]);
+    const annotatedPolicyTheoremResult = usePlaygroundStore((state) => state.verifyTheoremsResult);
+    const updateSandboxState = usePlaygroundStore((state) => state.setPlaygroundState);
+    const setEditorSelection = usePlaygroundStore((state) => state.setEditorSelection);
+    const verifyTheoremsStatus = usePlaygroundStore((state) => state.verifyTheoremsStatus);
+    const sandboxErrorCount = usePlaygroundStore((state) => state.setStateDataErrorCount);
+
+    const { setFocusedEditor } = useUIActions();
+
+    const editorData = activeSandbox?.data?.[sandboxDataType];
+    const isTheorumEditor = sandboxDataType === SandboxType.POLICY_THEOREM;
+
+    const updateMarkers = useCallback(() => {
+        const editor = editorRef.current;
+        if (!editor) return;
+
+        const errorMarkers = mapLocatedMessageMarkers(dataErrors ?? []);
+
+        monacoRef?.editor.setModelMarkers(editor.getModel()!, 'owner', errorMarkers);
+
+        // Update test result markers and glyphs
+        if (isTheorumEditor) {
+
+            // If there are input errors, clear the decorations as they won't align
+            if (errorMarkers?.length > 0) {
+                clearGlyphDecorations();
+                return;
+            }
+
+            const theoremResultMarkers = mapTheoremResultMarkers(annotatedPolicyTheoremResult);
+
+            if (!theoremResultMarkers) return;
+
+            const { authMarkers, delegationMarkers } = theoremResultMarkers;
+
+            monacoRef?.editor.setModelMarkers(editor.getModel()!, 'owner', [
+                ...authMarkers.rejected,
+                ...authMarkers.errors,
+                ...delegationMarkers.rejected,
+                ...delegationMarkers.errors,
+            ]);
+
+            clearGlyphDecorations();
+
+            const decorations = [
+                ...createGlyphDecorations([...authMarkers.accepted, ...delegationMarkers.accepted], 'passing'),
+                ...createGlyphDecorations([...authMarkers.rejected, ...delegationMarkers.rejected], 'failing')
+            ];
+
+            if (decorations.length > 0) decorationsRef.current = editor.createDecorationsCollection(decorations);
+        }
+    }, [dataErrors, annotatedPolicyTheoremResult, isTheorumEditor, monacoRef]);
+
+    const clearGlyphDecorations = () => {
+        decorationsRef.current?.clear();
+    };
+
+    const createGlyphDecorations = (markers: editor.IMarkerData[] = [], type: 'failing' | 'passing'): editor.IModelDeltaDecoration[] => {
+        if (!monacoRef) return [];
+
+        return markers.map(marker => ({
+            range: new monacoRef.Range(marker.startLineNumber, 1, marker.startLineNumber, 1),
+            options: {
+                isWholeLine: true,
+                glyphMarginClassName: type === 'failing' ? 'failing-glyph' : 'passing-glyph',
+                className: type === 'failing' ? 'failing-line-bg' : '',
+            }
+        }));
+    };
+
+    const handleEditorChange: OnChange = useDebounce((value) => {
+        void updateSandboxState({ [sandboxDataType]: value });
+
+        if (sandboxDataType === SandboxType.POLICY_THEOREM) {
+            clearGlyphDecorations();
+        }
+    }, 500);
+
+
+    const handleEditorMounted: OnMount = (editor) => {
+        editorRef.current = editor;
+        setIsEditorMounted(true);
+
+        const editorSelection = usePlaygroundStore.getState().editorSelections[sandboxDataType];
+
+        // Restore any saved selection and focus the editor
+        if (editorSelection) {
+            editor.setSelection(editorSelection);
+            editor.focus();
+            setFocusedEditor(sandboxDataType);
+        }
+    }
+
+    const handleBeforeMount = (monaco: Monaco) => {
+        registerPolicyTheoremLanguage(monaco);
+        definePolicyTheoremTheme(monaco);
+    }
+
+    // Clear decorations after changes or errors as the markers could be stale or misaligned
+    useEffect(() => {
+        const hasErrors = sandboxErrorCount > 0;
+        const wasRun = verifyTheoremsStatus === 'passed' || verifyTheoremsStatus === 'error';
+
+        if (hasErrors || wasRun)
+            clearGlyphDecorations();
+    }, [verifyTheoremsStatus, sandboxErrorCount]);
+
+    useEffect(() => {
+        if (!isEditorMounted) return;
+
+        updateMarkers();
+    }, [dataErrors, annotatedPolicyTheoremResult, updateMarkers, isEditorMounted]);
+
+
+    // Track cursor position and selection 
+    useEffect(() => {
+        const editor = editorRef.current;
+        if (!isEditorMounted || !editor) return;
+
+        const selectionEvent = editor.onDidChangeCursorSelection((e) => setEditorSelection(sandboxDataType, e.selection));
+        const focusEvent = editor.onDidFocusEditorWidget(() => setFocusedEditor(sandboxDataType));
+        const blurEvent = editor.onDidBlurEditorWidget(() => setFocusedEditor(null));
+
+        return () => {
+            selectionEvent.dispose();
+            focusEvent.dispose();
+            blurEvent.dispose();
+        };
+    }, [isEditorMounted, setEditorSelection, sandboxDataType]);
+
+    const editorLanguage = dataType.language || 'yaml';
+    const editorTheme = theme === 'dark' ? 'playgroundThemeDark' : 'playgroundThemeLight';
+
+    return <div className='h-full py-5 rounded-md overflow-hidden bg-editor border isolate'>
+        <Editor
+            height="100%"
+            defaultLanguage={editorLanguage}
+            defaultValue={editorData}
+            value={editorData}
+            onChange={handleEditorChange}
+            beforeMount={handleBeforeMount}
+            onMount={handleEditorMounted}
+            theme={editorTheme}
+            options={{
+                automaticLayout: true,
+                fixedOverflowWidgets: true,
+                glyphMargin: isTheorumEditor,
+                tabSize: 2,
+                ...props?.options
+            }}
+            {...props} />
+    </div>
+}
+
+export default BaseEditor;

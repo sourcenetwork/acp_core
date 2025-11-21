@@ -2,6 +2,7 @@ package zanzi
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	rcdb "github.com/sourcenetwork/raccoondb"
@@ -373,4 +374,62 @@ func (z *Adapter) CheckExpression(ctx context.Context, policy *types.Policy, obj
 	}
 
 	return response.Authorized, nil
+}
+
+func (z *Adapter) ExplainCheck(ctx context.Context, policy *types.Policy, operation *types.Operation, actor *types.Actor) (bool, *types.CheckExplainGraph, error) {
+	service := z.zanzi.GetRelationGraphService()
+	mapper := newRelationshipMapper(policy.ActorResource.Name)
+
+	req := &api.ExplainCheckRequest{
+		PolicyId: policy.Id,
+		AccessRequest: &domain.AccessRequest{
+			Object:   mapper.MapObject(operation.Object),
+			Relation: operation.Permission,
+			Subject: &domain.Entity{
+				Resource: policy.ActorResource.Name,
+				Id:       actor.Id,
+			},
+		},
+	}
+	response, err := service.ExplainCheck(ctx, req)
+	err = mapErr(err)
+	if err != nil {
+		return false, nil, fmt.Errorf("ExplainCheck: %w", err)
+	}
+
+	bytes, err := json.Marshal(response.Graph)
+	if err != nil {
+		return false, nil, fmt.Errorf("mapping explain graph: %v", err)
+	}
+	graph := &types.CheckExplainGraph{}
+	err = json.Unmarshal(bytes, graph)
+	if err != nil {
+		return false, nil, fmt.Errorf("mapping explain graph: %v", err)
+	}
+
+	return response.Authorized, graph, nil
+}
+
+func (z *Adapter) DOTExplainCheck(ctx context.Context, policy *types.Policy, operation *types.Operation, actor *types.Actor) (bool, string, error) {
+	service := z.zanzi.GetRelationGraphService()
+	mapper := newRelationshipMapper(policy.ActorResource.Name)
+
+	req := &api.DOTExplainCheckRequest{
+		PolicyId: policy.Id,
+		AccessRequest: &domain.AccessRequest{
+			Object:   mapper.MapObject(operation.Object),
+			Relation: operation.Permission,
+			Subject: &domain.Entity{
+				Resource: policy.ActorResource.Name,
+				Id:       actor.Id,
+			},
+		},
+	}
+	response, err := service.DOTExplainCheck(ctx, req)
+	err = mapErr(err)
+	if err != nil {
+		return false, "", fmt.Errorf("DOTExplainCheck: %w", err)
+	}
+
+	return response.Authorized, response.Tree, nil
 }

@@ -42,6 +42,7 @@ resources:
   - name: reader
 spec: defra
 `
+
 	resp, err := ctx.Engine.ValidatePolicy(ctx, &types.ValidatePolicyRequest{
 		Policy:      pol,
 		MarshalType: types.PolicyMarshalingType_YAML,

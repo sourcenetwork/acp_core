@@ -11,13 +11,15 @@ import (
 	"syscall/js"
 
 	"github.com/sourcenetwork/acp_core/internal/playground_js"
+	"github.com/sourcenetwork/acp_core/pkg/version"
 )
 
 func main() {
 	ctx := context.Background()
 
 	js.Global().Set("AcpPlayground", map[string]any{
-		"new": playground_js.PlaygroundConstructor(ctx),
+		"new":		playground_js.PlaygroundConstructor(ctx),
+		"commit":	js.ValueOf(version.Commit),
 	})
 
 	<-ctx.Done()

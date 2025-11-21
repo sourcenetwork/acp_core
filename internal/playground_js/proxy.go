@@ -13,6 +13,12 @@ import (
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
 
+// DefaultErrorEndpoint is the global PublishError endpoint for the playground.
+// Currently the system was designed to work under the same domain through a proxy
+//
+// FIXME this should probably be paramatrized and initialized by the WASM Host / JS code
+var DefaultErrorEndpoint = "/api/errors"
+
 // PlaygroundConstructor returns a JS function which acts as a contructor for Playground Services.
 // In JS land, the return of this constructor function is a JS object whose attributes implement
 // the Playground protobuff definition.
@@ -46,7 +52,10 @@ type PlaygroundServiceProxy struct {
 
 // NewPlaygroundServiceProxy creates a new PlaygroundService from a default context
 func NewPlaygroundServiceProxy(ctx context.Context, manager runtime.RuntimeManager) *PlaygroundServiceProxy {
-	service := services.NewPlaygroundService(manager)
+	cfg := services.PlaygroundConfig{
+		PublishErrorEndpoint: DefaultErrorEndpoint,
+	}
+	service := services.NewPlaygroundService(manager, &cfg)
 
 	proxy := &PlaygroundServiceProxy{
 		ctx:     ctx,
@@ -60,15 +69,18 @@ func NewPlaygroundServiceProxy(ctx context.Context, manager runtime.RuntimeManag
 	})
 
 	proxyMap := map[string]js.Func{
-		"NewSandbox":        asyncFn(wrapHandler(proxy.NewSandbox)),
-		"ListSandboxes":     asyncFn(wrapHandler(proxy.ListSandboxes)),
-		"SetState":          asyncFn(wrapHandler(proxy.SetState)),
-		"RestoreScratchpad": asyncFn(wrapHandler(proxy.RestoreScratchpad)),
-		"GetCatalogue":      asyncFn(wrapHandler(proxy.GetCatalogue)),
-		"GetSandbox":        asyncFn(wrapHandler(proxy.GetSandbox)),
-		"VerifyTheorems":    asyncFn(wrapHandler(proxy.VerifyTheorems)),
-		"Simulate":          asyncFn(wrapHandler(proxy.Simulate)),
-		"Close":             closeWrapper,
+		"NewSandbox":         asyncFn(wrapHandler(proxy.NewSandbox)),
+		"ListSandboxes":      asyncFn(wrapHandler(proxy.ListSandboxes)),
+		"SetState":           asyncFn(wrapHandler(proxy.SetState)),
+		"RestoreScratchpad":  asyncFn(wrapHandler(proxy.RestoreScratchpad)),
+		"GetCatalogue":       asyncFn(wrapHandler(proxy.GetCatalogue)),
+		"GetSandbox":         asyncFn(wrapHandler(proxy.GetSandbox)),
+		"VerifyTheorems":     asyncFn(wrapHandler(proxy.VerifyTheorems)),
+		"Simulate":           asyncFn(wrapHandler(proxy.Simulate)),
+		"GetSampleSandboxes": asyncFn(wrapHandler(proxy.GetSampleSandboxes)),
+		"DOTExplainCheck":    asyncFn(wrapHandler(proxy.DOTExplainCheck)),
+		"ExplainCheck":       asyncFn(wrapHandler(proxy.ExplainCheck)),
+		"Close":              closeWrapper,
 	}
 	proxy.proxyMap = proxyMap
 	proxy.makeJSValue()
@@ -188,7 +200,7 @@ func (s *PlaygroundServiceProxy) VerifyTheorems(this js.Value, args []js.Value) 
 	return resp, nil
 }
 
-func (s *PlaygroundServiceProxy) Simulate(this js.Value, args []js.Value) (*types.SimulateReponse, error) {
+func (s *PlaygroundServiceProxy) Simulate(this js.Value, args []js.Value) (*types.SimulateResponse, error) {
 	req := &types.SimulateRequest{}
 	err := unmarsahlArgs(req, args)
 	if err != nil {
@@ -196,6 +208,48 @@ func (s *PlaygroundServiceProxy) Simulate(this js.Value, args []js.Value) (*type
 	}
 
 	resp, err := s.service.Simulate(s.ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (s *PlaygroundServiceProxy) GetSampleSandboxes(this js.Value, args []js.Value) (*types.GetSampleSandboxesResponse, error) {
+	req := &types.GetSampleSandboxesRequest{}
+	err := unmarsahlArgs(req, args)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.service.GetSampleSandboxes(s.ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (s *PlaygroundServiceProxy) DOTExplainCheck(this js.Value, args []js.Value) (*types.DOTExplainCheckResponse, error) {
+	req := &types.DOTExplainCheckRequest{}
+	err := unmarsahlArgs(req, args)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.service.DOTExplainCheck(s.ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (s *PlaygroundServiceProxy) ExplainCheck(this js.Value, args []js.Value) (*types.ExplainCheckResponse, error) {
+	req := &types.ExplainCheckRequest{}
+	err := unmarsahlArgs(req, args)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.service.ExplainCheck(s.ctx, req)
 	if err != nil {
 		return nil, err
 	}

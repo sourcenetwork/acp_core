@@ -5,6 +5,8 @@ package sourcenetwork.acp_core;
 import "sourcenetwork/acp_core/catalogue.proto";
 import "sourcenetwork/acp_core/sandbox.proto";
 import "sourcenetwork/acp_core/theorem.proto";
+import "sourcenetwork/acp_core/check_explain.proto";
+import "sourcenetwork/acp_core/relationship.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
 
@@ -34,7 +36,15 @@ service PlaygroundService {
   // Simulate receives Sandbox state data and a theorem, creates an ephemeral sandbox
   // evaluates the given theorem against the sandbox's policy and returns the result
   // Simulate is a oneshot operation and persists no state in the process.
-  rpc Simulate(SimulateRequest) returns (SimulateReponse);
+  rpc Simulate(SimulateRequest) returns (SimulateResponse);
+
+  // GetSampleSandboxes returns a set of preloaded SandboxData objects
+  // which are used to demo different ACP Features
+  rpc GetSampleSandboxes(GetSampleSandboxesRequest) returns (GetSampleSandboxesResponse);
+
+  rpc DOTExplainCheck(DOTExplainCheckRequest) returns (DOTExplainCheckResponse);
+
+  rpc ExplainCheck(ExplainCheckRequest) returns (ExplainCheckResponse);
 
   // Check runs a Check operation with the provided data for the context of a sandbox.
   // A Check call is used to verify whether some actor is authorized to act on a some object
@@ -51,11 +61,6 @@ service PlaygroundService {
   // such as creating or deleting relationships.
   //rpc AuthorizeCommand (AuthorizeCommandRequest) returns (AuthorizeCommandResponse);
 
-  // Expand runs an expand operation in a sandbox.
-  //
-  // Expand is used to walk through the Object graph, starting at an Object Relation node
-  // and generate the tree of every actor which can perform the specified operation.
-  //rpc Expand(ExpandRequest) returns (ExpandResponse);
 }
 
 message NewSandboxRequest {
@@ -130,7 +135,7 @@ message SimulateRequest {
   sourcenetwork.acp_core.SandboxData data = 1;
 }
 
-message SimulateReponse {
+message SimulateResponse {
   // validate_data flags whether the input SandboxData was sucessfuly loaded
   bool valid_data = 1;
 
@@ -154,9 +159,11 @@ message GetSandboxResponse {
   sourcenetwork.acp_core.SandboxRecord record = 1;
 }
 
-message GetSampleSandboxesRequest {}
+message GetSampleSandboxesRequest{} 
 
-message GetSampleSandboxesResponse {}
+message GetSampleSandboxesResponse{
+  repeated SandboxTemplate samples = 1;
+}
 
 enum SerializationEncoding {
   UNKNOWN_ENCODING = 0;
@@ -188,4 +195,28 @@ message GetSerializedStateRequest {
 
 message GetSerializedStateResponse {
   bytes data = 1;
+}
+
+message ExplainCheckRequest{
+  uint64 handle = 1;
+  Object object = 2;
+  string permission = 3;
+  Actor actor = 4;
+}
+
+message ExplainCheckResponse{
+  bool authorized = 1;
+  CheckExplainGraph graph = 2;
+}
+
+message DOTExplainCheckRequest{
+  uint64 handle = 1;
+  Object object = 2;
+  string permission = 3;
+  Actor actor = 4;
+}
+
+message DOTExplainCheckResponse{
+  bool authorized = 1;
+  string dot_graph = 2;
 }

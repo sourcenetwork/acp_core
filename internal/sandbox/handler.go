@@ -3,6 +3,7 @@ package sandbox
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/sourcenetwork/acp_core/internal/policy"
 	"github.com/sourcenetwork/acp_core/internal/raccoon"
@@ -85,6 +86,7 @@ type SetStateHandler struct{}
 
 func (h *SetStateHandler) Handle(ctx context.Context, manager runtime.RuntimeManager, req *types.SetStateRequest) (*types.SetStateResponse, error) {
 	repository := NewSandboxRepository(manager.GetKVStore())
+	InjectSandboxData(ctx, req.Data)
 
 	record, err := repository.GetSandbox(ctx, req.Handle)
 	if err != nil {
@@ -150,11 +152,18 @@ func (h *SetStateHandler) parseCtx(ctx context.Context, manager runtime.RuntimeM
 	// FIXME do full parsing once independent parsing is implemented
 	_, err := policy.Unmarshal(data.PolicyDefinition, types.PolicyMarshalingType_YAML)
 	if err != nil {
+		end := getPolicyEndPosition(data.PolicyDefinition)
 		err := &types.LocatedMessage{
 			Message:   err.Error(),
 			Kind:      types.LocatedMessage_ERROR,
 			InputName: "policy",
-			// Interval is empty because unmarshaling still doesn't support that feature
+			Interval: &types.BufferInterval{
+				Start: &types.BufferPosition{
+					Line:   1,
+					Column: 1,
+				},
+				End: &end,
+			},
 		}
 		errs.PolicyErrors = append(errs.PolicyErrors, err)
 	}
@@ -214,12 +223,19 @@ func (h *SetStateHandler) setPolicy(ctx context.Context, manager runtime.Runtime
 	})
 
 	if err != nil {
+		end := getPolicyEndPosition(simCtx.PolicyDefinition)
 		if errors.Is(err, errors.ErrorType_BAD_INPUT) {
 			msg := &types.LocatedMessage{
 				Message:   err.Error(),
 				Kind:      types.LocatedMessage_ERROR,
 				InputName: "policy",
-				// Interval is empty because unmarshaling still doesn't support that feature
+				Interval: &types.BufferInterval{
+					Start: &types.BufferPosition{
+						Line:   1,
+						Column: 1,
+					},
+					End: &end,
+				},
 			}
 			errs.PolicyErrors = append(errs.PolicyErrors, msg)
 			return errs, nil
@@ -350,6 +366,7 @@ func HandleVerifyTheorem(ctx context.Context, manager runtime.RuntimeManager, re
 	if !record.Initialized {
 		return nil, newVerifyTheoremsErr(errors.Wrap("uninitialized sandbox cannot execute theorems", errors.ErrorType_OPERATION_FORBIDDEN), req.Handle)
 	}
+	InjectSandboxData(ctx, record.Data)
 
 	manager, err = GetManagerForSandbox(manager, req.Handle)
 	if err != nil {
@@ -387,6 +404,7 @@ func HandleGetCatalogue(ctx context.Context, manager runtime.RuntimeManager, req
 			errors.ErrorType_OPERATION_FORBIDDEN)
 		return nil, newGetCatalogueErr(err, req.Handle)
 	}
+	InjectSandboxData(ctx, record.Data)
 
 	manager, err = GetManagerForSandbox(manager, req.Handle)
 	if err != nil {
@@ -448,5 +466,113 @@ func HandleGetSandbox(ctx context.Context, manager runtime.RuntimeManager, req *
 	}
 	return &types.GetSandboxResponse{
 		Record: record,
+	}, nil
+}
+
+// getPolicyEndPosition return a BufferPosition to the last character
+// in pol. If an empty string, returns position 1,1
+func getPolicyEndPosition(pol string) types.BufferPosition {
+	pos := types.BufferPosition{
+		Line:   1,
+		Column: 1,
+	}
+	lines := strings.Split(pol, "\n")
+	if len(lines) > 0 {
+		lineCount := uint64(len(lines))
+		lastLine := lines[lineCount-1]
+		lastCol := uint64(len(lastLine))
+		pos.Line = lineCount
+		pos.Column = lastCol
+	}
+	return pos
+}
+
+func HandleGetSandboxSamples(ctx context.Context, _ runtime.RuntimeManager, req *types.GetSampleSandboxesRequest) (*types.GetSampleSandboxesResponse, error) {
+	return &types.GetSampleSandboxesResponse{
+		Samples: Samples,
+	}, nil
+}
+
+func HandleExplainCheck(ctx context.Context, manager runtime.RuntimeManager, req *types.ExplainCheckRequest) (*types.ExplainCheckResponse, error) {
+	repository := NewSandboxRepository(manager.GetKVStore())
+
+	record, err := repository.GetSandbox(ctx, req.Handle)
+	if err != nil {
+		return nil, newExplainCheckError(err, req.Handle)
+	}
+	if record == nil {
+		return nil, newExplainCheckError(errors.Wrap("sandbox not found", errors.ErrorType_NOT_FOUND), req.Handle)
+	}
+	if !record.Initialized {
+		err := errors.Wrap("uninitialized sandbox cannot execute theorems",
+			errors.ErrorType_OPERATION_FORBIDDEN)
+		return nil, newExplainCheckError(err, req.Handle)
+	}
+	InjectSandboxData(ctx, record.Data)
+
+	manager, err = GetManagerForSandbox(manager, req.Handle)
+	if err != nil {
+		return nil, newExplainCheckError(err, req.Handle)
+	}
+
+	op := &types.Operation{
+		Object:     req.Object,
+		Permission: req.Permission,
+	}
+
+	engine, err := zanzi.NewZanzi(manager.GetKVStore(), manager.GetLogger())
+	if err != nil {
+		return nil, newExplainCheckError(err, req.Handle)
+	}
+	authorized, graph, err := engine.ExplainCheck(ctx, record.Ctx.Policy, op, req.Actor)
+	if err != nil {
+		return nil, newExplainCheckError(err, req.Handle)
+	}
+
+	return &types.ExplainCheckResponse{
+		Authorized: authorized,
+		Graph:      graph,
+	}, nil
+}
+
+func HandleDOTExplainCheck(ctx context.Context, manager runtime.RuntimeManager, req *types.DOTExplainCheckRequest) (*types.DOTExplainCheckResponse, error) {
+	repository := NewSandboxRepository(manager.GetKVStore())
+
+	record, err := repository.GetSandbox(ctx, req.Handle)
+	if err != nil {
+		return nil, newExplainCheckError(err, req.Handle)
+	}
+	if record == nil {
+		return nil, newExplainCheckError(errors.Wrap("sandbox not found", errors.ErrorType_NOT_FOUND), req.Handle)
+	}
+	if !record.Initialized {
+		err := errors.Wrap("uninitialized sandbox cannot execute theorems",
+			errors.ErrorType_OPERATION_FORBIDDEN)
+		return nil, newExplainCheckError(err, req.Handle)
+	}
+	InjectSandboxData(ctx, record.Data)
+
+	manager, err = GetManagerForSandbox(manager, req.Handle)
+	if err != nil {
+		return nil, newExplainCheckError(err, req.Handle)
+	}
+
+	op := &types.Operation{
+		Object:     req.Object,
+		Permission: req.Permission,
+	}
+
+	engine, err := zanzi.NewZanzi(manager.GetKVStore(), manager.GetLogger())
+	if err != nil {
+		return nil, newExplainCheckError(err, req.Handle)
+	}
+	authorized, tree, err := engine.DOTExplainCheck(ctx, record.Ctx.Policy, op, req.Actor)
+	if err != nil {
+		return nil, newExplainCheckError(err, req.Handle)
+	}
+
+	return &types.DOTExplainCheckResponse{
+		Authorized: authorized,
+		DotGraph:   tree,
 	}, nil
 }

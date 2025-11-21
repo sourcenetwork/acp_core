@@ -5785,31 +5785,31 @@ func (x *fastReflection_SimulateRequest) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_SimulateReponse            protoreflect.MessageDescriptor
-	fd_SimulateReponse_valid_data protoreflect.FieldDescriptor
-	fd_SimulateReponse_errors     protoreflect.FieldDescriptor
-	fd_SimulateReponse_record     protoreflect.FieldDescriptor
-	fd_SimulateReponse_result     protoreflect.FieldDescriptor
+	md_SimulateResponse            protoreflect.MessageDescriptor
+	fd_SimulateResponse_valid_data protoreflect.FieldDescriptor
+	fd_SimulateResponse_errors     protoreflect.FieldDescriptor
+	fd_SimulateResponse_record     protoreflect.FieldDescriptor
+	fd_SimulateResponse_result     protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sourcenetwork_acp_core_playground_proto_init()
-	md_SimulateReponse = File_sourcenetwork_acp_core_playground_proto.Messages().ByName("SimulateReponse")
-	fd_SimulateReponse_valid_data = md_SimulateReponse.Fields().ByName("valid_data")
-	fd_SimulateReponse_errors = md_SimulateReponse.Fields().ByName("errors")
-	fd_SimulateReponse_record = md_SimulateReponse.Fields().ByName("record")
-	fd_SimulateReponse_result = md_SimulateReponse.Fields().ByName("result")
+	md_SimulateResponse = File_sourcenetwork_acp_core_playground_proto.Messages().ByName("SimulateResponse")
+	fd_SimulateResponse_valid_data = md_SimulateResponse.Fields().ByName("valid_data")
+	fd_SimulateResponse_errors = md_SimulateResponse.Fields().ByName("errors")
+	fd_SimulateResponse_record = md_SimulateResponse.Fields().ByName("record")
+	fd_SimulateResponse_result = md_SimulateResponse.Fields().ByName("result")
 }
 
-var _ protoreflect.Message = (*fastReflection_SimulateReponse)(nil)
+var _ protoreflect.Message = (*fastReflection_SimulateResponse)(nil)
 
-type fastReflection_SimulateReponse SimulateReponse
+type fastReflection_SimulateResponse SimulateResponse
 
-func (x *SimulateReponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_SimulateReponse)(x)
+func (x *SimulateResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_SimulateResponse)(x)
 }
 
-func (x *SimulateReponse) slowProtoReflect() protoreflect.Message {
+func (x *SimulateResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5821,43 +5821,43 @@ func (x *SimulateReponse) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_SimulateReponse_messageType fastReflection_SimulateReponse_messageType
-var _ protoreflect.MessageType = fastReflection_SimulateReponse_messageType{}
+var _fastReflection_SimulateResponse_messageType fastReflection_SimulateResponse_messageType
+var _ protoreflect.MessageType = fastReflection_SimulateResponse_messageType{}
 
-type fastReflection_SimulateReponse_messageType struct{}
+type fastReflection_SimulateResponse_messageType struct{}
 
-func (x fastReflection_SimulateReponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_SimulateReponse)(nil)
+func (x fastReflection_SimulateResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_SimulateResponse)(nil)
 }
-func (x fastReflection_SimulateReponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_SimulateReponse)
+func (x fastReflection_SimulateResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_SimulateResponse)
 }
-func (x fastReflection_SimulateReponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_SimulateReponse
+func (x fastReflection_SimulateResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_SimulateResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_SimulateReponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_SimulateReponse
+func (x *fastReflection_SimulateResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_SimulateResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_SimulateReponse) Type() protoreflect.MessageType {
-	return _fastReflection_SimulateReponse_messageType
+func (x *fastReflection_SimulateResponse) Type() protoreflect.MessageType {
+	return _fastReflection_SimulateResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_SimulateReponse) New() protoreflect.Message {
-	return new(fastReflection_SimulateReponse)
+func (x *fastReflection_SimulateResponse) New() protoreflect.Message {
+	return new(fastReflection_SimulateResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_SimulateReponse) Interface() protoreflect.ProtoMessage {
-	return (*SimulateReponse)(x)
+func (x *fastReflection_SimulateResponse) Interface() protoreflect.ProtoMessage {
+	return (*SimulateResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -5865,28 +5865,28 @@ func (x *fastReflection_SimulateReponse) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_SimulateReponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_SimulateResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.ValidData != false {
 		value := protoreflect.ValueOfBool(x.ValidData)
-		if !f(fd_SimulateReponse_valid_data, value) {
+		if !f(fd_SimulateResponse_valid_data, value) {
 			return
 		}
 	}
 	if x.Errors != nil {
 		value := protoreflect.ValueOfMessage(x.Errors.ProtoReflect())
-		if !f(fd_SimulateReponse_errors, value) {
+		if !f(fd_SimulateResponse_errors, value) {
 			return
 		}
 	}
 	if x.Record != nil {
 		value := protoreflect.ValueOfMessage(x.Record.ProtoReflect())
-		if !f(fd_SimulateReponse_record, value) {
+		if !f(fd_SimulateResponse_record, value) {
 			return
 		}
 	}
 	if x.Result != nil {
 		value := protoreflect.ValueOfMessage(x.Result.ProtoReflect())
-		if !f(fd_SimulateReponse_result, value) {
+		if !f(fd_SimulateResponse_result, value) {
 			return
 		}
 	}
@@ -5903,21 +5903,21 @@ func (x *fastReflection_SimulateReponse) Range(f func(protoreflect.FieldDescript
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_SimulateReponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_SimulateResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.SimulateReponse.valid_data":
+	case "sourcenetwork.acp_core.SimulateResponse.valid_data":
 		return x.ValidData != false
-	case "sourcenetwork.acp_core.SimulateReponse.errors":
+	case "sourcenetwork.acp_core.SimulateResponse.errors":
 		return x.Errors != nil
-	case "sourcenetwork.acp_core.SimulateReponse.record":
+	case "sourcenetwork.acp_core.SimulateResponse.record":
 		return x.Record != nil
-	case "sourcenetwork.acp_core.SimulateReponse.result":
+	case "sourcenetwork.acp_core.SimulateResponse.result":
 		return x.Result != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SimulateReponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SimulateResponse"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.SimulateReponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SimulateResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5927,21 +5927,21 @@ func (x *fastReflection_SimulateReponse) Has(fd protoreflect.FieldDescriptor) bo
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_SimulateReponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_SimulateResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.SimulateReponse.valid_data":
+	case "sourcenetwork.acp_core.SimulateResponse.valid_data":
 		x.ValidData = false
-	case "sourcenetwork.acp_core.SimulateReponse.errors":
+	case "sourcenetwork.acp_core.SimulateResponse.errors":
 		x.Errors = nil
-	case "sourcenetwork.acp_core.SimulateReponse.record":
+	case "sourcenetwork.acp_core.SimulateResponse.record":
 		x.Record = nil
-	case "sourcenetwork.acp_core.SimulateReponse.result":
+	case "sourcenetwork.acp_core.SimulateResponse.result":
 		x.Result = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SimulateReponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SimulateResponse"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.SimulateReponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SimulateResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -5951,25 +5951,25 @@ func (x *fastReflection_SimulateReponse) Clear(fd protoreflect.FieldDescriptor) 
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_SimulateReponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_SimulateResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sourcenetwork.acp_core.SimulateReponse.valid_data":
+	case "sourcenetwork.acp_core.SimulateResponse.valid_data":
 		value := x.ValidData
 		return protoreflect.ValueOfBool(value)
-	case "sourcenetwork.acp_core.SimulateReponse.errors":
+	case "sourcenetwork.acp_core.SimulateResponse.errors":
 		value := x.Errors
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "sourcenetwork.acp_core.SimulateReponse.record":
+	case "sourcenetwork.acp_core.SimulateResponse.record":
 		value := x.Record
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "sourcenetwork.acp_core.SimulateReponse.result":
+	case "sourcenetwork.acp_core.SimulateResponse.result":
 		value := x.Result
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SimulateReponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SimulateResponse"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.SimulateReponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SimulateResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -5983,21 +5983,21 @@ func (x *fastReflection_SimulateReponse) Get(descriptor protoreflect.FieldDescri
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_SimulateReponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_SimulateResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.SimulateReponse.valid_data":
+	case "sourcenetwork.acp_core.SimulateResponse.valid_data":
 		x.ValidData = value.Bool()
-	case "sourcenetwork.acp_core.SimulateReponse.errors":
+	case "sourcenetwork.acp_core.SimulateResponse.errors":
 		x.Errors = value.Message().Interface().(*SandboxDataErrors)
-	case "sourcenetwork.acp_core.SimulateReponse.record":
+	case "sourcenetwork.acp_core.SimulateResponse.record":
 		x.Record = value.Message().Interface().(*SandboxRecord)
-	case "sourcenetwork.acp_core.SimulateReponse.result":
+	case "sourcenetwork.acp_core.SimulateResponse.result":
 		x.Result = value.Message().Interface().(*AnnotatedPolicyTheoremResult)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SimulateReponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SimulateResponse"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.SimulateReponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SimulateResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -6011,64 +6011,64 @@ func (x *fastReflection_SimulateReponse) Set(fd protoreflect.FieldDescriptor, va
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_SimulateReponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_SimulateResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.SimulateReponse.errors":
+	case "sourcenetwork.acp_core.SimulateResponse.errors":
 		if x.Errors == nil {
 			x.Errors = new(SandboxDataErrors)
 		}
 		return protoreflect.ValueOfMessage(x.Errors.ProtoReflect())
-	case "sourcenetwork.acp_core.SimulateReponse.record":
+	case "sourcenetwork.acp_core.SimulateResponse.record":
 		if x.Record == nil {
 			x.Record = new(SandboxRecord)
 		}
 		return protoreflect.ValueOfMessage(x.Record.ProtoReflect())
-	case "sourcenetwork.acp_core.SimulateReponse.result":
+	case "sourcenetwork.acp_core.SimulateResponse.result":
 		if x.Result == nil {
 			x.Result = new(AnnotatedPolicyTheoremResult)
 		}
 		return protoreflect.ValueOfMessage(x.Result.ProtoReflect())
-	case "sourcenetwork.acp_core.SimulateReponse.valid_data":
-		panic(fmt.Errorf("field valid_data of message sourcenetwork.acp_core.SimulateReponse is not mutable"))
+	case "sourcenetwork.acp_core.SimulateResponse.valid_data":
+		panic(fmt.Errorf("field valid_data of message sourcenetwork.acp_core.SimulateResponse is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SimulateReponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SimulateResponse"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.SimulateReponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SimulateResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_SimulateReponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_SimulateResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.SimulateReponse.valid_data":
+	case "sourcenetwork.acp_core.SimulateResponse.valid_data":
 		return protoreflect.ValueOfBool(false)
-	case "sourcenetwork.acp_core.SimulateReponse.errors":
+	case "sourcenetwork.acp_core.SimulateResponse.errors":
 		m := new(SandboxDataErrors)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "sourcenetwork.acp_core.SimulateReponse.record":
+	case "sourcenetwork.acp_core.SimulateResponse.record":
 		m := new(SandboxRecord)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "sourcenetwork.acp_core.SimulateReponse.result":
+	case "sourcenetwork.acp_core.SimulateResponse.result":
 		m := new(AnnotatedPolicyTheoremResult)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SimulateReponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SimulateResponse"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.SimulateReponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SimulateResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_SimulateReponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_SimulateResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.SimulateReponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.SimulateResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -6076,7 +6076,7 @@ func (x *fastReflection_SimulateReponse) WhichOneof(d protoreflect.OneofDescript
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_SimulateReponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_SimulateResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -6087,7 +6087,7 @@ func (x *fastReflection_SimulateReponse) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_SimulateReponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_SimulateResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -6099,7 +6099,7 @@ func (x *fastReflection_SimulateReponse) SetUnknown(fields protoreflect.RawField
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_SimulateReponse) IsValid() bool {
+func (x *fastReflection_SimulateResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -6109,9 +6109,9 @@ func (x *fastReflection_SimulateReponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_SimulateReponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_SimulateResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*SimulateReponse)
+		x := input.Message.Interface().(*SimulateResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6148,7 +6148,7 @@ func (x *fastReflection_SimulateReponse) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*SimulateReponse)
+		x := input.Message.Interface().(*SimulateResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6230,7 +6230,7 @@ func (x *fastReflection_SimulateReponse) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*SimulateReponse)
+		x := input.Message.Interface().(*SimulateResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -6262,10 +6262,10 @@ func (x *fastReflection_SimulateReponse) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: SimulateReponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: SimulateResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: SimulateReponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: SimulateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -7626,13 +7626,66 @@ func (x *fastReflection_GetSampleSandboxesRequest) ProtoMethods() *protoiface.Me
 	}
 }
 
+var _ protoreflect.List = (*_GetSampleSandboxesResponse_1_list)(nil)
+
+type _GetSampleSandboxesResponse_1_list struct {
+	list *[]*SandboxTemplate
+}
+
+func (x *_GetSampleSandboxesResponse_1_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_GetSampleSandboxesResponse_1_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_GetSampleSandboxesResponse_1_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*SandboxTemplate)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_GetSampleSandboxesResponse_1_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*SandboxTemplate)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_GetSampleSandboxesResponse_1_list) AppendMutable() protoreflect.Value {
+	v := new(SandboxTemplate)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GetSampleSandboxesResponse_1_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_GetSampleSandboxesResponse_1_list) NewElement() protoreflect.Value {
+	v := new(SandboxTemplate)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GetSampleSandboxesResponse_1_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
-	md_GetSampleSandboxesResponse protoreflect.MessageDescriptor
+	md_GetSampleSandboxesResponse         protoreflect.MessageDescriptor
+	fd_GetSampleSandboxesResponse_samples protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sourcenetwork_acp_core_playground_proto_init()
 	md_GetSampleSandboxesResponse = File_sourcenetwork_acp_core_playground_proto.Messages().ByName("GetSampleSandboxesResponse")
+	fd_GetSampleSandboxesResponse_samples = md_GetSampleSandboxesResponse.Fields().ByName("samples")
 }
 
 var _ protoreflect.Message = (*fastReflection_GetSampleSandboxesResponse)(nil)
@@ -7700,6 +7753,12 @@ func (x *fastReflection_GetSampleSandboxesResponse) Interface() protoreflect.Pro
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_GetSampleSandboxesResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if len(x.Samples) != 0 {
+		value := protoreflect.ValueOfList(&_GetSampleSandboxesResponse_1_list{list: &x.Samples})
+		if !f(fd_GetSampleSandboxesResponse_samples, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -7715,6 +7774,8 @@ func (x *fastReflection_GetSampleSandboxesResponse) Range(f func(protoreflect.Fi
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_GetSampleSandboxesResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
+	case "sourcenetwork.acp_core.GetSampleSandboxesResponse.samples":
+		return len(x.Samples) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSampleSandboxesResponse"))
@@ -7731,6 +7792,8 @@ func (x *fastReflection_GetSampleSandboxesResponse) Has(fd protoreflect.FieldDes
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_GetSampleSandboxesResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
+	case "sourcenetwork.acp_core.GetSampleSandboxesResponse.samples":
+		x.Samples = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSampleSandboxesResponse"))
@@ -7747,6 +7810,12 @@ func (x *fastReflection_GetSampleSandboxesResponse) Clear(fd protoreflect.FieldD
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_GetSampleSandboxesResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
+	case "sourcenetwork.acp_core.GetSampleSandboxesResponse.samples":
+		if len(x.Samples) == 0 {
+			return protoreflect.ValueOfList(&_GetSampleSandboxesResponse_1_list{})
+		}
+		listValue := &_GetSampleSandboxesResponse_1_list{list: &x.Samples}
+		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSampleSandboxesResponse"))
@@ -7767,6 +7836,10 @@ func (x *fastReflection_GetSampleSandboxesResponse) Get(descriptor protoreflect.
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_GetSampleSandboxesResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
+	case "sourcenetwork.acp_core.GetSampleSandboxesResponse.samples":
+		lv := value.List()
+		clv := lv.(*_GetSampleSandboxesResponse_1_list)
+		x.Samples = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSampleSandboxesResponse"))
@@ -7787,6 +7860,12 @@ func (x *fastReflection_GetSampleSandboxesResponse) Set(fd protoreflect.FieldDes
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_GetSampleSandboxesResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sourcenetwork.acp_core.GetSampleSandboxesResponse.samples":
+		if x.Samples == nil {
+			x.Samples = []*SandboxTemplate{}
+		}
+		value := &_GetSampleSandboxesResponse_1_list{list: &x.Samples}
+		return protoreflect.ValueOfList(value)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSampleSandboxesResponse"))
@@ -7800,6 +7879,9 @@ func (x *fastReflection_GetSampleSandboxesResponse) Mutable(fd protoreflect.Fiel
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_GetSampleSandboxesResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "sourcenetwork.acp_core.GetSampleSandboxesResponse.samples":
+		list := []*SandboxTemplate{}
+		return protoreflect.ValueOfList(&_GetSampleSandboxesResponse_1_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.GetSampleSandboxesResponse"))
@@ -7869,6 +7951,12 @@ func (x *fastReflection_GetSampleSandboxesResponse) ProtoMethods() *protoiface.M
 		var n int
 		var l int
 		_ = l
+		if len(x.Samples) > 0 {
+			for _, e := range x.Samples {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -7897,6 +7985,22 @@ func (x *fastReflection_GetSampleSandboxesResponse) ProtoMethods() *protoiface.M
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.Samples) > 0 {
+			for iNdEx := len(x.Samples) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.Samples[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0xa
+			}
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -7947,6 +8051,40 @@ func (x *fastReflection_GetSampleSandboxesResponse) ProtoMethods() *protoiface.M
 				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: GetSampleSandboxesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Samples", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Samples = append(x.Samples, &SandboxTemplate{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Samples[len(x.Samples)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -9942,6 +10080,2221 @@ func (x *fastReflection_GetSerializedStateResponse) ProtoMethods() *protoiface.M
 	}
 }
 
+var (
+	md_ExplainCheckRequest            protoreflect.MessageDescriptor
+	fd_ExplainCheckRequest_handle     protoreflect.FieldDescriptor
+	fd_ExplainCheckRequest_object     protoreflect.FieldDescriptor
+	fd_ExplainCheckRequest_permission protoreflect.FieldDescriptor
+	fd_ExplainCheckRequest_actor      protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_sourcenetwork_acp_core_playground_proto_init()
+	md_ExplainCheckRequest = File_sourcenetwork_acp_core_playground_proto.Messages().ByName("ExplainCheckRequest")
+	fd_ExplainCheckRequest_handle = md_ExplainCheckRequest.Fields().ByName("handle")
+	fd_ExplainCheckRequest_object = md_ExplainCheckRequest.Fields().ByName("object")
+	fd_ExplainCheckRequest_permission = md_ExplainCheckRequest.Fields().ByName("permission")
+	fd_ExplainCheckRequest_actor = md_ExplainCheckRequest.Fields().ByName("actor")
+}
+
+var _ protoreflect.Message = (*fastReflection_ExplainCheckRequest)(nil)
+
+type fastReflection_ExplainCheckRequest ExplainCheckRequest
+
+func (x *ExplainCheckRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_ExplainCheckRequest)(x)
+}
+
+func (x *ExplainCheckRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[22]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_ExplainCheckRequest_messageType fastReflection_ExplainCheckRequest_messageType
+var _ protoreflect.MessageType = fastReflection_ExplainCheckRequest_messageType{}
+
+type fastReflection_ExplainCheckRequest_messageType struct{}
+
+func (x fastReflection_ExplainCheckRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_ExplainCheckRequest)(nil)
+}
+func (x fastReflection_ExplainCheckRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_ExplainCheckRequest)
+}
+func (x fastReflection_ExplainCheckRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_ExplainCheckRequest
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_ExplainCheckRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_ExplainCheckRequest
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_ExplainCheckRequest) Type() protoreflect.MessageType {
+	return _fastReflection_ExplainCheckRequest_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_ExplainCheckRequest) New() protoreflect.Message {
+	return new(fastReflection_ExplainCheckRequest)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_ExplainCheckRequest) Interface() protoreflect.ProtoMessage {
+	return (*ExplainCheckRequest)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_ExplainCheckRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Handle != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Handle)
+		if !f(fd_ExplainCheckRequest_handle, value) {
+			return
+		}
+	}
+	if x.Object != nil {
+		value := protoreflect.ValueOfMessage(x.Object.ProtoReflect())
+		if !f(fd_ExplainCheckRequest_object, value) {
+			return
+		}
+	}
+	if x.Permission != "" {
+		value := protoreflect.ValueOfString(x.Permission)
+		if !f(fd_ExplainCheckRequest_permission, value) {
+			return
+		}
+	}
+	if x.Actor != nil {
+		value := protoreflect.ValueOfMessage(x.Actor.ProtoReflect())
+		if !f(fd_ExplainCheckRequest_actor, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_ExplainCheckRequest) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.ExplainCheckRequest.handle":
+		return x.Handle != uint64(0)
+	case "sourcenetwork.acp_core.ExplainCheckRequest.object":
+		return x.Object != nil
+	case "sourcenetwork.acp_core.ExplainCheckRequest.permission":
+		return x.Permission != ""
+	case "sourcenetwork.acp_core.ExplainCheckRequest.actor":
+		return x.Actor != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_ExplainCheckRequest) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.ExplainCheckRequest.handle":
+		x.Handle = uint64(0)
+	case "sourcenetwork.acp_core.ExplainCheckRequest.object":
+		x.Object = nil
+	case "sourcenetwork.acp_core.ExplainCheckRequest.permission":
+		x.Permission = ""
+	case "sourcenetwork.acp_core.ExplainCheckRequest.actor":
+		x.Actor = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_ExplainCheckRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "sourcenetwork.acp_core.ExplainCheckRequest.handle":
+		value := x.Handle
+		return protoreflect.ValueOfUint64(value)
+	case "sourcenetwork.acp_core.ExplainCheckRequest.object":
+		value := x.Object
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "sourcenetwork.acp_core.ExplainCheckRequest.permission":
+		value := x.Permission
+		return protoreflect.ValueOfString(value)
+	case "sourcenetwork.acp_core.ExplainCheckRequest.actor":
+		value := x.Actor
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckRequest does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_ExplainCheckRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.ExplainCheckRequest.handle":
+		x.Handle = value.Uint()
+	case "sourcenetwork.acp_core.ExplainCheckRequest.object":
+		x.Object = value.Message().Interface().(*Object)
+	case "sourcenetwork.acp_core.ExplainCheckRequest.permission":
+		x.Permission = value.Interface().(string)
+	case "sourcenetwork.acp_core.ExplainCheckRequest.actor":
+		x.Actor = value.Message().Interface().(*Actor)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_ExplainCheckRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.ExplainCheckRequest.object":
+		if x.Object == nil {
+			x.Object = new(Object)
+		}
+		return protoreflect.ValueOfMessage(x.Object.ProtoReflect())
+	case "sourcenetwork.acp_core.ExplainCheckRequest.actor":
+		if x.Actor == nil {
+			x.Actor = new(Actor)
+		}
+		return protoreflect.ValueOfMessage(x.Actor.ProtoReflect())
+	case "sourcenetwork.acp_core.ExplainCheckRequest.handle":
+		panic(fmt.Errorf("field handle of message sourcenetwork.acp_core.ExplainCheckRequest is not mutable"))
+	case "sourcenetwork.acp_core.ExplainCheckRequest.permission":
+		panic(fmt.Errorf("field permission of message sourcenetwork.acp_core.ExplainCheckRequest is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_ExplainCheckRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.ExplainCheckRequest.handle":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "sourcenetwork.acp_core.ExplainCheckRequest.object":
+		m := new(Object)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "sourcenetwork.acp_core.ExplainCheckRequest.permission":
+		return protoreflect.ValueOfString("")
+	case "sourcenetwork.acp_core.ExplainCheckRequest.actor":
+		m := new(Actor)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_ExplainCheckRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.ExplainCheckRequest", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_ExplainCheckRequest) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_ExplainCheckRequest) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_ExplainCheckRequest) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_ExplainCheckRequest) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*ExplainCheckRequest)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.Handle != 0 {
+			n += 1 + runtime.Sov(uint64(x.Handle))
+		}
+		if x.Object != nil {
+			l = options.Size(x.Object)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.Permission)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.Actor != nil {
+			l = options.Size(x.Actor)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*ExplainCheckRequest)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Actor != nil {
+			encoded, err := options.Marshal(x.Actor)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x22
+		}
+		if len(x.Permission) > 0 {
+			i -= len(x.Permission)
+			copy(dAtA[i:], x.Permission)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Permission)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if x.Object != nil {
+			encoded, err := options.Marshal(x.Object)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if x.Handle != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Handle))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*ExplainCheckRequest)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ExplainCheckRequest: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ExplainCheckRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Handle", wireType)
+				}
+				x.Handle = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Handle |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Object", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Object == nil {
+					x.Object = &Object{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Object); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Permission", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Permission = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Actor", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Actor == nil {
+					x.Actor = &Actor{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Actor); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_ExplainCheckResponse            protoreflect.MessageDescriptor
+	fd_ExplainCheckResponse_authorized protoreflect.FieldDescriptor
+	fd_ExplainCheckResponse_graph      protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_sourcenetwork_acp_core_playground_proto_init()
+	md_ExplainCheckResponse = File_sourcenetwork_acp_core_playground_proto.Messages().ByName("ExplainCheckResponse")
+	fd_ExplainCheckResponse_authorized = md_ExplainCheckResponse.Fields().ByName("authorized")
+	fd_ExplainCheckResponse_graph = md_ExplainCheckResponse.Fields().ByName("graph")
+}
+
+var _ protoreflect.Message = (*fastReflection_ExplainCheckResponse)(nil)
+
+type fastReflection_ExplainCheckResponse ExplainCheckResponse
+
+func (x *ExplainCheckResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_ExplainCheckResponse)(x)
+}
+
+func (x *ExplainCheckResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[23]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_ExplainCheckResponse_messageType fastReflection_ExplainCheckResponse_messageType
+var _ protoreflect.MessageType = fastReflection_ExplainCheckResponse_messageType{}
+
+type fastReflection_ExplainCheckResponse_messageType struct{}
+
+func (x fastReflection_ExplainCheckResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_ExplainCheckResponse)(nil)
+}
+func (x fastReflection_ExplainCheckResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_ExplainCheckResponse)
+}
+func (x fastReflection_ExplainCheckResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_ExplainCheckResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_ExplainCheckResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_ExplainCheckResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_ExplainCheckResponse) Type() protoreflect.MessageType {
+	return _fastReflection_ExplainCheckResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_ExplainCheckResponse) New() protoreflect.Message {
+	return new(fastReflection_ExplainCheckResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_ExplainCheckResponse) Interface() protoreflect.ProtoMessage {
+	return (*ExplainCheckResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_ExplainCheckResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Authorized != false {
+		value := protoreflect.ValueOfBool(x.Authorized)
+		if !f(fd_ExplainCheckResponse_authorized, value) {
+			return
+		}
+	}
+	if x.Graph != nil {
+		value := protoreflect.ValueOfMessage(x.Graph.ProtoReflect())
+		if !f(fd_ExplainCheckResponse_graph, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_ExplainCheckResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.ExplainCheckResponse.authorized":
+		return x.Authorized != false
+	case "sourcenetwork.acp_core.ExplainCheckResponse.graph":
+		return x.Graph != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_ExplainCheckResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.ExplainCheckResponse.authorized":
+		x.Authorized = false
+	case "sourcenetwork.acp_core.ExplainCheckResponse.graph":
+		x.Graph = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_ExplainCheckResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "sourcenetwork.acp_core.ExplainCheckResponse.authorized":
+		value := x.Authorized
+		return protoreflect.ValueOfBool(value)
+	case "sourcenetwork.acp_core.ExplainCheckResponse.graph":
+		value := x.Graph
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_ExplainCheckResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.ExplainCheckResponse.authorized":
+		x.Authorized = value.Bool()
+	case "sourcenetwork.acp_core.ExplainCheckResponse.graph":
+		x.Graph = value.Message().Interface().(*CheckExplainGraph)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_ExplainCheckResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.ExplainCheckResponse.graph":
+		if x.Graph == nil {
+			x.Graph = new(CheckExplainGraph)
+		}
+		return protoreflect.ValueOfMessage(x.Graph.ProtoReflect())
+	case "sourcenetwork.acp_core.ExplainCheckResponse.authorized":
+		panic(fmt.Errorf("field authorized of message sourcenetwork.acp_core.ExplainCheckResponse is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_ExplainCheckResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.ExplainCheckResponse.authorized":
+		return protoreflect.ValueOfBool(false)
+	case "sourcenetwork.acp_core.ExplainCheckResponse.graph":
+		m := new(CheckExplainGraph)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ExplainCheckResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ExplainCheckResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_ExplainCheckResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.ExplainCheckResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_ExplainCheckResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_ExplainCheckResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_ExplainCheckResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_ExplainCheckResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*ExplainCheckResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.Authorized {
+			n += 2
+		}
+		if x.Graph != nil {
+			l = options.Size(x.Graph)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*ExplainCheckResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Graph != nil {
+			encoded, err := options.Marshal(x.Graph)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if x.Authorized {
+			i--
+			if x.Authorized {
+				dAtA[i] = 1
+			} else {
+				dAtA[i] = 0
+			}
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*ExplainCheckResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ExplainCheckResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ExplainCheckResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Authorized", wireType)
+				}
+				var v int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				x.Authorized = bool(v != 0)
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Graph", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Graph == nil {
+					x.Graph = &CheckExplainGraph{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Graph); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_DOTExplainCheckRequest            protoreflect.MessageDescriptor
+	fd_DOTExplainCheckRequest_handle     protoreflect.FieldDescriptor
+	fd_DOTExplainCheckRequest_object     protoreflect.FieldDescriptor
+	fd_DOTExplainCheckRequest_permission protoreflect.FieldDescriptor
+	fd_DOTExplainCheckRequest_actor      protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_sourcenetwork_acp_core_playground_proto_init()
+	md_DOTExplainCheckRequest = File_sourcenetwork_acp_core_playground_proto.Messages().ByName("DOTExplainCheckRequest")
+	fd_DOTExplainCheckRequest_handle = md_DOTExplainCheckRequest.Fields().ByName("handle")
+	fd_DOTExplainCheckRequest_object = md_DOTExplainCheckRequest.Fields().ByName("object")
+	fd_DOTExplainCheckRequest_permission = md_DOTExplainCheckRequest.Fields().ByName("permission")
+	fd_DOTExplainCheckRequest_actor = md_DOTExplainCheckRequest.Fields().ByName("actor")
+}
+
+var _ protoreflect.Message = (*fastReflection_DOTExplainCheckRequest)(nil)
+
+type fastReflection_DOTExplainCheckRequest DOTExplainCheckRequest
+
+func (x *DOTExplainCheckRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_DOTExplainCheckRequest)(x)
+}
+
+func (x *DOTExplainCheckRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[24]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_DOTExplainCheckRequest_messageType fastReflection_DOTExplainCheckRequest_messageType
+var _ protoreflect.MessageType = fastReflection_DOTExplainCheckRequest_messageType{}
+
+type fastReflection_DOTExplainCheckRequest_messageType struct{}
+
+func (x fastReflection_DOTExplainCheckRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_DOTExplainCheckRequest)(nil)
+}
+func (x fastReflection_DOTExplainCheckRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_DOTExplainCheckRequest)
+}
+func (x fastReflection_DOTExplainCheckRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_DOTExplainCheckRequest
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_DOTExplainCheckRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_DOTExplainCheckRequest
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_DOTExplainCheckRequest) Type() protoreflect.MessageType {
+	return _fastReflection_DOTExplainCheckRequest_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_DOTExplainCheckRequest) New() protoreflect.Message {
+	return new(fastReflection_DOTExplainCheckRequest)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_DOTExplainCheckRequest) Interface() protoreflect.ProtoMessage {
+	return (*DOTExplainCheckRequest)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_DOTExplainCheckRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Handle != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Handle)
+		if !f(fd_DOTExplainCheckRequest_handle, value) {
+			return
+		}
+	}
+	if x.Object != nil {
+		value := protoreflect.ValueOfMessage(x.Object.ProtoReflect())
+		if !f(fd_DOTExplainCheckRequest_object, value) {
+			return
+		}
+	}
+	if x.Permission != "" {
+		value := protoreflect.ValueOfString(x.Permission)
+		if !f(fd_DOTExplainCheckRequest_permission, value) {
+			return
+		}
+	}
+	if x.Actor != nil {
+		value := protoreflect.ValueOfMessage(x.Actor.ProtoReflect())
+		if !f(fd_DOTExplainCheckRequest_actor, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_DOTExplainCheckRequest) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.handle":
+		return x.Handle != uint64(0)
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.object":
+		return x.Object != nil
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.permission":
+		return x.Permission != ""
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.actor":
+		return x.Actor != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DOTExplainCheckRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.DOTExplainCheckRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_DOTExplainCheckRequest) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.handle":
+		x.Handle = uint64(0)
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.object":
+		x.Object = nil
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.permission":
+		x.Permission = ""
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.actor":
+		x.Actor = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DOTExplainCheckRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.DOTExplainCheckRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_DOTExplainCheckRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.handle":
+		value := x.Handle
+		return protoreflect.ValueOfUint64(value)
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.object":
+		value := x.Object
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.permission":
+		value := x.Permission
+		return protoreflect.ValueOfString(value)
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.actor":
+		value := x.Actor
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DOTExplainCheckRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.DOTExplainCheckRequest does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_DOTExplainCheckRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.handle":
+		x.Handle = value.Uint()
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.object":
+		x.Object = value.Message().Interface().(*Object)
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.permission":
+		x.Permission = value.Interface().(string)
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.actor":
+		x.Actor = value.Message().Interface().(*Actor)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DOTExplainCheckRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.DOTExplainCheckRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_DOTExplainCheckRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.object":
+		if x.Object == nil {
+			x.Object = new(Object)
+		}
+		return protoreflect.ValueOfMessage(x.Object.ProtoReflect())
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.actor":
+		if x.Actor == nil {
+			x.Actor = new(Actor)
+		}
+		return protoreflect.ValueOfMessage(x.Actor.ProtoReflect())
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.handle":
+		panic(fmt.Errorf("field handle of message sourcenetwork.acp_core.DOTExplainCheckRequest is not mutable"))
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.permission":
+		panic(fmt.Errorf("field permission of message sourcenetwork.acp_core.DOTExplainCheckRequest is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DOTExplainCheckRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.DOTExplainCheckRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_DOTExplainCheckRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.handle":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.object":
+		m := new(Object)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.permission":
+		return protoreflect.ValueOfString("")
+	case "sourcenetwork.acp_core.DOTExplainCheckRequest.actor":
+		m := new(Actor)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DOTExplainCheckRequest"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.DOTExplainCheckRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_DOTExplainCheckRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.DOTExplainCheckRequest", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_DOTExplainCheckRequest) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_DOTExplainCheckRequest) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_DOTExplainCheckRequest) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_DOTExplainCheckRequest) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*DOTExplainCheckRequest)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.Handle != 0 {
+			n += 1 + runtime.Sov(uint64(x.Handle))
+		}
+		if x.Object != nil {
+			l = options.Size(x.Object)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.Permission)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.Actor != nil {
+			l = options.Size(x.Actor)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*DOTExplainCheckRequest)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Actor != nil {
+			encoded, err := options.Marshal(x.Actor)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x22
+		}
+		if len(x.Permission) > 0 {
+			i -= len(x.Permission)
+			copy(dAtA[i:], x.Permission)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Permission)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if x.Object != nil {
+			encoded, err := options.Marshal(x.Object)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if x.Handle != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Handle))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*DOTExplainCheckRequest)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DOTExplainCheckRequest: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DOTExplainCheckRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Handle", wireType)
+				}
+				x.Handle = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Handle |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Object", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Object == nil {
+					x.Object = &Object{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Object); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Permission", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Permission = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Actor", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Actor == nil {
+					x.Actor = &Actor{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Actor); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_DOTExplainCheckResponse            protoreflect.MessageDescriptor
+	fd_DOTExplainCheckResponse_authorized protoreflect.FieldDescriptor
+	fd_DOTExplainCheckResponse_dot_graph  protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_sourcenetwork_acp_core_playground_proto_init()
+	md_DOTExplainCheckResponse = File_sourcenetwork_acp_core_playground_proto.Messages().ByName("DOTExplainCheckResponse")
+	fd_DOTExplainCheckResponse_authorized = md_DOTExplainCheckResponse.Fields().ByName("authorized")
+	fd_DOTExplainCheckResponse_dot_graph = md_DOTExplainCheckResponse.Fields().ByName("dot_graph")
+}
+
+var _ protoreflect.Message = (*fastReflection_DOTExplainCheckResponse)(nil)
+
+type fastReflection_DOTExplainCheckResponse DOTExplainCheckResponse
+
+func (x *DOTExplainCheckResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_DOTExplainCheckResponse)(x)
+}
+
+func (x *DOTExplainCheckResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[25]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_DOTExplainCheckResponse_messageType fastReflection_DOTExplainCheckResponse_messageType
+var _ protoreflect.MessageType = fastReflection_DOTExplainCheckResponse_messageType{}
+
+type fastReflection_DOTExplainCheckResponse_messageType struct{}
+
+func (x fastReflection_DOTExplainCheckResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_DOTExplainCheckResponse)(nil)
+}
+func (x fastReflection_DOTExplainCheckResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_DOTExplainCheckResponse)
+}
+func (x fastReflection_DOTExplainCheckResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_DOTExplainCheckResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_DOTExplainCheckResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_DOTExplainCheckResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_DOTExplainCheckResponse) Type() protoreflect.MessageType {
+	return _fastReflection_DOTExplainCheckResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_DOTExplainCheckResponse) New() protoreflect.Message {
+	return new(fastReflection_DOTExplainCheckResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_DOTExplainCheckResponse) Interface() protoreflect.ProtoMessage {
+	return (*DOTExplainCheckResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_DOTExplainCheckResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Authorized != false {
+		value := protoreflect.ValueOfBool(x.Authorized)
+		if !f(fd_DOTExplainCheckResponse_authorized, value) {
+			return
+		}
+	}
+	if x.DotGraph != "" {
+		value := protoreflect.ValueOfString(x.DotGraph)
+		if !f(fd_DOTExplainCheckResponse_dot_graph, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_DOTExplainCheckResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.DOTExplainCheckResponse.authorized":
+		return x.Authorized != false
+	case "sourcenetwork.acp_core.DOTExplainCheckResponse.dot_graph":
+		return x.DotGraph != ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DOTExplainCheckResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.DOTExplainCheckResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_DOTExplainCheckResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.DOTExplainCheckResponse.authorized":
+		x.Authorized = false
+	case "sourcenetwork.acp_core.DOTExplainCheckResponse.dot_graph":
+		x.DotGraph = ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DOTExplainCheckResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.DOTExplainCheckResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_DOTExplainCheckResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "sourcenetwork.acp_core.DOTExplainCheckResponse.authorized":
+		value := x.Authorized
+		return protoreflect.ValueOfBool(value)
+	case "sourcenetwork.acp_core.DOTExplainCheckResponse.dot_graph":
+		value := x.DotGraph
+		return protoreflect.ValueOfString(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DOTExplainCheckResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.DOTExplainCheckResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_DOTExplainCheckResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.DOTExplainCheckResponse.authorized":
+		x.Authorized = value.Bool()
+	case "sourcenetwork.acp_core.DOTExplainCheckResponse.dot_graph":
+		x.DotGraph = value.Interface().(string)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DOTExplainCheckResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.DOTExplainCheckResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_DOTExplainCheckResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.DOTExplainCheckResponse.authorized":
+		panic(fmt.Errorf("field authorized of message sourcenetwork.acp_core.DOTExplainCheckResponse is not mutable"))
+	case "sourcenetwork.acp_core.DOTExplainCheckResponse.dot_graph":
+		panic(fmt.Errorf("field dot_graph of message sourcenetwork.acp_core.DOTExplainCheckResponse is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DOTExplainCheckResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.DOTExplainCheckResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_DOTExplainCheckResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "sourcenetwork.acp_core.DOTExplainCheckResponse.authorized":
+		return protoreflect.ValueOfBool(false)
+	case "sourcenetwork.acp_core.DOTExplainCheckResponse.dot_graph":
+		return protoreflect.ValueOfString("")
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DOTExplainCheckResponse"))
+		}
+		panic(fmt.Errorf("message sourcenetwork.acp_core.DOTExplainCheckResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_DOTExplainCheckResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.DOTExplainCheckResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_DOTExplainCheckResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_DOTExplainCheckResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_DOTExplainCheckResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_DOTExplainCheckResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*DOTExplainCheckResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.Authorized {
+			n += 2
+		}
+		l = len(x.DotGraph)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*DOTExplainCheckResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.DotGraph) > 0 {
+			i -= len(x.DotGraph)
+			copy(dAtA[i:], x.DotGraph)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DotGraph)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if x.Authorized {
+			i--
+			if x.Authorized {
+				dAtA[i] = 1
+			} else {
+				dAtA[i] = 0
+			}
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*DOTExplainCheckResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DOTExplainCheckResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DOTExplainCheckResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Authorized", wireType)
+				}
+				var v int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				x.Authorized = bool(v != 0)
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DotGraph", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.DotGraph = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
 // Code generated by protoc-gen-go. DO NOT EDIT.
 // versions:
 // 	protoc-gen-go v1.27.0
@@ -10498,7 +12851,7 @@ func (x *SimulateRequest) GetData() *SandboxData {
 	return nil
 }
 
-type SimulateReponse struct {
+type SimulateResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -10513,8 +12866,8 @@ type SimulateReponse struct {
 	Result *AnnotatedPolicyTheoremResult `protobuf:"bytes,4,opt,name=result,proto3" json:"result,omitempty"`
 }
 
-func (x *SimulateReponse) Reset() {
-	*x = SimulateReponse{}
+func (x *SimulateResponse) Reset() {
+	*x = SimulateResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -10522,39 +12875,39 @@ func (x *SimulateReponse) Reset() {
 	}
 }
 
-func (x *SimulateReponse) String() string {
+func (x *SimulateResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SimulateReponse) ProtoMessage() {}
+func (*SimulateResponse) ProtoMessage() {}
 
-// Deprecated: Use SimulateReponse.ProtoReflect.Descriptor instead.
-func (*SimulateReponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use SimulateResponse.ProtoReflect.Descriptor instead.
+func (*SimulateResponse) Descriptor() ([]byte, []int) {
 	return file_sourcenetwork_acp_core_playground_proto_rawDescGZIP(), []int{13}
 }
 
-func (x *SimulateReponse) GetValidData() bool {
+func (x *SimulateResponse) GetValidData() bool {
 	if x != nil {
 		return x.ValidData
 	}
 	return false
 }
 
-func (x *SimulateReponse) GetErrors() *SandboxDataErrors {
+func (x *SimulateResponse) GetErrors() *SandboxDataErrors {
 	if x != nil {
 		return x.Errors
 	}
 	return nil
 }
 
-func (x *SimulateReponse) GetRecord() *SandboxRecord {
+func (x *SimulateResponse) GetRecord() *SandboxRecord {
 	if x != nil {
 		return x.Record
 	}
 	return nil
 }
 
-func (x *SimulateReponse) GetResult() *AnnotatedPolicyTheoremResult {
+func (x *SimulateResponse) GetResult() *AnnotatedPolicyTheoremResult {
 	if x != nil {
 		return x.Result
 	}
@@ -10663,6 +13016,8 @@ type GetSampleSandboxesResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	Samples []*SandboxTemplate `protobuf:"bytes,1,rep,name=samples,proto3" json:"samples,omitempty"`
 }
 
 func (x *GetSampleSandboxesResponse) Reset() {
@@ -10683,6 +13038,13 @@ func (*GetSampleSandboxesResponse) ProtoMessage() {}
 // Deprecated: Use GetSampleSandboxesResponse.ProtoReflect.Descriptor instead.
 func (*GetSampleSandboxesResponse) Descriptor() ([]byte, []int) {
 	return file_sourcenetwork_acp_core_playground_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *GetSampleSandboxesResponse) GetSamples() []*SandboxTemplate {
+	if x != nil {
+		return x.Samples
+	}
+	return nil
 }
 
 type SetSerializedStateRequest struct {
@@ -10870,6 +13232,210 @@ func (x *GetSerializedStateResponse) GetData() []byte {
 	return nil
 }
 
+type ExplainCheckRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Handle     uint64  `protobuf:"varint,1,opt,name=handle,proto3" json:"handle,omitempty"`
+	Object     *Object `protobuf:"bytes,2,opt,name=object,proto3" json:"object,omitempty"`
+	Permission string  `protobuf:"bytes,3,opt,name=permission,proto3" json:"permission,omitempty"`
+	Actor      *Actor  `protobuf:"bytes,4,opt,name=actor,proto3" json:"actor,omitempty"`
+}
+
+func (x *ExplainCheckRequest) Reset() {
+	*x = ExplainCheckRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[22]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ExplainCheckRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ExplainCheckRequest) ProtoMessage() {}
+
+// Deprecated: Use ExplainCheckRequest.ProtoReflect.Descriptor instead.
+func (*ExplainCheckRequest) Descriptor() ([]byte, []int) {
+	return file_sourcenetwork_acp_core_playground_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *ExplainCheckRequest) GetHandle() uint64 {
+	if x != nil {
+		return x.Handle
+	}
+	return 0
+}
+
+func (x *ExplainCheckRequest) GetObject() *Object {
+	if x != nil {
+		return x.Object
+	}
+	return nil
+}
+
+func (x *ExplainCheckRequest) GetPermission() string {
+	if x != nil {
+		return x.Permission
+	}
+	return ""
+}
+
+func (x *ExplainCheckRequest) GetActor() *Actor {
+	if x != nil {
+		return x.Actor
+	}
+	return nil
+}
+
+type ExplainCheckResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Authorized bool               `protobuf:"varint,1,opt,name=authorized,proto3" json:"authorized,omitempty"`
+	Graph      *CheckExplainGraph `protobuf:"bytes,2,opt,name=graph,proto3" json:"graph,omitempty"`
+}
+
+func (x *ExplainCheckResponse) Reset() {
+	*x = ExplainCheckResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[23]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ExplainCheckResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ExplainCheckResponse) ProtoMessage() {}
+
+// Deprecated: Use ExplainCheckResponse.ProtoReflect.Descriptor instead.
+func (*ExplainCheckResponse) Descriptor() ([]byte, []int) {
+	return file_sourcenetwork_acp_core_playground_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *ExplainCheckResponse) GetAuthorized() bool {
+	if x != nil {
+		return x.Authorized
+	}
+	return false
+}
+
+func (x *ExplainCheckResponse) GetGraph() *CheckExplainGraph {
+	if x != nil {
+		return x.Graph
+	}
+	return nil
+}
+
+type DOTExplainCheckRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Handle     uint64  `protobuf:"varint,1,opt,name=handle,proto3" json:"handle,omitempty"`
+	Object     *Object `protobuf:"bytes,2,opt,name=object,proto3" json:"object,omitempty"`
+	Permission string  `protobuf:"bytes,3,opt,name=permission,proto3" json:"permission,omitempty"`
+	Actor      *Actor  `protobuf:"bytes,4,opt,name=actor,proto3" json:"actor,omitempty"`
+}
+
+func (x *DOTExplainCheckRequest) Reset() {
+	*x = DOTExplainCheckRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[24]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DOTExplainCheckRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DOTExplainCheckRequest) ProtoMessage() {}
+
+// Deprecated: Use DOTExplainCheckRequest.ProtoReflect.Descriptor instead.
+func (*DOTExplainCheckRequest) Descriptor() ([]byte, []int) {
+	return file_sourcenetwork_acp_core_playground_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *DOTExplainCheckRequest) GetHandle() uint64 {
+	if x != nil {
+		return x.Handle
+	}
+	return 0
+}
+
+func (x *DOTExplainCheckRequest) GetObject() *Object {
+	if x != nil {
+		return x.Object
+	}
+	return nil
+}
+
+func (x *DOTExplainCheckRequest) GetPermission() string {
+	if x != nil {
+		return x.Permission
+	}
+	return ""
+}
+
+func (x *DOTExplainCheckRequest) GetActor() *Actor {
+	if x != nil {
+		return x.Actor
+	}
+	return nil
+}
+
+type DOTExplainCheckResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Authorized bool   `protobuf:"varint,1,opt,name=authorized,proto3" json:"authorized,omitempty"`
+	DotGraph   string `protobuf:"bytes,2,opt,name=dot_graph,json=dotGraph,proto3" json:"dot_graph,omitempty"`
+}
+
+func (x *DOTExplainCheckResponse) Reset() {
+	*x = DOTExplainCheckResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_sourcenetwork_acp_core_playground_proto_msgTypes[25]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DOTExplainCheckResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DOTExplainCheckResponse) ProtoMessage() {}
+
+// Deprecated: Use DOTExplainCheckResponse.ProtoReflect.Descriptor instead.
+func (*DOTExplainCheckResponse) Descriptor() ([]byte, []int) {
+	return file_sourcenetwork_acp_core_playground_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *DOTExplainCheckResponse) GetAuthorized() bool {
+	if x != nil {
+		return x.Authorized
+	}
+	return false
+}
+
+func (x *DOTExplainCheckResponse) GetDotGraph() string {
+	if x != nil {
+		return x.DotGraph
+	}
+	return ""
+}
+
 var File_sourcenetwork_acp_core_playground_proto protoreflect.FileDescriptor
 
 var file_sourcenetwork_acp_core_playground_proto_rawDesc = []byte{
@@ -10884,195 +13450,263 @@ var file_sourcenetwork_acp_core_playground_proto_rawDesc = []byte{
 	0x65, 0x2f, 0x73, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a,
 	0x24, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61,
 	0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x74, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x2e,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x49, 0x0a, 0x11, 0x4e, 0x65, 0x77, 0x53, 0x61, 0x6e, 0x64,
-	0x62, 0x6f, 0x78, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61,
-	0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x20,
-	0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e,
-	0x22, 0x53, 0x0a, 0x12, 0x4e, 0x65, 0x77, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3d, 0x0a, 0x06, 0x72, 0x65, 0x63, 0x6f, 0x72, 0x64,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e,
-	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e,
-	0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x52, 0x06, 0x72,
-	0x65, 0x63, 0x6f, 0x72, 0x64, 0x22, 0x62, 0x0a, 0x0f, 0x53, 0x65, 0x74, 0x53, 0x74, 0x61, 0x74,
-	0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x68, 0x61, 0x6e, 0x64,
-	0x6c, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65,
-	0x12, 0x37, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23,
-	0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61,
-	0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x44,
-	0x61, 0x74, 0x61, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0xa4, 0x01, 0x0a, 0x10, 0x53, 0x65,
-	0x74, 0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e,
-	0x0a, 0x02, 0x6f, 0x6b, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x02, 0x6f, 0x6b, 0x12, 0x41,
-	0x0a, 0x06, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x29,
-	0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61,
-	0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x44,
-	0x61, 0x74, 0x61, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x73, 0x52, 0x06, 0x65, 0x72, 0x72, 0x6f, 0x72,
-	0x73, 0x12, 0x3d, 0x0a, 0x06, 0x72, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x25, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
-	0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x61, 0x6e, 0x64, 0x62,
-	0x6f, 0x78, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x52, 0x06, 0x72, 0x65, 0x63, 0x6f, 0x72, 0x64,
-	0x22, 0x2d, 0x0a, 0x13, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x75, 0x65,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c,
-	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x22,
-	0x5d, 0x0a, 0x14, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x75, 0x65, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x45, 0x0a, 0x09, 0x63, 0x61, 0x74, 0x61, 0x6c,
-	0x6f, 0x67, 0x75, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x73, 0x6f, 0x75,
-	0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63,
-	0x6f, 0x72, 0x65, 0x2e, 0x50, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f,
-	0x67, 0x75, 0x65, 0x52, 0x09, 0x63, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x75, 0x65, 0x22, 0x2f,
-	0x0a, 0x15, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c,
-	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x22,
-	0x66, 0x0a, 0x16, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d,
-	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4c, 0x0a, 0x06, 0x72, 0x65, 0x73,
-	0x75, 0x6c, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x34, 0x2e, 0x73, 0x6f, 0x75, 0x72,
-	0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f,
-	0x72, 0x65, 0x2e, 0x41, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x65, 0x64, 0x50, 0x6f, 0x6c, 0x69,
-	0x63, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52,
-	0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x16, 0x0a, 0x14, 0x4c, 0x69, 0x73, 0x74, 0x53,
-	0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22,
-	0x58, 0x0a, 0x15, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65, 0x73,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3f, 0x0a, 0x07, 0x72, 0x65, 0x63, 0x6f,
-	0x72, 0x64, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x73, 0x6f, 0x75, 0x72,
-	0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f,
-	0x72, 0x65, 0x2e, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64,
-	0x52, 0x07, 0x72, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x73, 0x22, 0x32, 0x0a, 0x18, 0x52, 0x65, 0x73,
-	0x74, 0x6f, 0x72, 0x65, 0x53, 0x63, 0x72, 0x61, 0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x22, 0x60, 0x0a,
-	0x19, 0x52, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x53, 0x63, 0x72, 0x61, 0x74, 0x63, 0x68, 0x70,
-	0x61, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x43, 0x0a, 0x0a, 0x73, 0x63,
-	0x72, 0x61, 0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23,
-	0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61,
-	0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x44,
-	0x61, 0x74, 0x61, 0x52, 0x0a, 0x73, 0x63, 0x72, 0x61, 0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x22,
-	0x4a, 0x0a, 0x0f, 0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x12, 0x37, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x23, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b,
-	0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f,
-	0x78, 0x44, 0x61, 0x74, 0x61, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0x80, 0x02, 0x0a, 0x0f,
-	0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
-	0x1d, 0x0a, 0x0a, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x08, 0x52, 0x09, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x44, 0x61, 0x74, 0x61, 0x12, 0x41,
-	0x0a, 0x06, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x29,
-	0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61,
-	0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x44,
-	0x61, 0x74, 0x61, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x73, 0x52, 0x06, 0x65, 0x72, 0x72, 0x6f, 0x72,
-	0x73, 0x12, 0x3d, 0x0a, 0x06, 0x72, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x25, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
-	0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x61, 0x6e, 0x64, 0x62,
-	0x6f, 0x78, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x52, 0x06, 0x72, 0x65, 0x63, 0x6f, 0x72, 0x64,
-	0x12, 0x4c, 0x0a, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x2a, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
+	0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x63, 0x68,
+	0x65, 0x63, 0x6b, 0x5f, 0x65, 0x78, 0x70, 0x6c, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x1a, 0x29, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b,
+	0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x73, 0x68, 0x69, 0x70, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x49, 0x0a, 0x11,
+	0x4e, 0x65, 0x77, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x20, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70,
+	0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63,
+	0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x53, 0x0a, 0x12, 0x4e, 0x65, 0x77, 0x53, 0x61,
+	0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3d, 0x0a,
+	0x06, 0x72, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e,
+	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63,
+	0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65,
+	0x63, 0x6f, 0x72, 0x64, 0x52, 0x06, 0x72, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x22, 0x62, 0x0a, 0x0f,
+	0x53, 0x65, 0x74, 0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
+	0x16, 0x0a, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52,
+	0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x12, 0x37, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65,
+	0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53,
+	0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x44, 0x61, 0x74, 0x61, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61,
+	0x22, 0xa4, 0x01, 0x0a, 0x10, 0x53, 0x65, 0x74, 0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x6f, 0x6b, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x08, 0x52, 0x02, 0x6f, 0x6b, 0x12, 0x41, 0x0a, 0x06, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x73, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65,
+	0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53,
+	0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x44, 0x61, 0x74, 0x61, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x73,
+	0x52, 0x06, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x73, 0x12, 0x3d, 0x0a, 0x06, 0x72, 0x65, 0x63, 0x6f,
+	0x72, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63,
+	0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72,
+	0x65, 0x2e, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x52,
+	0x06, 0x72, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x22, 0x2d, 0x0a, 0x13, 0x47, 0x65, 0x74, 0x43, 0x61,
+	0x74, 0x61, 0x6c, 0x6f, 0x67, 0x75, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16,
+	0x0a, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06,
+	0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x22, 0x5d, 0x0a, 0x14, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74,
+	0x61, 0x6c, 0x6f, 0x67, 0x75, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x45,
+	0x0a, 0x09, 0x63, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x75, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x27, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
+	0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x50, 0x6f, 0x6c, 0x69, 0x63,
+	0x79, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x75, 0x65, 0x52, 0x09, 0x63, 0x61, 0x74, 0x61,
+	0x6c, 0x6f, 0x67, 0x75, 0x65, 0x22, 0x2f, 0x0a, 0x15, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x54,
+	0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16,
+	0x0a, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06,
+	0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x22, 0x66, 0x0a, 0x16, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79,
+	0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x4c, 0x0a, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b,
 	0x32, 0x34, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b,
 	0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x41, 0x6e, 0x6e, 0x6f, 0x74, 0x61,
 	0x74, 0x65, 0x64, 0x50, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d,
-	0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x2b,
-	0x0a, 0x11, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x04, 0x52, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x22, 0x53, 0x0a, 0x12, 0x47,
-	0x65, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x12, 0x3d, 0x0a, 0x06, 0x72, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x25, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
-	0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x61, 0x6e, 0x64, 0x62,
-	0x6f, 0x78, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x52, 0x06, 0x72, 0x65, 0x63, 0x6f, 0x72, 0x64,
-	0x22, 0x1b, 0x0a, 0x19, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x53, 0x61, 0x6e,
-	0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x1c, 0x0a,
-	0x1a, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f,
-	0x78, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x92, 0x01, 0x0a, 0x19,
+	0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x16,
+	0x0a, 0x14, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x58, 0x0a, 0x15, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x61,
+	0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x3f, 0x0a, 0x07, 0x72, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b,
+	0x32, 0x25, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b,
+	0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f,
+	0x78, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x52, 0x07, 0x72, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x73,
+	0x22, 0x32, 0x0a, 0x18, 0x52, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x53, 0x63, 0x72, 0x61, 0x74,
+	0x63, 0x68, 0x70, 0x61, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06,
+	0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x68, 0x61,
+	0x6e, 0x64, 0x6c, 0x65, 0x22, 0x60, 0x0a, 0x19, 0x52, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x53,
+	0x63, 0x72, 0x61, 0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x12, 0x43, 0x0a, 0x0a, 0x73, 0x63, 0x72, 0x61, 0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65,
+	0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53,
+	0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x44, 0x61, 0x74, 0x61, 0x52, 0x0a, 0x73, 0x63, 0x72, 0x61,
+	0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x22, 0x4a, 0x0a, 0x0f, 0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61,
+	0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x37, 0x0a, 0x04, 0x64, 0x61, 0x74,
+	0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
+	0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65,
+	0x2e, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x44, 0x61, 0x74, 0x61, 0x52, 0x04, 0x64, 0x61,
+	0x74, 0x61, 0x22, 0x81, 0x02, 0x0a, 0x10, 0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x76, 0x61, 0x6c, 0x69, 0x64,
+	0x5f, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x09, 0x76, 0x61, 0x6c,
+	0x69, 0x64, 0x44, 0x61, 0x74, 0x61, 0x12, 0x41, 0x0a, 0x06, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x73,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e,
+	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e,
+	0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x44, 0x61, 0x74, 0x61, 0x45, 0x72, 0x72, 0x6f, 0x72,
+	0x73, 0x52, 0x06, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x73, 0x12, 0x3d, 0x0a, 0x06, 0x72, 0x65, 0x63,
+	0x6f, 0x72, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x73, 0x6f, 0x75, 0x72,
+	0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f,
+	0x72, 0x65, 0x2e, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64,
+	0x52, 0x06, 0x72, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x12, 0x4c, 0x0a, 0x06, 0x72, 0x65, 0x73, 0x75,
+	0x6c, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x34, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63,
+	0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72,
+	0x65, 0x2e, 0x41, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x65, 0x64, 0x50, 0x6f, 0x6c, 0x69, 0x63,
+	0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x06,
+	0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x2b, 0x0a, 0x11, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6e,
+	0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x68,
+	0x61, 0x6e, 0x64, 0x6c, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x68, 0x61, 0x6e,
+	0x64, 0x6c, 0x65, 0x22, 0x53, 0x0a, 0x12, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f,
+	0x78, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3d, 0x0a, 0x06, 0x72, 0x65, 0x63,
+	0x6f, 0x72, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x73, 0x6f, 0x75, 0x72,
+	0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f,
+	0x72, 0x65, 0x2e, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64,
+	0x52, 0x06, 0x72, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x22, 0x1b, 0x0a, 0x19, 0x47, 0x65, 0x74, 0x53,
+	0x61, 0x6d, 0x70, 0x6c, 0x65, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x5f, 0x0a, 0x1a, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6d, 0x70,
+	0x6c, 0x65, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x12, 0x41, 0x0a, 0x07, 0x73, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x73, 0x18, 0x01,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
+	0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x61,
+	0x6e, 0x64, 0x62, 0x6f, 0x78, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x07, 0x73,
+	0x61, 0x6d, 0x70, 0x6c, 0x65, 0x73, 0x22, 0x92, 0x01, 0x0a, 0x19, 0x53, 0x65, 0x74, 0x53, 0x65,
+	0x72, 0x69, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x64, 0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x12, 0x49, 0x0a, 0x08,
+	0x65, 0x6e, 0x63, 0x6f, 0x64, 0x69, 0x6e, 0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x2d,
+	0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61,
+	0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x69, 0x7a,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x45, 0x6e, 0x63, 0x6f, 0x64, 0x69, 0x6e, 0x67, 0x52, 0x08, 0x65,
+	0x6e, 0x63, 0x6f, 0x64, 0x69, 0x6e, 0x67, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0xae, 0x01, 0x0a, 0x1a,
 	0x53, 0x65, 0x74, 0x53, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x64, 0x53, 0x74, 0x61,
+	0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x6f, 0x6b,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x02, 0x6f, 0x6b, 0x12, 0x41, 0x0a, 0x06, 0x65, 0x72,
+	0x72, 0x6f, 0x72, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x73, 0x6f, 0x75,
+	0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63,
+	0x6f, 0x72, 0x65, 0x2e, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x44, 0x61, 0x74, 0x61, 0x45,
+	0x72, 0x72, 0x6f, 0x72, 0x73, 0x52, 0x06, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x73, 0x12, 0x3d, 0x0a,
+	0x06, 0x72, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e,
+	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63,
+	0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65,
+	0x63, 0x6f, 0x72, 0x64, 0x52, 0x06, 0x72, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x22, 0x7e, 0x0a, 0x19,
+	0x47, 0x65, 0x74, 0x53, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x64, 0x53, 0x74, 0x61,
 	0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x68, 0x61, 0x6e,
 	0x64, 0x6c, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c,
 	0x65, 0x12, 0x49, 0x0a, 0x08, 0x65, 0x6e, 0x63, 0x6f, 0x64, 0x69, 0x6e, 0x67, 0x18, 0x02, 0x20,
 	0x01, 0x28, 0x0e, 0x32, 0x2d, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77,
 	0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x65, 0x72,
 	0x69, 0x61, 0x6c, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x45, 0x6e, 0x63, 0x6f, 0x64, 0x69,
-	0x6e, 0x67, 0x52, 0x08, 0x65, 0x6e, 0x63, 0x6f, 0x64, 0x69, 0x6e, 0x67, 0x12, 0x12, 0x0a, 0x04,
-	0x64, 0x61, 0x74, 0x61, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61,
-	0x22, 0xae, 0x01, 0x0a, 0x1a, 0x53, 0x65, 0x74, 0x53, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x69, 0x7a,
-	0x65, 0x64, 0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
-	0x0e, 0x0a, 0x02, 0x6f, 0x6b, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x02, 0x6f, 0x6b, 0x12,
-	0x41, 0x0a, 0x06, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32,
-	0x29, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e,
-	0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78,
-	0x44, 0x61, 0x74, 0x61, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x73, 0x52, 0x06, 0x65, 0x72, 0x72, 0x6f,
-	0x72, 0x73, 0x12, 0x3d, 0x0a, 0x06, 0x72, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x18, 0x03, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x25, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f,
-	0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x61, 0x6e, 0x64,
-	0x62, 0x6f, 0x78, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x52, 0x06, 0x72, 0x65, 0x63, 0x6f, 0x72,
-	0x64, 0x22, 0x7e, 0x0a, 0x19, 0x47, 0x65, 0x74, 0x53, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x69, 0x7a,
-	0x65, 0x64, 0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16,
-	0x0a, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06,
-	0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x12, 0x49, 0x0a, 0x08, 0x65, 0x6e, 0x63, 0x6f, 0x64, 0x69,
-	0x6e, 0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x2d, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63,
-	0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72,
-	0x65, 0x2e, 0x53, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x45,
-	0x6e, 0x63, 0x6f, 0x64, 0x69, 0x6e, 0x67, 0x52, 0x08, 0x65, 0x6e, 0x63, 0x6f, 0x64, 0x69, 0x6e,
-	0x67, 0x22, 0x30, 0x0a, 0x1a, 0x47, 0x65, 0x74, 0x53, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x69, 0x7a,
-	0x65, 0x64, 0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
-	0x12, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x64,
-	0x61, 0x74, 0x61, 0x2a, 0x44, 0x0a, 0x15, 0x53, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x69, 0x7a, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x45, 0x6e, 0x63, 0x6f, 0x64, 0x69, 0x6e, 0x67, 0x12, 0x14, 0x0a, 0x10,
-	0x55, 0x4e, 0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x5f, 0x45, 0x4e, 0x43, 0x4f, 0x44, 0x49, 0x4e, 0x47,
-	0x10, 0x00, 0x12, 0x0a, 0x0a, 0x06, 0x42, 0x41, 0x53, 0x45, 0x36, 0x34, 0x10, 0x01, 0x12, 0x09,
-	0x0a, 0x05, 0x42, 0x59, 0x54, 0x45, 0x53, 0x10, 0x02, 0x32, 0xde, 0x06, 0x0a, 0x11, 0x50, 0x6c,
-	0x61, 0x79, 0x67, 0x72, 0x6f, 0x75, 0x6e, 0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12,
-	0x63, 0x0a, 0x0a, 0x4e, 0x65, 0x77, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x12, 0x29, 0x2e,
+	0x6e, 0x67, 0x52, 0x08, 0x65, 0x6e, 0x63, 0x6f, 0x64, 0x69, 0x6e, 0x67, 0x22, 0x30, 0x0a, 0x1a,
+	0x47, 0x65, 0x74, 0x53, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x64, 0x53, 0x74, 0x61,
+	0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x61,
+	0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0xba,
+	0x01, 0x0a, 0x13, 0x45, 0x78, 0x70, 0x6c, 0x61, 0x69, 0x6e, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x12, 0x36,
+	0x0a, 0x06, 0x6f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1e,
+	0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61,
+	0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x52, 0x06,
+	0x6f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x12, 0x1e, 0x0a, 0x0a, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x70, 0x65, 0x72, 0x6d,
+	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x33, 0x0a, 0x05, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x18,
+	0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65,
+	0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x41,
+	0x63, 0x74, 0x6f, 0x72, 0x52, 0x05, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x22, 0x77, 0x0a, 0x14, 0x45,
+	0x78, 0x70, 0x6c, 0x61, 0x69, 0x6e, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x12, 0x1e, 0x0a, 0x0a, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x65,
+	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0a, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69,
+	0x7a, 0x65, 0x64, 0x12, 0x3f, 0x0a, 0x05, 0x67, 0x72, 0x61, 0x70, 0x68, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x29, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f,
+	0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x43, 0x68, 0x65, 0x63,
+	0x6b, 0x45, 0x78, 0x70, 0x6c, 0x61, 0x69, 0x6e, 0x47, 0x72, 0x61, 0x70, 0x68, 0x52, 0x05, 0x67,
+	0x72, 0x61, 0x70, 0x68, 0x22, 0xbd, 0x01, 0x0a, 0x16, 0x44, 0x4f, 0x54, 0x45, 0x78, 0x70, 0x6c,
+	0x61, 0x69, 0x6e, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
+	0x16, 0x0a, 0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52,
+	0x06, 0x68, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x12, 0x36, 0x0a, 0x06, 0x6f, 0x62, 0x6a, 0x65, 0x63,
+	0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1e, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
+	0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65,
+	0x2e, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x52, 0x06, 0x6f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x12,
+	0x1e, 0x0a, 0x0a, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x0a, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12,
+	0x33, 0x0a, 0x05, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d,
+	0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61,
+	0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x41, 0x63, 0x74, 0x6f, 0x72, 0x52, 0x05, 0x61,
+	0x63, 0x74, 0x6f, 0x72, 0x22, 0x56, 0x0a, 0x17, 0x44, 0x4f, 0x54, 0x45, 0x78, 0x70, 0x6c, 0x61,
+	0x69, 0x6e, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x1e, 0x0a, 0x0a, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x65, 0x64, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x08, 0x52, 0x0a, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x65, 0x64, 0x12,
+	0x1b, 0x0a, 0x09, 0x64, 0x6f, 0x74, 0x5f, 0x67, 0x72, 0x61, 0x70, 0x68, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x08, 0x64, 0x6f, 0x74, 0x47, 0x72, 0x61, 0x70, 0x68, 0x2a, 0x44, 0x0a, 0x15,
+	0x53, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x45, 0x6e, 0x63,
+	0x6f, 0x64, 0x69, 0x6e, 0x67, 0x12, 0x14, 0x0a, 0x10, 0x55, 0x4e, 0x4b, 0x4e, 0x4f, 0x57, 0x4e,
+	0x5f, 0x45, 0x4e, 0x43, 0x4f, 0x44, 0x49, 0x4e, 0x47, 0x10, 0x00, 0x12, 0x0a, 0x0a, 0x06, 0x42,
+	0x41, 0x53, 0x45, 0x36, 0x34, 0x10, 0x01, 0x12, 0x09, 0x0a, 0x05, 0x42, 0x59, 0x54, 0x45, 0x53,
+	0x10, 0x02, 0x32, 0xbb, 0x09, 0x0a, 0x11, 0x50, 0x6c, 0x61, 0x79, 0x67, 0x72, 0x6f, 0x75, 0x6e,
+	0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x63, 0x0a, 0x0a, 0x4e, 0x65, 0x77, 0x53,
+	0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x12, 0x29, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e,
+	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e,
+	0x4e, 0x65, 0x77, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x2a, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
+	0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4e, 0x65, 0x77, 0x53, 0x61,
+	0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6c, 0x0a,
+	0x0d, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x12, 0x2c,
+	0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61,
+	0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x61, 0x6e, 0x64,
+	0x62, 0x6f, 0x78, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2d, 0x2e, 0x73,
+	0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70,
+	0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f,
+	0x78, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x5d, 0x0a, 0x08, 0x53,
+	0x65, 0x74, 0x53, 0x74, 0x61, 0x74, 0x65, 0x12, 0x27, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
+	0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65,
+	0x2e, 0x53, 0x65, 0x74, 0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x28, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b,
+	0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x65, 0x74, 0x53, 0x74, 0x61,
+	0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x78, 0x0a, 0x11, 0x52, 0x65,
+	0x73, 0x74, 0x6f, 0x72, 0x65, 0x53, 0x63, 0x72, 0x61, 0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x12,
+	0x30, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e,
+	0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65,
+	0x53, 0x63, 0x72, 0x61, 0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x31, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
+	0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65, 0x73, 0x74, 0x6f,
+	0x72, 0x65, 0x53, 0x63, 0x72, 0x61, 0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x69, 0x0a, 0x0c, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c,
+	0x6f, 0x67, 0x75, 0x65, 0x12, 0x2b, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
+	0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65,
+	0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x75, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x2c, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
+	0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x61,
+	0x74, 0x61, 0x6c, 0x6f, 0x67, 0x75, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x63, 0x0a, 0x0a, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x12, 0x29, 0x2e,
 	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63,
-	0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4e, 0x65, 0x77, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f,
+	0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f,
 	0x78, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2a, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63,
 	0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72,
-	0x65, 0x2e, 0x4e, 0x65, 0x77, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6c, 0x0a, 0x0d, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x61, 0x6e, 0x64,
-	0x62, 0x6f, 0x78, 0x65, 0x73, 0x12, 0x2c, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65,
-	0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4c,
-	0x69, 0x73, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x1a, 0x2d, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77,
-	0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4c, 0x69, 0x73,
-	0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x12, 0x5d, 0x0a, 0x08, 0x53, 0x65, 0x74, 0x53, 0x74, 0x61, 0x74, 0x65, 0x12, 0x27,
-	0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61,
-	0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x65, 0x74, 0x53, 0x74, 0x61, 0x74, 0x65,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x28, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
-	0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65,
-	0x2e, 0x53, 0x65, 0x74, 0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x12, 0x78, 0x0a, 0x11, 0x52, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x53, 0x63, 0x72, 0x61,
-	0x74, 0x63, 0x68, 0x70, 0x61, 0x64, 0x12, 0x30, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e,
+	0x65, 0x2e, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6f, 0x0a, 0x0e, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x54, 0x68,
+	0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x12, 0x2d, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e,
 	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e,
-	0x52, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x53, 0x63, 0x72, 0x61, 0x74, 0x63, 0x68, 0x70, 0x61,
-	0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x31, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63,
-	0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72,
-	0x65, 0x2e, 0x52, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x53, 0x63, 0x72, 0x61, 0x74, 0x63, 0x68,
-	0x70, 0x61, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x69, 0x0a, 0x0c, 0x47,
-	0x65, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x75, 0x65, 0x12, 0x2b, 0x2e, 0x73, 0x6f,
-	0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f,
-	0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x75,
-	0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2c, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63,
-	0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72,
-	0x65, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x61, 0x74, 0x61, 0x6c, 0x6f, 0x67, 0x75, 0x65, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x63, 0x0a, 0x0a, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6e,
-	0x64, 0x62, 0x6f, 0x78, 0x12, 0x29, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
-	0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65,
-	0x74, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x2a, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e,
-	0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6e, 0x64,
-	0x62, 0x6f, 0x78, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6f, 0x0a, 0x0e, 0x56,
-	0x65, 0x72, 0x69, 0x66, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x12, 0x2d, 0x2e,
-	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63,
-	0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x54, 0x68, 0x65,
-	0x6f, 0x72, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2e, 0x2e, 0x73,
-	0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70,
-	0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x54, 0x68, 0x65, 0x6f,
-	0x72, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x5c, 0x0a, 0x08,
-	0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x12, 0x27, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63,
-	0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72,
-	0x65, 0x2e, 0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x1a, 0x27, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
+	0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2e, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65,
+	0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x56,
+	0x65, 0x72, 0x69, 0x66, 0x79, 0x54, 0x68, 0x65, 0x6f, 0x72, 0x65, 0x6d, 0x73, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x5d, 0x0a, 0x08, 0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74,
+	0x65, 0x12, 0x27, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
 	0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x53, 0x69, 0x6d, 0x75, 0x6c,
-	0x61, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x2d, 0x5a, 0x2b, 0x67, 0x69,
-	0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e,
-	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f,
-	0x70, 0x6b, 0x67, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x33,
+	0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x28, 0x2e, 0x73, 0x6f, 0x75,
+	0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63,
+	0x6f, 0x72, 0x65, 0x2e, 0x53, 0x69, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x7b, 0x0a, 0x12, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6d, 0x70, 0x6c,
+	0x65, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x12, 0x31, 0x2e, 0x73, 0x6f, 0x75,
+	0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63,
+	0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x53, 0x61, 0x6e,
+	0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x32, 0x2e,
+	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63,
+	0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x53, 0x61, 0x6d, 0x70, 0x6c, 0x65,
+	0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x12, 0x72, 0x0a, 0x0f, 0x44, 0x4f, 0x54, 0x45, 0x78, 0x70, 0x6c, 0x61, 0x69, 0x6e, 0x43,
+	0x68, 0x65, 0x63, 0x6b, 0x12, 0x2e, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
+	0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x44, 0x4f,
+	0x54, 0x45, 0x78, 0x70, 0x6c, 0x61, 0x69, 0x6e, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x2f, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
+	0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x44, 0x4f,
+	0x54, 0x45, 0x78, 0x70, 0x6c, 0x61, 0x69, 0x6e, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x69, 0x0a, 0x0c, 0x45, 0x78, 0x70, 0x6c, 0x61, 0x69, 0x6e,
+	0x43, 0x68, 0x65, 0x63, 0x6b, 0x12, 0x2b, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65,
+	0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x45,
+	0x78, 0x70, 0x6c, 0x61, 0x69, 0x6e, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x2c, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f,
+	0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x45, 0x78, 0x70, 0x6c,
+	0x61, 0x69, 0x6e, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x42, 0x2d, 0x5a, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73,
+	0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70,
+	0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62,
+	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -11088,7 +13722,7 @@ func file_sourcenetwork_acp_core_playground_proto_rawDescGZIP() []byte {
 }
 
 var file_sourcenetwork_acp_core_playground_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_sourcenetwork_acp_core_playground_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
+var file_sourcenetwork_acp_core_playground_proto_msgTypes = make([]protoimpl.MessageInfo, 26)
 var file_sourcenetwork_acp_core_playground_proto_goTypes = []interface{}{
 	(SerializationEncoding)(0),           // 0: sourcenetwork.acp_core.SerializationEncoding
 	(*NewSandboxRequest)(nil),            // 1: sourcenetwork.acp_core.NewSandboxRequest
@@ -11104,7 +13738,7 @@ var file_sourcenetwork_acp_core_playground_proto_goTypes = []interface{}{
 	(*RestoreScratchpadRequest)(nil),     // 11: sourcenetwork.acp_core.RestoreScratchpadRequest
 	(*RestoreScratchpadResponse)(nil),    // 12: sourcenetwork.acp_core.RestoreScratchpadResponse
 	(*SimulateRequest)(nil),              // 13: sourcenetwork.acp_core.SimulateRequest
-	(*SimulateReponse)(nil),              // 14: sourcenetwork.acp_core.SimulateReponse
+	(*SimulateResponse)(nil),             // 14: sourcenetwork.acp_core.SimulateResponse
 	(*GetSandboxRequest)(nil),            // 15: sourcenetwork.acp_core.GetSandboxRequest
 	(*GetSandboxResponse)(nil),           // 16: sourcenetwork.acp_core.GetSandboxResponse
 	(*GetSampleSandboxesRequest)(nil),    // 17: sourcenetwork.acp_core.GetSampleSandboxesRequest
@@ -11113,51 +13747,71 @@ var file_sourcenetwork_acp_core_playground_proto_goTypes = []interface{}{
 	(*SetSerializedStateResponse)(nil),   // 20: sourcenetwork.acp_core.SetSerializedStateResponse
 	(*GetSerializedStateRequest)(nil),    // 21: sourcenetwork.acp_core.GetSerializedStateRequest
 	(*GetSerializedStateResponse)(nil),   // 22: sourcenetwork.acp_core.GetSerializedStateResponse
-	(*SandboxRecord)(nil),                // 23: sourcenetwork.acp_core.SandboxRecord
-	(*SandboxData)(nil),                  // 24: sourcenetwork.acp_core.SandboxData
-	(*SandboxDataErrors)(nil),            // 25: sourcenetwork.acp_core.SandboxDataErrors
-	(*PolicyCatalogue)(nil),              // 26: sourcenetwork.acp_core.PolicyCatalogue
-	(*AnnotatedPolicyTheoremResult)(nil), // 27: sourcenetwork.acp_core.AnnotatedPolicyTheoremResult
+	(*ExplainCheckRequest)(nil),          // 23: sourcenetwork.acp_core.ExplainCheckRequest
+	(*ExplainCheckResponse)(nil),         // 24: sourcenetwork.acp_core.ExplainCheckResponse
+	(*DOTExplainCheckRequest)(nil),       // 25: sourcenetwork.acp_core.DOTExplainCheckRequest
+	(*DOTExplainCheckResponse)(nil),      // 26: sourcenetwork.acp_core.DOTExplainCheckResponse
+	(*SandboxRecord)(nil),                // 27: sourcenetwork.acp_core.SandboxRecord
+	(*SandboxData)(nil),                  // 28: sourcenetwork.acp_core.SandboxData
+	(*SandboxDataErrors)(nil),            // 29: sourcenetwork.acp_core.SandboxDataErrors
+	(*PolicyCatalogue)(nil),              // 30: sourcenetwork.acp_core.PolicyCatalogue
+	(*AnnotatedPolicyTheoremResult)(nil), // 31: sourcenetwork.acp_core.AnnotatedPolicyTheoremResult
+	(*SandboxTemplate)(nil),              // 32: sourcenetwork.acp_core.SandboxTemplate
+	(*Object)(nil),                       // 33: sourcenetwork.acp_core.Object
+	(*Actor)(nil),                        // 34: sourcenetwork.acp_core.Actor
+	(*CheckExplainGraph)(nil),            // 35: sourcenetwork.acp_core.CheckExplainGraph
 }
 var file_sourcenetwork_acp_core_playground_proto_depIdxs = []int32{
-	23, // 0: sourcenetwork.acp_core.NewSandboxResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
-	24, // 1: sourcenetwork.acp_core.SetStateRequest.data:type_name -> sourcenetwork.acp_core.SandboxData
-	25, // 2: sourcenetwork.acp_core.SetStateResponse.errors:type_name -> sourcenetwork.acp_core.SandboxDataErrors
-	23, // 3: sourcenetwork.acp_core.SetStateResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
-	26, // 4: sourcenetwork.acp_core.GetCatalogueResponse.catalogue:type_name -> sourcenetwork.acp_core.PolicyCatalogue
-	27, // 5: sourcenetwork.acp_core.VerifyTheoremsResponse.result:type_name -> sourcenetwork.acp_core.AnnotatedPolicyTheoremResult
-	23, // 6: sourcenetwork.acp_core.ListSandboxesResponse.records:type_name -> sourcenetwork.acp_core.SandboxRecord
-	24, // 7: sourcenetwork.acp_core.RestoreScratchpadResponse.scratchpad:type_name -> sourcenetwork.acp_core.SandboxData
-	24, // 8: sourcenetwork.acp_core.SimulateRequest.data:type_name -> sourcenetwork.acp_core.SandboxData
-	25, // 9: sourcenetwork.acp_core.SimulateReponse.errors:type_name -> sourcenetwork.acp_core.SandboxDataErrors
-	23, // 10: sourcenetwork.acp_core.SimulateReponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
-	27, // 11: sourcenetwork.acp_core.SimulateReponse.result:type_name -> sourcenetwork.acp_core.AnnotatedPolicyTheoremResult
-	23, // 12: sourcenetwork.acp_core.GetSandboxResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
-	0,  // 13: sourcenetwork.acp_core.SetSerializedStateRequest.encoding:type_name -> sourcenetwork.acp_core.SerializationEncoding
-	25, // 14: sourcenetwork.acp_core.SetSerializedStateResponse.errors:type_name -> sourcenetwork.acp_core.SandboxDataErrors
-	23, // 15: sourcenetwork.acp_core.SetSerializedStateResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
-	0,  // 16: sourcenetwork.acp_core.GetSerializedStateRequest.encoding:type_name -> sourcenetwork.acp_core.SerializationEncoding
-	1,  // 17: sourcenetwork.acp_core.PlaygroundService.NewSandbox:input_type -> sourcenetwork.acp_core.NewSandboxRequest
-	9,  // 18: sourcenetwork.acp_core.PlaygroundService.ListSandboxes:input_type -> sourcenetwork.acp_core.ListSandboxesRequest
-	3,  // 19: sourcenetwork.acp_core.PlaygroundService.SetState:input_type -> sourcenetwork.acp_core.SetStateRequest
-	11, // 20: sourcenetwork.acp_core.PlaygroundService.RestoreScratchpad:input_type -> sourcenetwork.acp_core.RestoreScratchpadRequest
-	5,  // 21: sourcenetwork.acp_core.PlaygroundService.GetCatalogue:input_type -> sourcenetwork.acp_core.GetCatalogueRequest
-	15, // 22: sourcenetwork.acp_core.PlaygroundService.GetSandbox:input_type -> sourcenetwork.acp_core.GetSandboxRequest
-	7,  // 23: sourcenetwork.acp_core.PlaygroundService.VerifyTheorems:input_type -> sourcenetwork.acp_core.VerifyTheoremsRequest
-	13, // 24: sourcenetwork.acp_core.PlaygroundService.Simulate:input_type -> sourcenetwork.acp_core.SimulateRequest
-	2,  // 25: sourcenetwork.acp_core.PlaygroundService.NewSandbox:output_type -> sourcenetwork.acp_core.NewSandboxResponse
-	10, // 26: sourcenetwork.acp_core.PlaygroundService.ListSandboxes:output_type -> sourcenetwork.acp_core.ListSandboxesResponse
-	4,  // 27: sourcenetwork.acp_core.PlaygroundService.SetState:output_type -> sourcenetwork.acp_core.SetStateResponse
-	12, // 28: sourcenetwork.acp_core.PlaygroundService.RestoreScratchpad:output_type -> sourcenetwork.acp_core.RestoreScratchpadResponse
-	6,  // 29: sourcenetwork.acp_core.PlaygroundService.GetCatalogue:output_type -> sourcenetwork.acp_core.GetCatalogueResponse
-	16, // 30: sourcenetwork.acp_core.PlaygroundService.GetSandbox:output_type -> sourcenetwork.acp_core.GetSandboxResponse
-	8,  // 31: sourcenetwork.acp_core.PlaygroundService.VerifyTheorems:output_type -> sourcenetwork.acp_core.VerifyTheoremsResponse
-	14, // 32: sourcenetwork.acp_core.PlaygroundService.Simulate:output_type -> sourcenetwork.acp_core.SimulateReponse
-	25, // [25:33] is the sub-list for method output_type
-	17, // [17:25] is the sub-list for method input_type
-	17, // [17:17] is the sub-list for extension type_name
-	17, // [17:17] is the sub-list for extension extendee
-	0,  // [0:17] is the sub-list for field type_name
+	27, // 0: sourcenetwork.acp_core.NewSandboxResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
+	28, // 1: sourcenetwork.acp_core.SetStateRequest.data:type_name -> sourcenetwork.acp_core.SandboxData
+	29, // 2: sourcenetwork.acp_core.SetStateResponse.errors:type_name -> sourcenetwork.acp_core.SandboxDataErrors
+	27, // 3: sourcenetwork.acp_core.SetStateResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
+	30, // 4: sourcenetwork.acp_core.GetCatalogueResponse.catalogue:type_name -> sourcenetwork.acp_core.PolicyCatalogue
+	31, // 5: sourcenetwork.acp_core.VerifyTheoremsResponse.result:type_name -> sourcenetwork.acp_core.AnnotatedPolicyTheoremResult
+	27, // 6: sourcenetwork.acp_core.ListSandboxesResponse.records:type_name -> sourcenetwork.acp_core.SandboxRecord
+	28, // 7: sourcenetwork.acp_core.RestoreScratchpadResponse.scratchpad:type_name -> sourcenetwork.acp_core.SandboxData
+	28, // 8: sourcenetwork.acp_core.SimulateRequest.data:type_name -> sourcenetwork.acp_core.SandboxData
+	29, // 9: sourcenetwork.acp_core.SimulateResponse.errors:type_name -> sourcenetwork.acp_core.SandboxDataErrors
+	27, // 10: sourcenetwork.acp_core.SimulateResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
+	31, // 11: sourcenetwork.acp_core.SimulateResponse.result:type_name -> sourcenetwork.acp_core.AnnotatedPolicyTheoremResult
+	27, // 12: sourcenetwork.acp_core.GetSandboxResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
+	32, // 13: sourcenetwork.acp_core.GetSampleSandboxesResponse.samples:type_name -> sourcenetwork.acp_core.SandboxTemplate
+	0,  // 14: sourcenetwork.acp_core.SetSerializedStateRequest.encoding:type_name -> sourcenetwork.acp_core.SerializationEncoding
+	29, // 15: sourcenetwork.acp_core.SetSerializedStateResponse.errors:type_name -> sourcenetwork.acp_core.SandboxDataErrors
+	27, // 16: sourcenetwork.acp_core.SetSerializedStateResponse.record:type_name -> sourcenetwork.acp_core.SandboxRecord
+	0,  // 17: sourcenetwork.acp_core.GetSerializedStateRequest.encoding:type_name -> sourcenetwork.acp_core.SerializationEncoding
+	33, // 18: sourcenetwork.acp_core.ExplainCheckRequest.object:type_name -> sourcenetwork.acp_core.Object
+	34, // 19: sourcenetwork.acp_core.ExplainCheckRequest.actor:type_name -> sourcenetwork.acp_core.Actor
+	35, // 20: sourcenetwork.acp_core.ExplainCheckResponse.graph:type_name -> sourcenetwork.acp_core.CheckExplainGraph
+	33, // 21: sourcenetwork.acp_core.DOTExplainCheckRequest.object:type_name -> sourcenetwork.acp_core.Object
+	34, // 22: sourcenetwork.acp_core.DOTExplainCheckRequest.actor:type_name -> sourcenetwork.acp_core.Actor
+	1,  // 23: sourcenetwork.acp_core.PlaygroundService.NewSandbox:input_type -> sourcenetwork.acp_core.NewSandboxRequest
+	9,  // 24: sourcenetwork.acp_core.PlaygroundService.ListSandboxes:input_type -> sourcenetwork.acp_core.ListSandboxesRequest
+	3,  // 25: sourcenetwork.acp_core.PlaygroundService.SetState:input_type -> sourcenetwork.acp_core.SetStateRequest
+	11, // 26: sourcenetwork.acp_core.PlaygroundService.RestoreScratchpad:input_type -> sourcenetwork.acp_core.RestoreScratchpadRequest
+	5,  // 27: sourcenetwork.acp_core.PlaygroundService.GetCatalogue:input_type -> sourcenetwork.acp_core.GetCatalogueRequest
+	15, // 28: sourcenetwork.acp_core.PlaygroundService.GetSandbox:input_type -> sourcenetwork.acp_core.GetSandboxRequest
+	7,  // 29: sourcenetwork.acp_core.PlaygroundService.VerifyTheorems:input_type -> sourcenetwork.acp_core.VerifyTheoremsRequest
+	13, // 30: sourcenetwork.acp_core.PlaygroundService.Simulate:input_type -> sourcenetwork.acp_core.SimulateRequest
+	17, // 31: sourcenetwork.acp_core.PlaygroundService.GetSampleSandboxes:input_type -> sourcenetwork.acp_core.GetSampleSandboxesRequest
+	25, // 32: sourcenetwork.acp_core.PlaygroundService.DOTExplainCheck:input_type -> sourcenetwork.acp_core.DOTExplainCheckRequest
+	23, // 33: sourcenetwork.acp_core.PlaygroundService.ExplainCheck:input_type -> sourcenetwork.acp_core.ExplainCheckRequest
+	2,  // 34: sourcenetwork.acp_core.PlaygroundService.NewSandbox:output_type -> sourcenetwork.acp_core.NewSandboxResponse
+	10, // 35: sourcenetwork.acp_core.PlaygroundService.ListSandboxes:output_type -> sourcenetwork.acp_core.ListSandboxesResponse
+	4,  // 36: sourcenetwork.acp_core.PlaygroundService.SetState:output_type -> sourcenetwork.acp_core.SetStateResponse
+	12, // 37: sourcenetwork.acp_core.PlaygroundService.RestoreScratchpad:output_type -> sourcenetwork.acp_core.RestoreScratchpadResponse
+	6,  // 38: sourcenetwork.acp_core.PlaygroundService.GetCatalogue:output_type -> sourcenetwork.acp_core.GetCatalogueResponse
+	16, // 39: sourcenetwork.acp_core.PlaygroundService.GetSandbox:output_type -> sourcenetwork.acp_core.GetSandboxResponse
+	8,  // 40: sourcenetwork.acp_core.PlaygroundService.VerifyTheorems:output_type -> sourcenetwork.acp_core.VerifyTheoremsResponse
+	14, // 41: sourcenetwork.acp_core.PlaygroundService.Simulate:output_type -> sourcenetwork.acp_core.SimulateResponse
+	18, // 42: sourcenetwork.acp_core.PlaygroundService.GetSampleSandboxes:output_type -> sourcenetwork.acp_core.GetSampleSandboxesResponse
+	26, // 43: sourcenetwork.acp_core.PlaygroundService.DOTExplainCheck:output_type -> sourcenetwork.acp_core.DOTExplainCheckResponse
+	24, // 44: sourcenetwork.acp_core.PlaygroundService.ExplainCheck:output_type -> sourcenetwork.acp_core.ExplainCheckResponse
+	34, // [34:45] is the sub-list for method output_type
+	23, // [23:34] is the sub-list for method input_type
+	23, // [23:23] is the sub-list for extension type_name
+	23, // [23:23] is the sub-list for extension extendee
+	0,  // [0:23] is the sub-list for field type_name
 }
 
 func init() { file_sourcenetwork_acp_core_playground_proto_init() }
@@ -11168,6 +13822,8 @@ func file_sourcenetwork_acp_core_playground_proto_init() {
 	file_sourcenetwork_acp_core_catalogue_proto_init()
 	file_sourcenetwork_acp_core_sandbox_proto_init()
 	file_sourcenetwork_acp_core_theorem_proto_init()
+	file_sourcenetwork_acp_core_check_explain_proto_init()
+	file_sourcenetwork_acp_core_relationship_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_sourcenetwork_acp_core_playground_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*NewSandboxRequest); i {
@@ -11326,7 +13982,7 @@ func file_sourcenetwork_acp_core_playground_proto_init() {
 			}
 		}
 		file_sourcenetwork_acp_core_playground_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SimulateReponse); i {
+			switch v := v.(*SimulateResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -11433,6 +14089,54 @@ func file_sourcenetwork_acp_core_playground_proto_init() {
 				return nil
 			}
 		}
+		file_sourcenetwork_acp_core_playground_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ExplainCheckRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_sourcenetwork_acp_core_playground_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ExplainCheckResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_sourcenetwork_acp_core_playground_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DOTExplainCheckRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_sourcenetwork_acp_core_playground_proto_msgTypes[25].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DOTExplainCheckResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -11440,7 +14144,7 @@ func file_sourcenetwork_acp_core_playground_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_sourcenetwork_acp_core_playground_proto_rawDesc,
 			NumEnums:      1,
-			NumMessages:   22,
+			NumMessages:   26,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

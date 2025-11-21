@@ -60,12 +60,24 @@ func (s *PlaygroundJS) RestoreScratchpad(ctx context.Context, req *types.Restore
 	return s.proxy.RestoreScratchpad(s.this, mustMapArgument(req))
 }
 
-func (s *PlaygroundJS) Simulate(ctx context.Context, req *types.SimulateRequest) (*types.SimulateReponse, error) {
+func (s *PlaygroundJS) Simulate(ctx context.Context, req *types.SimulateRequest) (*types.SimulateResponse, error) {
 	return s.proxy.Simulate(s.this, mustMapArgument(req))
 }
 
 func (s *PlaygroundJS) GetSandbox(ctx context.Context, req *types.GetSandboxRequest) (*types.GetSandboxResponse, error) {
 	return s.proxy.GetSandbox(s.this, mustMapArgument(req))
+}
+
+func (s *PlaygroundJS) GetSampleSandboxes(ctx context.Context, req *types.GetSampleSandboxesRequest) (*types.GetSampleSandboxesResponse, error) {
+	return s.proxy.GetSampleSandboxes(s.this, mustMapArgument(req))
+}
+
+func (s *PlaygroundJS) DOTExplainCheck(ctx context.Context, req *types.DOTExplainCheckRequest) (*types.DOTExplainCheckResponse, error) {
+	return s.proxy.DOTExplainCheck(s.this, mustMapArgument(req))
+}
+
+func (s *PlaygroundJS) ExplainCheck(ctx context.Context, req *types.ExplainCheckRequest) (*types.ExplainCheckResponse, error) {
+	return s.proxy.ExplainCheck(s.this, mustMapArgument(req))
 }
 
 func mustMapArgument(req proto.Message) []js.Value {

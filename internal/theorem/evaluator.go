@@ -35,10 +35,12 @@ func (e *Evaluator) evaluateAuthorizationTheorem(ctx context.Context, policy *ty
 			},
 		}, nil
 	}
+	thmOk := nxor(ok, theorem.AssertTrue)
 	return &types.AuthorizationTheoremResult{
 		Theorem: theorem,
 		Result: &types.Result{
-			Status:  toStatus(nxor(ok, theorem.AssertTrue)),
+			Status:  toStatus(thmOk),
+			Ok:      thmOk,
 			Message: "",
 		},
 	}, nil
@@ -47,6 +49,7 @@ func (e *Evaluator) evaluateAuthorizationTheorem(ctx context.Context, policy *ty
 func (e *Evaluator) evaluateReacheabilityTheorem(ctx context.Context, polId *types.Policy, theorem *types.ReachabilityTheorem) (*types.ReachabilityTheoremResult, error) {
 	return &types.ReachabilityTheoremResult{
 		Result: &types.Result{
+			Ok:      true,
 			Status:  types.ResultStatus_Accept,
 			Message: "",
 		},
@@ -71,9 +74,11 @@ func (e *Evaluator) evalDelegationTheorem(ctx context.Context, pol *types.Policy
 		}
 		return nil, err
 	}
+	thmOk := nxor(authorized, theorem.AssertTrue)
 	return &types.DelegationTheoremResult{
 		Result: &types.Result{
-			Status:  toStatus(nxor(authorized, theorem.AssertTrue)),
+			Status:  toStatus(thmOk),
+			Ok:      thmOk,
 			Message: "",
 		},
 		Theorem: theorem,
@@ -92,7 +97,10 @@ func (e *Evaluator) EvaluatePolicyTheoremDSL(ctx context.Context, polId string, 
 		return nil, err
 	}
 	annotatedResult := &types.AnnotatedPolicyTheoremResult{
-		Theorem: indexedTheorem.ToPolicyTheorem(),
+		Theorem:      indexedTheorem.ToPolicyTheorem(),
+		Ok:           policyResult.Ok,
+		TheoremCount: policyResult.TheoremCount,
+		Failures:     policyResult.Failures,
 	}
 	for i, theorem := range indexedTheorem.AuthorizationTheorems {
 		result := policyResult.AuthorizationTheoremsResult[i]
@@ -152,10 +160,35 @@ func (e *Evaluator) EvaluatePolicyTheorem(ctx context.Context, polId string, the
 		return nil, newEvaluatorErr(err)
 	}
 
+	ok := true
+	count := len(reachabilityResults) + len(delegationResults) + len(authzResults)
+	failures := 0
+	for _, result := range reachabilityResults {
+		if !result.Result.Ok {
+			ok = false
+			failures++
+		}
+	}
+	for _, result := range delegationResults {
+		if !result.Result.Ok {
+			ok = false
+			failures++
+		}
+	}
+	for _, result := range authzResults {
+		if !result.Result.Ok {
+			ok = false
+			failures++
+		}
+	}
+
 	return &types.PolicyTheoremResult{
 		ReachabilityTheoremsResult:  reachabilityResults,
 		DelegationTheoremsResult:    delegationResults,
 		AuthorizationTheoremsResult: authzResults,
+		Ok:                          ok,
+		Failures:                    uint32(failures),
+		TheoremCount:                uint32(count),
 	}, nil
 }
 

@@ -17,3 +17,11 @@ plugins:
     opt: 
       - paths=import
       - module=github.com/sourcenetwork/acp_core/pkg
+
+  - plugin: buf.build/community/stephenh-ts-proto
+    out: ../ui/src/types/proto-js
+    opt:
+      - outputEncodeMethods=false
+      - outputPartialMethods=false
+      - outputJsonMethods=false
+      - outputClientImpl=false

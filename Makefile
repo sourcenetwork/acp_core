@@ -1,3 +1,6 @@
+GIT_HEAD_COMMIT=$(shell git rev-parse HEAD)
+BUILD_FLAGS=-ldflags "-X 'github.com/sourcenetwork/acp_core/pkg/version.Commit=$(GIT_HEAD_COMMIT)'"
+
 .PHONY: test
 test:
 	go test -coverpkg=./... ./...
@@ -14,7 +17,7 @@ test\:js:
 .PHONY: proto
 proto:
 	docker image build --file proto/Dockerfile --tag acp_core_proto:latest .
-	docker run --rm --volume=".:/app" --workdir="/app/proto" --user="$$(id -u)" acp_core_proto generate
+	docker run --rm --volume=".:/app" --workdir="/app/proto" --env="HOST_USER=$$(id -u)" --entrypoint sh acp_core_proto ./docker-generate.sh
 	mv github.com/sourcenetwork/acp_core/pkg/types/* pkg/types/
 	mv github.com/sourcenetwork/acp_core/pkg/errors/* pkg/errors/
 	rm -r github.com
@@ -26,14 +29,14 @@ fmt:
 
 .PHONY: playground\:wasm_js
 playground\:wasm_js:
-	GOOS=js GOARCH=wasm go build -o build/playground.wasm cmd/playground_js/main.go
-
-.PHONY: proto\:ts
-proto\:ts:
-	cd proto && buf generate --template buf.ts.gen.yaml
+	GOOS=js GOARCH=wasm go build $(BUILD_FLAGS) -o build/playground.wasm cmd/playground_js/main.go
 
 .PHONY: playground
 playground: playground\:wasm_js
 	cp build/playground.wasm cmd/playground/content/playground.wasm
-	cp "$$(go env GOROOT)/misc/wasm/wasm_exec.js" cmd/playground/content/wasm_exec.js
+	cp "$$(go env GOROOT)/lib/wasm/wasm_exec.js" cmd/playground/content/wasm_exec.js
 	go build -o build/playground cmd/playground/main.go
+
+.PHONY: playground\:docker
+playground\:docker:
+	docker build -f playground.dockerfile -t ghcr.io/sourcenetwork/acp_playground:dev .
