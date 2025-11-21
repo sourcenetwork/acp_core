@@ -36,3 +36,7 @@ playground: playground\:wasm_js
 	cp build/playground.wasm cmd/playground/content/playground.wasm
 	cp "$$(go env GOROOT)/lib/wasm/wasm_exec.js" cmd/playground/content/wasm_exec.js
 	go build -o build/playground cmd/playground/main.go
+
+.PHONY: playground\:docker
+playground\:docker:
+	docker build -f playground.dockerfile -t ghcr.io/sourcenetwork/acp_playground:dev .
