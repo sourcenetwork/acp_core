@@ -9,6 +9,15 @@ import { type PolicySpecificationType } from "./specification";
 
 export const protobufPackage = "sourcenetwork.acp_core";
 
+/** PolicyEncodingType enumerates supported marshaling types for policies. */
+export enum PolicyMarshalingType {
+  /** UNKNOWN - Fallback value for a missing Marshaling Type */
+  UNKNOWN = 0,
+  /** YAML - YAML Marshaled Policy */
+  YAML = 1,
+  UNRECOGNIZED = -1,
+}
+
 /**
  * Policy represents an ACP module Policy definition.
  * Each Policy defines a set of high level rules over how the acces control system
@@ -39,6 +48,7 @@ export interface Resource {
   doc: string;
   permissions: Permission[];
   relations: Relation[];
+  managementPermissions: ManagementPermission[];
 }
 
 export interface Relation {
@@ -76,4 +86,11 @@ export interface ActorResource {
   name: string;
   doc: string;
   relations: Relation[];
+}
+
+export interface ManagementPermission {
+  /** name matches the name of the underlying relation the management permission manages */
+  name: string;
+  /** expression is the permission expression derived from the manages directives from the policy definition */
+  expression: string;
 }

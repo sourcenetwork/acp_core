@@ -2,7 +2,6 @@ package policy
 
 import (
 	"context"
-	"strings"
 
 	"github.com/sourcenetwork/acp_core/internal/zanzi"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
@@ -34,10 +33,7 @@ func BuildCatalogue(ctx context.Context, engine *zanzi.Adapter, polId string) (*
 	for _, resource := range rec.Policy.Resources {
 		resCatalogue := &types.ResourceCatalogue{}
 
-		resCatalogue.Permissions = utils.MapFilterSlice(resource.Permissions,
-			// filter out management permissions from catalogue
-			func(p *types.Permission) bool { return !strings.Contains(p.Name, types.ManagementPermissionPrefix) },
-			func(p *types.Permission) string { return p.Name })
+		resCatalogue.Permissions = utils.MapSlice(resource.Permissions, func(p *types.Permission) string { return p.Name })
 		resCatalogue.Relations = utils.MapSlice(resource.Relations, func(p *types.Relation) string { return p.Name })
 		catalogue.ResourceCatalogue[resource.Name] = resCatalogue
 	}

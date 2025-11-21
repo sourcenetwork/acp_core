@@ -58,7 +58,7 @@ spec: none
 	}
 	require.Equal(t, wantMetadata, resp.Record.Metadata)
 	require.Equal(t, &types.Policy{
-		Id:                "da7be65027664708551f97197ba5f5993aa99bc7b57055df9766426dc6da9605",
+		Id:                "ba5162bd61996b6fb6e66ef85449f0de2e89584743df7f71577674cfb531eb25",
 		Name:              "policy",
 		Description:       "ok",
 		SpecificationType: types.PolicySpecificationType_NO_SPEC,
@@ -94,21 +94,6 @@ spec: none
 				},
 				Permissions: []*types.Permission{
 					{
-						Name:       "_can_manage_admin",
-						Expression: "owner",
-						Doc:        "permission controls actors which are allowed to create relationships for the admin relation (permission was auto-generated).",
-					},
-					{
-						Name:       "_can_manage_owner",
-						Expression: "owner",
-						Doc:        "permission controls actors which are allowed to create relationships for the owner relation (permission was auto-generated).",
-					},
-					{
-						Name:       "_can_manage_reader",
-						Expression: "(admin + owner)",
-						Doc:        "permission controls actors which are allowed to create relationships for the reader relation (permission was auto-generated).",
-					},
-					{
 						Name:       "own",
 						Expression: "owner",
 						Doc:        "own doc",
@@ -116,6 +101,20 @@ spec: none
 					{
 						Name:       "read",
 						Expression: "(owner + reader)",
+					},
+				},
+				ManagementPermissions: []*types.ManagementPermission{
+					{
+						Name:       "admin",
+						Expression: "owner",
+					},
+					{
+						Name:       "owner",
+						Expression: "owner",
+					},
+					{
+						Name:       "reader",
+						Expression: "(admin + owner)",
 					},
 				},
 			},
@@ -128,13 +127,6 @@ spec: none
 	},
 		resp.Record.Policy,
 	)
-
-	event := &types.EventPolicyCreated{
-		PolicyId:   "4419a8abb886c641bc794b9b3289bc2118ab177542129627b6b05d540de03e46",
-		PolicyName: "policy",
-	}
-	_ = event
-	//.AssertEventEmmited(t, ctx, event)
 }
 
 func TestCreatePolicy_ResourcesWithoutOwnerRelation_IsAutomaticallyAdded(t *testing.T) {
@@ -252,8 +244,8 @@ spec: none
 	resp1, err1 := ctx.Engine.CreatePolicy(ctx, &req)
 	resp2, err2 := ctx.Engine.CreatePolicy(ctx, &req)
 
-	want1 := "0aceb40e813c157152dd931f0f5e59228fce7c87ab3a40341ac1abce7ad7da3a"
-	want2 := "f3743fa4268b48462014e0b1b8a07d7a8bf615b3ddc276d91c7128aaad8a2eee"
+	want1 := "4107b53494261acabf0109bc7e7599d63459cd91db98fedc397651d413467871"
+	want2 := "2eadb005094bf4b20435b03c6fb8cace4c070eae8d88d478402663d92df92c93"
 	require.NoError(t, err1)
 	require.NoError(t, err2)
 	require.Equal(t, want1, resp1.Record.Policy.Id)

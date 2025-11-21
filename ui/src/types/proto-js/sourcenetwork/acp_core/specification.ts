@@ -10,11 +10,9 @@ export const protobufPackage = "sourcenetwork.acp_core";
 
 /** PolicySpecificationType models a named policy specification */
 export enum PolicySpecificationType {
-  /** UNKNOWN_SPEC - UNKNOWN_SPEC models an invalid specification */
-  UNKNOWN_SPEC = 0,
+  /** NO_SPEC - NO_SPEC models a policy which has no additional contraints on it */
+  NO_SPEC = 0,
   /** DEFRA_SPEC - DEFRA_SPEC models a policy which matches the Defra policy specification */
   DEFRA_SPEC = 1,
-  /** NO_SPEC - NO_SPEC models a policy which has no additional contraints on it */
-  NO_SPEC = 2,
   UNRECOGNIZED = -1,
 }

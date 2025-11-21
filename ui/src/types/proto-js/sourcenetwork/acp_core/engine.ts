@@ -7,8 +7,8 @@
 /* eslint-disable */
 import { type PolicyCatalogue } from "./catalogue";
 import { type SuppliedMetadata } from "./metadata";
+import { type Policy, type PolicyMarshalingType } from "./policy";
 import { type PolicyRecord } from "./policy_record";
-import { type PolicyMarshalingType } from "./policy_short";
 import { type Actor, type Object, type Relationship, type RelationshipRecord } from "./relationship";
 import { type RelationshipSelector } from "./relationship_selector";
 import { type AccessRequest } from "./request";
@@ -18,6 +18,14 @@ import { type AnnotatedPolicyTheoremResult } from "./theorem";
 
 export const protobufPackage = "sourcenetwork.acp_core";
 
+export enum PolicyHandlingStrategy {
+  /** POLICY_ADAPT - POLICY_ADAPT signals that the engine will adapt the policy to match the spec */
+  POLICY_ADAPT = 0,
+  /** POLICY_ERROR - POLICY_ERROR signals that the engine should return an error if the policy does not satisfy the spec */
+  POLICY_ERROR = 1,
+  UNRECOGNIZED = -1,
+}
+
 export interface CreatePolicyRequest {
   policy: string;
   marshalType: PolicyMarshalingType;
@@ -25,7 +33,14 @@ export interface CreatePolicyRequest {
 }
 
 export interface CreatePolicyResponse {
-  record: PolicyRecord | undefined;
+  record:
+    | PolicyRecord
+    | undefined;
+  /**
+   * log is a set of messages generated while
+   * creating the policy
+   */
+  log: string[];
 }
 
 export interface CreatePolicyWithSpecificationRequest {
@@ -169,6 +184,11 @@ export interface ValidatePolicyRequest {
 export interface ValidatePolicyResponse {
   valid: boolean;
   errorMsg: string;
+  /**
+   * returns the parsed Policy object if the validation was
+   * successful
+   */
+  policy: Policy | undefined;
 }
 
 export interface SetParamsRequest {
@@ -246,6 +266,22 @@ export interface RevealRegistrationRequest {
 
 export interface RevealRegistrationResponse {
   record: RelationshipRecord | undefined;
+}
+
+export interface CheckManagementAuthorityRequest {
+  policyId: string;
+  /** object which actor wants to manage */
+  object:
+    | Object
+    | undefined;
+  /** relation which actor wants to manage */
+  relation: string;
+  /** actor which whose authority we want to verify */
+  actor: Actor | undefined;
+}
+
+export interface CheckManagementAuthorityResponse {
+  authorized: boolean;
 }
 
 export interface ACPEngine {
@@ -392,4 +428,11 @@ export interface ACPEngine {
    * the verification is often done by someone else
    */
   VerifyAccessRequest(request: VerifyAccessRequestRequest): Promise<VerifyAccessRequestResponse>;
+  /**
+   * CheckManagementAuthority verifies whether the given actor is authorized to manage the given relation for the given object.
+   *
+   * Eg. if a policy sets an `admin` relation as a manager of a `reader` relation, and `did:user:bob` is an `admin` for object `file:foo`,
+   * then Checking `did:user:bob`'s authority for `reader` on `file:foo` will return true.
+   */
+  CheckManagementAuthority(request: CheckManagementAuthorityRequest): Promise<CheckManagementAuthorityResponse>;
 }

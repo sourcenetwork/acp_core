@@ -332,8 +332,8 @@ func Test_GibberingSpecMapsErrors(t *testing.T) {
 }
 
 func Test_EmptySpecMapsToNone(t *testing.T) {
-	in := ` name: test
-	spec: ""
+	in := `name: test
+spec: ""
 `
 
 	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)

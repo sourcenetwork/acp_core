@@ -6,8 +6,7 @@
 
 /* eslint-disable */
 import { type RecordMetadata } from "./metadata";
-import { type Policy } from "./policy";
-import { type PolicyMarshalingType } from "./policy_short";
+import { type Policy, type PolicyMarshalingType } from "./policy";
 
 export const protobufPackage = "sourcenetwork.acp_core";
 

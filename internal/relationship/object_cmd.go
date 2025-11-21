@@ -158,15 +158,8 @@ func (c *ArchiveObjectHandler) Execute(ctx context.Context, runtime runtime.Runt
 		}, nil // noop when object is archived
 	}
 
-	authz := authorizer.NewOperationAuthorizer(engine)
-
-	request := authorizer.ManagementRequest{
-		Policy:   pol,
-		Object:   cmd.Object,
-		Relation: policy.OwnerRelation,
-		Actor:    types.NewActor(did),
-	}
-	authorized, err := authz.IsAuthorized(ctx, &request)
+	authorized, err := authorizer.VerifyManagementPermission(ctx, engine, pol,
+		cmd.Object, policy.OwnerRelation, types.NewActor(did))
 	if err != nil {
 		return nil, newArchiveObjectErr(err)
 	}
@@ -280,14 +273,8 @@ func (h *TransferObjectHandler) Execute(ctx context.Context, runtime runtime.Run
 		))
 	}
 
-	request := authorizer.ManagementRequest{
-		Policy:   pol,
-		Object:   cmd.Object,
-		Relation: policy.OwnerRelation,
-		Actor:    types.NewActor(did),
-	}
-	authz := authorizer.NewOperationAuthorizer(engine)
-	authorized, err := authz.IsAuthorized(ctx, &request)
+	authorized, err := authorizer.VerifyManagementPermission(ctx, engine, pol,
+		cmd.Object, policy.OwnerRelation, types.NewActor(did))
 	if err != nil {
 		return nil, newTransferObjectErr(err)
 	}
@@ -451,14 +438,8 @@ func (h *UnarchiveObjectHandler) Handle(ctx context.Context, runtime runtime.Run
 		))
 	}
 
-	req := authorizer.ManagementRequest{
-		Policy:   pol,
-		Object:   cmd.Object,
-		Relation: policy.OwnerRelation,
-		Actor:    types.NewActor(did),
-	}
-	authz := authorizer.NewOperationAuthorizer(engine)
-	authorized, err := authz.IsAuthorized(ctx, &req)
+	authorized, err := authorizer.VerifyManagementPermission(ctx, engine, pol,
+		cmd.Object, policy.OwnerRelation, types.NewActor(did))
 	if err != nil {
 		return nil, newUnarchiveObjectErr(err)
 	}

@@ -2,18 +2,13 @@
 // versions:
 //   protoc-gen-ts_proto  v2.6.1
 //   protoc               unknown
-// source: sourcenetwork/acp_core/policy_short.proto
+// source: sourcenetwork/acp_core/policy_yaml.proto
 
 /* eslint-disable */
-import { type ActorResource } from "./policy";
 
 export const protobufPackage = "sourcenetwork.acp_core";
 
-/**
- * PolicyShort is a compact Policy definition which is conveniently expressed
- * as JSON or YAML. The shorthand format is used created a Policy.
- */
-export interface PolicyShort {
+export interface PolicyYaml {
   name: string;
   description: string;
   /** spec models a known specification which this policy will fulfill */
@@ -24,41 +19,39 @@ export interface PolicyShort {
    * resources defines resources within a policy.
    * map keys define the name for a resource
    */
-  resources: { [key: string]: ResourceShort };
+  resources: ResourceYaml[];
   /**
    * actor resource defines the actor resource for the policy
    * optional.
    */
-  actor: ActorResource | undefined;
+  actor: ActorResourceYaml | undefined;
 }
 
-export interface PolicyShort_MetaEntry {
+export interface PolicyYaml_MetaEntry {
   key: string;
   value: string;
 }
 
-export interface PolicyShort_ResourcesEntry {
+export interface ResourceSpecYaml {
+  name: string;
+  args: { [key: string]: string };
+}
+
+export interface ResourceSpecYaml_ArgsEntry {
   key: string;
-  value: ResourceShort | undefined;
+  value: string;
 }
 
-export interface ResourceShort {
-  doc: string;
-  permissions: { [key: string]: PermissionShort };
-  relations: { [key: string]: RelationShort };
+export interface ResourceYaml {
+  name: string;
+  description: string;
+  specs: ResourceSpecYaml[];
+  relations: RelationYaml[];
+  permissions: PermissionYaml[];
 }
 
-export interface ResourceShort_PermissionsEntry {
-  key: string;
-  value: PermissionShort | undefined;
-}
-
-export interface ResourceShort_RelationsEntry {
-  key: string;
-  value: RelationShort | undefined;
-}
-
-export interface RelationShort {
+export interface RelationYaml {
+  name: string;
   doc: string;
   /** list of relations managed by the current relation */
   manages: string[];
@@ -71,7 +64,14 @@ export interface RelationShort {
   types: string[];
 }
 
-export interface PermissionShort {
+export interface PermissionYaml {
+  name: string;
   doc: string;
   expr: string;
+}
+
+export interface ActorResourceYaml {
+  name: string;
+  doc: string;
+  relations: RelationYaml[];
 }
