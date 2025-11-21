@@ -9,30 +9,30 @@ import (
 )
 
 func TestFullUnmarshal(t *testing.T) {
-	in := `
-        name: policy
-        description: ok
-		spec: none
-        resources:
-          foo:
-            relations: 
-              owner:
-                doc: owner owns
-                types:
-                  - blah
-                  - ok->that
-                manages: 
-                  - whatever
-            permissions: 
-              abc:
-                expr: owner
-                doc: abc doc
-              def: 
-                expr: owner + abc
-        actor:
-          name: actor-resource
-          doc: my actor
-          `
+	in := `actor:
+  doc: my actor
+  name: actor-resource
+description: ok
+name: policy
+resources:
+- name: foo
+  permissions:
+  - doc: abc doc
+    expr: owner
+    name: abc
+  - expr: owner + abc
+    name: def
+  relations:
+  - doc: owner owns
+    manages:
+    - whatever
+    name: owner
+    types:
+    - blah
+    - ok->that
+spec: none
+`
+
 	unmarshaler := shortUnmarshaler{}
 	out, err := unmarshaler.UnmarshalYAML(in)
 
@@ -86,7 +86,9 @@ func TestFullUnmarshal(t *testing.T) {
 }
 
 func TestUnmarshalWithoutSpecDefaultsToNone(t *testing.T) {
-	in := `name: policy`
+	in := `name: policy
+spec: none
+`
 	unmarshaler := shortUnmarshaler{}
 	out, err := unmarshaler.UnmarshalYAML(in)
 
@@ -100,10 +102,10 @@ func TestUnmarshalWithoutSpecDefaultsToNone(t *testing.T) {
 }
 
 func TestEmptyResourceMapsToResource(t *testing.T) {
-	in := `
-    resources:
-      foo:
-    `
+	in := `resources:
+- name: foo
+spec: none
+`
 
 	unmarshaler := shortUnmarshaler{}
 	out, err := unmarshaler.UnmarshalYAML(in)
@@ -121,12 +123,10 @@ func TestEmptyResourceMapsToResource(t *testing.T) {
 }
 
 func TestResourceWithoutPermsOrRelsMapsToResource(t *testing.T) {
-	in := `
-    resources:
-      foo:
-        relations:
-        permissions:
-    `
+	in := `resources:
+- name: foo
+spec: none
+`
 
 	unmarshaler := shortUnmarshaler{}
 	out, err := unmarshaler.UnmarshalYAML(in)
@@ -146,12 +146,12 @@ func TestResourceWithoutPermsOrRelsMapsToResource(t *testing.T) {
 }
 
 func TestEmptyRelationMapsToRelation(t *testing.T) {
-	in := `
-    resources:
-      foo:
-        relations:
-          blah:
-    `
+	in := `resources:
+- name: foo
+  relations:
+  - name: blah
+spec: none
+`
 
 	unmarshaler := shortUnmarshaler{}
 	out, err := unmarshaler.UnmarshalYAML(in)
@@ -181,12 +181,12 @@ func TestEmptyPermissionMapsToPermission(t *testing.T) {
 	// it's ok because the validation will happen elsewhere.
 	// Asserting the type unmarhsals correctly means that the validator -
 	// as opposed to the unmarshaler - will error out leading to better error msgs.
-	in := `
-    resources:
-      foo:
-        permissions:
-          blah:
-    `
+	in := `resources:
+- name: foo
+  permissions:
+  - name: blah
+spec: none
+`
 
 	unmarshaler := shortUnmarshaler{}
 	out, err := unmarshaler.UnmarshalYAML(in)
@@ -253,15 +253,15 @@ func TestDuplicatedRelationErrors(t *testing.T) {
 }
 
 func TestRestrictionIdentifierMapsBothForms(t *testing.T) {
-	in := `
-    resources:
-      foo:
-        relations:
-          blah:
-            types:
-              - actor
-              - book->owner
-    `
+	in := `resources:
+- name: foo
+  relations:
+  - name: blah
+    types:
+    - actor
+    - book->owner
+spec: none
+`
 
 	unmarshaler := shortUnmarshaler{}
 	out, err := unmarshaler.UnmarshalYAML(in)
@@ -295,10 +295,9 @@ func TestRestrictionIdentifierMapsBothForms(t *testing.T) {
 }
 
 func Test_NoneSpecMapsToNoneSpecficationType(t *testing.T) {
-	in := `
-	name: test
-	spec: none
-	`
+	in := `name: test
+spec: none
+`
 
 	unmarshaler := shortUnmarshaler{}
 	out, err := unmarshaler.UnmarshalYAML(in)
@@ -313,10 +312,9 @@ func Test_NoneSpecMapsToNoneSpecficationType(t *testing.T) {
 }
 
 func Test_DefraSpecMapsToDefraSpecficationType(t *testing.T) {
-	in := `
-	name: test
-	spec: defra
-	`
+	in := `name: test
+spec: defra
+`
 
 	unmarshaler := shortUnmarshaler{}
 	out, err := unmarshaler.UnmarshalYAML(in)
@@ -344,10 +342,9 @@ func Test_GibberingSpecMapsErrors(t *testing.T) {
 }
 
 func Test_EmptySpecMapsToNone(t *testing.T) {
-	in := `
-	name: test
-	spec: ""
-	`
+	in := `name: test
+spec: ""
+`
 
 	unmarshaler := shortUnmarshaler{}
 	out, err := unmarshaler.UnmarshalYAML(in)

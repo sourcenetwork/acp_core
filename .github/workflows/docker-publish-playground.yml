@@ -1,9 +1,8 @@
-name: Publish Docker image
+name: Publish Docker Playground image
 on:
   push:
     branches:
       - main
-      - feat/playground-ui
 jobs:
   build-and-push:
     runs-on: ubuntu-latest

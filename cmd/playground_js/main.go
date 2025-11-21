@@ -18,8 +18,8 @@ func main() {
 	ctx := context.Background()
 
 	js.Global().Set("AcpPlayground", map[string]any{
-		"new":    playground_js.PlaygroundConstructor(ctx),
-		"commit": js.ValueOf(version.Commit),
+		"new":		playground_js.PlaygroundConstructor(ctx),
+		"commit":	js.ValueOf(version.Commit),
 	})
 
 	<-ctx.Done()

@@ -9,58 +9,58 @@ var Samples []*types.SandboxTemplate = []*types.SandboxTemplate{
 		Data: &types.SandboxData{
 			PolicyDefinition: `name: filesystem
 resources:
-  file:
-    relations:
-      owner:
-        types:
-          - actor
-      reader:
-        types:
-          - actor
-          - group->participant
-      writer:
-        types:
-          - actor
-          - group->participant
-      parent:
-        types:
-          - directory
-    permissions:
-      read:
-        expr: owner + reader + writer + parent->read
-      write:
-        expr: owner + writer + parent->write
-  directory:
-    relations:
-      owner:
-        types:
-          - actor
-      reader:
-        types:
-          - actor
-          - group->participant
-      writer:
-        types:
-          - actor
-          - group->participant
-    permissions:
-      read:
-        expr: owner + reader + writer
-      write:
-        expr: owner + writer
-  group:
-    relations:
-      owner:
-        types:
-          - actor
-      guest:
-        types:
-          - actor
-    permissions:
-      participant:
-        expr: owner + guest
-`,
-			Relationships: `file:readme#owner@did:user:bob // bob owns file readme
+- name: directory
+  permissions:
+  - expr: owner + reader + writer
+    name: read
+  - expr: owner + writer
+    name: write
+  relations:
+  - name: owner
+    types:
+    - actor
+  - name: reader
+    types:
+    - actor
+    - group->participant
+  - name: writer
+    types:
+    - actor
+    - group->participant
+- name: file
+  permissions:
+  - expr: owner + reader + writer + parent->read
+    name: read
+  - expr: owner + writer + parent->write
+    name: write
+  relations:
+  - name: owner
+    types:
+    - actor
+  - name: parent
+    types:
+    - directory
+  - name: reader
+    types:
+    - actor
+    - group->participant
+  - name: writer
+    types:
+    - actor
+    - group->participant
+- name: group
+  permissions:
+  - expr: owner + guest
+    name: participant
+  relations:
+  - name: guest
+    types:
+    - actor
+  - name: owner
+    types:
+    - actor
+spec: none
+`, Relationships: `file:readme#owner@did:user:bob // bob owns file readme
 file:readme#writer@did:user:alice // alice can read file readme
 file:readme#reader@group:engineering#participant // participants of the engineering group can read file readme
 
