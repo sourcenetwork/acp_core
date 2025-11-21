@@ -43,3 +43,4 @@ RUN  npm run build
 # Main entrypoint
 FROM nginx:alpine
 COPY --from=ui-builder /home/node/app/dist /usr/share/nginx/html
+EXPOSE 80

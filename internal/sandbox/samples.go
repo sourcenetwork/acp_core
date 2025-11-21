@@ -59,7 +59,6 @@ resources:
   - name: owner
     types:
     - actor
-spec: none
 `, Relationships: `file:readme#owner@did:user:bob // bob owns file readme
 file:readme#writer@did:user:alice // alice can read file readme
 file:readme#reader@group:engineering#participant // participants of the engineering group can read file readme
