@@ -13,19 +13,18 @@ func TestCreatePolicy_DefraSpec_RequiresRead(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	pol := `
-	name: test
-	spec: defra
-	resources:
-	  file:
-	    permissions:
-		  write:
-		    expr: owner
-	`
+	pol := `name: test
+resources:
+- name: file
+  permissions:
+  - expr: owner
+    name: write
+spec: defra
+`
 
 	req := types.CreatePolicyRequest{
 		Policy:      pol,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 	}
 	resp, err := ctx.Engine.CreatePolicy(ctx, &req)
 
@@ -37,19 +36,18 @@ func TestCreatePolicy_DefraSpec_RequiresWrite(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	pol := `
-	name: test
-	spec: defra
-	resources:
-	  file:
-	    permissions:
-		  read:
-		    expr: owner
-	`
+	pol := `name: test
+resources:
+- name: file
+  permissions:
+  - expr: owner
+    name: read
+spec: defra
+`
 
 	req := types.CreatePolicyRequest{
 		Policy:      pol,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 	}
 	resp, err := ctx.Engine.CreatePolicy(ctx, &req)
 
@@ -61,21 +59,20 @@ func TestCreatePolicy_DefraSpec_OkWithReadAndWrite(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	pol := `
-	name: test
-	spec: defra
-	resources:
-	  file:
-	    permissions:
-		  write:
-		    expr: owner
-		  read:
-		    expr: owner
-	`
+	pol := `name: test
+resources:
+- name: file
+  permissions:
+  - expr: owner
+    name: read
+  - expr: owner
+    name: write
+spec: defra
+`
 
 	req := types.CreatePolicyRequest{
 		Policy:      pol,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 	}
 	resp, err := ctx.Engine.CreatePolicy(ctx, &req)
 
@@ -86,21 +83,20 @@ func TestCreatePolicy_DefraSpec_OkWithReadAndWrite(t *testing.T) {
 func TestCreatePolicy_DefraSpec_WriteImpliesRead(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
-	pol := `
-	name: test
-	spec: defra
-	resources:
-	  file:
-	    relations:
-		  writer:
-		    types:
-			  - actor
-	    permissions:
-		  write:
-		    expr: owner + writer
-		  read:
-		    expr: owner 
-	`
+	pol := `name: test
+resources:
+- name: file
+  permissions:
+  - expr: owner
+    name: read
+  - expr: owner + writer
+    name: write
+  relations:
+  - name: writer
+    types:
+    - actor
+spec: defra
+`
 
 	action := test.PolicySetupAction{
 		Policy:        pol,

@@ -2,6 +2,20 @@
 
 Significant features added between versions will be contained in the changelog, as well as any breaking changes.
 
+## [0.6.0] - 2025-11-21
+Breaking changes and refactor:
+- Change Policy yaml representation
+- Removed support for JSON Policies
+- Add Policy migration tool
+
+## [0.5.4] - 2025-08-14
+Fixes:
+- Fixed error message formatting
+
+## [0.5.3] - 2025-08-12
+Features:
+- Add parsed Policy object to ValidatePolicy method in Engine
+
 ## [0.5.2] - 2025-04-07
 Features:
 - Add EventPolicyEdited type

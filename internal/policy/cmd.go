@@ -46,15 +46,12 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 		return nil, fmt.Errorf("CreatePolicy: %w", err)
 	}
 
-	if policy.SpecificationType == types.PolicySpecificationType_UNKNOWN_SPEC {
-		policy.SpecificationType = types.PolicySpecificationType_NO_SPEC
-	}
-
 	pipeline := ppp.CreatePolicyPipelineFactory(i, policy.SpecificationType)
-	policy, err = pipeline.Process(policy)
+	result, err := pipeline.Process(policy)
 	if err != nil {
 		return nil, fmt.Errorf("CreatePolicy: %w", err)
 	}
+	policy = &result.Policy
 
 	record := &types.PolicyRecord{
 		Policy:           policy,
@@ -84,6 +81,7 @@ func (c *CreatePolicyHandler) Execute(ctx context.Context, runtime runtime.Runti
 
 	return &types.CreatePolicyResponse{
 		Record: record,
+		Log:    result.Messages,
 	}, nil
 }
 
@@ -135,8 +133,8 @@ func (c *CreatePolicyWithSpecHandler) Execute(ctx context.Context, runtime runti
 		return nil, fmt.Errorf("CreatePolicy: %w", err)
 	}
 
-	// if no spec was provided, assign the required spec
-	if policy.SpecificationType == types.PolicySpecificationType_UNKNOWN_SPEC {
+	// TODO if create strategy is reject then error
+	if policy.SpecificationType == types.PolicySpecificationType_NO_SPEC {
 		policy.SpecificationType = req.RequiredSpec
 	}
 
@@ -148,10 +146,11 @@ func (c *CreatePolicyWithSpecHandler) Execute(ctx context.Context, runtime runti
 	}
 
 	pipeline := ppp.CreatePolicyPipelineFactory(i, req.RequiredSpec)
-	policy, err = pipeline.Process(policy)
+	result, err := pipeline.Process(policy)
 	if err != nil {
 		return nil, fmt.Errorf("CreatePolicy: %w", err)
 	}
+	policy = &result.Policy
 
 	record := &types.PolicyRecord{
 		Policy:           policy,
@@ -213,15 +212,17 @@ func (h *EditPolicyHandler) Execute(ctx context.Context, runtime runtime.Runtime
 	if err != nil {
 		return nil, fmt.Errorf("EditPolicy: %w", err)
 	}
-	if policy.SpecificationType == types.PolicySpecificationType_UNKNOWN_SPEC {
+	// TODO if create strategy is reject then error
+	if policy.SpecificationType == types.PolicySpecificationType_NO_SPEC {
 		policy.SpecificationType = types.PolicySpecificationType_NO_SPEC
 	}
 
 	pipeline := ppp.EditPolicyPipelineFactory(oldRecord.Policy)
-	policy, err = pipeline.Process(policy)
+	result, err := pipeline.Process(policy)
 	if err != nil {
 		return nil, fmt.Errorf("EditPolicy: %w", err)
 	}
+	policy = &result.Policy
 
 	now, err := runtime.GetTimeService().GetNow(ctx)
 	if err != nil {

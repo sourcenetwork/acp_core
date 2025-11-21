@@ -85,16 +85,14 @@ func TestFullUnmarshal(t *testing.T) {
 	require.Equal(t, want, out)
 }
 
-func TestUnmarshalWithoutSpecDefaultsToUnkown(t *testing.T) {
-	in := `
-	name: policy
-`
+func TestUnmarshalWithoutSpecDefaultsToNone(t *testing.T) {
+	in := `name: policy`
 	unmarshaler := shortUnmarshaler{}
 	out, err := unmarshaler.UnmarshalYAML(in)
 
 	want := &types.Policy{
 		Name:              "policy",
-		SpecificationType: types.PolicySpecificationType_UNKNOWN_SPEC,
+		SpecificationType: types.PolicySpecificationType_NO_SPEC,
 		Resources:         []*types.Resource{},
 	}
 	require.Nil(t, err)
@@ -111,7 +109,7 @@ func TestEmptyResourceMapsToResource(t *testing.T) {
 	out, err := unmarshaler.UnmarshalYAML(in)
 
 	want := &types.Policy{
-		SpecificationType: types.PolicySpecificationType_UNKNOWN_SPEC,
+		SpecificationType: types.PolicySpecificationType_NO_SPEC,
 		Resources: []*types.Resource{
 			{
 				Name: "foo",
@@ -134,7 +132,7 @@ func TestResourceWithoutPermsOrRelsMapsToResource(t *testing.T) {
 	out, err := unmarshaler.UnmarshalYAML(in)
 
 	want := &types.Policy{
-		SpecificationType: types.PolicySpecificationType_UNKNOWN_SPEC,
+		SpecificationType: types.PolicySpecificationType_NO_SPEC,
 		Resources: []*types.Resource{
 			{
 				Name:        "foo",
@@ -159,7 +157,7 @@ func TestEmptyRelationMapsToRelation(t *testing.T) {
 	out, err := unmarshaler.UnmarshalYAML(in)
 
 	want := &types.Policy{
-		SpecificationType: types.PolicySpecificationType_UNKNOWN_SPEC,
+		SpecificationType: types.PolicySpecificationType_NO_SPEC,
 		Resources: []*types.Resource{
 			{
 				Name: "foo",
@@ -194,7 +192,7 @@ func TestEmptyPermissionMapsToPermission(t *testing.T) {
 	out, err := unmarshaler.UnmarshalYAML(in)
 
 	want := &types.Policy{
-		SpecificationType: types.PolicySpecificationType_UNKNOWN_SPEC,
+		SpecificationType: types.PolicySpecificationType_NO_SPEC,
 		Resources: []*types.Resource{
 			{
 				Name: "foo",
@@ -269,7 +267,7 @@ func TestRestrictionIdentifierMapsBothForms(t *testing.T) {
 	out, err := unmarshaler.UnmarshalYAML(in)
 
 	want := &types.Policy{
-		SpecificationType: types.PolicySpecificationType_UNKNOWN_SPEC,
+		SpecificationType: types.PolicySpecificationType_NO_SPEC,
 		Resources: []*types.Resource{
 			{
 				Name: "foo",
@@ -345,7 +343,7 @@ func Test_GibberingSpecMapsErrors(t *testing.T) {
 	require.Nil(t, out)
 }
 
-func Test_EmptySpecMapsToUnknown(t *testing.T) {
+func Test_EmptySpecMapsToNone(t *testing.T) {
 	in := `
 	name: test
 	spec: ""
@@ -357,8 +355,115 @@ func Test_EmptySpecMapsToUnknown(t *testing.T) {
 	require.NoError(t, err)
 	want := &types.Policy{
 		Name:              "test",
-		SpecificationType: types.PolicySpecificationType_UNKNOWN_SPEC,
+		SpecificationType: types.PolicySpecificationType_NO_SPEC,
 		Resources:         []*types.Resource{},
 	}
+	require.Equal(t, want, out)
+}
+
+func TestYaml_FullUnmarshal(t *testing.T) {
+	in := `name: policy
+description: ok
+spec: none
+resources:
+- name: foo
+  relations: 
+  - name: owner
+    doc: owner owns
+    types:
+    - blah
+    - ok->that
+    manages: 
+    - whatever
+  permissions: 
+  - name: abc
+    expr: owner
+    doc: abc doc
+  - name: def
+    expr: owner + abc
+actor:
+  name: actor-resource
+  doc: my actor
+`
+	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
+
+	want := &types.Policy{
+		Name:              "policy",
+		Description:       "ok",
+		SpecificationType: types.PolicySpecificationType_NO_SPEC,
+		Resources: []*types.Resource{
+			{
+				Name: "foo",
+				Relations: []*types.Relation{
+					{
+						Name: "owner",
+						Doc:  "owner owns",
+						VrTypes: []*types.Restriction{
+							{
+								ResourceName: "blah",
+								RelationName: "",
+							},
+							{
+								ResourceName: "ok",
+								RelationName: "that",
+							},
+						},
+						Manages: []string{
+							"whatever",
+						},
+					},
+				},
+				Permissions: []*types.Permission{
+					{
+						Name:       "abc",
+						Doc:        "abc doc",
+						Expression: "owner",
+					},
+					{
+						Name:       "def",
+						Doc:        "",
+						Expression: "owner + abc",
+					},
+				},
+			},
+		},
+		ActorResource: &types.ActorResource{
+			Name:      "actor-resource",
+			Doc:       "my actor",
+			Relations: []*types.Relation{},
+		},
+	}
+	require.Nil(t, err)
+	require.Equal(t, want, out)
+}
+
+func TestYaml_UnmarshalWithEmptyPermExpression(t *testing.T) {
+	in := `name: policy
+description: ok
+spec: none
+resources:
+- name: foo
+  permissions: 
+  - name: abc
+`
+	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
+
+	want := &types.Policy{
+		Name:              "policy",
+		Description:       "ok",
+		SpecificationType: types.PolicySpecificationType_NO_SPEC,
+		Resources: []*types.Resource{
+			{
+				Name:      "foo",
+				Relations: []*types.Relation{},
+				Permissions: []*types.Permission{
+					{
+						Name: "abc",
+					},
+				},
+			},
+		},
+	}
+	require.Nil(t, err)
 	require.Equal(t, want, out)
 }

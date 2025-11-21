@@ -155,6 +155,13 @@ service ACPEngine {
   // TODO: Expand and Reverse lookup
 }
 
+enum PolicyHandlingStrategy {
+  // POLICY_ADAPT signals that the engine will adapt the policy to match the spec
+  POLICY_ADAPT = 0;
+  // POLICY_ERROR signals that the engine should return an error if the policy does not satisfy the spec
+  POLICY_ERROR = 1;
+}
+
 message CreatePolicyRequest {
   string policy = 1;
   PolicyMarshalingType marshal_type = 2;
@@ -163,6 +170,9 @@ message CreatePolicyRequest {
 
 message CreatePolicyResponse {
   PolicyRecord record = 1;
+  // log is a set of messages generated while
+  // creating the policy
+  repeated string log = 2;
 }
 
 message CreatePolicyWithSpecificationRequest {
@@ -301,6 +311,9 @@ message ValidatePolicyRequest {
 message ValidatePolicyResponse {
   bool valid = 1;
   string error_msg = 2;
+  // returns the parsed Policy object if the validation was
+  // successful
+  Policy policy = 3;
 }
 
 message SetParamsRequest {

@@ -22,23 +22,23 @@ Delegations {}
 `
 
 var setupData = &types.SandboxData{
-	PolicyDefinition: `
-				name: test
-				resources:
-				  file:
-				    relations:
-					  owner:
-					    types:
-						  - actor
-					  reader:
-					    types:
-						  - actor
-				    permissions:
-					  read:
-					    expr: owner + reader
-					  write:
-					    expr: owner
-				`,
+	PolicyDefinition: `name: test
+resources:
+- name: file
+  permissions:
+  - expr: owner + reader
+    name: read
+  - expr: owner
+    name: write
+  relations:
+  - name: owner
+    types:
+    - actor
+  - name: reader
+    types:
+    - actor
+spec: none
+`,
 	Relationships: `
 				file:readme#owner@did:example:bob
 				file:readme#reader@did:example:alice
@@ -118,9 +118,10 @@ func Test_SetState_EmptyTheoremErrors(t *testing.T) {
 
 	a1 := NewAndSet{
 		Data: &types.SandboxData{
-			PolicyDefinition: `name: test`,
-			Relationships:    ``,
-			PolicyTheorem:    "",
+			PolicyDefinition: `name: test
+spec: none
+`, Relationships: ``,
+			PolicyTheorem: "",
 		},
 		Assertions: []Assertion{
 			HasTheoremError("mismatched input"),
@@ -134,9 +135,10 @@ func Test_Evaluate_SandboxWithEmptyTheoremOk(t *testing.T) {
 
 	a1 := NewAndSet{
 		Data: &types.SandboxData{
-			PolicyDefinition: `name: test`,
-			Relationships:    ``,
-			PolicyTheorem:    noopTheorem,
+			PolicyDefinition: `name: test
+spec: none
+`, Relationships: ``,
+			PolicyTheorem: noopTheorem,
 		},
 	}
 	handle := a1.Run(ctx)
@@ -178,18 +180,20 @@ func Test_ListSandboxes_ReturnsExistingSandboxes(t *testing.T) {
 
 	a := NewAndSet{
 		Data: &types.SandboxData{
-			PolicyDefinition: `name: test1`,
-			Relationships:    ``,
-			PolicyTheorem:    noopTheorem,
+			PolicyDefinition: `name: test1
+spec: none
+`, Relationships: ``,
+			PolicyTheorem: noopTheorem,
 		},
 	}
 	a.Run(ctx)
 
 	a = NewAndSet{
 		Data: &types.SandboxData{
-			PolicyDefinition: `name: test2`,
-			Relationships:    ``,
-			PolicyTheorem:    noopTheorem,
+			PolicyDefinition: `name: test2
+spec: none
+`, Relationships: ``,
+			PolicyTheorem: noopTheorem,
 		},
 	}
 	a.Run(ctx)
@@ -216,23 +220,23 @@ func Test_SetState_SettingValidStateReturnsOk(t *testing.T) {
 		Req: &types.SetStateRequest{
 			Handle: resp.Record.Handle,
 			Data: &types.SandboxData{
-				PolicyDefinition: `
-                name: test
-                resources:
-                  file:
-                    relations:
-                      owner:
-                        types:
-                          - actor
-                      reader:
-                        types:
-                          - actor
-                    permissions:
-                      read:
-                        expr: owner + reader
-                      write:
-                        expr: owner`,
-				Relationships: `
+				PolicyDefinition: `name: test
+resources:
+- name: file
+  permissions:
+  - expr: owner + reader
+    name: read
+  - expr: owner
+    name: write
+  relations:
+  - name: owner
+    types:
+    - actor
+  - name: reader
+    types:
+    - actor
+spec: none
+`, Relationships: `
 				file:readme#owner@did:example:bob
 				file:readme#reader@did:example:alice
 				`,
@@ -297,23 +301,23 @@ func Test_Simulate(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
 	data := types.SandboxData{
-		PolicyDefinition: `
-        name: test
-        resources:
-          file:
-            relations:
-              owner:
-                types:
-                  - actor
-              reader:
-                types:
-                  - actor
-            permissions:
-              read:
-                expr: owner + reader
-              write:
-                expr: owner
-        `,
+		PolicyDefinition: `name: test
+resources:
+- name: file
+  permissions:
+  - expr: owner + reader
+    name: read
+  - expr: owner
+    name: write
+  relations:
+  - name: owner
+    types:
+    - actor
+  - name: reader
+    types:
+    - actor
+spec: none
+`,
 		Relationships: `
 		file:abc#owner@did:ex:bob
 		file:abc#reader@did:ex:alice
