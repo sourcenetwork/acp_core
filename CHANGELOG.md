@@ -2,6 +2,10 @@
 
 Significant features added between versions will be contained in the changelog, as well as any breaking changes.
 
+## [0.7.0] - 2025-11-21
+Feat:
+- Add ACP Playground
+
 ## [0.6.0] - 2025-11-21
 Breaking changes and refactor:
 - Change Policy yaml representation
