@@ -1,7 +1,6 @@
 package playground
 
 import (
-	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -413,23 +412,433 @@ func Test_GetPlaygroundSamples_ReturnSamples(t *testing.T) {
 }
 
 func Test_ShinzoPolicy_Ok(t *testing.T) {
-	in := `{
-  "policyDefinition": "name: shinzo\nresources:\n  primitive:\n\t\trelations:\n\t\t\tadmin:\n\t\t\t\tmanages:\n\t\t\t\t- writer\n\t\t\t\t- reader\n\t\t\t\t- banned\n\t\t\t\ttypes:\n\t\t\t\t- actor\n\t\t\t\t- group->administrator\n\t\t\twriter:\n\t\t\t\ttypes:\n\t\t\t\t- actor\n\t\t\t\t- group->member\n\t\t\treader:\n\t\t\t\ttypes:\n\t\t\t\t- actor\n\t\t\t\t- group->member\n\t\t\tsubscriber:\n\t\t\t\ttypes:\n\t\t\t\t- actor\n\t\t\tbanned:\n\t\t\t\ttypes:\n\t\t\t\t- actor\n\t\tpermissions:\n\t\t\tread:\n\t\t\t\texpr: (writer + reader) - banned\n\t\t\tupdate:\n\t\t\t\texpr: writer - banned\n\t\t\tdelete:\n\t\t\t\texpr: owner\n\t\t\tquery:\n\t\t\t\texpr: (subscriber) - banned\n  view:\n    relations:\n      admin:\n        manages:\n        - writer\n        - reader\n        - subscriber\n        - banned\n        types:\n        - actor\n        - group->administrator\n      creator:\n        types:\n        - actor\n      writer:\n        types:\n        - actor\n        - group->member\n      reader:\n        types:\n        - actor\n        - group->member\n      banned:\n        types:\n        - actor\n      subscriber:\n        types:\n        - actor\n      parent:\n        types:\n        - primitive\n        - view\n    permissions:\n      read:\n        expr: writer + reader + parent->read + subscriber - banned\n      update:\n        expr: ((writer + parent->update) & parent->read) - banned\n      query:\n        expr: (subscriber) - banned\n      delete:\n        expr: owner\n  group:  \n    relations:\n      owner:\n        manages:\n        - admin\n        - guest\n        - blocked\n        types:\n        - actor\n      admin:\n        manages:\n        - guest\n        - blocked\n        types:\n        - actor\n        - group->administrator\n      guest:\n        types:\n        - actor\n      blocked:\n        types:\n        - actor\n    permissions:\n      member:\n        expr: guest - blocked\n      administrator:\n        expr: (owner + admin) - blocked",
-  "policyTheorem": "Authorizations {\n  // @@@ blocks tests\n  primitive:blocks#read@did:user:randomUser\n  !primitive:blocks#update@did:user:randomUser\n  !primitive:blocks#query@did:user:randomUser\n\n  primitive:blocks#read@did:user:aHost\n  !primitive:blocks#update@did:user:aHost\n  !primitive:blocks#query@did:user:aHost\n\n  primitive:blocks#read@did:user:anIndexer\n  primitive:blocks#update@did:user:anIndexer\n  !primitive:blocks#query@did:user:anIndexer\n\n  !primitive:blocks#read@did:user:duncan \n  !primitive:blocks#update@did:user:duncan\n  !primitive:blocks#query@did:user:duncan\n  !primitive:blocks#read@did:user:addo\n  !primitive:blocks#update@did:user:addo\n  !primitive:blocks#query@did:user:addo\n  !primitive:blocks#read@did:user:quinn\n  !primitive:blocks#update@did:user:quinn\n  !primitive:blocks#query@did:user:quinn\n  !primitive:blocks#read@did:user:daniel\n  !primitive:blocks#update@did:user:daniel\n  !primitive:blocks#query@did:user:daniel\n\n  !primitive:blocks#read@did:user:shinzohub\n  !primitive:blocks#update@did:user:shinzohub\n  !primitive:blocks#query@did:user:shinzohub\n\n  !primitive:blocks#read@did:user:unregisteredUser\n  !primitive:blocks#update@did:user:unregisteredUser\n  !primitive:blocks#query@did:user:unregisteredUser\n\n  !primitive:blocks#read@did:user:aBlockedIndexer\n  !primitive:blocks#update@did:user:aBlockedIndexer\n  !primitive:blocks#query@did:user:aBlockedIndexer\n\n  !primitive:blocks#read@did:user:aBannedIndexer\n  !primitive:blocks#update@did:user:aBannedIndexer\n  !primitive:blocks#query@did:user:aBannedIndexer\n\n  !primitive:blocks#read@did:user:aBlockedHost\n  !primitive:blocks#update@did:user:aBlockedHost\n  !primitive:blocks#query@did:user:aBlockedHost\n\n  // @@@ Secondary data feed (a data feed derived directly from primitives) tests\n  view:datafeedA#read@did:user:subscriber\n  !view:datafeedA#update@did:user:subscriber\n  view:datafeedA#query@did:user:subscriber\n  !view:datafeedA#creator@did:user:subscriber\n\n  !view:datafeedA#read@did:user:subscriberToB\n  !view:datafeedA#update@did:user:subscriberToB\n  !view:datafeedA#query@did:user:subscriberToB\n  !view:datafeedA#creator@did:user:subscriberToB\n\n  !view:datafeedA#read@did:user:anonsubscriber\n  !view:datafeedA#update@did:user:anonsubscriber\n  !view:datafeedA#query@did:user:anonsubscriber\n  !view:datafeedA#creator@did:user:anonsubscriber\n\n  view:datafeedA#read@did:user:aHost\n  view:datafeedA#update@did:user:aHost\n  !view:datafeedA#query@did:user:aHost\n  !view:datafeedA#creator@did:user:aHost\n\n  !view:datafeedA#read@did:user:creator\n  !view:datafeedA#update@did:user:creator\n  !view:datafeedA#query@did:user:creator\n  view:datafeedA#creator@did:user:creator\n\n  !view:datafeedA#read@did:user:creatorOfB\n  !view:datafeedA#update@did:user:creatorOfB\n  !view:datafeedA#query@did:user:creatorOfB\n  !view:datafeedA#creator@did:user:creatorOfB\n\n  !view:datafeedA#read@did:user:addo\n  !view:datafeedA#update@did:user:addo\n  !view:datafeedA#query@did:user:addo\n  !view:datafeedA#creator@did:user:addo\n\n  !view:datafeedA#read@did:user:shinzohub\n  !view:datafeedA#update@did:user:shinzohub\n  !view:datafeedA#query@did:user:shinzohub\n  !view:datafeedA#creator@did:user:shinzohub\n\n  !view:datafeedA#read@did:user:aBannedHost\n  !view:datafeedA#update@did:user:aBannedHost\n  !view:datafeedA#query@did:user:aBannedHost\n  !view:datafeedA#creator@did:user:aBannedHost\n\n  !view:datafeedA#read@did:user:aBlockedHost\n  !view:datafeedA#update@did:user:aBlockedHost\n  !view:datafeedA#query@did:user:aBlockedHost\n  !view:datafeedA#creator@did:user:aBlockedHost\n\n  view:datafeedA#read@did:user:anIndexer\n  view:datafeedA#update@did:user:anIndexer\n  !view:datafeedA#query@did:user:anIndexer\n  !view:datafeedA#creator@did:user:anIndexer\n\n  // @@@ Tertiary data feed (a datafeed derived directly from another data feed) tests\n  view:datafeedB#read@did:user:subscriber\n  !view:datafeedB#update@did:user:subscriber\n  !view:datafeedB#query@did:user:subscriber\n  !view:datafeedB#creator@did:user:subscriber\n\n  view:datafeedB#read@did:user:subscriberToB\n  !view:datafeedB#update@did:user:subscriberToB\n  view:datafeedB#query@did:user:subscriberToB\n  !view:datadeefB#creator@did:user:subscriberToB\n\n  !view:datafeedB#read@did:user:anonsubscriber\n  !view:datafeedB#update@did:user:anonsubscriber\n  !view:datafeedB#query@did:user:anonsubscriber\n  !view:datafeedB#creator@did:user:anonsubscriber\n\n  // Members of the host group inherit write permissions on datafeedB as they have it for datafeedA and datafeedA is datafeedB's parent\n  view:datafeedB#read@did:user:aHost\n  view:datafeedB#update@did:user:aHost\n  !view:datafeedB#query@did:user:aHost\n  !view:datafeedB#creator@did:user:aHost\n\n  !view:datafeedB#read@did:user:creator\n  !view:datafeedB#update@did:user:creator\n  !view:datafeedB#query@did:user:creator\n  !view:datafeedB#creator@did:user:creator\n\n  !view:datafeedB#read@did:user:creatorOfB\n  !view:datafeedB#update@did:user:creatorOfB\n  !view:datafeedB#query@did:user:creatorOfB\n  view:datafeedB#creator@did:user:creatorOfB\n\n  !view:datafeedB#read@did:user:addo\n  !view:datafeedB#update@did:user:addo\n  !view:datafeedB#query@did:user:addo\n  !view:datafeedB#creator@did:user:addo\n\n  !view:datafeedB#read@did:user:shinzohub\n  !view:datafeedB#update@did:user:shinzohub\n  !view:datafeedB#query@did:user:shinzohub\n  !view:datafeedB#creator@did:user:shinzohub\n\n  !view:datafeedB#read@did:user:aBannedHost\n  !view:datafeedB#update@did:user:aBannedHost\n  !view:datafeedB#query@did:user:aBannedHost\n  !view:datafeedB#creator@did:user:aBannedHost\n\n  !view:datafeedB#read@did:user:aBlockedHost\n  !view:datafeedB#update@did:user:aBlockedHost\n  !view:datafeedB#query@did:user:aBlockedHost\n  !view:datafeedB#creator@did:user:aBlockedHost\n\n  view:datafeedB#read@did:user:anIndexer\n  view:datafeedB#update@did:user:anIndexer\n  !view:datafeedB#query@did:user:anIndexer\n  !view:datafeedB#creator@did:user:anIndexer\n\n}\n\nDelegations {\n  // Shinzo Team group administration tests\n  !did:user:quinn > group:indexer#guest\n  !did:user:quinn > group:indexer#admin\n  !did:user:quinn > group:indexer#owner\n  did:user:duncan > group:indexer#guest\n  !did:user:duncan > group:indexer#admin\n  !did:user:duncan > group:indexer#owner\n  did:user:addo > group:indexer#guest\n  !did:user:addo > group:indexer#admin\n  !did:user:addo > group:indexer#owner\n\n  !did:user:quinn > group:host#guest\n  !did:user:quinn > group:host#admin\n  !did:user:quinn > group:host#owner\n  did:user:duncan > group:host#guest\n  !did:user:duncan > group:host#admin\n  !did:user:duncan > group:host#owner\n  did:user:addo > group:host#guest\n  !did:user:addo > group:host#admin\n  !did:user:addo > group:host#owner\n\n  !did:user:quinn > group:shinzoteam#guest\n  !did:user:quinn > group:shinzoteam#admin\n  !did:user:quinn > group:shinzoteam#owner\n  did:user:duncan > group:shinzoteam#guest\n  !did:user:duncan > group:shinzoteam#admin\n  !did:user:duncan > group:shinzoteam#owner\n  did:user:addo > group:shinzoteam#guest\n  did:user:addo > group:shinzoteam#admin\n  did:user:addo > group:shinzoteam#owner \n\n  // Shinzo team file administration \n  !did:user:addo > primitive:blocks#reader\n  !did:user:addo > primitive:blocks#writer\n  !did:user:addo > primitive:blocks#admin\n  !did:user:addo > primitive:blocks#owner\n\n  did:user:addo > view:datafeedA#reader\n  did:user:addo > view:datafeedA#writer\n  !did:user:addo > view:datafeedA#creator\n  !did:user:addo > view:datafeedA#admin\n  !did:user:addo > view:datafeedA#owner\n\n  did:user:addo > view:datafeedB#reader\n  did:user:addo > view:datafeedB#writer\n  !did:user:addo > view:datafeedB#creator\n  !did:user:addo > view:datafeedB#admin\n  !did:user:addo > view:datafeedB#owner\n\n  !did:user:duncan > primitive:blocks#reader\n  !did:user:duncan > primitive:blocks#writer\n  !did:user:duncan > primitive:blocks#admin\n  !did:user:duncan > primitive:blocks#owner\n\n  did:user:duncan > view:datafeedA#reader\n  did:user:duncan > view:datafeedA#writer\n  !did:user:duncan > view:datafeedA#creator\n  !did:user:duncan > view:datafeedA#admin\n  !did:user:duncan > view:datafeedA#owner\n\n  did:user:duncan > view:datafeedB#reader\n  did:user:duncan > view:datafeedB#writer\n  !did:user:duncan > view:datafeedB#creator\n  !did:user:duncan > view:datafeedB#admin\n  !did:user:duncan > view:datafeedB#owner\n\n  !did:user:quinn > primitive:blocks#reader\n  !did:user:quinn > primitive:blocks#writer\n  !did:user:quinn > primitive:blocks#admin\n  !did:user:quinn > primitive:blocks#owner\n\n  !did:user:quinn > view:datafeedA#reader\n  !did:user:quinn > view:datafeedA#writer\n  !did:user:quinn > view:datafeedA#creator\n  !did:user:quinn > view:datafeedA#admin\n  !did:user:quinn > view:datafeedA#owner\n\n  // Shinzo hub access administration tests\n  did:user:shinzohub > group:indexer#guest\n  !did:user:shinzohub > group:indexer#admin\n  !did:user:shinzohub > group:indexer#owner\n\n  did:user:shinzohub > group:host#guest\n  !did:user:shinzohub > group:host#admin\n  !did:user:shinzohub > group:host#owner\n\n  did:user:shinzohub > primitive:blocks#reader\n  did:user:shinzohub > primitive:blocks#writer\n  !did:user:shinzohub > primitive:blocks#admin\n  !did:user:shinzohub > primitive:blocks#owner\n\n  did:user:shinzohub > view:datafeedA#reader\n  did:user:shinzohub > view:datafeedA#writer\n  did:user:shinzohub > view:datafeedA#subscriber\n  !did:user:shinzohub > view:datafeedA#creator\n  !did:user:shinzohub > view:datafeedA#admin\n  !did:user:shinzohub > view:datafeedA#owner\n\n  did:user:shinzohub > view:datafeedB#reader\n  did:user:shinzohub > view:datafeedB#writer\n  did:user:shinzohub > view:datafeedB#subscriber\n  !did:user:shinzohub > view:datafeedB#creator\n  !did:user:shinzohub > view:datafeedB#admin\n  !did:user:shinzohub > view:datafeedB#owner\n}",
-  "relationships": "primitive:blocks#owner@did:user:sourcehub\nprimitive:blocks#admin@did:user:shinzohub\nprimitive:blocks#writer@group:indexer#member\nprimitive:blocks#reader@group:host#member\nprimitive:blocks#reader@did:user:randomUser\nprimitive:blocks#banned@did:user:aBannedIndexer\nprimitive:blocks#subscriber@did:user:subscriber\n\nview:datafeedA#owner@did:user:sourcehub\nview:datafeedA#admin@did:user:shinzohub\nview:datafeedA#admin@group:shinzoteam#administrator\nview:datafeedA#creator@did:user:creator\nview:datafeedA#subscriber@did:user:subscriber\nview:datafeedA#writer@group:host#member\nview:datafeedA#banned@did:user:aBannedHost\nview:datafeedA#parent@primitive:blocks\n\nview:datafeedB#owner@did:user:sourcehub\nview:datafeedB#admin@did:user:shinzohub\nview:datafeedB#admin@group:shinzoteam#administrator\nview:datafeedB#creator@did:user:creatorOfB\nview:datafeedB#subscriber@did:user:subscriberToB\nview:datafeedB#parent@view:datafeedA\n\ngroup:shinzoteam#owner@did:user:addo \ngroup:shinzoteam#admin@did:user:duncan\ngroup:shinzoteam#guest@did:user:quinn\ngroup:shinzoteam#guest@did:user:daniel\n\ngroup:indexer#owner@did:user:sourcehub\ngroup:indexer#admin@did:user:shinzohub\ngroup:indexer#admin@group:shinzoteam#administrator\ngroup:indexer#guest@did:user:anIndexer\ngroup:indexer#guest@did:user:aBlockedIndexer\ngroup:indexer#blocked@did:user:aBlockedIndexer\ngroup:indexer#guest@did:user:aBannedIndexer\n\ngroup:host#owner@did:user:sourcehub\ngroup:host#admin@did:user:shinzohub\ngroup:host#admin@group:shinzoteam#administrator\ngroup:host#guest@did:user:aHost\ngroup:host#guest@did:user:aBlockedHost\ngroup:host#blocked@did:user:aBlockedHost"
-}`
-	d := make(map[string]string)
-	err := json.Unmarshal([]byte(in), &d)
-	require.NoError(t, err)
-
+	pol := `name: shinzo
+        resources:
+          primitive:
+        		relations:
+        			admin:
+        				manages:
+        				- writer
+        				- reader
+        				- banned
+        				types:
+        				- actor
+        				- group->administrator
+        			writer:
+        				types:
+        				- actor
+        				- group->member
+        			reader:
+        				types:
+        				- actor
+        				- group->member
+        			subscriber:
+        				types:
+        				- actor
+        			banned:
+        				types:
+        				- actor
+        		permissions:
+        			read:
+        				expr: (writer + reader) - banned
+        			update:
+        				expr: writer - banned
+        			delete:
+        				expr: owner
+        			query:
+        				expr: (subscriber) - banned
+          view:
+            relations:
+              admin:
+                manages:
+                - writer
+                - reader
+                - subscriber
+                - banned
+                types:
+                - actor
+                - group->administrator
+              creator:
+                types:
+                - actor
+              writer:
+                types:
+                - actor
+                - group->member
+              reader:
+                types:
+                - actor
+                - group->member
+              banned:
+                types:
+                - actor
+              subscriber:
+                types:
+                - actor
+              parent:
+                types:
+                - primitive
+                - view
+            permissions:
+              read:
+                expr: writer + reader + parent->read + subscriber - banned
+              update:
+                expr: ((writer + parent->update) & parent->read) - banned
+              query:
+                expr: (subscriber) - banned
+              delete:
+                expr: owner
+          group:  
+            relations:
+              owner:
+                manages:
+                - admin
+                - guest
+                - blocked
+                types:
+                - actor
+              admin:
+                manages:
+                - guest
+                - blocked
+                types:
+                - actor
+                - group->administrator
+              guest:
+                types:
+                - actor
+              blocked:
+                types:
+                - actor
+            permissions:
+              member:
+                expr: guest - blocked
+              administrator:
+                expr: (owner + admin) - blocked`
+	relationships := `primitive:blocks#owner@did:user:sourcehub
+        primitive:blocks#admin@did:user:shinzohub
+        primitive:blocks#writer@group:indexer#member
+        primitive:blocks#reader@group:host#member
+        primitive:blocks#reader@did:user:randomUser
+        primitive:blocks#banned@did:user:aBannedIndexer
+        primitive:blocks#subscriber@did:user:subscriber
+        
+        view:datafeedA#owner@did:user:sourcehub
+        view:datafeedA#admin@did:user:shinzohub
+        view:datafeedA#admin@group:shinzoteam#administrator
+        view:datafeedA#creator@did:user:creator
+        view:datafeedA#subscriber@did:user:subscriber
+        view:datafeedA#writer@group:host#member
+        view:datafeedA#banned@did:user:aBannedHost
+        view:datafeedA#parent@primitive:blocks
+        
+        view:datafeedB#owner@did:user:sourcehub
+        view:datafeedB#admin@did:user:shinzohub
+        view:datafeedB#admin@group:shinzoteam#administrator
+        view:datafeedB#creator@did:user:creatorOfB
+        view:datafeedB#subscriber@did:user:subscriberToB
+        view:datafeedB#parent@view:datafeedA
+        
+        group:shinzoteam#owner@did:user:addo 
+        group:shinzoteam#admin@did:user:duncan
+        group:shinzoteam#guest@did:user:quinn
+        group:shinzoteam#guest@did:user:daniel
+        
+        group:indexer#owner@did:user:sourcehub
+        group:indexer#admin@did:user:shinzohub
+        group:indexer#admin@group:shinzoteam#administrator
+        group:indexer#guest@did:user:anIndexer
+        group:indexer#guest@did:user:aBlockedIndexer
+        group:indexer#blocked@did:user:aBlockedIndexer
+        group:indexer#guest@did:user:aBannedIndexer
+        
+        group:host#owner@did:user:sourcehub
+        group:host#admin@did:user:shinzohub
+        group:host#admin@group:shinzoteam#administrator
+        group:host#guest@did:user:aHost
+        group:host#guest@did:user:aBlockedHost
+        group:host#blocked@did:user:aBlockedHost
+		`
+	theorems := `Authorizations {
+          // @@@ blocks tests
+          primitive:blocks#read@did:user:randomUser
+          !primitive:blocks#update@did:user:randomUser
+          !primitive:blocks#query@did:user:randomUser
+        
+          primitive:blocks#read@did:user:aHost
+          !primitive:blocks#update@did:user:aHost
+          !primitive:blocks#query@did:user:aHost
+        
+          primitive:blocks#read@did:user:anIndexer
+          primitive:blocks#update@did:user:anIndexer
+          !primitive:blocks#query@did:user:anIndexer
+        
+          !primitive:blocks#read@did:user:duncan 
+          !primitive:blocks#update@did:user:duncan
+          !primitive:blocks#query@did:user:duncan
+          !primitive:blocks#read@did:user:addo
+          !primitive:blocks#update@did:user:addo
+          !primitive:blocks#query@did:user:addo
+          !primitive:blocks#read@did:user:quinn
+          !primitive:blocks#update@did:user:quinn
+          !primitive:blocks#query@did:user:quinn
+          !primitive:blocks#read@did:user:daniel
+          !primitive:blocks#update@did:user:daniel
+          !primitive:blocks#query@did:user:daniel
+        
+          !primitive:blocks#read@did:user:shinzohub
+          !primitive:blocks#update@did:user:shinzohub
+          !primitive:blocks#query@did:user:shinzohub
+        
+          !primitive:blocks#read@did:user:unregisteredUser
+          !primitive:blocks#update@did:user:unregisteredUser
+          !primitive:blocks#query@did:user:unregisteredUser
+        
+          !primitive:blocks#read@did:user:aBlockedIndexer
+          !primitive:blocks#update@did:user:aBlockedIndexer
+          !primitive:blocks#query@did:user:aBlockedIndexer
+        
+          !primitive:blocks#read@did:user:aBannedIndexer
+          !primitive:blocks#update@did:user:aBannedIndexer
+          !primitive:blocks#query@did:user:aBannedIndexer
+        
+          !primitive:blocks#read@did:user:aBlockedHost
+          !primitive:blocks#update@did:user:aBlockedHost
+          !primitive:blocks#query@did:user:aBlockedHost
+        
+          // @@@ Secondary data feed (a data feed derived directly from primitives) tests
+          view:datafeedA#read@did:user:subscriber
+          !view:datafeedA#update@did:user:subscriber
+          view:datafeedA#query@did:user:subscriber
+          !view:datafeedA#creator@did:user:subscriber
+        
+          !view:datafeedA#read@did:user:subscriberToB
+          !view:datafeedA#update@did:user:subscriberToB
+          !view:datafeedA#query@did:user:subscriberToB
+          !view:datafeedA#creator@did:user:subscriberToB
+        
+          !view:datafeedA#read@did:user:anonsubscriber
+          !view:datafeedA#update@did:user:anonsubscriber
+          !view:datafeedA#query@did:user:anonsubscriber
+          !view:datafeedA#creator@did:user:anonsubscriber
+        
+          view:datafeedA#read@did:user:aHost
+          view:datafeedA#update@did:user:aHost
+          !view:datafeedA#query@did:user:aHost
+          !view:datafeedA#creator@did:user:aHost
+        
+          !view:datafeedA#read@did:user:creator
+          !view:datafeedA#update@did:user:creator
+          !view:datafeedA#query@did:user:creator
+          view:datafeedA#creator@did:user:creator
+        
+          !view:datafeedA#read@did:user:creatorOfB
+          !view:datafeedA#update@did:user:creatorOfB
+          !view:datafeedA#query@did:user:creatorOfB
+          !view:datafeedA#creator@did:user:creatorOfB
+        
+          !view:datafeedA#read@did:user:addo
+          !view:datafeedA#update@did:user:addo
+          !view:datafeedA#query@did:user:addo
+          !view:datafeedA#creator@did:user:addo
+        
+          !view:datafeedA#read@did:user:shinzohub
+          !view:datafeedA#update@did:user:shinzohub
+          !view:datafeedA#query@did:user:shinzohub
+          !view:datafeedA#creator@did:user:shinzohub
+        
+          !view:datafeedA#read@did:user:aBannedHost
+          !view:datafeedA#update@did:user:aBannedHost
+          !view:datafeedA#query@did:user:aBannedHost
+          !view:datafeedA#creator@did:user:aBannedHost
+        
+          !view:datafeedA#read@did:user:aBlockedHost
+          !view:datafeedA#update@did:user:aBlockedHost
+          !view:datafeedA#query@did:user:aBlockedHost
+          !view:datafeedA#creator@did:user:aBlockedHost
+        
+          view:datafeedA#read@did:user:anIndexer
+          view:datafeedA#update@did:user:anIndexer
+          !view:datafeedA#query@did:user:anIndexer
+          !view:datafeedA#creator@did:user:anIndexer
+        
+          // @@@ Tertiary data feed (a datafeed derived directly from another data feed) tests
+          view:datafeedB#read@did:user:subscriber
+          !view:datafeedB#update@did:user:subscriber
+          !view:datafeedB#query@did:user:subscriber
+          !view:datafeedB#creator@did:user:subscriber
+        
+          view:datafeedB#read@did:user:subscriberToB
+          !view:datafeedB#update@did:user:subscriberToB
+          view:datafeedB#query@did:user:subscriberToB
+          !view:datadeefB#creator@did:user:subscriberToB
+        
+          !view:datafeedB#read@did:user:anonsubscriber
+          !view:datafeedB#update@did:user:anonsubscriber
+          !view:datafeedB#query@did:user:anonsubscriber
+          !view:datafeedB#creator@did:user:anonsubscriber
+        
+          // Members of the host group inherit write permissions on datafeedB as they have it for datafeedA and datafeedA is datafeedB's parent
+          view:datafeedB#read@did:user:aHost
+          view:datafeedB#update@did:user:aHost
+          !view:datafeedB#query@did:user:aHost
+          !view:datafeedB#creator@did:user:aHost
+        
+          !view:datafeedB#read@did:user:creator
+          !view:datafeedB#update@did:user:creator
+          !view:datafeedB#query@did:user:creator
+          !view:datafeedB#creator@did:user:creator
+        
+          !view:datafeedB#read@did:user:creatorOfB
+          !view:datafeedB#update@did:user:creatorOfB
+          !view:datafeedB#query@did:user:creatorOfB
+          view:datafeedB#creator@did:user:creatorOfB
+        
+          !view:datafeedB#read@did:user:addo
+          !view:datafeedB#update@did:user:addo
+          !view:datafeedB#query@did:user:addo
+          !view:datafeedB#creator@did:user:addo
+        
+          !view:datafeedB#read@did:user:shinzohub
+          !view:datafeedB#update@did:user:shinzohub
+          !view:datafeedB#query@did:user:shinzohub
+          !view:datafeedB#creator@did:user:shinzohub
+        
+          !view:datafeedB#read@did:user:aBannedHost
+          !view:datafeedB#update@did:user:aBannedHost
+          !view:datafeedB#query@did:user:aBannedHost
+          !view:datafeedB#creator@did:user:aBannedHost
+        
+          !view:datafeedB#read@did:user:aBlockedHost
+          !view:datafeedB#update@did:user:aBlockedHost
+          !view:datafeedB#query@did:user:aBlockedHost
+          !view:datafeedB#creator@did:user:aBlockedHost
+        
+          view:datafeedB#read@did:user:anIndexer
+          view:datafeedB#update@did:user:anIndexer
+          !view:datafeedB#query@did:user:anIndexer
+          !view:datafeedB#creator@did:user:anIndexer
+        
+        }
+        
+        Delegations {
+          // Shinzo Team group administration tests
+          !did:user:quinn > group:indexer#guest
+          !did:user:quinn > group:indexer#admin
+          !did:user:quinn > group:indexer#owner
+          did:user:duncan > group:indexer#guest
+          !did:user:duncan > group:indexer#admin
+          !did:user:duncan > group:indexer#owner
+          did:user:addo > group:indexer#guest
+          !did:user:addo > group:indexer#admin
+          !did:user:addo > group:indexer#owner
+        
+          !did:user:quinn > group:host#guest
+          !did:user:quinn > group:host#admin
+          !did:user:quinn > group:host#owner
+          did:user:duncan > group:host#guest
+          !did:user:duncan > group:host#admin
+          !did:user:duncan > group:host#owner
+          did:user:addo > group:host#guest
+          !did:user:addo > group:host#admin
+          !did:user:addo > group:host#owner
+        
+          !did:user:quinn > group:shinzoteam#guest
+          !did:user:quinn > group:shinzoteam#admin
+          !did:user:quinn > group:shinzoteam#owner
+          did:user:duncan > group:shinzoteam#guest
+          !did:user:duncan > group:shinzoteam#admin
+          !did:user:duncan > group:shinzoteam#owner
+          did:user:addo > group:shinzoteam#guest
+          did:user:addo > group:shinzoteam#admin
+          did:user:addo > group:shinzoteam#owner 
+        
+          // Shinzo team file administration 
+          !did:user:addo > primitive:blocks#reader
+          !did:user:addo > primitive:blocks#writer
+          !did:user:addo > primitive:blocks#admin
+          !did:user:addo > primitive:blocks#owner
+        
+          did:user:addo > view:datafeedA#reader
+          did:user:addo > view:datafeedA#writer
+          !did:user:addo > view:datafeedA#creator
+          !did:user:addo > view:datafeedA#admin
+          !did:user:addo > view:datafeedA#owner
+        
+          did:user:addo > view:datafeedB#reader
+          did:user:addo > view:datafeedB#writer
+          !did:user:addo > view:datafeedB#creator
+          !did:user:addo > view:datafeedB#admin
+          !did:user:addo > view:datafeedB#owner
+        
+          !did:user:duncan > primitive:blocks#reader
+          !did:user:duncan > primitive:blocks#writer
+          !did:user:duncan > primitive:blocks#admin
+          !did:user:duncan > primitive:blocks#owner
+        
+          did:user:duncan > view:datafeedA#reader
+          did:user:duncan > view:datafeedA#writer
+          !did:user:duncan > view:datafeedA#creator
+          !did:user:duncan > view:datafeedA#admin
+          !did:user:duncan > view:datafeedA#owner
+        
+          did:user:duncan > view:datafeedB#reader
+          did:user:duncan > view:datafeedB#writer
+          !did:user:duncan > view:datafeedB#creator
+          !did:user:duncan > view:datafeedB#admin
+          !did:user:duncan > view:datafeedB#owner
+        
+          !did:user:quinn > primitive:blocks#reader
+          !did:user:quinn > primitive:blocks#writer
+          !did:user:quinn > primitive:blocks#admin
+          !did:user:quinn > primitive:blocks#owner
+        
+          !did:user:quinn > view:datafeedA#reader
+          !did:user:quinn > view:datafeedA#writer
+          !did:user:quinn > view:datafeedA#creator
+          !did:user:quinn > view:datafeedA#admin
+          !did:user:quinn > view:datafeedA#owner
+        
+          // Shinzo hub access administration tests
+          did:user:shinzohub > group:indexer#guest
+          !did:user:shinzohub > group:indexer#admin
+          !did:user:shinzohub > group:indexer#owner
+        
+          did:user:shinzohub > group:host#guest
+          !did:user:shinzohub > group:host#admin
+          !did:user:shinzohub > group:host#owner
+        
+          did:user:shinzohub > primitive:blocks#reader
+          did:user:shinzohub > primitive:blocks#writer
+          !did:user:shinzohub > primitive:blocks#admin
+          !did:user:shinzohub > primitive:blocks#owner
+        
+          did:user:shinzohub > view:datafeedA#reader
+          did:user:shinzohub > view:datafeedA#writer
+          did:user:shinzohub > view:datafeedA#subscriber
+          !did:user:shinzohub > view:datafeedA#creator
+          !did:user:shinzohub > view:datafeedA#admin
+          !did:user:shinzohub > view:datafeedA#owner
+        
+          did:user:shinzohub > view:datafeedB#reader
+          did:user:shinzohub > view:datafeedB#writer
+          did:user:shinzohub > view:datafeedB#subscriber
+          !did:user:shinzohub > view:datafeedB#creator
+          !did:user:shinzohub > view:datafeedB#admin
+          !did:user:shinzohub > view:datafeedB#owner
+        }
+`
 	ctx := test.NewTestCtx(t)
 	action := NewAndSet{
 		Data: &types.SandboxData{
-			PolicyDefinition: d["policyDefinition"],
-			PolicyTheorem:    d["policyTheorem"],
-			Relationships:    d["relationships"],
+			PolicyDefinition: pol,
+			PolicyTheorem:    theorems,
+			Relationships:    relationships,
 		},
 	}
+	t.Log(action.Data.PolicyDefinition)
+	t.Log(action.Data.PolicyTheorem)
+	t.Log(action.Data.Relationships)
 	handle := action.Run(ctx)
 
 	result, err := ctx.Playground.VerifyTheorems(ctx, &types.VerifyTheoremsRequest{
