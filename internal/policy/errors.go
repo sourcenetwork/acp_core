@@ -9,6 +9,7 @@ var (
 	ErrUnmarshaling          = errors.Wrap("unmarshaling error", errors.ErrorType_BAD_INPUT)
 
 	ErrInvalidShortPolicy = errors.Wrap("invalid short policy", errors.ErrorType_BAD_INPUT)
+	ErrInvalidYamlPolicy  = errors.Wrap("invalid yaml policy", errors.ErrorType_BAD_INPUT)
 )
 
 func newEvaluateTheoremErr(err error) error {

@@ -13,39 +13,37 @@ import (
 func TestCreatePolicyWithSpec_ValidPolicyIsCreated(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
-	policyStr := `
-name: policy
+	policyStr := `actor:
+  doc: my actor
+  name: actor-resource
 description: ok
-spec: none
-resources:
-  file:
-    relations:
-      owner:
-        doc: owner owns
-        types:
-          - actor-resource
-      reader:
-      admin:
-        manages:
-          - reader
-    permissions:
-      own:
-        expr: owner
-        doc: own doc
-      read:
-        expr: owner + reader
-
 meta:
   a: b
   key: value
-
-actor:
-  name: actor-resource
-  doc: my actor
+name: policy
+resources:
+- name: file
+  permissions:
+  - doc: own doc
+    expr: owner
+    name: own
+  - expr: owner + reader
+    name: read
+  relations:
+  - manages:
+    - reader
+    name: admin
+  - doc: owner owns
+    name: owner
+    types:
+    - actor-resource
+  - name: reader
+spec: none
 `
+
 	msg := types.CreatePolicyWithSpecificationRequest{
 		Policy:       policyStr,
-		MarshalType:  types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType:  types.PolicyMarshalingType_YAML,
 		Metadata:     metadata,
 		RequiredSpec: types.PolicySpecificationType_NO_SPEC,
 	}
@@ -133,13 +131,13 @@ actor:
 func TestCreatePolicyWithSpec_RequiredSpecDiffersFromInformedSpec(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
-	policyStr := `
-name: policy
+	policyStr := `name: policy
 spec: none
 `
+
 	msg := types.CreatePolicyWithSpecificationRequest{
 		Policy:       policyStr,
-		MarshalType:  types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType:  types.PolicyMarshalingType_YAML,
 		RequiredSpec: types.PolicySpecificationType_DEFRA_SPEC,
 	}
 	resp, err := ctx.Engine.CreatePolicyWithSpecification(ctx, &msg)

@@ -27,10 +27,10 @@ func TestGetPolicy_ReturnsAnExistingPolicy(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	pol := `
-name: policy
+	pol := `name: policy
 spec: none
 `
+
 	action := test.CreatePolicyAction{
 		Policy: pol,
 	}
@@ -50,7 +50,7 @@ spec: none
 		},
 	}
 	require.Equal(t, wantPolicy, resp.Record.Policy)
-	require.Equal(t, types.PolicyMarshalingType_SHORT_YAML, resp.Record.MarshalType)
+	require.Equal(t, types.PolicyMarshalingType_YAML, resp.Record.MarshalType)
 	require.NoError(t, err)
 }
 

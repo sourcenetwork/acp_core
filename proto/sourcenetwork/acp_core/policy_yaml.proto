@@ -6,48 +6,56 @@ import "sourcenetwork/acp_core/policy.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
 
-// PolicyShort is a compact Policy definition which is conveniently expressed
-// as JSON or YAML. The shorthand format is used created a Policy.
-message PolicyShort {
+message PolicyYaml {
   string name = 1;
-
   string description = 2;
-
   // spec models a known specification which this policy will fulfill
   string spec = 3;
-
   // meta field stores arbitrary key-values from users
   map<string, string> meta = 4;
-
   // resources defines resources within a policy.
   // map keys define the name for a resource
-  map<string, ResourceShort> resources = 5;
+  repeated ResourceYaml resources = 5;
 
   // actor resource defines the actor resource for the policy
   // optional.
-  ActorResource actor = 6;
+  ActorResourceYaml actor = 6;
 }
 
-message ResourceShort {
-  string doc = 1;
-  map<string, PermissionShort> permissions = 2;
-  map<string, RelationShort> relations = 3;
+message ResourceSpecYaml {
+  string name = 1;
+  map<string, string> args = 2;
 }
 
-message RelationShort {
-  string doc = 1;
+message ResourceYaml {
+  string name = 1;
+  string description = 2;
+  repeated ResourceSpecYaml specs = 3;
+  repeated RelationYaml relations = 4;
+  repeated PermissionYaml permissions = 5;
+}
+
+message RelationYaml {
+  string name = 1;
+  string doc = 2;
 
   // list of relations managed by the current relation
-  repeated string manages = 2;
+  repeated string manages = 3;
 
   // types define a list of target types the current relation can point to.
   // Each type restriction points to a a resource's relation.
   // The syntax for a type restriction is "{resource}->{relation}", where relation is optional.
   // An empty relation means the relationship can only point to an object node, as opposed to an userset.
-  repeated string types = 3;
+  repeated string types = 4;
 }
 
-message PermissionShort {
-  string doc = 1;
-  string expr = 2;
+message PermissionYaml {
+  string name = 1;
+  string doc = 2;
+  string expr = 3;
+}
+message ActorResourceYaml {
+  string name = 1;
+  string doc = 2;
+  repeated RelationYaml relations = 3;
 }

@@ -22,7 +22,7 @@ type CreatePolicyAction struct {
 func (a *CreatePolicyAction) Run(ctx *TestCtx) *types.Policy {
 	req := types.CreatePolicyRequest{
 		Policy:      a.Policy,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 		Metadata:    a.Metadata,
 	}
 
@@ -253,7 +253,7 @@ func (a *EditPolicyAction) Run(ctx *TestCtx) *types.Policy {
 	req := types.EditPolicyRequest{
 		PolicyId:    a.PolicyId,
 		Policy:      a.Policy,
-		MarshalType: types.PolicyMarshalingType_SHORT_YAML,
+		MarshalType: types.PolicyMarshalingType_YAML,
 	}
 
 	resp, err := ctx.Engine.EditPolicy(ctx, &req)

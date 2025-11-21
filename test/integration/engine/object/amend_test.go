@@ -12,15 +12,15 @@ func amendSetup(t *testing.T) *test.TestCtx {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("creator")
 
-	policy := `
-    name: policy
-    resources:
-      resource:
-        relations:
-          owner:
-            types:
-              - actor
-    `
+	policy := `name: policy
+resources:
+- name: resource
+  relations:
+  - name: owner
+    types:
+    - actor
+spec: none
+`
 	action := test.PolicySetupAction{
 		Policy:        policy,
 		PolicyCreator: "creator",

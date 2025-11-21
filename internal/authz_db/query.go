@@ -15,6 +15,13 @@ func VerifyAccessRequest(ctx context.Context, runtime runtime.RuntimeManager, re
 		return nil, err
 	}
 
+	if req.AccessRequest == nil {
+		return nil, errors.New("access request cannot be nil", errors.ErrorType_BAD_INPUT)
+	}
+	if req.AccessRequest.Actor == nil {
+		return nil, errors.New("invalid access request: actor cannot be nil", errors.ErrorType_BAD_INPUT)
+	}
+
 	rec, err := zanzi.GetPolicy(ctx, req.PolicyId)
 	if err != nil {
 		return nil, err
