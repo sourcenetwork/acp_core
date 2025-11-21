@@ -412,109 +412,113 @@ func Test_GetPlaygroundSamples_ReturnSamples(t *testing.T) {
 }
 
 func Test_ShinzoPolicy_Ok(t *testing.T) {
-	pol := `name: shinzo
-        resources:
-          primitive:
-        		relations:
-        			admin:
-        				manages:
-        				- writer
-        				- reader
-        				- banned
-        				types:
-        				- actor
-        				- group->administrator
-        			writer:
-        				types:
-        				- actor
-        				- group->member
-        			reader:
-        				types:
-        				- actor
-        				- group->member
-        			subscriber:
-        				types:
-        				- actor
-        			banned:
-        				types:
-        				- actor
-        		permissions:
-        			read:
-        				expr: (writer + reader) - banned
-        			update:
-        				expr: writer - banned
-        			delete:
-        				expr: owner
-        			query:
-        				expr: (subscriber) - banned
-          view:
-            relations:
-              admin:
-                manages:
-                - writer
-                - reader
-                - subscriber
-                - banned
-                types:
-                - actor
-                - group->administrator
-              creator:
-                types:
-                - actor
-              writer:
-                types:
-                - actor
-                - group->member
-              reader:
-                types:
-                - actor
-                - group->member
-              banned:
-                types:
-                - actor
-              subscriber:
-                types:
-                - actor
-              parent:
-                types:
-                - primitive
-                - view
-            permissions:
-              read:
-                expr: writer + reader + parent->read + subscriber - banned
-              update:
-                expr: ((writer + parent->update) & parent->read) - banned
-              query:
-                expr: (subscriber) - banned
-              delete:
-                expr: owner
-          group:  
-            relations:
-              owner:
-                manages:
-                - admin
-                - guest
-                - blocked
-                types:
-                - actor
-              admin:
-                manages:
-                - guest
-                - blocked
-                types:
-                - actor
-                - group->administrator
-              guest:
-                types:
-                - actor
-              blocked:
-                types:
-                - actor
-            permissions:
-              member:
-                expr: guest - blocked
-              administrator:
-                expr: (owner + admin) - blocked`
+	pol := `
+name: shinzo
+resources:
+- name: primitive
+  relations:
+  - name: admin
+    manages:
+    - writer
+    - reader
+    - banned
+    types:
+    - actor
+    - group->administrator
+  - name: writer
+    types:
+    - actor
+    - group->member
+  - name: reader
+    types:
+    - actor
+    - group->member
+  - name: subscriber
+    types:
+    - actor
+  - name: banned
+    types:
+    - actor
+  permissions:
+  - name: read
+    expr: (writer + reader) - banned
+  - name: update
+    expr: writer - banned
+  - name: delete
+    expr: owner
+  - name: query
+    expr: (subscriber) - banned
+
+- name: view
+  relations:
+  - name: admin
+    manages:
+    - writer
+    - reader
+    - subscriber
+    - banned
+    types:
+    - actor
+    - group->administrator
+  - name: creator
+    types:
+    - actor
+  - name: writer
+    types:
+    - actor
+    - group->member
+  - name: reader
+    types:
+    - actor
+    - group->member
+  - name: banned
+    types:
+    - actor
+  - name: subscriber
+    types:
+    - actor
+  - name: parent
+    types:
+    - primitive
+    - view
+  permissions:
+  - name: read
+    expr: writer + reader + parent->read + subscriber - banned
+  - name: update
+    expr: ((writer + parent->update) & parent->read) - banned
+  - name: query
+    expr: (subscriber) - banned
+  - name: delete
+
+- name: group
+  relations:
+  - name: owner
+    manages:
+    - admin
+    - guest
+    - blocked
+    types:
+    - actor
+  - name: admin
+    manages:
+    - guest
+    - blocked
+    types:
+    - actor
+    - group->administrator
+  - name: guest
+    types:
+    - actor
+  - name: blocked
+    types:
+    - actor
+  permissions:
+  - name: member
+    expr: guest - blocked
+  - name: administrator
+    expr: (owner + admin) - blocked
+`
+
 	relationships := `primitive:blocks#owner@did:user:sourcehub
         primitive:blocks#admin@did:user:shinzohub
         primitive:blocks#writer@group:indexer#member
@@ -836,9 +840,6 @@ func Test_ShinzoPolicy_Ok(t *testing.T) {
 			Relationships:    relationships,
 		},
 	}
-	t.Log(action.Data.PolicyDefinition)
-	t.Log(action.Data.PolicyTheorem)
-	t.Log(action.Data.Relationships)
 	handle := action.Run(ctx)
 
 	result, err := ctx.Playground.VerifyTheorems(ctx, &types.VerifyTheoremsRequest{
