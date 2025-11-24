@@ -152,7 +152,7 @@ func mapSpecTypeToString(specType types.PolicySpecificationType) string {
 	case types.PolicySpecificationType_DEFRA_SPEC:
 		return "defra"
 	case types.PolicySpecificationType_NO_SPEC:
-		return "none"
+		return ""
 	default:
 		return "unknown"
 	}
