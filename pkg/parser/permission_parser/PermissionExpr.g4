@@ -16,5 +16,5 @@ operator: '+' #union
         | '&' #intersection
         ;
 
-IDENTIFIER: [a-zA-Z] [a-zA-Z0-9_]+;
+IDENTIFIER: [a-zA-Z] [a-zA-Z0-9_]*;
 WS : [ \t]+ -> skip ; // skip spaces, tabs

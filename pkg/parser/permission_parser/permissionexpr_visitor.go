@@ -1,7 +1,8 @@
-// Code generated from ./internal/parser/permission_parser/PermissionExpr.g4 by ANTLR 4.13.2. DO NOT EDIT.
+// Code generated from ./pkg/parser/permission_parser/PermissionExpr.g4 by ANTLR 4.13.2. DO NOT EDIT.
 
 package permission_parser // PermissionExpr
 import "github.com/antlr4-go/antlr/v4"
+
 
 // A complete Visitor for a parse tree produced by PermissionExprParser.
 type PermissionExprVisitor interface {
@@ -36,4 +37,5 @@ type PermissionExprVisitor interface {
 
 	// Visit a parse tree produced by PermissionExprParser#intersection.
 	VisitIntersection(ctx *IntersectionContext) interface{}
+
 }
