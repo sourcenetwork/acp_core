@@ -7,6 +7,7 @@ import (
 	"go/token"
 	"log"
 	"strconv"
+	"strings"
 
 	"os"
 
@@ -66,23 +67,38 @@ func (v *stringLiteralVisitor) Visit(node ast.Node) ast.Visitor {
 				panic(err)
 			}
 		}
+		// if string is just whitespace, do nothing
+		if strings.TrimSpace(literal) == "" {
+			return v
+		}
+
+		if literal == "null" {
+			return v
+		}
 
 		pol, err := policy.UnmarshalShort(literal)
 		if err != nil {
 			return v
 		}
+
+		// skip if policy had no resources - could be due to a json match or something similar
+		if len(pol.Resources) == 0 {
+			return v
+		}
+
 		yamlPol := mapPolicyToYaml(pol)
 		bytes, err := yaml.Marshal(yamlPol)
 		if err != nil {
 			panic(err)
 		}
 		str := string(bytes)
-
 		if doubleQuote {
+			str = strings.TrimSpace(str)
 			str = strconv.Quote(str)
 		} else {
-			str = "`" + str + "`"
+			str = "`\n" + str + "`"
 		}
+
 		n.Value = string(str)
 		log.Printf("update file %v: len %v", v.File, len(literal))
 	}
