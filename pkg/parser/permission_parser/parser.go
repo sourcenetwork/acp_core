@@ -25,7 +25,7 @@ func Parse(expr string) (*types.PermissionFetchTree, error) {
 func ParseWithReport(expr string) (*types.PermissionFetchTree, *parser.ParserReport) {
 	endPosition := types.BufferPosition{
 		Line:   1,
-		Column: 1,
+		Column: uint64(len(expr)),
 	}
 	lines := strings.Split(expr, "\n")
 	if len(lines) > 0 {
@@ -35,11 +35,13 @@ func ParseWithReport(expr string) (*types.PermissionFetchTree, *parser.ParserRep
 		endPosition.Column = uint64(len(lastLine))
 	}
 
+	errListener := parser.NewErrLsitener("Permission Expression", endPosition)
+
 	inputStream := antlr.NewInputStream(expr)
 	lexer := NewPermissionExprLexer(inputStream)
-	stream := antlr.NewCommonTokenStream(lexer, 0)
+	lexer.AddErrorListener(errListener)
 
-	errListener := parser.NewErrLsitener("Permission Expression", endPosition)
+	stream := antlr.NewCommonTokenStream(lexer, 0)
 
 	parser := NewPermissionExprParser(stream)
 	parser.RemoveErrorListeners()
