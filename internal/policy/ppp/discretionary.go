@@ -95,10 +95,10 @@ func (t *DiscretionaryTransformer) Transform(policy types.Policy) (specification
 		for _, permission := range resource.Permissions {
 			tree, err := parser.Parse(permission.Expression)
 			if err != nil {
-				return res, errors.Wrap("parsing permission", ErrDiscretionaryTransformer,
+				return res, errors.Wrap("parsing permission", errors.Wrap(err.Error(), ErrDiscretionaryTransformer,
 					errors.Pair("resource", resource.Name),
 					errors.Pair("permission", permission.Name),
-				)
+				))
 			}
 			tree, modified := t.transformFetchTree(tree)
 			expr := tree.IntoPermissionExpr()
