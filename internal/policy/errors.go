@@ -10,6 +10,10 @@ var (
 
 	ErrInvalidShortPolicy = errors.Wrap("invalid short policy", errors.ErrorType_BAD_INPUT)
 	ErrInvalidYamlPolicy  = errors.Wrap("invalid yaml policy", errors.ErrorType_BAD_INPUT)
+
+	ErrResourceNotInPolicy     = errors.Wrap("resource not in policy", errors.ErrorType_BAD_INPUT)
+	ErrRelationNotInResource   = errors.Wrap("relation not in resource", errors.ErrorType_BAD_INPUT)
+	ErrPermissionNotInResource = errors.Wrap("permission not in resource", errors.ErrorType_BAD_INPUT)
 )
 
 func newEvaluateTheoremErr(err error) error {
@@ -18,4 +22,16 @@ func newEvaluateTheoremErr(err error) error {
 
 func newPolicyCatalogueErr(err error) error {
 	return errors.Wrap("get policy catalogue failed", err)
+}
+
+func NewErrResourceNotInPolicy(policyId string, resource string) error {
+	return errors.Wrap("", ErrResourceNotInPolicy, errors.Pair("policy", policyId), errors.Pair("resource", resource))
+}
+
+func NewErrRelationNotInResource(policyId, resource, relation string) error {
+	return errors.Wrap("", ErrRelationNotInResource, errors.Pair("policy", policyId), errors.Pair("resource", resource), errors.Pair("relation", relation))
+}
+
+func NewErrPermissionNotInResource(policyId, resource, permission string) error {
+	return errors.Wrap("", ErrRelationNotInResource, errors.Pair("policy", policyId), errors.Pair("resource", resource), errors.Pair("permission", permission))
 }

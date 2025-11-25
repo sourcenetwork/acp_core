@@ -108,6 +108,21 @@ func (c *SetRelationshipHandler) Execute(ctx context.Context, runtime runtime.Ru
 }
 
 func (c *SetRelationshipHandler) validate(pol *types.Policy, cmd *types.SetRelationshipRequest) error {
+	if cmd.Relationship.Relation == policy.OwnerRelation {
+		return ErrDeleteOwnerRel
+	}
+	resName := cmd.Relationship.Object.Resource
+	res := pol.GetResourceByName(resName)
+	if res == nil {
+		return policy.NewErrResourceNotInPolicy(pol.Id, resName)
+	}
+
+	relName := cmd.Relationship.Relation
+	rel := res.GetRelationByName(relName)
+	if rel == nil {
+		return policy.NewErrRelationNotInResource(pol.Id, resName, relName)
+	}
+
 	err := relationshipSpec(pol, cmd.Relationship)
 	if err != nil {
 		return err
@@ -133,11 +148,6 @@ func (c *DeleteRelationshipHandler) Execute(ctx context.Context, runtime runtime
 	}
 	did := principal.Identifier
 
-	err = c.validate(cmd)
-	if err != nil {
-		return nil, newDeleteRelationshipErr(err)
-	}
-
 	rec, err := engine.GetPolicy(ctx, cmd.PolicyId)
 	if err != nil {
 		return nil, newDeleteRelationshipErr(err)
@@ -146,6 +156,11 @@ func (c *DeleteRelationshipHandler) Execute(ctx context.Context, runtime runtime
 		return nil, newDeleteRelationshipErr(errors.ErrPolicyNotFound(cmd.PolicyId))
 	}
 	policy := rec.Policy
+
+	err = c.validate(cmd, policy)
+	if err != nil {
+		return nil, newDeleteRelationshipErr(err)
+	}
 
 	isAuthorized, err := authorizer.VerifyManagementPermission(ctx, engine, policy,
 		cmd.Relationship.Object, cmd.Relationship.Relation, types.NewActor(did))
@@ -171,9 +186,21 @@ func (c *DeleteRelationshipHandler) Execute(ctx context.Context, runtime runtime
 	}, nil
 }
 
-func (c *DeleteRelationshipHandler) validate(cmd *types.DeleteRelationshipRequest) error {
+func (c *DeleteRelationshipHandler) validate(cmd *types.DeleteRelationshipRequest, pol *types.Policy) error {
 	if cmd.Relationship.Relation == policy.OwnerRelation {
 		return ErrDeleteOwnerRel
 	}
+	resName := cmd.Relationship.Object.Resource
+	res := pol.GetResourceByName(resName)
+	if res == nil {
+		return policy.NewErrResourceNotInPolicy(pol.Id, resName)
+	}
+
+	relName := cmd.Relationship.Relation
+	rel := res.GetRelationByName(relName)
+	if rel == nil {
+		return policy.NewErrRelationNotInResource(pol.Id, resName, relName)
+	}
+
 	return nil
 }
