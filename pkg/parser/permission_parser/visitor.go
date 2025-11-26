@@ -22,8 +22,8 @@ func (v *visitor) VisitTtu_term(ctx *Ttu_termContext) any {
 			Operation: &types.FetchOperation{
 				Operation: &types.FetchOperation_Ttu{
 					Ttu: &types.TupleToUsersetNode{
-						Resource: ctx.Resource().GetText(),
-						Relation: ctx.Relation().GetText(),
+						LookupRelation:          ctx.Resource().GetText(),
+						ComputedUsersetRelation: ctx.Relation().GetText(),
 					},
 				},
 			},
