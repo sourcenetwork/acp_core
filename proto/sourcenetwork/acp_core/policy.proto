@@ -39,6 +39,9 @@ message Resource {
   repeated Permission permissions = 3;
   repeated Relation relations = 4;
   repeated ManagementPermission management_permissions = 5;
+  // owner models a special relation which is added to all resources.
+  // It is used to represent the owner of some object in the system
+  Relation owner = 6;
 }
 
 message Relation {
