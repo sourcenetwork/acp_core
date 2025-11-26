@@ -49,6 +49,11 @@ export interface Resource {
   permissions: Permission[];
   relations: Relation[];
   managementPermissions: ManagementPermission[];
+  /**
+   * owner models a special relation which is added to all resources.
+   * It is used to represent the owner of some object in the system
+   */
+  owner: Relation | undefined;
 }
 
 export interface Relation {
