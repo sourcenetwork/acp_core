@@ -9,8 +9,7 @@ import (
 )
 
 func TestFullUnmarshal(t *testing.T) {
-	in := `
-actor:
+	in := `actor:
   doc: my actor
   name: actor-resource
 description: ok
@@ -23,6 +22,15 @@ resources:
     name: abc
   - expr: owner + abc
     name: def
+  relations:
+  - doc: owner owns
+    manages:
+    - whatever
+    name: owner
+    types:
+    - blah
+    - ok->that
+spec: none
 `
 
 	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
@@ -92,9 +100,9 @@ func TestUnmarshalWithoutSpecDefaultsToNone(t *testing.T) {
 }
 
 func TestEmptyResourceMapsToResource(t *testing.T) {
-	in := `
-resources:
+	in := `resources:
 - name: foo
+spec: none
 `
 
 	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
@@ -114,9 +122,9 @@ resources:
 }
 
 func TestResourceWithoutPermsOrRelsMapsToResource(t *testing.T) {
-	in := `
-resources:
+	in := `resources:
 - name: foo
+spec: none
 `
 
 	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
@@ -136,11 +144,11 @@ resources:
 }
 
 func TestEmptyRelationMapsToRelation(t *testing.T) {
-	in := `
-resources:
+	in := `resources:
 - name: foo
   relations:
   - name: blah
+spec: none
 `
 
 	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
@@ -171,11 +179,11 @@ func TestEmptyPermissionMapsToPermission(t *testing.T) {
 	// it's ok because the validation will happen elsewhere.
 	// Asserting the type unmarhsals correctly means that the validator -
 	// as opposed to the unmarshaler - will error out leading to better error msgs.
-	in := `
-resources:
+	in := `resources:
 - name: foo
   permissions:
   - name: blah
+spec: none
 `
 
 	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
@@ -239,14 +247,14 @@ func TestDuplicatedRelationErrors(t *testing.T) {
 }
 
 func TestRestrictionIdentifierMapsBothForms(t *testing.T) {
-	in := `
-resources:
+	in := `resources:
 - name: foo
   relations:
   - name: blah
     types:
     - actor
     - book->owner
+spec: none
 `
 
 	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
@@ -340,22 +348,29 @@ spec: ""
 }
 
 func TestYaml_FullUnmarshal(t *testing.T) {
-	in := `
-actor:
-  doc: my actor
-  name: actor-resource
+	in := `name: policy
 description: ok
-name: policy
+spec: none
 resources:
 - name: foo
-  permissions:
-  - doc: abc doc
+  relations: 
+  - name: owner
+    doc: owner owns
+    types:
+    - blah
+    - ok->that
+    manages: 
+    - whatever
+  permissions: 
+  - name: abc
     expr: owner
-    name: abc
-  - expr: owner + abc
-    name: def
+    doc: abc doc
+  - name: def
+    expr: owner + abc
+actor:
+  name: actor-resource
+  doc: my actor
 `
-
 	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
 
 	want := &types.Policy{
@@ -409,12 +424,12 @@ resources:
 }
 
 func TestYaml_UnmarshalWithEmptyPermExpression(t *testing.T) {
-	in := `
+	in := `name: policy
 description: ok
-name: policy
+spec: none
 resources:
 - name: foo
-  permissions:
+  permissions: 
   - name: abc
 `
 	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
