@@ -9,7 +9,8 @@ import (
 )
 
 func TestFullUnmarshal(t *testing.T) {
-	in := `actor:
+	in := `
+actor:
   doc: my actor
   name: actor-resource
 description: ok
@@ -20,17 +21,8 @@ resources:
   - doc: abc doc
     expr: owner
     name: abc
-  - expr: owner + abc
+  - expr: abc
     name: def
-  relations:
-  - doc: owner owns
-    manages:
-    - whatever
-    name: owner
-    types:
-    - blah
-    - ok->that
-spec: none
 `
 
 	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
@@ -100,9 +92,9 @@ func TestUnmarshalWithoutSpecDefaultsToNone(t *testing.T) {
 }
 
 func TestEmptyResourceMapsToResource(t *testing.T) {
-	in := `resources:
+	in := `
+resources:
 - name: foo
-spec: none
 `
 
 	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
@@ -122,9 +114,9 @@ spec: none
 }
 
 func TestResourceWithoutPermsOrRelsMapsToResource(t *testing.T) {
-	in := `resources:
+	in := `
+resources:
 - name: foo
-spec: none
 `
 
 	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
@@ -144,11 +136,11 @@ spec: none
 }
 
 func TestEmptyRelationMapsToRelation(t *testing.T) {
-	in := `resources:
+	in := `
+resources:
 - name: foo
   relations:
   - name: blah
-spec: none
 `
 
 	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
@@ -247,14 +239,14 @@ func TestDuplicatedRelationErrors(t *testing.T) {
 }
 
 func TestRestrictionIdentifierMapsBothForms(t *testing.T) {
-	in := `resources:
+	in := `
+resources:
 - name: foo
   relations:
   - name: blah
     types:
     - actor
     - book->owner
-spec: none
 `
 
 	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
@@ -348,29 +340,22 @@ spec: ""
 }
 
 func TestYaml_FullUnmarshal(t *testing.T) {
-	in := `name: policy
+	in := `
+actor:
+  doc: my actor
+  name: actor-resource
 description: ok
-spec: none
+name: policy
 resources:
 - name: foo
-  relations: 
-  - name: owner
-    doc: owner owns
-    types:
-    - blah
-    - ok->that
-    manages: 
-    - whatever
-  permissions: 
-  - name: abc
+  permissions:
+  - doc: abc doc
     expr: owner
-    doc: abc doc
-  - name: def
-    expr: owner + abc
-actor:
-  name: actor-resource
-  doc: my actor
+    name: abc
+  - expr: abc
+    name: def
 `
+
 	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
 
 	want := &types.Policy{

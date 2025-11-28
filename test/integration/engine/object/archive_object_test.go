@@ -14,18 +14,16 @@ func testArchiveObjectSetup(t *testing.T) *test.TestCtx {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("admin")
 
-	pol := `name: policy
+	pol := `
+name: policy
 resources:
 - name: file
   relations:
-  - name: owner
-    types:
-    - actor
   - name: reader
     types:
     - actor
-spec: none
 `
+
 	action := test.CreatePolicyAction{
 		Policy: pol,
 	}

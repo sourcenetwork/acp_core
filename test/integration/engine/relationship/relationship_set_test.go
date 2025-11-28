@@ -13,7 +13,8 @@ import (
 func setRelationshipTestSetup(t *testing.T) *test.TestCtx {
 	ctx := test.NewTestCtx(t)
 
-	policy := `name: policy
+	policy := `
+name: policy
 resources:
 - name: file
   relations:
@@ -22,14 +23,11 @@ resources:
     name: admin
     types:
     - actor
-  - name: owner
-    types:
-    - actor
   - name: reader
     types:
     - actor
-spec: none
 `
+
 	action := test.PolicySetupAction{
 		Policy:        policy,
 		PolicyCreator: "root",

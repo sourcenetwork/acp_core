@@ -12,17 +12,14 @@ import (
 	"github.com/sourcenetwork/acp_core/test"
 )
 
-var policyStr string = `name: policy
+var policyStr string = `
+name: policy
 resources:
 - name: doc
   relations:
-  - name: owner
-    types:
-    - actor
   - name: reader
     types:
     - actor
-spec: none
 `
 
 func BenchmarkCreateRelationshipsWithObjects(b *testing.B) {

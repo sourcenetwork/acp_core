@@ -16,15 +16,10 @@ func TestEditPolicy_CannotRemoveResource(t *testing.T) {
 	ctx.SetPrincipal("bob")
 
 	// Given Policy
-	oldPol := `name: policy
+	oldPol := `
+name: policy
 resources:
 - name: file
-  relations:
-  - doc: owner owns
-    name: owner
-    types:
-    - actor
-spec: none
 `
 
 	a1 := test.CreatePolicyAction{
@@ -50,15 +45,10 @@ func TestEditPolicy_RemovingOwnerRelation_DiscretionaryTransformerRestoresIt(t *
 	ctx.SetPrincipal("bob")
 
 	// Given Policy
-	oldPol := `name: policy
+	oldPol := `
+name: policy
 resources:
 - name: file
-  relations:
-  - doc: owner owns
-    name: owner
-    types:
-    - actor
-spec: none
 `
 
 	a1 := test.CreatePolicyAction{
@@ -67,10 +57,10 @@ spec: none
 	a1.Run(ctx)
 
 	// When I attempt to remove the owner relation
-	new := `name: policy
+	new := `
+name: policy
 resources:
 - name: file
-spec: none
 `
 
 	a := test.EditPolicyAction{
@@ -123,7 +113,8 @@ func TestEditPolicy_CannotChangeSpec(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	oldPol := `name: policy
+	oldPol := `
+name: policy
 resources:
 - name: file
   permissions:
@@ -133,14 +124,14 @@ resources:
     name: write
 spec: defra
 `
-
 	a1 := test.CreatePolicyAction{
 		Policy: oldPol,
 	}
 	a1.Run(ctx)
 
 	// When the I edit a policy with a new policy spec
-	new := `name: policy
+	new := `
+name: policy
 resources:
 - name: file
   permissions:
@@ -148,7 +139,6 @@ resources:
     name: read
   - expr: owner
     name: write
-spec: none
 `
 
 	a := test.EditPolicyAction{
@@ -163,7 +153,8 @@ func TestEditPolicy_CannotEditPolicyThatDoesntExist(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	new := `name: policy
+	new := `
+name: policy
 resources:
 - name: file
   permissions:
@@ -171,7 +162,6 @@ resources:
     name: read
   - expr: owner
     name: write
-spec: none
 `
 
 	a := test.EditPolicyAction{
@@ -186,12 +176,12 @@ func TestEditPolicy_CanAddRelation(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	oldPol := `name: policy
+	oldPol := `
+name: policy
 resources:
 - name: file
   relations:
   - name: reader
-spec: none
 `
 	a1 := test.CreatePolicyAction{
 		Policy: oldPol,
@@ -199,13 +189,13 @@ spec: none
 	a1.Run(ctx)
 
 	// When the I add a new relation to an existing resource
-	new := `name: policy
+	new := `
+name: policy
 resources:
 - name: file
   relations:
   - name: reader
   - name: writer
-spec: none
 `
 	a := test.EditPolicyAction{
 		PolicyId: ctx.State.PolicyId,
@@ -225,12 +215,12 @@ func TestEditPolicy_CanAddResource(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	oldPol := `name: policy
+	oldPol := `
+name: policy
 resources:
 - name: file
   relations:
   - name: reader
-spec: none
 `
 	a1 := test.CreatePolicyAction{
 		Policy: oldPol,
@@ -238,7 +228,8 @@ spec: none
 	a1.Run(ctx)
 
 	// When the I add a new resource with a relation
-	new := `name: policy
+	new := `
+name: policy
 resources:
 - name: file
   relations:
@@ -246,7 +237,6 @@ resources:
 - name: group
   relations:
   - name: member
-spec: none
 `
 	a := test.EditPolicyAction{
 		PolicyId: ctx.State.PolicyId,
@@ -311,32 +301,32 @@ func TestEditPolicy_CanEditPermissionExpr(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	oldPol := `name: policy
+	oldPol := `
+name: policy
 resources:
 - name: file
   permissions:
-  - expr: owner + reader
+  - expr: reader
     name: read
   relations:
   - name: reader
   - name: writer
-spec: none
 `
 	a1 := test.CreatePolicyAction{
 		Policy: oldPol,
 	}
 	a1.Run(ctx)
 
-	new := `name: policy
+	new := `
+name: policy
 resources:
 - name: file
   permissions:
-  - expr: owner + writer
+  - expr: writer
     name: read
   relations:
   - name: reader
   - name: writer
-spec: none
 `
 	a := test.EditPolicyAction{
 		PolicyId: ctx.State.PolicyId,
@@ -352,7 +342,8 @@ func TestEditPolicy_CannotRemoveDefraPermissionsFromDefraPolicy(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	oldPol := `name: policy
+	oldPol := `
+name: policy
 resources:
 - name: file
   permissions:
@@ -362,18 +353,17 @@ resources:
     name: write
 spec: defra
 `
-
 	a1 := test.CreatePolicyAction{
 		Policy: oldPol,
 	}
 	a1.Run(ctx)
 
-	new := `name: policy
+	new := `
+name: policy
 resources:
 - name: file
 spec: defra
 `
-
 	a := test.EditPolicyAction{
 		PolicyId:    ctx.State.PolicyId,
 		Policy:      new,
@@ -386,7 +376,8 @@ func TestEditPolicy_CanAddPermission(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	oldPol := `name: policy
+	oldPol := `
+name: policy
 resources:
 - name: file
   permissions:
@@ -394,14 +385,14 @@ resources:
     name: read
   relations:
   - name: reader
-spec: none
 `
 	a1 := test.CreatePolicyAction{
 		Policy: oldPol,
 	}
 	a1.Run(ctx)
 
-	new := `name: policy
+	new := `
+name: policy
 resources:
 - name: file
   permissions:
@@ -411,7 +402,6 @@ resources:
     name: write
   relations:
   - name: reader
-spec: none
 `
 	a := test.EditPolicyAction{
 		PolicyId: ctx.State.PolicyId,
@@ -431,7 +421,8 @@ func TestEditPolicy_CanRemovePermission(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	oldPol := `name: policy
+	oldPol := `
+name: policy
 resources:
 - name: file
   permissions:
@@ -439,19 +430,18 @@ resources:
     name: read
   relations:
   - name: reader
-spec: none
 `
 	a1 := test.CreatePolicyAction{
 		Policy: oldPol,
 	}
 	a1.Run(ctx)
 
-	new := `name: policy
+	new := `
+name: policy
 resources:
 - name: file
   relations:
   - name: reader
-spec: none
 `
 
 	a := test.EditPolicyAction{
@@ -467,7 +457,8 @@ func TestEditPolicy_DoesNotChangeSuppliedMetadata(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	oldPol := `name: policy
+	oldPol := `
+name: policy
 resources:
 - name: file
   permissions:
@@ -475,19 +466,18 @@ resources:
     name: read
   relations:
   - name: reader
-spec: none
 `
 	a1 := test.CreatePolicyAction{
 		Policy: oldPol,
 	}
 	a1.Run(ctx)
 
-	new := `name: policy
+	new := `
+name: policy
 resources:
 - name: file
   relations:
   - name: reader
-spec: none
 `
 
 	a := test.EditPolicyAction{
@@ -503,7 +493,8 @@ func TestEditPolicyMetadata_CanEditMetadata(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	oldPol := `name: policy
+	oldPol := `
+name: policy
 resources:
 - name: file
   permissions:
@@ -511,7 +502,6 @@ resources:
     name: read
   relations:
   - name: reader
-spec: none
 `
 	a1 := test.CreatePolicyAction{
 		Policy: oldPol,

@@ -13,23 +13,21 @@ func Test_SetAndVerify_ConsistentResults(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
 	data := types.SandboxData{
-		PolicyDefinition: `name: filesystem
+		PolicyDefinition: `
+name: filesystem
 resources:
 - name: file
   permissions:
-  - expr: owner + reader
+  - expr: reader
     name: read
   - expr: owner
     name: write
   relations:
-  - name: owner
-    types:
-    - actor
   - name: reader
     types:
     - actor
-spec: none
 `,
+
 		Relationships: `
 file:readme#owner@did:user:bob // bob owns file readme
 file:readme#reader@did:user:alice // alice can read and write file readme
