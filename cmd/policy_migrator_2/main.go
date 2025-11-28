@@ -201,6 +201,11 @@ func removeOwnerFromTree(tree *types.PermissionFetchTree) *types.PermissionFetch
 		term.CombNode.Left = removeOwnerFromTree(term.CombNode.Left)
 		term.CombNode.Right = removeOwnerFromTree(term.CombNode.Right)
 		return tree
+	case *types.PermissionFetchTree_Operation:
+		if isOwnerCu(tree) {
+			return nil
+		}
+		return tree
 	default:
 		return tree
 	}
