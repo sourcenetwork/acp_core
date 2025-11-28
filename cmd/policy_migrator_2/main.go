@@ -95,7 +95,7 @@ func (v *stringLiteralVisitor) Visit(node ast.Node) ast.Visitor {
 				}
 				tree, err := permission_parser.Parse(p.Expression)
 				if err != nil {
-					log.Printf("error parsing permission: file %v: resource %v: permission %v: %w: literal %v",
+					log.Printf("error parsing permission: file %v: resource %v: permission %v: %v: literal %v",
 						v.File, resource.Name, p.Name, err, literal)
 				}
 				tree = removeOwnerFromTree(tree)

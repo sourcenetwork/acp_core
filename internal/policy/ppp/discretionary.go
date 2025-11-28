@@ -13,6 +13,8 @@ import (
 var _ specification.Transformer = (*DiscretionaryTransformer)(nil)
 
 func GetOwnerRelation(actorResourceName string, managedRels []string) *types.Relation {
+	// owner manages itself
+	manages := append(managedRels, OwnerRelationName)
 	return &types.Relation{
 		Name: OwnerRelationName,
 		Doc:  ownerDescription,
@@ -21,7 +23,7 @@ func GetOwnerRelation(actorResourceName string, managedRels []string) *types.Rel
 				ResourceName: actorResourceName,
 			},
 		},
-		Manages: managedRels,
+		Manages: manages,
 	}
 }
 

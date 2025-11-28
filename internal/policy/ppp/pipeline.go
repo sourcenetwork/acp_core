@@ -102,7 +102,7 @@ func (p *Pipeline) validateRequirements(pol *types.Policy) *errors.MultiError {
 		clone := proto.Clone(pol).(*types.Policy)
 		err := spec.Validate(*clone)
 		if err != nil {
-			multiErr.Append(err)
+			multiErr.Append(errors.Wrap("requirement failed", err, errors.Pair("requirement", spec.GetName())))
 		}
 	}
 
@@ -110,7 +110,8 @@ func (p *Pipeline) validateRequirements(pol *types.Policy) *errors.MultiError {
 		cloned := proto.Clone(pol).(*types.Policy)
 		err := transformer.Validate(*cloned)
 		if err != nil {
-			multiErr.Append(err)
+			multiErr.Append(errors.Wrap("transformer validation failed",
+				err, errors.Pair("transformer", transformer.GetName())))
 		}
 	}
 
@@ -129,7 +130,7 @@ func (p *Pipeline) applyTransforms(policy types.Policy) (specification.Transform
 		result.Policy = tmp.Policy
 		result.Messages = append(result.Messages, tmp.Messages...)
 		if err != nil {
-			return result, err
+			return result, errors.Wrap("transform failed", err, errors.Pair("transformer", trans.GetName()))
 		}
 	}
 	return result, nil

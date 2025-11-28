@@ -55,7 +55,9 @@ func (t *DecentralizedAdminTransformer) Transform(pol types.Policy) (specificati
 	}
 
 	for _, resource := range pol.Resources {
-		rules := make([]*types.ManagementRule, 0, len(resource.Relations))
+		rules := make([]*types.ManagementRule, 0, len(resource.Relations)+1)
+		perm := t.buildManagementPermission(resource.Name, resource.Owner, graph)
+		rules = append(rules, perm)
 		for _, relation := range resource.Relations {
 			perm := t.buildManagementPermission(resource.Name, relation, graph)
 			rules = append(rules, perm)
