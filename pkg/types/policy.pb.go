@@ -5,11 +5,12 @@ package types
 
 import (
 	fmt "fmt"
-	proto "github.com/cosmos/gogoproto/proto"
-	_ "github.com/cosmos/gogoproto/types"
 	io "io"
 	math "math"
 	math_bits "math/bits"
+
+	proto "github.com/cosmos/gogoproto/proto"
+	_ "github.com/cosmos/gogoproto/types"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -150,11 +151,11 @@ func (m *Policy) GetSpecificationType() PolicySpecificationType {
 // Appications will have multiple entities which they must manage such as files or groups.
 // A Resource represents a set of entities of a certain type.
 type Resource struct {
-	Name                  string                  `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Doc                   string                  `protobuf:"bytes,2,opt,name=doc,proto3" json:"doc,omitempty"`
-	Permissions           []*Permission           `protobuf:"bytes,3,rep,name=permissions,proto3" json:"permissions,omitempty"`
-	Relations             []*Relation             `protobuf:"bytes,4,rep,name=relations,proto3" json:"relations,omitempty"`
-	ManagementPermissions []*ManagementPermission `protobuf:"bytes,5,rep,name=management_permissions,json=managementPermissions,proto3" json:"management_permissions,omitempty"`
+	Name            string            `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Doc             string            `protobuf:"bytes,2,opt,name=doc,proto3" json:"doc,omitempty"`
+	Permissions     []*Permission     `protobuf:"bytes,3,rep,name=permissions,proto3" json:"permissions,omitempty"`
+	Relations       []*Relation       `protobuf:"bytes,4,rep,name=relations,proto3" json:"relations,omitempty"`
+	ManagementRules []*ManagementRule `protobuf:"bytes,5,rep,name=management_permissions,json=managementPermissions,proto3" json:"management_permissions,omitempty"`
 	// owner models a special relation which is added to all resources.
 	// It is used to represent the owner of some object in the system
 	Owner *Relation `protobuf:"bytes,6,opt,name=owner,proto3" json:"owner,omitempty"`
@@ -221,9 +222,9 @@ func (m *Resource) GetRelations() []*Relation {
 	return nil
 }
 
-func (m *Resource) GetManagementPermissions() []*ManagementPermission {
+func (m *Resource) GetManagementPermissions() []*ManagementRule {
 	if m != nil {
-		return m.ManagementPermissions
+		return m.ManagementRules
 	}
 	return nil
 }
@@ -484,7 +485,7 @@ func (m *ActorResource) GetRelations() []*Relation {
 	return nil
 }
 
-type ManagementPermission struct {
+type ManagementRule struct {
 	// name matches the name of the underlying relation the management permission manages
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// expression is the permission expression derived from the manages directives from the policy definition
@@ -494,16 +495,16 @@ type ManagementPermission struct {
 	Relations []string `protobuf:"bytes,3,rep,name=relations,proto3" json:"relations,omitempty"`
 }
 
-func (m *ManagementPermission) Reset()         { *m = ManagementPermission{} }
-func (m *ManagementPermission) String() string { return proto.CompactTextString(m) }
-func (*ManagementPermission) ProtoMessage()    {}
-func (*ManagementPermission) Descriptor() ([]byte, []int) {
+func (m *ManagementRule) Reset()         { *m = ManagementRule{} }
+func (m *ManagementRule) String() string { return proto.CompactTextString(m) }
+func (*ManagementRule) ProtoMessage()    {}
+func (*ManagementRule) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a48745632897a68d, []int{6}
 }
-func (m *ManagementPermission) XXX_Unmarshal(b []byte) error {
+func (m *ManagementRule) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *ManagementPermission) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *ManagementRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
 		return xxx_messageInfo_ManagementPermission.Marshal(b, m, deterministic)
 	} else {
@@ -515,33 +516,33 @@ func (m *ManagementPermission) XXX_Marshal(b []byte, deterministic bool) ([]byte
 		return b[:n], nil
 	}
 }
-func (m *ManagementPermission) XXX_Merge(src proto.Message) {
+func (m *ManagementRule) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_ManagementPermission.Merge(m, src)
 }
-func (m *ManagementPermission) XXX_Size() int {
+func (m *ManagementRule) XXX_Size() int {
 	return m.Size()
 }
-func (m *ManagementPermission) XXX_DiscardUnknown() {
+func (m *ManagementRule) XXX_DiscardUnknown() {
 	xxx_messageInfo_ManagementPermission.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ManagementPermission proto.InternalMessageInfo
 
-func (m *ManagementPermission) GetName() string {
+func (m *ManagementRule) GetName() string {
 	if m != nil {
 		return m.Name
 	}
 	return ""
 }
 
-func (m *ManagementPermission) GetExpression() string {
+func (m *ManagementRule) GetExpression() string {
 	if m != nil {
 		return m.Expression
 	}
 	return ""
 }
 
-func (m *ManagementPermission) GetRelations() []string {
+func (m *ManagementRule) GetRelations() []string {
 	if m != nil {
 		return m.Relations
 	}
@@ -557,7 +558,7 @@ func init() {
 	proto.RegisterType((*Restriction)(nil), "sourcenetwork.acp_core.Restriction")
 	proto.RegisterType((*Permission)(nil), "sourcenetwork.acp_core.Permission")
 	proto.RegisterType((*ActorResource)(nil), "sourcenetwork.acp_core.ActorResource")
-	proto.RegisterType((*ManagementPermission)(nil), "sourcenetwork.acp_core.ManagementPermission")
+	proto.RegisterType((*ManagementRule)(nil), "sourcenetwork.acp_core.ManagementPermission")
 }
 
 func init() {
@@ -735,10 +736,10 @@ func (m *Resource) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x32
 	}
-	if len(m.ManagementPermissions) > 0 {
-		for iNdEx := len(m.ManagementPermissions) - 1; iNdEx >= 0; iNdEx-- {
+	if len(m.ManagementRules) > 0 {
+		for iNdEx := len(m.ManagementRules) - 1; iNdEx >= 0; iNdEx-- {
 			{
-				size, err := m.ManagementPermissions[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				size, err := m.ManagementRules[iNdEx].MarshalToSizedBuffer(dAtA[:i])
 				if err != nil {
 					return 0, err
 				}
@@ -986,7 +987,7 @@ func (m *ActorResource) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *ManagementPermission) Marshal() (dAtA []byte, err error) {
+func (m *ManagementRule) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -996,12 +997,12 @@ func (m *ManagementPermission) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *ManagementPermission) MarshalTo(dAtA []byte) (int, error) {
+func (m *ManagementRule) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *ManagementPermission) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *ManagementRule) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1111,8 +1112,8 @@ func (m *Resource) Size() (n int) {
 			n += 1 + l + sovPolicy(uint64(l))
 		}
 	}
-	if len(m.ManagementPermissions) > 0 {
-		for _, e := range m.ManagementPermissions {
+	if len(m.ManagementRules) > 0 {
+		for _, e := range m.ManagementRules {
 			l = e.Size()
 			n += 1 + l + sovPolicy(uint64(l))
 		}
@@ -1214,7 +1215,7 @@ func (m *ActorResource) Size() (n int) {
 	return n
 }
 
-func (m *ManagementPermission) Size() (n int) {
+func (m *ManagementRule) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1795,8 +1796,8 @@ func (m *Resource) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ManagementPermissions = append(m.ManagementPermissions, &ManagementPermission{})
-			if err := m.ManagementPermissions[len(m.ManagementPermissions)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.ManagementRules = append(m.ManagementRules, &ManagementRule{})
+			if err := m.ManagementRules[len(m.ManagementRules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -2445,7 +2446,7 @@ func (m *ActorResource) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *ManagementPermission) Unmarshal(dAtA []byte) error {
+func (m *ManagementRule) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {

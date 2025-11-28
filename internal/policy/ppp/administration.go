@@ -23,7 +23,7 @@ func (t *DecentralizedAdminTransformer) Validate(policy types.Policy) *errors.Mu
 
 	for _, resource := range policy.Resources {
 		mgmtPermissions := make(map[string]struct{})
-		for _, perm := range resource.ManagementPermissions {
+		for _, perm := range resource.ManagementRules {
 			mgmtPermissions[perm.Name] = struct{}{}
 		}
 
@@ -55,24 +55,24 @@ func (t *DecentralizedAdminTransformer) Transform(pol types.Policy) (specificati
 	}
 
 	for _, resource := range pol.Resources {
-		perms := make([]*types.ManagementPermission, 0, len(resource.Relations))
+		perms := make([]*types.ManagementRule, 0, len(resource.Relations))
 		for _, relation := range resource.Relations {
 			perm := t.buildManagementPermission(resource.Name, relation, graph)
 			perms = append(perms, perm)
 		}
-		resource.ManagementPermissions = perms
+		resource.ManagementRules = perms
 	}
 
 	res.Policy = pol
 	return res, nil
 }
 
-func (t *DecentralizedAdminTransformer) buildManagementPermission(resourceName string, relation *types.Relation, graph *types.ManagementGraph) *types.ManagementPermission {
+func (t *DecentralizedAdminTransformer) buildManagementPermission(resourceName string, relation *types.Relation, graph *types.ManagementGraph) *types.ManagementRule {
 	managerRelations := graph.GetManagers(resourceName, relation.Name)
 
 	exprTree := t.buildRelationExpression(managerRelations)
 
-	return &types.ManagementPermission{
+	return &types.ManagementRule{
 		Name:       relation.Name,
 		Expression: exprTree.IntoPermissionExpr(),
 		Relations:  managerRelations,

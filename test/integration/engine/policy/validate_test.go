@@ -137,7 +137,7 @@ spec: none
 						Expression: "(owner + reader)",
 					},
 				},
-				ManagementPermissions: []*types.ManagementPermission{
+				ManagementRules: []*types.ManagementRule{
 					{
 						Name:       "admin",
 						Expression: "owner",

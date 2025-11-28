@@ -68,7 +68,7 @@ resources:
 	want := []string{
 		"abc", "def", "relation",
 	}
-	require.Equal(t, want, file.ManagementPermissions)
+	require.Equal(t, want, file.ManagementRules)
 }
 
 func TestCreatePolicy_PermissionReferencingOwner_IsRejected(t *testing.T) {
