@@ -75,6 +75,7 @@ func (t *DecentralizedAdminTransformer) buildManagementPermission(resourceName s
 	return &types.ManagementPermission{
 		Name:       relation.Name,
 		Expression: exprTree.IntoPermissionExpr(),
+		Relations:  managerRelations,
 	}
 }
 

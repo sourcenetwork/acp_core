@@ -85,4 +85,7 @@ message ManagementPermission {
   string name = 1;
   // expression is the permission expression derived from the manages directives from the policy definition
   string expression = 2;
+  // relations are the raw representation of the set of relations managed by
+  // the current ManagementPermission
+  repeated string relations = 3;
 }

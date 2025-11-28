@@ -98,4 +98,9 @@ export interface ManagementPermission {
   name: string;
   /** expression is the permission expression derived from the manages directives from the policy definition */
   expression: string;
+  /**
+   * relations are the raw representation of the set of relations managed by
+   * the current ManagementPermission
+   */
+  relations: string[];
 }
