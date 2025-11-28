@@ -21,21 +21,23 @@ Delegations {}
 `
 
 var setupData = &types.SandboxData{
-	PolicyDefinition: `
-name: test
+	PolicyDefinition: `name: test
 resources:
 - name: file
   permissions:
-  - expr: reader
+  - expr: owner + reader
     name: read
   - expr: owner
     name: write
   relations:
+  - name: owner
+    types:
+    - actor
   - name: reader
     types:
     - actor
+spec: none
 `,
-
 	Relationships: `
 				file:readme#owner@did:example:bob
 				file:readme#reader@did:example:alice
@@ -217,22 +219,23 @@ func Test_SetState_SettingValidStateReturnsOk(t *testing.T) {
 		Req: &types.SetStateRequest{
 			Handle: resp.Record.Handle,
 			Data: &types.SandboxData{
-				PolicyDefinition: `
-name: test
+				PolicyDefinition: `name: test
 resources:
 - name: file
   permissions:
-  - expr: reader
+  - expr: owner + reader
     name: read
   - expr: owner
     name: write
   relations:
+  - name: owner
+    types:
+    - actor
   - name: reader
     types:
     - actor
-`,
-
-				Relationships: `
+spec: none
+`, Relationships: `
 				file:readme#owner@did:example:bob
 				file:readme#reader@did:example:alice
 				`,
@@ -297,21 +300,23 @@ func Test_Simulate(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
 	data := types.SandboxData{
-		PolicyDefinition: `
-name: test
+		PolicyDefinition: `name: test
 resources:
 - name: file
   permissions:
-  - expr: reader
+  - expr: owner + reader
     name: read
   - expr: owner
     name: write
   relations:
+  - name: owner
+    types:
+    - actor
   - name: reader
     types:
     - actor
+spec: none
 `,
-
 		Relationships: `
 		file:abc#owner@did:ex:bob
 		file:abc#reader@did:ex:alice

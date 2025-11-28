@@ -16,8 +16,7 @@ func testDeleteRelationshipSetup(t *testing.T) *test.TestCtx {
 	writer := ctx.Actors.DID("writer")
 	reader := ctx.Actors.DID("reader")
 
-	policy := `
-name: policy
+	policy := `name: policy
 resources:
 - name: file
   relations:
@@ -26,14 +25,17 @@ resources:
     name: admin
     types:
     - actor
+  - name: owner
+    types:
+    - actor
   - name: reader
     types:
     - actor
   - name: writer
     types:
     - actor
+spec: none
 `
-
 	action := test.PolicySetupAction{
 		Policy:        policy,
 		PolicyCreator: "creator",

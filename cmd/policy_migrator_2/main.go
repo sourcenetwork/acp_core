@@ -95,7 +95,12 @@ func (v *stringLiteralVisitor) Visit(node ast.Node) ast.Visitor {
 					return v
 				}
 				tree = removeOwnerFromTree(tree)
-				p.Expression = tree.IntoPermissionExpr()
+				if tree == nil {
+					p.Expression = ""
+				} else {
+					p.Expression = tree.IntoPermissionExpr()
+				}
+
 			}
 		}
 

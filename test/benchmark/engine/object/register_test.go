@@ -10,10 +10,14 @@ import (
 	"github.com/sourcenetwork/acp_core/test"
 )
 
-var policyStr string = `
-name: policy
+var policyStr string = `name: policy
 resources:
 - name: doc
+  relations:
+  - name: owner
+    types:
+    - actor
+spec: none
 `
 
 func BenchmarkObjectRegistration(b *testing.B) {

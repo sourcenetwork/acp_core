@@ -13,8 +13,7 @@ func TestCreatePolicy_DefraSpec_RequiresRead(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	pol := `
-name: test
+	pol := `name: test
 resources:
 - name: file
   permissions:
@@ -22,6 +21,7 @@ resources:
     name: write
 spec: defra
 `
+
 	req := types.CreatePolicyRequest{
 		Policy:      pol,
 		MarshalType: types.PolicyMarshalingType_YAML,
@@ -36,8 +36,7 @@ func TestCreatePolicy_DefraSpec_RequiresWrite(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	pol := `
-name: test
+	pol := `name: test
 resources:
 - name: file
   permissions:
@@ -45,6 +44,7 @@ resources:
     name: read
 spec: defra
 `
+
 	req := types.CreatePolicyRequest{
 		Policy:      pol,
 		MarshalType: types.PolicyMarshalingType_YAML,
@@ -59,8 +59,7 @@ func TestCreatePolicy_DefraSpec_OkWithReadAndWrite(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	pol := `
-name: test
+	pol := `name: test
 resources:
 - name: file
   permissions:
@@ -70,6 +69,7 @@ resources:
     name: write
 spec: defra
 `
+
 	req := types.CreatePolicyRequest{
 		Policy:      pol,
 		MarshalType: types.PolicyMarshalingType_YAML,
@@ -83,14 +83,13 @@ spec: defra
 func TestCreatePolicy_DefraSpec_WriteImpliesRead(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
-	pol := `
-name: test
+	pol := `name: test
 resources:
 - name: file
   permissions:
   - expr: owner
     name: read
-  - expr: writer
+  - expr: owner + writer
     name: write
   relations:
   - name: writer
@@ -98,6 +97,7 @@ resources:
     - actor
 spec: defra
 `
+
 	action := test.PolicySetupAction{
 		Policy:        pol,
 		PolicyCreator: "bob",
