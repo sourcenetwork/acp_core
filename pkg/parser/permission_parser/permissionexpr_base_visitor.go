@@ -3,7 +3,6 @@
 package permission_parser // PermissionExpr
 import "github.com/antlr4-go/antlr/v4"
 
-
 type BasePermissionExprVisitor struct {
 	*antlr.BaseParseTreeVisitor
 }

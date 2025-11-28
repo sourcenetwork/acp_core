@@ -3,7 +3,6 @@
 package permission_parser // PermissionExpr
 import "github.com/antlr4-go/antlr/v4"
 
-
 // A complete Visitor for a parse tree produced by PermissionExprParser.
 type PermissionExprVisitor interface {
 	antlr.ParseTreeVisitor
@@ -37,5 +36,4 @@ type PermissionExprVisitor interface {
 
 	// Visit a parse tree produced by PermissionExprParser#intersection.
 	VisitIntersection(ctx *IntersectionContext) interface{}
-
 }

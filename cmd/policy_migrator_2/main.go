@@ -61,7 +61,7 @@ func (v *stringLiteralVisitor) Visit(node ast.Node) ast.Visitor {
 				panic(err)
 			}
 			doubleQuote = true
-		} else {	//multiline string
+		} else { //multiline string
 			literal, err = strconv.Unquote(n.Value)
 			if err != nil {
 				panic(err)
@@ -111,12 +111,12 @@ func (v *stringLiteralVisitor) Visit(node ast.Node) ast.Visitor {
 
 func mapPolicyToYaml(in *types.Policy) *types.PolicyYaml {
 	out := &types.PolicyYaml{
-		Name:		in.Name,
-		Description:	in.Description,
-		Meta:		in.Attributes,
-		Spec:		mapSpecTypeToString(in.SpecificationType),
-		Resources:	utils.MapSlice(in.Resources, mapResourceToYaml),
-		Actor:		mapActorResourceToYaml(in.ActorResource),
+		Name:        in.Name,
+		Description: in.Description,
+		Meta:        in.Attributes,
+		Spec:        mapSpecTypeToString(in.SpecificationType),
+		Resources:   utils.MapSlice(in.Resources, mapResourceToYaml),
+		Actor:       mapActorResourceToYaml(in.ActorResource),
 	}
 
 	return out
@@ -124,27 +124,27 @@ func mapPolicyToYaml(in *types.Policy) *types.PolicyYaml {
 
 func mapResourceToYaml(r *types.Resource) *types.ResourceYaml {
 	return &types.ResourceYaml{
-		Name:		r.Name,
-		Description:	r.Doc,
-		Permissions:	utils.MapSlice(r.Permissions, mapPermissionToYaml),
-		Relations:	utils.MapSlice(r.Relations, mapRelationToYaml),
+		Name:        r.Name,
+		Description: r.Doc,
+		Permissions: utils.MapSlice(r.Permissions, mapPermissionToYaml),
+		Relations:   utils.MapSlice(r.Relations, mapRelationToYaml),
 	}
 }
 
 func mapRelationToYaml(rel *types.Relation) *types.RelationYaml {
 	return &types.RelationYaml{
-		Name:		rel.Name,
-		Doc:		rel.Doc,
-		Manages:	rel.Manages,
-		Types:		utils.MapSlice(rel.VrTypes, mapRestrictionToString),
+		Name:    rel.Name,
+		Doc:     rel.Doc,
+		Manages: rel.Manages,
+		Types:   utils.MapSlice(rel.VrTypes, mapRestrictionToString),
 	}
 }
 
 func mapPermissionToYaml(p *types.Permission) *types.PermissionYaml {
 	return &types.PermissionYaml{
-		Name:	p.Name,
-		Doc:	p.Doc,
-		Expr:	p.Expression,
+		Name: p.Name,
+		Doc:  p.Doc,
+		Expr: p.Expression,
 	}
 }
 
@@ -154,9 +154,9 @@ func mapActorResourceToYaml(in *types.ActorResource) *types.ActorResourceYaml {
 	}
 
 	return &types.ActorResourceYaml{
-		Name:		in.Name,
-		Doc:		in.Doc,
-		Relations:	utils.MapSlice(in.Relations, mapRelationToYaml),
+		Name:      in.Name,
+		Doc:       in.Doc,
+		Relations: utils.MapSlice(in.Relations, mapRelationToYaml),
 	}
 }
 
