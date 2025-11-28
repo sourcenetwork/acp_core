@@ -15,7 +15,8 @@ func TestCreatePolicy_ValidPolicyIsCreated(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	bob := ctx.SetPrincipal("bob")
 
-	policyStr := `actor:
+	policyStr := `
+actor:
   doc: my actor
   name: actor-resource
 description: ok
@@ -35,12 +36,7 @@ resources:
   - manages:
     - reader
     name: admin
-  - doc: owner owns
-    name: owner
-    types:
-    - actor-resource
   - name: reader
-spec: none
 `
 
 	msg := types.CreatePolicyRequest{
@@ -133,16 +129,14 @@ func TestCreatePolicy_ResourcesWithoutOwnerRelation_IsAutomaticallyAdded(t *test
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	pol := `description: ok
+	pol := `
+description: ok
 name: policy
 resources:
 - name: file
   relations:
   - name: reader
 - name: foo
-  relations:
-  - name: owner
-spec: none
 `
 
 	req := types.CreatePolicyRequest{
@@ -169,7 +163,8 @@ func TestCreatePolicy_ManagementReferencingUndefinedRelationReturnsError(t *test
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	pol := `description: ok
+	pol := `
+description: ok
 name: policy
 resources:
 - name: file
@@ -177,8 +172,6 @@ resources:
   - manages:
     - deleter
     name: admin
-  - name: owner
-spec: none
 `
 
 	req := types.CreatePolicyRequest{
@@ -212,15 +205,16 @@ func TestCreatePolicy_CreatingMultipleEqualPoliciesProduceDifferentIDs(t *testin
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("creator")
 
-	pol := `actor:
+	pol := `
+actor:
   name: actor
 description: A Valid Defra Policy Interface (DPI)
 name: test
 resources:
 - name: users
   permissions:
-  - name: read
-    expr: reader
+  - expr: reader
+    name: read
   - name: write
   relations:
   - manages:
@@ -228,13 +222,9 @@ resources:
     name: admin
     types:
     - actor
-  - name: owner
-    types:
-    - actor
   - name: reader
     types:
     - actor
-spec: none
 `
 
 	req := types.CreatePolicyRequest{
@@ -260,10 +250,6 @@ func TestCreatePolicy_WithEmptyPermission_OwnerIsPermitted(t *testing.T) {
 name: policy
 resources:
 - name: foo
-  relations:
-  - name: owner
-    types:
-    - actor
   permissions:
   - name: test
 `

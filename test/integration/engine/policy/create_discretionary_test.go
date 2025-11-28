@@ -21,10 +21,6 @@ resources:
 - name: file
   permissions:
   - name: read
-  relations:
-  - name: owner
-    types:
-    - actor
 `
 
 	msg := types.CreatePolicyRequest{

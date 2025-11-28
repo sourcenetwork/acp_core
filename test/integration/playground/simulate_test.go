@@ -13,20 +13,13 @@ func Test_Simulate_ReturnsErrorIfSubjectInOwnerRelationshipIsNotActor(t *testing
 	ctx := test.NewTestCtx(t)
 
 	data := types.SandboxData{
-		PolicyDefinition: `name: shinzo
+		PolicyDefinition: `
+name: shinzo
 resources:
 - name: file
-  relations:
-  - name: owner
-    types:
-    - actor
 - name: group
-  relations:
-  - name: owner
-    types:
-    - actor
-spec: none
 `,
+
 		Relationships: `
 file:logs#owner@group:example#owner
 `,

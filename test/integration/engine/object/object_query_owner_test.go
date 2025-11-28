@@ -15,7 +15,8 @@ func setupQueryObjectOwner(t *testing.T) *test.TestCtx {
 
 	ctx.SetPrincipal("admin")
 
-	pol := `actor:
+	pol := `
+actor:
   doc: my actor
   name: actor-resource
 description: ok
@@ -32,13 +33,9 @@ resources:
   - manages:
     - reader
     name: admin
-  - doc: owner owns
-    name: owner
-    types:
-    - actor-resource
   - name: reader
-spec: none
 `
+
 	action := test.CreatePolicyAction{
 		Policy: pol,
 	}

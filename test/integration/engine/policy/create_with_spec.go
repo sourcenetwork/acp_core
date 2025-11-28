@@ -13,7 +13,8 @@ import (
 func TestCreatePolicyWithSpec_ValidPolicyIsCreated(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
-	policyStr := `actor:
+	policyStr := `
+actor:
   doc: my actor
   name: actor-resource
 description: ok
@@ -33,12 +34,7 @@ resources:
   - manages:
     - reader
     name: admin
-  - doc: owner owns
-    name: owner
-    types:
-    - actor-resource
   - name: reader
-spec: none
 `
 
 	msg := types.CreatePolicyWithSpecificationRequest{
