@@ -29,7 +29,7 @@ func VerifyManagementPermission(ctx context.Context, engine *zanzi.Adapter, poli
 			errors.Pair("resource", obj.Resource),
 		)
 	}
-	perm := resource.GetManagementPermissionByName(relation)
+	perm := resource.GetManagementRuleByName(relation)
 	if perm == nil {
 		return false, errors.New("management permission not found for relation in resource", errors.ErrorType_NOT_FOUND,
 			errors.Pair("policy", policy.Id),

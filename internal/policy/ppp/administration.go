@@ -22,15 +22,15 @@ func (t *DecentralizedAdminTransformer) Validate(policy types.Policy) *errors.Mu
 	multiErr := errors.NewMultiError(ErrAdministrationTransformer)
 
 	for _, resource := range policy.Resources {
-		mgmtPermissions := make(map[string]struct{})
-		for _, perm := range resource.ManagementRules {
-			mgmtPermissions[perm.Name] = struct{}{}
+		rules := make(map[string]struct{})
+		for _, rule := range resource.ManagementRules {
+			rules[rule.Relation] = struct{}{}
 		}
 
 		for _, rel := range resource.Relations {
-			_, ok := mgmtPermissions[rel.Name]
+			_, ok := rules[rel.Name]
 			if !ok {
-				err := fmt.Errorf("management permission not found: resource %v: relation %v", resource.Name, rel.Name)
+				err := fmt.Errorf("management rule not found: resource %v: relation %v", resource.Name, rel.Name)
 				multiErr.Append(err)
 			}
 		}
@@ -73,9 +73,9 @@ func (t *DecentralizedAdminTransformer) buildManagementPermission(resourceName s
 	exprTree := t.buildRelationExpression(managerRelations)
 
 	return &types.ManagementRule{
-		Name:       relation.Name,
+		Relation:   relation.Name,
 		Expression: exprTree.IntoPermissionExpr(),
-		Relations:  managerRelations,
+		Managers:   managerRelations,
 	}
 }
 

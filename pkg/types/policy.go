@@ -42,12 +42,12 @@ func (res *Resource) GetRelationByName(name string) *Relation {
 	return nil
 }
 
-// GetManagementPermissionByName returns a ManagementPermission with `name`.
+// GetManagementRuleByName returns a ManagementPermission with `name`.
 // If no ManagementPermission matches name, returns nil
-func (res *Resource) GetManagementPermissionByName(name string) *ManagementRule {
-	for _, perm := range res.ManagementRules {
-		if perm.Name == name {
-			return perm
+func (res *Resource) GetManagementRuleByName(relation string) *ManagementRule {
+	for _, rule := range res.ManagementRules {
+		if rule.Relation == relation {
+			return rule
 		}
 	}
 	return nil

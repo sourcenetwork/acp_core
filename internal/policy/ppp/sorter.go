@@ -20,7 +20,7 @@ func (t *SortTransformer) Transform(pol types.Policy) (specification.Transformer
 	resourceExtractor := func(resource *types.Resource) string { return resource.Name }
 	relationExtractor := func(relation *types.Relation) string { return relation.Name }
 	permissionExtractor := func(permission *types.Permission) string { return permission.Name }
-	mgmtPermExtractor := func(permission *types.ManagementRule) string { return permission.Name }
+	mgmtPermExtractor := func(rule *types.ManagementRule) string { return rule.Relation }
 
 	utils.FromExtractor(pol.Resources, resourceExtractor).SortInPlace()
 
