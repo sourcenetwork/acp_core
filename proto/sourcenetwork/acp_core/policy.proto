@@ -101,4 +101,7 @@ message ManagementRule {
   // managers are the set of relation names which have authority to
   // manage relation instances of the relation the rule applies to.
   repeated string managers = 2;
+  // expression is a zanzi compatible relation expression
+  // which represents the management rule
+  string expression = 3;
 }

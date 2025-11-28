@@ -4619,9 +4619,10 @@ func (x *_ManagementRule_2_list) IsValid() bool {
 }
 
 var (
-	md_ManagementRule          protoreflect.MessageDescriptor
-	fd_ManagementRule_relation protoreflect.FieldDescriptor
-	fd_ManagementRule_managers protoreflect.FieldDescriptor
+	md_ManagementRule            protoreflect.MessageDescriptor
+	fd_ManagementRule_relation   protoreflect.FieldDescriptor
+	fd_ManagementRule_managers   protoreflect.FieldDescriptor
+	fd_ManagementRule_expression protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -4629,6 +4630,7 @@ func init() {
 	md_ManagementRule = File_sourcenetwork_acp_core_policy_proto.Messages().ByName("ManagementRule")
 	fd_ManagementRule_relation = md_ManagementRule.Fields().ByName("relation")
 	fd_ManagementRule_managers = md_ManagementRule.Fields().ByName("managers")
+	fd_ManagementRule_expression = md_ManagementRule.Fields().ByName("expression")
 }
 
 var _ protoreflect.Message = (*fastReflection_ManagementRule)(nil)
@@ -4708,6 +4710,12 @@ func (x *fastReflection_ManagementRule) Range(f func(protoreflect.FieldDescripto
 			return
 		}
 	}
+	if x.Expression != "" {
+		value := protoreflect.ValueOfString(x.Expression)
+		if !f(fd_ManagementRule_expression, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -4727,6 +4735,8 @@ func (x *fastReflection_ManagementRule) Has(fd protoreflect.FieldDescriptor) boo
 		return x.Relation != ""
 	case "sourcenetwork.acp_core.ManagementRule.managers":
 		return len(x.Managers) != 0
+	case "sourcenetwork.acp_core.ManagementRule.expression":
+		return x.Expression != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ManagementRule"))
@@ -4747,6 +4757,8 @@ func (x *fastReflection_ManagementRule) Clear(fd protoreflect.FieldDescriptor) {
 		x.Relation = ""
 	case "sourcenetwork.acp_core.ManagementRule.managers":
 		x.Managers = nil
+	case "sourcenetwork.acp_core.ManagementRule.expression":
+		x.Expression = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ManagementRule"))
@@ -4772,6 +4784,9 @@ func (x *fastReflection_ManagementRule) Get(descriptor protoreflect.FieldDescrip
 		}
 		listValue := &_ManagementRule_2_list{list: &x.Managers}
 		return protoreflect.ValueOfList(listValue)
+	case "sourcenetwork.acp_core.ManagementRule.expression":
+		value := x.Expression
+		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ManagementRule"))
@@ -4798,6 +4813,8 @@ func (x *fastReflection_ManagementRule) Set(fd protoreflect.FieldDescriptor, val
 		lv := value.List()
 		clv := lv.(*_ManagementRule_2_list)
 		x.Managers = *clv.list
+	case "sourcenetwork.acp_core.ManagementRule.expression":
+		x.Expression = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ManagementRule"))
@@ -4826,6 +4843,8 @@ func (x *fastReflection_ManagementRule) Mutable(fd protoreflect.FieldDescriptor)
 		return protoreflect.ValueOfList(value)
 	case "sourcenetwork.acp_core.ManagementRule.relation":
 		panic(fmt.Errorf("field relation of message sourcenetwork.acp_core.ManagementRule is not mutable"))
+	case "sourcenetwork.acp_core.ManagementRule.expression":
+		panic(fmt.Errorf("field expression of message sourcenetwork.acp_core.ManagementRule is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ManagementRule"))
@@ -4844,6 +4863,8 @@ func (x *fastReflection_ManagementRule) NewField(fd protoreflect.FieldDescriptor
 	case "sourcenetwork.acp_core.ManagementRule.managers":
 		list := []string{}
 		return protoreflect.ValueOfList(&_ManagementRule_2_list{list: &list})
+	case "sourcenetwork.acp_core.ManagementRule.expression":
+		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ManagementRule"))
@@ -4923,6 +4944,10 @@ func (x *fastReflection_ManagementRule) ProtoMethods() *protoiface.Methods {
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
 		}
+		l = len(x.Expression)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -4951,6 +4976,13 @@ func (x *fastReflection_ManagementRule) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.Expression) > 0 {
+			i -= len(x.Expression)
+			copy(dAtA[i:], x.Expression)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Expression)))
+			i--
+			dAtA[i] = 0x1a
 		}
 		if len(x.Managers) > 0 {
 			for iNdEx := len(x.Managers) - 1; iNdEx >= 0; iNdEx-- {
@@ -5080,6 +5112,38 @@ func (x *fastReflection_ManagementRule) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				x.Managers = append(x.Managers, string(dAtA[iNdEx:postIndex]))
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Expression", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Expression = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -5588,6 +5652,9 @@ type ManagementRule struct {
 	// managers are the set of relation names which have authority to
 	// manage relation instances of the relation the rule applies to.
 	Managers []string `protobuf:"bytes,2,rep,name=managers,proto3" json:"managers,omitempty"`
+	// expression is a zanzi compatible relation expression
+	// which represents the management rule
+	Expression string `protobuf:"bytes,3,opt,name=expression,proto3" json:"expression,omitempty"`
 }
 
 func (x *ManagementRule) Reset() {
@@ -5622,6 +5689,13 @@ func (x *ManagementRule) GetManagers() []string {
 		return x.Managers
 	}
 	return nil
+}
+
+func (x *ManagementRule) GetExpression() string {
+	if x != nil {
+		return x.Expression
+	}
+	return ""
 }
 
 var File_sourcenetwork_acp_core_policy_proto protoreflect.FileDescriptor
@@ -5715,11 +5789,13 @@ var file_sourcenetwork_acp_core_policy_proto_rawDesc = []byte{
 	0x20, 0x03, 0x28, 0x0b, 0x32, 0x20, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
 	0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65,
 	0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x09, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x73, 0x22, 0x48, 0x0a, 0x0e, 0x4d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x52,
+	0x73, 0x22, 0x68, 0x0a, 0x0e, 0x4d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x52,
 	0x75, 0x6c, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18,
 	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12,
 	0x1a, 0x0a, 0x08, 0x6d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x72, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28,
-	0x09, 0x52, 0x08, 0x6d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x72, 0x73, 0x2a, 0x2d, 0x0a, 0x14, 0x50,
+	0x09, 0x52, 0x08, 0x6d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x72, 0x73, 0x12, 0x1e, 0x0a, 0x0a, 0x65,
+	0x78, 0x70, 0x72, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x0a, 0x65, 0x78, 0x70, 0x72, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2a, 0x2d, 0x0a, 0x14, 0x50,
 	0x6f, 0x6c, 0x69, 0x63, 0x79, 0x4d, 0x61, 0x72, 0x73, 0x68, 0x61, 0x6c, 0x69, 0x6e, 0x67, 0x54,
 	0x79, 0x70, 0x65, 0x12, 0x0b, 0x0a, 0x07, 0x55, 0x4e, 0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x10, 0x00,
 	0x12, 0x08, 0x0a, 0x04, 0x59, 0x41, 0x4d, 0x4c, 0x10, 0x01, 0x42, 0x2d, 0x5a, 0x2b, 0x67, 0x69,

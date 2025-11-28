@@ -121,4 +121,9 @@ export interface ManagementRule {
    * manage relation instances of the relation the rule applies to.
    */
   managers: string[];
+  /**
+   * expression is a zanzi compatible relation expression
+   * which represents the management rule
+   */
+  expression: string;
 }
