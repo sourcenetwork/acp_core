@@ -17,6 +17,9 @@ func (g *ManagementGraph) LoadFromPolicy(policy *Policy) {
 				g.RegisterManagedRel(resource.Name, relation.Name, managedRel)
 			}
 		}
+		for _, managedRel := range resource.Owner.Manages {
+			g.RegisterManagedRel(resource.Name, resource.Owner.Name, managedRel)
+		}
 	}
 }
 

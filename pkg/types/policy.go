@@ -4,6 +4,8 @@ import (
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
 
+const OwnerRelationName = "owner"
+
 // GetResourceByName returns a Resource with the given Name.
 // If no resource is found with resourceName, return nil
 func (pol *Policy) GetResourceByName(resourceName string) *Resource {
@@ -34,6 +36,9 @@ func (res *Resource) GetPermissionByName(name string) *Permission {
 // GetRelationByName returns a Relation with `name`.
 // If no Relation matches name, returns nil
 func (res *Resource) GetRelationByName(name string) *Relation {
+	if name == OwnerRelationName {
+		return res.Owner
+	}
 	for _, relation := range res.Relations {
 		if relation.Name == name {
 			return relation
