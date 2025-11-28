@@ -9,6 +9,12 @@ import (
 // BuildManagementGraph builds a Management Graph from a Policy.
 func (g *ManagementGraph) LoadFromPolicy(policy *Policy) {
 	for _, resource := range policy.Resources {
+		// register owner relation
+		g.registerRel(resource.Name, resource.Owner.Name)
+		for _, managedRel := range resource.Owner.Manages {
+			g.RegisterManagedRel(resource.Name, resource.Owner.Name, managedRel)
+		}
+
 		// register relation and managed rels
 		for _, relation := range resource.Relations {
 			g.registerRel(resource.Name, relation.Name)
@@ -16,9 +22,6 @@ func (g *ManagementGraph) LoadFromPolicy(policy *Policy) {
 			for _, managedRel := range relation.Manages {
 				g.RegisterManagedRel(resource.Name, relation.Name, managedRel)
 			}
-		}
-		for _, managedRel := range resource.Owner.Manages {
-			g.RegisterManagedRel(resource.Name, resource.Owner.Name, managedRel)
 		}
 	}
 }

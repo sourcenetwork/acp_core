@@ -95,14 +95,14 @@ func findOwnerViolationsInParseTree(tree *types.PermissionFetchTree) error {
 		switch op := term.Operation.Operation.(type) {
 		case *types.FetchOperation_Cu:
 			if op.Cu.Relation == OwnerRelationName {
-				return fmt.Errorf("violation found: cannot reference `owner` as part of expression")
+				return ErrPermissionReferencesOwner
 			}
 		case *types.FetchOperation_Ttu:
 			// we only care about the first relation in a TTU,
 			// because it's perfectly valid to reference the owner of another
 			// resource as the inheritance target
 			if op.Ttu.LookupRelation == OwnerRelationName {
-				return fmt.Errorf("violation found: `owner` relation cannot be used as the lookup relation in a tuple to userset")
+				return ErrPermissionReferencesOwner
 			}
 			// other cases are uninteresting
 		}
@@ -113,11 +113,11 @@ func findOwnerViolationsInParseTree(tree *types.PermissionFetchTree) error {
 func (t *DiscretionaryTransformer) validatePermissionDoesNotReferenceOwner(expr string) error {
 	tree, err := parser.Parse(expr)
 	if err != nil {
-		return fmt.Errorf("invalid permission: parsing error: %v", err)
+		return errors.NewWithCause("invalid permission: parsing error", err, errors.ErrorType_BAD_INPUT)
 	}
 	err = findOwnerViolationsInParseTree(tree)
 	if err != nil {
-		return fmt.Errorf("invalid permission: %w", err)
+		return err
 	}
 	return nil
 }
@@ -148,7 +148,7 @@ func (t *DiscretionaryTransformer) Transform(policy types.Policy) (specification
 		for _, permission := range resource.Permissions {
 			err := t.validatePermissionDoesNotReferenceOwner(permission.Expression)
 			if err != nil {
-				return res, errors.Attrs(ErrPermissionReferencesOwner,
+				return res, errors.Attrs(err,
 					errors.Pair("resource", resource.Name),
 					errors.Pair("permission", permission.Name))
 			}
