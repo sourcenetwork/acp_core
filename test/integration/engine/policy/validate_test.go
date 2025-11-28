@@ -11,7 +11,8 @@ import (
 func TestValidatePolicy_ValidPolicyOk(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
-	pol := `name: test
+	pol := `
+name: test
 resources:
 - name: foo
   permissions:
@@ -19,7 +20,6 @@ resources:
     name: read
   relations:
   - name: reader
-spec: none
 `
 	resp, err := ctx.Engine.ValidatePolicy(ctx, &types.ValidatePolicyRequest{
 		Policy:      pol,
@@ -32,7 +32,8 @@ spec: none
 func TestValidatePolicy_InvalidPolicyReturnsErrorMsg(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
-	pol := `name: test
+	pol := `
+name: test
 resources:
 - name: foo
   permissions:
@@ -42,7 +43,6 @@ resources:
   - name: reader
 spec: defra
 `
-
 	resp, err := ctx.Engine.ValidatePolicy(ctx, &types.ValidatePolicyRequest{
 		Policy:      pol,
 		MarshalType: types.PolicyMarshalingType_YAML,
@@ -55,7 +55,8 @@ spec: defra
 func TestValidatePolicy_ReturnsParsedPolicy(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
-	policyStr := `actor:
+	policyStr := `
+actor:
   doc: my actor
   name: actor-resource
 description: ok
@@ -67,20 +68,14 @@ resources:
 - name: file
   permissions:
   - doc: own doc
-    expr: owner
     name: own
-  - expr: owner + reader
+  - expr: reader
     name: read
   relations:
   - manages:
     - reader
     name: admin
-  - doc: owner owns
-    name: owner
-    types:
-    - actor-resource
   - name: reader
-spec: none
 `
 
 	msg := types.ValidatePolicyRequest{

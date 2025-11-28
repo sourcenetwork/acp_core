@@ -7,18 +7,16 @@ var Samples []*types.SandboxTemplate = []*types.SandboxTemplate{
 		Name:        "Filesystem Example",
 		Description: "Models a simple filesystem, with hiearchical files and user groups",
 		Data: &types.SandboxData{
-			PolicyDefinition: `name: filesystem
+			PolicyDefinition: `
+name: filesystem
 resources:
 - name: directory
   permissions:
-  - expr: owner + reader + writer
+  - expr: (reader + writer)
     name: read
-  - expr: owner + writer
+  - expr: writer
     name: write
   relations:
-  - name: owner
-    types:
-    - actor
   - name: reader
     types:
     - actor
@@ -29,14 +27,11 @@ resources:
     - group->participant
 - name: file
   permissions:
-  - expr: owner + reader + writer + parent->read
+  - expr: ((reader + writer) + parent->read)
     name: read
-  - expr: owner + writer + parent->write
+  - expr: (writer + parent->write)
     name: write
   relations:
-  - name: owner
-    types:
-    - actor
   - name: parent
     types:
     - directory
@@ -50,16 +45,15 @@ resources:
     - group->participant
 - name: group
   permissions:
-  - expr: owner + guest
+  - expr: guest
     name: participant
   relations:
   - name: guest
     types:
     - actor
-  - name: owner
-    types:
-    - actor
-`, Relationships: `file:readme#owner@did:user:bob // bob owns file readme
+`,
+
+			Relationships: `file:readme#owner@did:user:bob // bob owns file readme
 file:readme#writer@did:user:alice // alice can read file readme
 file:readme#reader@group:engineering#participant // participants of the engineering group can read file readme
 

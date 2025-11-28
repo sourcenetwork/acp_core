@@ -12,15 +12,12 @@ func unarchiveSetup(t *testing.T) *test.TestCtx {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("creator")
 
-	policy := `name: policy
+	policy := `
+name: policy
 resources:
 - name: resource
-  relations:
-  - name: owner
-    types:
-    - actor
-spec: none
 `
+
 	action := test.PolicySetupAction{
 		Policy:        policy,
 		PolicyCreator: "creator",

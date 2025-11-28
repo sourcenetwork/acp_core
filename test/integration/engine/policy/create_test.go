@@ -15,7 +15,8 @@ func TestCreatePolicy_ValidPolicyIsCreated(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	bob := ctx.SetPrincipal("bob")
 
-	policyStr := `actor:
+	policyStr := `
+actor:
   doc: my actor
   name: actor-resource
 description: ok
@@ -27,20 +28,14 @@ resources:
 - name: file
   permissions:
   - doc: own doc
-    expr: owner
     name: own
-  - expr: owner + reader
+  - expr: reader
     name: read
   relations:
   - manages:
     - reader
     name: admin
-  - doc: owner owns
-    name: owner
-    types:
-    - actor-resource
   - name: reader
-spec: none
 `
 
 	msg := types.CreatePolicyRequest{
@@ -133,16 +128,14 @@ func TestCreatePolicy_ResourcesWithoutOwnerRelation_IsAutomaticallyAdded(t *test
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	pol := `description: ok
+	pol := `
+description: ok
 name: policy
 resources:
 - name: file
   relations:
   - name: reader
 - name: foo
-  relations:
-  - name: owner
-spec: none
 `
 
 	req := types.CreatePolicyRequest{
@@ -169,7 +162,8 @@ func TestCreatePolicy_ManagementReferencingUndefinedRelationReturnsError(t *test
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	pol := `description: ok
+	pol := `
+description: ok
 name: policy
 resources:
 - name: file
@@ -177,8 +171,6 @@ resources:
   - manages:
     - deleter
     name: admin
-  - name: owner
-spec: none
 `
 
 	req := types.CreatePolicyRequest{
