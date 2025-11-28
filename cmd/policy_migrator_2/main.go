@@ -90,9 +90,13 @@ func (v *stringLiteralVisitor) Visit(node ast.Node) ast.Visitor {
 		for _, resource := range pol.Resources {
 			resource.Relations = utils.FilterSlice(resource.Relations, func(r *types.Relation) bool { return r.Name != "owner" })
 			for _, p := range resource.Permissions {
+				if p.Expression == "" {
+					continue
+				}
 				tree, err := permission_parser.Parse(p.Expression)
 				if err != nil {
-					return v
+					log.Printf("error parsing permission: file %v: resource %v: permission %v: %w: literal %v",
+						v.File, resource.Name, p.Name, err, literal)
 				}
 				tree = removeOwnerFromTree(tree)
 				if tree == nil {
