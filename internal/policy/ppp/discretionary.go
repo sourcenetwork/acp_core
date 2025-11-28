@@ -192,6 +192,9 @@ func (t *DiscretionaryTransformer) Transform(policy types.Policy) (specification
 // as there are several subtle expressions which could remove owner access
 // eg. owner - (something & owner)
 func (t *DiscretionaryTransformer) transformFetchTree(tree *types.PermissionFetchTree) (_ *types.PermissionFetchTree, modified bool) {
+	if tree.Term == nil {
+		return newFetchOwnerTree(), true
+	}
 	if checkOwnerIsTopNode(tree) {
 		return tree, false
 	}

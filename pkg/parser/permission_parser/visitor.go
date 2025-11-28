@@ -102,3 +102,4 @@ func (v *visitor) Visit(tree antlr.ParseTree) any            { return tree.Accep
 func (v *visitor) VisitChildren(node antlr.RuleNode) any     { return nil }
 func (v *visitor) VisitTerminal(node antlr.TerminalNode) any { return nil }
 func (v *visitor) VisitErrorNode(node antlr.ErrorNode) any   { return nil }
+func (v *visitor) VisitEmpty(ctx *EmptyContext) any          { return nil }

@@ -34,3 +34,12 @@ func TestPermission_SingleLetterRelation(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, want, tree.IntoPermissionExpr())
 }
+
+func TestPermission_EmptyProduction_ReturnsNilTree(t *testing.T) {
+	perm := ""
+
+	tree, err := Parse(perm)
+
+	require.NoError(t, err)
+	require.Nil(t, tree.Term)
+}

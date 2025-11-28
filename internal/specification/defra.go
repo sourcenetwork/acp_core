@@ -89,7 +89,7 @@ func (s *writeImpliesReadTransform) Transform(pol types.Policy) (TransformerResu
 			if permission.Name != DefraReadPermissionName {
 				continue
 			}
-			tree, err := parser.Parse(permission.Expression)
+			tree, err := parser.Parse(permission.EffectiveExpression)
 			if err != nil {
 				return result, errors.Wrap("parsing permission", ErrDefraSpec,
 					errors.Pair("resource", resource.Name),
@@ -97,7 +97,7 @@ func (s *writeImpliesReadTransform) Transform(pol types.Policy) (TransformerResu
 				)
 			}
 			tree = s.transformTree(tree)
-			permission.Expression = tree.IntoPermissionExpr()
+			permission.EffectiveExpression = tree.IntoPermissionExpr()
 		}
 	}
 	result.Policy = pol
