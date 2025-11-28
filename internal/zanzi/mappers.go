@@ -149,7 +149,8 @@ func (m *policyMapper) permToZanziRel(permission *types.Permission) *domain.Rela
 		Description: permission.Doc,
 		RelationExpression: &domain.RelationExpression{
 			Expression: &domain.RelationExpression_Expr{
-				Expr: permission.Expression,
+				// use effective expression instead
+				Expr: permission.EffectiveExpression,
 			},
 		},
 		SubjectRestriction: &domain.SubjectRestriction{

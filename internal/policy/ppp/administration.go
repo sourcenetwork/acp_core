@@ -55,12 +55,12 @@ func (t *DecentralizedAdminTransformer) Transform(pol types.Policy) (specificati
 	}
 
 	for _, resource := range pol.Resources {
-		perms := make([]*types.ManagementRule, 0, len(resource.Relations))
+		rules := make([]*types.ManagementRule, 0, len(resource.Relations))
 		for _, relation := range resource.Relations {
 			perm := t.buildManagementPermission(resource.Name, relation, graph)
-			perms = append(perms, perm)
+			rules = append(rules, perm)
 		}
-		resource.ManagementRules = perms
+		resource.ManagementRules = rules
 	}
 
 	res.Policy = pol
@@ -80,10 +80,9 @@ func (t *DecentralizedAdminTransformer) buildManagementPermission(resourceName s
 }
 
 func (t *DecentralizedAdminTransformer) buildRelationExpression(relations []string) *types.PermissionFetchTree {
-	if len(relations) == 0 {
-		return newFetchOwnerTree()
-	}
-
+	// to build the RelationExpression we rely on the discretionary transformer,
+	// which adds the owner relation as a manager for every relation in a resource.
+	// This guarantees len(relations) >= 1
 	tree := &types.PermissionFetchTree{
 		Term: &types.PermissionFetchTree_Operation{
 			Operation: &types.FetchOperation{
@@ -95,7 +94,7 @@ func (t *DecentralizedAdminTransformer) buildRelationExpression(relations []stri
 			},
 		},
 	}
-	for _, relation := range relations[1:len(relations)] {
+	for _, relation := range relations[1:] {
 		node := &types.PermissionFetchTree{
 			Term: &types.PermissionFetchTree_Operation{
 				Operation: &types.FetchOperation{
@@ -117,16 +116,7 @@ func (t *DecentralizedAdminTransformer) buildRelationExpression(relations []stri
 			},
 		}
 	}
-
-	return &types.PermissionFetchTree{
-		Term: &types.PermissionFetchTree_CombNode{
-			CombNode: &types.CombinationNode{
-				Left:       tree,
-				Combinator: types.Combinator_UNION,
-				Right:      newFetchOwnerTree(),
-			},
-		},
-	}
+	return tree
 }
 
 func (t *DecentralizedAdminTransformer) GetName() string { return "Decentralized Administrator" }

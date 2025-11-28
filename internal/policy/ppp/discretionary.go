@@ -160,8 +160,6 @@ func (t *DiscretionaryTransformer) Transform(policy types.Policy) (specification
 		}
 	}
 
-	// FIXME ideally this would be done in a way transparent to the final user
-
 	// for all permissions in all resources
 	// add a computed userset fetch rule as the toplevel operation
 	for _, resource := range policy.Resources {
@@ -175,7 +173,7 @@ func (t *DiscretionaryTransformer) Transform(policy types.Policy) (specification
 			}
 			tree, modified := t.transformFetchTree(tree)
 			expr := tree.IntoPermissionExpr()
-			permission.Expression = expr
+			permission.EffectiveExpression = expr
 			if modified {
 				msg := fmt.Sprintf("added owner relation to permission: resource %v: permission %v",
 					resource.Name, permission.Name)
