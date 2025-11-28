@@ -12,6 +12,7 @@ import (
 	"os"
 
 	"github.com/sourcenetwork/acp_core/internal/policy"
+	"github.com/sourcenetwork/acp_core/pkg/parser/permission_parser"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 	"sigs.k8s.io/yaml"
@@ -88,6 +89,14 @@ func (v *stringLiteralVisitor) Visit(node ast.Node) ast.Visitor {
 
 		for _, resource := range pol.Resources {
 			resource.Relations = utils.FilterSlice(resource.Relations, func(r *types.Relation) bool { return r.Name != "owner" })
+			for _, p := range resource.Permissions {
+				tree, err := permission_parser.Parse(p.Expression)
+				if err != nil {
+					return v
+				}
+				tree = removeOwnerFromTree(tree)
+				p.Expression = tree.IntoPermissionExpr()
+			}
 		}
 
 		yamlPol := mapPolicyToYaml(pol)
@@ -176,4 +185,35 @@ func mapSpecTypeToString(specType types.PolicySpecificationType) string {
 	default:
 		return "unknown"
 	}
+}
+
+// remove owner from tree if left or right nodes are CU
+func removeOwnerFromTree(tree *types.PermissionFetchTree) *types.PermissionFetchTree {
+	switch term := tree.Term.(type) {
+	case *types.PermissionFetchTree_CombNode:
+		if term.CombNode.Combinator == types.Combinator_UNION {
+			if isOwnerCu(term.CombNode.Left) {
+				return removeOwnerFromTree(term.CombNode.Right)
+			} else if isOwnerCu(term.CombNode.Right) {
+				return removeOwnerFromTree(term.CombNode.Left)
+			}
+		}
+		term.CombNode.Left = removeOwnerFromTree(term.CombNode.Left)
+		term.CombNode.Right = removeOwnerFromTree(term.CombNode.Right)
+		return tree
+	default:
+		return tree
+	}
+}
+
+func isOwnerCu(t *types.PermissionFetchTree) bool {
+	op := t.GetOperation()
+	if op == nil {
+		return false
+	}
+	cu := op.GetCu()
+	if cu == nil {
+		return false
+	}
+	return cu.Relation == "owner"
 }

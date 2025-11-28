@@ -50,13 +50,7 @@ func (t *DiscretionaryTransformer) GetName() string {
 func (t *DiscretionaryTransformer) Validate(policy types.Policy) *errors.MultiError {
 	multiErr := errors.NewMultiError(ErrDiscretionaryTransformer)
 	for _, resource := range policy.Resources {
-		ownerRel := utils.FilterSlice(resource.Relations, func(r *types.Relation) bool { return r.Name == OwnerRelationName })
-		if len(ownerRel) > 1 {
-			err := fmt.Errorf("invalid policy: resource %v: multiple owner relations", resource.Name)
-			multiErr.Append(err)
-		}
-
-		if len(ownerRel) == 0 {
+		if resource.Owner == nil || resource.Owner.Name != OwnerRelationName {
 			err := fmt.Errorf("invalid policy: resource %v: no owner relation", resource.Name)
 			multiErr.Append(err)
 		}
@@ -64,13 +58,14 @@ func (t *DiscretionaryTransformer) Validate(policy types.Policy) *errors.MultiEr
 
 	for _, resource := range policy.Resources {
 		for _, permission := range resource.Permissions {
-			tree, err := parser.Parse(permission.Expression)
+			tree, err := parser.Parse(permission.EffectiveExpression)
 			if err != nil {
 				err := fmt.Errorf("parsing permission: resource %v: permission %v: %w", resource.Name, permission.Name, err)
 				multiErr.Append(err)
 				continue
 			}
 
+			// TODO refactor this to a tautology check
 			if !checkOwnerIsTopNode(tree) {
 				err := fmt.Errorf("invalid permission: resource %v: permission %v: expression does not contain owner as topmost allowed relation", resource.Name, permission.Name)
 				multiErr.Append(err)
