@@ -170,11 +170,11 @@ func TestEmptyPermissionMapsToPermission(t *testing.T) {
 	// it's ok because the validation will happen elsewhere.
 	// Asserting the type unmarhsals correctly means that the validator -
 	// as opposed to the unmarshaler - will error out leading to better error msgs.
-	in := `resources:
+	in := `
+resources:
 - name: foo
   permissions:
   - name: blah
-spec: none
 `
 
 	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)
@@ -407,12 +407,12 @@ resources:
 }
 
 func TestYaml_UnmarshalWithEmptyPermExpression(t *testing.T) {
-	in := `name: policy
+	in := `
 description: ok
-spec: none
+name: policy
 resources:
 - name: foo
-  permissions: 
+  permissions:
   - name: abc
 `
 	out, err := Unmarshal(in, types.PolicyMarshalingType_YAML)

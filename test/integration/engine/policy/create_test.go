@@ -204,15 +204,16 @@ func TestCreatePolicy_CreatingMultipleEqualPoliciesProduceDifferentIDs(t *testin
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("creator")
 
-	pol := `actor:
+	pol := `
+actor:
   name: actor
 description: A Valid Defra Policy Interface (DPI)
 name: test
 resources:
 - name: users
   permissions:
-  - name: read
-    expr: reader
+  - expr: reader
+    name: read
   - name: write
   relations:
   - manages:
@@ -220,13 +221,9 @@ resources:
     name: admin
     types:
     - actor
-  - name: owner
-    types:
-    - actor
   - name: reader
     types:
     - actor
-spec: none
 `
 
 	req := types.CreatePolicyRequest{
@@ -252,10 +249,6 @@ func TestCreatePolicy_WithEmptyPermission_OwnerIsPermitted(t *testing.T) {
 name: policy
 resources:
 - name: foo
-  relations:
-  - name: owner
-    types:
-    - actor
   permissions:
   - name: test
 `
