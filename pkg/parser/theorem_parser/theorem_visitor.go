@@ -3,6 +3,7 @@
 package theorem_parser // Theorem
 import "github.com/antlr4-go/antlr/v4"
 
+
 // A complete Visitor for a parse tree produced by TheoremParser.
 type TheoremVisitor interface {
 	antlr.ParseTreeVisitor
@@ -69,4 +70,5 @@ type TheoremVisitor interface {
 
 	// Visit a parse tree produced by TheoremParser#actorid.
 	VisitActorid(ctx *ActoridContext) interface{}
+
 }

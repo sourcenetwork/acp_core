@@ -3,6 +3,7 @@
 package permission_parser // PermissionExpr
 import "github.com/antlr4-go/antlr/v4"
 
+
 type BasePermissionExprVisitor struct {
 	*antlr.BaseParseTreeVisitor
 }
@@ -12,6 +13,10 @@ func (v *BasePermissionExprVisitor) VisitAtom(ctx *AtomContext) interface{} {
 }
 
 func (v *BasePermissionExprVisitor) VisitNested(ctx *NestedContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BasePermissionExprVisitor) VisitEmpty(ctx *EmptyContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 

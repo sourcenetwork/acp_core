@@ -3,6 +3,7 @@
 package theorem_parser // Theorem
 import "github.com/antlr4-go/antlr/v4"
 
+
 type BaseTheoremVisitor struct {
 	*antlr.BaseParseTreeVisitor
 }

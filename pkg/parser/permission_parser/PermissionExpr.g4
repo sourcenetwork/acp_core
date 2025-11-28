@@ -2,7 +2,7 @@ grammar PermissionExpr;
 
 expr: term #atom 
     | expr operator term #nested
-    | //match empty string as valid expression (for default permissions)
+    | #empty //match empty string as valid expression (for default permissions)
     ;
 
 term: relation #cu_term
