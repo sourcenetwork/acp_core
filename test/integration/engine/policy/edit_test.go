@@ -40,47 +40,6 @@ spec: none
 	a.Run(ctx)
 }
 
-func TestEditPolicy_RemovingOwnerRelation_DiscretionaryTransformerRestoresIt(t *testing.T) {
-	ctx := test.NewTestCtx(t)
-	ctx.SetPrincipal("bob")
-
-	// Given Policy
-	oldPol := `
-name: policy
-resources:
-- name: file
-`
-
-	a1 := test.CreatePolicyAction{
-		Policy: oldPol,
-	}
-	a1.Run(ctx)
-
-	// When I attempt to remove the owner relation
-	new := `
-name: policy
-resources:
-- name: file
-`
-
-	a := test.EditPolicyAction{
-		PolicyId: ctx.State.PolicyId,
-		Policy:   new,
-	}
-	pol := a.Run(ctx)
-	t.Logf("pol: %v", pol)
-	want := &types.Relation{
-		Name: "owner",
-		Doc:  "owner relations represents the object owner",
-		VrTypes: []*types.Restriction{
-			{
-				ResourceName: "actor",
-			},
-		},
-	}
-	require.Equal(t, want, pol.GetResourceByName("file").GetRelationByName("owner"))
-}
-
 func TestEditPolicy_CannotRenameActorResource(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
@@ -329,8 +288,12 @@ resources:
 	}
 	pol := a.Run(ctx)
 
-	want := "(owner + writer)"
-	require.Equal(ctx.T, want, pol.GetResourceByName("file").GetPermissionByName("read").Expression)
+	want := &types.Permission{
+		Name:                "read",
+		Expression:          "writer",
+		EffectiveExpression: "(owner + writer)",
+	}
+	require.Equal(ctx.T, want, pol.GetResourceByName("file").GetPermissionByName("read"))
 }
 
 func TestEditPolicy_CannotRemoveDefraPermissionsFromDefraPolicy(t *testing.T) {
@@ -405,8 +368,9 @@ resources:
 
 	// then the new permission exists in the policy
 	want := &types.Permission{
-		Name:       "write",
-		Expression: "(owner + reader)",
+		Name:                "write",
+		Expression:          "reader",
+		EffectiveExpression: "(owner + reader)",
 	}
 	require.Equal(ctx.T, want, pol.GetResourceByName("file").GetPermissionByName("write"))
 }

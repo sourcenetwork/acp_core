@@ -17,7 +17,7 @@ func GetOwnerRelation(actorResourceName string, managedRels []string) *types.Rel
 	manages := append(managedRels, OwnerRelationName)
 	return &types.Relation{
 		Name: OwnerRelationName,
-		Doc:  ownerDescription,
+		Doc:  OwnerDescription,
 		VrTypes: []*types.Restriction{
 			{
 				ResourceName: actorResourceName,
@@ -29,11 +29,11 @@ func GetOwnerRelation(actorResourceName string, managedRels []string) *types.Rel
 
 const (
 	OwnerRelationName = "owner"
-	ownerDescription  = "owner relations represents the object owner"
+	OwnerDescription  = "owner relations represents the object owner"
 )
 
 var ErrDiscretionaryTransformer = errors.New("discretionary policy transformer", errors.ErrorType_BAD_INPUT)
-var ErrResourceContainsOwner = errors.New("invalid resource: resource includes reserved `owner` relation: rename `owner` to another relation name", errors.ErrorType_BAD_INPUT)
+var ErrResourceContainsOwner = errors.New("invalid resource: 'owner` is a reserved relation name: rename 'owner' to a different name", errors.ErrorType_BAD_INPUT)
 var ErrPermissionReferencesOwner = errors.New("invalid permission: permission cannot reference `owner` relation as part of the computed expression. Try removing `owner` or asserting the tuple to userset expression is correct", errors.ErrorType_BAD_INPUT)
 
 // DiscretionaryTransformer is an essential part of acp_core which
@@ -132,10 +132,11 @@ func (t *DiscretionaryTransformer) Transform(policy types.Policy) (specification
 
 	// pre-validation: assert that resoruces don not include an `owner` relation
 	for _, resource := range policy.Resources {
-		rel := resource.GetRelationByName(OwnerRelationName)
-		if rel != nil {
-			return res, errors.Attrs(ErrResourceContainsOwner,
-				errors.Pair("resource", resource.Name))
+		for _, rel := range resource.Relations {
+			if rel.Name == OwnerRelationName {
+				return res, errors.Attrs(ErrResourceContainsOwner,
+					errors.Pair("resource", resource.Name))
+			}
 		}
 	}
 

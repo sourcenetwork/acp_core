@@ -47,6 +47,17 @@ func (res *Resource) GetRelationByName(name string) *Relation {
 	return nil
 }
 
+// GetAllRelations returns a list of all relations in a resource,
+// including the owner relation
+func (res *Resource) GetAllRelations() []*Relation {
+	rels := append(res.Relations, res.Owner)
+	sortable := utils.FromExtractor(rels, func(r *Relation) string {
+		return r.Name
+	})
+	sortable.SortInPlace()
+	return rels
+}
+
 // GetManagementRuleByName returns a ManagementPermission with `name`.
 // If no ManagementPermission matches name, returns nil
 func (res *Resource) GetManagementRuleByName(relation string) *ManagementRule {

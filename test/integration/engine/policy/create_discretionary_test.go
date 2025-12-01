@@ -19,6 +19,10 @@ func TestCreatePolicy_ResourceContainsOwnerRelation_Errors(t *testing.T) {
 name: pol
 resources:
 - name: file
+  relations:
+  - name: owner
+    types:
+    - actor
   permissions:
   - name: read
 `
@@ -49,7 +53,7 @@ resources:
   - name: def
   - name: relation
     types:
-	- actor
+    - actor
 `
 
 	msg := types.CreatePolicyRequest{
@@ -62,9 +66,9 @@ resources:
 	pol := resp.Record.Policy
 	file := pol.GetResourceByName("file")
 	want := []string{
-		"abc", "def", "relation",
+		"abc", "def", "relation", "owner",
 	}
-	require.Equal(t, want, file.ManagementRules)
+	require.Equal(t, want, file.Owner.Manages)
 }
 
 func TestCreatePolicy_PermissionReferencingOwner_IsRejected(t *testing.T) {
@@ -77,7 +81,7 @@ resources:
 - name: file
   permissions:
   - name: read
-	expr: owner
+    expr: owner
   relations:
 `
 
@@ -103,11 +107,11 @@ resources:
 - name: file
   permissions:
   - name: read
-	expr: parent->owner
+    expr: parent->owner
   relations:
   - name: parent
     types:
-	- directory
+    - directory
 `
 
 	msg := types.CreatePolicyRequest{
@@ -132,7 +136,7 @@ resources:
 - name: file
   permissions:
   - name: read
-	expr: owner->something
+    expr: owner->something
 `
 
 	msg := types.CreatePolicyRequest{

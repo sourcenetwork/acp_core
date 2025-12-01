@@ -3,6 +3,7 @@ package policy
 import (
 	"testing"
 
+	"github.com/sourcenetwork/acp_core/internal/policy/ppp"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/test"
 	"github.com/stretchr/testify/require"
@@ -107,43 +108,52 @@ resources:
 						VrTypes: []*types.Restriction{},
 					},
 					{
-						Name: "owner",
-						Doc:  "owner owns",
-						VrTypes: []*types.Restriction{
-							{
-								ResourceName: "actor-resource",
-								RelationName: "",
-							},
-						},
-					},
-					{
 						Name:    "reader",
 						VrTypes: []*types.Restriction{},
 					},
 				},
 				Permissions: []*types.Permission{
 					{
-						Name:       "own",
-						Expression: "owner",
-						Doc:        "own doc",
+						Name:                "own",
+						Expression:          "",
+						EffectiveExpression: "owner",
+						Doc:                 "own doc",
 					},
 					{
-						Name:       "read",
-						Expression: "(owner + reader)",
+						Name:                "read",
+						Expression:          "reader",
+						EffectiveExpression: "(owner + reader)",
 					},
 				},
 				ManagementRules: []*types.ManagementRule{
 					{
 						Relation:   "admin",
 						Expression: "owner",
+						Managers:   []string{"owner"},
 					},
 					{
 						Relation:   "owner",
 						Expression: "owner",
+						Managers:   []string{"owner"},
 					},
 					{
 						Relation:   "reader",
 						Expression: "(admin + owner)",
+						Managers: []string{
+							"admin", "owner",
+						},
+					},
+				},
+				Owner: &types.Relation{
+					Name: "owner",
+					Doc:  ppp.OwnerDescription,
+					VrTypes: []*types.Restriction{
+						{
+							ResourceName: "actor-resource",
+						},
+					},
+					Manages: []string{
+						"admin", "reader", "owner",
 					},
 				},
 			},

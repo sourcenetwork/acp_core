@@ -32,7 +32,13 @@ const (
 )
 
 // ErrDefraSpec is the base error for the DefraSpec implementation
-var ErrDefraSpec = errors.New("defra policy specification", errors.ErrorType_BAD_INPUT)
+var (
+	ErrDefraSpec = errors.New("defra policy specification", errors.ErrorType_BAD_INPUT)
+)
+
+func newErrMissingRequiredPermission(resource, perm string) error {
+	return fmt.Errorf("missing required permission: %v", perm)
+}
 
 // RequiredPermissiosn are the set of permissions which all resources
 // must include in a Defra compliant Policy.
@@ -57,8 +63,7 @@ func (s *defaultPermissionsRequirement) Validate(pol types.Policy) *errors.Multi
 		permissionsSet := sets.New(permissions...)
 		for _, permission := range RequiredPermissions {
 			if !permissionsSet.Has(permission) {
-				violation := fmt.Errorf("resource %v: missing required permission: %v", resource.Name, permission)
-				multiErr.Append(violation)
+				multiErr.Append(newErrMissingRequiredPermission(resource.Name, permission))
 			}
 		}
 	}

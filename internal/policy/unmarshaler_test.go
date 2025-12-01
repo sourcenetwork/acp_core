@@ -32,36 +32,18 @@ resources:
 		SpecificationType: types.PolicySpecificationType_NO_SPEC,
 		Resources: []*types.Resource{
 			{
-				Name: "foo",
-				Relations: []*types.Relation{
-					{
-						Name: "owner",
-						Doc:  "owner owns",
-						VrTypes: []*types.Restriction{
-							{
-								ResourceName: "blah",
-								RelationName: "",
-							},
-							{
-								ResourceName: "ok",
-								RelationName: "that",
-							},
-						},
-						Manages: []string{
-							"whatever",
-						},
-					},
-				},
+				Name:      "foo",
+				Relations: []*types.Relation{},
 				Permissions: []*types.Permission{
 					{
 						Name:       "abc",
 						Doc:        "abc doc",
-						Expression: "owner",
+						Expression: "",
 					},
 					{
 						Name:       "def",
 						Doc:        "",
-						Expression: "owner + abc",
+						Expression: "abc",
 					},
 				},
 			},
@@ -362,36 +344,18 @@ resources:
 		SpecificationType: types.PolicySpecificationType_NO_SPEC,
 		Resources: []*types.Resource{
 			{
-				Name: "foo",
-				Relations: []*types.Relation{
-					{
-						Name: "owner",
-						Doc:  "owner owns",
-						VrTypes: []*types.Restriction{
-							{
-								ResourceName: "blah",
-								RelationName: "",
-							},
-							{
-								ResourceName: "ok",
-								RelationName: "that",
-							},
-						},
-						Manages: []string{
-							"whatever",
-						},
-					},
-				},
+				Name:      "foo",
+				Relations: []*types.Relation{},
 				Permissions: []*types.Permission{
 					{
 						Name:       "abc",
 						Doc:        "abc doc",
-						Expression: "owner",
+						Expression: "",
 					},
 					{
 						Name:       "def",
 						Doc:        "",
-						Expression: "owner + abc",
+						Expression: "abc",
 					},
 				},
 			},

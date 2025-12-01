@@ -40,3 +40,7 @@ playground: playground\:wasm_js
 .PHONY: playground\:docker
 playground\:docker:
 	docker build -f playground.dockerfile -t ghcr.io/sourcenetwork/acp_playground:dev .
+
+.PHONY: test\:cover
+	go test -coverpkg=./... -coverprofile cover.html ./...
+	go tool cover -html=cover.html

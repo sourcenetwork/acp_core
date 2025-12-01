@@ -53,7 +53,7 @@ resources:
 	}
 	require.Equal(t, wantMetadata, resp.Record.Metadata)
 	require.Equal(t, &types.Policy{
-		Id:                "ba5162bd61996b6fb6e66ef85449f0de2e89584743df7f71577674cfb531eb25",
+		Id:                "199091661bdd06221eb0a8070673c76f25ca8c8dcc04d47934f0abb123daf78b",
 		Name:              "policy",
 		Description:       "ok",
 		SpecificationType: types.PolicySpecificationType_NO_SPEC,
@@ -73,43 +73,59 @@ resources:
 						VrTypes: []*types.Restriction{},
 					},
 					{
-						Name: "owner",
-						Doc:  "owner owns",
-						VrTypes: []*types.Restriction{
-							{
-								ResourceName: "actor-resource",
-								RelationName: "",
-							},
-						},
-					},
-					{
 						Name:    "reader",
 						VrTypes: []*types.Restriction{},
 					},
 				},
 				Permissions: []*types.Permission{
 					{
-						Name:       "own",
-						Expression: "owner",
-						Doc:        "own doc",
+						Name:                "own",
+						Expression:          "",
+						EffectiveExpression: "owner",
+						Doc:                 "own doc",
 					},
 					{
-						Name:       "read",
-						Expression: "(owner + reader)",
+						Name:                "read",
+						Expression:          "reader",
+						EffectiveExpression: "(owner + reader)",
+					},
+				},
+				Owner: &types.Relation{
+					Name: "owner",
+					Doc:  ppp.OwnerDescription,
+					VrTypes: []*types.Restriction{
+						{
+							ResourceName: "actor-resource",
+						},
+					},
+					Manages: []string{
+						"admin",
+						"reader",
+						"owner",
 					},
 				},
 				ManagementRules: []*types.ManagementRule{
 					{
 						Relation:   "admin",
 						Expression: "owner",
+						Managers: []string{
+							"owner",
+						},
 					},
 					{
 						Relation:   "owner",
 						Expression: "owner",
+						Managers: []string{
+							"owner",
+						},
 					},
 					{
 						Relation:   "reader",
 						Expression: "(admin + owner)",
+						Managers: []string{
+							"admin",
+							"owner",
+						},
 					},
 				},
 			},
@@ -146,16 +162,19 @@ resources:
 
 	require.NoError(t, err)
 	want := &types.Relation{
-		Name:    "owner",
-		Doc:     "owner relations represents the object owner",
-		Manages: nil,
+		Name: "owner",
+		Doc:  ppp.OwnerDescription,
+		Manages: []string{
+			"reader",
+			"owner",
+		},
 		VrTypes: []*types.Restriction{
 			{
 				ResourceName: resp.Record.Policy.ActorResource.Name,
 			},
 		},
 	}
-	require.Equal(t, want, resp.Record.Policy.Resources[0].Relations[0])
+	require.Equal(t, want, resp.Record.Policy.Resources[0].Owner)
 }
 
 func TestCreatePolicy_ManagementReferencingUndefinedRelationReturnsError(t *testing.T) {
@@ -233,8 +252,8 @@ resources:
 	resp1, err1 := ctx.Engine.CreatePolicy(ctx, &req)
 	resp2, err2 := ctx.Engine.CreatePolicy(ctx, &req)
 
-	want1 := "4107b53494261acabf0109bc7e7599d63459cd91db98fedc397651d413467871"
-	want2 := "2eadb005094bf4b20435b03c6fb8cace4c070eae8d88d478402663d92df92c93"
+	want1 := "9372b5ef92b9332f597b46120026583a3ceed09d50046da159ee65273602fa82"
+	want2 := "4bd4dd14eec0fb91e3eb2e2f8d36b52b521bf72b60ec137658804dac8e69379e"
 	require.NoError(t, err1)
 	require.NoError(t, err2)
 	require.Equal(t, want1, resp1.Record.Policy.Id)

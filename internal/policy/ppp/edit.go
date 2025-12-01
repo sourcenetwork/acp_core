@@ -14,9 +14,12 @@ var _ specification.Transformer = (*TransferIdTransformer)(nil)
 var _ specification.Requirement = (*ImmutableSpecRequirement)(nil)
 var _ specification.Requirement = (*PreservedResourcesRequirement)(nil)
 
-var ErrPreserveResource = errors.New("cannot remove resources from policy", errors.ErrorType_BAD_INPUT)
-var ErrImmutableId = errors.New("editing policy must preserve id", errors.ErrorType_BAD_INPUT)
-var ErrImmutableSpec = errors.New("editing policy must preserve spec", errors.ErrorType_BAD_INPUT)
+var (
+	ErrEditTransform    = errors.New("edit transformer", errors.ErrorType_BAD_INPUT)
+	ErrPreserveResource = errors.New("cannot remove resources from Policy", errors.ErrorType_BAD_INPUT)
+	ErrImmutableSpec    = errors.New("editing policy must preserve spec", errors.ErrorType_BAD_INPUT)
+	ErrImmutableId      = errors.New("editing policy must preserve id", errors.ErrorType_BAD_INPUT)
+)
 
 // NewTransferIdTransformer returns an instance of ImmutableIdRequirement
 // bound to some id
@@ -33,7 +36,7 @@ type TransferIdTransformer struct {
 
 func (r *TransferIdTransformer) Validate(policy types.Policy) *errors.MultiError {
 	if policy.Id != r.oldId {
-		return errors.NewMultiError(ErrImmutableId)
+		return errors.NewMultiError(ErrImmutableId, fmt.Errorf("old id %v: new id: %v", r.oldId, policy.Id))
 	}
 	return nil
 }
@@ -65,7 +68,8 @@ type ImmutableSpecRequirement struct {
 
 func (r *ImmutableSpecRequirement) Validate(policy types.Policy) *errors.MultiError {
 	if policy.SpecificationType != r.oldSpec {
-		return errors.NewMultiError(ErrImmutableSpec)
+		err := fmt.Errorf("had: %v; got: %v", r.oldSpec, policy.SpecificationType)
+		return errors.NewMultiError(ErrImmutableSpec, err)
 	}
 	return nil
 }
