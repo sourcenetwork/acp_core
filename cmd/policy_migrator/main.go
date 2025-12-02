@@ -150,8 +150,6 @@ func mapActorResourceToYaml(in *types.ActorResource) *types.ActorResourceYaml {
 	}
 
 	return &types.ActorResourceYaml{
-		Name:      in.Name,
-		Doc:       in.Doc,
 		Relations: utils.MapSlice(in.Relations, mapRelationToYaml),
 	}
 }

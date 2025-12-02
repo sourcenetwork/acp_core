@@ -259,8 +259,6 @@ func (u *yamlUnmarshaler) mapActorResource(in *types.ActorResourceYaml) *types.A
 	}
 
 	return &types.ActorResource{
-		Name:      in.Name,
-		Doc:       in.Doc,
 		Relations: utils.MapSlice(in.Relations, u.mapRelation),
 	}
 }

@@ -9,7 +9,8 @@ import (
 var _ specification.Transformer = (*BasicTransformer)(nil)
 var _ specification.Requirement = (*BasicRequirement)(nil)
 
-const DefaultActorResourceName string = "actor"
+const ActorResourceName string = "actor"
+const ActorResourceDoc = "actor resource models the set of actors defined within a policy"
 
 // ErrBasicTransformer is the base error for problems detected by the BasicTransformer
 var ErrBasicTransformer = errors.New("basic transformer", errors.ErrorType_BAD_INPUT)
@@ -40,7 +41,7 @@ type BasicTransformer struct{}
 
 // Validate ensures the Actor resource exists
 func (s *BasicTransformer) Validate(pol types.Policy) *errors.MultiError {
-	if pol.ActorResource == nil || pol.ActorResource.Name == "" {
+	if pol.ActorResource == nil {
 		return errors.NewMultiError(ErrBasicTransformer,
 			errors.Wrap("invalid actor resource", errors.ErrInvalidPolicy),
 		)
@@ -52,10 +53,10 @@ func (s *BasicTransformer) Validate(pol types.Policy) *errors.MultiError {
 func (t *BasicTransformer) Transform(pol types.Policy) (specification.TransformerResult, error) {
 	result := specification.TransformerResult{}
 	if pol.ActorResource == nil {
-		pol.ActorResource = &types.ActorResource{
-			Name: DefaultActorResourceName,
-		}
+		pol.ActorResource = &types.ActorResource{}
 	}
+	pol.ActorResource.Name = ActorResourceName
+	pol.ActorResource.Doc = ActorResourceDoc
 
 	result.Policy = pol
 	return result, nil
