@@ -37,8 +37,8 @@ func theoremParserInit() {
     "'#'", "'Delegations'", "'>'", "'@'", "':'", "'!'",
   }
   staticData.SymbolicNames = []string{
-    "", "", "", "", "", "", "", "", "", "", "", "NEGATION", "OPERATION", 
-    "ID", "STRING", "DID", "COMMENT", "WS", "NL",
+    "", "", "", "", "", "", "", "", "", "", "", "NEGATION", "ID", "STRING", 
+    "DID", "COMMENT", "WS", "NL",
   }
   staticData.RuleNames = []string{
     "relationship_document", "relationship_set", "policy_thorem", "authorization_theorems", 
@@ -48,7 +48,7 @@ func theoremParserInit() {
   }
   staticData.PredictionContextCache = antlr.NewPredictionContextCache()
   staticData.serializedATN = []int32{
-	4, 1, 18, 141, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7, 
+	4, 1, 17, 141, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7, 
 	4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 2, 10, 7, 
 	10, 2, 11, 7, 11, 2, 12, 7, 12, 2, 13, 7, 13, 2, 14, 7, 14, 2, 15, 7, 15, 
 	2, 16, 7, 16, 2, 17, 7, 17, 1, 0, 1, 0, 1, 0, 1, 1, 5, 1, 41, 8, 1, 10, 
@@ -97,10 +97,10 @@ func theoremParserInit() {
 	121, 125, 1, 0, 0, 0, 122, 125, 3, 26, 13, 0, 123, 125, 3, 34, 17, 0, 124, 
 	118, 1, 0, 0, 0, 124, 122, 1, 0, 0, 0, 124, 123, 1, 0, 0, 0, 125, 25, 1, 
 	0, 0, 0, 126, 127, 3, 32, 16, 0, 127, 128, 5, 10, 0, 0, 128, 129, 3, 28, 
-	14, 0, 129, 27, 1, 0, 0, 0, 130, 133, 5, 13, 0, 0, 131, 133, 5, 14, 0, 
+	14, 0, 129, 27, 1, 0, 0, 0, 130, 133, 5, 12, 0, 0, 131, 133, 5, 13, 0, 
 	0, 132, 130, 1, 0, 0, 0, 132, 131, 1, 0, 0, 0, 133, 29, 1, 0, 0, 0, 134, 
-	135, 5, 13, 0, 0, 135, 31, 1, 0, 0, 0, 136, 137, 5, 13, 0, 0, 137, 33, 
-	1, 0, 0, 0, 138, 139, 5, 15, 0, 0, 139, 35, 1, 0, 0, 0, 9, 42, 50, 59, 
+	135, 5, 12, 0, 0, 135, 31, 1, 0, 0, 0, 136, 137, 5, 12, 0, 0, 137, 33, 
+	1, 0, 0, 0, 138, 139, 5, 14, 0, 0, 139, 35, 1, 0, 0, 0, 9, 42, 50, 59, 
 	67, 74, 92, 106, 124, 132,
 }
   deserializer := antlr.NewATNDeserializer(nil)
@@ -152,13 +152,12 @@ const (
 	TheoremParserT__8 = 9
 	TheoremParserT__9 = 10
 	TheoremParserNEGATION = 11
-	TheoremParserOPERATION = 12
-	TheoremParserID = 13
-	TheoremParserSTRING = 14
-	TheoremParserDID = 15
-	TheoremParserCOMMENT = 16
-	TheoremParserWS = 17
-	TheoremParserNL = 18
+	TheoremParserID = 12
+	TheoremParserSTRING = 13
+	TheoremParserDID = 14
+	TheoremParserCOMMENT = 15
+	TheoremParserWS = 16
+	TheoremParserNL = 17
 )
 
 // TheoremParser rules.
