@@ -15,7 +15,8 @@ func TestCreatePolicy_ValidPolicyIsCreated(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	bob := ctx.SetPrincipal("bob")
 
-	policyStr := `actor:
+	policyStr := `
+actor:
   doc: my actor
   name: actor-resource
 description: ok
@@ -27,20 +28,14 @@ resources:
 - name: file
   permissions:
   - doc: own doc
-    expr: owner
     name: own
-  - expr: owner + reader
+  - expr: reader
     name: read
   relations:
   - manages:
     - reader
     name: admin
-  - doc: owner owns
-    name: owner
-    types:
-    - actor-resource
   - name: reader
-spec: none
 `
 
 	msg := types.CreatePolicyRequest{
@@ -58,7 +53,7 @@ spec: none
 	}
 	require.Equal(t, wantMetadata, resp.Record.Metadata)
 	require.Equal(t, &types.Policy{
-		Id:                "ba5162bd61996b6fb6e66ef85449f0de2e89584743df7f71577674cfb531eb25",
+		Id:                "199091661bdd06221eb0a8070673c76f25ca8c8dcc04d47934f0abb123daf78b",
 		Name:              "policy",
 		Description:       "ok",
 		SpecificationType: types.PolicySpecificationType_NO_SPEC,
@@ -78,43 +73,59 @@ spec: none
 						VrTypes: []*types.Restriction{},
 					},
 					{
-						Name: "owner",
-						Doc:  "owner owns",
-						VrTypes: []*types.Restriction{
-							{
-								ResourceName: "actor-resource",
-								RelationName: "",
-							},
-						},
-					},
-					{
 						Name:    "reader",
 						VrTypes: []*types.Restriction{},
 					},
 				},
 				Permissions: []*types.Permission{
 					{
-						Name:       "own",
-						Expression: "owner",
-						Doc:        "own doc",
+						Name:                "own",
+						Expression:          "",
+						EffectiveExpression: "owner",
+						Doc:                 "own doc",
 					},
 					{
-						Name:       "read",
-						Expression: "(owner + reader)",
+						Name:                "read",
+						Expression:          "reader",
+						EffectiveExpression: "(owner + reader)",
 					},
 				},
-				ManagementPermissions: []*types.ManagementPermission{
+				Owner: &types.Relation{
+					Name: "owner",
+					Doc:  ppp.OwnerDescription,
+					VrTypes: []*types.Restriction{
+						{
+							ResourceName: "actor-resource",
+						},
+					},
+					Manages: []string{
+						"admin",
+						"reader",
+						"owner",
+					},
+				},
+				ManagementRules: []*types.ManagementRule{
 					{
-						Name:       "admin",
+						Relation:   "admin",
 						Expression: "owner",
+						Managers: []string{
+							"owner",
+						},
 					},
 					{
-						Name:       "owner",
+						Relation:   "owner",
 						Expression: "owner",
+						Managers: []string{
+							"owner",
+						},
 					},
 					{
-						Name:       "reader",
+						Relation:   "reader",
 						Expression: "(admin + owner)",
+						Managers: []string{
+							"admin",
+							"owner",
+						},
 					},
 				},
 			},
@@ -133,16 +144,14 @@ func TestCreatePolicy_ResourcesWithoutOwnerRelation_IsAutomaticallyAdded(t *test
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	pol := `description: ok
+	pol := `
+description: ok
 name: policy
 resources:
 - name: file
   relations:
   - name: reader
 - name: foo
-  relations:
-  - name: owner
-spec: none
 `
 
 	req := types.CreatePolicyRequest{
@@ -153,23 +162,27 @@ spec: none
 
 	require.NoError(t, err)
 	want := &types.Relation{
-		Name:    "owner",
-		Doc:     "owner relations represents the object owner",
-		Manages: nil,
+		Name: "owner",
+		Doc:  ppp.OwnerDescription,
+		Manages: []string{
+			"reader",
+			"owner",
+		},
 		VrTypes: []*types.Restriction{
 			{
 				ResourceName: resp.Record.Policy.ActorResource.Name,
 			},
 		},
 	}
-	require.Equal(t, want, resp.Record.Policy.Resources[0].Relations[0])
+	require.Equal(t, want, resp.Record.Policy.Resources[0].Owner)
 }
 
 func TestCreatePolicy_ManagementReferencingUndefinedRelationReturnsError(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	pol := `description: ok
+	pol := `
+description: ok
 name: policy
 resources:
 - name: file
@@ -177,8 +190,6 @@ resources:
   - manages:
     - deleter
     name: admin
-  - name: owner
-spec: none
 `
 
 	req := types.CreatePolicyRequest{
@@ -212,15 +223,16 @@ func TestCreatePolicy_CreatingMultipleEqualPoliciesProduceDifferentIDs(t *testin
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("creator")
 
-	pol := `actor:
+	pol := `
+actor:
   name: actor
 description: A Valid Defra Policy Interface (DPI)
 name: test
 resources:
 - name: users
   permissions:
-  - name: read
-    expr: reader
+  - expr: reader
+    name: read
   - name: write
   relations:
   - manages:
@@ -228,13 +240,9 @@ resources:
     name: admin
     types:
     - actor
-  - name: owner
-    types:
-    - actor
   - name: reader
     types:
     - actor
-spec: none
 `
 
 	req := types.CreatePolicyRequest{
@@ -244,8 +252,8 @@ spec: none
 	resp1, err1 := ctx.Engine.CreatePolicy(ctx, &req)
 	resp2, err2 := ctx.Engine.CreatePolicy(ctx, &req)
 
-	want1 := "4107b53494261acabf0109bc7e7599d63459cd91db98fedc397651d413467871"
-	want2 := "2eadb005094bf4b20435b03c6fb8cace4c070eae8d88d478402663d92df92c93"
+	want1 := "9372b5ef92b9332f597b46120026583a3ceed09d50046da159ee65273602fa82"
+	want2 := "4bd4dd14eec0fb91e3eb2e2f8d36b52b521bf72b60ec137658804dac8e69379e"
 	require.NoError(t, err1)
 	require.NoError(t, err2)
 	require.Equal(t, want1, resp1.Record.Policy.Id)
@@ -260,10 +268,6 @@ func TestCreatePolicy_WithEmptyPermission_OwnerIsPermitted(t *testing.T) {
 name: policy
 resources:
 - name: foo
-  relations:
-  - name: owner
-    types:
-    - actor
   permissions:
   - name: test
 `
@@ -295,4 +299,26 @@ resources:
 	})
 	require.NoError(t, err)
 	require.True(t, checkResult.Valid)
+}
+
+func TestCreatePolicy_ClashingRelationAndPermissionNames_Errors(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("bob")
+
+	pol := `
+name: policy
+resources:
+- name: foo
+  permissions:
+  - name: test
+  relations:
+  - name: test
+`
+	req := types.CreatePolicyRequest{
+		Policy:      pol,
+		MarshalType: types.PolicyMarshalingType_YAML,
+	}
+	resp, err := ctx.Engine.CreatePolicy(ctx, &req)
+	require.Nil(t, resp)
+	require.ErrorIs(t, err, errors.ErrorType_BAD_INPUT)
 }

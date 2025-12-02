@@ -67,7 +67,7 @@ func (e *Error) Error() string {
 func (e *Error) Is(target error) bool {
 	switch other := target.(type) {
 	case *Error:
-		return strings.Contains(e.Message, other.Message) && e.Kind == other.Kind
+		return strings.Contains(e.Message, other.Message) && e.Kind == other.Kind || errors.Is(e.Cause, target)
 	case ErrorType:
 		return e.Kind.Is(other)
 	default:

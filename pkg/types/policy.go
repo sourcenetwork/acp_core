@@ -4,6 +4,8 @@ import (
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
 
+const OwnerRelationName = "owner"
+
 // GetResourceByName returns a Resource with the given Name.
 // If no resource is found with resourceName, return nil
 func (pol *Policy) GetResourceByName(resourceName string) *Resource {
@@ -34,6 +36,9 @@ func (res *Resource) GetPermissionByName(name string) *Permission {
 // GetRelationByName returns a Relation with `name`.
 // If no Relation matches name, returns nil
 func (res *Resource) GetRelationByName(name string) *Relation {
+	if name == OwnerRelationName {
+		return res.Owner
+	}
 	for _, relation := range res.Relations {
 		if relation.Name == name {
 			return relation
@@ -42,12 +47,23 @@ func (res *Resource) GetRelationByName(name string) *Relation {
 	return nil
 }
 
-// GetManagementPermissionByName returns a ManagementPermission with `name`.
+// GetAllRelations returns a list of all relations in a resource,
+// including the owner relation
+func (res *Resource) GetAllRelations() []*Relation {
+	rels := append(res.Relations, res.Owner)
+	sortable := utils.FromExtractor(rels, func(r *Relation) string {
+		return r.Name
+	})
+	sortable.SortInPlace()
+	return rels
+}
+
+// GetManagementRuleByName returns a ManagementPermission with `name`.
 // If no ManagementPermission matches name, returns nil
-func (res *Resource) GetManagementPermissionByName(name string) *ManagementPermission {
-	for _, perm := range res.ManagementPermissions {
-		if perm.Name == name {
-			return perm
+func (res *Resource) GetManagementRuleByName(relation string) *ManagementRule {
+	for _, rule := range res.ManagementRules {
+		if rule.Relation == relation {
+			return rule
 		}
 	}
 	return nil

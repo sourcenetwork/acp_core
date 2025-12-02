@@ -38,7 +38,10 @@ message Resource {
   string doc = 2;
   repeated Permission permissions = 3;
   repeated Relation relations = 4;
-  repeated ManagementPermission management_permissions = 5;
+  repeated ManagementRule management_rules = 5;
+  // owner models a special relation which is added to all resources.
+  // It is used to represent the owner of some object in the system
+  Relation owner = 6;
 }
 
 message Relation {
@@ -65,9 +68,19 @@ message Restriction {
 // Permission models a special type of Relation which is evaluated at runtime.
 // A permission often maps to an operation defined for a resource which an actor may attempt.
 message Permission {
+  // name is an user defined identifier which uniquely identifies a permission within a resource
   string name = 1;
+  // doc is an user defined string explaining the permission
   string doc = 2;
+  // expression is a user defined permission expression, which follows the permission expression
+  // grammar and models the evaluation steps which should b taken by the permission
   string expression = 3;
+
+  // effective_expression is the engine define expression which will be used to compute the permission.
+  // the effective expression may differ from the user expression due to internal acp engine
+  // behavior enforcement, policy spec definitions and other policy behavior transforming
+  // mechanisms.
+  string effective_expression = 4;
 }
 
 // ActorResource represents a special Resource which is reserved for Policy actors.
@@ -77,9 +90,18 @@ message ActorResource {
   repeated Relation relations = 3;
 }
 
-message ManagementPermission {
-  // name matches the name of the underlying relation the management permission manages
-  string name = 1;
-  // expression is the permission expression derived from the manages directives from the policy definition
-  string expression = 2;
+// ManagementRule models a policy rule which specifies the set of accepted relations
+// an actor must have in order to modify relationships for an object
+//
+// This allows object owners, through a special management rule, to delegate
+// the ability of creating relationships with a given relation to their object
+message ManagementRule {
+  // relation identifies relation the rule applies to 
+  string relation = 1;
+  // managers are the set of relation names which have authority to
+  // manage relation instances of the relation the rule applies to.
+  repeated string managers = 2;
+  // expression is a zanzi compatible relation expression
+  // which represents the management rule
+  string expression = 3;
 }

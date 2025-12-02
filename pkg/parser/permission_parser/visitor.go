@@ -22,8 +22,8 @@ func (v *visitor) VisitTtu_term(ctx *Ttu_termContext) any {
 			Operation: &types.FetchOperation{
 				Operation: &types.FetchOperation_Ttu{
 					Ttu: &types.TupleToUsersetNode{
-						Resource: ctx.Resource().GetText(),
-						Relation: ctx.Relation().GetText(),
+						LookupRelation:          ctx.Resource().GetText(),
+						ComputedUsersetRelation: ctx.Relation().GetText(),
 					},
 				},
 			},
@@ -102,3 +102,4 @@ func (v *visitor) Visit(tree antlr.ParseTree) any            { return tree.Accep
 func (v *visitor) VisitChildren(node antlr.RuleNode) any     { return nil }
 func (v *visitor) VisitTerminal(node antlr.TerminalNode) any { return nil }
 func (v *visitor) VisitErrorNode(node antlr.ErrorNode) any   { return nil }
+func (v *visitor) VisitEmpty(ctx *EmptyContext) any          { return nil }

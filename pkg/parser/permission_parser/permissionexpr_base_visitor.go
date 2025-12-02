@@ -16,6 +16,10 @@ func (v *BasePermissionExprVisitor) VisitNested(ctx *NestedContext) interface{} 
 	return v.VisitChildren(ctx)
 }
 
+func (v *BasePermissionExprVisitor) VisitEmpty(ctx *EmptyContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BasePermissionExprVisitor) VisitCu_term(ctx *Cu_termContext) interface{} {
 	return v.VisitChildren(ctx)
 }

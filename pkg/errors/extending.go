@@ -18,12 +18,19 @@ func Wrap(msg string, err error, pairs ...ContextPair) error {
 			Cause:    e.Cause,
 			Metadata: appendPairs(e.Metadata, pairs),
 		}
+	case *MultiError:
+		return &Error{
+			Kind:     e.root.Kind,
+			Message:  msg,
+			Cause:    err,
+			Metadata: appendPairs(nil, pairs),
+		}
 	default:
 		return &Error{
 			Kind:     ErrorType_UNKNOWN,
 			Message:  msg,
 			Cause:    err,
-			Metadata: nil,
+			Metadata: appendPairs(nil, pairs),
 		}
 	}
 }

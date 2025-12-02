@@ -1,8 +1,6 @@
 package ppp
 
 import (
-	"fmt"
-
 	"github.com/sourcenetwork/acp_core/internal/specification"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
@@ -59,17 +57,6 @@ func (t *BasicTransformer) Transform(pol types.Policy) (specification.Transforme
 		}
 	}
 
-	// normalize all empty permissions to "owner"
-	for _, res := range pol.Resources {
-		for _, perm := range res.Permissions {
-			if perm.Expression == "" {
-				perm.Expression = "owner"
-				msg := fmt.Sprintf("defaulting permission to owner: resource %v: relation %v",
-					res.Name, perm.Name)
-				result.Messages = append(result.Messages, msg)
-			}
-		}
-	}
 	result.Policy = pol
 	return result, nil
 }

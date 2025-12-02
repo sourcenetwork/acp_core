@@ -21,23 +21,20 @@ Delegations {}
 `
 
 var setupData = &types.SandboxData{
-	PolicyDefinition: `name: test
+	PolicyDefinition: `
+name: test
 resources:
 - name: file
   permissions:
-  - expr: owner + reader
+  - expr: reader
     name: read
-  - expr: owner
-    name: write
+  - name: write
   relations:
-  - name: owner
-    types:
-    - actor
   - name: reader
     types:
     - actor
-spec: none
 `,
+
 	Relationships: `
 				file:readme#owner@did:example:bob
 				file:readme#reader@did:example:alice
@@ -219,23 +216,21 @@ func Test_SetState_SettingValidStateReturnsOk(t *testing.T) {
 		Req: &types.SetStateRequest{
 			Handle: resp.Record.Handle,
 			Data: &types.SandboxData{
-				PolicyDefinition: `name: test
+				PolicyDefinition: `
+name: test
 resources:
 - name: file
   permissions:
-  - expr: owner + reader
+  - expr: reader
     name: read
-  - expr: owner
-    name: write
+  - name: write
   relations:
-  - name: owner
-    types:
-    - actor
   - name: reader
     types:
     - actor
-spec: none
-`, Relationships: `
+`,
+
+				Relationships: `
 				file:readme#owner@did:example:bob
 				file:readme#reader@did:example:alice
 				`,
@@ -300,23 +295,20 @@ func Test_Simulate(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
 	data := types.SandboxData{
-		PolicyDefinition: `name: test
+		PolicyDefinition: `
+name: test
 resources:
 - name: file
   permissions:
-  - expr: owner + reader
+  - expr: reader
     name: read
-  - expr: owner
-    name: write
+  - name: write
   relations:
-  - name: owner
-    types:
-    - actor
   - name: reader
     types:
     - actor
-spec: none
 `,
+
 		Relationships: `
 		file:abc#owner@did:ex:bob
 		file:abc#reader@did:ex:alice
@@ -415,20 +407,47 @@ func Test_ShinzoPolicy_Ok(t *testing.T) {
 	pol := `
 name: shinzo
 resources:
-- name: primitive
+- name: group
+  permissions:
+  - expr: (admin - blocked)
+    name: administrator
+  - expr: (guest - blocked)
+    name: member
   relations:
-  - name: admin
-    manages:
-    - writer
-    - reader
-    - banned
+  - manages:
+    - guest
+    - blocked
+    name: admin
     types:
     - actor
     - group->administrator
-  - name: writer
+  - name: blocked
     types:
     - actor
-    - group->member
+  - name: guest
+    types:
+    - actor
+- name: primitive
+  permissions:
+  - name: delete
+  - expr: (subscriber - banned)
+    name: query
+  - expr: ((writer + reader) - banned)
+    name: read
+  - expr: (writer - banned)
+    name: update
+  relations:
+  - manages:
+    - writer
+    - reader
+    - banned
+    name: admin
+    types:
+    - actor
+    - group->administrator
+  - name: banned
+    types:
+    - actor
   - name: reader
     types:
     - actor
@@ -436,87 +455,50 @@ resources:
   - name: subscriber
     types:
     - actor
-  - name: banned
+  - name: writer
     types:
     - actor
-  permissions:
-  - name: read
-    expr: (writer + reader) - banned
-  - name: update
-    expr: writer - banned
-  - name: delete
-    expr: owner
-  - name: query
-    expr: (subscriber) - banned
-
+    - group->member
 - name: view
+  permissions:
+  - name: delete
+  - expr: (subscriber - banned)
+    name: query
+  - expr: ((((writer + reader) + parent->read) + subscriber) - banned)
+    name: read
+  - expr: (((writer + parent->update) & parent->read) - banned)
+    name: update
   relations:
-  - name: admin
-    manages:
+  - manages:
     - writer
     - reader
     - subscriber
     - banned
+    name: admin
     types:
     - actor
     - group->administrator
-  - name: creator
-    types:
-    - actor
-  - name: writer
-    types:
-    - actor
-    - group->member
-  - name: reader
-    types:
-    - actor
-    - group->member
   - name: banned
     types:
     - actor
-  - name: subscriber
+  - name: creator
     types:
     - actor
   - name: parent
     types:
     - primitive
     - view
-  permissions:
-  - name: read
-    expr: writer + reader + parent->read + subscriber - banned
-  - name: update
-    expr: ((writer + parent->update) & parent->read) - banned
-  - name: query
-    expr: (subscriber) - banned
-  - name: delete
-
-- name: group
-  relations:
-  - name: owner
-    manages:
-    - admin
-    - guest
-    - blocked
+  - name: reader
     types:
     - actor
-  - name: admin
-    manages:
-    - guest
-    - blocked
+    - group->member
+  - name: subscriber
     types:
     - actor
-    - group->administrator
-  - name: guest
+  - name: writer
     types:
     - actor
-  - name: blocked
-    types:
-    - actor
-  permissions:
-  - name: member
-    expr: guest - blocked
-  - name: administrator
-    expr: (owner + admin) - blocked
+    - group->member
 `
 
 	relationships := `primitive:blocks#owner@did:user:sourcehub

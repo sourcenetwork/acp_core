@@ -22,15 +22,15 @@ func (t *DecentralizedAdminTransformer) Validate(policy types.Policy) *errors.Mu
 	multiErr := errors.NewMultiError(ErrAdministrationTransformer)
 
 	for _, resource := range policy.Resources {
-		mgmtPermissions := make(map[string]struct{})
-		for _, perm := range resource.ManagementPermissions {
-			mgmtPermissions[perm.Name] = struct{}{}
+		rules := make(map[string]struct{})
+		for _, rule := range resource.ManagementRules {
+			rules[rule.Relation] = struct{}{}
 		}
 
 		for _, rel := range resource.Relations {
-			_, ok := mgmtPermissions[rel.Name]
+			_, ok := rules[rel.Name]
 			if !ok {
-				err := fmt.Errorf("management permission not found: resource %v: relation %v", resource.Name, rel.Name)
+				err := fmt.Errorf("management rule not found: resource %v: relation %v", resource.Name, rel.Name)
 				multiErr.Append(err)
 			}
 		}
@@ -55,34 +55,36 @@ func (t *DecentralizedAdminTransformer) Transform(pol types.Policy) (specificati
 	}
 
 	for _, resource := range pol.Resources {
-		perms := make([]*types.ManagementPermission, 0, len(resource.Relations))
+		rules := make([]*types.ManagementRule, 0, len(resource.Relations)+1)
+		perm := t.buildManagementPermission(resource.Name, resource.Owner, graph)
+		rules = append(rules, perm)
 		for _, relation := range resource.Relations {
 			perm := t.buildManagementPermission(resource.Name, relation, graph)
-			perms = append(perms, perm)
+			rules = append(rules, perm)
 		}
-		resource.ManagementPermissions = perms
+		resource.ManagementRules = rules
 	}
 
 	res.Policy = pol
 	return res, nil
 }
 
-func (t *DecentralizedAdminTransformer) buildManagementPermission(resourceName string, relation *types.Relation, graph *types.ManagementGraph) *types.ManagementPermission {
+func (t *DecentralizedAdminTransformer) buildManagementPermission(resourceName string, relation *types.Relation, graph *types.ManagementGraph) *types.ManagementRule {
 	managerRelations := graph.GetManagers(resourceName, relation.Name)
 
 	exprTree := t.buildRelationExpression(managerRelations)
 
-	return &types.ManagementPermission{
-		Name:       relation.Name,
+	return &types.ManagementRule{
+		Relation:   relation.Name,
 		Expression: exprTree.IntoPermissionExpr(),
+		Managers:   managerRelations,
 	}
 }
 
 func (t *DecentralizedAdminTransformer) buildRelationExpression(relations []string) *types.PermissionFetchTree {
-	if len(relations) == 0 {
-		return newFetchOwnerTree()
-	}
-
+	// to build the RelationExpression we rely on the discretionary transformer,
+	// which adds the owner relation as a manager for every relation in a resource.
+	// This guarantees len(relations) >= 1
 	tree := &types.PermissionFetchTree{
 		Term: &types.PermissionFetchTree_Operation{
 			Operation: &types.FetchOperation{
@@ -94,7 +96,7 @@ func (t *DecentralizedAdminTransformer) buildRelationExpression(relations []stri
 			},
 		},
 	}
-	for _, relation := range relations[1:len(relations)] {
+	for _, relation := range relations[1:] {
 		node := &types.PermissionFetchTree{
 			Term: &types.PermissionFetchTree_Operation{
 				Operation: &types.FetchOperation{
@@ -116,16 +118,7 @@ func (t *DecentralizedAdminTransformer) buildRelationExpression(relations []stri
 			},
 		}
 	}
-
-	return &types.PermissionFetchTree{
-		Term: &types.PermissionFetchTree_CombNode{
-			CombNode: &types.CombinationNode{
-				Left:       tree,
-				Combinator: types.Combinator_UNION,
-				Right:      newFetchOwnerTree(),
-			},
-		},
-	}
+	return tree
 }
 
 func (t *DecentralizedAdminTransformer) GetName() string { return "Decentralized Administrator" }

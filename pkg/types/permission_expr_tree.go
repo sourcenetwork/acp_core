@@ -46,9 +46,9 @@ func (op *FetchOperation) intoPermissionExpr(builder *strings.Builder) {
 		builder.WriteString(op.GetCu().Relation)
 	} else if op.GetTtu() != nil {
 		ttu := op.GetTtu()
-		builder.WriteString(ttu.Resource)
+		builder.WriteString(ttu.LookupRelation)
 		builder.WriteString(ttuOperatorLexeme)
-		builder.WriteString(ttu.Relation)
+		builder.WriteString(ttu.ComputedUsersetRelation)
 	} else {
 		builder.WriteString("_this")
 	}

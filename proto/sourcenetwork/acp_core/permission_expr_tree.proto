@@ -49,6 +49,6 @@ message ThisNode {
 
 // TupleToUsersetNode models a Tuple to Userset operation
 message TupleToUsersetNode {
-    string resource = 1;
-    string relation = 2;
+    string lookup_relation = 1;
+    string computed_userset_relation = 2;
 }

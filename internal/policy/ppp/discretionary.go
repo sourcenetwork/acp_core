@@ -12,12 +12,29 @@ import (
 
 var _ specification.Transformer = (*DiscretionaryTransformer)(nil)
 
+func newOwnerRelation(actorResourceName string, managedRels []string) *types.Relation {
+	// owner manages itself
+	manages := append(managedRels, OwnerRelationName)
+	return &types.Relation{
+		Name: OwnerRelationName,
+		Doc:  OwnerDescription,
+		VrTypes: []*types.Restriction{
+			{
+				ResourceName: actorResourceName,
+			},
+		},
+		Manages: manages,
+	}
+}
+
 const (
 	OwnerRelationName = "owner"
 	OwnerDescription  = "owner relations represents the object owner"
 )
 
 var ErrDiscretionaryTransformer = errors.New("discretionary policy transformer", errors.ErrorType_BAD_INPUT)
+var ErrResourceContainsOwner = errors.New("invalid resource: 'owner` is a reserved relation name: rename 'owner' to a different name", errors.ErrorType_BAD_INPUT)
+var ErrPermissionReferencesOwner = errors.New("invalid permission: permission cannot reference `owner` relation as part of the computed expression. Try removing `owner` or asserting the tuple to userset expression is correct", errors.ErrorType_BAD_INPUT)
 
 // DiscretionaryTransformer is an essential part of acp_core which
 // asures the owner relation exists for all resources in a policy.
@@ -35,13 +52,7 @@ func (t *DiscretionaryTransformer) GetName() string {
 func (t *DiscretionaryTransformer) Validate(policy types.Policy) *errors.MultiError {
 	multiErr := errors.NewMultiError(ErrDiscretionaryTransformer)
 	for _, resource := range policy.Resources {
-		ownerRel := utils.FilterSlice(resource.Relations, func(r *types.Relation) bool { return r.Name == OwnerRelationName })
-		if len(ownerRel) > 1 {
-			err := fmt.Errorf("invalid policy: resource %v: multiple owner relations", resource.Name)
-			multiErr.Append(err)
-		}
-
-		if len(ownerRel) == 0 {
+		if resource.Owner == nil || resource.Owner.Name != OwnerRelationName {
 			err := fmt.Errorf("invalid policy: resource %v: no owner relation", resource.Name)
 			multiErr.Append(err)
 		}
@@ -49,13 +60,14 @@ func (t *DiscretionaryTransformer) Validate(policy types.Policy) *errors.MultiEr
 
 	for _, resource := range policy.Resources {
 		for _, permission := range resource.Permissions {
-			tree, err := parser.Parse(permission.Expression)
+			tree, err := parser.Parse(permission.EffectiveExpression)
 			if err != nil {
 				err := fmt.Errorf("parsing permission: resource %v: permission %v: %w", resource.Name, permission.Name, err)
 				multiErr.Append(err)
 				continue
 			}
 
+			// TODO refactor this to a tautology check
 			if !checkOwnerIsTopNode(tree) {
 				err := fmt.Errorf("invalid permission: resource %v: permission %v: expression does not contain owner as topmost allowed relation", resource.Name, permission.Name)
 				multiErr.Append(err)
@@ -70,22 +82,79 @@ func (t *DiscretionaryTransformer) Validate(policy types.Policy) *errors.MultiEr
 	return nil
 }
 
+// findOwnerViolationsInParseTree returns a term in a PermissionFetchTree
+// which references owner in a way which violates the discretionry transformer.
+// ie. only owners in another resource (tuple to userset) can be referenced in a permission expr.
+func findOwnerViolationsInParseTree(tree *types.PermissionFetchTree) error {
+	switch term := tree.Term.(type) {
+	case *types.PermissionFetchTree_CombNode:
+		err := findOwnerViolationsInParseTree(term.CombNode.Left)
+		if err != nil {
+			return err
+		}
+		return findOwnerViolationsInParseTree(term.CombNode.Right)
+	case *types.PermissionFetchTree_Operation:
+		switch op := term.Operation.Operation.(type) {
+		case *types.FetchOperation_Cu:
+			if op.Cu.Relation == OwnerRelationName {
+				return ErrPermissionReferencesOwner
+			}
+		case *types.FetchOperation_Ttu:
+			// we only care about the first relation in a TTU,
+			// because it's perfectly valid to reference the owner of another
+			// resource as the inheritance target
+			if op.Ttu.LookupRelation == OwnerRelationName {
+				return ErrPermissionReferencesOwner
+			}
+			// other cases are uninteresting
+		}
+	}
+	return nil
+}
+
+func (t *DiscretionaryTransformer) validatePermissionDoesNotReferenceOwner(expr string) error {
+	tree, err := parser.Parse(expr)
+	if err != nil {
+		return errors.NewWithCause("invalid permission: parsing error", err, errors.ErrorType_BAD_INPUT)
+	}
+	err = findOwnerViolationsInParseTree(tree)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // Transform mutates all resources in a policy by asserting the owner relation exists, adding it otherwise.
 // Futheremore, it modifies all permissions (if necessary),
 // by adding the owner relation as one of the allowed relations.
 func (t *DiscretionaryTransformer) Transform(policy types.Policy) (specification.TransformerResult, error) {
 	res := specification.TransformerResult{}
-	// for all resources, add owner relation to it, if it doesn't exist
+
+	// pre-validation: assert that resources do not include an `owner` relation
 	for _, resource := range policy.Resources {
-		ownerRel := utils.FilterSlice(resource.Relations, func(r *types.Relation) bool { return r.Name == OwnerRelationName })
-		if len(ownerRel) > 1 {
-			return res, errors.Wrap("invalid resource: multiple owner relations",
-				ErrDiscretionaryTransformer,
-				errors.Pair("resource", resource.Name))
+		for _, rel := range resource.Relations {
+			if rel.Name == OwnerRelationName {
+				return res, errors.Attrs(ErrResourceContainsOwner,
+					errors.Pair("resource", resource.Name))
+			}
 		}
-		if len(ownerRel) == 0 {
-			rel := newOwnerRelation(&policy)
-			resource.Relations = append(resource.Relations, rel)
+	}
+
+	// add special owner relation to every resource
+	for _, resource := range policy.Resources {
+		relNames := utils.MapSlice(resource.Relations, func(r *types.Relation) string { return r.Name })
+		resource.Owner = newOwnerRelation(policy.ActorResource.Name, relNames)
+	}
+
+	// walk through permissions asserting it does not reference owner
+	for _, resource := range policy.Resources {
+		for _, permission := range resource.Permissions {
+			err := t.validatePermissionDoesNotReferenceOwner(permission.Expression)
+			if err != nil {
+				return res, errors.Attrs(err,
+					errors.Pair("resource", resource.Name),
+					errors.Pair("permission", permission.Name))
+			}
 		}
 	}
 
@@ -102,7 +171,7 @@ func (t *DiscretionaryTransformer) Transform(policy types.Policy) (specification
 			}
 			tree, modified := t.transformFetchTree(tree)
 			expr := tree.IntoPermissionExpr()
-			permission.Expression = expr
+			permission.EffectiveExpression = expr
 			if modified {
 				msg := fmt.Sprintf("added owner relation to permission: resource %v: permission %v",
 					resource.Name, permission.Name)
@@ -124,6 +193,9 @@ func (t *DiscretionaryTransformer) Transform(policy types.Policy) (specification
 // as there are several subtle expressions which could remove owner access
 // eg. owner - (something & owner)
 func (t *DiscretionaryTransformer) transformFetchTree(tree *types.PermissionFetchTree) (_ *types.PermissionFetchTree, modified bool) {
+	if tree.Term == nil {
+		return newFetchOwnerTree(), true
+	}
 	if checkOwnerIsTopNode(tree) {
 		return tree, false
 	}
@@ -149,19 +221,6 @@ func newFetchOwnerTree() *types.PermissionFetchTree {
 						Relation: OwnerRelationName,
 					},
 				},
-			},
-		},
-	}
-}
-
-// newOwnerRelation returns a default relation for the resource owner
-func newOwnerRelation(policy *types.Policy) *types.Relation {
-	return &types.Relation{
-		Name: OwnerRelationName,
-		Doc:  OwnerDescription,
-		VrTypes: []*types.Restriction{
-			{
-				ResourceName: policy.ActorResource.Name,
 			},
 		},
 	}

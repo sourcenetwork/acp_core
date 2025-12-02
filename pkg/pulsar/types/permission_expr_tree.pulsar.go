@@ -2611,16 +2611,16 @@ func (x *fastReflection_ThisNode) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_TupleToUsersetNode          protoreflect.MessageDescriptor
-	fd_TupleToUsersetNode_resource protoreflect.FieldDescriptor
-	fd_TupleToUsersetNode_relation protoreflect.FieldDescriptor
+	md_TupleToUsersetNode                           protoreflect.MessageDescriptor
+	fd_TupleToUsersetNode_lookup_relation           protoreflect.FieldDescriptor
+	fd_TupleToUsersetNode_computed_userset_relation protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sourcenetwork_acp_core_permission_expr_tree_proto_init()
 	md_TupleToUsersetNode = File_sourcenetwork_acp_core_permission_expr_tree_proto.Messages().ByName("TupleToUsersetNode")
-	fd_TupleToUsersetNode_resource = md_TupleToUsersetNode.Fields().ByName("resource")
-	fd_TupleToUsersetNode_relation = md_TupleToUsersetNode.Fields().ByName("relation")
+	fd_TupleToUsersetNode_lookup_relation = md_TupleToUsersetNode.Fields().ByName("lookup_relation")
+	fd_TupleToUsersetNode_computed_userset_relation = md_TupleToUsersetNode.Fields().ByName("computed_userset_relation")
 }
 
 var _ protoreflect.Message = (*fastReflection_TupleToUsersetNode)(nil)
@@ -2688,15 +2688,15 @@ func (x *fastReflection_TupleToUsersetNode) Interface() protoreflect.ProtoMessag
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_TupleToUsersetNode) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Resource != "" {
-		value := protoreflect.ValueOfString(x.Resource)
-		if !f(fd_TupleToUsersetNode_resource, value) {
+	if x.LookupRelation != "" {
+		value := protoreflect.ValueOfString(x.LookupRelation)
+		if !f(fd_TupleToUsersetNode_lookup_relation, value) {
 			return
 		}
 	}
-	if x.Relation != "" {
-		value := protoreflect.ValueOfString(x.Relation)
-		if !f(fd_TupleToUsersetNode_relation, value) {
+	if x.ComputedUsersetRelation != "" {
+		value := protoreflect.ValueOfString(x.ComputedUsersetRelation)
+		if !f(fd_TupleToUsersetNode_computed_userset_relation, value) {
 			return
 		}
 	}
@@ -2715,10 +2715,10 @@ func (x *fastReflection_TupleToUsersetNode) Range(f func(protoreflect.FieldDescr
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_TupleToUsersetNode) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.TupleToUsersetNode.resource":
-		return x.Resource != ""
-	case "sourcenetwork.acp_core.TupleToUsersetNode.relation":
-		return x.Relation != ""
+	case "sourcenetwork.acp_core.TupleToUsersetNode.lookup_relation":
+		return x.LookupRelation != ""
+	case "sourcenetwork.acp_core.TupleToUsersetNode.computed_userset_relation":
+		return x.ComputedUsersetRelation != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.TupleToUsersetNode"))
@@ -2735,10 +2735,10 @@ func (x *fastReflection_TupleToUsersetNode) Has(fd protoreflect.FieldDescriptor)
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_TupleToUsersetNode) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.TupleToUsersetNode.resource":
-		x.Resource = ""
-	case "sourcenetwork.acp_core.TupleToUsersetNode.relation":
-		x.Relation = ""
+	case "sourcenetwork.acp_core.TupleToUsersetNode.lookup_relation":
+		x.LookupRelation = ""
+	case "sourcenetwork.acp_core.TupleToUsersetNode.computed_userset_relation":
+		x.ComputedUsersetRelation = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.TupleToUsersetNode"))
@@ -2755,11 +2755,11 @@ func (x *fastReflection_TupleToUsersetNode) Clear(fd protoreflect.FieldDescripto
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_TupleToUsersetNode) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sourcenetwork.acp_core.TupleToUsersetNode.resource":
-		value := x.Resource
+	case "sourcenetwork.acp_core.TupleToUsersetNode.lookup_relation":
+		value := x.LookupRelation
 		return protoreflect.ValueOfString(value)
-	case "sourcenetwork.acp_core.TupleToUsersetNode.relation":
-		value := x.Relation
+	case "sourcenetwork.acp_core.TupleToUsersetNode.computed_userset_relation":
+		value := x.ComputedUsersetRelation
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
@@ -2781,10 +2781,10 @@ func (x *fastReflection_TupleToUsersetNode) Get(descriptor protoreflect.FieldDes
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_TupleToUsersetNode) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.TupleToUsersetNode.resource":
-		x.Resource = value.Interface().(string)
-	case "sourcenetwork.acp_core.TupleToUsersetNode.relation":
-		x.Relation = value.Interface().(string)
+	case "sourcenetwork.acp_core.TupleToUsersetNode.lookup_relation":
+		x.LookupRelation = value.Interface().(string)
+	case "sourcenetwork.acp_core.TupleToUsersetNode.computed_userset_relation":
+		x.ComputedUsersetRelation = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.TupleToUsersetNode"))
@@ -2805,10 +2805,10 @@ func (x *fastReflection_TupleToUsersetNode) Set(fd protoreflect.FieldDescriptor,
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_TupleToUsersetNode) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.TupleToUsersetNode.resource":
-		panic(fmt.Errorf("field resource of message sourcenetwork.acp_core.TupleToUsersetNode is not mutable"))
-	case "sourcenetwork.acp_core.TupleToUsersetNode.relation":
-		panic(fmt.Errorf("field relation of message sourcenetwork.acp_core.TupleToUsersetNode is not mutable"))
+	case "sourcenetwork.acp_core.TupleToUsersetNode.lookup_relation":
+		panic(fmt.Errorf("field lookup_relation of message sourcenetwork.acp_core.TupleToUsersetNode is not mutable"))
+	case "sourcenetwork.acp_core.TupleToUsersetNode.computed_userset_relation":
+		panic(fmt.Errorf("field computed_userset_relation of message sourcenetwork.acp_core.TupleToUsersetNode is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.TupleToUsersetNode"))
@@ -2822,9 +2822,9 @@ func (x *fastReflection_TupleToUsersetNode) Mutable(fd protoreflect.FieldDescrip
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_TupleToUsersetNode) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.TupleToUsersetNode.resource":
+	case "sourcenetwork.acp_core.TupleToUsersetNode.lookup_relation":
 		return protoreflect.ValueOfString("")
-	case "sourcenetwork.acp_core.TupleToUsersetNode.relation":
+	case "sourcenetwork.acp_core.TupleToUsersetNode.computed_userset_relation":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
@@ -2895,11 +2895,11 @@ func (x *fastReflection_TupleToUsersetNode) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
-		l = len(x.Resource)
+		l = len(x.LookupRelation)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.Relation)
+		l = len(x.ComputedUsersetRelation)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -2932,17 +2932,17 @@ func (x *fastReflection_TupleToUsersetNode) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.Relation) > 0 {
-			i -= len(x.Relation)
-			copy(dAtA[i:], x.Relation)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Relation)))
+		if len(x.ComputedUsersetRelation) > 0 {
+			i -= len(x.ComputedUsersetRelation)
+			copy(dAtA[i:], x.ComputedUsersetRelation)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ComputedUsersetRelation)))
 			i--
 			dAtA[i] = 0x12
 		}
-		if len(x.Resource) > 0 {
-			i -= len(x.Resource)
-			copy(dAtA[i:], x.Resource)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Resource)))
+		if len(x.LookupRelation) > 0 {
+			i -= len(x.LookupRelation)
+			copy(dAtA[i:], x.LookupRelation)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.LookupRelation)))
 			i--
 			dAtA[i] = 0xa
 		}
@@ -2997,7 +2997,7 @@ func (x *fastReflection_TupleToUsersetNode) ProtoMethods() *protoiface.Methods {
 			switch fieldNum {
 			case 1:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Resource", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LookupRelation", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -3025,11 +3025,11 @@ func (x *fastReflection_TupleToUsersetNode) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Resource = string(dAtA[iNdEx:postIndex])
+				x.LookupRelation = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 2:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Relation", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ComputedUsersetRelation", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -3057,7 +3057,7 @@ func (x *fastReflection_TupleToUsersetNode) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Relation = string(dAtA[iNdEx:postIndex])
+				x.ComputedUsersetRelation = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -3437,8 +3437,8 @@ type TupleToUsersetNode struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Resource string `protobuf:"bytes,1,opt,name=resource,proto3" json:"resource,omitempty"`
-	Relation string `protobuf:"bytes,2,opt,name=relation,proto3" json:"relation,omitempty"`
+	LookupRelation          string `protobuf:"bytes,1,opt,name=lookup_relation,json=lookupRelation,proto3" json:"lookup_relation,omitempty"`
+	ComputedUsersetRelation string `protobuf:"bytes,2,opt,name=computed_userset_relation,json=computedUsersetRelation,proto3" json:"computed_userset_relation,omitempty"`
 }
 
 func (x *TupleToUsersetNode) Reset() {
@@ -3461,16 +3461,16 @@ func (*TupleToUsersetNode) Descriptor() ([]byte, []int) {
 	return file_sourcenetwork_acp_core_permission_expr_tree_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *TupleToUsersetNode) GetResource() string {
+func (x *TupleToUsersetNode) GetLookupRelation() string {
 	if x != nil {
-		return x.Resource
+		return x.LookupRelation
 	}
 	return ""
 }
 
-func (x *TupleToUsersetNode) GetRelation() string {
+func (x *TupleToUsersetNode) GetComputedUsersetRelation() string {
 	if x != nil {
-		return x.Relation
+		return x.ComputedUsersetRelation
 	}
 	return ""
 }
@@ -3524,20 +3524,23 @@ var file_sourcenetwork_acp_core_permission_expr_tree_proto_rawDesc = []byte{
 	0x0a, 0x13, 0x43, 0x6f, 0x6d, 0x70, 0x75, 0x74, 0x65, 0x64, 0x55, 0x73, 0x65, 0x72, 0x73, 0x65,
 	0x74, 0x4e, 0x6f, 0x64, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f,
 	0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x22, 0x0a, 0x0a, 0x08, 0x54, 0x68, 0x69, 0x73, 0x4e, 0x6f, 0x64, 0x65, 0x22, 0x4c, 0x0a,
+	0x6e, 0x22, 0x0a, 0x0a, 0x08, 0x54, 0x68, 0x69, 0x73, 0x4e, 0x6f, 0x64, 0x65, 0x22, 0x79, 0x0a,
 	0x12, 0x54, 0x75, 0x70, 0x6c, 0x65, 0x54, 0x6f, 0x55, 0x73, 0x65, 0x72, 0x73, 0x65, 0x74, 0x4e,
-	0x6f, 0x64, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x12,
-	0x1a, 0x0a, 0x08, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x08, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2a, 0x4b, 0x0a, 0x0a, 0x43,
-	0x6f, 0x6d, 0x62, 0x69, 0x6e, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x10, 0x0a, 0x0c, 0x43, 0x4f, 0x4d,
-	0x42, 0x5f, 0x55, 0x4e, 0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x10, 0x00, 0x12, 0x09, 0x0a, 0x05, 0x55,
-	0x4e, 0x49, 0x4f, 0x4e, 0x10, 0x01, 0x12, 0x0e, 0x0a, 0x0a, 0x44, 0x49, 0x46, 0x46, 0x45, 0x52,
-	0x45, 0x4e, 0x43, 0x45, 0x10, 0x02, 0x12, 0x10, 0x0a, 0x0c, 0x49, 0x4e, 0x54, 0x45, 0x52, 0x53,
-	0x45, 0x43, 0x54, 0x49, 0x4f, 0x4e, 0x10, 0x03, 0x42, 0x2d, 0x5a, 0x2b, 0x67, 0x69, 0x74, 0x68,
-	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
-	0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x70, 0x6b,
-	0x67, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6f, 0x64, 0x65, 0x12, 0x27, 0x0a, 0x0f, 0x6c, 0x6f, 0x6f, 0x6b, 0x75, 0x70, 0x5f, 0x72, 0x65,
+	0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x6c, 0x6f,
+	0x6f, 0x6b, 0x75, 0x70, 0x52, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x3a, 0x0a, 0x19,
+	0x63, 0x6f, 0x6d, 0x70, 0x75, 0x74, 0x65, 0x64, 0x5f, 0x75, 0x73, 0x65, 0x72, 0x73, 0x65, 0x74,
+	0x5f, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x17, 0x63, 0x6f, 0x6d, 0x70, 0x75, 0x74, 0x65, 0x64, 0x55, 0x73, 0x65, 0x72, 0x73, 0x65, 0x74,
+	0x52, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2a, 0x4b, 0x0a, 0x0a, 0x43, 0x6f, 0x6d, 0x62,
+	0x69, 0x6e, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x10, 0x0a, 0x0c, 0x43, 0x4f, 0x4d, 0x42, 0x5f, 0x55,
+	0x4e, 0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x10, 0x00, 0x12, 0x09, 0x0a, 0x05, 0x55, 0x4e, 0x49, 0x4f,
+	0x4e, 0x10, 0x01, 0x12, 0x0e, 0x0a, 0x0a, 0x44, 0x49, 0x46, 0x46, 0x45, 0x52, 0x45, 0x4e, 0x43,
+	0x45, 0x10, 0x02, 0x12, 0x10, 0x0a, 0x0c, 0x49, 0x4e, 0x54, 0x45, 0x52, 0x53, 0x45, 0x43, 0x54,
+	0x49, 0x4f, 0x4e, 0x10, 0x03, 0x42, 0x2d, 0x5a, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e,
+	0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
+	0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x74,
+	0x79, 0x70, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (

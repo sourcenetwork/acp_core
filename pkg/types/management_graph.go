@@ -10,7 +10,7 @@ import (
 func (g *ManagementGraph) LoadFromPolicy(policy *Policy) {
 	for _, resource := range policy.Resources {
 		// register relation and managed rels
-		for _, relation := range resource.Relations {
+		for _, relation := range resource.GetAllRelations() {
 			g.registerRel(resource.Name, relation.Name)
 
 			for _, managedRel := range relation.Manages {

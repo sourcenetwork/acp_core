@@ -128,7 +128,7 @@ func (m *policyMapper) ToZanzi(policy *types.Policy) *domain.Policy {
 
 func (m *policyMapper) toZanziResource(resource *types.Resource) *domain.Resource {
 	perms := utils.MapSlice(resource.Permissions, m.permToZanziRel)
-	rels := utils.MapSlice(resource.Relations, m.toZanziRel)
+	rels := utils.MapSlice(resource.GetAllRelations(), m.toZanziRel)
 
 	rels = append(rels, perms...)
 
@@ -149,7 +149,8 @@ func (m *policyMapper) permToZanziRel(permission *types.Permission) *domain.Rela
 		Description: permission.Doc,
 		RelationExpression: &domain.RelationExpression{
 			Expression: &domain.RelationExpression_Expr{
-				Expr: permission.Expression,
+				// use effective expression instead
+				Expr: permission.EffectiveExpression,
 			},
 		},
 		SubjectRestriction: &domain.SubjectRestriction{

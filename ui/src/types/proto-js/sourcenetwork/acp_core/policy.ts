@@ -48,7 +48,12 @@ export interface Resource {
   doc: string;
   permissions: Permission[];
   relations: Relation[];
-  managementPermissions: ManagementPermission[];
+  managementRules: ManagementRule[];
+  /**
+   * owner models a special relation which is added to all resources.
+   * It is used to represent the owner of some object in the system
+   */
+  owner: Relation | undefined;
 }
 
 export interface Relation {
@@ -76,9 +81,22 @@ export interface Restriction {
  * A permission often maps to an operation defined for a resource which an actor may attempt.
  */
 export interface Permission {
+  /** name is an user defined identifier which uniquely identifies a permission within a resource */
   name: string;
+  /** doc is an user defined string explaining the permission */
   doc: string;
+  /**
+   * expression is a user defined permission expression, which follows the permission expression
+   * grammar and models the evaluation steps which should b taken by the permission
+   */
   expression: string;
+  /**
+   * effective_expression is the engine define expression which will be used to compute the permission.
+   * the effective expression may differ from the user expression due to internal acp engine
+   * behavior enforcement, policy spec definitions and other policy behavior transforming
+   * mechanisms.
+   */
+  effectiveExpression: string;
 }
 
 /** ActorResource represents a special Resource which is reserved for Policy actors. */
@@ -88,9 +106,24 @@ export interface ActorResource {
   relations: Relation[];
 }
 
-export interface ManagementPermission {
-  /** name matches the name of the underlying relation the management permission manages */
-  name: string;
-  /** expression is the permission expression derived from the manages directives from the policy definition */
+/**
+ * ManagementRule models a policy rule which specifies the set of accepted relations
+ * an actor must have in order to modify relationships for an object
+ *
+ * This allows object owners, through a special management rule, to delegate
+ * the ability of creating relationships with a given relation to their object
+ */
+export interface ManagementRule {
+  /** relation identifies relation the rule applies to */
+  relation: string;
+  /**
+   * managers are the set of relation names which have authority to
+   * manage relation instances of the relation the rule applies to.
+   */
+  managers: string[];
+  /**
+   * expression is a zanzi compatible relation expression
+   * which represents the management rule
+   */
   expression: string;
 }

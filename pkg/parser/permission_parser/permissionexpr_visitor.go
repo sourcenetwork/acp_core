@@ -14,6 +14,9 @@ type PermissionExprVisitor interface {
 	// Visit a parse tree produced by PermissionExprParser#nested.
 	VisitNested(ctx *NestedContext) interface{}
 
+	// Visit a parse tree produced by PermissionExprParser#empty.
+	VisitEmpty(ctx *EmptyContext) interface{}
+
 	// Visit a parse tree produced by PermissionExprParser#cu_term.
 	VisitCu_term(ctx *Cu_termContext) interface{}
 

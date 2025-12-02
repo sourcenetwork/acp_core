@@ -54,6 +54,6 @@ export interface ThisNode {
 
 /** TupleToUsersetNode models a Tuple to Userset operation */
 export interface TupleToUsersetNode {
-  resource: string;
-  relation: string;
+  lookupRelation: string;
+  computedUsersetRelation: string;
 }

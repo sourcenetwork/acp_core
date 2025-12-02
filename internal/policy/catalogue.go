@@ -34,7 +34,7 @@ func BuildCatalogue(ctx context.Context, engine *zanzi.Adapter, polId string) (*
 		resCatalogue := &types.ResourceCatalogue{}
 
 		resCatalogue.Permissions = utils.MapSlice(resource.Permissions, func(p *types.Permission) string { return p.Name })
-		resCatalogue.Relations = utils.MapSlice(resource.Relations, func(p *types.Relation) string { return p.Name })
+		resCatalogue.Relations = utils.MapSlice(resource.GetAllRelations(), func(p *types.Relation) string { return p.Name })
 		catalogue.ResourceCatalogue[resource.Name] = resCatalogue
 	}
 

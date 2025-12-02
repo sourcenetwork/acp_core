@@ -56,5 +56,8 @@ func ParseWithReport(expr string) (*types.PermissionFetchTree, *parser.ParserRep
 
 	v := visitor{}
 	result := v.Visit(tree)
+	if result == nil {
+		result = &types.PermissionFetchTree{}
+	}
 	return result.(*types.PermissionFetchTree), report
 }

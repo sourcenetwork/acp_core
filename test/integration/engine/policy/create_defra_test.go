@@ -13,12 +13,12 @@ func TestCreatePolicy_DefraSpec_RequiresRead(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	pol := `name: test
+	pol := `
+name: test
 resources:
 - name: file
   permissions:
-  - expr: owner
-    name: write
+  - name: write
 spec: defra
 `
 
@@ -36,12 +36,12 @@ func TestCreatePolicy_DefraSpec_RequiresWrite(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	pol := `name: test
+	pol := `
+name: test
 resources:
 - name: file
   permissions:
-  - expr: owner
-    name: read
+  - name: read
 spec: defra
 `
 
@@ -59,14 +59,13 @@ func TestCreatePolicy_DefraSpec_OkWithReadAndWrite(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
 
-	pol := `name: test
+	pol := `
+name: test
 resources:
 - name: file
   permissions:
-  - expr: owner
-    name: read
-  - expr: owner
-    name: write
+  - name: read
+  - name: write
 spec: defra
 `
 
@@ -83,13 +82,13 @@ spec: defra
 func TestCreatePolicy_DefraSpec_WriteImpliesRead(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
-	pol := `name: test
+	pol := `
+name: test
 resources:
 - name: file
   permissions:
-  - expr: owner
-    name: read
-  - expr: owner + writer
+  - name: read
+  - expr: writer
     name: write
   relations:
   - name: writer

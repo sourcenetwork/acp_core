@@ -1236,7 +1236,7 @@ func (x *_Resource_4_list) IsValid() bool {
 var _ protoreflect.List = (*_Resource_5_list)(nil)
 
 type _Resource_5_list struct {
-	list *[]*ManagementPermission
+	list *[]*ManagementRule
 }
 
 func (x *_Resource_5_list) Len() int {
@@ -1252,18 +1252,18 @@ func (x *_Resource_5_list) Get(i int) protoreflect.Value {
 
 func (x *_Resource_5_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*ManagementPermission)
+	concreteValue := valueUnwrapped.Interface().(*ManagementRule)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_Resource_5_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*ManagementPermission)
+	concreteValue := valueUnwrapped.Interface().(*ManagementRule)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_Resource_5_list) AppendMutable() protoreflect.Value {
-	v := new(ManagementPermission)
+	v := new(ManagementRule)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -1276,7 +1276,7 @@ func (x *_Resource_5_list) Truncate(n int) {
 }
 
 func (x *_Resource_5_list) NewElement() protoreflect.Value {
-	v := new(ManagementPermission)
+	v := new(ManagementRule)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
@@ -1285,12 +1285,13 @@ func (x *_Resource_5_list) IsValid() bool {
 }
 
 var (
-	md_Resource                        protoreflect.MessageDescriptor
-	fd_Resource_name                   protoreflect.FieldDescriptor
-	fd_Resource_doc                    protoreflect.FieldDescriptor
-	fd_Resource_permissions            protoreflect.FieldDescriptor
-	fd_Resource_relations              protoreflect.FieldDescriptor
-	fd_Resource_management_permissions protoreflect.FieldDescriptor
+	md_Resource                  protoreflect.MessageDescriptor
+	fd_Resource_name             protoreflect.FieldDescriptor
+	fd_Resource_doc              protoreflect.FieldDescriptor
+	fd_Resource_permissions      protoreflect.FieldDescriptor
+	fd_Resource_relations        protoreflect.FieldDescriptor
+	fd_Resource_management_rules protoreflect.FieldDescriptor
+	fd_Resource_owner            protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -1300,7 +1301,8 @@ func init() {
 	fd_Resource_doc = md_Resource.Fields().ByName("doc")
 	fd_Resource_permissions = md_Resource.Fields().ByName("permissions")
 	fd_Resource_relations = md_Resource.Fields().ByName("relations")
-	fd_Resource_management_permissions = md_Resource.Fields().ByName("management_permissions")
+	fd_Resource_management_rules = md_Resource.Fields().ByName("management_rules")
+	fd_Resource_owner = md_Resource.Fields().ByName("owner")
 }
 
 var _ protoreflect.Message = (*fastReflection_Resource)(nil)
@@ -1392,9 +1394,15 @@ func (x *fastReflection_Resource) Range(f func(protoreflect.FieldDescriptor, pro
 			return
 		}
 	}
-	if len(x.ManagementPermissions) != 0 {
-		value := protoreflect.ValueOfList(&_Resource_5_list{list: &x.ManagementPermissions})
-		if !f(fd_Resource_management_permissions, value) {
+	if len(x.ManagementRules) != 0 {
+		value := protoreflect.ValueOfList(&_Resource_5_list{list: &x.ManagementRules})
+		if !f(fd_Resource_management_rules, value) {
+			return
+		}
+	}
+	if x.Owner != nil {
+		value := protoreflect.ValueOfMessage(x.Owner.ProtoReflect())
+		if !f(fd_Resource_owner, value) {
 			return
 		}
 	}
@@ -1421,8 +1429,10 @@ func (x *fastReflection_Resource) Has(fd protoreflect.FieldDescriptor) bool {
 		return len(x.Permissions) != 0
 	case "sourcenetwork.acp_core.Resource.relations":
 		return len(x.Relations) != 0
-	case "sourcenetwork.acp_core.Resource.management_permissions":
-		return len(x.ManagementPermissions) != 0
+	case "sourcenetwork.acp_core.Resource.management_rules":
+		return len(x.ManagementRules) != 0
+	case "sourcenetwork.acp_core.Resource.owner":
+		return x.Owner != nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Resource"))
@@ -1447,8 +1457,10 @@ func (x *fastReflection_Resource) Clear(fd protoreflect.FieldDescriptor) {
 		x.Permissions = nil
 	case "sourcenetwork.acp_core.Resource.relations":
 		x.Relations = nil
-	case "sourcenetwork.acp_core.Resource.management_permissions":
-		x.ManagementPermissions = nil
+	case "sourcenetwork.acp_core.Resource.management_rules":
+		x.ManagementRules = nil
+	case "sourcenetwork.acp_core.Resource.owner":
+		x.Owner = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Resource"))
@@ -1483,12 +1495,15 @@ func (x *fastReflection_Resource) Get(descriptor protoreflect.FieldDescriptor) p
 		}
 		listValue := &_Resource_4_list{list: &x.Relations}
 		return protoreflect.ValueOfList(listValue)
-	case "sourcenetwork.acp_core.Resource.management_permissions":
-		if len(x.ManagementPermissions) == 0 {
+	case "sourcenetwork.acp_core.Resource.management_rules":
+		if len(x.ManagementRules) == 0 {
 			return protoreflect.ValueOfList(&_Resource_5_list{})
 		}
-		listValue := &_Resource_5_list{list: &x.ManagementPermissions}
+		listValue := &_Resource_5_list{list: &x.ManagementRules}
 		return protoreflect.ValueOfList(listValue)
+	case "sourcenetwork.acp_core.Resource.owner":
+		value := x.Owner
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Resource"))
@@ -1521,10 +1536,12 @@ func (x *fastReflection_Resource) Set(fd protoreflect.FieldDescriptor, value pro
 		lv := value.List()
 		clv := lv.(*_Resource_4_list)
 		x.Relations = *clv.list
-	case "sourcenetwork.acp_core.Resource.management_permissions":
+	case "sourcenetwork.acp_core.Resource.management_rules":
 		lv := value.List()
 		clv := lv.(*_Resource_5_list)
-		x.ManagementPermissions = *clv.list
+		x.ManagementRules = *clv.list
+	case "sourcenetwork.acp_core.Resource.owner":
+		x.Owner = value.Message().Interface().(*Relation)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Resource"))
@@ -1557,12 +1574,17 @@ func (x *fastReflection_Resource) Mutable(fd protoreflect.FieldDescriptor) proto
 		}
 		value := &_Resource_4_list{list: &x.Relations}
 		return protoreflect.ValueOfList(value)
-	case "sourcenetwork.acp_core.Resource.management_permissions":
-		if x.ManagementPermissions == nil {
-			x.ManagementPermissions = []*ManagementPermission{}
+	case "sourcenetwork.acp_core.Resource.management_rules":
+		if x.ManagementRules == nil {
+			x.ManagementRules = []*ManagementRule{}
 		}
-		value := &_Resource_5_list{list: &x.ManagementPermissions}
+		value := &_Resource_5_list{list: &x.ManagementRules}
 		return protoreflect.ValueOfList(value)
+	case "sourcenetwork.acp_core.Resource.owner":
+		if x.Owner == nil {
+			x.Owner = new(Relation)
+		}
+		return protoreflect.ValueOfMessage(x.Owner.ProtoReflect())
 	case "sourcenetwork.acp_core.Resource.name":
 		panic(fmt.Errorf("field name of message sourcenetwork.acp_core.Resource is not mutable"))
 	case "sourcenetwork.acp_core.Resource.doc":
@@ -1590,9 +1612,12 @@ func (x *fastReflection_Resource) NewField(fd protoreflect.FieldDescriptor) prot
 	case "sourcenetwork.acp_core.Resource.relations":
 		list := []*Relation{}
 		return protoreflect.ValueOfList(&_Resource_4_list{list: &list})
-	case "sourcenetwork.acp_core.Resource.management_permissions":
-		list := []*ManagementPermission{}
+	case "sourcenetwork.acp_core.Resource.management_rules":
+		list := []*ManagementRule{}
 		return protoreflect.ValueOfList(&_Resource_5_list{list: &list})
+	case "sourcenetwork.acp_core.Resource.owner":
+		m := new(Relation)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Resource"))
@@ -1682,11 +1707,15 @@ func (x *fastReflection_Resource) ProtoMethods() *protoiface.Methods {
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
 		}
-		if len(x.ManagementPermissions) > 0 {
-			for _, e := range x.ManagementPermissions {
+		if len(x.ManagementRules) > 0 {
+			for _, e := range x.ManagementRules {
 				l = options.Size(e)
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
+		}
+		if x.Owner != nil {
+			l = options.Size(x.Owner)
+			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -1717,9 +1746,23 @@ func (x *fastReflection_Resource) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.ManagementPermissions) > 0 {
-			for iNdEx := len(x.ManagementPermissions) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.ManagementPermissions[iNdEx])
+		if x.Owner != nil {
+			encoded, err := options.Marshal(x.Owner)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x32
+		}
+		if len(x.ManagementRules) > 0 {
+			for iNdEx := len(x.ManagementRules) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.ManagementRules[iNdEx])
 				if err != nil {
 					return protoiface.MarshalOutput{
 						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1962,7 +2005,7 @@ func (x *fastReflection_Resource) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 5:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ManagementPermissions", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ManagementRules", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -1989,8 +2032,44 @@ func (x *fastReflection_Resource) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.ManagementPermissions = append(x.ManagementPermissions, &ManagementPermission{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.ManagementPermissions[len(x.ManagementPermissions)-1]); err != nil {
+				x.ManagementRules = append(x.ManagementRules, &ManagementRule{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.ManagementRules[len(x.ManagementRules)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 6:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Owner", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Owner == nil {
+					x.Owner = &Relation{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Owner); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -3260,10 +3339,11 @@ func (x *fastReflection_Restriction) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_Permission            protoreflect.MessageDescriptor
-	fd_Permission_name       protoreflect.FieldDescriptor
-	fd_Permission_doc        protoreflect.FieldDescriptor
-	fd_Permission_expression protoreflect.FieldDescriptor
+	md_Permission                      protoreflect.MessageDescriptor
+	fd_Permission_name                 protoreflect.FieldDescriptor
+	fd_Permission_doc                  protoreflect.FieldDescriptor
+	fd_Permission_expression           protoreflect.FieldDescriptor
+	fd_Permission_effective_expression protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -3272,6 +3352,7 @@ func init() {
 	fd_Permission_name = md_Permission.Fields().ByName("name")
 	fd_Permission_doc = md_Permission.Fields().ByName("doc")
 	fd_Permission_expression = md_Permission.Fields().ByName("expression")
+	fd_Permission_effective_expression = md_Permission.Fields().ByName("effective_expression")
 }
 
 var _ protoreflect.Message = (*fastReflection_Permission)(nil)
@@ -3357,6 +3438,12 @@ func (x *fastReflection_Permission) Range(f func(protoreflect.FieldDescriptor, p
 			return
 		}
 	}
+	if x.EffectiveExpression != "" {
+		value := protoreflect.ValueOfString(x.EffectiveExpression)
+		if !f(fd_Permission_effective_expression, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -3378,6 +3465,8 @@ func (x *fastReflection_Permission) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.Doc != ""
 	case "sourcenetwork.acp_core.Permission.expression":
 		return x.Expression != ""
+	case "sourcenetwork.acp_core.Permission.effective_expression":
+		return x.EffectiveExpression != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Permission"))
@@ -3400,6 +3489,8 @@ func (x *fastReflection_Permission) Clear(fd protoreflect.FieldDescriptor) {
 		x.Doc = ""
 	case "sourcenetwork.acp_core.Permission.expression":
 		x.Expression = ""
+	case "sourcenetwork.acp_core.Permission.effective_expression":
+		x.EffectiveExpression = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Permission"))
@@ -3424,6 +3515,9 @@ func (x *fastReflection_Permission) Get(descriptor protoreflect.FieldDescriptor)
 		return protoreflect.ValueOfString(value)
 	case "sourcenetwork.acp_core.Permission.expression":
 		value := x.Expression
+		return protoreflect.ValueOfString(value)
+	case "sourcenetwork.acp_core.Permission.effective_expression":
+		value := x.EffectiveExpression
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
@@ -3451,6 +3545,8 @@ func (x *fastReflection_Permission) Set(fd protoreflect.FieldDescriptor, value p
 		x.Doc = value.Interface().(string)
 	case "sourcenetwork.acp_core.Permission.expression":
 		x.Expression = value.Interface().(string)
+	case "sourcenetwork.acp_core.Permission.effective_expression":
+		x.EffectiveExpression = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Permission"))
@@ -3477,6 +3573,8 @@ func (x *fastReflection_Permission) Mutable(fd protoreflect.FieldDescriptor) pro
 		panic(fmt.Errorf("field doc of message sourcenetwork.acp_core.Permission is not mutable"))
 	case "sourcenetwork.acp_core.Permission.expression":
 		panic(fmt.Errorf("field expression of message sourcenetwork.acp_core.Permission is not mutable"))
+	case "sourcenetwork.acp_core.Permission.effective_expression":
+		panic(fmt.Errorf("field effective_expression of message sourcenetwork.acp_core.Permission is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Permission"))
@@ -3495,6 +3593,8 @@ func (x *fastReflection_Permission) NewField(fd protoreflect.FieldDescriptor) pr
 	case "sourcenetwork.acp_core.Permission.doc":
 		return protoreflect.ValueOfString("")
 	case "sourcenetwork.acp_core.Permission.expression":
+		return protoreflect.ValueOfString("")
+	case "sourcenetwork.acp_core.Permission.effective_expression":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
@@ -3577,6 +3677,10 @@ func (x *fastReflection_Permission) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
+		l = len(x.EffectiveExpression)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -3605,6 +3709,13 @@ func (x *fastReflection_Permission) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.EffectiveExpression) > 0 {
+			i -= len(x.EffectiveExpression)
+			copy(dAtA[i:], x.EffectiveExpression)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.EffectiveExpression)))
+			i--
+			dAtA[i] = 0x22
 		}
 		if len(x.Expression) > 0 {
 			i -= len(x.Expression)
@@ -3771,6 +3882,38 @@ func (x *fastReflection_Permission) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				x.Expression = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field EffectiveExpression", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.EffectiveExpression = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -4429,28 +4572,76 @@ func (x *fastReflection_ActorResource) ProtoMethods() *protoiface.Methods {
 	}
 }
 
+var _ protoreflect.List = (*_ManagementRule_2_list)(nil)
+
+type _ManagementRule_2_list struct {
+	list *[]string
+}
+
+func (x *_ManagementRule_2_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_ManagementRule_2_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfString((*x.list)[i])
+}
+
+func (x *_ManagementRule_2_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_ManagementRule_2_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.String()
+	concreteValue := valueUnwrapped
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_ManagementRule_2_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message ManagementRule at list field Managers as it is not of Message kind"))
+}
+
+func (x *_ManagementRule_2_list) Truncate(n int) {
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_ManagementRule_2_list) NewElement() protoreflect.Value {
+	v := ""
+	return protoreflect.ValueOfString(v)
+}
+
+func (x *_ManagementRule_2_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
-	md_ManagementPermission            protoreflect.MessageDescriptor
-	fd_ManagementPermission_name       protoreflect.FieldDescriptor
-	fd_ManagementPermission_expression protoreflect.FieldDescriptor
+	md_ManagementRule            protoreflect.MessageDescriptor
+	fd_ManagementRule_relation   protoreflect.FieldDescriptor
+	fd_ManagementRule_managers   protoreflect.FieldDescriptor
+	fd_ManagementRule_expression protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sourcenetwork_acp_core_policy_proto_init()
-	md_ManagementPermission = File_sourcenetwork_acp_core_policy_proto.Messages().ByName("ManagementPermission")
-	fd_ManagementPermission_name = md_ManagementPermission.Fields().ByName("name")
-	fd_ManagementPermission_expression = md_ManagementPermission.Fields().ByName("expression")
+	md_ManagementRule = File_sourcenetwork_acp_core_policy_proto.Messages().ByName("ManagementRule")
+	fd_ManagementRule_relation = md_ManagementRule.Fields().ByName("relation")
+	fd_ManagementRule_managers = md_ManagementRule.Fields().ByName("managers")
+	fd_ManagementRule_expression = md_ManagementRule.Fields().ByName("expression")
 }
 
-var _ protoreflect.Message = (*fastReflection_ManagementPermission)(nil)
+var _ protoreflect.Message = (*fastReflection_ManagementRule)(nil)
 
-type fastReflection_ManagementPermission ManagementPermission
+type fastReflection_ManagementRule ManagementRule
 
-func (x *ManagementPermission) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_ManagementPermission)(x)
+func (x *ManagementRule) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_ManagementRule)(x)
 }
 
-func (x *ManagementPermission) slowProtoReflect() protoreflect.Message {
+func (x *ManagementRule) slowProtoReflect() protoreflect.Message {
 	mi := &file_sourcenetwork_acp_core_policy_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -4462,43 +4653,43 @@ func (x *ManagementPermission) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_ManagementPermission_messageType fastReflection_ManagementPermission_messageType
-var _ protoreflect.MessageType = fastReflection_ManagementPermission_messageType{}
+var _fastReflection_ManagementRule_messageType fastReflection_ManagementRule_messageType
+var _ protoreflect.MessageType = fastReflection_ManagementRule_messageType{}
 
-type fastReflection_ManagementPermission_messageType struct{}
+type fastReflection_ManagementRule_messageType struct{}
 
-func (x fastReflection_ManagementPermission_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_ManagementPermission)(nil)
+func (x fastReflection_ManagementRule_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_ManagementRule)(nil)
 }
-func (x fastReflection_ManagementPermission_messageType) New() protoreflect.Message {
-	return new(fastReflection_ManagementPermission)
+func (x fastReflection_ManagementRule_messageType) New() protoreflect.Message {
+	return new(fastReflection_ManagementRule)
 }
-func (x fastReflection_ManagementPermission_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_ManagementPermission
+func (x fastReflection_ManagementRule_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_ManagementRule
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_ManagementPermission) Descriptor() protoreflect.MessageDescriptor {
-	return md_ManagementPermission
+func (x *fastReflection_ManagementRule) Descriptor() protoreflect.MessageDescriptor {
+	return md_ManagementRule
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_ManagementPermission) Type() protoreflect.MessageType {
-	return _fastReflection_ManagementPermission_messageType
+func (x *fastReflection_ManagementRule) Type() protoreflect.MessageType {
+	return _fastReflection_ManagementRule_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_ManagementPermission) New() protoreflect.Message {
-	return new(fastReflection_ManagementPermission)
+func (x *fastReflection_ManagementRule) New() protoreflect.Message {
+	return new(fastReflection_ManagementRule)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_ManagementPermission) Interface() protoreflect.ProtoMessage {
-	return (*ManagementPermission)(x)
+func (x *fastReflection_ManagementRule) Interface() protoreflect.ProtoMessage {
+	return (*ManagementRule)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -4506,16 +4697,22 @@ func (x *fastReflection_ManagementPermission) Interface() protoreflect.ProtoMess
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_ManagementPermission) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Name != "" {
-		value := protoreflect.ValueOfString(x.Name)
-		if !f(fd_ManagementPermission_name, value) {
+func (x *fastReflection_ManagementRule) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Relation != "" {
+		value := protoreflect.ValueOfString(x.Relation)
+		if !f(fd_ManagementRule_relation, value) {
+			return
+		}
+	}
+	if len(x.Managers) != 0 {
+		value := protoreflect.ValueOfList(&_ManagementRule_2_list{list: &x.Managers})
+		if !f(fd_ManagementRule_managers, value) {
 			return
 		}
 	}
 	if x.Expression != "" {
 		value := protoreflect.ValueOfString(x.Expression)
-		if !f(fd_ManagementPermission_expression, value) {
+		if !f(fd_ManagementRule_expression, value) {
 			return
 		}
 	}
@@ -4532,17 +4729,19 @@ func (x *fastReflection_ManagementPermission) Range(f func(protoreflect.FieldDes
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_ManagementPermission) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_ManagementRule) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.ManagementPermission.name":
-		return x.Name != ""
-	case "sourcenetwork.acp_core.ManagementPermission.expression":
+	case "sourcenetwork.acp_core.ManagementRule.relation":
+		return x.Relation != ""
+	case "sourcenetwork.acp_core.ManagementRule.managers":
+		return len(x.Managers) != 0
+	case "sourcenetwork.acp_core.ManagementRule.expression":
 		return x.Expression != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ManagementPermission"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ManagementRule"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.ManagementPermission does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ManagementRule does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -4552,17 +4751,19 @@ func (x *fastReflection_ManagementPermission) Has(fd protoreflect.FieldDescripto
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ManagementPermission) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_ManagementRule) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.ManagementPermission.name":
-		x.Name = ""
-	case "sourcenetwork.acp_core.ManagementPermission.expression":
+	case "sourcenetwork.acp_core.ManagementRule.relation":
+		x.Relation = ""
+	case "sourcenetwork.acp_core.ManagementRule.managers":
+		x.Managers = nil
+	case "sourcenetwork.acp_core.ManagementRule.expression":
 		x.Expression = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ManagementPermission"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ManagementRule"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.ManagementPermission does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ManagementRule does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -4572,19 +4773,25 @@ func (x *fastReflection_ManagementPermission) Clear(fd protoreflect.FieldDescrip
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_ManagementPermission) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_ManagementRule) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sourcenetwork.acp_core.ManagementPermission.name":
-		value := x.Name
+	case "sourcenetwork.acp_core.ManagementRule.relation":
+		value := x.Relation
 		return protoreflect.ValueOfString(value)
-	case "sourcenetwork.acp_core.ManagementPermission.expression":
+	case "sourcenetwork.acp_core.ManagementRule.managers":
+		if len(x.Managers) == 0 {
+			return protoreflect.ValueOfList(&_ManagementRule_2_list{})
+		}
+		listValue := &_ManagementRule_2_list{list: &x.Managers}
+		return protoreflect.ValueOfList(listValue)
+	case "sourcenetwork.acp_core.ManagementRule.expression":
 		value := x.Expression
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ManagementPermission"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ManagementRule"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.ManagementPermission does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ManagementRule does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -4598,17 +4805,21 @@ func (x *fastReflection_ManagementPermission) Get(descriptor protoreflect.FieldD
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ManagementPermission) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_ManagementRule) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.ManagementPermission.name":
-		x.Name = value.Interface().(string)
-	case "sourcenetwork.acp_core.ManagementPermission.expression":
+	case "sourcenetwork.acp_core.ManagementRule.relation":
+		x.Relation = value.Interface().(string)
+	case "sourcenetwork.acp_core.ManagementRule.managers":
+		lv := value.List()
+		clv := lv.(*_ManagementRule_2_list)
+		x.Managers = *clv.list
+	case "sourcenetwork.acp_core.ManagementRule.expression":
 		x.Expression = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ManagementPermission"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ManagementRule"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.ManagementPermission does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ManagementRule does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -4622,44 +4833,53 @@ func (x *fastReflection_ManagementPermission) Set(fd protoreflect.FieldDescripto
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ManagementPermission) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_ManagementRule) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.ManagementPermission.name":
-		panic(fmt.Errorf("field name of message sourcenetwork.acp_core.ManagementPermission is not mutable"))
-	case "sourcenetwork.acp_core.ManagementPermission.expression":
-		panic(fmt.Errorf("field expression of message sourcenetwork.acp_core.ManagementPermission is not mutable"))
+	case "sourcenetwork.acp_core.ManagementRule.managers":
+		if x.Managers == nil {
+			x.Managers = []string{}
+		}
+		value := &_ManagementRule_2_list{list: &x.Managers}
+		return protoreflect.ValueOfList(value)
+	case "sourcenetwork.acp_core.ManagementRule.relation":
+		panic(fmt.Errorf("field relation of message sourcenetwork.acp_core.ManagementRule is not mutable"))
+	case "sourcenetwork.acp_core.ManagementRule.expression":
+		panic(fmt.Errorf("field expression of message sourcenetwork.acp_core.ManagementRule is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ManagementPermission"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ManagementRule"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.ManagementPermission does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ManagementRule does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_ManagementPermission) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_ManagementRule) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.ManagementPermission.name":
+	case "sourcenetwork.acp_core.ManagementRule.relation":
 		return protoreflect.ValueOfString("")
-	case "sourcenetwork.acp_core.ManagementPermission.expression":
+	case "sourcenetwork.acp_core.ManagementRule.managers":
+		list := []string{}
+		return protoreflect.ValueOfList(&_ManagementRule_2_list{list: &list})
+	case "sourcenetwork.acp_core.ManagementRule.expression":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ManagementPermission"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ManagementRule"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.ManagementPermission does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.ManagementRule does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_ManagementPermission) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_ManagementRule) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.ManagementPermission", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.ManagementRule", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -4667,7 +4887,7 @@ func (x *fastReflection_ManagementPermission) WhichOneof(d protoreflect.OneofDes
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_ManagementPermission) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_ManagementRule) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -4678,7 +4898,7 @@ func (x *fastReflection_ManagementPermission) GetUnknown() protoreflect.RawField
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ManagementPermission) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_ManagementRule) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -4690,7 +4910,7 @@ func (x *fastReflection_ManagementPermission) SetUnknown(fields protoreflect.Raw
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_ManagementPermission) IsValid() bool {
+func (x *fastReflection_ManagementRule) IsValid() bool {
 	return x != nil
 }
 
@@ -4700,9 +4920,9 @@ func (x *fastReflection_ManagementPermission) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_ManagementPermission) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_ManagementRule) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*ManagementPermission)
+		x := input.Message.Interface().(*ManagementRule)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -4714,9 +4934,15 @@ func (x *fastReflection_ManagementPermission) ProtoMethods() *protoiface.Methods
 		var n int
 		var l int
 		_ = l
-		l = len(x.Name)
+		l = len(x.Relation)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if len(x.Managers) > 0 {
+			for _, s := range x.Managers {
+				l = len(s)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
 		}
 		l = len(x.Expression)
 		if l > 0 {
@@ -4732,7 +4958,7 @@ func (x *fastReflection_ManagementPermission) ProtoMethods() *protoiface.Methods
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*ManagementPermission)
+		x := input.Message.Interface().(*ManagementRule)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -4756,12 +4982,21 @@ func (x *fastReflection_ManagementPermission) ProtoMethods() *protoiface.Methods
 			copy(dAtA[i:], x.Expression)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Expression)))
 			i--
-			dAtA[i] = 0x12
+			dAtA[i] = 0x1a
 		}
-		if len(x.Name) > 0 {
-			i -= len(x.Name)
-			copy(dAtA[i:], x.Name)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Name)))
+		if len(x.Managers) > 0 {
+			for iNdEx := len(x.Managers) - 1; iNdEx >= 0; iNdEx-- {
+				i -= len(x.Managers[iNdEx])
+				copy(dAtA[i:], x.Managers[iNdEx])
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Managers[iNdEx])))
+				i--
+				dAtA[i] = 0x12
+			}
+		}
+		if len(x.Relation) > 0 {
+			i -= len(x.Relation)
+			copy(dAtA[i:], x.Relation)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Relation)))
 			i--
 			dAtA[i] = 0xa
 		}
@@ -4776,7 +5011,7 @@ func (x *fastReflection_ManagementPermission) ProtoMethods() *protoiface.Methods
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*ManagementPermission)
+		x := input.Message.Interface().(*ManagementRule)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -4808,15 +5043,15 @@ func (x *fastReflection_ManagementPermission) ProtoMethods() *protoiface.Methods
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ManagementPermission: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ManagementRule: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ManagementPermission: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ManagementRule: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Relation", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -4844,9 +5079,41 @@ func (x *fastReflection_ManagementPermission) ProtoMethods() *protoiface.Methods
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Name = string(dAtA[iNdEx:postIndex])
+				x.Relation = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Managers", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Managers = append(x.Managers, string(dAtA[iNdEx:postIndex]))
+				iNdEx = postIndex
+			case 3:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Expression", wireType)
 				}
@@ -5069,11 +5336,14 @@ type Resource struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name                  string                  `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Doc                   string                  `protobuf:"bytes,2,opt,name=doc,proto3" json:"doc,omitempty"`
-	Permissions           []*Permission           `protobuf:"bytes,3,rep,name=permissions,proto3" json:"permissions,omitempty"`
-	Relations             []*Relation             `protobuf:"bytes,4,rep,name=relations,proto3" json:"relations,omitempty"`
-	ManagementPermissions []*ManagementPermission `protobuf:"bytes,5,rep,name=management_permissions,json=managementPermissions,proto3" json:"management_permissions,omitempty"`
+	Name            string            `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Doc             string            `protobuf:"bytes,2,opt,name=doc,proto3" json:"doc,omitempty"`
+	Permissions     []*Permission     `protobuf:"bytes,3,rep,name=permissions,proto3" json:"permissions,omitempty"`
+	Relations       []*Relation       `protobuf:"bytes,4,rep,name=relations,proto3" json:"relations,omitempty"`
+	ManagementRules []*ManagementRule `protobuf:"bytes,5,rep,name=management_rules,json=managementRules,proto3" json:"management_rules,omitempty"`
+	// owner models a special relation which is added to all resources.
+	// It is used to represent the owner of some object in the system
+	Owner *Relation `protobuf:"bytes,6,opt,name=owner,proto3" json:"owner,omitempty"`
 }
 
 func (x *Resource) Reset() {
@@ -5124,9 +5394,16 @@ func (x *Resource) GetRelations() []*Relation {
 	return nil
 }
 
-func (x *Resource) GetManagementPermissions() []*ManagementPermission {
+func (x *Resource) GetManagementRules() []*ManagementRule {
 	if x != nil {
-		return x.ManagementPermissions
+		return x.ManagementRules
+	}
+	return nil
+}
+
+func (x *Resource) GetOwner() *Relation {
+	if x != nil {
+		return x.Owner
 	}
 	return nil
 }
@@ -5246,9 +5523,18 @@ type Permission struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name       string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Doc        string `protobuf:"bytes,2,opt,name=doc,proto3" json:"doc,omitempty"`
+	// name is an user defined identifier which uniquely identifies a permission within a resource
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// doc is an user defined string explaining the permission
+	Doc string `protobuf:"bytes,2,opt,name=doc,proto3" json:"doc,omitempty"`
+	// expression is a user defined permission expression, which follows the permission expression
+	// grammar and models the evaluation steps which should b taken by the permission
 	Expression string `protobuf:"bytes,3,opt,name=expression,proto3" json:"expression,omitempty"`
+	// effective_expression is the engine define expression which will be used to compute the permission.
+	// the effective expression may differ from the user expression due to internal acp engine
+	// behavior enforcement, policy spec definitions and other policy behavior transforming
+	// mechanisms.
+	EffectiveExpression string `protobuf:"bytes,4,opt,name=effective_expression,json=effectiveExpression,proto3" json:"effective_expression,omitempty"`
 }
 
 func (x *Permission) Reset() {
@@ -5288,6 +5574,13 @@ func (x *Permission) GetDoc() string {
 func (x *Permission) GetExpression() string {
 	if x != nil {
 		return x.Expression
+	}
+	return ""
+}
+
+func (x *Permission) GetEffectiveExpression() string {
+	if x != nil {
+		return x.EffectiveExpression
 	}
 	return ""
 }
@@ -5344,19 +5637,28 @@ func (x *ActorResource) GetRelations() []*Relation {
 	return nil
 }
 
-type ManagementPermission struct {
+// ManagementRule models a policy rule which specifies the set of accepted relations
+// an actor must have in order to modify relationships for an object
+//
+// This allows object owners, through a special management rule, to delegate
+// the ability of creating relationships with a given relation to their object
+type ManagementRule struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// name matches the name of the underlying relation the management permission manages
-	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// expression is the permission expression derived from the manages directives from the policy definition
-	Expression string `protobuf:"bytes,2,opt,name=expression,proto3" json:"expression,omitempty"`
+	// relation identifies relation the rule applies to
+	Relation string `protobuf:"bytes,1,opt,name=relation,proto3" json:"relation,omitempty"`
+	// managers are the set of relation names which have authority to
+	// manage relation instances of the relation the rule applies to.
+	Managers []string `protobuf:"bytes,2,rep,name=managers,proto3" json:"managers,omitempty"`
+	// expression is a zanzi compatible relation expression
+	// which represents the management rule
+	Expression string `protobuf:"bytes,3,opt,name=expression,proto3" json:"expression,omitempty"`
 }
 
-func (x *ManagementPermission) Reset() {
-	*x = ManagementPermission{}
+func (x *ManagementRule) Reset() {
+	*x = ManagementRule{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sourcenetwork_acp_core_policy_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5364,25 +5666,32 @@ func (x *ManagementPermission) Reset() {
 	}
 }
 
-func (x *ManagementPermission) String() string {
+func (x *ManagementRule) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ManagementPermission) ProtoMessage() {}
+func (*ManagementRule) ProtoMessage() {}
 
-// Deprecated: Use ManagementPermission.ProtoReflect.Descriptor instead.
-func (*ManagementPermission) Descriptor() ([]byte, []int) {
+// Deprecated: Use ManagementRule.ProtoReflect.Descriptor instead.
+func (*ManagementRule) Descriptor() ([]byte, []int) {
 	return file_sourcenetwork_acp_core_policy_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *ManagementPermission) GetName() string {
+func (x *ManagementRule) GetRelation() string {
 	if x != nil {
-		return x.Name
+		return x.Relation
 	}
 	return ""
 }
 
-func (x *ManagementPermission) GetExpression() string {
+func (x *ManagementRule) GetManagers() []string {
+	if x != nil {
+		return x.Managers
+	}
+	return nil
+}
+
+func (x *ManagementRule) GetExpression() string {
 	if x != nil {
 		return x.Expression
 	}
@@ -5429,7 +5738,7 @@ var file_sourcenetwork_acp_core_policy_proto_rawDesc = []byte{
 	0x72, 0x69, 0x62, 0x75, 0x74, 0x65, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03,
 	0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14,
 	0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76,
-	0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0x9b, 0x02, 0x0a, 0x08, 0x52, 0x65, 0x73,
+	0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0xc1, 0x02, 0x0a, 0x08, 0x52, 0x65, 0x73,
 	0x6f, 0x75, 0x72, 0x63, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20,
 	0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x64, 0x6f, 0x63,
 	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x64, 0x6f, 0x63, 0x12, 0x44, 0x0a, 0x0b, 0x70,
@@ -5441,51 +5750,59 @@ var file_sourcenetwork_acp_core_policy_proto_rawDesc = []byte{
 	0x20, 0x03, 0x28, 0x0b, 0x32, 0x20, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
 	0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65,
 	0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x09, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x73, 0x12, 0x63, 0x0a, 0x16, 0x6d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x5f,
-	0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x05, 0x20, 0x03, 0x28,
-	0x0b, 0x32, 0x2c, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72,
-	0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4d, 0x61, 0x6e, 0x61, 0x67,
-	0x65, 0x6d, 0x65, 0x6e, 0x74, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52,
-	0x15, 0x6d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x50, 0x65, 0x72, 0x6d, 0x69,
-	0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x22, 0x8a, 0x01, 0x0a, 0x08, 0x52, 0x65, 0x6c, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x64, 0x6f, 0x63, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x64, 0x6f, 0x63, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x61, 0x6e,
-	0x61, 0x67, 0x65, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x61, 0x6e, 0x61,
-	0x67, 0x65, 0x73, 0x12, 0x3e, 0x0a, 0x08, 0x76, 0x72, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x18,
-	0x04, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65,
-	0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52,
-	0x65, 0x73, 0x74, 0x72, 0x69, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x07, 0x76, 0x72, 0x54, 0x79,
-	0x70, 0x65, 0x73, 0x22, 0x57, 0x0a, 0x0b, 0x52, 0x65, 0x73, 0x74, 0x72, 0x69, 0x63, 0x74, 0x69,
-	0x6f, 0x6e, 0x12, 0x23, 0x0a, 0x0d, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x5f, 0x6e,
-	0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x72, 0x65, 0x73, 0x6f, 0x75,
-	0x72, 0x63, 0x65, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x23, 0x0a, 0x0d, 0x72, 0x65, 0x6c, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c,
-	0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4e, 0x61, 0x6d, 0x65, 0x22, 0x52, 0x0a, 0x0a,
-	0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61,
-	0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x10,
-	0x0a, 0x03, 0x64, 0x6f, 0x63, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x64, 0x6f, 0x63,
-	0x12, 0x1e, 0x0a, 0x0a, 0x65, 0x78, 0x70, 0x72, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x03,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x65, 0x78, 0x70, 0x72, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e,
-	0x22, 0x75, 0x0a, 0x0d, 0x41, 0x63, 0x74, 0x6f, 0x72, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63,
-	0x65, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x73, 0x12, 0x51, 0x0a, 0x10, 0x6d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x5f,
+	0x72, 0x75, 0x6c, 0x65, 0x73, 0x18, 0x05, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x73, 0x6f,
+	0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f,
+	0x63, 0x6f, 0x72, 0x65, 0x2e, 0x4d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x52,
+	0x75, 0x6c, 0x65, 0x52, 0x0f, 0x6d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x52,
+	0x75, 0x6c, 0x65, 0x73, 0x12, 0x36, 0x0a, 0x05, 0x6f, 0x77, 0x6e, 0x65, 0x72, 0x18, 0x06, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x20, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77,
+	0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65, 0x6c,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x05, 0x6f, 0x77, 0x6e, 0x65, 0x72, 0x22, 0x8a, 0x01, 0x0a,
+	0x08, 0x52, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d,
+	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x10, 0x0a,
+	0x03, 0x64, 0x6f, 0x63, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x64, 0x6f, 0x63, 0x12,
+	0x18, 0x0a, 0x07, 0x6d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x09,
+	0x52, 0x07, 0x6d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x73, 0x12, 0x3e, 0x0a, 0x08, 0x76, 0x72, 0x5f,
+	0x74, 0x79, 0x70, 0x65, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x73, 0x6f,
+	0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f,
+	0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65, 0x73, 0x74, 0x72, 0x69, 0x63, 0x74, 0x69, 0x6f, 0x6e,
+	0x52, 0x07, 0x76, 0x72, 0x54, 0x79, 0x70, 0x65, 0x73, 0x22, 0x57, 0x0a, 0x0b, 0x52, 0x65, 0x73,
+	0x74, 0x72, 0x69, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x23, 0x0a, 0x0d, 0x72, 0x65, 0x73, 0x6f,
+	0x75, 0x72, 0x63, 0x65, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x0c, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x23, 0x0a,
+	0x0d, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4e, 0x61,
+	0x6d, 0x65, 0x22, 0x85, 0x01, 0x0a, 0x0a, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f,
+	0x6e, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
 	0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x64, 0x6f, 0x63, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x03, 0x64, 0x6f, 0x63, 0x12, 0x3e, 0x0a, 0x09, 0x72, 0x65, 0x6c, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x20, 0x2e, 0x73, 0x6f, 0x75,
-	0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63,
-	0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x09, 0x72, 0x65,
-	0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x22, 0x4a, 0x0a, 0x14, 0x4d, 0x61, 0x6e, 0x61, 0x67,
-	0x65, 0x6d, 0x65, 0x6e, 0x74, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12,
-	0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e,
-	0x61, 0x6d, 0x65, 0x12, 0x1e, 0x0a, 0x0a, 0x65, 0x78, 0x70, 0x72, 0x65, 0x73, 0x73, 0x69, 0x6f,
-	0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x65, 0x78, 0x70, 0x72, 0x65, 0x73, 0x73,
-	0x69, 0x6f, 0x6e, 0x2a, 0x2d, 0x0a, 0x14, 0x50, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x4d, 0x61, 0x72,
-	0x73, 0x68, 0x61, 0x6c, 0x69, 0x6e, 0x67, 0x54, 0x79, 0x70, 0x65, 0x12, 0x0b, 0x0a, 0x07, 0x55,
-	0x4e, 0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x10, 0x00, 0x12, 0x08, 0x0a, 0x04, 0x59, 0x41, 0x4d, 0x4c,
-	0x10, 0x01, 0x42, 0x2d, 0x5a, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
-	0x2f, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61,
-	0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x74, 0x79, 0x70, 0x65,
-	0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x28, 0x09, 0x52, 0x03, 0x64, 0x6f, 0x63, 0x12, 0x1e, 0x0a, 0x0a, 0x65, 0x78, 0x70, 0x72, 0x65,
+	0x73, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x65, 0x78, 0x70,
+	0x72, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x31, 0x0a, 0x14, 0x65, 0x66, 0x66, 0x65, 0x63,
+	0x74, 0x69, 0x76, 0x65, 0x5f, 0x65, 0x78, 0x70, 0x72, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x18,
+	0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x13, 0x65, 0x66, 0x66, 0x65, 0x63, 0x74, 0x69, 0x76, 0x65,
+	0x45, 0x78, 0x70, 0x72, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x22, 0x75, 0x0a, 0x0d, 0x41, 0x63,
+	0x74, 0x6f, 0x72, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x6e,
+	0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12,
+	0x10, 0x0a, 0x03, 0x64, 0x6f, 0x63, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x64, 0x6f,
+	0x63, 0x12, 0x3e, 0x0a, 0x09, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x03,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x20, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74,
+	0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65,
+	0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x09, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x73, 0x22, 0x68, 0x0a, 0x0e, 0x4d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x52,
+	0x75, 0x6c, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12,
+	0x1a, 0x0a, 0x08, 0x6d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x72, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28,
+	0x09, 0x52, 0x08, 0x6d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x72, 0x73, 0x12, 0x1e, 0x0a, 0x0a, 0x65,
+	0x78, 0x70, 0x72, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x0a, 0x65, 0x78, 0x70, 0x72, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2a, 0x2d, 0x0a, 0x14, 0x50,
+	0x6f, 0x6c, 0x69, 0x63, 0x79, 0x4d, 0x61, 0x72, 0x73, 0x68, 0x61, 0x6c, 0x69, 0x6e, 0x67, 0x54,
+	0x79, 0x70, 0x65, 0x12, 0x0b, 0x0a, 0x07, 0x55, 0x4e, 0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x10, 0x00,
+	0x12, 0x08, 0x0a, 0x04, 0x59, 0x41, 0x4d, 0x4c, 0x10, 0x01, 0x42, 0x2d, 0x5a, 0x2b, 0x67, 0x69,
+	0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e,
+	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f,
+	0x70, 0x6b, 0x67, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x33,
 }
 
 var (
@@ -5510,25 +5827,26 @@ var file_sourcenetwork_acp_core_policy_proto_goTypes = []interface{}{
 	(*Restriction)(nil),          // 4: sourcenetwork.acp_core.Restriction
 	(*Permission)(nil),           // 5: sourcenetwork.acp_core.Permission
 	(*ActorResource)(nil),        // 6: sourcenetwork.acp_core.ActorResource
-	(*ManagementPermission)(nil), // 7: sourcenetwork.acp_core.ManagementPermission
+	(*ManagementRule)(nil),       // 7: sourcenetwork.acp_core.ManagementRule
 	nil,                          // 8: sourcenetwork.acp_core.Policy.AttributesEntry
 	(PolicySpecificationType)(0), // 9: sourcenetwork.acp_core.PolicySpecificationType
 }
 var file_sourcenetwork_acp_core_policy_proto_depIdxs = []int32{
-	2, // 0: sourcenetwork.acp_core.Policy.resources:type_name -> sourcenetwork.acp_core.Resource
-	6, // 1: sourcenetwork.acp_core.Policy.actor_resource:type_name -> sourcenetwork.acp_core.ActorResource
-	8, // 2: sourcenetwork.acp_core.Policy.attributes:type_name -> sourcenetwork.acp_core.Policy.AttributesEntry
-	9, // 3: sourcenetwork.acp_core.Policy.specification_type:type_name -> sourcenetwork.acp_core.PolicySpecificationType
-	5, // 4: sourcenetwork.acp_core.Resource.permissions:type_name -> sourcenetwork.acp_core.Permission
-	3, // 5: sourcenetwork.acp_core.Resource.relations:type_name -> sourcenetwork.acp_core.Relation
-	7, // 6: sourcenetwork.acp_core.Resource.management_permissions:type_name -> sourcenetwork.acp_core.ManagementPermission
-	4, // 7: sourcenetwork.acp_core.Relation.vr_types:type_name -> sourcenetwork.acp_core.Restriction
-	3, // 8: sourcenetwork.acp_core.ActorResource.relations:type_name -> sourcenetwork.acp_core.Relation
-	9, // [9:9] is the sub-list for method output_type
-	9, // [9:9] is the sub-list for method input_type
-	9, // [9:9] is the sub-list for extension type_name
-	9, // [9:9] is the sub-list for extension extendee
-	0, // [0:9] is the sub-list for field type_name
+	2,  // 0: sourcenetwork.acp_core.Policy.resources:type_name -> sourcenetwork.acp_core.Resource
+	6,  // 1: sourcenetwork.acp_core.Policy.actor_resource:type_name -> sourcenetwork.acp_core.ActorResource
+	8,  // 2: sourcenetwork.acp_core.Policy.attributes:type_name -> sourcenetwork.acp_core.Policy.AttributesEntry
+	9,  // 3: sourcenetwork.acp_core.Policy.specification_type:type_name -> sourcenetwork.acp_core.PolicySpecificationType
+	5,  // 4: sourcenetwork.acp_core.Resource.permissions:type_name -> sourcenetwork.acp_core.Permission
+	3,  // 5: sourcenetwork.acp_core.Resource.relations:type_name -> sourcenetwork.acp_core.Relation
+	7,  // 6: sourcenetwork.acp_core.Resource.management_rules:type_name -> sourcenetwork.acp_core.ManagementRule
+	3,  // 7: sourcenetwork.acp_core.Resource.owner:type_name -> sourcenetwork.acp_core.Relation
+	4,  // 8: sourcenetwork.acp_core.Relation.vr_types:type_name -> sourcenetwork.acp_core.Restriction
+	3,  // 9: sourcenetwork.acp_core.ActorResource.relations:type_name -> sourcenetwork.acp_core.Relation
+	10, // [10:10] is the sub-list for method output_type
+	10, // [10:10] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_sourcenetwork_acp_core_policy_proto_init() }
@@ -5611,7 +5929,7 @@ func file_sourcenetwork_acp_core_policy_proto_init() {
 			}
 		}
 		file_sourcenetwork_acp_core_policy_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ManagementPermission); i {
+			switch v := v.(*ManagementRule); i {
 			case 0:
 				return &v.state
 			case 1:
