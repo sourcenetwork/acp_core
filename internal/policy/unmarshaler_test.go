@@ -10,9 +10,6 @@ import (
 
 func TestFullUnmarshal(t *testing.T) {
 	in := `
-actor:
-  doc: my actor
-  name: actor-resource
 description: ok
 name: policy
 resources:
@@ -48,11 +45,7 @@ resources:
 				},
 			},
 		},
-		ActorResource: &types.ActorResource{
-			Name:      "actor-resource",
-			Doc:       "my actor",
-			Relations: []*types.Relation{},
-		},
+		ActorResource: nil,
 	}
 	require.Nil(t, err)
 	require.Equal(t, want, out)
@@ -361,8 +354,6 @@ resources:
 			},
 		},
 		ActorResource: &types.ActorResource{
-			Name:      "actor-resource",
-			Doc:       "my actor",
 			Relations: []*types.Relation{},
 		},
 	}

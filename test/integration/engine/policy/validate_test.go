@@ -57,9 +57,6 @@ func TestValidatePolicy_ReturnsParsedPolicy(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
 	policyStr := `
-actor:
-  doc: my actor
-  name: actor-resource
 description: ok
 meta:
   a: b
@@ -149,7 +146,7 @@ resources:
 					Doc:  ppp.OwnerDescription,
 					VrTypes: []*types.Restriction{
 						{
-							ResourceName: "actor-resource",
+							ResourceName: "actor",
 						},
 					},
 					Manages: []string{
@@ -159,9 +156,8 @@ resources:
 			},
 		},
 		ActorResource: &types.ActorResource{
-			Name:      "actor-resource",
-			Doc:       "my actor",
-			Relations: []*types.Relation{},
+			Name: ppp.ActorResourceName,
+			Doc:  ppp.ActorResourceDoc,
 		},
 	},
 		resp.Policy,

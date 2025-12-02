@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/sourcenetwork/acp_core/internal/policy/ppp"
 	"github.com/sourcenetwork/acp_core/pkg/errors"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 	"github.com/sourcenetwork/acp_core/test"
@@ -46,7 +47,8 @@ spec: none
 		Name:              "policy",
 		SpecificationType: types.PolicySpecificationType_NO_SPEC,
 		ActorResource: &types.ActorResource{
-			Name: "actor",
+			Name: ppp.ActorResourceName,
+			Doc:  ppp.ActorResourceDoc,
 		},
 	}
 	require.Equal(t, wantPolicy, resp.Record.Policy)

@@ -40,34 +40,6 @@ spec: none
 	a.Run(ctx)
 }
 
-func TestEditPolicy_CannotRenameActorResource(t *testing.T) {
-	ctx := test.NewTestCtx(t)
-	ctx.SetPrincipal("bob")
-
-	oldPol := `actor:
-  name: test
-name: policy
-spec: none
-`
-
-	a1 := test.CreatePolicyAction{
-		Policy: oldPol,
-	}
-	a1.Run(ctx)
-
-	// When I attempt to rename the actor resource
-	new := `actor:
-  name: new-actor-name
-name: policy
-spec: none
-`
-	a := test.EditPolicyAction{
-		PolicyId:    ctx.State.PolicyId,
-		Policy:      new,
-		ExpectedErr: ppp.ErrPreserveResource,
-	}
-	a.Run(ctx)
-}
 func TestEditPolicy_CannotChangeSpec(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 	ctx.SetPrincipal("bob")
@@ -240,6 +212,7 @@ spec: none
 		Resources:   []*types.Resource{},
 		ActorResource: &types.ActorResource{
 			Name: "actor",
+			Doc:  ppp.ActorResourceDoc,
 		},
 		Attributes: map[string]string{
 			"key":  "val2",
