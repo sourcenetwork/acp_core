@@ -70,8 +70,15 @@ export interface PermissionYaml {
   expr: string;
 }
 
+/**
+ * ActorResourceYaml models a default resource which is
+ * part of every policy.
+ * This resource models the set of actors known to a policy
+ */
 export interface ActorResourceYaml {
-  name: string;
-  doc: string;
+  /**
+   * relations is a sequence of optional relations
+   * which are added to the actor resource
+   */
   relations: RelationYaml[];
 }

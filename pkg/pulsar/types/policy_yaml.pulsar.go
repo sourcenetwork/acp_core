@@ -3984,69 +3984,65 @@ func (x *fastReflection_PermissionYaml) ProtoMethods() *protoiface.Methods {
 	}
 }
 
-var _ protoreflect.List = (*_ActorResourceYaml_3_list)(nil)
+var _ protoreflect.List = (*_ActorResourceYaml_1_list)(nil)
 
-type _ActorResourceYaml_3_list struct {
+type _ActorResourceYaml_1_list struct {
 	list *[]*RelationYaml
 }
 
-func (x *_ActorResourceYaml_3_list) Len() int {
+func (x *_ActorResourceYaml_1_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_ActorResourceYaml_3_list) Get(i int) protoreflect.Value {
+func (x *_ActorResourceYaml_1_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
 }
 
-func (x *_ActorResourceYaml_3_list) Set(i int, value protoreflect.Value) {
+func (x *_ActorResourceYaml_1_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*RelationYaml)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_ActorResourceYaml_3_list) Append(value protoreflect.Value) {
+func (x *_ActorResourceYaml_1_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*RelationYaml)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_ActorResourceYaml_3_list) AppendMutable() protoreflect.Value {
+func (x *_ActorResourceYaml_1_list) AppendMutable() protoreflect.Value {
 	v := new(RelationYaml)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_ActorResourceYaml_3_list) Truncate(n int) {
+func (x *_ActorResourceYaml_1_list) Truncate(n int) {
 	for i := n; i < len(*x.list); i++ {
 		(*x.list)[i] = nil
 	}
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_ActorResourceYaml_3_list) NewElement() protoreflect.Value {
+func (x *_ActorResourceYaml_1_list) NewElement() protoreflect.Value {
 	v := new(RelationYaml)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_ActorResourceYaml_3_list) IsValid() bool {
+func (x *_ActorResourceYaml_1_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
 	md_ActorResourceYaml           protoreflect.MessageDescriptor
-	fd_ActorResourceYaml_name      protoreflect.FieldDescriptor
-	fd_ActorResourceYaml_doc       protoreflect.FieldDescriptor
 	fd_ActorResourceYaml_relations protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_sourcenetwork_acp_core_policy_yaml_proto_init()
 	md_ActorResourceYaml = File_sourcenetwork_acp_core_policy_yaml_proto.Messages().ByName("ActorResourceYaml")
-	fd_ActorResourceYaml_name = md_ActorResourceYaml.Fields().ByName("name")
-	fd_ActorResourceYaml_doc = md_ActorResourceYaml.Fields().ByName("doc")
 	fd_ActorResourceYaml_relations = md_ActorResourceYaml.Fields().ByName("relations")
 }
 
@@ -4115,20 +4111,8 @@ func (x *fastReflection_ActorResourceYaml) Interface() protoreflect.ProtoMessage
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_ActorResourceYaml) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Name != "" {
-		value := protoreflect.ValueOfString(x.Name)
-		if !f(fd_ActorResourceYaml_name, value) {
-			return
-		}
-	}
-	if x.Doc != "" {
-		value := protoreflect.ValueOfString(x.Doc)
-		if !f(fd_ActorResourceYaml_doc, value) {
-			return
-		}
-	}
 	if len(x.Relations) != 0 {
-		value := protoreflect.ValueOfList(&_ActorResourceYaml_3_list{list: &x.Relations})
+		value := protoreflect.ValueOfList(&_ActorResourceYaml_1_list{list: &x.Relations})
 		if !f(fd_ActorResourceYaml_relations, value) {
 			return
 		}
@@ -4148,10 +4132,6 @@ func (x *fastReflection_ActorResourceYaml) Range(f func(protoreflect.FieldDescri
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_ActorResourceYaml) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.ActorResourceYaml.name":
-		return x.Name != ""
-	case "sourcenetwork.acp_core.ActorResourceYaml.doc":
-		return x.Doc != ""
 	case "sourcenetwork.acp_core.ActorResourceYaml.relations":
 		return len(x.Relations) != 0
 	default:
@@ -4170,10 +4150,6 @@ func (x *fastReflection_ActorResourceYaml) Has(fd protoreflect.FieldDescriptor) 
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_ActorResourceYaml) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.ActorResourceYaml.name":
-		x.Name = ""
-	case "sourcenetwork.acp_core.ActorResourceYaml.doc":
-		x.Doc = ""
 	case "sourcenetwork.acp_core.ActorResourceYaml.relations":
 		x.Relations = nil
 	default:
@@ -4192,17 +4168,11 @@ func (x *fastReflection_ActorResourceYaml) Clear(fd protoreflect.FieldDescriptor
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_ActorResourceYaml) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sourcenetwork.acp_core.ActorResourceYaml.name":
-		value := x.Name
-		return protoreflect.ValueOfString(value)
-	case "sourcenetwork.acp_core.ActorResourceYaml.doc":
-		value := x.Doc
-		return protoreflect.ValueOfString(value)
 	case "sourcenetwork.acp_core.ActorResourceYaml.relations":
 		if len(x.Relations) == 0 {
-			return protoreflect.ValueOfList(&_ActorResourceYaml_3_list{})
+			return protoreflect.ValueOfList(&_ActorResourceYaml_1_list{})
 		}
-		listValue := &_ActorResourceYaml_3_list{list: &x.Relations}
+		listValue := &_ActorResourceYaml_1_list{list: &x.Relations}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
@@ -4224,13 +4194,9 @@ func (x *fastReflection_ActorResourceYaml) Get(descriptor protoreflect.FieldDesc
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_ActorResourceYaml) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.ActorResourceYaml.name":
-		x.Name = value.Interface().(string)
-	case "sourcenetwork.acp_core.ActorResourceYaml.doc":
-		x.Doc = value.Interface().(string)
 	case "sourcenetwork.acp_core.ActorResourceYaml.relations":
 		lv := value.List()
-		clv := lv.(*_ActorResourceYaml_3_list)
+		clv := lv.(*_ActorResourceYaml_1_list)
 		x.Relations = *clv.list
 	default:
 		if fd.IsExtension() {
@@ -4256,12 +4222,8 @@ func (x *fastReflection_ActorResourceYaml) Mutable(fd protoreflect.FieldDescript
 		if x.Relations == nil {
 			x.Relations = []*RelationYaml{}
 		}
-		value := &_ActorResourceYaml_3_list{list: &x.Relations}
+		value := &_ActorResourceYaml_1_list{list: &x.Relations}
 		return protoreflect.ValueOfList(value)
-	case "sourcenetwork.acp_core.ActorResourceYaml.name":
-		panic(fmt.Errorf("field name of message sourcenetwork.acp_core.ActorResourceYaml is not mutable"))
-	case "sourcenetwork.acp_core.ActorResourceYaml.doc":
-		panic(fmt.Errorf("field doc of message sourcenetwork.acp_core.ActorResourceYaml is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ActorResourceYaml"))
@@ -4275,13 +4237,9 @@ func (x *fastReflection_ActorResourceYaml) Mutable(fd protoreflect.FieldDescript
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_ActorResourceYaml) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.ActorResourceYaml.name":
-		return protoreflect.ValueOfString("")
-	case "sourcenetwork.acp_core.ActorResourceYaml.doc":
-		return protoreflect.ValueOfString("")
 	case "sourcenetwork.acp_core.ActorResourceYaml.relations":
 		list := []*RelationYaml{}
-		return protoreflect.ValueOfList(&_ActorResourceYaml_3_list{list: &list})
+		return protoreflect.ValueOfList(&_ActorResourceYaml_1_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.ActorResourceYaml"))
@@ -4351,14 +4309,6 @@ func (x *fastReflection_ActorResourceYaml) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
-		l = len(x.Name)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		l = len(x.Doc)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
 		if len(x.Relations) > 0 {
 			for _, e := range x.Relations {
 				l = options.Size(e)
@@ -4407,22 +4357,8 @@ func (x *fastReflection_ActorResourceYaml) ProtoMethods() *protoiface.Methods {
 				copy(dAtA[i:], encoded)
 				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 				i--
-				dAtA[i] = 0x1a
+				dAtA[i] = 0xa
 			}
-		}
-		if len(x.Doc) > 0 {
-			i -= len(x.Doc)
-			copy(dAtA[i:], x.Doc)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Doc)))
-			i--
-			dAtA[i] = 0x12
-		}
-		if len(x.Name) > 0 {
-			i -= len(x.Name)
-			copy(dAtA[i:], x.Name)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Name)))
-			i--
-			dAtA[i] = 0xa
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -4474,70 +4410,6 @@ func (x *fastReflection_ActorResourceYaml) ProtoMethods() *protoiface.Methods {
 			}
 			switch fieldNum {
 			case 1:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Name = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 2:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Doc", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Doc = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 3:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Relations", wireType)
 				}
@@ -4925,14 +4797,17 @@ func (x *PermissionYaml) GetExpr() string {
 	return ""
 }
 
+// ActorResourceYaml models a default resource which is
+// part of every policy.
+// This resource models the set of actors known to a policy
 type ActorResourceYaml struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name      string          `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Doc       string          `protobuf:"bytes,2,opt,name=doc,proto3" json:"doc,omitempty"`
-	Relations []*RelationYaml `protobuf:"bytes,3,rep,name=relations,proto3" json:"relations,omitempty"`
+	// relations is a sequence of optional relations
+	// which are added to the actor resource
+	Relations []*RelationYaml `protobuf:"bytes,1,rep,name=relations,proto3" json:"relations,omitempty"`
 }
 
 func (x *ActorResourceYaml) Reset() {
@@ -4953,20 +4828,6 @@ func (*ActorResourceYaml) ProtoMessage() {}
 // Deprecated: Use ActorResourceYaml.ProtoReflect.Descriptor instead.
 func (*ActorResourceYaml) Descriptor() ([]byte, []int) {
 	return file_sourcenetwork_acp_core_policy_yaml_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *ActorResourceYaml) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *ActorResourceYaml) GetDoc() string {
-	if x != nil {
-		return x.Doc
-	}
-	return ""
 }
 
 func (x *ActorResourceYaml) GetRelations() []*RelationYaml {
@@ -5046,18 +4907,16 @@ var file_sourcenetwork_acp_core_policy_yaml_proto_rawDesc = []byte{
 	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x64,
 	0x6f, 0x63, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x64, 0x6f, 0x63, 0x12, 0x12, 0x0a,
 	0x04, 0x65, 0x78, 0x70, 0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x65, 0x78, 0x70,
-	0x72, 0x22, 0x7d, 0x0a, 0x11, 0x41, 0x63, 0x74, 0x6f, 0x72, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72,
-	0x63, 0x65, 0x59, 0x61, 0x6d, 0x6c, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x64, 0x6f,
-	0x63, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x64, 0x6f, 0x63, 0x12, 0x42, 0x0a, 0x09,
-	0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32,
-	0x24, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e,
-	0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x59, 0x61, 0x6d, 0x6c, 0x52, 0x09, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73,
-	0x42, 0x2d, 0x5a, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73,
-	0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70,
-	0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62,
-	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x72, 0x22, 0x57, 0x0a, 0x11, 0x41, 0x63, 0x74, 0x6f, 0x72, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72,
+	0x63, 0x65, 0x59, 0x61, 0x6d, 0x6c, 0x12, 0x42, 0x0a, 0x09, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x24, 0x2e, 0x73, 0x6f, 0x75, 0x72,
+	0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f,
+	0x72, 0x65, 0x2e, 0x52, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x59, 0x61, 0x6d, 0x6c, 0x52,
+	0x09, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x42, 0x2d, 0x5a, 0x2b, 0x67, 0x69,
+	0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e,
+	0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f,
+	0x70, 0x6b, 0x67, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x33,
 }
 
 var (
