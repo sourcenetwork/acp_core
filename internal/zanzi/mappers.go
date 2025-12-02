@@ -128,11 +128,9 @@ func (m *policyMapper) ToZanzi(policy *types.Policy) *domain.Policy {
 
 func (m *policyMapper) toZanziResource(resource *types.Resource) *domain.Resource {
 	perms := utils.MapSlice(resource.Permissions, m.permToZanziRel)
-	rels := utils.MapSlice(resource.Relations, m.toZanziRel)
+	rels := utils.MapSlice(resource.GetAllRelations(), m.toZanziRel)
 
-	owner := m.toZanziRel(resource.Owner)
 	rels = append(rels, perms...)
-	rels = append(rels, owner)
 
 	return &domain.Resource{
 		Name:        resource.Name,

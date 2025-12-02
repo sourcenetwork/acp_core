@@ -12,7 +12,7 @@ import (
 
 var _ specification.Transformer = (*DiscretionaryTransformer)(nil)
 
-func GetOwnerRelation(actorResourceName string, managedRels []string) *types.Relation {
+func newOwnerRelation(actorResourceName string, managedRels []string) *types.Relation {
 	// owner manages itself
 	manages := append(managedRels, OwnerRelationName)
 	return &types.Relation{
@@ -130,7 +130,7 @@ func (t *DiscretionaryTransformer) validatePermissionDoesNotReferenceOwner(expr 
 func (t *DiscretionaryTransformer) Transform(policy types.Policy) (specification.TransformerResult, error) {
 	res := specification.TransformerResult{}
 
-	// pre-validation: assert that resoruces don not include an `owner` relation
+	// pre-validation: assert that resources do not include an `owner` relation
 	for _, resource := range policy.Resources {
 		for _, rel := range resource.Relations {
 			if rel.Name == OwnerRelationName {
@@ -143,7 +143,7 @@ func (t *DiscretionaryTransformer) Transform(policy types.Policy) (specification
 	// add special owner relation to every resource
 	for _, resource := range policy.Resources {
 		relNames := utils.MapSlice(resource.Relations, func(r *types.Relation) string { return r.Name })
-		resource.Owner = GetOwnerRelation(policy.ActorResource.Name, relNames)
+		resource.Owner = newOwnerRelation(policy.ActorResource.Name, relNames)
 	}
 
 	// walk through permissions asserting it does not reference owner
