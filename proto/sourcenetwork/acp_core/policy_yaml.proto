@@ -54,8 +54,12 @@ message PermissionYaml {
   string doc = 2;
   string expr = 3;
 }
+
+// ActorResourceYaml models a default resource which is 
+// part of every policy.
+// This resource models the set of actors known to a policy
 message ActorResourceYaml {
-  string name = 1;
-  string doc = 2;
-  repeated RelationYaml relations = 3;
+  // relations is a sequence of optional relations 
+  // which are added to the actor resource
+  repeated RelationYaml relations = 1;
 }
