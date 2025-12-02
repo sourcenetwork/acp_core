@@ -300,3 +300,25 @@ resources:
 	require.NoError(t, err)
 	require.True(t, checkResult.Valid)
 }
+
+func TestCreatePolicy_ClashingRelationAndPermissionNames_Errors(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("bob")
+
+	pol := `
+name: policy
+resources:
+- name: foo
+  permissions:
+  - name: test
+  relations:
+  - name: test
+`
+	req := types.CreatePolicyRequest{
+		Policy:      pol,
+		MarshalType: types.PolicyMarshalingType_YAML,
+	}
+	resp, err := ctx.Engine.CreatePolicy(ctx, &req)
+	require.Nil(t, resp)
+	require.ErrorIs(t, err, errors.ErrorType_BAD_INPUT)
+}

@@ -188,3 +188,25 @@ resources:
 	require.NoError(t, err)
 	require.True(t, resp.Valid)
 }
+
+func Test_CreatePolicy_PermissionNamedOwner_Errors(t *testing.T) {
+	ctx := test.NewTestCtx(t)
+	ctx.SetPrincipal("bob")
+
+	pol := `
+name: policy
+resources:
+- name: foo
+  permissions:
+  - name: owner
+  relations:
+  - name: test
+`
+	req := types.CreatePolicyRequest{
+		Policy:      pol,
+		MarshalType: types.PolicyMarshalingType_YAML,
+	}
+	resp, err := ctx.Engine.CreatePolicy(ctx, &req)
+	require.Nil(t, resp)
+	require.ErrorIs(t, err, errors.ErrorType_BAD_INPUT)
+}

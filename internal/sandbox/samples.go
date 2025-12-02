@@ -12,7 +12,7 @@ name: filesystem
 resources:
 - name: directory
   permissions:
-  - expr: (reader + writer)
+  - expr: reader + writer
     name: read
   - expr: writer
     name: write
@@ -27,9 +27,9 @@ resources:
     - group->participant
 - name: file
   permissions:
-  - expr: ((reader + writer) + parent->read)
+  - expr: reader + writer + parent->read
     name: read
-  - expr: (writer + parent->write)
+  - expr: writer + parent->write
     name: write
   relations:
   - name: parent
