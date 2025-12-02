@@ -32,7 +32,6 @@ actorid: DID;
 
 NEGATION: '!';
 
-OPERATION: 'delete' | 'create';
 ID: [a-zA-Z] [a-zA-Z0-9_]+;
 STRING: '"' .*? '"';
 DID: 'did:' [a-z0-9]+ ':' [a-z0-9A-Z._-]+;
