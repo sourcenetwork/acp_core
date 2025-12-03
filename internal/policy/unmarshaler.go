@@ -189,14 +189,16 @@ type yamlUnmarshaler struct{}
 
 func (u *yamlUnmarshaler) Unmarshal(pol string) (*types.Policy, error) {
 	// Strict returns error if any key is duplicated
-	bytes, err := yaml.YAMLToJSONStrict([]byte(pol))
+	jsonBytes, err := yaml.YAMLToJSONStrict([]byte(pol))
 	if err != nil {
 		return nil, fmt.Errorf("%w: %v", ErrInvalidYamlPolicy, err)
 	}
 
 	yaml := types.PolicyYaml{}
 
-	err = json.Unmarshal(bytes, &yaml)
+	dec := json.NewDecoder(bytes.NewReader(jsonBytes))
+	dec.DisallowUnknownFields()
+	err = dec.Decode(&yaml)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %v", ErrInvalidYamlPolicy, err)
 	}

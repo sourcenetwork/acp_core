@@ -315,9 +315,6 @@ spec: ""
 
 func TestYaml_FullUnmarshal(t *testing.T) {
 	in := `
-actor:
-  doc: my actor
-  name: actor-resource
 description: ok
 name: policy
 resources:
@@ -353,9 +350,7 @@ resources:
 				},
 			},
 		},
-		ActorResource: &types.ActorResource{
-			Relations: []*types.Relation{},
-		},
+		ActorResource: nil,
 	}
 	require.Nil(t, err)
 	require.Equal(t, want, out)

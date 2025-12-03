@@ -220,8 +220,6 @@ func TestCreatePolicy_CreatingMultipleEqualPoliciesProduceDifferentIDs(t *testin
 	ctx.SetPrincipal("creator")
 
 	pol := `
-actor:
-  name: actor
 description: A Valid Defra Policy Interface (DPI)
 name: test
 resources:
