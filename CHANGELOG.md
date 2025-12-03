@@ -2,6 +2,13 @@
 
 Significant features added between versions will be contained in the changelog, as well as any breaking changes.
 
+## [0.8.0] - 2025-12-03
+Refactor:
+- Make `owner` a reserved relation name and reject any relation with matching name [breaking change]
+- Add new `Owner` field to Relation type
+- Reject permissions which reference the relation `owner` [breaking change]
+- Refactor `actor` into a reserved resource
+
 ## [0.7.0] - 2025-11-21
 Feat:
 - Add ACP Playground
