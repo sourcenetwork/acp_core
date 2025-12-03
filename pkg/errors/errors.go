@@ -11,9 +11,9 @@ var (
 	// ErrUnknownVariant signals that an enum-like field received an unexpected value
 	ErrUnknownVariant = New("unknown variant", ErrorType_BAD_INPUT)
 
-	ErrInvalidDID          = New("did", ErrorType_BAD_INPUT)
-	ErrInvalidPolicy       = New("policy", ErrorType_BAD_INPUT)
-	ErrInvalidRelationship = New("relationship", ErrorType_BAD_INPUT)
+	ErrInvalidDID          = New("invalid did", ErrorType_BAD_INPUT)
+	ErrInvalidPolicy       = New("invalid policy", ErrorType_BAD_INPUT)
+	ErrInvalidRelationship = New("invalid relationship", ErrorType_BAD_INPUT)
 )
 
 func ErrPolicyNotFound(policyID string) error {

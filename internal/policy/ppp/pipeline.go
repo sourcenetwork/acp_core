@@ -15,7 +15,7 @@ var createPolicyRequirements = []specification.Requirement{
 
 func newCreatePolicyPipeline(sequenceNumber uint64, spec specification.Specification) Pipeline {
 	headTransformers := []specification.Transformer{
-		&BasicTransformer{},
+		&DefaultActorTransformer{},
 		&DiscretionaryTransformer{},
 		&DecentralizedAdminTransformer{},
 	}
@@ -46,7 +46,7 @@ func newEditPolicyPipeline(oldPolicy *types.Policy, spec specification.Specifica
 	}
 
 	headTransformers := []specification.Transformer{
-		&BasicTransformer{},
+		&DefaultActorTransformer{},
 		NewTransferIdTransformer(oldPolicy.Id),
 		&DiscretionaryTransformer{},
 		&DecentralizedAdminTransformer{},
