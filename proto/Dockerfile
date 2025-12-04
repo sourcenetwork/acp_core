@@ -1,4 +1,4 @@
-FROM golang:1.21-alpine
+FROM golang:1.24-alpine
 
 ARG COSMOS_GOGOPROTO_VERSION=latest
 ARG PULSAR_VERSION=latest

@@ -23,7 +23,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// PolicyEncodingType enumerates supported marshaling types for policies.
+// PolicyMarshalingType enumerates supported marshaling types for policies.
 type PolicyMarshalingType int32
 
 const (

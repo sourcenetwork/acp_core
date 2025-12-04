@@ -9,7 +9,6 @@ import "sourcenetwork/acp_core/metadata.proto";
 import "sourcenetwork/acp_core/policy.proto";
 import "sourcenetwork/acp_core/specification.proto";
 import "sourcenetwork/acp_core/policy_record.proto";
-import "sourcenetwork/acp_core/policy_short.proto";
 import "sourcenetwork/acp_core/relationship.proto";
 import "sourcenetwork/acp_core/relationship_selector.proto";
 import "sourcenetwork/acp_core/system.proto";
