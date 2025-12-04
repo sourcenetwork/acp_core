@@ -9,7 +9,7 @@ import { type PolicySpecificationType } from "./specification";
 
 export const protobufPackage = "sourcenetwork.acp_core";
 
-/** PolicyEncodingType enumerates supported marshaling types for policies. */
+/** PolicyMarshalingType enumerates supported marshaling types for policies. */
 export enum PolicyMarshalingType {
   /** UNKNOWN - Fallback value for a missing Marshaling Type */
   UNKNOWN = 0,

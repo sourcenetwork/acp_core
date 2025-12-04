@@ -5193,7 +5193,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// PolicyEncodingType enumerates supported marshaling types for policies.
+// PolicyMarshalingType enumerates supported marshaling types for policies.
 type PolicyMarshalingType int32
 
 const (
