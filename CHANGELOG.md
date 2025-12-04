@@ -2,6 +2,11 @@
 
 Significant features added between versions will be contained in the changelog, as well as any breaking changes.
 
+## [0.8.1] - 2025-12-04
+chore:
+- remove unused proto imports
+- bump react version playground
+
 ## [0.8.0] - 2025-12-03
 Refactor:
 - Make `owner` a reserved relation name and reject any relation with matching name [breaking change]
