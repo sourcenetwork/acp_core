@@ -6,7 +6,6 @@ import "google/protobuf/timestamp.proto";
 import "sourcenetwork/acp_core/request.proto";
 import "sourcenetwork/acp_core/buffer_position.proto";
 import "sourcenetwork/acp_core/policy.proto";
-import "sourcenetwork/acp_core/policy_short.proto";
 import "sourcenetwork/acp_core/relationship.proto";
 import "sourcenetwork/acp_core/relationship_selector.proto";
 import "sourcenetwork/acp_core/system.proto";
