@@ -1,5 +1,5 @@
 # Playground WASM Stage
-FROM golang:1.23-bookworm AS playground-builder
+FROM golang:1.24-bookworm AS playground-builder
 
 # BUILD_COMMIT arg represents the acp_core commit from which the image was built
 ARG BUILD_COMMIT
@@ -10,7 +10,7 @@ COPY go.* /app
 
 RUN go mod download &&\
     mkdir -p /app/build &&\
-	cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" /app/build/wasm_exec.js
+	cp "$(go env GOROOT)/lib/wasm/wasm_exec.js" /app/build/wasm_exec.js
 
 
 COPY . /app
