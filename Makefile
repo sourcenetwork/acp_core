@@ -12,7 +12,7 @@ test\:bench:
 
 .PHONY: test\:js
 test\:js:
-	GOOS=js GOARCH=wasm go test -exec="$$(go env GOROOT)/misc/wasm/go_js_wasm_exec" ./...
+	GOOS=js GOARCH=wasm go test -exec="$$(go env GOROOT)/lib/wasm/go_js_wasm_exec" ./...
 
 .PHONY: proto
 proto:
@@ -30,12 +30,6 @@ fmt:
 .PHONY: playground\:wasm_js
 playground\:wasm_js:
 	GOOS=js GOARCH=wasm go build $(BUILD_FLAGS) -o build/playground.wasm cmd/playground_js/main.go
-
-.PHONY: playground
-playground: playground\:wasm_js
-	cp build/playground.wasm cmd/playground/content/playground.wasm
-	cp "$$(go env GOROOT)/lib/wasm/wasm_exec.js" cmd/playground/content/wasm_exec.js
-	go build -o build/playground cmd/playground/main.go
 
 .PHONY: playground\:docker
 playground\:docker:
