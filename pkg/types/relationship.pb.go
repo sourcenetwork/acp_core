@@ -218,6 +218,7 @@ var xxx_messageInfo_AllActors proto.InternalMessageInfo
 // Subject specifies the target of a Relationship.
 type Subject struct {
 	// Types that are valid to be assigned to Subject:
+	//
 	//	*Subject_Actor
 	//	*Subject_ActorSet
 	//	*Subject_AllActors
