@@ -1,11 +1,13 @@
 syntax = "proto3";
 package sourcenetwork.acp_core;
 
+import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
 import "sourcenetwork/acp_core/metadata.proto";
 import "sourcenetwork/acp_core/policy.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+option (gogoproto.stable_marshaler_all) = true;
 
 // PolicyRecord represents a the Policy Document which will be persisted in the data layer
 message PolicyRecord {

@@ -2,11 +2,12 @@ syntax = "proto3";
 
 package sourcenetwork.acp_core;
 
+import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
-
 import "sourcenetwork/acp_core/specification.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+option (gogoproto.stable_marshaler_all) = true;
 
 // PolicyMarshalingType enumerates supported marshaling types for policies.
 enum PolicyMarshalingType {
@@ -96,7 +97,7 @@ message ActorResource {
 // This allows object owners, through a special management rule, to delegate
 // the ability of creating relationships with a given relation to their object
 message ManagementRule {
-  // relation identifies relation the rule applies to 
+  // relation identifies relation the rule applies to
   string relation = 1;
   // managers are the set of relation names which have authority to
   // manage relation instances of the relation the rule applies to.

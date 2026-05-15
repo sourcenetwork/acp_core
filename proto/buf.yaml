@@ -1,5 +1,7 @@
 version: v1
 name: buf.build/sourcenetwork/acp-core
+deps:
+  - buf.build/cosmos/gogo-proto
 
 lint:
   use:

@@ -2,12 +2,14 @@ syntax = "proto3";
 
 package sourcenetwork.acp_core;
 
+import "gogoproto/gogo.proto";
 import "sourcenetwork/acp_core/parser_message.proto";
 import "sourcenetwork/acp_core/policy.proto";
 import "sourcenetwork/acp_core/relationship.proto";
 import "sourcenetwork/acp_core/theorem.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+option (gogoproto.stable_marshaler_all) = true;
 
 // SandboxRecord represents an instance of a sandbox
 message SandboxRecord {
@@ -67,7 +69,7 @@ message SandboxDataErrors {
 // SandboxTemplate models a template sandbox
 // containing its data, a name and description
 message SandboxTemplate {
-  string name =1;
-  string description =  2;
+  string name = 1;
+  string description = 2;
   SandboxData data = 3;
 }

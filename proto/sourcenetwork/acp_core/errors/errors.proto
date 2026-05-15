@@ -2,7 +2,10 @@ syntax = "proto3";
 
 package sourcenetwork.acp_core.errors;
 
+import "gogoproto/gogo.proto";
+
 option go_package = "github.com/sourcenetwork/acp_core/pkg/errors";
+option (gogoproto.stable_marshaler_all) = true;
 
 // ErrorType represent families of errors which acp_core can throw.
 // Concrete errors are refined with additional context data and explanatory messages

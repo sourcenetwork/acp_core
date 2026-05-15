@@ -2,15 +2,17 @@ syntax = "proto3";
 
 package sourcenetwork.acp_core;
 
+import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
-import "sourcenetwork/acp_core/request.proto";
 import "sourcenetwork/acp_core/buffer_position.proto";
 import "sourcenetwork/acp_core/policy.proto";
 import "sourcenetwork/acp_core/relationship.proto";
 import "sourcenetwork/acp_core/relationship_selector.proto";
+import "sourcenetwork/acp_core/request.proto";
 import "sourcenetwork/acp_core/system.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+option (gogoproto.stable_marshaler_all) = true;
 
 // AuthorizationTheorem states that the given AccessRequest request is valid (or not) in the context of a certain Policy
 message AuthorizationTheorem {
