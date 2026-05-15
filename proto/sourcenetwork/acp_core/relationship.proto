@@ -2,10 +2,12 @@ syntax = "proto3";
 
 package sourcenetwork.acp_core;
 
+import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
 import "sourcenetwork/acp_core/metadata.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+option (gogoproto.stable_marshaler_all) = true;
 
 // Object represents an entity which must be access controlled within a Policy.
 message Object {

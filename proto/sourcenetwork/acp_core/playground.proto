@@ -2,13 +2,15 @@ syntax = "proto3";
 
 package sourcenetwork.acp_core;
 
+import "gogoproto/gogo.proto";
 import "sourcenetwork/acp_core/catalogue.proto";
-import "sourcenetwork/acp_core/sandbox.proto";
-import "sourcenetwork/acp_core/theorem.proto";
 import "sourcenetwork/acp_core/check_explain.proto";
 import "sourcenetwork/acp_core/relationship.proto";
+import "sourcenetwork/acp_core/sandbox.proto";
+import "sourcenetwork/acp_core/theorem.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+option (gogoproto.stable_marshaler_all) = true;
 
 service PlaygroundService {
   // NewSandbox creates a new isolated execution environment in the Service
@@ -60,7 +62,6 @@ service PlaygroundService {
   // in a policy. Commands refer to actions take can be done to the policy itself,
   // such as creating or deleting relationships.
   //rpc AuthorizeCommand (AuthorizeCommandRequest) returns (AuthorizeCommandResponse);
-
 }
 
 message NewSandboxRequest {
@@ -159,9 +160,9 @@ message GetSandboxResponse {
   sourcenetwork.acp_core.SandboxRecord record = 1;
 }
 
-message GetSampleSandboxesRequest{} 
+message GetSampleSandboxesRequest {}
 
-message GetSampleSandboxesResponse{
+message GetSampleSandboxesResponse {
   repeated SandboxTemplate samples = 1;
 }
 
@@ -197,26 +198,26 @@ message GetSerializedStateResponse {
   bytes data = 1;
 }
 
-message ExplainCheckRequest{
+message ExplainCheckRequest {
   uint64 handle = 1;
   Object object = 2;
   string permission = 3;
   Actor actor = 4;
 }
 
-message ExplainCheckResponse{
+message ExplainCheckResponse {
   bool authorized = 1;
   CheckExplainGraph graph = 2;
 }
 
-message DOTExplainCheckRequest{
+message DOTExplainCheckRequest {
   uint64 handle = 1;
   Object object = 2;
   string permission = 3;
   Actor actor = 4;
 }
 
-message DOTExplainCheckResponse{
+message DOTExplainCheckResponse {
   bool authorized = 1;
   string dot_graph = 2;
 }

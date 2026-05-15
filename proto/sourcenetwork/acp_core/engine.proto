@@ -2,19 +2,21 @@ syntax = "proto3";
 
 package sourcenetwork.acp_core;
 
+import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
-import "sourcenetwork/acp_core/request.proto";
 import "sourcenetwork/acp_core/catalogue.proto";
 import "sourcenetwork/acp_core/metadata.proto";
 import "sourcenetwork/acp_core/policy.proto";
-import "sourcenetwork/acp_core/specification.proto";
 import "sourcenetwork/acp_core/policy_record.proto";
 import "sourcenetwork/acp_core/relationship.proto";
 import "sourcenetwork/acp_core/relationship_selector.proto";
+import "sourcenetwork/acp_core/request.proto";
+import "sourcenetwork/acp_core/specification.proto";
 import "sourcenetwork/acp_core/system.proto";
 import "sourcenetwork/acp_core/theorem.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+option (gogoproto.stable_marshaler_all) = true;
 
 service ACPEngine {
   // CreatePolicy adds a new Policy to the engine.
@@ -407,6 +409,6 @@ message CheckManagementAuthorityRequest {
   Actor actor = 4;
 }
 
-message CheckManagementAuthorityResponse{
+message CheckManagementAuthorityResponse {
   bool authorized = 1;
 }

@@ -2,14 +2,17 @@ syntax = "proto3";
 
 package sourcenetwork.acp_core;
 
+import "gogoproto/gogo.proto";
+
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+option (gogoproto.stable_marshaler_all) = true;
 
 // Params models the dynamic system parameters that callers can set
 message Params {}
 
 message BuildInfo {
-    // commit is the commit from which this build was generated
-    string commit = 1;
-    // version
-    string version = 2;
+  // commit is the commit from which this build was generated
+  string commit = 1;
+  // version
+  string version = 2;
 }

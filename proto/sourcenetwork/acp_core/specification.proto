@@ -2,13 +2,16 @@ syntax = "proto3";
 
 package sourcenetwork.acp_core;
 
+import "gogoproto/gogo.proto";
+
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+option (gogoproto.stable_marshaler_all) = true;
 
 // PolicySpecificationType models a named policy specification
 enum PolicySpecificationType {
-    // NO_SPEC models a policy which has no additional contraints on it
-    NO_SPEC = 0;
+  // NO_SPEC models a policy which has no additional contraints on it
+  NO_SPEC = 0;
 
-    // DEFRA_SPEC models a policy which matches the Defra policy specification
-    DEFRA_SPEC = 1;
+  // DEFRA_SPEC models a policy which matches the Defra policy specification
+  DEFRA_SPEC = 1;
 }

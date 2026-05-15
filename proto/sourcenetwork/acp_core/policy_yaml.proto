@@ -2,9 +2,11 @@ syntax = "proto3";
 
 package sourcenetwork.acp_core;
 
+import "gogoproto/gogo.proto";
 import "sourcenetwork/acp_core/policy.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+option (gogoproto.stable_marshaler_all) = true;
 
 message PolicyYaml {
   string name = 1;
@@ -55,11 +57,11 @@ message PermissionYaml {
   string expr = 3;
 }
 
-// ActorResourceYaml models a default resource which is 
+// ActorResourceYaml models a default resource which is
 // part of every policy.
 // This resource models the set of actors known to a policy
 message ActorResourceYaml {
-  // relations is a sequence of optional relations 
+  // relations is a sequence of optional relations
   // which are added to the actor resource
   repeated RelationYaml relations = 1;
 }

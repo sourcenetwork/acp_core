@@ -2,9 +2,11 @@ syntax = "proto3";
 
 package sourcenetwork.acp_core;
 
+import "gogoproto/gogo.proto";
 import "sourcenetwork/acp_core/relationship.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+option (gogoproto.stable_marshaler_all) = true;
 
 // RelationshipSelector models a set of predicates which are used to filter through
 // Relationships in a Policy.
