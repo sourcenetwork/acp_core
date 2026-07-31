@@ -2,6 +2,10 @@
 
 Significant features added between versions will be contained in the changelog, as well as any breaking changes.
 
+## [0.8.2] - 2026-07-31
+Fixes:
+- Fixed non-determinism issues due to map iteration and set conversion
+
 ## [0.8.1] - 2025-12-04
 chore:
 - remove unused proto imports
