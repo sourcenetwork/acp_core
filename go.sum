@@ -217,6 +217,8 @@ github.com/sourcenetwork/raccoondb/v2 v2.0.0 h1:Gb0SjsZUbrbkHCEg7PyyNs0+2IzPxjE/
 github.com/sourcenetwork/raccoondb/v2 v2.0.0/go.mod h1:tPKAWHUgYcSoXNMt01iWJ+Y51AQYc2knY93IjmmbejY=
 github.com/sourcenetwork/zanzi v0.3.1-0.20260514183406-33141096311f h1:uURLAfIX+KnaQJqNFLy+Sr8MKRcQ2bAmwilHBB4lg7I=
 github.com/sourcenetwork/zanzi v0.3.1-0.20260514183406-33141096311f/go.mod h1:Elj7mNEfkthXGmHOdyfbPMBaJQqKIZlTRmSD0R5FYfs=
+github.com/sourcenetwork/zanzi v0.3.1-0.20260731133738-53cb4f16fe3e h1:Q+qzo49PMTHIrWAAgdkz9PR3R85Gpo7NwAUODHIeigA=
+github.com/sourcenetwork/zanzi v0.3.1-0.20260731133738-53cb4f16fe3e/go.mod h1:Elj7mNEfkthXGmHOdyfbPMBaJQqKIZlTRmSD0R5FYfs=
 github.com/spf13/cast v1.10.0 h1:h2x0u2shc1QuLHfxi+cTJvs30+ZAHOGRic8uyGTDWxY=
 github.com/spf13/cast v1.10.0/go.mod h1:jNfB8QC9IA6ZuY2ZjDp0KtFO2LZZlg4S/7bzP6qqeHo=
 github.com/spf13/cobra v1.10.1 h1:lJeBwCfmrnXthfAupyUTzJ/J4Nc1RsHC/mSRU2dll/s=
