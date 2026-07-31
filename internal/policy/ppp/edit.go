@@ -97,7 +97,7 @@ func (r *PreservedResourcesRequirement) Validate(policy types.Policy) *errors.Mu
 	newResources := sets.New(policy.ListResourcesNames()...)
 	missing := oldResources.Difference(newResources)
 
-	errs := utils.MapSlice(missing.UnsortedList(), func(name string) error {
+	errs := utils.MapSlice(sets.List(missing), func(name string) error {
 		return fmt.Errorf("removed resource %v", name)
 	})
 

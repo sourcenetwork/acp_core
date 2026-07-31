@@ -54,11 +54,10 @@ func BuildCatalogue(ctx context.Context, engine *zanzi.Adapter, polId string) (*
 			objects.Insert(record.Relationship.Object.Id)
 		}
 
-		catalogue.ResourceCatalogue[res.Name].ObjectIds = objects.UnsortedList()
+		catalogue.ResourceCatalogue[res.Name].ObjectIds = sets.List(objects)
 	}
 
-	catalogue.Actors = actors.UnsortedList()
-	utils.SortSlice(catalogue.Actors)
+	catalogue.Actors = sets.List(actors)
 
 	return catalogue, nil
 }

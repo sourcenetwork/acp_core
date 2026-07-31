@@ -2,6 +2,8 @@ package types
 
 import (
 	"fmt"
+	"maps"
+	"slices"
 
 	"github.com/sourcenetwork/acp_core/pkg/utils"
 )
@@ -25,8 +27,9 @@ func (g *ManagementGraph) LoadFromPolicy(policy *Policy) {
 // If any edge is not defined, returns an error with the offending edges.
 // If graph is well formed, return nil
 func (g *ManagementGraph) IsWellFormed() error {
-	for src, edgs := range g.ForwardEdges {
-		for dst, _ := range edgs.Edges {
+	for _, src := range slices.Sorted(maps.Keys(g.ForwardEdges)) {
+		edgs := g.ForwardEdges[src]
+		for _, dst := range slices.Sorted(maps.Keys(edgs.Edges)) {
 
 			_, src_ok := g.getNode(src)
 			if !src_ok {

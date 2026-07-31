@@ -255,7 +255,15 @@ func Test_GetCatalogue_ReturnsSandboxCatalogue(t *testing.T) {
 	ctx := test.NewTestCtx(t)
 
 	a1 := NewAndSet{
-		Data: setupData,
+		Data: &types.SandboxData{
+			PolicyDefinition: setupData.PolicyDefinition,
+			Relationships: `
+				file:zulu#owner@did:example:bob
+				file:alpha#owner@did:example:alice
+				file:mike#owner@did:example:carol
+			`,
+			PolicyTheorem: noopTheorem,
+		},
 	}
 	handle := a1.Run(ctx)
 
@@ -277,13 +285,16 @@ func Test_GetCatalogue_ReturnsSandboxCatalogue(t *testing.T) {
 							"reader",
 						},
 						ObjectIds: []string{
-							"readme",
+							"alpha",
+							"mike",
+							"zulu",
 						},
 					},
 				},
 				Actors: []string{
 					"did:example:alice",
 					"did:example:bob",
+					"did:example:carol",
 				},
 			},
 		},
