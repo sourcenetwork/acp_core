@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package sourcenetwork.acp_core;
+
+import "gogoproto/gogo.proto";
+import "sourcenetwork/acp_core/policy.proto";
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+option (gogoproto.stable_marshaler_all) = true;
+
+// PolicyCompiler compiles policies into models for external verification tools
+service PolicyCompiler {
+  // Compile processes a policy and emits it as a bundle of Alloy modules
+  rpc Compile(CompileRequest) returns (CompileResponse);
+}
+
+message CompileRequest {
+  string policy = 1;
+  PolicyMarshalingType marshal_type = 2;
+  // module names the emitted Alloy modules, defaults to the policy name.
+  // Invalid characters are replaced by underscores.
+  string module = 3;
+}
+
+message CompileResponse {
+  repeated CompiledFile files = 1;
+}
+
+// CompiledFile models a file emitted by the policy compiler
+message CompiledFile {
+  string name = 1;
+  string content = 2;
+}
