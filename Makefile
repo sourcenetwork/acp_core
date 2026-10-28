@@ -35,6 +35,10 @@ playground\:wasm_js:
 policy_compiler:
 	go build $(BUILD_FLAGS) -o build/policy_compiler cmd/policy_compiler/main.go
 
+.PHONY: simulator
+simulator:
+	go build $(BUILD_FLAGS) -o build/acp_simulate cmd/acp_simulate/main.go
+
 .PHONY: playground\:docker
 playground\:docker:
 	docker build -f playground.dockerfile -t ghcr.io/sourcenetwork/acp_playground:dev .

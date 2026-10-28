@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package sourcenetwork.acp_core;
+
+import "gogoproto/gogo.proto";
+import "sourcenetwork/acp_core/sandbox.proto";
+import "sourcenetwork/acp_core/theorem.proto";
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+option (gogoproto.stable_marshaler_all) = true;
+
+// Simulator evaluates policies against relationships and theorems.
+//
+// The Simulator is stateless: every request is evaluated in an ephemeral environment,
+// and the same request always produces the same response.
+service Simulator {
+  // Evaluate loads a policy and a set of relationships and evaluates theorems against them
+  rpc Evaluate(EvaluateRequest) returns (EvaluateResponse);
+}
+
+message EvaluateRequest {
+  // policy is a yaml serialized policy
+  string policy = 1;
+  // relationships is a set of line separated relationships, as defined in the PolicyTheoremDSL.
+  // The owner relationship of an object registers it, so owner relationships must precede
+  // any other relationship for that object.
+  string relationships = 2;
+  // theorems is a PolicyTheoremDSL document. An empty document evaluates no theorems.
+  string theorems = 3;
+}
+
+message EvaluateResponse {
+  // valid is false if the policy, relationships or theorems couldn't be loaded,
+  // in which case errors describes why and no theorem is evaluated
+  bool valid = 1;
+  SandboxDataErrors errors = 2;
+  // ctx contains the processed policy, the parsed relationships and the parsed theorems
+  SandboxCtx ctx = 3;
+  AnnotatedPolicyTheoremResult result = 4;
+}
