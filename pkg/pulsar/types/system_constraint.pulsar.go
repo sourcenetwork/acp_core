@@ -14,30 +14,30 @@ import (
 )
 
 var (
-	md_Assumption             protoreflect.MessageDescriptor
-	fd_Assumption_disjoint    protoreflect.FieldDescriptor
-	fd_Assumption_at_most_one protoreflect.FieldDescriptor
-	fd_Assumption_acyclic     protoreflect.FieldDescriptor
+	md_SystemConstraint             protoreflect.MessageDescriptor
+	fd_SystemConstraint_disjoint    protoreflect.FieldDescriptor
+	fd_SystemConstraint_at_most_one protoreflect.FieldDescriptor
+	fd_SystemConstraint_acyclic     protoreflect.FieldDescriptor
 )
 
 func init() {
-	file_sourcenetwork_acp_core_assumption_proto_init()
-	md_Assumption = File_sourcenetwork_acp_core_assumption_proto.Messages().ByName("Assumption")
-	fd_Assumption_disjoint = md_Assumption.Fields().ByName("disjoint")
-	fd_Assumption_at_most_one = md_Assumption.Fields().ByName("at_most_one")
-	fd_Assumption_acyclic = md_Assumption.Fields().ByName("acyclic")
+	file_sourcenetwork_acp_core_system_constraint_proto_init()
+	md_SystemConstraint = File_sourcenetwork_acp_core_system_constraint_proto.Messages().ByName("SystemConstraint")
+	fd_SystemConstraint_disjoint = md_SystemConstraint.Fields().ByName("disjoint")
+	fd_SystemConstraint_at_most_one = md_SystemConstraint.Fields().ByName("at_most_one")
+	fd_SystemConstraint_acyclic = md_SystemConstraint.Fields().ByName("acyclic")
 }
 
-var _ protoreflect.Message = (*fastReflection_Assumption)(nil)
+var _ protoreflect.Message = (*fastReflection_SystemConstraint)(nil)
 
-type fastReflection_Assumption Assumption
+type fastReflection_SystemConstraint SystemConstraint
 
-func (x *Assumption) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_Assumption)(x)
+func (x *SystemConstraint) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_SystemConstraint)(x)
 }
 
-func (x *Assumption) slowProtoReflect() protoreflect.Message {
-	mi := &file_sourcenetwork_acp_core_assumption_proto_msgTypes[0]
+func (x *SystemConstraint) slowProtoReflect() protoreflect.Message {
+	mi := &file_sourcenetwork_acp_core_system_constraint_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -48,43 +48,43 @@ func (x *Assumption) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_Assumption_messageType fastReflection_Assumption_messageType
-var _ protoreflect.MessageType = fastReflection_Assumption_messageType{}
+var _fastReflection_SystemConstraint_messageType fastReflection_SystemConstraint_messageType
+var _ protoreflect.MessageType = fastReflection_SystemConstraint_messageType{}
 
-type fastReflection_Assumption_messageType struct{}
+type fastReflection_SystemConstraint_messageType struct{}
 
-func (x fastReflection_Assumption_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_Assumption)(nil)
+func (x fastReflection_SystemConstraint_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_SystemConstraint)(nil)
 }
-func (x fastReflection_Assumption_messageType) New() protoreflect.Message {
-	return new(fastReflection_Assumption)
+func (x fastReflection_SystemConstraint_messageType) New() protoreflect.Message {
+	return new(fastReflection_SystemConstraint)
 }
-func (x fastReflection_Assumption_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_Assumption
+func (x fastReflection_SystemConstraint_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_SystemConstraint
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_Assumption) Descriptor() protoreflect.MessageDescriptor {
-	return md_Assumption
+func (x *fastReflection_SystemConstraint) Descriptor() protoreflect.MessageDescriptor {
+	return md_SystemConstraint
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_Assumption) Type() protoreflect.MessageType {
-	return _fastReflection_Assumption_messageType
+func (x *fastReflection_SystemConstraint) Type() protoreflect.MessageType {
+	return _fastReflection_SystemConstraint_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_Assumption) New() protoreflect.Message {
-	return new(fastReflection_Assumption)
+func (x *fastReflection_SystemConstraint) New() protoreflect.Message {
+	return new(fastReflection_SystemConstraint)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_Assumption) Interface() protoreflect.ProtoMessage {
-	return (*Assumption)(x)
+func (x *fastReflection_SystemConstraint) Interface() protoreflect.ProtoMessage {
+	return (*SystemConstraint)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -92,25 +92,25 @@ func (x *fastReflection_Assumption) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_Assumption) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Assumption != nil {
-		switch o := x.Assumption.(type) {
-		case *Assumption_Disjoint:
+func (x *fastReflection_SystemConstraint) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Constraint != nil {
+		switch o := x.Constraint.(type) {
+		case *SystemConstraint_Disjoint:
 			v := o.Disjoint
 			value := protoreflect.ValueOfMessage(v.ProtoReflect())
-			if !f(fd_Assumption_disjoint, value) {
+			if !f(fd_SystemConstraint_disjoint, value) {
 				return
 			}
-		case *Assumption_AtMostOne:
+		case *SystemConstraint_AtMostOne:
 			v := o.AtMostOne
 			value := protoreflect.ValueOfMessage(v.ProtoReflect())
-			if !f(fd_Assumption_at_most_one, value) {
+			if !f(fd_SystemConstraint_at_most_one, value) {
 				return
 			}
-		case *Assumption_Acyclic:
+		case *SystemConstraint_Acyclic:
 			v := o.Acyclic
 			value := protoreflect.ValueOfMessage(v.ProtoReflect())
-			if !f(fd_Assumption_acyclic, value) {
+			if !f(fd_SystemConstraint_acyclic, value) {
 				return
 			}
 		}
@@ -128,37 +128,37 @@ func (x *fastReflection_Assumption) Range(f func(protoreflect.FieldDescriptor, p
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_Assumption) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_SystemConstraint) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.Assumption.disjoint":
-		if x.Assumption == nil {
+	case "sourcenetwork.acp_core.SystemConstraint.disjoint":
+		if x.Constraint == nil {
 			return false
-		} else if _, ok := x.Assumption.(*Assumption_Disjoint); ok {
+		} else if _, ok := x.Constraint.(*SystemConstraint_Disjoint); ok {
 			return true
 		} else {
 			return false
 		}
-	case "sourcenetwork.acp_core.Assumption.at_most_one":
-		if x.Assumption == nil {
+	case "sourcenetwork.acp_core.SystemConstraint.at_most_one":
+		if x.Constraint == nil {
 			return false
-		} else if _, ok := x.Assumption.(*Assumption_AtMostOne); ok {
+		} else if _, ok := x.Constraint.(*SystemConstraint_AtMostOne); ok {
 			return true
 		} else {
 			return false
 		}
-	case "sourcenetwork.acp_core.Assumption.acyclic":
-		if x.Assumption == nil {
+	case "sourcenetwork.acp_core.SystemConstraint.acyclic":
+		if x.Constraint == nil {
 			return false
-		} else if _, ok := x.Assumption.(*Assumption_Acyclic); ok {
+		} else if _, ok := x.Constraint.(*SystemConstraint_Acyclic); ok {
 			return true
 		} else {
 			return false
 		}
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Assumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SystemConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.Assumption does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SystemConstraint does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -168,19 +168,19 @@ func (x *fastReflection_Assumption) Has(fd protoreflect.FieldDescriptor) bool {
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_Assumption) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_SystemConstraint) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.Assumption.disjoint":
-		x.Assumption = nil
-	case "sourcenetwork.acp_core.Assumption.at_most_one":
-		x.Assumption = nil
-	case "sourcenetwork.acp_core.Assumption.acyclic":
-		x.Assumption = nil
+	case "sourcenetwork.acp_core.SystemConstraint.disjoint":
+		x.Constraint = nil
+	case "sourcenetwork.acp_core.SystemConstraint.at_most_one":
+		x.Constraint = nil
+	case "sourcenetwork.acp_core.SystemConstraint.acyclic":
+		x.Constraint = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Assumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SystemConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.Assumption does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SystemConstraint does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -190,37 +190,37 @@ func (x *fastReflection_Assumption) Clear(fd protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_Assumption) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_SystemConstraint) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sourcenetwork.acp_core.Assumption.disjoint":
-		if x.Assumption == nil {
-			return protoreflect.ValueOfMessage((*DisjointAssumption)(nil).ProtoReflect())
-		} else if v, ok := x.Assumption.(*Assumption_Disjoint); ok {
+	case "sourcenetwork.acp_core.SystemConstraint.disjoint":
+		if x.Constraint == nil {
+			return protoreflect.ValueOfMessage((*DisjointConstraint)(nil).ProtoReflect())
+		} else if v, ok := x.Constraint.(*SystemConstraint_Disjoint); ok {
 			return protoreflect.ValueOfMessage(v.Disjoint.ProtoReflect())
 		} else {
-			return protoreflect.ValueOfMessage((*DisjointAssumption)(nil).ProtoReflect())
+			return protoreflect.ValueOfMessage((*DisjointConstraint)(nil).ProtoReflect())
 		}
-	case "sourcenetwork.acp_core.Assumption.at_most_one":
-		if x.Assumption == nil {
-			return protoreflect.ValueOfMessage((*AtMostOneAssumption)(nil).ProtoReflect())
-		} else if v, ok := x.Assumption.(*Assumption_AtMostOne); ok {
+	case "sourcenetwork.acp_core.SystemConstraint.at_most_one":
+		if x.Constraint == nil {
+			return protoreflect.ValueOfMessage((*AtMostOneConstraint)(nil).ProtoReflect())
+		} else if v, ok := x.Constraint.(*SystemConstraint_AtMostOne); ok {
 			return protoreflect.ValueOfMessage(v.AtMostOne.ProtoReflect())
 		} else {
-			return protoreflect.ValueOfMessage((*AtMostOneAssumption)(nil).ProtoReflect())
+			return protoreflect.ValueOfMessage((*AtMostOneConstraint)(nil).ProtoReflect())
 		}
-	case "sourcenetwork.acp_core.Assumption.acyclic":
-		if x.Assumption == nil {
-			return protoreflect.ValueOfMessage((*AcyclicAssumption)(nil).ProtoReflect())
-		} else if v, ok := x.Assumption.(*Assumption_Acyclic); ok {
+	case "sourcenetwork.acp_core.SystemConstraint.acyclic":
+		if x.Constraint == nil {
+			return protoreflect.ValueOfMessage((*AcyclicConstraint)(nil).ProtoReflect())
+		} else if v, ok := x.Constraint.(*SystemConstraint_Acyclic); ok {
 			return protoreflect.ValueOfMessage(v.Acyclic.ProtoReflect())
 		} else {
-			return protoreflect.ValueOfMessage((*AcyclicAssumption)(nil).ProtoReflect())
+			return protoreflect.ValueOfMessage((*AcyclicConstraint)(nil).ProtoReflect())
 		}
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Assumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SystemConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.Assumption does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SystemConstraint does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -234,22 +234,22 @@ func (x *fastReflection_Assumption) Get(descriptor protoreflect.FieldDescriptor)
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_Assumption) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_SystemConstraint) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.Assumption.disjoint":
-		cv := value.Message().Interface().(*DisjointAssumption)
-		x.Assumption = &Assumption_Disjoint{Disjoint: cv}
-	case "sourcenetwork.acp_core.Assumption.at_most_one":
-		cv := value.Message().Interface().(*AtMostOneAssumption)
-		x.Assumption = &Assumption_AtMostOne{AtMostOne: cv}
-	case "sourcenetwork.acp_core.Assumption.acyclic":
-		cv := value.Message().Interface().(*AcyclicAssumption)
-		x.Assumption = &Assumption_Acyclic{Acyclic: cv}
+	case "sourcenetwork.acp_core.SystemConstraint.disjoint":
+		cv := value.Message().Interface().(*DisjointConstraint)
+		x.Constraint = &SystemConstraint_Disjoint{Disjoint: cv}
+	case "sourcenetwork.acp_core.SystemConstraint.at_most_one":
+		cv := value.Message().Interface().(*AtMostOneConstraint)
+		x.Constraint = &SystemConstraint_AtMostOne{AtMostOne: cv}
+	case "sourcenetwork.acp_core.SystemConstraint.acyclic":
+		cv := value.Message().Interface().(*AcyclicConstraint)
+		x.Constraint = &SystemConstraint_Acyclic{Acyclic: cv}
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Assumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SystemConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.Assumption does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SystemConstraint does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -263,105 +263,105 @@ func (x *fastReflection_Assumption) Set(fd protoreflect.FieldDescriptor, value p
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_Assumption) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_SystemConstraint) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.Assumption.disjoint":
-		if x.Assumption == nil {
-			value := &DisjointAssumption{}
-			oneofValue := &Assumption_Disjoint{Disjoint: value}
-			x.Assumption = oneofValue
+	case "sourcenetwork.acp_core.SystemConstraint.disjoint":
+		if x.Constraint == nil {
+			value := &DisjointConstraint{}
+			oneofValue := &SystemConstraint_Disjoint{Disjoint: value}
+			x.Constraint = oneofValue
 			return protoreflect.ValueOfMessage(value.ProtoReflect())
 		}
-		switch m := x.Assumption.(type) {
-		case *Assumption_Disjoint:
+		switch m := x.Constraint.(type) {
+		case *SystemConstraint_Disjoint:
 			return protoreflect.ValueOfMessage(m.Disjoint.ProtoReflect())
 		default:
-			value := &DisjointAssumption{}
-			oneofValue := &Assumption_Disjoint{Disjoint: value}
-			x.Assumption = oneofValue
+			value := &DisjointConstraint{}
+			oneofValue := &SystemConstraint_Disjoint{Disjoint: value}
+			x.Constraint = oneofValue
 			return protoreflect.ValueOfMessage(value.ProtoReflect())
 		}
-	case "sourcenetwork.acp_core.Assumption.at_most_one":
-		if x.Assumption == nil {
-			value := &AtMostOneAssumption{}
-			oneofValue := &Assumption_AtMostOne{AtMostOne: value}
-			x.Assumption = oneofValue
+	case "sourcenetwork.acp_core.SystemConstraint.at_most_one":
+		if x.Constraint == nil {
+			value := &AtMostOneConstraint{}
+			oneofValue := &SystemConstraint_AtMostOne{AtMostOne: value}
+			x.Constraint = oneofValue
 			return protoreflect.ValueOfMessage(value.ProtoReflect())
 		}
-		switch m := x.Assumption.(type) {
-		case *Assumption_AtMostOne:
+		switch m := x.Constraint.(type) {
+		case *SystemConstraint_AtMostOne:
 			return protoreflect.ValueOfMessage(m.AtMostOne.ProtoReflect())
 		default:
-			value := &AtMostOneAssumption{}
-			oneofValue := &Assumption_AtMostOne{AtMostOne: value}
-			x.Assumption = oneofValue
+			value := &AtMostOneConstraint{}
+			oneofValue := &SystemConstraint_AtMostOne{AtMostOne: value}
+			x.Constraint = oneofValue
 			return protoreflect.ValueOfMessage(value.ProtoReflect())
 		}
-	case "sourcenetwork.acp_core.Assumption.acyclic":
-		if x.Assumption == nil {
-			value := &AcyclicAssumption{}
-			oneofValue := &Assumption_Acyclic{Acyclic: value}
-			x.Assumption = oneofValue
+	case "sourcenetwork.acp_core.SystemConstraint.acyclic":
+		if x.Constraint == nil {
+			value := &AcyclicConstraint{}
+			oneofValue := &SystemConstraint_Acyclic{Acyclic: value}
+			x.Constraint = oneofValue
 			return protoreflect.ValueOfMessage(value.ProtoReflect())
 		}
-		switch m := x.Assumption.(type) {
-		case *Assumption_Acyclic:
+		switch m := x.Constraint.(type) {
+		case *SystemConstraint_Acyclic:
 			return protoreflect.ValueOfMessage(m.Acyclic.ProtoReflect())
 		default:
-			value := &AcyclicAssumption{}
-			oneofValue := &Assumption_Acyclic{Acyclic: value}
-			x.Assumption = oneofValue
+			value := &AcyclicConstraint{}
+			oneofValue := &SystemConstraint_Acyclic{Acyclic: value}
+			x.Constraint = oneofValue
 			return protoreflect.ValueOfMessage(value.ProtoReflect())
 		}
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Assumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SystemConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.Assumption does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SystemConstraint does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_Assumption) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_SystemConstraint) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.Assumption.disjoint":
-		value := &DisjointAssumption{}
+	case "sourcenetwork.acp_core.SystemConstraint.disjoint":
+		value := &DisjointConstraint{}
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "sourcenetwork.acp_core.Assumption.at_most_one":
-		value := &AtMostOneAssumption{}
+	case "sourcenetwork.acp_core.SystemConstraint.at_most_one":
+		value := &AtMostOneConstraint{}
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "sourcenetwork.acp_core.Assumption.acyclic":
-		value := &AcyclicAssumption{}
+	case "sourcenetwork.acp_core.SystemConstraint.acyclic":
+		value := &AcyclicConstraint{}
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.Assumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.SystemConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.Assumption does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.SystemConstraint does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_Assumption) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_SystemConstraint) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
-	case "sourcenetwork.acp_core.Assumption.assumption":
-		if x.Assumption == nil {
+	case "sourcenetwork.acp_core.SystemConstraint.constraint":
+		if x.Constraint == nil {
 			return nil
 		}
-		switch x.Assumption.(type) {
-		case *Assumption_Disjoint:
+		switch x.Constraint.(type) {
+		case *SystemConstraint_Disjoint:
 			return x.Descriptor().Fields().ByName("disjoint")
-		case *Assumption_AtMostOne:
+		case *SystemConstraint_AtMostOne:
 			return x.Descriptor().Fields().ByName("at_most_one")
-		case *Assumption_Acyclic:
+		case *SystemConstraint_Acyclic:
 			return x.Descriptor().Fields().ByName("acyclic")
 		}
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.Assumption", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.SystemConstraint", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -369,7 +369,7 @@ func (x *fastReflection_Assumption) WhichOneof(d protoreflect.OneofDescriptor) p
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_Assumption) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_SystemConstraint) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -380,7 +380,7 @@ func (x *fastReflection_Assumption) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_Assumption) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_SystemConstraint) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -392,7 +392,7 @@ func (x *fastReflection_Assumption) SetUnknown(fields protoreflect.RawFields) {
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_Assumption) IsValid() bool {
+func (x *fastReflection_SystemConstraint) IsValid() bool {
 	return x != nil
 }
 
@@ -402,9 +402,9 @@ func (x *fastReflection_Assumption) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_Assumption) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_SystemConstraint) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*Assumption)
+		x := input.Message.Interface().(*SystemConstraint)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -416,20 +416,20 @@ func (x *fastReflection_Assumption) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
-		switch x := x.Assumption.(type) {
-		case *Assumption_Disjoint:
+		switch x := x.Constraint.(type) {
+		case *SystemConstraint_Disjoint:
 			if x == nil {
 				break
 			}
 			l = options.Size(x.Disjoint)
 			n += 1 + l + runtime.Sov(uint64(l))
-		case *Assumption_AtMostOne:
+		case *SystemConstraint_AtMostOne:
 			if x == nil {
 				break
 			}
 			l = options.Size(x.AtMostOne)
 			n += 1 + l + runtime.Sov(uint64(l))
-		case *Assumption_Acyclic:
+		case *SystemConstraint_Acyclic:
 			if x == nil {
 				break
 			}
@@ -446,7 +446,7 @@ func (x *fastReflection_Assumption) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*Assumption)
+		x := input.Message.Interface().(*SystemConstraint)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -465,8 +465,8 @@ func (x *fastReflection_Assumption) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		switch x := x.Assumption.(type) {
-		case *Assumption_Disjoint:
+		switch x := x.Constraint.(type) {
+		case *SystemConstraint_Disjoint:
 			encoded, err := options.Marshal(x.Disjoint)
 			if err != nil {
 				return protoiface.MarshalOutput{
@@ -479,7 +479,7 @@ func (x *fastReflection_Assumption) ProtoMethods() *protoiface.Methods {
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
 			dAtA[i] = 0xa
-		case *Assumption_AtMostOne:
+		case *SystemConstraint_AtMostOne:
 			encoded, err := options.Marshal(x.AtMostOne)
 			if err != nil {
 				return protoiface.MarshalOutput{
@@ -492,7 +492,7 @@ func (x *fastReflection_Assumption) ProtoMethods() *protoiface.Methods {
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
 			dAtA[i] = 0x12
-		case *Assumption_Acyclic:
+		case *SystemConstraint_Acyclic:
 			encoded, err := options.Marshal(x.Acyclic)
 			if err != nil {
 				return protoiface.MarshalOutput{
@@ -517,7 +517,7 @@ func (x *fastReflection_Assumption) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*Assumption)
+		x := input.Message.Interface().(*SystemConstraint)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -549,10 +549,10 @@ func (x *fastReflection_Assumption) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Assumption: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: SystemConstraint: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Assumption: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: SystemConstraint: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -584,11 +584,11 @@ func (x *fastReflection_Assumption) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				v := &DisjointAssumption{}
+				v := &DisjointConstraint{}
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], v); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
-				x.Assumption = &Assumption_Disjoint{v}
+				x.Constraint = &SystemConstraint_Disjoint{v}
 				iNdEx = postIndex
 			case 2:
 				if wireType != 2 {
@@ -619,11 +619,11 @@ func (x *fastReflection_Assumption) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				v := &AtMostOneAssumption{}
+				v := &AtMostOneConstraint{}
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], v); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
-				x.Assumption = &Assumption_AtMostOne{v}
+				x.Constraint = &SystemConstraint_AtMostOne{v}
 				iNdEx = postIndex
 			case 3:
 				if wireType != 2 {
@@ -654,11 +654,11 @@ func (x *fastReflection_Assumption) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				v := &AcyclicAssumption{}
+				v := &AcyclicConstraint{}
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], v); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
-				x.Assumption = &Assumption_Acyclic{v}
+				x.Constraint = &SystemConstraint_Acyclic{v}
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -695,75 +695,75 @@ func (x *fastReflection_Assumption) ProtoMethods() *protoiface.Methods {
 	}
 }
 
-var _ protoreflect.List = (*_DisjointAssumption_2_list)(nil)
+var _ protoreflect.List = (*_DisjointConstraint_2_list)(nil)
 
-type _DisjointAssumption_2_list struct {
+type _DisjointConstraint_2_list struct {
 	list *[]string
 }
 
-func (x *_DisjointAssumption_2_list) Len() int {
+func (x *_DisjointConstraint_2_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_DisjointAssumption_2_list) Get(i int) protoreflect.Value {
+func (x *_DisjointConstraint_2_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfString((*x.list)[i])
 }
 
-func (x *_DisjointAssumption_2_list) Set(i int, value protoreflect.Value) {
+func (x *_DisjointConstraint_2_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.String()
 	concreteValue := valueUnwrapped
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_DisjointAssumption_2_list) Append(value protoreflect.Value) {
+func (x *_DisjointConstraint_2_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.String()
 	concreteValue := valueUnwrapped
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_DisjointAssumption_2_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message DisjointAssumption at list field Relations as it is not of Message kind"))
+func (x *_DisjointConstraint_2_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message DisjointConstraint at list field Relations as it is not of Message kind"))
 }
 
-func (x *_DisjointAssumption_2_list) Truncate(n int) {
+func (x *_DisjointConstraint_2_list) Truncate(n int) {
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_DisjointAssumption_2_list) NewElement() protoreflect.Value {
+func (x *_DisjointConstraint_2_list) NewElement() protoreflect.Value {
 	v := ""
 	return protoreflect.ValueOfString(v)
 }
 
-func (x *_DisjointAssumption_2_list) IsValid() bool {
+func (x *_DisjointConstraint_2_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_DisjointAssumption           protoreflect.MessageDescriptor
-	fd_DisjointAssumption_resource  protoreflect.FieldDescriptor
-	fd_DisjointAssumption_relations protoreflect.FieldDescriptor
+	md_DisjointConstraint           protoreflect.MessageDescriptor
+	fd_DisjointConstraint_resource  protoreflect.FieldDescriptor
+	fd_DisjointConstraint_relations protoreflect.FieldDescriptor
 )
 
 func init() {
-	file_sourcenetwork_acp_core_assumption_proto_init()
-	md_DisjointAssumption = File_sourcenetwork_acp_core_assumption_proto.Messages().ByName("DisjointAssumption")
-	fd_DisjointAssumption_resource = md_DisjointAssumption.Fields().ByName("resource")
-	fd_DisjointAssumption_relations = md_DisjointAssumption.Fields().ByName("relations")
+	file_sourcenetwork_acp_core_system_constraint_proto_init()
+	md_DisjointConstraint = File_sourcenetwork_acp_core_system_constraint_proto.Messages().ByName("DisjointConstraint")
+	fd_DisjointConstraint_resource = md_DisjointConstraint.Fields().ByName("resource")
+	fd_DisjointConstraint_relations = md_DisjointConstraint.Fields().ByName("relations")
 }
 
-var _ protoreflect.Message = (*fastReflection_DisjointAssumption)(nil)
+var _ protoreflect.Message = (*fastReflection_DisjointConstraint)(nil)
 
-type fastReflection_DisjointAssumption DisjointAssumption
+type fastReflection_DisjointConstraint DisjointConstraint
 
-func (x *DisjointAssumption) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_DisjointAssumption)(x)
+func (x *DisjointConstraint) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_DisjointConstraint)(x)
 }
 
-func (x *DisjointAssumption) slowProtoReflect() protoreflect.Message {
-	mi := &file_sourcenetwork_acp_core_assumption_proto_msgTypes[1]
+func (x *DisjointConstraint) slowProtoReflect() protoreflect.Message {
+	mi := &file_sourcenetwork_acp_core_system_constraint_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -774,43 +774,43 @@ func (x *DisjointAssumption) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_DisjointAssumption_messageType fastReflection_DisjointAssumption_messageType
-var _ protoreflect.MessageType = fastReflection_DisjointAssumption_messageType{}
+var _fastReflection_DisjointConstraint_messageType fastReflection_DisjointConstraint_messageType
+var _ protoreflect.MessageType = fastReflection_DisjointConstraint_messageType{}
 
-type fastReflection_DisjointAssumption_messageType struct{}
+type fastReflection_DisjointConstraint_messageType struct{}
 
-func (x fastReflection_DisjointAssumption_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_DisjointAssumption)(nil)
+func (x fastReflection_DisjointConstraint_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_DisjointConstraint)(nil)
 }
-func (x fastReflection_DisjointAssumption_messageType) New() protoreflect.Message {
-	return new(fastReflection_DisjointAssumption)
+func (x fastReflection_DisjointConstraint_messageType) New() protoreflect.Message {
+	return new(fastReflection_DisjointConstraint)
 }
-func (x fastReflection_DisjointAssumption_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_DisjointAssumption
+func (x fastReflection_DisjointConstraint_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_DisjointConstraint
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_DisjointAssumption) Descriptor() protoreflect.MessageDescriptor {
-	return md_DisjointAssumption
+func (x *fastReflection_DisjointConstraint) Descriptor() protoreflect.MessageDescriptor {
+	return md_DisjointConstraint
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_DisjointAssumption) Type() protoreflect.MessageType {
-	return _fastReflection_DisjointAssumption_messageType
+func (x *fastReflection_DisjointConstraint) Type() protoreflect.MessageType {
+	return _fastReflection_DisjointConstraint_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_DisjointAssumption) New() protoreflect.Message {
-	return new(fastReflection_DisjointAssumption)
+func (x *fastReflection_DisjointConstraint) New() protoreflect.Message {
+	return new(fastReflection_DisjointConstraint)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_DisjointAssumption) Interface() protoreflect.ProtoMessage {
-	return (*DisjointAssumption)(x)
+func (x *fastReflection_DisjointConstraint) Interface() protoreflect.ProtoMessage {
+	return (*DisjointConstraint)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -818,16 +818,16 @@ func (x *fastReflection_DisjointAssumption) Interface() protoreflect.ProtoMessag
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_DisjointAssumption) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_DisjointConstraint) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Resource != "" {
 		value := protoreflect.ValueOfString(x.Resource)
-		if !f(fd_DisjointAssumption_resource, value) {
+		if !f(fd_DisjointConstraint_resource, value) {
 			return
 		}
 	}
 	if len(x.Relations) != 0 {
-		value := protoreflect.ValueOfList(&_DisjointAssumption_2_list{list: &x.Relations})
-		if !f(fd_DisjointAssumption_relations, value) {
+		value := protoreflect.ValueOfList(&_DisjointConstraint_2_list{list: &x.Relations})
+		if !f(fd_DisjointConstraint_relations, value) {
 			return
 		}
 	}
@@ -844,17 +844,17 @@ func (x *fastReflection_DisjointAssumption) Range(f func(protoreflect.FieldDescr
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_DisjointAssumption) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_DisjointConstraint) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.DisjointAssumption.resource":
+	case "sourcenetwork.acp_core.DisjointConstraint.resource":
 		return x.Resource != ""
-	case "sourcenetwork.acp_core.DisjointAssumption.relations":
+	case "sourcenetwork.acp_core.DisjointConstraint.relations":
 		return len(x.Relations) != 0
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DisjointAssumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DisjointConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.DisjointAssumption does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.DisjointConstraint does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -864,17 +864,17 @@ func (x *fastReflection_DisjointAssumption) Has(fd protoreflect.FieldDescriptor)
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_DisjointAssumption) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_DisjointConstraint) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.DisjointAssumption.resource":
+	case "sourcenetwork.acp_core.DisjointConstraint.resource":
 		x.Resource = ""
-	case "sourcenetwork.acp_core.DisjointAssumption.relations":
+	case "sourcenetwork.acp_core.DisjointConstraint.relations":
 		x.Relations = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DisjointAssumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DisjointConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.DisjointAssumption does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.DisjointConstraint does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -884,22 +884,22 @@ func (x *fastReflection_DisjointAssumption) Clear(fd protoreflect.FieldDescripto
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_DisjointAssumption) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_DisjointConstraint) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sourcenetwork.acp_core.DisjointAssumption.resource":
+	case "sourcenetwork.acp_core.DisjointConstraint.resource":
 		value := x.Resource
 		return protoreflect.ValueOfString(value)
-	case "sourcenetwork.acp_core.DisjointAssumption.relations":
+	case "sourcenetwork.acp_core.DisjointConstraint.relations":
 		if len(x.Relations) == 0 {
-			return protoreflect.ValueOfList(&_DisjointAssumption_2_list{})
+			return protoreflect.ValueOfList(&_DisjointConstraint_2_list{})
 		}
-		listValue := &_DisjointAssumption_2_list{list: &x.Relations}
+		listValue := &_DisjointConstraint_2_list{list: &x.Relations}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DisjointAssumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DisjointConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.DisjointAssumption does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.DisjointConstraint does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -913,19 +913,19 @@ func (x *fastReflection_DisjointAssumption) Get(descriptor protoreflect.FieldDes
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_DisjointAssumption) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_DisjointConstraint) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.DisjointAssumption.resource":
+	case "sourcenetwork.acp_core.DisjointConstraint.resource":
 		x.Resource = value.Interface().(string)
-	case "sourcenetwork.acp_core.DisjointAssumption.relations":
+	case "sourcenetwork.acp_core.DisjointConstraint.relations":
 		lv := value.List()
-		clv := lv.(*_DisjointAssumption_2_list)
+		clv := lv.(*_DisjointConstraint_2_list)
 		x.Relations = *clv.list
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DisjointAssumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DisjointConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.DisjointAssumption does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.DisjointConstraint does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -939,49 +939,49 @@ func (x *fastReflection_DisjointAssumption) Set(fd protoreflect.FieldDescriptor,
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_DisjointAssumption) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_DisjointConstraint) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.DisjointAssumption.relations":
+	case "sourcenetwork.acp_core.DisjointConstraint.relations":
 		if x.Relations == nil {
 			x.Relations = []string{}
 		}
-		value := &_DisjointAssumption_2_list{list: &x.Relations}
+		value := &_DisjointConstraint_2_list{list: &x.Relations}
 		return protoreflect.ValueOfList(value)
-	case "sourcenetwork.acp_core.DisjointAssumption.resource":
-		panic(fmt.Errorf("field resource of message sourcenetwork.acp_core.DisjointAssumption is not mutable"))
+	case "sourcenetwork.acp_core.DisjointConstraint.resource":
+		panic(fmt.Errorf("field resource of message sourcenetwork.acp_core.DisjointConstraint is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DisjointAssumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DisjointConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.DisjointAssumption does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.DisjointConstraint does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_DisjointAssumption) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_DisjointConstraint) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.DisjointAssumption.resource":
+	case "sourcenetwork.acp_core.DisjointConstraint.resource":
 		return protoreflect.ValueOfString("")
-	case "sourcenetwork.acp_core.DisjointAssumption.relations":
+	case "sourcenetwork.acp_core.DisjointConstraint.relations":
 		list := []string{}
-		return protoreflect.ValueOfList(&_DisjointAssumption_2_list{list: &list})
+		return protoreflect.ValueOfList(&_DisjointConstraint_2_list{list: &list})
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DisjointAssumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.DisjointConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.DisjointAssumption does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.DisjointConstraint does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_DisjointAssumption) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_DisjointConstraint) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.DisjointAssumption", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.DisjointConstraint", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -989,7 +989,7 @@ func (x *fastReflection_DisjointAssumption) WhichOneof(d protoreflect.OneofDescr
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_DisjointAssumption) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_DisjointConstraint) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1000,7 +1000,7 @@ func (x *fastReflection_DisjointAssumption) GetUnknown() protoreflect.RawFields 
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_DisjointAssumption) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_DisjointConstraint) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1012,7 +1012,7 @@ func (x *fastReflection_DisjointAssumption) SetUnknown(fields protoreflect.RawFi
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_DisjointAssumption) IsValid() bool {
+func (x *fastReflection_DisjointConstraint) IsValid() bool {
 	return x != nil
 }
 
@@ -1022,9 +1022,9 @@ func (x *fastReflection_DisjointAssumption) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_DisjointAssumption) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_DisjointConstraint) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*DisjointAssumption)
+		x := input.Message.Interface().(*DisjointConstraint)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1056,7 +1056,7 @@ func (x *fastReflection_DisjointAssumption) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*DisjointAssumption)
+		x := input.Message.Interface().(*DisjointConstraint)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1102,7 +1102,7 @@ func (x *fastReflection_DisjointAssumption) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*DisjointAssumption)
+		x := input.Message.Interface().(*DisjointConstraint)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1134,10 +1134,10 @@ func (x *fastReflection_DisjointAssumption) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DisjointAssumption: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DisjointConstraint: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DisjointAssumption: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DisjointConstraint: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -1240,28 +1240,28 @@ func (x *fastReflection_DisjointAssumption) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_AtMostOneAssumption          protoreflect.MessageDescriptor
-	fd_AtMostOneAssumption_resource protoreflect.FieldDescriptor
-	fd_AtMostOneAssumption_relation protoreflect.FieldDescriptor
+	md_AtMostOneConstraint          protoreflect.MessageDescriptor
+	fd_AtMostOneConstraint_resource protoreflect.FieldDescriptor
+	fd_AtMostOneConstraint_relation protoreflect.FieldDescriptor
 )
 
 func init() {
-	file_sourcenetwork_acp_core_assumption_proto_init()
-	md_AtMostOneAssumption = File_sourcenetwork_acp_core_assumption_proto.Messages().ByName("AtMostOneAssumption")
-	fd_AtMostOneAssumption_resource = md_AtMostOneAssumption.Fields().ByName("resource")
-	fd_AtMostOneAssumption_relation = md_AtMostOneAssumption.Fields().ByName("relation")
+	file_sourcenetwork_acp_core_system_constraint_proto_init()
+	md_AtMostOneConstraint = File_sourcenetwork_acp_core_system_constraint_proto.Messages().ByName("AtMostOneConstraint")
+	fd_AtMostOneConstraint_resource = md_AtMostOneConstraint.Fields().ByName("resource")
+	fd_AtMostOneConstraint_relation = md_AtMostOneConstraint.Fields().ByName("relation")
 }
 
-var _ protoreflect.Message = (*fastReflection_AtMostOneAssumption)(nil)
+var _ protoreflect.Message = (*fastReflection_AtMostOneConstraint)(nil)
 
-type fastReflection_AtMostOneAssumption AtMostOneAssumption
+type fastReflection_AtMostOneConstraint AtMostOneConstraint
 
-func (x *AtMostOneAssumption) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_AtMostOneAssumption)(x)
+func (x *AtMostOneConstraint) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_AtMostOneConstraint)(x)
 }
 
-func (x *AtMostOneAssumption) slowProtoReflect() protoreflect.Message {
-	mi := &file_sourcenetwork_acp_core_assumption_proto_msgTypes[2]
+func (x *AtMostOneConstraint) slowProtoReflect() protoreflect.Message {
+	mi := &file_sourcenetwork_acp_core_system_constraint_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1272,43 +1272,43 @@ func (x *AtMostOneAssumption) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_AtMostOneAssumption_messageType fastReflection_AtMostOneAssumption_messageType
-var _ protoreflect.MessageType = fastReflection_AtMostOneAssumption_messageType{}
+var _fastReflection_AtMostOneConstraint_messageType fastReflection_AtMostOneConstraint_messageType
+var _ protoreflect.MessageType = fastReflection_AtMostOneConstraint_messageType{}
 
-type fastReflection_AtMostOneAssumption_messageType struct{}
+type fastReflection_AtMostOneConstraint_messageType struct{}
 
-func (x fastReflection_AtMostOneAssumption_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_AtMostOneAssumption)(nil)
+func (x fastReflection_AtMostOneConstraint_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_AtMostOneConstraint)(nil)
 }
-func (x fastReflection_AtMostOneAssumption_messageType) New() protoreflect.Message {
-	return new(fastReflection_AtMostOneAssumption)
+func (x fastReflection_AtMostOneConstraint_messageType) New() protoreflect.Message {
+	return new(fastReflection_AtMostOneConstraint)
 }
-func (x fastReflection_AtMostOneAssumption_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_AtMostOneAssumption
+func (x fastReflection_AtMostOneConstraint_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_AtMostOneConstraint
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_AtMostOneAssumption) Descriptor() protoreflect.MessageDescriptor {
-	return md_AtMostOneAssumption
+func (x *fastReflection_AtMostOneConstraint) Descriptor() protoreflect.MessageDescriptor {
+	return md_AtMostOneConstraint
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_AtMostOneAssumption) Type() protoreflect.MessageType {
-	return _fastReflection_AtMostOneAssumption_messageType
+func (x *fastReflection_AtMostOneConstraint) Type() protoreflect.MessageType {
+	return _fastReflection_AtMostOneConstraint_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_AtMostOneAssumption) New() protoreflect.Message {
-	return new(fastReflection_AtMostOneAssumption)
+func (x *fastReflection_AtMostOneConstraint) New() protoreflect.Message {
+	return new(fastReflection_AtMostOneConstraint)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_AtMostOneAssumption) Interface() protoreflect.ProtoMessage {
-	return (*AtMostOneAssumption)(x)
+func (x *fastReflection_AtMostOneConstraint) Interface() protoreflect.ProtoMessage {
+	return (*AtMostOneConstraint)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -1316,16 +1316,16 @@ func (x *fastReflection_AtMostOneAssumption) Interface() protoreflect.ProtoMessa
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_AtMostOneAssumption) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_AtMostOneConstraint) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Resource != "" {
 		value := protoreflect.ValueOfString(x.Resource)
-		if !f(fd_AtMostOneAssumption_resource, value) {
+		if !f(fd_AtMostOneConstraint_resource, value) {
 			return
 		}
 	}
 	if x.Relation != "" {
 		value := protoreflect.ValueOfString(x.Relation)
-		if !f(fd_AtMostOneAssumption_relation, value) {
+		if !f(fd_AtMostOneConstraint_relation, value) {
 			return
 		}
 	}
@@ -1342,17 +1342,17 @@ func (x *fastReflection_AtMostOneAssumption) Range(f func(protoreflect.FieldDesc
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_AtMostOneAssumption) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_AtMostOneConstraint) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.AtMostOneAssumption.resource":
+	case "sourcenetwork.acp_core.AtMostOneConstraint.resource":
 		return x.Resource != ""
-	case "sourcenetwork.acp_core.AtMostOneAssumption.relation":
+	case "sourcenetwork.acp_core.AtMostOneConstraint.relation":
 		return x.Relation != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AtMostOneAssumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AtMostOneConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.AtMostOneAssumption does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.AtMostOneConstraint does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1362,17 +1362,17 @@ func (x *fastReflection_AtMostOneAssumption) Has(fd protoreflect.FieldDescriptor
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_AtMostOneAssumption) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_AtMostOneConstraint) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.AtMostOneAssumption.resource":
+	case "sourcenetwork.acp_core.AtMostOneConstraint.resource":
 		x.Resource = ""
-	case "sourcenetwork.acp_core.AtMostOneAssumption.relation":
+	case "sourcenetwork.acp_core.AtMostOneConstraint.relation":
 		x.Relation = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AtMostOneAssumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AtMostOneConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.AtMostOneAssumption does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.AtMostOneConstraint does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1382,19 +1382,19 @@ func (x *fastReflection_AtMostOneAssumption) Clear(fd protoreflect.FieldDescript
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_AtMostOneAssumption) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_AtMostOneConstraint) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sourcenetwork.acp_core.AtMostOneAssumption.resource":
+	case "sourcenetwork.acp_core.AtMostOneConstraint.resource":
 		value := x.Resource
 		return protoreflect.ValueOfString(value)
-	case "sourcenetwork.acp_core.AtMostOneAssumption.relation":
+	case "sourcenetwork.acp_core.AtMostOneConstraint.relation":
 		value := x.Relation
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AtMostOneAssumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AtMostOneConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.AtMostOneAssumption does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.AtMostOneConstraint does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1408,17 +1408,17 @@ func (x *fastReflection_AtMostOneAssumption) Get(descriptor protoreflect.FieldDe
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_AtMostOneAssumption) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_AtMostOneConstraint) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.AtMostOneAssumption.resource":
+	case "sourcenetwork.acp_core.AtMostOneConstraint.resource":
 		x.Resource = value.Interface().(string)
-	case "sourcenetwork.acp_core.AtMostOneAssumption.relation":
+	case "sourcenetwork.acp_core.AtMostOneConstraint.relation":
 		x.Relation = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AtMostOneAssumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AtMostOneConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.AtMostOneAssumption does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.AtMostOneConstraint does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1432,44 +1432,44 @@ func (x *fastReflection_AtMostOneAssumption) Set(fd protoreflect.FieldDescriptor
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_AtMostOneAssumption) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_AtMostOneConstraint) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.AtMostOneAssumption.resource":
-		panic(fmt.Errorf("field resource of message sourcenetwork.acp_core.AtMostOneAssumption is not mutable"))
-	case "sourcenetwork.acp_core.AtMostOneAssumption.relation":
-		panic(fmt.Errorf("field relation of message sourcenetwork.acp_core.AtMostOneAssumption is not mutable"))
+	case "sourcenetwork.acp_core.AtMostOneConstraint.resource":
+		panic(fmt.Errorf("field resource of message sourcenetwork.acp_core.AtMostOneConstraint is not mutable"))
+	case "sourcenetwork.acp_core.AtMostOneConstraint.relation":
+		panic(fmt.Errorf("field relation of message sourcenetwork.acp_core.AtMostOneConstraint is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AtMostOneAssumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AtMostOneConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.AtMostOneAssumption does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.AtMostOneConstraint does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_AtMostOneAssumption) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_AtMostOneConstraint) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.AtMostOneAssumption.resource":
+	case "sourcenetwork.acp_core.AtMostOneConstraint.resource":
 		return protoreflect.ValueOfString("")
-	case "sourcenetwork.acp_core.AtMostOneAssumption.relation":
+	case "sourcenetwork.acp_core.AtMostOneConstraint.relation":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AtMostOneAssumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AtMostOneConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.AtMostOneAssumption does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.AtMostOneConstraint does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_AtMostOneAssumption) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_AtMostOneConstraint) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.AtMostOneAssumption", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.AtMostOneConstraint", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1477,7 +1477,7 @@ func (x *fastReflection_AtMostOneAssumption) WhichOneof(d protoreflect.OneofDesc
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_AtMostOneAssumption) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_AtMostOneConstraint) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1488,7 +1488,7 @@ func (x *fastReflection_AtMostOneAssumption) GetUnknown() protoreflect.RawFields
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_AtMostOneAssumption) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_AtMostOneConstraint) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1500,7 +1500,7 @@ func (x *fastReflection_AtMostOneAssumption) SetUnknown(fields protoreflect.RawF
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_AtMostOneAssumption) IsValid() bool {
+func (x *fastReflection_AtMostOneConstraint) IsValid() bool {
 	return x != nil
 }
 
@@ -1510,9 +1510,9 @@ func (x *fastReflection_AtMostOneAssumption) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_AtMostOneAssumption) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_AtMostOneConstraint) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*AtMostOneAssumption)
+		x := input.Message.Interface().(*AtMostOneConstraint)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1542,7 +1542,7 @@ func (x *fastReflection_AtMostOneAssumption) ProtoMethods() *protoiface.Methods 
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*AtMostOneAssumption)
+		x := input.Message.Interface().(*AtMostOneConstraint)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1586,7 +1586,7 @@ func (x *fastReflection_AtMostOneAssumption) ProtoMethods() *protoiface.Methods 
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*AtMostOneAssumption)
+		x := input.Message.Interface().(*AtMostOneConstraint)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1618,10 +1618,10 @@ func (x *fastReflection_AtMostOneAssumption) ProtoMethods() *protoiface.Methods 
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: AtMostOneAssumption: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: AtMostOneConstraint: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: AtMostOneAssumption: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: AtMostOneConstraint: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -1724,28 +1724,28 @@ func (x *fastReflection_AtMostOneAssumption) ProtoMethods() *protoiface.Methods 
 }
 
 var (
-	md_AcyclicAssumption          protoreflect.MessageDescriptor
-	fd_AcyclicAssumption_resource protoreflect.FieldDescriptor
-	fd_AcyclicAssumption_relation protoreflect.FieldDescriptor
+	md_AcyclicConstraint          protoreflect.MessageDescriptor
+	fd_AcyclicConstraint_resource protoreflect.FieldDescriptor
+	fd_AcyclicConstraint_relation protoreflect.FieldDescriptor
 )
 
 func init() {
-	file_sourcenetwork_acp_core_assumption_proto_init()
-	md_AcyclicAssumption = File_sourcenetwork_acp_core_assumption_proto.Messages().ByName("AcyclicAssumption")
-	fd_AcyclicAssumption_resource = md_AcyclicAssumption.Fields().ByName("resource")
-	fd_AcyclicAssumption_relation = md_AcyclicAssumption.Fields().ByName("relation")
+	file_sourcenetwork_acp_core_system_constraint_proto_init()
+	md_AcyclicConstraint = File_sourcenetwork_acp_core_system_constraint_proto.Messages().ByName("AcyclicConstraint")
+	fd_AcyclicConstraint_resource = md_AcyclicConstraint.Fields().ByName("resource")
+	fd_AcyclicConstraint_relation = md_AcyclicConstraint.Fields().ByName("relation")
 }
 
-var _ protoreflect.Message = (*fastReflection_AcyclicAssumption)(nil)
+var _ protoreflect.Message = (*fastReflection_AcyclicConstraint)(nil)
 
-type fastReflection_AcyclicAssumption AcyclicAssumption
+type fastReflection_AcyclicConstraint AcyclicConstraint
 
-func (x *AcyclicAssumption) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_AcyclicAssumption)(x)
+func (x *AcyclicConstraint) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_AcyclicConstraint)(x)
 }
 
-func (x *AcyclicAssumption) slowProtoReflect() protoreflect.Message {
-	mi := &file_sourcenetwork_acp_core_assumption_proto_msgTypes[3]
+func (x *AcyclicConstraint) slowProtoReflect() protoreflect.Message {
+	mi := &file_sourcenetwork_acp_core_system_constraint_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1756,43 +1756,43 @@ func (x *AcyclicAssumption) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_AcyclicAssumption_messageType fastReflection_AcyclicAssumption_messageType
-var _ protoreflect.MessageType = fastReflection_AcyclicAssumption_messageType{}
+var _fastReflection_AcyclicConstraint_messageType fastReflection_AcyclicConstraint_messageType
+var _ protoreflect.MessageType = fastReflection_AcyclicConstraint_messageType{}
 
-type fastReflection_AcyclicAssumption_messageType struct{}
+type fastReflection_AcyclicConstraint_messageType struct{}
 
-func (x fastReflection_AcyclicAssumption_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_AcyclicAssumption)(nil)
+func (x fastReflection_AcyclicConstraint_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_AcyclicConstraint)(nil)
 }
-func (x fastReflection_AcyclicAssumption_messageType) New() protoreflect.Message {
-	return new(fastReflection_AcyclicAssumption)
+func (x fastReflection_AcyclicConstraint_messageType) New() protoreflect.Message {
+	return new(fastReflection_AcyclicConstraint)
 }
-func (x fastReflection_AcyclicAssumption_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_AcyclicAssumption
+func (x fastReflection_AcyclicConstraint_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_AcyclicConstraint
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_AcyclicAssumption) Descriptor() protoreflect.MessageDescriptor {
-	return md_AcyclicAssumption
+func (x *fastReflection_AcyclicConstraint) Descriptor() protoreflect.MessageDescriptor {
+	return md_AcyclicConstraint
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_AcyclicAssumption) Type() protoreflect.MessageType {
-	return _fastReflection_AcyclicAssumption_messageType
+func (x *fastReflection_AcyclicConstraint) Type() protoreflect.MessageType {
+	return _fastReflection_AcyclicConstraint_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_AcyclicAssumption) New() protoreflect.Message {
-	return new(fastReflection_AcyclicAssumption)
+func (x *fastReflection_AcyclicConstraint) New() protoreflect.Message {
+	return new(fastReflection_AcyclicConstraint)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_AcyclicAssumption) Interface() protoreflect.ProtoMessage {
-	return (*AcyclicAssumption)(x)
+func (x *fastReflection_AcyclicConstraint) Interface() protoreflect.ProtoMessage {
+	return (*AcyclicConstraint)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -1800,16 +1800,16 @@ func (x *fastReflection_AcyclicAssumption) Interface() protoreflect.ProtoMessage
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_AcyclicAssumption) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_AcyclicConstraint) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Resource != "" {
 		value := protoreflect.ValueOfString(x.Resource)
-		if !f(fd_AcyclicAssumption_resource, value) {
+		if !f(fd_AcyclicConstraint_resource, value) {
 			return
 		}
 	}
 	if x.Relation != "" {
 		value := protoreflect.ValueOfString(x.Relation)
-		if !f(fd_AcyclicAssumption_relation, value) {
+		if !f(fd_AcyclicConstraint_relation, value) {
 			return
 		}
 	}
@@ -1826,17 +1826,17 @@ func (x *fastReflection_AcyclicAssumption) Range(f func(protoreflect.FieldDescri
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_AcyclicAssumption) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_AcyclicConstraint) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.AcyclicAssumption.resource":
+	case "sourcenetwork.acp_core.AcyclicConstraint.resource":
 		return x.Resource != ""
-	case "sourcenetwork.acp_core.AcyclicAssumption.relation":
+	case "sourcenetwork.acp_core.AcyclicConstraint.relation":
 		return x.Relation != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AcyclicAssumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AcyclicConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.AcyclicAssumption does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.AcyclicConstraint does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1846,17 +1846,17 @@ func (x *fastReflection_AcyclicAssumption) Has(fd protoreflect.FieldDescriptor) 
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_AcyclicAssumption) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_AcyclicConstraint) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.AcyclicAssumption.resource":
+	case "sourcenetwork.acp_core.AcyclicConstraint.resource":
 		x.Resource = ""
-	case "sourcenetwork.acp_core.AcyclicAssumption.relation":
+	case "sourcenetwork.acp_core.AcyclicConstraint.relation":
 		x.Relation = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AcyclicAssumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AcyclicConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.AcyclicAssumption does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.AcyclicConstraint does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1866,19 +1866,19 @@ func (x *fastReflection_AcyclicAssumption) Clear(fd protoreflect.FieldDescriptor
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_AcyclicAssumption) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_AcyclicConstraint) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "sourcenetwork.acp_core.AcyclicAssumption.resource":
+	case "sourcenetwork.acp_core.AcyclicConstraint.resource":
 		value := x.Resource
 		return protoreflect.ValueOfString(value)
-	case "sourcenetwork.acp_core.AcyclicAssumption.relation":
+	case "sourcenetwork.acp_core.AcyclicConstraint.relation":
 		value := x.Relation
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AcyclicAssumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AcyclicConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.AcyclicAssumption does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.AcyclicConstraint does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1892,17 +1892,17 @@ func (x *fastReflection_AcyclicAssumption) Get(descriptor protoreflect.FieldDesc
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_AcyclicAssumption) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_AcyclicConstraint) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.AcyclicAssumption.resource":
+	case "sourcenetwork.acp_core.AcyclicConstraint.resource":
 		x.Resource = value.Interface().(string)
-	case "sourcenetwork.acp_core.AcyclicAssumption.relation":
+	case "sourcenetwork.acp_core.AcyclicConstraint.relation":
 		x.Relation = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AcyclicAssumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AcyclicConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.AcyclicAssumption does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.AcyclicConstraint does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1916,44 +1916,44 @@ func (x *fastReflection_AcyclicAssumption) Set(fd protoreflect.FieldDescriptor, 
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_AcyclicAssumption) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_AcyclicConstraint) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.AcyclicAssumption.resource":
-		panic(fmt.Errorf("field resource of message sourcenetwork.acp_core.AcyclicAssumption is not mutable"))
-	case "sourcenetwork.acp_core.AcyclicAssumption.relation":
-		panic(fmt.Errorf("field relation of message sourcenetwork.acp_core.AcyclicAssumption is not mutable"))
+	case "sourcenetwork.acp_core.AcyclicConstraint.resource":
+		panic(fmt.Errorf("field resource of message sourcenetwork.acp_core.AcyclicConstraint is not mutable"))
+	case "sourcenetwork.acp_core.AcyclicConstraint.relation":
+		panic(fmt.Errorf("field relation of message sourcenetwork.acp_core.AcyclicConstraint is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AcyclicAssumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AcyclicConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.AcyclicAssumption does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.AcyclicConstraint does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_AcyclicAssumption) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_AcyclicConstraint) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "sourcenetwork.acp_core.AcyclicAssumption.resource":
+	case "sourcenetwork.acp_core.AcyclicConstraint.resource":
 		return protoreflect.ValueOfString("")
-	case "sourcenetwork.acp_core.AcyclicAssumption.relation":
+	case "sourcenetwork.acp_core.AcyclicConstraint.relation":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AcyclicAssumption"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: sourcenetwork.acp_core.AcyclicConstraint"))
 		}
-		panic(fmt.Errorf("message sourcenetwork.acp_core.AcyclicAssumption does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message sourcenetwork.acp_core.AcyclicConstraint does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_AcyclicAssumption) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_AcyclicConstraint) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.AcyclicAssumption", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in sourcenetwork.acp_core.AcyclicConstraint", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1961,7 +1961,7 @@ func (x *fastReflection_AcyclicAssumption) WhichOneof(d protoreflect.OneofDescri
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_AcyclicAssumption) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_AcyclicConstraint) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1972,7 +1972,7 @@ func (x *fastReflection_AcyclicAssumption) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_AcyclicAssumption) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_AcyclicConstraint) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1984,7 +1984,7 @@ func (x *fastReflection_AcyclicAssumption) SetUnknown(fields protoreflect.RawFie
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_AcyclicAssumption) IsValid() bool {
+func (x *fastReflection_AcyclicConstraint) IsValid() bool {
 	return x != nil
 }
 
@@ -1994,9 +1994,9 @@ func (x *fastReflection_AcyclicAssumption) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_AcyclicAssumption) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_AcyclicConstraint) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*AcyclicAssumption)
+		x := input.Message.Interface().(*AcyclicConstraint)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2026,7 +2026,7 @@ func (x *fastReflection_AcyclicAssumption) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*AcyclicAssumption)
+		x := input.Message.Interface().(*AcyclicConstraint)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2070,7 +2070,7 @@ func (x *fastReflection_AcyclicAssumption) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*AcyclicAssumption)
+		x := input.Message.Interface().(*AcyclicConstraint)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2102,10 +2102,10 @@ func (x *fastReflection_AcyclicAssumption) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: AcyclicAssumption: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: AcyclicConstraint: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: AcyclicAssumption: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: AcyclicConstraint: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -2211,7 +2211,7 @@ func (x *fastReflection_AcyclicAssumption) ProtoMethods() *protoiface.Methods {
 // versions:
 // 	protoc-gen-go v1.27.0
 // 	protoc        (unknown)
-// source: sourcenetwork/acp_core/assumption.proto
+// source: sourcenetwork/acp_core/system_constraint.proto
 
 const (
 	// Verify that this generated code is sufficiently up-to-date.
@@ -2220,93 +2220,93 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// Assumption models an invariant over relationships which the application enforces,
-// but acp_core does not. Assumptions restrict the instances considered when analyzing a policy.
-type Assumption struct {
+// SystemConstraint models a rule about relationship data which the application enforces,
+// but acp_core does not. Together with a policy, system constraints define the valid states of a system.
+type SystemConstraint struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Types that are assignable to Assumption:
-	//	*Assumption_Disjoint
-	//	*Assumption_AtMostOne
-	//	*Assumption_Acyclic
-	Assumption isAssumption_Assumption `protobuf_oneof:"assumption"`
+	// Types that are assignable to Constraint:
+	//	*SystemConstraint_Disjoint
+	//	*SystemConstraint_AtMostOne
+	//	*SystemConstraint_Acyclic
+	Constraint isSystemConstraint_Constraint `protobuf_oneof:"constraint"`
 }
 
-func (x *Assumption) Reset() {
-	*x = Assumption{}
+func (x *SystemConstraint) Reset() {
+	*x = SystemConstraint{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sourcenetwork_acp_core_assumption_proto_msgTypes[0]
+		mi := &file_sourcenetwork_acp_core_system_constraint_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *Assumption) String() string {
+func (x *SystemConstraint) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Assumption) ProtoMessage() {}
+func (*SystemConstraint) ProtoMessage() {}
 
-// Deprecated: Use Assumption.ProtoReflect.Descriptor instead.
-func (*Assumption) Descriptor() ([]byte, []int) {
-	return file_sourcenetwork_acp_core_assumption_proto_rawDescGZIP(), []int{0}
+// Deprecated: Use SystemConstraint.ProtoReflect.Descriptor instead.
+func (*SystemConstraint) Descriptor() ([]byte, []int) {
+	return file_sourcenetwork_acp_core_system_constraint_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Assumption) GetAssumption() isAssumption_Assumption {
+func (x *SystemConstraint) GetConstraint() isSystemConstraint_Constraint {
 	if x != nil {
-		return x.Assumption
+		return x.Constraint
 	}
 	return nil
 }
 
-func (x *Assumption) GetDisjoint() *DisjointAssumption {
-	if x, ok := x.GetAssumption().(*Assumption_Disjoint); ok {
+func (x *SystemConstraint) GetDisjoint() *DisjointConstraint {
+	if x, ok := x.GetConstraint().(*SystemConstraint_Disjoint); ok {
 		return x.Disjoint
 	}
 	return nil
 }
 
-func (x *Assumption) GetAtMostOne() *AtMostOneAssumption {
-	if x, ok := x.GetAssumption().(*Assumption_AtMostOne); ok {
+func (x *SystemConstraint) GetAtMostOne() *AtMostOneConstraint {
+	if x, ok := x.GetConstraint().(*SystemConstraint_AtMostOne); ok {
 		return x.AtMostOne
 	}
 	return nil
 }
 
-func (x *Assumption) GetAcyclic() *AcyclicAssumption {
-	if x, ok := x.GetAssumption().(*Assumption_Acyclic); ok {
+func (x *SystemConstraint) GetAcyclic() *AcyclicConstraint {
+	if x, ok := x.GetConstraint().(*SystemConstraint_Acyclic); ok {
 		return x.Acyclic
 	}
 	return nil
 }
 
-type isAssumption_Assumption interface {
-	isAssumption_Assumption()
+type isSystemConstraint_Constraint interface {
+	isSystemConstraint_Constraint()
 }
 
-type Assumption_Disjoint struct {
-	Disjoint *DisjointAssumption `protobuf:"bytes,1,opt,name=disjoint,proto3,oneof"`
+type SystemConstraint_Disjoint struct {
+	Disjoint *DisjointConstraint `protobuf:"bytes,1,opt,name=disjoint,proto3,oneof"`
 }
 
-type Assumption_AtMostOne struct {
-	AtMostOne *AtMostOneAssumption `protobuf:"bytes,2,opt,name=at_most_one,json=atMostOne,proto3,oneof"`
+type SystemConstraint_AtMostOne struct {
+	AtMostOne *AtMostOneConstraint `protobuf:"bytes,2,opt,name=at_most_one,json=atMostOne,proto3,oneof"`
 }
 
-type Assumption_Acyclic struct {
-	Acyclic *AcyclicAssumption `protobuf:"bytes,3,opt,name=acyclic,proto3,oneof"`
+type SystemConstraint_Acyclic struct {
+	Acyclic *AcyclicConstraint `protobuf:"bytes,3,opt,name=acyclic,proto3,oneof"`
 }
 
-func (*Assumption_Disjoint) isAssumption_Assumption() {}
+func (*SystemConstraint_Disjoint) isSystemConstraint_Constraint() {}
 
-func (*Assumption_AtMostOne) isAssumption_Assumption() {}
+func (*SystemConstraint_AtMostOne) isSystemConstraint_Constraint() {}
 
-func (*Assumption_Acyclic) isAssumption_Assumption() {}
+func (*SystemConstraint_Acyclic) isSystemConstraint_Constraint() {}
 
-// DisjointAssumption states that a subject is never related to an object
+// DisjointConstraint states that a subject is never related to an object
 // through more than one of the relations (eg. an owner is never also listed as an editor)
-type DisjointAssumption struct {
+type DisjointConstraint struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -2315,43 +2315,43 @@ type DisjointAssumption struct {
 	Relations []string `protobuf:"bytes,2,rep,name=relations,proto3" json:"relations,omitempty"`
 }
 
-func (x *DisjointAssumption) Reset() {
-	*x = DisjointAssumption{}
+func (x *DisjointConstraint) Reset() {
+	*x = DisjointConstraint{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sourcenetwork_acp_core_assumption_proto_msgTypes[1]
+		mi := &file_sourcenetwork_acp_core_system_constraint_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *DisjointAssumption) String() string {
+func (x *DisjointConstraint) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*DisjointAssumption) ProtoMessage() {}
+func (*DisjointConstraint) ProtoMessage() {}
 
-// Deprecated: Use DisjointAssumption.ProtoReflect.Descriptor instead.
-func (*DisjointAssumption) Descriptor() ([]byte, []int) {
-	return file_sourcenetwork_acp_core_assumption_proto_rawDescGZIP(), []int{1}
+// Deprecated: Use DisjointConstraint.ProtoReflect.Descriptor instead.
+func (*DisjointConstraint) Descriptor() ([]byte, []int) {
+	return file_sourcenetwork_acp_core_system_constraint_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *DisjointAssumption) GetResource() string {
+func (x *DisjointConstraint) GetResource() string {
 	if x != nil {
 		return x.Resource
 	}
 	return ""
 }
 
-func (x *DisjointAssumption) GetRelations() []string {
+func (x *DisjointConstraint) GetRelations() []string {
 	if x != nil {
 		return x.Relations
 	}
 	return nil
 }
 
-// AtMostOneAssumption states that an object has at most one relationship
+// AtMostOneConstraint states that an object has at most one relationship
 // for the relation (eg. a file lives in at most one folder)
-type AtMostOneAssumption struct {
+type AtMostOneConstraint struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -2360,43 +2360,43 @@ type AtMostOneAssumption struct {
 	Relation string `protobuf:"bytes,2,opt,name=relation,proto3" json:"relation,omitempty"`
 }
 
-func (x *AtMostOneAssumption) Reset() {
-	*x = AtMostOneAssumption{}
+func (x *AtMostOneConstraint) Reset() {
+	*x = AtMostOneConstraint{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sourcenetwork_acp_core_assumption_proto_msgTypes[2]
+		mi := &file_sourcenetwork_acp_core_system_constraint_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *AtMostOneAssumption) String() string {
+func (x *AtMostOneConstraint) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*AtMostOneAssumption) ProtoMessage() {}
+func (*AtMostOneConstraint) ProtoMessage() {}
 
-// Deprecated: Use AtMostOneAssumption.ProtoReflect.Descriptor instead.
-func (*AtMostOneAssumption) Descriptor() ([]byte, []int) {
-	return file_sourcenetwork_acp_core_assumption_proto_rawDescGZIP(), []int{2}
+// Deprecated: Use AtMostOneConstraint.ProtoReflect.Descriptor instead.
+func (*AtMostOneConstraint) Descriptor() ([]byte, []int) {
+	return file_sourcenetwork_acp_core_system_constraint_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *AtMostOneAssumption) GetResource() string {
+func (x *AtMostOneConstraint) GetResource() string {
 	if x != nil {
 		return x.Resource
 	}
 	return ""
 }
 
-func (x *AtMostOneAssumption) GetRelation() string {
+func (x *AtMostOneConstraint) GetRelation() string {
 	if x != nil {
 		return x.Relation
 	}
 	return ""
 }
 
-// AcyclicAssumption states that following the relation from an object
+// AcyclicConstraint states that following the relation from an object
 // never leads back to it (eg. a folder never contains itself)
-type AcyclicAssumption struct {
+type AcyclicConstraint struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -2405,108 +2405,109 @@ type AcyclicAssumption struct {
 	Relation string `protobuf:"bytes,2,opt,name=relation,proto3" json:"relation,omitempty"`
 }
 
-func (x *AcyclicAssumption) Reset() {
-	*x = AcyclicAssumption{}
+func (x *AcyclicConstraint) Reset() {
+	*x = AcyclicConstraint{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sourcenetwork_acp_core_assumption_proto_msgTypes[3]
+		mi := &file_sourcenetwork_acp_core_system_constraint_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *AcyclicAssumption) String() string {
+func (x *AcyclicConstraint) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*AcyclicAssumption) ProtoMessage() {}
+func (*AcyclicConstraint) ProtoMessage() {}
 
-// Deprecated: Use AcyclicAssumption.ProtoReflect.Descriptor instead.
-func (*AcyclicAssumption) Descriptor() ([]byte, []int) {
-	return file_sourcenetwork_acp_core_assumption_proto_rawDescGZIP(), []int{3}
+// Deprecated: Use AcyclicConstraint.ProtoReflect.Descriptor instead.
+func (*AcyclicConstraint) Descriptor() ([]byte, []int) {
+	return file_sourcenetwork_acp_core_system_constraint_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *AcyclicAssumption) GetResource() string {
+func (x *AcyclicConstraint) GetResource() string {
 	if x != nil {
 		return x.Resource
 	}
 	return ""
 }
 
-func (x *AcyclicAssumption) GetRelation() string {
+func (x *AcyclicConstraint) GetRelation() string {
 	if x != nil {
 		return x.Relation
 	}
 	return ""
 }
 
-var File_sourcenetwork_acp_core_assumption_proto protoreflect.FileDescriptor
+var File_sourcenetwork_acp_core_system_constraint_proto protoreflect.FileDescriptor
 
-var file_sourcenetwork_acp_core_assumption_proto_rawDesc = []byte{
-	0x0a, 0x27, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f,
-	0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x61, 0x73, 0x73, 0x75, 0x6d, 0x70, 0x74,
-	0x69, 0x6f, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x16, 0x73, 0x6f, 0x75, 0x72, 0x63,
-	0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72,
-	0x65, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67,
-	0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xfa, 0x01, 0x0a, 0x0a, 0x41, 0x73, 0x73, 0x75,
-	0x6d, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x48, 0x0a, 0x08, 0x64, 0x69, 0x73, 0x6a, 0x6f, 0x69,
-	0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63,
-	0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72,
-	0x65, 0x2e, 0x44, 0x69, 0x73, 0x6a, 0x6f, 0x69, 0x6e, 0x74, 0x41, 0x73, 0x73, 0x75, 0x6d, 0x70,
-	0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x08, 0x64, 0x69, 0x73, 0x6a, 0x6f, 0x69, 0x6e, 0x74,
-	0x12, 0x4d, 0x0a, 0x0b, 0x61, 0x74, 0x5f, 0x6d, 0x6f, 0x73, 0x74, 0x5f, 0x6f, 0x6e, 0x65, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2b, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65,
-	0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x41,
-	0x74, 0x4d, 0x6f, 0x73, 0x74, 0x4f, 0x6e, 0x65, 0x41, 0x73, 0x73, 0x75, 0x6d, 0x70, 0x74, 0x69,
-	0x6f, 0x6e, 0x48, 0x00, 0x52, 0x09, 0x61, 0x74, 0x4d, 0x6f, 0x73, 0x74, 0x4f, 0x6e, 0x65, 0x12,
-	0x45, 0x0a, 0x07, 0x61, 0x63, 0x79, 0x63, 0x6c, 0x69, 0x63, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x29, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b,
-	0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x41, 0x63, 0x79, 0x63, 0x6c, 0x69,
-	0x63, 0x41, 0x73, 0x73, 0x75, 0x6d, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x48, 0x00, 0x52, 0x07, 0x61,
-	0x63, 0x79, 0x63, 0x6c, 0x69, 0x63, 0x42, 0x0c, 0x0a, 0x0a, 0x61, 0x73, 0x73, 0x75, 0x6d, 0x70,
-	0x74, 0x69, 0x6f, 0x6e, 0x22, 0x4e, 0x0a, 0x12, 0x44, 0x69, 0x73, 0x6a, 0x6f, 0x69, 0x6e, 0x74,
-	0x41, 0x73, 0x73, 0x75, 0x6d, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65,
-	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x72, 0x65,
-	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x12, 0x1c, 0x0a, 0x09, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69,
-	0x6f, 0x6e, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x09, 0x52, 0x09, 0x72, 0x65, 0x6c, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x73, 0x22, 0x4d, 0x0a, 0x13, 0x41, 0x74, 0x4d, 0x6f, 0x73, 0x74, 0x4f, 0x6e,
-	0x65, 0x41, 0x73, 0x73, 0x75, 0x6d, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1a, 0x0a, 0x08, 0x72,
-	0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x72,
-	0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x6c, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x72, 0x65, 0x6c, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x22, 0x4b, 0x0a, 0x11, 0x41, 0x63, 0x79, 0x63, 0x6c, 0x69, 0x63, 0x41, 0x73,
-	0x73, 0x75, 0x6d, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x73, 0x6f,
+var file_sourcenetwork_acp_core_system_constraint_proto_rawDesc = []byte{
+	0x0a, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f,
+	0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x73, 0x79, 0x73, 0x74, 0x65, 0x6d, 0x5f,
+	0x63, 0x6f, 0x6e, 0x73, 0x74, 0x72, 0x61, 0x69, 0x6e, 0x74, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x12, 0x16, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e,
+	0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x80,
+	0x02, 0x0a, 0x10, 0x53, 0x79, 0x73, 0x74, 0x65, 0x6d, 0x43, 0x6f, 0x6e, 0x73, 0x74, 0x72, 0x61,
+	0x69, 0x6e, 0x74, 0x12, 0x48, 0x0a, 0x08, 0x64, 0x69, 0x73, 0x6a, 0x6f, 0x69, 0x6e, 0x74, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65,
+	0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x44,
+	0x69, 0x73, 0x6a, 0x6f, 0x69, 0x6e, 0x74, 0x43, 0x6f, 0x6e, 0x73, 0x74, 0x72, 0x61, 0x69, 0x6e,
+	0x74, 0x48, 0x00, 0x52, 0x08, 0x64, 0x69, 0x73, 0x6a, 0x6f, 0x69, 0x6e, 0x74, 0x12, 0x4d, 0x0a,
+	0x0b, 0x61, 0x74, 0x5f, 0x6d, 0x6f, 0x73, 0x74, 0x5f, 0x6f, 0x6e, 0x65, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x2b, 0x2e, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f,
+	0x72, 0x6b, 0x2e, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x41, 0x74, 0x4d, 0x6f,
+	0x73, 0x74, 0x4f, 0x6e, 0x65, 0x43, 0x6f, 0x6e, 0x73, 0x74, 0x72, 0x61, 0x69, 0x6e, 0x74, 0x48,
+	0x00, 0x52, 0x09, 0x61, 0x74, 0x4d, 0x6f, 0x73, 0x74, 0x4f, 0x6e, 0x65, 0x12, 0x45, 0x0a, 0x07,
+	0x61, 0x63, 0x79, 0x63, 0x6c, 0x69, 0x63, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x29, 0x2e,
+	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2e, 0x61, 0x63,
+	0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2e, 0x41, 0x63, 0x79, 0x63, 0x6c, 0x69, 0x63, 0x43, 0x6f,
+	0x6e, 0x73, 0x74, 0x72, 0x61, 0x69, 0x6e, 0x74, 0x48, 0x00, 0x52, 0x07, 0x61, 0x63, 0x79, 0x63,
+	0x6c, 0x69, 0x63, 0x42, 0x0c, 0x0a, 0x0a, 0x63, 0x6f, 0x6e, 0x73, 0x74, 0x72, 0x61, 0x69, 0x6e,
+	0x74, 0x22, 0x4e, 0x0a, 0x12, 0x44, 0x69, 0x73, 0x6a, 0x6f, 0x69, 0x6e, 0x74, 0x43, 0x6f, 0x6e,
+	0x73, 0x74, 0x72, 0x61, 0x69, 0x6e, 0x74, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x73, 0x6f, 0x75,
+	0x72, 0x63, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x72, 0x65, 0x73, 0x6f, 0x75,
+	0x72, 0x63, 0x65, 0x12, 0x1c, 0x0a, 0x09, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73,
+	0x18, 0x02, 0x20, 0x03, 0x28, 0x09, 0x52, 0x09, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x73, 0x22, 0x4d, 0x0a, 0x13, 0x41, 0x74, 0x4d, 0x6f, 0x73, 0x74, 0x4f, 0x6e, 0x65, 0x43, 0x6f,
+	0x6e, 0x73, 0x74, 0x72, 0x61, 0x69, 0x6e, 0x74, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x73, 0x6f,
 	0x75, 0x72, 0x63, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x72, 0x65, 0x73, 0x6f,
 	0x75, 0x72, 0x63, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e,
 	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x42, 0x31, 0xd8, 0xe2, 0x1e, 0x01, 0x5a, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63,
-	0x6f, 0x6d, 0x2f, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b,
-	0x2f, 0x61, 0x63, 0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x74, 0x79,
-	0x70, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x22, 0x4b, 0x0a, 0x11, 0x41, 0x63, 0x79, 0x63, 0x6c, 0x69, 0x63, 0x43, 0x6f, 0x6e, 0x73, 0x74,
+	0x72, 0x61, 0x69, 0x6e, 0x74, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63,
+	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63,
+	0x65, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x08, 0x72, 0x65, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x31, 0xd8,
+	0xe2, 0x1e, 0x01, 0x5a, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
+	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x2f, 0x61, 0x63,
+	0x70, 0x5f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
-	file_sourcenetwork_acp_core_assumption_proto_rawDescOnce sync.Once
-	file_sourcenetwork_acp_core_assumption_proto_rawDescData = file_sourcenetwork_acp_core_assumption_proto_rawDesc
+	file_sourcenetwork_acp_core_system_constraint_proto_rawDescOnce sync.Once
+	file_sourcenetwork_acp_core_system_constraint_proto_rawDescData = file_sourcenetwork_acp_core_system_constraint_proto_rawDesc
 )
 
-func file_sourcenetwork_acp_core_assumption_proto_rawDescGZIP() []byte {
-	file_sourcenetwork_acp_core_assumption_proto_rawDescOnce.Do(func() {
-		file_sourcenetwork_acp_core_assumption_proto_rawDescData = protoimpl.X.CompressGZIP(file_sourcenetwork_acp_core_assumption_proto_rawDescData)
+func file_sourcenetwork_acp_core_system_constraint_proto_rawDescGZIP() []byte {
+	file_sourcenetwork_acp_core_system_constraint_proto_rawDescOnce.Do(func() {
+		file_sourcenetwork_acp_core_system_constraint_proto_rawDescData = protoimpl.X.CompressGZIP(file_sourcenetwork_acp_core_system_constraint_proto_rawDescData)
 	})
-	return file_sourcenetwork_acp_core_assumption_proto_rawDescData
+	return file_sourcenetwork_acp_core_system_constraint_proto_rawDescData
 }
 
-var file_sourcenetwork_acp_core_assumption_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
-var file_sourcenetwork_acp_core_assumption_proto_goTypes = []interface{}{
-	(*Assumption)(nil),          // 0: sourcenetwork.acp_core.Assumption
-	(*DisjointAssumption)(nil),  // 1: sourcenetwork.acp_core.DisjointAssumption
-	(*AtMostOneAssumption)(nil), // 2: sourcenetwork.acp_core.AtMostOneAssumption
-	(*AcyclicAssumption)(nil),   // 3: sourcenetwork.acp_core.AcyclicAssumption
+var file_sourcenetwork_acp_core_system_constraint_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_sourcenetwork_acp_core_system_constraint_proto_goTypes = []interface{}{
+	(*SystemConstraint)(nil),    // 0: sourcenetwork.acp_core.SystemConstraint
+	(*DisjointConstraint)(nil),  // 1: sourcenetwork.acp_core.DisjointConstraint
+	(*AtMostOneConstraint)(nil), // 2: sourcenetwork.acp_core.AtMostOneConstraint
+	(*AcyclicConstraint)(nil),   // 3: sourcenetwork.acp_core.AcyclicConstraint
 }
-var file_sourcenetwork_acp_core_assumption_proto_depIdxs = []int32{
-	1, // 0: sourcenetwork.acp_core.Assumption.disjoint:type_name -> sourcenetwork.acp_core.DisjointAssumption
-	2, // 1: sourcenetwork.acp_core.Assumption.at_most_one:type_name -> sourcenetwork.acp_core.AtMostOneAssumption
-	3, // 2: sourcenetwork.acp_core.Assumption.acyclic:type_name -> sourcenetwork.acp_core.AcyclicAssumption
+var file_sourcenetwork_acp_core_system_constraint_proto_depIdxs = []int32{
+	1, // 0: sourcenetwork.acp_core.SystemConstraint.disjoint:type_name -> sourcenetwork.acp_core.DisjointConstraint
+	2, // 1: sourcenetwork.acp_core.SystemConstraint.at_most_one:type_name -> sourcenetwork.acp_core.AtMostOneConstraint
+	3, // 2: sourcenetwork.acp_core.SystemConstraint.acyclic:type_name -> sourcenetwork.acp_core.AcyclicConstraint
 	3, // [3:3] is the sub-list for method output_type
 	3, // [3:3] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name
@@ -2514,14 +2515,14 @@ var file_sourcenetwork_acp_core_assumption_proto_depIdxs = []int32{
 	0, // [0:3] is the sub-list for field type_name
 }
 
-func init() { file_sourcenetwork_acp_core_assumption_proto_init() }
-func file_sourcenetwork_acp_core_assumption_proto_init() {
-	if File_sourcenetwork_acp_core_assumption_proto != nil {
+func init() { file_sourcenetwork_acp_core_system_constraint_proto_init() }
+func file_sourcenetwork_acp_core_system_constraint_proto_init() {
+	if File_sourcenetwork_acp_core_system_constraint_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_sourcenetwork_acp_core_assumption_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Assumption); i {
+		file_sourcenetwork_acp_core_system_constraint_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*SystemConstraint); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2532,8 +2533,8 @@ func file_sourcenetwork_acp_core_assumption_proto_init() {
 				return nil
 			}
 		}
-		file_sourcenetwork_acp_core_assumption_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DisjointAssumption); i {
+		file_sourcenetwork_acp_core_system_constraint_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DisjointConstraint); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2544,8 +2545,8 @@ func file_sourcenetwork_acp_core_assumption_proto_init() {
 				return nil
 			}
 		}
-		file_sourcenetwork_acp_core_assumption_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AtMostOneAssumption); i {
+		file_sourcenetwork_acp_core_system_constraint_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*AtMostOneConstraint); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2556,8 +2557,8 @@ func file_sourcenetwork_acp_core_assumption_proto_init() {
 				return nil
 			}
 		}
-		file_sourcenetwork_acp_core_assumption_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AcyclicAssumption); i {
+		file_sourcenetwork_acp_core_system_constraint_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*AcyclicConstraint); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2569,27 +2570,27 @@ func file_sourcenetwork_acp_core_assumption_proto_init() {
 			}
 		}
 	}
-	file_sourcenetwork_acp_core_assumption_proto_msgTypes[0].OneofWrappers = []interface{}{
-		(*Assumption_Disjoint)(nil),
-		(*Assumption_AtMostOne)(nil),
-		(*Assumption_Acyclic)(nil),
+	file_sourcenetwork_acp_core_system_constraint_proto_msgTypes[0].OneofWrappers = []interface{}{
+		(*SystemConstraint_Disjoint)(nil),
+		(*SystemConstraint_AtMostOne)(nil),
+		(*SystemConstraint_Acyclic)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_sourcenetwork_acp_core_assumption_proto_rawDesc,
+			RawDescriptor: file_sourcenetwork_acp_core_system_constraint_proto_rawDesc,
 			NumEnums:      0,
 			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_sourcenetwork_acp_core_assumption_proto_goTypes,
-		DependencyIndexes: file_sourcenetwork_acp_core_assumption_proto_depIdxs,
-		MessageInfos:      file_sourcenetwork_acp_core_assumption_proto_msgTypes,
+		GoTypes:           file_sourcenetwork_acp_core_system_constraint_proto_goTypes,
+		DependencyIndexes: file_sourcenetwork_acp_core_system_constraint_proto_depIdxs,
+		MessageInfos:      file_sourcenetwork_acp_core_system_constraint_proto_msgTypes,
 	}.Build()
-	File_sourcenetwork_acp_core_assumption_proto = out.File
-	file_sourcenetwork_acp_core_assumption_proto_rawDesc = nil
-	file_sourcenetwork_acp_core_assumption_proto_goTypes = nil
-	file_sourcenetwork_acp_core_assumption_proto_depIdxs = nil
+	File_sourcenetwork_acp_core_system_constraint_proto = out.File
+	file_sourcenetwork_acp_core_system_constraint_proto_rawDesc = nil
+	file_sourcenetwork_acp_core_system_constraint_proto_goTypes = nil
+	file_sourcenetwork_acp_core_system_constraint_proto_depIdxs = nil
 }

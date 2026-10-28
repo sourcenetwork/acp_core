@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package sourcenetwork.acp_core;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+option (gogoproto.stable_marshaler_all) = true;
+
+// SystemConstraint models a rule about relationship data which the application enforces,
+// but acp_core does not. Together with a policy, system constraints define the valid states of a system.
+message SystemConstraint {
+  oneof constraint {
+    DisjointConstraint disjoint = 1;
+    AtMostOneConstraint at_most_one = 2;
+    AcyclicConstraint acyclic = 3;
+  }
+}
+
+// DisjointConstraint states that a subject is never related to an object
+// through more than one of the relations (eg. an owner is never also listed as an editor)
+message DisjointConstraint {
+  string resource = 1;
+  repeated string relations = 2;
+}
+
+// AtMostOneConstraint states that an object has at most one relationship
+// for the relation (eg. a file lives in at most one folder)
+message AtMostOneConstraint {
+  string resource = 1;
+  string relation = 2;
+}
+
+// AcyclicConstraint states that following the relation from an object
+// never leads back to it (eg. a folder never contains itself)
+message AcyclicConstraint {
+  string resource = 1;
+  string relation = 2;
+}

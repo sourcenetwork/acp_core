@@ -48,7 +48,7 @@ func (*Acyclic) isAssumption()   {}
 //	- disjoint: [doc.owner, doc.editor]
 //	- at_most_one: file.parent
 //	- acyclic: folder.parent
-func UnmarshalAssumptions(definition string) ([]*types.Assumption, error) {
+func UnmarshalAssumptions(definition string) ([]*types.SystemConstraint, error) {
 	var doc struct {
 		Assumptions []struct {
 			Disjoint  []string `json:"disjoint"`
@@ -61,7 +61,7 @@ func UnmarshalAssumptions(definition string) ([]*types.Assumption, error) {
 	}
 
 	errs := errors.NewMultiError(ErrPolicyCompiler)
-	var assumptions []*types.Assumption
+	var assumptions []*types.SystemConstraint
 	for i, entry := range doc.Assumptions {
 		set := 0
 		for _, isSet := range []bool{len(entry.Disjoint) > 0, entry.AtMostOne != "", entry.Acyclic != ""} {
@@ -76,7 +76,7 @@ func UnmarshalAssumptions(definition string) ([]*types.Assumption, error) {
 
 		switch {
 		case len(entry.Disjoint) > 0:
-			disjoint := &types.DisjointAssumption{}
+			disjoint := &types.DisjointConstraint{}
 			for _, ref := range entry.Disjoint {
 				resource, relation, err := parseRelationRef(ref)
 				if err != nil {
@@ -90,15 +90,15 @@ func UnmarshalAssumptions(definition string) ([]*types.Assumption, error) {
 				disjoint.Resource = resource
 				disjoint.Relations = append(disjoint.Relations, relation)
 			}
-			assumptions = append(assumptions, &types.Assumption{Assumption: &types.Assumption_Disjoint{Disjoint: disjoint}})
+			assumptions = append(assumptions, &types.SystemConstraint{Constraint: &types.SystemConstraint_Disjoint{Disjoint: disjoint}})
 		case entry.AtMostOne != "":
 			resource, relation, err := parseRelationRef(entry.AtMostOne)
 			if err != nil {
 				errs.Append(fmt.Errorf("assumption %v: %w", i+1, err))
 				continue
 			}
-			assumptions = append(assumptions, &types.Assumption{Assumption: &types.Assumption_AtMostOne{
-				AtMostOne: &types.AtMostOneAssumption{Resource: resource, Relation: relation},
+			assumptions = append(assumptions, &types.SystemConstraint{Constraint: &types.SystemConstraint_AtMostOne{
+				AtMostOne: &types.AtMostOneConstraint{Resource: resource, Relation: relation},
 			}})
 		case entry.Acyclic != "":
 			resource, relation, err := parseRelationRef(entry.Acyclic)
@@ -106,8 +106,8 @@ func UnmarshalAssumptions(definition string) ([]*types.Assumption, error) {
 				errs.Append(fmt.Errorf("assumption %v: %w", i+1, err))
 				continue
 			}
-			assumptions = append(assumptions, &types.Assumption{Assumption: &types.Assumption_Acyclic{
-				Acyclic: &types.AcyclicAssumption{Resource: resource, Relation: relation},
+			assumptions = append(assumptions, &types.SystemConstraint{Constraint: &types.SystemConstraint_Acyclic{
+				Acyclic: &types.AcyclicConstraint{Resource: resource, Relation: relation},
 			}})
 		}
 	}
@@ -127,7 +127,7 @@ func parseRelationRef(ref string) (resource, relation string, err error) {
 }
 
 // LowerAssumptions resolves assumptions against the relations of a Model
-func LowerAssumptions(model *Model, assumptions []*types.Assumption) ([]Assumption, error) {
+func LowerAssumptions(model *Model, assumptions []*types.SystemConstraint) ([]Assumption, error) {
 	errs := errors.NewMultiError(ErrPolicyCompiler)
 	fieldsOf := func(resource, relation string) []*Field {
 		for _, r := range model.Resources {
@@ -141,11 +141,11 @@ func LowerAssumptions(model *Model, assumptions []*types.Assumption) ([]Assumpti
 				}
 			}
 			if len(fields) == 0 {
-				errs.Append(fmt.Errorf("assumption references undefined relation %v.%v", resource, relation))
+				errs.Append(fmt.Errorf("constraint references undefined relation %v.%v", resource, relation))
 			}
 			return fields
 		}
-		errs.Append(fmt.Errorf("assumption references undefined resource %v", resource))
+		errs.Append(fmt.Errorf("constraint references undefined resource %v", resource))
 		return nil
 	}
 
@@ -201,7 +201,7 @@ func LowerAssumptions(model *Model, assumptions []*types.Assumption) ([]Assumpti
 			}
 			lowered = append(lowered, &Acyclic{Resource: c.Resource, Relation: c.Relation, Fields: fields})
 		default:
-			errs.Append(fmt.Errorf("empty assumption"))
+			errs.Append(fmt.Errorf("empty constraint"))
 		}
 	}
 	if len(errs.GetErrors()) > 0 {

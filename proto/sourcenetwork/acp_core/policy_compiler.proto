@@ -3,7 +3,7 @@ syntax = "proto3";
 package sourcenetwork.acp_core;
 
 import "gogoproto/gogo.proto";
-import "sourcenetwork/acp_core/assumption.proto";
+import "sourcenetwork/acp_core/system_constraint.proto";
 import "sourcenetwork/acp_core/policy.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
@@ -21,8 +21,8 @@ message CompileRequest {
   // module names the emitted Alloy modules, defaults to the policy name.
   // Invalid characters are replaced by underscores.
   string module = 3;
-  // assumptions are emitted as an additional <module>_assumptions.als module
-  repeated Assumption assumptions = 4;
+  // constraints are emitted as an additional <module>_assumptions.als module
+  repeated SystemConstraint constraints = 4;
 }
 
 message CompileResponse {

@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package sourcenetwork.acp_core;
+
+import "gogoproto/gogo.proto";
+import "sourcenetwork/acp_core/system_constraint.proto";
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+option (gogoproto.stable_marshaler_all) = true;
+
+// Playground2 explores the states of a system. It is stateless and deterministic:
+// the same request always produces the same response.
+service Playground2 {
+  // Generate returns worlds which are valid states of a system model
+  rpc Generate(GenerateRequest) returns (GenerateResponse);
+}
+
+// SystemModel defines every valid state of a system
+message SystemModel {
+  // policy is a yaml serialized acp_core policy
+  string policy = 1;
+  // constraints are the rules about relationship data enforced by the application
+  repeated SystemConstraint constraints = 2;
+}
+
+// World is one concrete state of a system
+message World {
+  // relationships is a set of line separated relationships, as defined in the PolicyTheoremDSL,
+  // with owner relationships first
+  string relationships = 1;
+  // assertions is a PolicyTheoremDSL document with expectations about the world.
+  // Generated worlds carry no assertions.
+  string assertions = 2;
+}
+
+message GenerateConfig {
+  // count is the maximum number of worlds to generate. Defaults to 1.
+  uint32 count = 1;
+  // scope bounds the number of objects of each resource in a world. Defaults to 3.
+  uint32 scope = 2;
+  // actors is the number of actors in a world, each of which takes part in some relationship. Defaults to 3.
+  uint32 actors = 3;
+}
+
+message GenerateRequest {
+  SystemModel system_model = 1;
+  GenerateConfig config = 2;
+}
+
+message GenerateResponse {
+  // worlds may contain fewer worlds than requested if the system model allows no more
+  repeated World worlds = 1;
+}

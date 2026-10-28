@@ -89,7 +89,7 @@ func compile(policyPath, outDir, assumptionsPath string) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		req.Assumptions = assumptions
+		req.Constraints = assumptions
 	}
 	resp, err := services.NewPolicyCompilerService().Compile(context.Background(), req)
 	if err != nil {

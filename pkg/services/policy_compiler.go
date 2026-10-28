@@ -36,8 +36,8 @@ func (s *PolicyCompilerService) Compile(ctx context.Context, req *types.CompileR
 			return nil, err
 		}
 		files := alloy.Emit(model, req.Module)
-		if len(req.Assumptions) > 0 {
-			assumptions, err := policy_compiler.LowerAssumptions(model, req.Assumptions)
+		if len(req.Constraints) > 0 {
+			assumptions, err := policy_compiler.LowerAssumptions(model, req.Constraints)
 			if err != nil {
 				return nil, err
 			}

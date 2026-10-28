@@ -60,8 +60,8 @@ resources:
 `
 	resp, err := NewPolicyCompilerService().Compile(context.Background(), &types.CompileRequest{
 		Policy: policy,
-		Assumptions: []*types.Assumption{{Assumption: &types.Assumption_Disjoint{
-			Disjoint: &types.DisjointAssumption{Resource: "note", Relations: []string{"reader", "editor"}},
+		Constraints: []*types.SystemConstraint{{Constraint: &types.SystemConstraint_Disjoint{
+			Disjoint: &types.DisjointConstraint{Resource: "note", Relations: []string{"reader", "editor"}},
 		}}},
 	})
 	require.NoError(t, err)
@@ -71,8 +71,8 @@ resources:
 
 	_, err = NewPolicyCompilerService().Compile(context.Background(), &types.CompileRequest{
 		Policy: policy,
-		Assumptions: []*types.Assumption{{Assumption: &types.Assumption_Acyclic{
-			Acyclic: &types.AcyclicAssumption{Resource: "note", Relation: "reader"},
+		Constraints: []*types.SystemConstraint{{Constraint: &types.SystemConstraint_Acyclic{
+			Acyclic: &types.AcyclicConstraint{Resource: "note", Relation: "reader"},
 		}}},
 	})
 	require.ErrorContains(t, err, "can't form cycles")
