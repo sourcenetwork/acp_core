@@ -1,0 +1,105 @@
+<alloy builddate="2025-01-09T08:17:18.350Z">
+
+<instance bitwidth="4" maxseq="3" mintrace="-1" maxtrace="-1" command="Run nested_viewer for 3 but 2 Actor" filename="" tracelength="1" looplength="1">
+
+<sig label="seq/Int" ID="0" parentID="1" builtin="yes">
+</sig>
+
+<sig label="Int" ID="1" parentID="2" builtin="yes">
+</sig>
+
+<sig label="String" ID="3" parentID="2" builtin="yes">
+</sig>
+
+<sig label="workspace/Doc" ID="4" parentID="5">
+</sig>
+
+<field label="owner" ID="6" parentID="4">
+   <types> <type ID="4"/> <type ID="7"/> </types>
+</field>
+
+<field label="banned" ID="8" parentID="4">
+   <types> <type ID="4"/> <type ID="7"/> </types>
+</field>
+
+<field label="folder" ID="9" parentID="4">
+   <types> <type ID="4"/> <type ID="10"/> </types>
+</field>
+
+<field label="reviewer" ID="11" parentID="4">
+   <types> <type ID="4"/> <type ID="7"/> </types>
+</field>
+
+<sig label="workspace/Folder" ID="10" parentID="5">
+   <atom label="workspace/Folder$0"/>
+</sig>
+
+<field label="owner" ID="12" parentID="10">
+   <tuple> <atom label="workspace/Folder$0"/> <atom label="workspace/Actor$0"/> </tuple>
+   <types> <type ID="10"/> <type ID="7"/> </types>
+</field>
+
+<field label="editor" ID="13" parentID="10">
+   <tuple> <atom label="workspace/Folder$0"/> <atom label="workspace/Actor$0"/> </tuple>
+   <types> <type ID="10"/> <type ID="7"/> </types>
+</field>
+
+<field label="editor_group_view" ID="14" parentID="10">
+   <types> <type ID="10"/> <type ID="15"/> </types>
+</field>
+
+<field label="parent" ID="16" parentID="10">
+   <tuple> <atom label="workspace/Folder$0"/> <atom label="workspace/Folder$0"/> </tuple>
+   <types> <type ID="10"/> <type ID="10"/> </types>
+</field>
+
+<field label="viewer" ID="17" parentID="10">
+   <types> <type ID="10"/> <type ID="7"/> </types>
+</field>
+
+<field label="viewer_group_member" ID="18" parentID="10">
+   <tuple> <atom label="workspace/Folder$0"/> <atom label="workspace/Group$0"/> </tuple>
+   <types> <type ID="10"/> <type ID="15"/> </types>
+</field>
+
+<sig label="workspace/Group" ID="15" parentID="5">
+   <atom label="workspace/Group$0"/>
+</sig>
+
+<field label="owner" ID="19" parentID="15">
+   <tuple> <atom label="workspace/Group$0"/> <atom label="workspace/Actor$0"/> </tuple>
+   <types> <type ID="15"/> <type ID="7"/> </types>
+</field>
+
+<field label="admin" ID="20" parentID="15">
+   <tuple> <atom label="workspace/Group$0"/> <atom label="workspace/Actor$0"/> </tuple>
+   <types> <type ID="15"/> <type ID="7"/> </types>
+</field>
+
+<field label="member" ID="21" parentID="15">
+   <types> <type ID="15"/> <type ID="7"/> </types>
+</field>
+
+<field label="member_group_member" ID="22" parentID="15">
+   <tuple> <atom label="workspace/Group$0"/> <atom label="workspace/Group$0"/> </tuple>
+   <types> <type ID="15"/> <type ID="15"/> </types>
+</field>
+
+<sig label="workspace/Object" ID="5" parentID="2" abstract="yes">
+</sig>
+
+<sig label="workspace/Actor" ID="7" parentID="2">
+   <atom label="workspace/Actor$0"/>
+</sig>
+
+<sig label="univ" ID="2" builtin="yes">
+</sig>
+
+<skolem label="$nested_viewer_f" ID="23">
+   <tuple> <atom label="workspace/Folder$0"/> </tuple>
+   <types> <type ID="10"/> </types>
+</skolem>
+
+</instance>
+
+</alloy>

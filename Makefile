@@ -33,7 +33,7 @@ playground\:wasm_js:
 
 .PHONY: policy_compiler
 policy_compiler:
-	go build $(BUILD_FLAGS) -o build/policy_compiler cmd/policy_compiler/main.go
+	go build $(BUILD_FLAGS) -o build/policy_compiler ./cmd/policy_compiler
 
 .PHONY: simulator
 simulator:
