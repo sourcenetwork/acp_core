@@ -280,10 +280,28 @@ func checkWithAlloy(t *testing.T, model *pc.Model, inst *instance, expected map[
 
 	path := filepath.Join(dir, "instance.als")
 	require.NoError(t, os.WriteFile(path, []byte(b.String()), 0644))
-	out, err := exec.Command("alloy", "exec", "-q", "-f", "-t", "none", "-c", "*", "-o", filepath.Join(dir, "out"), path).CombinedOutput()
+	solved := runAlloy(t, path)
+	require.Len(t, solved, len(names), "alloy did not run every check")
+
+	var failed []string
+	for name, found := range solved {
+		if found {
+			failed = append(failed, fmt.Sprintf("%v (expected %v)", name, relation(expected[strings.TrimPrefix(name, "eq_")])))
+		}
+	}
+	sort.Strings(failed)
+	return failed
+}
+
+// runAlloy executes every command in an alloy file, returning whether each command found
+// an instance (for a check: a counterexample)
+func runAlloy(t *testing.T, path string) map[string]bool {
+	t.Helper()
+	outDir := filepath.Join(filepath.Dir(path), "out")
+	out, err := exec.Command("alloy", "exec", "-q", "-f", "-t", "none", "-c", "*", "-o", outDir, path).CombinedOutput()
 	require.NoError(t, err, string(out))
 
-	receiptBytes, err := os.ReadFile(filepath.Join(dir, "out", "receipt.json"))
+	receiptBytes, err := os.ReadFile(filepath.Join(outDir, "receipt.json"))
 	require.NoError(t, err)
 	var receipt struct {
 		Commands map[string]struct {
@@ -291,16 +309,12 @@ func checkWithAlloy(t *testing.T, model *pc.Model, inst *instance, expected map[
 		} `json:"commands"`
 	}
 	require.NoError(t, json.Unmarshal(receiptBytes, &receipt))
-	require.Len(t, receipt.Commands, len(names), "alloy did not run every check:\n%v", string(out))
 
-	var failed []string
+	solved := make(map[string]bool)
 	for name, cmd := range receipt.Commands {
-		if len(cmd.Solution) > 0 {
-			failed = append(failed, fmt.Sprintf("%v (expected %v)", name, relation(expected[strings.TrimPrefix(name, "eq_")])))
-		}
+		solved[name] = len(cmd.Solution) > 0
 	}
-	sort.Strings(failed)
-	return failed
+	return solved
 }
 
 func relation(atoms []string) string {

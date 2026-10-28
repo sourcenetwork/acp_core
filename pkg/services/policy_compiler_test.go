@@ -46,3 +46,34 @@ resources:
 	require.Contains(t, resp.Files[0].Content, "fun note_read: Note->Actor")
 	require.Equal(t, "notes_management.als", resp.Files[1].Name)
 }
+
+func Test_PolicyCompiler_CompileEmitsAssumptions(t *testing.T) {
+	policy := `
+name: notes
+resources:
+- name: note
+  relations:
+  - name: reader
+    types: [actor]
+  - name: editor
+    types: [actor]
+`
+	resp, err := NewPolicyCompilerService().Compile(context.Background(), &types.CompileRequest{
+		Policy: policy,
+		Assumptions: []*types.Assumption{{Assumption: &types.Assumption_Disjoint{
+			Disjoint: &types.DisjointAssumption{Resource: "note", Relations: []string{"reader", "editor"}},
+		}}},
+	})
+	require.NoError(t, err)
+	require.Len(t, resp.Files, 3)
+	require.Equal(t, "notes_assumptions.als", resp.Files[2].Name)
+	require.Contains(t, resp.Files[2].Content, "no (Note <: reader) & (Note <: editor)")
+
+	_, err = NewPolicyCompilerService().Compile(context.Background(), &types.CompileRequest{
+		Policy: policy,
+		Assumptions: []*types.Assumption{{Assumption: &types.Assumption_Acyclic{
+			Acyclic: &types.AcyclicAssumption{Resource: "note", Relation: "reader"},
+		}}},
+	})
+	require.ErrorContains(t, err, "can't form cycles")
+}

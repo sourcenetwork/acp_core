@@ -134,11 +134,14 @@ func printInstance(inst *alloy.Instance, perms, manages grants) {
 				continue
 			}
 			any = true
-			line := fmt.Sprintf("    %-*v  %v", width, object, strings.Join(p, " "))
-			if len(m) > 0 {
-				line += "  | manages " + strings.Join(m, " ")
+			cols := []string{fmt.Sprintf("%-*v", width, object)}
+			if len(p) > 0 {
+				cols = append(cols, strings.Join(p, " "))
 			}
-			fmt.Println(strings.TrimRight(line, " "))
+			if len(m) > 0 {
+				cols = append(cols, "| manages "+strings.Join(m, " "))
+			}
+			fmt.Println("    " + strings.Join(cols, "  "))
 		}
 		if !any {
 			fmt.Println("    nothing")

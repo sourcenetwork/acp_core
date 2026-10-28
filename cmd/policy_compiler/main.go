@@ -2,7 +2,7 @@
 //
 // Usage:
 //
-//	policy_compiler compile <policy.yaml> <output dir>
+//	policy_compiler compile [-a assumptions.yaml] <policy.yaml> <output dir>
 //	policy_compiler instance [-o dir] <policy.yaml> <instance.xml>...
 //	policy_compiler serve [address]
 //
@@ -22,6 +22,7 @@ import (
 
 	"google.golang.org/grpc"
 
+	"github.com/sourcenetwork/acp_core/internal/policy_compiler"
 	"github.com/sourcenetwork/acp_core/pkg/services"
 	"github.com/sourcenetwork/acp_core/pkg/types"
 )
@@ -34,10 +35,14 @@ func main() {
 	}
 	switch os.Args[1] {
 	case "compile":
-		if len(os.Args) != 4 {
+		fs := flag.NewFlagSet("compile", flag.ExitOnError)
+		assumptionsPath := fs.String("a", "", "application assumptions yaml, emitted as <module>_assumptions.als")
+		fs.Usage = usage
+		fs.Parse(os.Args[2:])
+		if fs.NArg() != 2 {
 			usage()
 		}
-		compile(os.Args[2], os.Args[3])
+		compile(fs.Arg(0), fs.Arg(1), *assumptionsPath)
 	case "instance":
 		fs := flag.NewFlagSet("instance", flag.ExitOnError)
 		outDir := fs.String("o", "", "write each instance as relationships.txt and theorems.txt under this directory")
@@ -59,7 +64,7 @@ func main() {
 }
 
 func usage() {
-	fmt.Fprintf(os.Stderr, "usage:\n  %[1]v compile <policy.yaml> <output dir>\n  %[1]v instance [-o dir] <policy.yaml> <instance.xml>...\n  %[1]v serve [address]\n", filepath.Base(os.Args[0]))
+	fmt.Fprintf(os.Stderr, "usage:\n  %[1]v compile [-a assumptions.yaml] <policy.yaml> <output dir>\n  %[1]v instance [-o dir] <policy.yaml> <instance.xml>...\n  %[1]v serve [address]\n", filepath.Base(os.Args[0]))
 	os.Exit(2)
 }
 
@@ -71,14 +76,22 @@ func read(path string) string {
 	return string(content)
 }
 
-func compile(policyPath, outDir string) {
+func compile(policyPath, outDir, assumptionsPath string) {
 	definition := read(policyPath)
 	// modules are named after the policy file, eg. policy.yaml emits policy.als
 	module := strings.TrimSuffix(filepath.Base(policyPath), filepath.Ext(policyPath))
-	resp, err := services.NewPolicyCompilerService().Compile(context.Background(), &types.CompileRequest{
+	req := &types.CompileRequest{
 		Policy: definition,
 		Module: module,
-	})
+	}
+	if assumptionsPath != "" {
+		assumptions, err := policy_compiler.UnmarshalAssumptions(read(assumptionsPath))
+		if err != nil {
+			log.Fatal(err)
+		}
+		req.Assumptions = assumptions
+	}
+	resp, err := services.NewPolicyCompilerService().Compile(context.Background(), req)
 	if err != nil {
 		log.Fatal(err)
 	}

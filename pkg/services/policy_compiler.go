@@ -24,6 +24,7 @@ func NewPolicyCompilerService() *PolicyCompilerService {
 
 // Compile processes a policy and emits it as a bundle of Alloy modules.
 // An unspecified marshal type defaults to YAML and an empty module name to the policy name.
+// If the request has assumptions, they are emitted as an additional module.
 func (s *PolicyCompilerService) Compile(ctx context.Context, req *types.CompileRequest) (*types.CompileResponse, error) {
 	h := func(ctx context.Context, req *types.CompileRequest) (*types.CompileResponse, error) {
 		marshalType := req.MarshalType
@@ -34,8 +35,17 @@ func (s *PolicyCompilerService) Compile(ctx context.Context, req *types.CompileR
 		if err != nil {
 			return nil, err
 		}
+		files := alloy.Emit(model, req.Module)
+		if len(req.Assumptions) > 0 {
+			assumptions, err := policy_compiler.LowerAssumptions(model, req.Assumptions)
+			if err != nil {
+				return nil, err
+			}
+			files = append(files, alloy.EmitAssumptions(model, req.Module, assumptions))
+		}
+
 		resp := &types.CompileResponse{}
-		for _, f := range alloy.Emit(model, req.Module) {
+		for _, f := range files {
 			resp.Files = append(resp.Files, &types.CompiledFile{Name: f.Name, Content: f.Content})
 		}
 		return resp, nil

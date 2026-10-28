@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package sourcenetwork.acp_core;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+option (gogoproto.stable_marshaler_all) = true;
+
+// Assumption models an invariant over relationships which the application enforces,
+// but acp_core does not. Assumptions restrict the instances considered when analyzing a policy.
+message Assumption {
+  oneof assumption {
+    DisjointAssumption disjoint = 1;
+    AtMostOneAssumption at_most_one = 2;
+    AcyclicAssumption acyclic = 3;
+  }
+}
+
+// DisjointAssumption states that a subject is never related to an object
+// through more than one of the relations (eg. an owner is never also listed as an editor)
+message DisjointAssumption {
+  string resource = 1;
+  repeated string relations = 2;
+}
+
+// AtMostOneAssumption states that an object has at most one relationship
+// for the relation (eg. a file lives in at most one folder)
+message AtMostOneAssumption {
+  string resource = 1;
+  string relation = 2;
+}
+
+// AcyclicAssumption states that following the relation from an object
+// never leads back to it (eg. a folder never contains itself)
+message AcyclicAssumption {
+  string resource = 1;
+  string relation = 2;
+}
