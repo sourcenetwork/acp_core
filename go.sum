@@ -215,8 +215,6 @@ github.com/sourcenetwork/raccoondb v0.2.1-0.20260514175348-017fdf639300 h1:Cg44Z
 github.com/sourcenetwork/raccoondb v0.2.1-0.20260514175348-017fdf639300/go.mod h1:/WJdZWouiY199DypsN0xaP5PF0zy3rka3FxH5Y8o9Bc=
 github.com/sourcenetwork/raccoondb/v2 v2.0.0 h1:Gb0SjsZUbrbkHCEg7PyyNs0+2IzPxjE/BkEQnlu1nfA=
 github.com/sourcenetwork/raccoondb/v2 v2.0.0/go.mod h1:tPKAWHUgYcSoXNMt01iWJ+Y51AQYc2knY93IjmmbejY=
-github.com/sourcenetwork/zanzi v0.3.1-0.20260514183406-33141096311f h1:uURLAfIX+KnaQJqNFLy+Sr8MKRcQ2bAmwilHBB4lg7I=
-github.com/sourcenetwork/zanzi v0.3.1-0.20260514183406-33141096311f/go.mod h1:Elj7mNEfkthXGmHOdyfbPMBaJQqKIZlTRmSD0R5FYfs=
 github.com/sourcenetwork/zanzi v0.3.1-0.20260731133738-53cb4f16fe3e h1:Q+qzo49PMTHIrWAAgdkz9PR3R85Gpo7NwAUODHIeigA=
 github.com/sourcenetwork/zanzi v0.3.1-0.20260731133738-53cb4f16fe3e/go.mod h1:Elj7mNEfkthXGmHOdyfbPMBaJQqKIZlTRmSD0R5FYfs=
 github.com/spf13/cast v1.10.0 h1:h2x0u2shc1QuLHfxi+cTJvs30+ZAHOGRic8uyGTDWxY=

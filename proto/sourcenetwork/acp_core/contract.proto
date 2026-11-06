@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package sourcenetwork.acp_core;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
+option (gogoproto.stable_marshaler_all) = true;
+
+// Requirement is something the user wants of the system, in their own words,
+// and the contracts the policy engineer derived from it
+message Requirement {
+  // name identifies the requirement, eg. read-access
+  string name = 1;
+  // statement is what the user said, verbatim
+  string statement = 2;
+  // notes are the policy engineer's: open questions, assumptions made, things it didn't understand
+  repeated string notes = 3;
+  repeated Contract contracts = 4;
+}
+
+// Contract is one claim derived from a requirement, which the user can accept or not
+message Contract {
+  // name identifies the contract, eg. unbanned-readers-can-read
+  string name = 1;
+  // description states the claim in natural language
+  string description = 2;
+  ContractStatus status = 3;
+  // properties formalize the contract, which holds if all of them do. A contract without properties is a draft.
+  repeated Property properties = 4;
+}
+
+enum ContractStatus {
+  // PROPOSED contracts haven't been accepted by the user
+  PROPOSED = 0;
+  // ACCEPTED contracts were accepted by the user as stating what they want.
+  // It says nothing about whether the policy satisfies them.
+  ACCEPTED = 1;
+}
+
+// Property is an Alloy formula over the policy's compiled model
+message Property {
+  PropertyType type = 1;
+  // description explains what the formula checks, in natural language
+  string description = 2;
+  // formula is an Alloy formula, eg. `all d: Doc | d.doc_reader - d.doc_banned in d.doc_read`
+  string formula = 3;
+}
+
+enum PropertyType {
+  // ASSERT properties must hold in every valid state: `check { assumptions implies formula }`
+  ASSERT = 0;
+  // PRED properties must hold in some valid state: `run { assumptions and formula }`
+  PRED = 1;
+}

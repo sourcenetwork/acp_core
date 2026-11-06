@@ -1,0 +1,3 @@
+#!/bin/sh
+# alloy runs the Alloy analyzer's CLI from its jar, as the native `alloy` launcher does
+exec java -Djava.awt.headless=true -jar /opt/alloy/alloy.jar "$@"

@@ -1,0 +1,6 @@
+#!/bin/sh
+# playground-local runs the playground service and serves the playground UI for a workspace, in one container:
+#   docker run -p 7070:7070 -v $PWD/myapp:/workspace <image> playground-local [workspace]
+set -e
+playground2 -addr localhost:8090 &
+exec acp playground -server http://localhost:8090 -addr 0.0.0.0:7070 -open=false "${1:-/workspace}"

@@ -35,6 +35,21 @@ playground\:wasm_js:
 policy_compiler:
 	go build $(BUILD_FLAGS) -o build/policy_compiler ./cmd/policy_compiler
 
+.PHONY: acp
+acp:
+	go build $(BUILD_FLAGS) -o build/acp ./cmd/acp
+
+# acp-ui rebuilds the playground UI embedded in acp (cmd/acp/ui, committed so `go install` includes it), and acp
+.PHONY: acp-ui
+acp-ui:
+	cd playground2 && npm run build
+	rm -rf cmd/acp/ui && cp -r playground2/dist cmd/acp/ui
+	go build $(BUILD_FLAGS) -o build/acp ./cmd/acp
+
+.PHONY: playground2
+playground2:
+	go build $(BUILD_FLAGS) -o build/playground2 ./cmd/playground2
+
 .PHONY: simulator
 simulator:
 	go build $(BUILD_FLAGS) -o build/acp_simulate cmd/acp_simulate/main.go

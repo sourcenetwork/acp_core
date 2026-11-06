@@ -47,12 +47,12 @@ assumptions:
 - disjoint: [doc.owner, doc.viewer]
 `
 
-func generator(t *testing.T) *Generator {
+func analyzer(t *testing.T) *Analyzer {
 	t.Helper()
 	if _, err := exec.LookPath("alloy"); err != nil {
 		t.Skip("alloy not found in PATH")
 	}
-	return &Generator{AlloyPath: "alloy", Timeout: time.Minute}
+	return &Analyzer{AlloyPath: "alloy", Timeout: time.Minute}
 }
 
 func folderModel(t *testing.T) *types.SystemModel {
@@ -76,13 +76,13 @@ func Test_Generate_ConfigDefaultsAndLimits(t *testing.T) {
 	_, err = withDefaults(&types.GenerateConfig{Actors: maxActors + 1})
 	require.ErrorIs(t, err, errors.ErrorType_BAD_INPUT)
 
-	g := &Generator{AlloyPath: "alloy", Timeout: time.Minute}
+	g := &Analyzer{AlloyPath: "alloy", Timeout: time.Minute}
 	_, err = g.Generate(context.Background(), &types.GenerateRequest{})
 	require.ErrorIs(t, err, ErrGenerate)
 }
 
 func Test_Generate_ReturnsValidWorlds(t *testing.T) {
-	g := generator(t)
+	g := analyzer(t)
 	req := &types.GenerateRequest{
 		SystemModel: folderModel(t),
 		Config:      &types.GenerateConfig{Count: 3, Actors: 4},

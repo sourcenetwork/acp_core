@@ -2,3 +2,7 @@ build
 ui/public/playground.wasm
 ui/node_modules
 ui/dist
+.git
+playground2/node_modules
+playground2/dist
+cmd/acp/ui

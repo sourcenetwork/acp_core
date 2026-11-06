@@ -24,7 +24,7 @@ const (
 	maxScope      = 6
 	maxActors     = 10
 
-	// module names the compiled system model in the generator's working directory
+	// module names the compiled system model in the analyzer's working directory
 	module = "system"
 	// command names the alloy command which generates worlds
 	command = "generate"
@@ -32,8 +32,8 @@ const (
 
 var ErrGenerate = errors.New("generate", errors.ErrorType_BAD_INPUT)
 
-// Generator generates worlds by running the Alloy analyzer
-type Generator struct {
+// Analyzer generates worlds and verifies contracts by running the Alloy analyzer
+type Analyzer struct {
 	// AlloyPath is the alloy executable
 	AlloyPath string
 	// Timeout bounds each Alloy run
@@ -42,7 +42,7 @@ type Generator struct {
 
 // Generate compiles the system model and asks Alloy for up to count worlds satisfying
 // the system constraints, translating each back into relationships.
-func (g *Generator) Generate(ctx context.Context, req *types.GenerateRequest) (*types.GenerateResponse, error) {
+func (g *Analyzer) Generate(ctx context.Context, req *types.GenerateRequest) (*types.GenerateResponse, error) {
 	if req.SystemModel == nil {
 		return nil, errors.Wrap("system model is required", ErrGenerate)
 	}
@@ -70,10 +70,8 @@ func (g *Generator) Generate(ctx context.Context, req *types.GenerateRequest) (*
 		alloy.EmitAssumptions(model, module, constraints),
 		alloy.EmitGenerate(model, module, command, cfg.Scope, cfg.Actors),
 	)
-	for _, f := range files {
-		if err := os.WriteFile(filepath.Join(dir, f.Name), []byte(f.Content), 0644); err != nil {
-			return nil, fmt.Errorf("generate: %w", err)
-		}
+	if err := writeFiles(dir, files); err != nil {
+		return nil, fmt.Errorf("generate: %w", err)
 	}
 
 	outDir := filepath.Join(dir, "out")
@@ -101,7 +99,7 @@ func (g *Generator) Generate(ctx context.Context, req *types.GenerateRequest) (*
 	return resp, nil
 }
 
-func (g *Generator) run(ctx context.Context, dir, outDir string, count uint32) error {
+func (g *Analyzer) run(ctx context.Context, dir, outDir string, count uint32) error {
 	ctx, cancel := context.WithTimeout(ctx, g.Timeout)
 	defer cancel()
 	cmd := exec.CommandContext(ctx, g.AlloyPath, "exec", "-q", "-f", "-c", command, "-t", "xml",
@@ -112,6 +110,15 @@ func (g *Generator) run(ctx context.Context, dir, outDir string, count uint32) e
 	}
 	if err != nil {
 		return errors.New(fmt.Sprintf("running alloy: %v: %v", err, alloyError(string(out))), errors.ErrorType_INTERNAL)
+	}
+	return nil
+}
+
+func writeFiles(dir string, files []alloy.File) error {
+	for _, f := range files {
+		if err := os.WriteFile(filepath.Join(dir, f.Name), []byte(f.Content), 0644); err != nil {
+			return err
+		}
 	}
 	return nil
 }

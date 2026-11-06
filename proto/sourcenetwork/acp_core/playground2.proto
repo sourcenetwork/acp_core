@@ -3,6 +3,10 @@ syntax = "proto3";
 package sourcenetwork.acp_core;
 
 import "gogoproto/gogo.proto";
+import "sourcenetwork/acp_core/check_explain.proto";
+import "sourcenetwork/acp_core/contract.proto";
+import "sourcenetwork/acp_core/policy_compiler.proto";
+import "sourcenetwork/acp_core/relationship.proto";
 import "sourcenetwork/acp_core/system_constraint.proto";
 
 option go_package = "github.com/sourcenetwork/acp_core/pkg/types";
@@ -13,6 +17,25 @@ option (gogoproto.stable_marshaler_all) = true;
 service Playground2 {
   // Generate returns worlds which are valid states of a system model
   rpc Generate(GenerateRequest) returns (GenerateResponse);
+
+  // Check returns whether an actor has a permission (or relation) on an object, in a world
+  rpc Check(CheckRequest) returns (CheckResponse);
+
+  // Explain performs a Check and returns the graph of the engine's search, which shows why
+  // the actor has the permission or not. The graph's shape is not stable: use it for display only.
+  rpc Explain(ExplainRequest) returns (ExplainResponse);
+
+  // Verify checks the contracts of a system model's requirements against every valid state, up to a scope
+  rpc Verify(VerifyRequest) returns (VerifyResponse);
+
+  // Compile returns the Alloy modules a policy compiles to: the model contract formulas are written against
+  rpc Compile(CompileRequest) returns (CompileResponse);
+}
+
+// Scenario is a system model and a world: everything needed to evaluate the world
+message Scenario {
+  SystemModel system_model = 1;
+  World world = 2;
 }
 
 // SystemModel defines every valid state of a system
@@ -21,6 +44,8 @@ message SystemModel {
   string policy = 1;
   // constraints are the rules about relationship data enforced by the application
   repeated SystemConstraint constraints = 2;
+  // requirements are what the user wants of the system, and the contracts derived from them. Only Verify uses them.
+  repeated Requirement requirements = 3;
 }
 
 // World is one concrete state of a system
@@ -31,6 +56,15 @@ message World {
   // assertions is a PolicyTheoremDSL document with expectations about the world.
   // Generated worlds carry no assertions.
   string assertions = 2;
+  // name identifies a saved world, eg. after its file. Generated worlds have none.
+  string name = 3;
+}
+
+// Workspace is a system specification and the worlds saved against it: everything a user keeps,
+// eg. as a directory with policy.yaml, constraints.yaml, contracts.yaml and worlds/
+message Workspace {
+  SystemModel system_model = 1;
+  repeated World worlds = 2;
 }
 
 message GenerateConfig {
@@ -50,4 +84,86 @@ message GenerateRequest {
 message GenerateResponse {
   // worlds may contain fewer worlds than requested if the system model allows no more
   repeated World worlds = 1;
+}
+
+message CheckRequest {
+  Scenario scenario = 1;
+  Object object = 2;
+  // permission is the name of a permission or relation of the object's resource
+  string permission = 3;
+  Actor actor = 4;
+}
+
+message CheckResponse {
+  bool allowed = 1;
+}
+
+message ExplainRequest {
+  Scenario scenario = 1;
+  Object object = 2;
+  // permission is the name of a permission or relation of the object's resource
+  string permission = 3;
+  Actor actor = 4;
+}
+
+message ExplainResponse {
+  bool allowed = 1;
+  CheckExplainGraph graph = 2;
+}
+
+message VerifyConfig {
+  // scope bounds the number of objects of each resource, and of actors, in the states checked. Defaults to 3.
+  uint32 scope = 1;
+}
+
+message VerifyRequest {
+  SystemModel system_model = 1;
+  VerifyConfig config = 2;
+}
+
+message VerifyResponse {
+  // results has one result per contract, in order
+  repeated ContractResult results = 1;
+  // scope is the scope the contracts were verified up to
+  uint32 scope = 2;
+}
+
+message ContractResult {
+  string requirement = 1;
+  string contract = 2;
+  // status is VIOLATED if any property is violated, else UNVERIFIED if any is unverified,
+  // else SATISFIED. A contract without properties is a DRAFT.
+  VerifyStatus status = 3;
+  // properties has one result per property, in order
+  repeated PropertyResult properties = 4;
+}
+
+message PropertyResult {
+  VerifyStatus status = 1;
+  // world is a counterexample for a violated assert, or an example for a satisfied pred
+  World world = 2;
+  // bindings name the objects and actors world is about (eg. the doc and actor breaking an assert),
+  // after the formula's variables
+  repeated Binding bindings = 3;
+  // message explains why the property is unverified
+  string message = 4;
+}
+
+enum VerifyStatus {
+  // UNVERIFIED properties could not be verified, eg. the formula is invalid or alloy timed out
+  UNVERIFIED = 0;
+  // SATISFIED asserts hold in every state up to the scope; satisfied preds hold in world
+  SATISFIED = 1;
+  // VIOLATED asserts fail in world; violated preds hold in no state up to the scope
+  VIOLATED = 2;
+  // DRAFT contracts have no properties to verify
+  DRAFT = 3;
+}
+
+// Binding is the value of a formula variable in a world
+message Binding {
+  // name is the variable, eg. d
+  string name = 1;
+  // values are object or actor ids. Relations, eg. a set comprehension, render tuples as a->b.
+  repeated string values = 2;
 }

@@ -61,12 +61,13 @@ evaluating worlds, assertions, contracts, auth, multiple workspaces.
 
 All on `main`, in Go:
 
-- **API**: `proto/sourcenetwork/acp_core/playground2.proto` (service `Playground2`, rpc `Generate`) and
+- **API**: `proto/sourcenetwork/acp_core/playground2.proto` (service `Playground2`: rpcs `Generate`, `Check`,
+  `Explain`) and
   `proto/sourcenetwork/acp_core/system_constraint.proto`. Generated Go types are in `pkg/types`
   (`types.GenerateRequest`, `types.SystemModel`, `types.World`, ...).
 - **Implementation**: `services.NewPlayground2Service(alloyPath)` in `pkg/services/playground2.go` implements
-  `types.Playground2Server`. Pass `""` to find `alloy` in `PATH`. It's stateless and deterministic, and each call runs
-  Alloy (bounded by a timeout and by caps on count, scope and actors).
+  `types.Playground2Server`. Pass `""` to find `alloy` in `PATH`. It's stateless and deterministic. `Generate` runs
+  Alloy (bounded by a timeout and by caps on count, scope and actors); `Check` and `Explain` only use the acp engine.
 - **Requirements**: the `alloy` executable must be in `PATH` (it is on this machine: `/usr/local/bin/alloy`), plus Java.
 - **Tests**: `go test ./internal/playground2/ ./pkg/services/` show how it's used.
 
@@ -101,7 +102,11 @@ work with them directly. Two options:
   you go this way.
 
 Either way, the wire format is the same, so the UI doesn't care. Listen on `localhost:8090` by default, with a flag to
-change it.
+change it. Serve all three rpcs (`Generate`, `Check`, `Explain`) the same way.
+
+Marshal responses with `jsonpb.Marshaler{EmitDefaults: true}`. Without it, zero values are omitted: a union node in an
+Explain graph would have no `nodeType` (`UNION_NODE` is the zero value) and an unauthorized result no `authorized`
+field. The old playground does the same for the same reason.
 
 ### Wire format (verified)
 
@@ -135,6 +140,80 @@ Response:
 
 Empty fields are omitted (eg. `assertions`, and `worlds` when none were found). Fewer worlds than `count` means the
 system model allows no more. `relationships` lists owner relationships first, one per line.
+
+### Check and Explain
+
+Both take a **scenario** (system model + world) and ask a question about that one world. They're what makes a world
+interactive: "can bob view roadmap?" and "why?". Using them in the UI is a stretch goal for this task (eg. a small
+form under a world: actor, object, permission → allowed, and a "why" that shows the graph); the backend should serve
+them regardless.
+
+```json
+POST /sourcenetwork.acp_core.Playground2/Check
+{
+  "scenario": {
+    "systemModel": { "policy": "...", "constraints": [] },
+    "world": { "relationships": "folder:specs#owner@did:user:alice\nfolder:specs#viewer@did:user:bob\n..." }
+  },
+  "object": { "resource": "doc", "id": "roadmap" },
+  "permission": "view",
+  "actor": { "id": "did:user:bob" }
+}
+→ { "allowed": true }
+```
+
+`Explain` takes the same request and returns `{ "allowed": true, "graph": { "rootNodeId", "nodes", "edges" } }`, the
+engine's search graph (`CheckExplainGraph` in `check_explain.proto`): union/difference/intersection nodes and userset
+nodes like `(doc:roadmap, view)`, each with a `result` (`authorized`, `explored`, `exhausted`). The old playground
+renders the same structure with React Flow + dagre (`ui/src/components/ExplainCheckGraph`), which is worth reusing.
+The graph's shape is not stable (zanzi treats it as debug output): lay it out from the edges, and don't rely on
+`rootNodeId` (it can point at the first operator rather than the request node).
+
+A world that doesn't load (eg. a relationship before its object's owner relationship) returns `invalid_argument`
+with a message like `invalid scenario: relationships 1:0: object not registered`. There's no Expand: the engine
+doesn't implement it.
+
+### Verify (served, not in the UI yet)
+
+`Verify` checks the contracts of the system model's **requirements** against every valid state up to a scope. The
+route is wired in `cmd/playground2`; a contracts panel is not part of this task, but keep room for it (see "Coming
+next").
+
+```json
+POST /sourcenetwork.acp_core.Playground2/Verify
+{
+  "systemModel": {
+    "policy": "...", "constraints": [],
+    "requirements": [{
+      "name": "doc-view", "statement": "only people on a doc can see it", "notes": [],
+      "contracts": [{
+        "name": "only-direct-viewers", "description": "Only a doc's owner and viewers can view it.", "status": "PROPOSED",
+        "properties": [{ "type": "ASSERT", "description": "every doc viewer is the owner or a viewer",
+                         "formula": "all d: Doc, a: Actor | a in d.doc_view implies a in d.doc_owner + d.doc_viewer" }]
+      }]
+    }]
+  },
+  "config": { "scope": 3 }
+}
+→ { "scope": 3, "results": [{ "requirement": "doc-view", "contract": "only-direct-viewers", "status": "VIOLATED",
+      "properties": [{ "status": "VIOLATED", "world": { "relationships": "..." }, "message": "",
+        "bindings": [{ "name": "a", "values": ["did:user:bob"] }, { "name": "d", "values": ["doc:doc0"] }] }] }] }
+```
+
+A requirement is the user's statement and the contracts derived from it; a contract (`status` `PROPOSED` or
+`ACCEPTED` by the user) is verified by its properties. Property `type` is `ASSERT` (must hold in every world; a
+violation carries a counterexample `world`) or `PRED` (must hold in some world; a satisfied pred carries an example
+`world`). Property `status` is `SATISFIED`, `VIOLATED` or `UNVERIFIED` (with a `message`, eg.
+`syntax error at formula line 1 column 16: The name "nope" cannot be found.`). Contract `status` combines them, and
+is `DRAFT` for a contract without properties. `bindings` name the objects and actors the world is about, which is what
+a Check/Explain form should be prefilled with. The contracts file is YAML (`requirements:`, see `HANDOFF.md`).
+
+### Compile
+
+`POST /sourcenetwork.acp_core.Playground2/Compile` takes the existing `CompileRequest`
+(`{"policy", "marshalType": "YAML", "module", "constraints"}`) and returns `{"files": [{"name", "content"}]}`: the
+Alloy modules the policy compiles to, which contract formulas are written against. Useful for a read-only "model"
+view next to the contracts.
 
 ## UI: constraints format
 
@@ -237,12 +316,13 @@ Done when:
 
 ## Coming next (don't build, but don't block)
 
-- Evaluate a world: what can each actor do in it (the engine already supports this via the `Simulator` service,
-  which will move into `Playground2` under the new vocabulary).
+- Evaluate a world: assertions, and what each actor can do in it (the engine supports this via the `Simulator`
+  service, which will move into `Playground2` under the new vocabulary).
 - Save a generated world, edit worlds by hand, add assertions to them.
 - A graph view of a world (entities and relationships), expandable from a node.
 - Steering generation, eg. "worlds where docs are in nested folders".
-- Contracts, checked across all worlds.
+- A contracts panel: run Verify, list results, open a counterexample as a world with Check/Explain prefilled from
+  its bindings.
 
 Keep the state model ready for this: a workspace holds one system model and a list of worlds, each either saved or
 ephemeral.

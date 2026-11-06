@@ -28,19 +28,105 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+type VerifyStatus int32
+
+const (
+	// UNVERIFIED properties could not be verified, eg. the formula is invalid or alloy timed out
+	VerifyStatus_UNVERIFIED VerifyStatus = 0
+	// SATISFIED asserts hold in every state up to the scope; satisfied preds hold in world
+	VerifyStatus_SATISFIED VerifyStatus = 1
+	// VIOLATED asserts fail in world; violated preds hold in no state up to the scope
+	VerifyStatus_VIOLATED VerifyStatus = 2
+	// DRAFT contracts have no properties to verify
+	VerifyStatus_DRAFT VerifyStatus = 3
+)
+
+var VerifyStatus_name = map[int32]string{
+	0: "UNVERIFIED",
+	1: "SATISFIED",
+	2: "VIOLATED",
+	3: "DRAFT",
+}
+
+var VerifyStatus_value = map[string]int32{
+	"UNVERIFIED": 0,
+	"SATISFIED":  1,
+	"VIOLATED":   2,
+	"DRAFT":      3,
+}
+
+func (x VerifyStatus) String() string {
+	return proto.EnumName(VerifyStatus_name, int32(x))
+}
+
+func (VerifyStatus) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_c65b404db2855d7b, []int{0}
+}
+
+// Scenario is a system model and a world: everything needed to evaluate the world
+type Scenario struct {
+	SystemModel *SystemModel `protobuf:"bytes,1,opt,name=system_model,json=systemModel,proto3" json:"system_model,omitempty"`
+	World       *World       `protobuf:"bytes,2,opt,name=world,proto3" json:"world,omitempty"`
+}
+
+func (m *Scenario) Reset()         { *m = Scenario{} }
+func (m *Scenario) String() string { return proto.CompactTextString(m) }
+func (*Scenario) ProtoMessage()    {}
+func (*Scenario) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c65b404db2855d7b, []int{0}
+}
+func (m *Scenario) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Scenario) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Scenario) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Scenario.Merge(m, src)
+}
+func (m *Scenario) XXX_Size() int {
+	return m.Size()
+}
+func (m *Scenario) XXX_DiscardUnknown() {
+	xxx_messageInfo_Scenario.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Scenario proto.InternalMessageInfo
+
+func (m *Scenario) GetSystemModel() *SystemModel {
+	if m != nil {
+		return m.SystemModel
+	}
+	return nil
+}
+
+func (m *Scenario) GetWorld() *World {
+	if m != nil {
+		return m.World
+	}
+	return nil
+}
+
 // SystemModel defines every valid state of a system
 type SystemModel struct {
 	// policy is a yaml serialized acp_core policy
 	Policy string `protobuf:"bytes,1,opt,name=policy,proto3" json:"policy,omitempty"`
 	// constraints are the rules about relationship data enforced by the application
 	Constraints []*SystemConstraint `protobuf:"bytes,2,rep,name=constraints,proto3" json:"constraints,omitempty"`
+	// requirements are what the user wants of the system, and the contracts derived from them. Only Verify uses them.
+	Requirements []*Requirement `protobuf:"bytes,3,rep,name=requirements,proto3" json:"requirements,omitempty"`
 }
 
 func (m *SystemModel) Reset()         { *m = SystemModel{} }
 func (m *SystemModel) String() string { return proto.CompactTextString(m) }
 func (*SystemModel) ProtoMessage()    {}
 func (*SystemModel) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c65b404db2855d7b, []int{0}
+	return fileDescriptor_c65b404db2855d7b, []int{1}
 }
 func (m *SystemModel) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -79,6 +165,13 @@ func (m *SystemModel) GetConstraints() []*SystemConstraint {
 	return nil
 }
 
+func (m *SystemModel) GetRequirements() []*Requirement {
+	if m != nil {
+		return m.Requirements
+	}
+	return nil
+}
+
 // World is one concrete state of a system
 type World struct {
 	// relationships is a set of line separated relationships, as defined in the PolicyTheoremDSL,
@@ -87,13 +180,15 @@ type World struct {
 	// assertions is a PolicyTheoremDSL document with expectations about the world.
 	// Generated worlds carry no assertions.
 	Assertions string `protobuf:"bytes,2,opt,name=assertions,proto3" json:"assertions,omitempty"`
+	// name identifies a saved world, eg. after its file. Generated worlds have none.
+	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
 }
 
 func (m *World) Reset()         { *m = World{} }
 func (m *World) String() string { return proto.CompactTextString(m) }
 func (*World) ProtoMessage()    {}
 func (*World) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c65b404db2855d7b, []int{1}
+	return fileDescriptor_c65b404db2855d7b, []int{2}
 }
 func (m *World) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -132,6 +227,63 @@ func (m *World) GetAssertions() string {
 	return ""
 }
 
+func (m *World) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+// Workspace is a system specification and the worlds saved against it: everything a user keeps,
+// eg. as a directory with policy.yaml, constraints.yaml, contracts.yaml and worlds/
+type Workspace struct {
+	SystemModel *SystemModel `protobuf:"bytes,1,opt,name=system_model,json=systemModel,proto3" json:"system_model,omitempty"`
+	Worlds      []*World     `protobuf:"bytes,2,rep,name=worlds,proto3" json:"worlds,omitempty"`
+}
+
+func (m *Workspace) Reset()         { *m = Workspace{} }
+func (m *Workspace) String() string { return proto.CompactTextString(m) }
+func (*Workspace) ProtoMessage()    {}
+func (*Workspace) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c65b404db2855d7b, []int{3}
+}
+func (m *Workspace) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Workspace) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Workspace) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Workspace.Merge(m, src)
+}
+func (m *Workspace) XXX_Size() int {
+	return m.Size()
+}
+func (m *Workspace) XXX_DiscardUnknown() {
+	xxx_messageInfo_Workspace.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Workspace proto.InternalMessageInfo
+
+func (m *Workspace) GetSystemModel() *SystemModel {
+	if m != nil {
+		return m.SystemModel
+	}
+	return nil
+}
+
+func (m *Workspace) GetWorlds() []*World {
+	if m != nil {
+		return m.Worlds
+	}
+	return nil
+}
+
 type GenerateConfig struct {
 	// count is the maximum number of worlds to generate. Defaults to 1.
 	Count uint32 `protobuf:"varint,1,opt,name=count,proto3" json:"count,omitempty"`
@@ -145,7 +297,7 @@ func (m *GenerateConfig) Reset()         { *m = GenerateConfig{} }
 func (m *GenerateConfig) String() string { return proto.CompactTextString(m) }
 func (*GenerateConfig) ProtoMessage()    {}
 func (*GenerateConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c65b404db2855d7b, []int{2}
+	return fileDescriptor_c65b404db2855d7b, []int{4}
 }
 func (m *GenerateConfig) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -200,7 +352,7 @@ func (m *GenerateRequest) Reset()         { *m = GenerateRequest{} }
 func (m *GenerateRequest) String() string { return proto.CompactTextString(m) }
 func (*GenerateRequest) ProtoMessage()    {}
 func (*GenerateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c65b404db2855d7b, []int{3}
+	return fileDescriptor_c65b404db2855d7b, []int{5}
 }
 func (m *GenerateRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -248,7 +400,7 @@ func (m *GenerateResponse) Reset()         { *m = GenerateResponse{} }
 func (m *GenerateResponse) String() string { return proto.CompactTextString(m) }
 func (*GenerateResponse) ProtoMessage()    {}
 func (*GenerateResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c65b404db2855d7b, []int{4}
+	return fileDescriptor_c65b404db2855d7b, []int{6}
 }
 func (m *GenerateResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -280,12 +432,568 @@ func (m *GenerateResponse) GetWorlds() []*World {
 	return nil
 }
 
+type CheckRequest struct {
+	Scenario *Scenario `protobuf:"bytes,1,opt,name=scenario,proto3" json:"scenario,omitempty"`
+	Object   *Object   `protobuf:"bytes,2,opt,name=object,proto3" json:"object,omitempty"`
+	// permission is the name of a permission or relation of the object's resource
+	Permission string `protobuf:"bytes,3,opt,name=permission,proto3" json:"permission,omitempty"`
+	Actor      *Actor `protobuf:"bytes,4,opt,name=actor,proto3" json:"actor,omitempty"`
+}
+
+func (m *CheckRequest) Reset()         { *m = CheckRequest{} }
+func (m *CheckRequest) String() string { return proto.CompactTextString(m) }
+func (*CheckRequest) ProtoMessage()    {}
+func (*CheckRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c65b404db2855d7b, []int{7}
+}
+func (m *CheckRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CheckRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CheckRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CheckRequest.Merge(m, src)
+}
+func (m *CheckRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *CheckRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CheckRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CheckRequest proto.InternalMessageInfo
+
+func (m *CheckRequest) GetScenario() *Scenario {
+	if m != nil {
+		return m.Scenario
+	}
+	return nil
+}
+
+func (m *CheckRequest) GetObject() *Object {
+	if m != nil {
+		return m.Object
+	}
+	return nil
+}
+
+func (m *CheckRequest) GetPermission() string {
+	if m != nil {
+		return m.Permission
+	}
+	return ""
+}
+
+func (m *CheckRequest) GetActor() *Actor {
+	if m != nil {
+		return m.Actor
+	}
+	return nil
+}
+
+type CheckResponse struct {
+	Allowed bool `protobuf:"varint,1,opt,name=allowed,proto3" json:"allowed,omitempty"`
+}
+
+func (m *CheckResponse) Reset()         { *m = CheckResponse{} }
+func (m *CheckResponse) String() string { return proto.CompactTextString(m) }
+func (*CheckResponse) ProtoMessage()    {}
+func (*CheckResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c65b404db2855d7b, []int{8}
+}
+func (m *CheckResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CheckResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CheckResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CheckResponse.Merge(m, src)
+}
+func (m *CheckResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *CheckResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_CheckResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CheckResponse proto.InternalMessageInfo
+
+func (m *CheckResponse) GetAllowed() bool {
+	if m != nil {
+		return m.Allowed
+	}
+	return false
+}
+
+type ExplainRequest struct {
+	Scenario *Scenario `protobuf:"bytes,1,opt,name=scenario,proto3" json:"scenario,omitempty"`
+	Object   *Object   `protobuf:"bytes,2,opt,name=object,proto3" json:"object,omitempty"`
+	// permission is the name of a permission or relation of the object's resource
+	Permission string `protobuf:"bytes,3,opt,name=permission,proto3" json:"permission,omitempty"`
+	Actor      *Actor `protobuf:"bytes,4,opt,name=actor,proto3" json:"actor,omitempty"`
+}
+
+func (m *ExplainRequest) Reset()         { *m = ExplainRequest{} }
+func (m *ExplainRequest) String() string { return proto.CompactTextString(m) }
+func (*ExplainRequest) ProtoMessage()    {}
+func (*ExplainRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c65b404db2855d7b, []int{9}
+}
+func (m *ExplainRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ExplainRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ExplainRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ExplainRequest.Merge(m, src)
+}
+func (m *ExplainRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *ExplainRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ExplainRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ExplainRequest proto.InternalMessageInfo
+
+func (m *ExplainRequest) GetScenario() *Scenario {
+	if m != nil {
+		return m.Scenario
+	}
+	return nil
+}
+
+func (m *ExplainRequest) GetObject() *Object {
+	if m != nil {
+		return m.Object
+	}
+	return nil
+}
+
+func (m *ExplainRequest) GetPermission() string {
+	if m != nil {
+		return m.Permission
+	}
+	return ""
+}
+
+func (m *ExplainRequest) GetActor() *Actor {
+	if m != nil {
+		return m.Actor
+	}
+	return nil
+}
+
+type ExplainResponse struct {
+	Allowed bool               `protobuf:"varint,1,opt,name=allowed,proto3" json:"allowed,omitempty"`
+	Graph   *CheckExplainGraph `protobuf:"bytes,2,opt,name=graph,proto3" json:"graph,omitempty"`
+}
+
+func (m *ExplainResponse) Reset()         { *m = ExplainResponse{} }
+func (m *ExplainResponse) String() string { return proto.CompactTextString(m) }
+func (*ExplainResponse) ProtoMessage()    {}
+func (*ExplainResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c65b404db2855d7b, []int{10}
+}
+func (m *ExplainResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ExplainResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ExplainResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ExplainResponse.Merge(m, src)
+}
+func (m *ExplainResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *ExplainResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ExplainResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ExplainResponse proto.InternalMessageInfo
+
+func (m *ExplainResponse) GetAllowed() bool {
+	if m != nil {
+		return m.Allowed
+	}
+	return false
+}
+
+func (m *ExplainResponse) GetGraph() *CheckExplainGraph {
+	if m != nil {
+		return m.Graph
+	}
+	return nil
+}
+
+type VerifyConfig struct {
+	// scope bounds the number of objects of each resource, and of actors, in the states checked. Defaults to 3.
+	Scope uint32 `protobuf:"varint,1,opt,name=scope,proto3" json:"scope,omitempty"`
+}
+
+func (m *VerifyConfig) Reset()         { *m = VerifyConfig{} }
+func (m *VerifyConfig) String() string { return proto.CompactTextString(m) }
+func (*VerifyConfig) ProtoMessage()    {}
+func (*VerifyConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c65b404db2855d7b, []int{11}
+}
+func (m *VerifyConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *VerifyConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *VerifyConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VerifyConfig.Merge(m, src)
+}
+func (m *VerifyConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *VerifyConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_VerifyConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_VerifyConfig proto.InternalMessageInfo
+
+func (m *VerifyConfig) GetScope() uint32 {
+	if m != nil {
+		return m.Scope
+	}
+	return 0
+}
+
+type VerifyRequest struct {
+	SystemModel *SystemModel  `protobuf:"bytes,1,opt,name=system_model,json=systemModel,proto3" json:"system_model,omitempty"`
+	Config      *VerifyConfig `protobuf:"bytes,2,opt,name=config,proto3" json:"config,omitempty"`
+}
+
+func (m *VerifyRequest) Reset()         { *m = VerifyRequest{} }
+func (m *VerifyRequest) String() string { return proto.CompactTextString(m) }
+func (*VerifyRequest) ProtoMessage()    {}
+func (*VerifyRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c65b404db2855d7b, []int{12}
+}
+func (m *VerifyRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *VerifyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *VerifyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VerifyRequest.Merge(m, src)
+}
+func (m *VerifyRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *VerifyRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_VerifyRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_VerifyRequest proto.InternalMessageInfo
+
+func (m *VerifyRequest) GetSystemModel() *SystemModel {
+	if m != nil {
+		return m.SystemModel
+	}
+	return nil
+}
+
+func (m *VerifyRequest) GetConfig() *VerifyConfig {
+	if m != nil {
+		return m.Config
+	}
+	return nil
+}
+
+type VerifyResponse struct {
+	// results has one result per contract, in order
+	Results []*ContractResult `protobuf:"bytes,1,rep,name=results,proto3" json:"results,omitempty"`
+	// scope is the scope the contracts were verified up to
+	Scope uint32 `protobuf:"varint,2,opt,name=scope,proto3" json:"scope,omitempty"`
+}
+
+func (m *VerifyResponse) Reset()         { *m = VerifyResponse{} }
+func (m *VerifyResponse) String() string { return proto.CompactTextString(m) }
+func (*VerifyResponse) ProtoMessage()    {}
+func (*VerifyResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c65b404db2855d7b, []int{13}
+}
+func (m *VerifyResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *VerifyResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *VerifyResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VerifyResponse.Merge(m, src)
+}
+func (m *VerifyResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *VerifyResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_VerifyResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_VerifyResponse proto.InternalMessageInfo
+
+func (m *VerifyResponse) GetResults() []*ContractResult {
+	if m != nil {
+		return m.Results
+	}
+	return nil
+}
+
+func (m *VerifyResponse) GetScope() uint32 {
+	if m != nil {
+		return m.Scope
+	}
+	return 0
+}
+
+type ContractResult struct {
+	Requirement string `protobuf:"bytes,1,opt,name=requirement,proto3" json:"requirement,omitempty"`
+	Contract    string `protobuf:"bytes,2,opt,name=contract,proto3" json:"contract,omitempty"`
+	// status is VIOLATED if any property is violated, else UNVERIFIED if any is unverified,
+	// else SATISFIED. A contract without properties is a DRAFT.
+	Status VerifyStatus `protobuf:"varint,3,opt,name=status,proto3,enum=sourcenetwork.acp_core.VerifyStatus" json:"status,omitempty"`
+	// properties has one result per property, in order
+	Properties []*PropertyResult `protobuf:"bytes,4,rep,name=properties,proto3" json:"properties,omitempty"`
+}
+
+func (m *ContractResult) Reset()         { *m = ContractResult{} }
+func (m *ContractResult) String() string { return proto.CompactTextString(m) }
+func (*ContractResult) ProtoMessage()    {}
+func (*ContractResult) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c65b404db2855d7b, []int{14}
+}
+func (m *ContractResult) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ContractResult) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ContractResult) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ContractResult.Merge(m, src)
+}
+func (m *ContractResult) XXX_Size() int {
+	return m.Size()
+}
+func (m *ContractResult) XXX_DiscardUnknown() {
+	xxx_messageInfo_ContractResult.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ContractResult proto.InternalMessageInfo
+
+func (m *ContractResult) GetRequirement() string {
+	if m != nil {
+		return m.Requirement
+	}
+	return ""
+}
+
+func (m *ContractResult) GetContract() string {
+	if m != nil {
+		return m.Contract
+	}
+	return ""
+}
+
+func (m *ContractResult) GetStatus() VerifyStatus {
+	if m != nil {
+		return m.Status
+	}
+	return VerifyStatus_UNVERIFIED
+}
+
+func (m *ContractResult) GetProperties() []*PropertyResult {
+	if m != nil {
+		return m.Properties
+	}
+	return nil
+}
+
+type PropertyResult struct {
+	Status VerifyStatus `protobuf:"varint,1,opt,name=status,proto3,enum=sourcenetwork.acp_core.VerifyStatus" json:"status,omitempty"`
+	// world is a counterexample for a violated assert, or an example for a satisfied pred
+	World *World `protobuf:"bytes,2,opt,name=world,proto3" json:"world,omitempty"`
+	// bindings name the objects and actors world is about (eg. the doc and actor breaking an assert),
+	// after the formula's variables
+	Bindings []*Binding `protobuf:"bytes,3,rep,name=bindings,proto3" json:"bindings,omitempty"`
+	// message explains why the property is unverified
+	Message string `protobuf:"bytes,4,opt,name=message,proto3" json:"message,omitempty"`
+}
+
+func (m *PropertyResult) Reset()         { *m = PropertyResult{} }
+func (m *PropertyResult) String() string { return proto.CompactTextString(m) }
+func (*PropertyResult) ProtoMessage()    {}
+func (*PropertyResult) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c65b404db2855d7b, []int{15}
+}
+func (m *PropertyResult) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PropertyResult) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PropertyResult) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PropertyResult.Merge(m, src)
+}
+func (m *PropertyResult) XXX_Size() int {
+	return m.Size()
+}
+func (m *PropertyResult) XXX_DiscardUnknown() {
+	xxx_messageInfo_PropertyResult.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PropertyResult proto.InternalMessageInfo
+
+func (m *PropertyResult) GetStatus() VerifyStatus {
+	if m != nil {
+		return m.Status
+	}
+	return VerifyStatus_UNVERIFIED
+}
+
+func (m *PropertyResult) GetWorld() *World {
+	if m != nil {
+		return m.World
+	}
+	return nil
+}
+
+func (m *PropertyResult) GetBindings() []*Binding {
+	if m != nil {
+		return m.Bindings
+	}
+	return nil
+}
+
+func (m *PropertyResult) GetMessage() string {
+	if m != nil {
+		return m.Message
+	}
+	return ""
+}
+
+// Binding is the value of a formula variable in a world
+type Binding struct {
+	// name is the variable, eg. d
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// values are object or actor ids. Relations, eg. a set comprehension, render tuples as a->b.
+	Values []string `protobuf:"bytes,2,rep,name=values,proto3" json:"values,omitempty"`
+}
+
+func (m *Binding) Reset()         { *m = Binding{} }
+func (m *Binding) String() string { return proto.CompactTextString(m) }
+func (*Binding) ProtoMessage()    {}
+func (*Binding) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c65b404db2855d7b, []int{16}
+}
+func (m *Binding) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Binding) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Binding) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Binding.Merge(m, src)
+}
+func (m *Binding) XXX_Size() int {
+	return m.Size()
+}
+func (m *Binding) XXX_DiscardUnknown() {
+	xxx_messageInfo_Binding.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Binding proto.InternalMessageInfo
+
+func (m *Binding) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *Binding) GetValues() []string {
+	if m != nil {
+		return m.Values
+	}
+	return nil
+}
+
 func init() {
+	proto.RegisterEnum("sourcenetwork.acp_core.VerifyStatus", VerifyStatus_name, VerifyStatus_value)
+	proto.RegisterType((*Scenario)(nil), "sourcenetwork.acp_core.Scenario")
 	proto.RegisterType((*SystemModel)(nil), "sourcenetwork.acp_core.SystemModel")
 	proto.RegisterType((*World)(nil), "sourcenetwork.acp_core.World")
+	proto.RegisterType((*Workspace)(nil), "sourcenetwork.acp_core.Workspace")
 	proto.RegisterType((*GenerateConfig)(nil), "sourcenetwork.acp_core.GenerateConfig")
 	proto.RegisterType((*GenerateRequest)(nil), "sourcenetwork.acp_core.GenerateRequest")
 	proto.RegisterType((*GenerateResponse)(nil), "sourcenetwork.acp_core.GenerateResponse")
+	proto.RegisterType((*CheckRequest)(nil), "sourcenetwork.acp_core.CheckRequest")
+	proto.RegisterType((*CheckResponse)(nil), "sourcenetwork.acp_core.CheckResponse")
+	proto.RegisterType((*ExplainRequest)(nil), "sourcenetwork.acp_core.ExplainRequest")
+	proto.RegisterType((*ExplainResponse)(nil), "sourcenetwork.acp_core.ExplainResponse")
+	proto.RegisterType((*VerifyConfig)(nil), "sourcenetwork.acp_core.VerifyConfig")
+	proto.RegisterType((*VerifyRequest)(nil), "sourcenetwork.acp_core.VerifyRequest")
+	proto.RegisterType((*VerifyResponse)(nil), "sourcenetwork.acp_core.VerifyResponse")
+	proto.RegisterType((*ContractResult)(nil), "sourcenetwork.acp_core.ContractResult")
+	proto.RegisterType((*PropertyResult)(nil), "sourcenetwork.acp_core.PropertyResult")
+	proto.RegisterType((*Binding)(nil), "sourcenetwork.acp_core.Binding")
 }
 
 func init() {
@@ -293,34 +1001,70 @@ func init() {
 }
 
 var fileDescriptor_c65b404db2855d7b = []byte{
-	// 427 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x53, 0xd1, 0x6a, 0xd4, 0x40,
-	0x14, 0xdd, 0xb4, 0x74, 0xd1, 0x1b, 0x57, 0x65, 0x28, 0x65, 0x59, 0x70, 0x28, 0x51, 0x34, 0x20,
-	0x24, 0x10, 0xf1, 0xd5, 0x07, 0x0b, 0x4a, 0x85, 0x82, 0x8c, 0x82, 0x20, 0x48, 0x49, 0x67, 0xc7,
-	0x34, 0x34, 0x3b, 0x77, 0x3a, 0x77, 0x42, 0xd9, 0xbf, 0xf0, 0xd5, 0x3f, 0xf2, 0xb1, 0x8f, 0x7d,
-	0x94, 0xdd, 0x1f, 0x91, 0x4c, 0xb2, 0xa6, 0x0b, 0xc6, 0xbe, 0xe5, 0x9c, 0x9c, 0x7b, 0x72, 0xe6,
-	0xe4, 0x0e, 0xc4, 0x84, 0xb5, 0x95, 0x4a, 0x2b, 0x77, 0x85, 0xf6, 0x22, 0xcd, 0xa5, 0x39, 0x95,
-	0x68, 0x55, 0x6a, 0xaa, 0x7c, 0x59, 0x58, 0xac, 0xf5, 0x3c, 0x4b, 0x8c, 0x45, 0x87, 0xec, 0x60,
-	0x4b, 0x99, 0x6c, 0x94, 0xb3, 0xfd, 0x02, 0x0b, 0xf4, 0x92, 0xb4, 0x79, 0x6a, 0xd5, 0xb3, 0x64,
-	0xc0, 0x97, 0x96, 0xe4, 0xd4, 0xe2, 0x54, 0xa2, 0x26, 0x67, 0xf3, 0x52, 0xbb, 0x56, 0x1f, 0x5d,
-	0x42, 0xf8, 0xc9, 0xbf, 0x3a, 0xc1, 0xb9, 0xaa, 0xd8, 0x01, 0x8c, 0x0d, 0x56, 0xa5, 0x5c, 0x4e,
-	0x83, 0xc3, 0x20, 0xbe, 0x2f, 0x3a, 0xc4, 0x3e, 0x40, 0xd8, 0x8f, 0xd2, 0x74, 0xe7, 0x70, 0x37,
-	0x0e, 0xb3, 0x38, 0xf9, 0x77, 0xb4, 0xa4, 0x75, 0x3c, 0xfa, 0x3b, 0x20, 0x6e, 0x0f, 0x47, 0x27,
-	0xb0, 0xf7, 0x05, 0x6d, 0x35, 0x67, 0xcf, 0x60, 0x62, 0x55, 0x95, 0xbb, 0x12, 0x35, 0x9d, 0x97,
-	0x86, 0xba, 0x6f, 0x6e, 0x93, 0x8c, 0x03, 0xe4, 0x44, 0xca, 0x7a, 0x66, 0xba, 0xe3, 0x25, 0xb7,
-	0x98, 0xe8, 0x33, 0x3c, 0x7c, 0xaf, 0xb4, 0xb2, 0xb9, 0x53, 0x47, 0xa8, 0xbf, 0x97, 0x05, 0xdb,
-	0x87, 0x3d, 0x89, 0xb5, 0x76, 0xde, 0x6f, 0x22, 0x5a, 0xd0, 0xb0, 0x24, 0xd1, 0x28, 0x6f, 0x31,
-	0x11, 0x2d, 0x68, 0x0e, 0x9c, 0x4b, 0x87, 0x96, 0xa6, 0xbb, 0x9e, 0xee, 0x50, 0xf4, 0x33, 0x80,
-	0x47, 0x1b, 0x5b, 0xa1, 0x2e, 0x6b, 0x45, 0x8e, 0xbd, 0x83, 0x07, 0x5d, 0x8d, 0x8b, 0xa6, 0x2c,
-	0x6f, 0x1f, 0x66, 0x4f, 0xff, 0xdf, 0x82, 0xef, 0x55, 0x84, 0xd4, 0x03, 0xf6, 0x06, 0xc6, 0xd2,
-	0x27, 0xf5, 0x51, 0xc2, 0xec, 0xf9, 0x90, 0xc3, 0xf6, 0xb9, 0x44, 0x37, 0x15, 0x1d, 0xc3, 0xe3,
-	0x3e, 0x1a, 0x19, 0xd4, 0xa4, 0xd8, 0x6b, 0x18, 0x5f, 0x35, 0xa5, 0x36, 0x25, 0x36, 0xff, 0xe6,
-	0xc9, 0x90, 0xa7, 0xaf, 0x5e, 0x74, 0xe2, 0xac, 0x82, 0xf0, 0x63, 0xbf, 0x71, 0xec, 0x1b, 0xdc,
-	0xdb, 0x38, 0xb3, 0x17, 0x77, 0xa5, 0xea, 0x6a, 0x99, 0xc5, 0x77, 0x0b, 0xdb, 0x90, 0x6f, 0x8f,
-	0x7f, 0xad, 0x78, 0x70, 0xbd, 0xe2, 0xc1, 0xcd, 0x8a, 0x07, 0xbf, 0x57, 0x3c, 0xf8, 0xb1, 0xe6,
-	0xa3, 0xeb, 0x35, 0x1f, 0xdd, 0xac, 0xf9, 0xe8, 0xeb, 0xcb, 0xa2, 0x74, 0xe7, 0xf5, 0x59, 0x22,
-	0x71, 0x91, 0x0e, 0xdd, 0x8e, 0x8b, 0x22, 0x75, 0x4b, 0xa3, 0xe8, 0x6c, 0xec, 0xd7, 0xf7, 0xd5,
-	0x9f, 0x01, 0x00, 0x5d, 0xbb, 0x81, 0x0a, 0x48, 0x03, 0x00, 0x00,
+	// 1006 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x96, 0xcf, 0x6f, 0x1b, 0x45,
+	0x14, 0xc7, 0x33, 0x71, 0xec, 0xd8, 0xcf, 0x3f, 0x1a, 0x8d, 0xaa, 0xca, 0xb2, 0xc4, 0x62, 0x2d,
+	0x49, 0xeb, 0x14, 0x64, 0x4b, 0xa9, 0xca, 0x85, 0x0a, 0x48, 0x9d, 0x38, 0x32, 0x02, 0x5a, 0x8d,
+	0x4d, 0x22, 0x55, 0x42, 0xd1, 0x64, 0x3d, 0x5d, 0x2f, 0x59, 0xef, 0x2c, 0x33, 0x6b, 0x82, 0xff,
+	0x02, 0x24, 0x4e, 0x5c, 0x38, 0xf0, 0xaf, 0xf0, 0x17, 0x70, 0xac, 0x04, 0x87, 0x02, 0x17, 0xe4,
+	0xfc, 0x23, 0x68, 0x67, 0x67, 0xed, 0x35, 0xea, 0x7a, 0x45, 0x94, 0x53, 0x6f, 0x79, 0xe3, 0xcf,
+	0x7b, 0x79, 0xdf, 0x37, 0xf3, 0xde, 0x5b, 0x68, 0x49, 0x3e, 0x15, 0x16, 0xf3, 0x58, 0x70, 0xc5,
+	0xc5, 0x65, 0x87, 0x5a, 0xfe, 0xb9, 0xc5, 0x05, 0xeb, 0xf8, 0x2e, 0x9d, 0xd9, 0x82, 0x4f, 0xbd,
+	0xd1, 0x41, 0xdb, 0x17, 0x3c, 0xe0, 0xf8, 0xde, 0x0a, 0xd9, 0x8e, 0xc9, 0xc6, 0x5d, 0x9b, 0xdb,
+	0x5c, 0x21, 0x9d, 0xf0, 0xaf, 0x88, 0x6e, 0x3c, 0x4c, 0x89, 0x6b, 0x8d, 0x99, 0x75, 0x79, 0xce,
+	0xbe, 0xf7, 0x5d, 0xea, 0x78, 0x9a, 0xdd, 0x4b, 0x63, 0xb9, 0x17, 0x08, 0x6a, 0x05, 0x1a, 0xfb,
+	0x20, 0x2d, 0x55, 0xee, 0x3a, 0xd6, 0xec, 0xdc, 0xe2, 0x13, 0xdf, 0x71, 0x99, 0xd0, 0xf4, 0x7e,
+	0x0a, 0x2d, 0x98, 0x4b, 0x03, 0x87, 0x7b, 0x72, 0xec, 0xf8, 0x1a, 0x6d, 0xa7, 0xa0, 0x72, 0x26,
+	0x03, 0x36, 0x39, 0xb7, 0xb8, 0x27, 0x03, 0x41, 0x1d, 0x4f, 0x27, 0x62, 0xfe, 0x80, 0xa0, 0x38,
+	0xb0, 0x98, 0x47, 0x85, 0xc3, 0x71, 0x0f, 0x2a, 0x9a, 0x9b, 0xf0, 0x11, 0x73, 0xeb, 0xa8, 0x89,
+	0x5a, 0xe5, 0x83, 0xf7, 0xda, 0x6f, 0xae, 0x56, 0x7b, 0xa0, 0xd8, 0x2f, 0x42, 0x94, 0x94, 0xe5,
+	0xd2, 0xc0, 0x8f, 0x20, 0x7f, 0xc5, 0x85, 0x3b, 0xaa, 0x6f, 0xaa, 0x00, 0xef, 0xa4, 0x05, 0x38,
+	0x0b, 0x21, 0x12, 0xb1, 0xe6, 0xaf, 0x08, 0xca, 0x89, 0x88, 0xf8, 0x1e, 0x14, 0xa2, 0x6a, 0xa8,
+	0x34, 0x4a, 0x44, 0x5b, 0xf8, 0x33, 0x28, 0x2f, 0x55, 0xc8, 0xfa, 0x66, 0x33, 0xd7, 0x2a, 0x1f,
+	0xb4, 0xd6, 0xe7, 0xd8, 0x5d, 0x38, 0x90, 0xa4, 0x33, 0x3e, 0x81, 0x8a, 0x60, 0xdf, 0x4e, 0x1d,
+	0xc1, 0x26, 0x2c, 0x0c, 0x96, 0x6b, 0xe6, 0xd6, 0x09, 0x26, 0x4b, 0x96, 0xac, 0x38, 0x9a, 0x14,
+	0xf2, 0x4a, 0x0c, 0xde, 0x85, 0x6a, 0xf2, 0x56, 0xa4, 0x4e, 0x7e, 0xf5, 0x10, 0x1b, 0x00, 0x54,
+	0x4a, 0x26, 0xd4, 0x89, 0xaa, 0x52, 0x89, 0x24, 0x4e, 0x30, 0x86, 0x2d, 0x8f, 0x4e, 0x58, 0x3d,
+	0xa7, 0x7e, 0x51, 0x7f, 0x9b, 0x3f, 0x22, 0x28, 0x9d, 0x71, 0x71, 0x29, 0x7d, 0x6a, 0xb1, 0x5b,
+	0xbb, 0xaa, 0xc7, 0x50, 0x50, 0xe5, 0x8f, 0x0b, 0x99, 0x71, 0x57, 0x1a, 0x36, 0x87, 0x50, 0x3b,
+	0x61, 0x1e, 0x13, 0x34, 0x60, 0x5d, 0xee, 0xbd, 0x74, 0x6c, 0x7c, 0x17, 0xf2, 0x16, 0x9f, 0x7a,
+	0x81, 0xca, 0xa4, 0x4a, 0x22, 0x23, 0x3c, 0x95, 0x16, 0xf7, 0x99, 0xd2, 0x58, 0x25, 0x91, 0x11,
+	0x5e, 0x2d, 0xb5, 0x02, 0x2e, 0xa4, 0x12, 0x58, 0x25, 0xda, 0x32, 0x7f, 0x41, 0x70, 0x27, 0x0e,
+	0x1b, 0xd6, 0x9a, 0xc9, 0xe0, 0xd6, 0x84, 0x7e, 0x0c, 0x05, 0x4b, 0x65, 0xaa, 0x1f, 0xe5, 0xfd,
+	0xb4, 0x08, 0xab, 0xba, 0x88, 0xf6, 0x32, 0xfb, 0xb0, 0xb3, 0x4c, 0x4d, 0xfa, 0xdc, 0x93, 0x2c,
+	0x51, 0x3c, 0xf4, 0x7f, 0x8a, 0xf7, 0x27, 0x82, 0x4a, 0x37, 0x9c, 0x1d, 0xb1, 0xc6, 0x27, 0x50,
+	0x94, 0xba, 0x07, 0xb5, 0xbe, 0x66, 0xaa, 0x3e, 0xcd, 0x91, 0x85, 0x07, 0xfe, 0x10, 0x0a, 0xfc,
+	0xe2, 0x1b, 0x66, 0x05, 0x5a, 0x99, 0x91, 0xe6, 0xfb, 0x4c, 0x51, 0x44, 0xd3, 0xe1, 0x23, 0xf4,
+	0x99, 0x98, 0x38, 0x52, 0x3a, 0xdc, 0xd3, 0x4f, 0x2d, 0x71, 0x12, 0x76, 0xb1, 0xba, 0x97, 0xfa,
+	0xd6, 0xfa, 0x2e, 0x3e, 0x0c, 0x21, 0x12, 0xb1, 0xe6, 0x3e, 0x54, 0xb5, 0x34, 0x5d, 0xa3, 0x3a,
+	0x6c, 0x53, 0xd7, 0xe5, 0x57, 0x6c, 0xa4, 0xa4, 0x15, 0x49, 0x6c, 0x9a, 0x7f, 0x23, 0xa8, 0x1d,
+	0x47, 0xc3, 0xf3, 0x2d, 0x2c, 0x84, 0x0b, 0x77, 0x16, 0xe2, 0xb2, 0x4a, 0x81, 0x3f, 0x81, 0xbc,
+	0x2d, 0xa8, 0x3f, 0xd6, 0x89, 0xef, 0xa7, 0xfd, 0x07, 0x55, 0x5a, 0x1d, 0xf6, 0x24, 0x74, 0x20,
+	0x91, 0x9f, 0xb9, 0x0b, 0x95, 0x53, 0x26, 0x9c, 0x97, 0xb3, 0x65, 0x37, 0x46, 0x7d, 0x87, 0x12,
+	0x7d, 0x67, 0xfe, 0x8c, 0xa0, 0x1a, 0x61, 0xb7, 0xdd, 0x5d, 0x4f, 0xfe, 0xd3, 0x5d, 0xbb, 0x69,
+	0x11, 0x92, 0x59, 0x2e, 0x7a, 0x6b, 0x0c, 0xb5, 0x38, 0x2d, 0x5d, 0xaa, 0x4f, 0x61, 0x5b, 0x30,
+	0x39, 0x75, 0x83, 0xb8, 0xb5, 0x52, 0xdb, 0xb5, 0xab, 0x17, 0x2b, 0x51, 0x38, 0x89, 0xdd, 0xde,
+	0x3c, 0x79, 0xcc, 0x3f, 0x10, 0xd4, 0x56, 0x3d, 0x70, 0x13, 0xca, 0x89, 0x51, 0xae, 0xe7, 0x75,
+	0xf2, 0x08, 0x37, 0xa0, 0x18, 0xaf, 0x6f, 0x3d, 0xab, 0x17, 0x76, 0x28, 0x5c, 0x06, 0x34, 0x98,
+	0x46, 0xa3, 0xac, 0x96, 0x25, 0x7c, 0xa0, 0x58, 0xa2, 0x7d, 0x70, 0x0f, 0xc0, 0x17, 0xdc, 0x0f,
+	0xc7, 0x3e, 0x93, 0xf5, 0xad, 0xf5, 0x4a, 0x9f, 0x47, 0xe4, 0x4c, 0x2b, 0x4d, 0x78, 0x9a, 0x7f,
+	0x21, 0xa8, 0xad, 0xfe, 0x9c, 0x48, 0x0c, 0xdd, 0x20, 0xb1, 0x9b, 0x6c, 0x70, 0xfc, 0x11, 0x14,
+	0x2f, 0x1c, 0x6f, 0xe4, 0x78, 0x76, 0xbc, 0x49, 0xdf, 0x4d, 0xf3, 0x7b, 0x1a, 0x71, 0x64, 0xe1,
+	0x10, 0x36, 0xc7, 0x84, 0x49, 0x49, 0x6d, 0xa6, 0xda, 0xac, 0x44, 0x62, 0xd3, 0x7c, 0x0c, 0xdb,
+	0x1a, 0x5f, 0xec, 0x45, 0xb4, 0xdc, 0x8b, 0xe1, 0x32, 0xf9, 0x8e, 0xba, 0x53, 0x16, 0x6d, 0xb0,
+	0x12, 0xd1, 0xd6, 0xc3, 0x1e, 0x54, 0x92, 0xd2, 0x70, 0x0d, 0xe0, 0xab, 0x2f, 0x4f, 0x8f, 0x49,
+	0xbf, 0xd7, 0x3f, 0x3e, 0xda, 0xd9, 0xc0, 0x55, 0x28, 0x0d, 0x0e, 0x87, 0xfd, 0x81, 0x32, 0x11,
+	0xae, 0x40, 0xf1, 0xb4, 0xff, 0xec, 0xf3, 0xc3, 0xe1, 0xf1, 0xd1, 0xce, 0x26, 0x2e, 0x41, 0xfe,
+	0x88, 0x1c, 0xf6, 0x86, 0x3b, 0xb9, 0x83, 0xdf, 0x73, 0x50, 0x7e, 0xbe, 0xfc, 0x82, 0xc4, 0x5f,
+	0x43, 0x31, 0x5e, 0x04, 0xf8, 0x41, 0xd6, 0x12, 0xd1, 0x7d, 0xd6, 0x68, 0x65, 0x83, 0xfa, 0xe5,
+	0x0f, 0x21, 0xaf, 0xba, 0x1c, 0xef, 0xae, 0x1d, 0x02, 0x71, 0xe0, 0xbd, 0x0c, 0x4a, 0x47, 0x7d,
+	0x01, 0xdb, 0x7a, 0x6c, 0xe0, 0xd4, 0xf7, 0xb5, 0x3a, 0x8b, 0x1b, 0x0f, 0x32, 0x39, 0x1d, 0xfb,
+	0x0c, 0x0a, 0x51, 0xa1, 0xf1, 0xde, 0xfa, 0x37, 0x16, 0x47, 0xbe, 0x9f, 0x85, 0x2d, 0x93, 0xee,
+	0x46, 0x1f, 0xc2, 0x78, 0x4d, 0xfb, 0x2b, 0x20, 0x33, 0xe9, 0x05, 0x17, 0xc5, 0x7e, 0xda, 0xff,
+	0x6d, 0x6e, 0xa0, 0x57, 0x73, 0x03, 0xbd, 0x9e, 0x1b, 0xe8, 0x9f, 0xb9, 0x81, 0x7e, 0xba, 0x36,
+	0x36, 0x5e, 0x5d, 0x1b, 0x1b, 0xaf, 0xaf, 0x8d, 0x8d, 0x17, 0xef, 0xdb, 0x4e, 0x30, 0x9e, 0x5e,
+	0xb4, 0x2d, 0x3e, 0xe9, 0xa4, 0x7d, 0xa9, 0x5f, 0xda, 0x9d, 0x60, 0xe6, 0x33, 0x79, 0x51, 0x50,
+	0x5f, 0xd2, 0x8f, 0xfe, 0x1d, 0x00, 0x84, 0x17, 0xa8, 0xd5, 0x7f, 0x0c, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -337,6 +1081,15 @@ const _ = grpc.SupportPackageIsVersion4
 type Playground2Client interface {
 	// Generate returns worlds which are valid states of a system model
 	Generate(ctx context.Context, in *GenerateRequest, opts ...grpc.CallOption) (*GenerateResponse, error)
+	// Check returns whether an actor has a permission (or relation) on an object, in a world
+	Check(ctx context.Context, in *CheckRequest, opts ...grpc.CallOption) (*CheckResponse, error)
+	// Explain performs a Check and returns the graph of the engine's search, which shows why
+	// the actor has the permission or not. The graph's shape is not stable: use it for display only.
+	Explain(ctx context.Context, in *ExplainRequest, opts ...grpc.CallOption) (*ExplainResponse, error)
+	// Verify checks the contracts of a system model's requirements against every valid state, up to a scope
+	Verify(ctx context.Context, in *VerifyRequest, opts ...grpc.CallOption) (*VerifyResponse, error)
+	// Compile returns the Alloy modules a policy compiles to: the model contract formulas are written against
+	Compile(ctx context.Context, in *CompileRequest, opts ...grpc.CallOption) (*CompileResponse, error)
 }
 
 type playground2Client struct {
@@ -356,10 +1109,55 @@ func (c *playground2Client) Generate(ctx context.Context, in *GenerateRequest, o
 	return out, nil
 }
 
+func (c *playground2Client) Check(ctx context.Context, in *CheckRequest, opts ...grpc.CallOption) (*CheckResponse, error) {
+	out := new(CheckResponse)
+	err := c.cc.Invoke(ctx, "/sourcenetwork.acp_core.Playground2/Check", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *playground2Client) Explain(ctx context.Context, in *ExplainRequest, opts ...grpc.CallOption) (*ExplainResponse, error) {
+	out := new(ExplainResponse)
+	err := c.cc.Invoke(ctx, "/sourcenetwork.acp_core.Playground2/Explain", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *playground2Client) Verify(ctx context.Context, in *VerifyRequest, opts ...grpc.CallOption) (*VerifyResponse, error) {
+	out := new(VerifyResponse)
+	err := c.cc.Invoke(ctx, "/sourcenetwork.acp_core.Playground2/Verify", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *playground2Client) Compile(ctx context.Context, in *CompileRequest, opts ...grpc.CallOption) (*CompileResponse, error) {
+	out := new(CompileResponse)
+	err := c.cc.Invoke(ctx, "/sourcenetwork.acp_core.Playground2/Compile", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Playground2Server is the server API for Playground2 service.
 type Playground2Server interface {
 	// Generate returns worlds which are valid states of a system model
 	Generate(context.Context, *GenerateRequest) (*GenerateResponse, error)
+	// Check returns whether an actor has a permission (or relation) on an object, in a world
+	Check(context.Context, *CheckRequest) (*CheckResponse, error)
+	// Explain performs a Check and returns the graph of the engine's search, which shows why
+	// the actor has the permission or not. The graph's shape is not stable: use it for display only.
+	Explain(context.Context, *ExplainRequest) (*ExplainResponse, error)
+	// Verify checks the contracts of a system model's requirements against every valid state, up to a scope
+	Verify(context.Context, *VerifyRequest) (*VerifyResponse, error)
+	// Compile returns the Alloy modules a policy compiles to: the model contract formulas are written against
+	Compile(context.Context, *CompileRequest) (*CompileResponse, error)
 }
 
 // UnimplementedPlayground2Server can be embedded to have forward compatible implementations.
@@ -368,6 +1166,18 @@ type UnimplementedPlayground2Server struct {
 
 func (*UnimplementedPlayground2Server) Generate(ctx context.Context, req *GenerateRequest) (*GenerateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Generate not implemented")
+}
+func (*UnimplementedPlayground2Server) Check(ctx context.Context, req *CheckRequest) (*CheckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Check not implemented")
+}
+func (*UnimplementedPlayground2Server) Explain(ctx context.Context, req *ExplainRequest) (*ExplainResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Explain not implemented")
+}
+func (*UnimplementedPlayground2Server) Verify(ctx context.Context, req *VerifyRequest) (*VerifyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Verify not implemented")
+}
+func (*UnimplementedPlayground2Server) Compile(ctx context.Context, req *CompileRequest) (*CompileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Compile not implemented")
 }
 
 func RegisterPlayground2Server(s grpc1.Server, srv Playground2Server) {
@@ -392,6 +1202,78 @@ func _Playground2_Generate_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Playground2_Check_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(Playground2Server).Check(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sourcenetwork.acp_core.Playground2/Check",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(Playground2Server).Check(ctx, req.(*CheckRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Playground2_Explain_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ExplainRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(Playground2Server).Explain(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sourcenetwork.acp_core.Playground2/Explain",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(Playground2Server).Explain(ctx, req.(*ExplainRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Playground2_Verify_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VerifyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(Playground2Server).Verify(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sourcenetwork.acp_core.Playground2/Verify",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(Playground2Server).Verify(ctx, req.(*VerifyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Playground2_Compile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CompileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(Playground2Server).Compile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sourcenetwork.acp_core.Playground2/Compile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(Playground2Server).Compile(ctx, req.(*CompileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Playground2_serviceDesc = _Playground2_serviceDesc
 var _Playground2_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "sourcenetwork.acp_core.Playground2",
@@ -401,9 +1283,72 @@ var _Playground2_serviceDesc = grpc.ServiceDesc{
 			MethodName: "Generate",
 			Handler:    _Playground2_Generate_Handler,
 		},
+		{
+			MethodName: "Check",
+			Handler:    _Playground2_Check_Handler,
+		},
+		{
+			MethodName: "Explain",
+			Handler:    _Playground2_Explain_Handler,
+		},
+		{
+			MethodName: "Verify",
+			Handler:    _Playground2_Verify_Handler,
+		},
+		{
+			MethodName: "Compile",
+			Handler:    _Playground2_Compile_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "sourcenetwork/acp_core/playground2.proto",
+}
+
+func (m *Scenario) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Scenario) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Scenario) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.World != nil {
+		{
+			size, err := m.World.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPlayground2(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.SystemModel != nil {
+		{
+			size, err := m.SystemModel.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPlayground2(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *SystemModel) Marshal() (dAtA []byte, err error) {
@@ -426,6 +1371,20 @@ func (m *SystemModel) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.Requirements) > 0 {
+		for iNdEx := len(m.Requirements) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Requirements[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPlayground2(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
 	if len(m.Constraints) > 0 {
 		for iNdEx := len(m.Constraints) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -470,6 +1429,13 @@ func (m *World) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintPlayground2(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x1a
+	}
 	if len(m.Assertions) > 0 {
 		i -= len(m.Assertions)
 		copy(dAtA[i:], m.Assertions)
@@ -481,6 +1447,55 @@ func (m *World) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.Relationships)
 		copy(dAtA[i:], m.Relationships)
 		i = encodeVarintPlayground2(dAtA, i, uint64(len(m.Relationships)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *Workspace) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Workspace) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Workspace) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Worlds) > 0 {
+		for iNdEx := len(m.Worlds) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Worlds[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPlayground2(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.SystemModel != nil {
+		{
+			size, err := m.SystemModel.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPlayground2(dAtA, i, uint64(size))
+		}
 		i--
 		dAtA[i] = 0xa
 	}
@@ -609,6 +1624,489 @@ func (m *GenerateResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *CheckRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CheckRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CheckRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Actor != nil {
+		{
+			size, err := m.Actor.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPlayground2(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.Permission) > 0 {
+		i -= len(m.Permission)
+		copy(dAtA[i:], m.Permission)
+		i = encodeVarintPlayground2(dAtA, i, uint64(len(m.Permission)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Object != nil {
+		{
+			size, err := m.Object.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPlayground2(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Scenario != nil {
+		{
+			size, err := m.Scenario.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPlayground2(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CheckResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CheckResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CheckResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Allowed {
+		i--
+		if m.Allowed {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ExplainRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ExplainRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ExplainRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Actor != nil {
+		{
+			size, err := m.Actor.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPlayground2(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.Permission) > 0 {
+		i -= len(m.Permission)
+		copy(dAtA[i:], m.Permission)
+		i = encodeVarintPlayground2(dAtA, i, uint64(len(m.Permission)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Object != nil {
+		{
+			size, err := m.Object.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPlayground2(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Scenario != nil {
+		{
+			size, err := m.Scenario.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPlayground2(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ExplainResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ExplainResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ExplainResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Graph != nil {
+		{
+			size, err := m.Graph.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPlayground2(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Allowed {
+		i--
+		if m.Allowed {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *VerifyConfig) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *VerifyConfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VerifyConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Scope != 0 {
+		i = encodeVarintPlayground2(dAtA, i, uint64(m.Scope))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *VerifyRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *VerifyRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VerifyRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Config != nil {
+		{
+			size, err := m.Config.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPlayground2(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.SystemModel != nil {
+		{
+			size, err := m.SystemModel.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPlayground2(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *VerifyResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *VerifyResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VerifyResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Scope != 0 {
+		i = encodeVarintPlayground2(dAtA, i, uint64(m.Scope))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Results) > 0 {
+		for iNdEx := len(m.Results) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Results[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPlayground2(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ContractResult) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ContractResult) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ContractResult) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Properties) > 0 {
+		for iNdEx := len(m.Properties) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Properties[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPlayground2(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if m.Status != 0 {
+		i = encodeVarintPlayground2(dAtA, i, uint64(m.Status))
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.Contract) > 0 {
+		i -= len(m.Contract)
+		copy(dAtA[i:], m.Contract)
+		i = encodeVarintPlayground2(dAtA, i, uint64(len(m.Contract)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Requirement) > 0 {
+		i -= len(m.Requirement)
+		copy(dAtA[i:], m.Requirement)
+		i = encodeVarintPlayground2(dAtA, i, uint64(len(m.Requirement)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *PropertyResult) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PropertyResult) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PropertyResult) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Message) > 0 {
+		i -= len(m.Message)
+		copy(dAtA[i:], m.Message)
+		i = encodeVarintPlayground2(dAtA, i, uint64(len(m.Message)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.Bindings) > 0 {
+		for iNdEx := len(m.Bindings) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Bindings[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPlayground2(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if m.World != nil {
+		{
+			size, err := m.World.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPlayground2(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Status != 0 {
+		i = encodeVarintPlayground2(dAtA, i, uint64(m.Status))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *Binding) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Binding) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Binding) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Values) > 0 {
+		for iNdEx := len(m.Values) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Values[iNdEx])
+			copy(dAtA[i:], m.Values[iNdEx])
+			i = encodeVarintPlayground2(dAtA, i, uint64(len(m.Values[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintPlayground2(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintPlayground2(dAtA []byte, offset int, v uint64) int {
 	offset -= sovPlayground2(v)
 	base := offset
@@ -620,6 +2118,23 @@ func encodeVarintPlayground2(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
+func (m *Scenario) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SystemModel != nil {
+		l = m.SystemModel.Size()
+		n += 1 + l + sovPlayground2(uint64(l))
+	}
+	if m.World != nil {
+		l = m.World.Size()
+		n += 1 + l + sovPlayground2(uint64(l))
+	}
+	return n
+}
+
 func (m *SystemModel) Size() (n int) {
 	if m == nil {
 		return 0
@@ -632,6 +2147,12 @@ func (m *SystemModel) Size() (n int) {
 	}
 	if len(m.Constraints) > 0 {
 		for _, e := range m.Constraints {
+			l = e.Size()
+			n += 1 + l + sovPlayground2(uint64(l))
+		}
+	}
+	if len(m.Requirements) > 0 {
+		for _, e := range m.Requirements {
 			l = e.Size()
 			n += 1 + l + sovPlayground2(uint64(l))
 		}
@@ -652,6 +2173,29 @@ func (m *World) Size() (n int) {
 	l = len(m.Assertions)
 	if l > 0 {
 		n += 1 + l + sovPlayground2(uint64(l))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovPlayground2(uint64(l))
+	}
+	return n
+}
+
+func (m *Workspace) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SystemModel != nil {
+		l = m.SystemModel.Size()
+		n += 1 + l + sovPlayground2(uint64(l))
+	}
+	if len(m.Worlds) > 0 {
+		for _, e := range m.Worlds {
+			l = e.Size()
+			n += 1 + l + sovPlayground2(uint64(l))
+		}
 	}
 	return n
 }
@@ -706,11 +2250,329 @@ func (m *GenerateResponse) Size() (n int) {
 	return n
 }
 
+func (m *CheckRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Scenario != nil {
+		l = m.Scenario.Size()
+		n += 1 + l + sovPlayground2(uint64(l))
+	}
+	if m.Object != nil {
+		l = m.Object.Size()
+		n += 1 + l + sovPlayground2(uint64(l))
+	}
+	l = len(m.Permission)
+	if l > 0 {
+		n += 1 + l + sovPlayground2(uint64(l))
+	}
+	if m.Actor != nil {
+		l = m.Actor.Size()
+		n += 1 + l + sovPlayground2(uint64(l))
+	}
+	return n
+}
+
+func (m *CheckResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Allowed {
+		n += 2
+	}
+	return n
+}
+
+func (m *ExplainRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Scenario != nil {
+		l = m.Scenario.Size()
+		n += 1 + l + sovPlayground2(uint64(l))
+	}
+	if m.Object != nil {
+		l = m.Object.Size()
+		n += 1 + l + sovPlayground2(uint64(l))
+	}
+	l = len(m.Permission)
+	if l > 0 {
+		n += 1 + l + sovPlayground2(uint64(l))
+	}
+	if m.Actor != nil {
+		l = m.Actor.Size()
+		n += 1 + l + sovPlayground2(uint64(l))
+	}
+	return n
+}
+
+func (m *ExplainResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Allowed {
+		n += 2
+	}
+	if m.Graph != nil {
+		l = m.Graph.Size()
+		n += 1 + l + sovPlayground2(uint64(l))
+	}
+	return n
+}
+
+func (m *VerifyConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Scope != 0 {
+		n += 1 + sovPlayground2(uint64(m.Scope))
+	}
+	return n
+}
+
+func (m *VerifyRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SystemModel != nil {
+		l = m.SystemModel.Size()
+		n += 1 + l + sovPlayground2(uint64(l))
+	}
+	if m.Config != nil {
+		l = m.Config.Size()
+		n += 1 + l + sovPlayground2(uint64(l))
+	}
+	return n
+}
+
+func (m *VerifyResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Results) > 0 {
+		for _, e := range m.Results {
+			l = e.Size()
+			n += 1 + l + sovPlayground2(uint64(l))
+		}
+	}
+	if m.Scope != 0 {
+		n += 1 + sovPlayground2(uint64(m.Scope))
+	}
+	return n
+}
+
+func (m *ContractResult) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Requirement)
+	if l > 0 {
+		n += 1 + l + sovPlayground2(uint64(l))
+	}
+	l = len(m.Contract)
+	if l > 0 {
+		n += 1 + l + sovPlayground2(uint64(l))
+	}
+	if m.Status != 0 {
+		n += 1 + sovPlayground2(uint64(m.Status))
+	}
+	if len(m.Properties) > 0 {
+		for _, e := range m.Properties {
+			l = e.Size()
+			n += 1 + l + sovPlayground2(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *PropertyResult) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Status != 0 {
+		n += 1 + sovPlayground2(uint64(m.Status))
+	}
+	if m.World != nil {
+		l = m.World.Size()
+		n += 1 + l + sovPlayground2(uint64(l))
+	}
+	if len(m.Bindings) > 0 {
+		for _, e := range m.Bindings {
+			l = e.Size()
+			n += 1 + l + sovPlayground2(uint64(l))
+		}
+	}
+	l = len(m.Message)
+	if l > 0 {
+		n += 1 + l + sovPlayground2(uint64(l))
+	}
+	return n
+}
+
+func (m *Binding) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovPlayground2(uint64(l))
+	}
+	if len(m.Values) > 0 {
+		for _, s := range m.Values {
+			l = len(s)
+			n += 1 + l + sovPlayground2(uint64(l))
+		}
+	}
+	return n
+}
+
 func sovPlayground2(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozPlayground2(x uint64) (n int) {
 	return sovPlayground2(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (m *Scenario) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPlayground2
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Scenario: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Scenario: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SystemModel", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.SystemModel == nil {
+				m.SystemModel = &SystemModel{}
+			}
+			if err := m.SystemModel.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field World", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.World == nil {
+				m.World = &World{}
+			}
+			if err := m.World.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPlayground2(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
 }
 func (m *SystemModel) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -804,6 +2666,40 @@ func (m *SystemModel) Unmarshal(dAtA []byte) error {
 			}
 			m.Constraints = append(m.Constraints, &SystemConstraint{})
 			if err := m.Constraints[len(m.Constraints)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Requirements", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Requirements = append(m.Requirements, &Requirement{})
+			if err := m.Requirements[len(m.Requirements)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -920,6 +2816,158 @@ func (m *World) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Assertions = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPlayground2(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Workspace) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPlayground2
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Workspace: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Workspace: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SystemModel", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.SystemModel == nil {
+				m.SystemModel = &SystemModel{}
+			}
+			if err := m.SystemModel.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Worlds", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Worlds = append(m.Worlds, &World{})
+			if err := m.Worlds[len(m.Worlds)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1233,6 +3281,1308 @@ func (m *GenerateResponse) Unmarshal(dAtA []byte) error {
 			if err := m.Worlds[len(m.Worlds)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPlayground2(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CheckRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPlayground2
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CheckRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CheckRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Scenario", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Scenario == nil {
+				m.Scenario = &Scenario{}
+			}
+			if err := m.Scenario.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Object", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Object == nil {
+				m.Object = &Object{}
+			}
+			if err := m.Object.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Permission", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Permission = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Actor", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Actor == nil {
+				m.Actor = &Actor{}
+			}
+			if err := m.Actor.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPlayground2(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CheckResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPlayground2
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CheckResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CheckResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Allowed", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Allowed = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPlayground2(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ExplainRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPlayground2
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ExplainRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ExplainRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Scenario", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Scenario == nil {
+				m.Scenario = &Scenario{}
+			}
+			if err := m.Scenario.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Object", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Object == nil {
+				m.Object = &Object{}
+			}
+			if err := m.Object.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Permission", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Permission = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Actor", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Actor == nil {
+				m.Actor = &Actor{}
+			}
+			if err := m.Actor.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPlayground2(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ExplainResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPlayground2
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ExplainResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ExplainResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Allowed", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Allowed = bool(v != 0)
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Graph", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Graph == nil {
+				m.Graph = &CheckExplainGraph{}
+			}
+			if err := m.Graph.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPlayground2(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *VerifyConfig) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPlayground2
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: VerifyConfig: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: VerifyConfig: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Scope", wireType)
+			}
+			m.Scope = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Scope |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPlayground2(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *VerifyRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPlayground2
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: VerifyRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: VerifyRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SystemModel", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.SystemModel == nil {
+				m.SystemModel = &SystemModel{}
+			}
+			if err := m.SystemModel.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Config", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Config == nil {
+				m.Config = &VerifyConfig{}
+			}
+			if err := m.Config.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPlayground2(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *VerifyResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPlayground2
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: VerifyResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: VerifyResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Results", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Results = append(m.Results, &ContractResult{})
+			if err := m.Results[len(m.Results)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Scope", wireType)
+			}
+			m.Scope = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Scope |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPlayground2(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ContractResult) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPlayground2
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ContractResult: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ContractResult: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Requirement", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Requirement = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Contract", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Contract = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			m.Status = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Status |= VerifyStatus(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Properties", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Properties = append(m.Properties, &PropertyResult{})
+			if err := m.Properties[len(m.Properties)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPlayground2(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PropertyResult) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPlayground2
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PropertyResult: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PropertyResult: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			m.Status = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Status |= VerifyStatus(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field World", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.World == nil {
+				m.World = &World{}
+			}
+			if err := m.World.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Bindings", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Bindings = append(m.Bindings, &Binding{})
+			if err := m.Bindings[len(m.Bindings)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Message", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Message = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPlayground2(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Binding) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPlayground2
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Binding: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Binding: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Values", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPlayground2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPlayground2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Values = append(m.Values, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

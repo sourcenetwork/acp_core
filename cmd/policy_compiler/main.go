@@ -4,10 +4,14 @@
 //
 //	policy_compiler compile [-a assumptions.yaml] <policy.yaml> <output dir>
 //	policy_compiler instance [-o dir] <policy.yaml> <instance.xml>...
+//	policy_compiler verify [-a assumptions.yaml] [-s scope] [-o dir] <policy.yaml> <contracts.yaml>
 //	policy_compiler serve [address]
 //
 // instance translates instances written by `alloy exec -t xml` back into relationships
 // and reports what every actor can do, as evaluated by the acp engine.
+//
+// verify checks contracts against every state allowed by the assumptions, up to a scope,
+// reporting counterexamples. It exits with 1 unless every contract is satisfied.
 package main
 
 import (
@@ -52,6 +56,17 @@ func main() {
 			usage()
 		}
 		instances(fs.Arg(0), *outDir, fs.Args()[1:])
+	case "verify":
+		fs := flag.NewFlagSet("verify", flag.ExitOnError)
+		assumptionsPath := fs.String("a", "", "application assumptions yaml")
+		scope := fs.Uint("s", 3, "number of objects of each resource, and of actors, in the states checked")
+		outDir := fs.String("o", "", "write each counterexample or example as <dir>/<contract>/relationships.txt")
+		fs.Usage = usage
+		fs.Parse(os.Args[2:])
+		if fs.NArg() != 2 {
+			usage()
+		}
+		verify(fs.Arg(0), fs.Arg(1), *assumptionsPath, *outDir, *scope)
 	case "serve":
 		addr := defaultAddress
 		if len(os.Args) > 2 {
@@ -64,7 +79,7 @@ func main() {
 }
 
 func usage() {
-	fmt.Fprintf(os.Stderr, "usage:\n  %[1]v compile [-a assumptions.yaml] <policy.yaml> <output dir>\n  %[1]v instance [-o dir] <policy.yaml> <instance.xml>...\n  %[1]v serve [address]\n", filepath.Base(os.Args[0]))
+	fmt.Fprintf(os.Stderr, "usage:\n  %[1]v compile [-a assumptions.yaml] <policy.yaml> <output dir>\n  %[1]v instance [-o dir] <policy.yaml> <instance.xml>...\n  %[1]v verify [-a assumptions.yaml] [-s scope] [-o dir] <policy.yaml> <contracts.yaml>\n  %[1]v serve [address]\n", filepath.Base(os.Args[0]))
 	os.Exit(2)
 }
 
